@@ -1,3 +1,3 @@
-# Capitallstorage
+# Clstorage
 
-folder name is VSA project functionality
+folder name is ... project functionality
