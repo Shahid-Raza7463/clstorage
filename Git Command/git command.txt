@@ -1,9 +1,11 @@
 #################################################################################
+i am using this 
 1.Go to git hub and create repositery 
 2.open command line using administrate
 
 git init
 git add README.md ye run n kare skip it 
+git add .
 git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/Shahid-Raza7463/reactnative-app.git
@@ -17,6 +19,7 @@ git remote set-url origin https://github.com/Shahid-Raza7463/reactnative-app.git
 
 
 #################################################################################
+i am using this
 1 existing repositery ko push karna ho to run below command
 
 git remote add origin https://github.com/Shahid-Raza7463/reactnative-app.git
