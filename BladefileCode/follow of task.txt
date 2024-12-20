@@ -41,7 +41,7 @@ on UDIN List section, after click plus button you can add udin documentation dat
 
 Steps:-
 1.Navigate to the application
-2.Click on 'Client' dropdown.
+2.Click on 'Client/Assignmnet' dropdown.
 2.Click on 'Assignment List'.
 3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
 4.click on UDIN List: 
@@ -58,7 +58,21 @@ Steps:-
 1.Navigate to the application
 2.Click on 'Human resoursec' dropdown.
 3.Click on 'Timesheet dropdown and navigate to 'my timesheet.
-4.click on 'Add Timesheet Request'
+4.click on 'Add Timesheet'
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignment' dropdown.
+3.click on 'Assignment List'
+4.click on 'hyperlink client name'
+5.click on 'year hyperlink '
+6.Go to Other partner column
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+4.click on 'Attendance'
 
 
 
@@ -96,4 +110,93 @@ Check using Admin.partner,manager and staff id
 1
 Date formate should be 01-01-2024 on portal and in excell currently date formate are like january ,9 2024
 in excell, we need to check downloaded data also becouse after modification data can goes in excell with code (i have Attached image)
+
+
+Attendance module 
+22222222222222222222222222222222222222222222222222
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users attendance
+3.On admin dashboard, client want to display attendance according date wise and all date contain wording like persent (P), travel (T), Casual leave (cl),exam laeve (EL), holidays(H), sundauy (W), sturdays (OH)
+here T will be assign only full days travel 
+4.Attendance table contain below column 
+  Employee name,role months, date from 01 to 31, Total Number of days,Total Working days,Total Casual Leave,Total Exam Leave,	Total Travel,Total Offholidays,Total Weekend,Total Holidays
+5.client want to filter functionality on attendance click (Attendance tab)
+6.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+7.on staff,manager and partner dashboard,all working days should be display after click on total working days box
+8.staff,manager and partner can export total working days excell
+9.on attendance page,Validation should be on date after click attendance tab where admin can filter attendance
+10.Attendance tab should be aceess only partner and admin
+
+
+Now You have to test attendance table hare 
+
+1.attendance table will be update only when user submitted theire timesheet not on create timesheet 
+2.when user apply exam leave and admin approved it then attendance table will be update 
+3.when user apply Casual leave and user submited theire timesheet then attendance table will be update
+4.WHen user submitted leave revert request after approved it. attandence table will be update 
+5.When admin and partner reject user timesheet and user submit rejected timesheet in both case attandance table will be update
+6.If a timesheet is rejected on a specific date, the user can apply for leave on those days, and the attendance table will be updated accordingly
+7. when admin fill laeving date in profile section in that time all save timesheet currently submitted automatic in this case attendance table will be update
+8. if user fill two timesheet in one days and both timesheet has a P then no of persent column will be count 1 and if user fill two timesheet in one days and one timesheet contain T and one timesheet contain P then it will be count no of persent 1 and assign P
+
+
+Now You have to test are you sure message on click approved and reject button in (admin and partner)
+1.Apply leave section 
+2.revert leave section
+3.open leave section
+4.timesheet request list section 
+5.timesheet request box on dashboard 
+6.leave box on dashboard section
+
+
+
+You need to apply for exam leave for at least 20 days in a month that includes holidays. After approving the exam leave, check the attendance report to ensure that all holiday dates display 'H' in the attendance
+
+
+
+Currently, holidays (H) are not appearing in the attendance record.
+
+regarding notification on jira this is in word file 
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+All Notification will be show on admin portal 
+only partner notifications will be show on partner portal 
+only manager notifications will be show on manager portal 
+only staff notifications will be show on staff portal 
+when we target individual after that you will be get teammember selection box hare aap jise target karoge usi ke portal per notification dikhega and admin ke portal per 
+Hare you have to check read and unread functionality like readed notification will be show in black color and not readed notification will be show in red color 
+
+
+1st notification 
+Steps:-
+1.Navigate to the application
+2.On dashboard, here you can see notification section.
+
+
+
+2nd notification 
+Steps:-
+1.Navigate to the application
+2.Click on 'Notification list' dropdown.
+
+3rd notification 
+Steps:-
+1.Navigate to the application
+2.On dashboard , here you can see on top header section.
+
+it is for admin only
+Steps:-
+1.Navigate to the application
+2.Click on 'Notification list' dropdown.
+2.Click on 'Add Announcement'.
+3. fill form and click send button 
+
+
+
+
 

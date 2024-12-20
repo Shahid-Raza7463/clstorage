@@ -1,0 +1,749 @@
+attendance module requarment 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222
+attendance
+
+1.Client want to attendance report on admin dashboard 
+5.Admin can export excel report all users
+6.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+7.After implementation attendance client want to display total working days, total casual leave, total exam leave ,total travel and total days of month,
+8.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+2.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+3.on staff,manager and partner dashboard,all working days should be display after click on total working days
+4.staff,manager and partner can export excel
+
+
+
+
+
+
+
+Affected page 
+1.leave   ............
+2.revert leave ............
+3.rejected team timesheet   ...............
+4.rejected partner timesheet   ...............
+5.submitted timesheet page, where admin and partner can reject particular timesheet  ..............
+7.rejected timesheet during leave apply that is automatic approved  ......................
+6.When Admin fill leave date in profile section in that time will be afect attandance ................
+7. submit timesheet then calculation left   ......................... 
+8.if user fill 2 timesheet in one days 
+
+approved by ajit 
+1.casula leave apply and approved then attendance table not affected only affexted on submit casula leave
+
+
+
+Exam leave = EL     ................................
+casual leave = CL    ...........................
+timesheet filled  = P  ......................
+
+holidays  = H   .............................
+Travel = T full days .............
+Off/holidays (sturday and sunday) =   W (sunday) ............   oh for sturdays   .............   
+
+
+
+unlocated 
+travel
+seminar conference 
+off/ holidays 
+
+
+testing purpos
+22222222222222222222222222222222222222222222222222222222222222222222222222222222
+attendance
+
+1.Client want to attendance report on admin dashboard   ````````````
+
+5.Admin can export excel report all users  ```````````````````
+
+6.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w) ``````
+
+7.After implementation attendance client want to display total working days, total casual leave, total exam leave ,total travel and total days of month, ```````````````````
+
+8.on admin panale , client want to add filter functionality on attendance using date like from start date to end date. ``````````````````````
+
+2.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),```````````````````````
+
+
+3.on staff,manager and partner dashboard,all working days should be display after click on total working days  ````````````````````````````````
+4.staff,manager and partner can export excel ``````````````````````
+
+
+
+
+
+
+
+Affected page 
+1.leave   ............  ````````````
+2.revert leave ............  ````````````
+
+
+3.rejected team timesheet   ............... ```````````````
+4.submitted team timesheet  ``````````````````
+4.rejected partner timesheet   ...............  ``````````````````
+4.submitted partner timesheet   `````````````````````
+5.submitted timesheet page, where admin and partner can reject particular timesheet  ..............  `````
+7.rejected timesheet during leave apply that is automatic approved  ......................  ``````````
+7. submit timesheet then calculation left   ......................... ```````````````````
+
+
+Exam leave = EL     ................................  ```````````````
+casual leave = CL    ...........................    `````````````````
+timesheet filled  = P  ......................    ```````````````````
+holidays  = H   .............................  `````````````````````
+Travel = T full days .............   ``````````````````````
+
+Off/holidays (sturday and sunday) =   W (sunday) ............   oh for sturdays   ............. ``````   
+
+
+
+unlocated 
+travel
+seminar conference 
+off/ holidays 
+
+
+6.When Admin fill leave date in profile section in that time will be afect attandance ........`````````  
+8.if user fill 2 timesheet in one days .......................... ````````````````````
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2.timesheet block days want to decrease now days is 14 days 
+3.some modification in timesheet not fill reminder (mail)
+3. wednesday and suterday mail 
+
+1.7 days block 
+timesheet block before date 
+
+
+leave reason 
+timesheet request 
+
+
+
+
+
+12-09-24
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222
+1.The client wants to know the active and inactive users in the attendance report.==============
+
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this. ====================
+
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date. ==============
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.======================
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+
+22222222222222222222222222222222222222222
+timesheet featues 
+
+Filter implimentation on submitted team timesheet for admin.
+When assignment closed then assignment should be not selected in Assignment select box on add assignmnet page.
+Seprated timesheet submitted data becouse it was coming in one column .
+Team Timesheet report on admin and partner.
+Refresh all input field when date changes on add timesheet page.
+Client want to client list according open assignment and date of closed assignment .
+Display warning message on click approve button and open modal box on click reject button (timesheet request view page ).
+timesheet request list for patner and admin where admin and partner can approved and reject timesheet request.
+total hour and hour shoud be 0 after exam leave and casual leave taken.
+filter add on using assignmentname on team timesheet report.
+submit a saved timesheet forcefully when the user goes.
+Separate weekly timesheet on admin ,partner,and manager.
+Get work items from calendar when user choose of holiday.
+Highlight Sunday date on timesheet create calender.
+Admin add secondary patner inside assignment. 
+Display warning message on timesheet create page when user's timesheet rejected.
+Timesheet request remark should be mandatory currently it gets submitted after entering a space.  
+Attachment file shoud be on timesheet request create form.
+Leave can not apply before submitted timesheet date, 11 septamber 2023, but timesheet rejected then it will be apply only that days.
+When submitted timesheet rejected then user can apply leave on that days and submitted timesheet overwrite according leave.  
+Submitted timesheet rejected edit functionality.
+Display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+Timesheet rejected more than one days. 
+Display warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+A user's saved timesheet can also be deleted by the admin. 
+A user cannot submit a new timesheet request within 24 hours if they already have an open timesheet request. 
+Last week submitted timesheet excel will be send after clicking on timesheet all button on admin and partner id. 
+A user's saved timesheet can also be deleted by the admin. 
+A user cannot submit a new timesheet request within 24 hours if they already have an open timesheet request. 
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222
+applyleave features 
+  
+ 
+When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+When a user applies for leave, the partner receives a notification, and after approval, the user also receives a notification.
+Display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave Listing pages.
+Exam leave has an auto-submit functionality: if a user submits timesheets on a weekly basis consistently and then applies for leave, their exam leave timesheet will be automatically submitted.
+Insert value 0 to total hour and hour after exam leave and casual leave taken. 
+Leave can not apply before submitted timesheet date, 11 septamber 2023, but timesheet rejected then it will be apply only that days.
+When submitted timesheet rejected then user can apply leave on that days and submitted timesheet overwrite according leave.  
+On apply leave page, alart box on click approved and reject button.
+When user apply leave revert on start leave date then all data should be delete.
+Count for Approved leaves for the Year (Jan to Dec) should be visible to the User in their portal.
+Filter functionality with proper validation exist on apply leave listed page.
+Leave revert functionality also exist.
+Leave will be auto-approved when a user applies for leave on one or more consecutive days with rejected timesheets. Approval from the admin or partner is not required.
+Casual leave revert module.
+
+
+
+22222222222222222222222222222222222222222
+Rejoining & Promotion Process on other position
+https://capitallio.atlassian.net/browse/VS-118
+
+
+In case of rejoining, “Rejoining date” is to be entered.
+If the designation of the rejoined individual is same, then the Employee code should remain same.
+In case there is change in designation, then the employee will be assigned a  new code.
+The new code should be linked to the old code and all the previous data will be accessible with the use of previous employee code and employee name.
+In case of change in code, previous code should be mentioned on the profile of employee.
+In case there is a change in designation, but the individual is mapped to a particular assignment then his right related to that assignment should not change till the assignment is over.
+Similar process to be carried out in case of Promotion of an employee from manager to partner.
+pormotion and rejoining listing will be show on admin dashboard.
+
+The user should not be able to fill the timesheet before the rejoining date.
+The User should not be able to apply leave before re-joining date.
+The timesheet report will be show new staff code for the user even after the promotion, in new assignment.
+When the super admin rejects a timesheet for a new assignment, the timesheet should be the new staff code in 'Rejected Timesheet'. However, when the user resubmits it, the new code appears.
+when user will rejoin manager to partner after that all previous data will be show according manager and current data will be show according partner.
+when user will promote manager to partner after that all previous data will be show according manager and current data will be show according partner.
+
+
+
+22222222222222222222222222222222222222222
+Assignment features 
+
+The client wants to remove the 'type' input field from the team member addition form when the assignment is closed, and display it only when the assignment is open.
+Assignment Details on mail when assignment closed by otp.
+Assignment budgetting and assignment mapping should be in one place.
+When assignment closed then assignment should be not selected in timesheet Assignment field.
+Filter functionality On Team Timesheet report page.
+The selection of assignment according Asssignment closed date and open assignment.
+The date format should be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+Implemented checkbox on assignment create page so that user submit form without select teammemebr currently user can not create assignment without teammember selection.
+Assignment viewer list on  assignmentview  page to view user only.
+After creating assignment partner and listed team recieved mail with assignment details.
+Total hour will be show on assignmnt view page to partner, manager and staff.
+While adding User in an assignment, the "teammember select box" should not display inactive users.
+Assignment total hour show on open assignment page.
+Assignmwnt total hour show on admin panel according teamwise.
+Assignment total hours show on assignment time report tab.
+We can add secondary patner inside assignment. 
+Filter implementation on Assignment time report 
+The partner list and theire total hour on assignment view page. 
+
+
+22222222222222222222222222222222222222222
+Notification features 
+1.When the admin sends a notification, it will appear in the user's notification tab. If the notification is unread, the text color will be red; if the notification is read, the text color will be black
+
+
+
+
+22222222222222222222222222222222222222222
+Attendance features
+https://capitallio.atlassian.net/browse/VS-154
+
+The attendance report should be on admin and partner dashboard. 
+Admin and partner can export excel report all users.
+On admin and partner panel, attendance record should be display according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w).
+On admin and partner panel,filter functionality on attendance using date like from start date to end date.
+When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+After submitting the leaving date, the attendance report will be updated by marking entries with a cross sign (X) for all dates following the leaving date.
+If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+Attendance data will be after new teammeber creating time. 
+We can not select start date and end date in future on attendance page (filter functionality).
+When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+attendance report will be display from April to September. Currently, the data is only available from October because the attendance module has been running since then.
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.testing purpose for tester  attendance module
+22222222222222222222222222222222222222222222222222
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users attendance
+3.On admin dashboard, client want to display attendance according date wise and all date contain wording like persent (P), travel (T), Casual leave (cl),exam laeve (EL), holidays(H), sundauy (W), sturdays (OH) and Rejected timesheet (R)
+here T will be assign only full days travel 
+4.Attendance table contain below column 
+  Employee name,role months, date from 01 to 31, Total Number of days,Total Working days,Total Casual Leave,Total Exam Leave,	Total Travel,Total Offholidays,Total Weekend,Total Holidays
+5.client want to filter functionality on attendance click (Attendance tab)
+6.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+7.on staff,manager and partner dashboard,all working days should be display after click on total working days box
+8.staff,manager and partner can export total working days excell
+9.on attendance page,Validation should be on date after click attendance tab where admin can filter attendance
+10.Attendance tab should be aceess only partner and admin
+
+
+Now You have to test attendance table hare 
+
+11.attendance table will be update only when user submitted theire timesheet not on create timesheet 
+12.when user apply exam leave and admin approved it then attendance table will be update 
+13.when user apply Casual leave and user submited theire timesheet then attendance table will be update
+14.WHen user submitted leave revert request after approved it. attandence table will be update 
+15.When admin and partner reject user timesheet and user submit rejected timesheet in both case attandance table will be update
+16.If a timesheet is rejected on a specific date, the user can apply for leave on those days, and the attendance table will be updated accordingly
+17. when admin fill laeving date in profile section in that time all save timesheet currently submitted automatic in this case attendance table will be update
+18. if user fill two timesheet in one days and both timesheet has a P then no of persent column will be count 1 and if user fill two timesheet in one days and one timesheet contain T and one timesheet contain P then it will be count no of persent 1 and assign P
+
+
+Now You have to test are you sure message on click approved and reject button in (admin and partner)
+19.Apply leave section 
+20.revert leave section
+21.open leave section
+22.timesheet request list section 
+23.timesheet request box on dashboard 
+24.leave box on dashboard section
+
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+1.The client wants to remove the 'type' input field from the team member addition form when the assignment is closed, and display it only when the assignment is open.
+
+
+2.The client wants to send an email with the leave reason, staff code, and updated email formate.
+3.The client wants to send an email with the timesheet request reason, staff code, and updated email formate.
+
+4.The client wants to modify the timesheet block for tasks. They want the timesheet to be blocked after 16 days, but if the last submitted date falls on a Saturday, it will block after 17 days. If the last submitted date falls on a Sunday, it will block after 16 days.
+
+5.The client wants to modify the timesheet request approval email
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+Steps:-
+1.Navigate to the application
+2.Click on 'Client' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.click on Teammember List plus icon: 
+
+
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+1.The client wants to know the active and inactive users in the attendance report.==============
+
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this. ====================
+
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date. ==============
+
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.======================
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+
+2222222222222222222222222222
+1.The client wants to know the active and inactive users in the attendance report.
+
+Admin Id 
+Steps:-
+1.Navigate to the application
+2.Click on 'Dashboard' dropdown.
+2.Click on 'Teammember Box on dashboard'.
+3.Click on Teammember name hyperlink, after that please enter leaving date and click on submit button.
+
+Expected result: After submitting the leaving date, the attendance report will be updated by marking entries with a cross sign (X) for all dates following the leaving date
+
+
+2222222222222222222222222222
+1.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+
+Expected result: On the first day of the month, attendance records will be created for all active team members.
+
+
+
+2222222222222222222222222222
+1.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+
+2222222222222222222222222222
+1.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+
+1.When selecting start date and end date, You cannot select a date in future date
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+
+2222222222222222222222
+1.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Dashboard' dropdown.
+2.Click on 'Teammember Box on dashboard'.
+3.Click on Teammember name hyperlink, after that please enter leaving date and click on submit button.
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+
+
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+1.When creating a new teammember on that time attendence record should be created also.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Team' dropdown.
+3.Click on 'team list tab,
+4.click on 'Add Teammember'
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+The user should not create duplicate assignments when clicking the submit button multiple times.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Add Assignment.
+after that please enter all date and click on submit button.
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+The user should not create duplicate assignments when clicking the submit button multiple times.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Add Assignment.
+
+In this form, when a name is selected and the plus icon is clicked, a new input box should appear to select another name. In this case, the previously selected name should no longer be shown in the dropdown box
+
+
+
+
+
+testning purpose 
+222222222222222222222222222222222222222222222222222222222222
+1.all timesheet submitted data get 
+2.All sunday date will be get
+3.all sturday date will be get 
+4.All holiday date will be get 
+5.All cl date get 
+6.All el date get 
+7.All travel date will be get.
+
+
+chalanging
+1.i have not idea joinig date 
+2.leaving date also 
+3.cross sign after leaving date 
+
+
+
+
+
+
+10.1 Client selected (off/holiday) - 0 hours of work = H in attendance - QA Pass
+
+10.2 If user selects (off/holiday) client for 0 hours + work for 1 Hour = P  in attendance 
+
+10.3 If user selects (off/holiday) client for 0 hours + Travel for 1 Hour = T  in attendance 
+
+10.4 If user selects (off/holiday) client for 0 hours + work for 8 Hour = P  in attendance 
+
+10.5 If user selects (off/holiday) client for 0 hours + Travel for 8 Hour = T  in attendance 
+
+10.6 If user selects (off/holiday) client for 0 hours + work for 4 Hour = P  in attendance 
+
+10.7 If user selects (off/holiday) client for 0 hours + Travel for 4 Hour = T  in attendance 
+
+10.8  If user selects (off/holiday) client for 0 hours + work for 4 Hour +Travel for 4 Hour = P
+	
+
+send karna hai 			
+2222222222222222222222222222222222222222222222222222222
+1.When creating a new teammember on that time attendence record should be created also.
+
+2.When selecting start date and end date, You cannot select a date in future date
+
+3.Attendance data not updating proper with active & inactive users.(has point)
+
+4.In Teams tab, for two different user's same staff code is coming.
+
+5.Options alignment on the apply leave page in Admin account is not proper
+
+6.If timesheet is rejected on continuesly more than 1 days, the user can apply for leave on those days, and the attendance table will be updated accordingly.
+
+2.client want to change filter formate on applyleave page currently working using ajax but client want to serach button
+2.Table Design fixed on applyleave page 
+3.Validation on filter like validation on date 
+4.show approved and reject button on applyleave page 
+5.fixed accending order and descending order after filter data 
+6.Fixed data width inside excell after export data in excell 
+
+2222222222222222222222222222222222222222222222222
+
+!!!2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+!!!1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+!!!3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+!!!!1.Attendance revert exam leave problem fixed (user name gurvesh)
+!!!2.Attendance inserting leaving date after deleting attendance problem fixed (user name gurvesh)
+!!!1.Exam leave count problem tested and fixed 
+2.All attendance get using year column on everywhere on attendance module
+
+
+1.Revert exam leave count problem fixed in Attendance module.
+2.
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+4.click on 'Attendance'
+
+
+//////
+ check teammember list
+ 
+ 22222222222222222222222222222222222222222222222222 
+
+exam me holidays only goes and el
+casual leave me cl only goes not W and H 
+
+
+testing for demo 
+222222222222222222222222222222222222222222222222222222222222222
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed 
+Total hour count bugs, bugs no is vs-224
+
+
+
+
+
+222222222222222222222222222222222222222222222222
+
+To Do 
+1.Client want to stop send mail to particular partner from timesheet not fill reminder.#
+2.Delete submitted timesheet of Surya Kant Verma after leaving date.
+3.In attendance module,insert H wording for 5 users who is apply leave before october
+4.CreatedBy column will be display on assignment folder file listing page
+5.User can not enter time in this formate 08:00
+6.Client want to Add partner button on assignmentview page
+7.assignment viewer implementation on open assignment (discuss)   ignore
+8.Client list edit functionality on assinmentview page (discuss)   ignore
+9.Udin date formate want to fixed
+10.assignment should be not show after inactive on that assignment for users (bugs)
+11.if casual leave timesheet submitted after that admin can not reject casula leave timesheet submitted data
+12.data handover form want to implement.  ignore 
+13.When a user exits, they can fill out their timesheet on the same day before 6 PM.
+14.The joining date will be displayed in the attendance module.
+15.Fixed attendance data for users who applied for leave before October.
+16.admin and partner can not reject submitted timesheet before joinig date.
+
+
+17. admin acoount inactive automatic.
+18.total hour for closed assignment.  ignore
+19. travel box seprately on dashboard  ignore 
+20.assignment closed button acending order (discuss)
+21.resend otp during closed assignment.
+22 task on whatshapp
+
+
+
+1.Stop sending timesheet reminder emails to a specific partner as requested by the client.
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
+3.In the attendance module, insert "H" for 5 users who applied for leave before October.
+4.Add a CreatedBy column to display on the assignment folder file listing page.
+5.Restrict users from entering time in the format 08:00.
+6.Add a Partner button on the assignment view page as requested by the client.
+7.Udin date format needs to be fixed.
+8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug fix).
+9.Restrict admin from rejecting casual leave timesheets if submitted.
+10.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+11.Display the joining date in the attendance module.
+12.Fixed attendance data for users who applied for leave before October.
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.
+14.Assignment viewer implementation on open assignment.
+15.Client list edit functionality on the assignment view page.
+16.Data handover form implementation.
+
+
+
+
+
+
+1.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+2.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+3.Add a travel box on the dashboard as requested by the client.
+4.Implement ascending and descending order sorting for open and closed assignments.
+5.Add a Resend OTP button during the closed assignment process.
+6.Ensure OTP for closing an assignment is not generated if there are any pending independencies.
+
+
+22222222222222222222222222222222222222222222222222222222
+To Do 
+1.client want to stop mail to particular  partner for timesheet not fill reminder 
+
+2.Surya Kant Verma ka leaving date check karke leaving date ke baad ke date ka 2 timesheet submit hai use delete 
+3.exam leave 5 user left to insert H wording.
+
+4.created by column will be come inside assinment filoder 
+5.timesheet restrected 08:00 hour
+6.partner adding from assignment view page
+7.assignment viewer implementation on open assignment (discuss)   ignore
+8.clent list edit functionality on assinmentview page (discuss)   ignore
+9.Udin date formate want to fixed
+10.assignment shold be not show after inactive on that assignment(bugs)
+11.if casual leave data submitted after that admin can not reject casula leave 
+  1.1 if holidays exist in calander then user applyleave and select start date and end date on holidays then not apply holidays
+12.data handover form want to implement.  ignore 
+16.admin and partner can not reject submitted timesheet before joinig date.
+
+17. admin acoount inactive automatic.
+18.total hour for closed assignment.  ignore
+19. travel box seprately on dashboard  ignore 
+20.assignment closed button acending order (discuss)
+21.resend otp during closed assignment.
+22 task on whatshapp
+23.The client wants "Approve" and "Reject" buttons to be included in the email for approving or rejecting leave and timesheet requests
+
+
+1.When a user exits, they can fill out their timesheet on the same day before 6 PM.
+2.The joining date will be displayed in the attendance module.
+3.Fixed attendance data for users who applied for leave before October.
+
+
+
+222222222222222222222222222222222222222222222222222
+
+
+
+attendance bugs
+22222222222222222222222222222222222222222222222222222
+
+ID: 770 - Amit
+ID: 772 - Ankit Kumar
+ID: 806 - Sachin Kumar
+ID: 794 - Tannu Sharma
+ID: 913 - Ananya Singh
+ID: 943 - Nitin
+ID: 835 - Vishal Singh
+ID: 940 - Subhash Kumar Mishra
+ID: 944 - Vishal Kumar Thakur
+ID: 938 - Sandeep Singh
+ID: 916 - Punit Kumar
+ID: 947 - Sarthak Kejriwal
+ID: 891 - Sudheer Rawat
+ID: 805 - Ravi Kumar
+ID: 832 - Vaibhav Arora
+ID: 889 - Mohit Kumar
+ID: 782 - Antima Jhajhra
+ID: 828 - Sahil Kumar
+ID: 881 - Rohit Kumar
+ID: 817 - Hemant Kumar
+ID: 811 - Tushar Garg
+ID: 785 - Kanika Singhal
+ID: 830 - Sohan Jha
+ID: 879 - Jassi Gupta
+ID: 812 - Yog Madhu
+
+Vishal Singh M1001 - April data is missing  because rejoinig date of this user in may 9, 2024. and (25-12-2023 to 30-12-2023) to (06-05-2024 to 11-05-2024)
+Vishal Singh M1065 - missing 24th aug data  because this user has not submitted timesheet on 24th August
+Vishal Kumar Thakur M1023 - missing data also missing name in timesheet but name is showing in attendance drop-down  becouse this user naver fill timesheet and submitted timesheet
+
+i have to update
+Sudheer Rawat S1055 - 15th nov data missing 
+Sandeep Singh M1071 - 20th to 30th missing data  in september data exist
+Vishal Kumar Thakur M1077 - 25th to 30th sep data missing   in september
+
+
+
+Sahil Kumar
+Anu anjali
+Vishal Singh   already done 
+Dheeraj Jain
+Shakti K.C.
+Akansha Prakash
+
+
+2222222222222222222222222222222222222222222222222
+1.When a user's timesheet is rejected continuously for more than 8 days, & if the user has submitted or not submitted the Sunday date timesheet....
+2.The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+3.The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+4.The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+5.The user cannot apply for leave on a holiday.
+6.The user cannot apply for leave on a Sunday.
+7.When admin delete save timesheet in that time total hour not reduce (bugs fixed)
+			

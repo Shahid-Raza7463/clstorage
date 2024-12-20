@@ -1,21 +1,1167 @@
 {{-- *  --}}
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
+{{-- ! End hare --}}
 {{-- *  --}}
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
+{{-- ! End hare --}}
 {{-- *  --}}
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
+{{-- ! End hare --}}
 {{-- *  --}}
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding summernote --}}
+{{--  Start Hare  --}}
+<div class="row row-sm">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="font-weight-600">Announcement Content *</label>
+            <textarea rows="4" name="mail_content" class="centered form-control" id="summernote" placeholder="Enter Description"
+                id="editors" style="height:500px;"></textarea>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 100, // Sets the editor height to 100px
+        });
+        // Add required validation
+        $('form').on('submit', function(e) {
+            // Check if Summernote content is empty
+            var summernoteContent = $('#summernote').summernote('isEmpty');
+            if (summernoteContent) {
+                alert('Announcement Content is required.');
+                e.preventDefault(); // Prevent form submission
+                return false;
+            }
+        });
+    });
+</script>
+{{--  Start Hare  --}}
+
+<script>
+    $(document).ready(function() {
+        $('#exampleFormControlSelect111').on('change', function() {
+            if (this.value == '1') {
+                $("#designation").show();
+                document.getElementById("designationinput").required = true;
+            } else {
+                $("#designation").hide();
+                document.getElementById("designationinput").required = false;
+            }
+        });
+    });
+</script>
+{{-- ! End hare --}}
+{{-- * regarding disable / regarding checkbox --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        $('#enablebox').on('change', function() {
+            $('.enablefalse').prop('disabled', this.checked);
+            if (this.checked) {
+                $('.add_buttonn, .remove_button, .hidedive').addClass('d-none');
+            } else {
+                $('.add_buttonn, .remove_button, .hidedive').removeClass('d-none');
+            }
+        });
+    });
+</script>
+{{-- ! End hare --}}
 {{-- *  --}}
 {{--  Start Hare  --}}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "order": [
+                [3, "desc"]
+            ],
+            //   searching: false,
+            columnDefs: [{
+
+                @if (Auth::user()->role_id == 11)
+                    targets: [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+                @else
+                    targets: [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+                @endif
+                orderable: false
+            }],
+            buttons: []
+        });
+    });
+</script>
+
+{{-- filter on weekly list --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        //   all partner
+        $('#filter1').change(function() {
+            var search1 = $(this).val();
+            var search2 = $('#filter2').val();
+            // console.log(search1);
+
+            var urlParams = new URLSearchParams(window.location.search);
+            // Access values from the URL
+            var id = urlParams.get('id');
+            var teamid = urlParams.get('teamid');
+            var partnerid = urlParams.get('partnerid');
+            var startdate = urlParams.get('startdate');
+            var enddate = urlParams.get('enddate');
+
+
+
+            $.ajax({
+                type: 'GET',
+                url: '/filter-weeklist',
+                data: {
+                    clientname: search1,
+                    assignmentname: search2,
+                    id: id,
+                    teamid: teamid,
+                    partnerid: partnerid
+                },
+                success: function(data) {
+                    // Clear the table body
+                    $('table tbody').html("");
+
+                    if (data.length === 0) {
+                        // If no data is found, display a "No data found" message
+                        $('table tbody').append(
+                            '<tr><td colspan="10" class="text-center">No data found</td></tr>'
+                        );
+                    } else {
+                        $.each(data, function(index, item) {
+                            var dayOfWeek = moment(item.date).format('dddd');
+                            var formattedDate = moment(item.date).format(
+                                'DD-MM-YYYY');
+                            var statusBadge = item.status == 0 ?
+                                '<span class="badge badge-pill badge-warning">saved</span>' :
+                                '<span class="badge badge-pill badge-danger">submit</span>';
+                            // Add the rows to the table
+
+
+                            $('table tbody').append('<tr>' +
+                                '<td>' + item.team_member + '</td>' +
+                                '<td>' + formattedDate + '</td>' +
+                                '<td>' + dayOfWeek + '</td>' +
+                                '<td>' + item.client_name + '</td>' +
+                                '<td>' + item.assignment_name + '</td>' +
+                                '<td>' + item.workitem + '</td>' +
+                                '<td>' + item.location + '</td>' +
+                                '<td>' + item.partnername_name + '</td>' +
+                                '<td>' + item.hour + '</td>' +
+                                '<td>' + statusBadge + '</td>' +
+                                // Add more columns here
+                                '</tr>');
+                        });
+
+                        //   remove pagination after filter
+                        $('.paging_simple_numbers').remove();
+                        $('.dataTables_info').remove();
+                    }
+                }
+            });
+        });
+
+
+
+        //** start date
+        $('#filter2').change(function() {
+            var search2 = $(this).val();
+            var search1 = $('#filter1').val();
+            console.log(search2);
+            var urlParams = new URLSearchParams(window.location.search);
+            // Access values from the URL
+            var id = urlParams.get('id');
+            var teamid = urlParams.get('teamid');
+            var partnerid = urlParams.get('partnerid');
+            var startdate = urlParams.get('startdate');
+            var enddate = urlParams.get('enddate');
+            $.ajax({
+                type: 'GET',
+                url: '/filter-weeklist',
+                data: {
+                    assignmentname: search2,
+                    clientname: search1,
+                    id: id,
+                    teamid: teamid,
+                    partnerid: partnerid
+                },
+                success: function(data) {
+                    // Replace the table body with the filtered data
+                    $('table tbody').html(""); // Clear the table body
+
+                    if (data.length === 0) {
+                        // If no data is found, display a "No data found" message
+                        $('table tbody').append(
+                            '<tr><td colspan="10" class="text-center">No data found</td></tr>'
+                        );
+                    } else {
+                        $.each(data, function(index, item) {
+                            var dayOfWeek = moment(item.date).format('dddd');
+                            var formattedDate = moment(item.date).format(
+                                'DD-MM-YYYY');
+                            var statusBadge = item.status == 0 ?
+                                '<span class="badge badge-pill badge-warning">saved</span>' :
+                                '<span class="badge badge-pill badge-danger">submit</span>';
+                            // Add the rows to the table
+
+
+                            $('table tbody').append('<tr>' +
+                                '<td>' + item.team_member + '</td>' +
+                                '<td>' + formattedDate + '</td>' +
+                                '<td>' + dayOfWeek + '</td>' +
+                                '<td>' + item.client_name + '</td>' +
+                                '<td>' + item.assignment_name + '</td>' +
+                                '<td>' + item.workitem + '</td>' +
+                                '<td>' + item.location + '</td>' +
+                                '<td>' + item.partnername_name + '</td>' +
+                                '<td>' + item.hour + '</td>' +
+                                '<td>' + statusBadge + '</td>' +
+                                // Add more columns here
+                                '</tr>');
+                        });
+                        //   remove pagination after filter
+                        $('.paging_simple_numbers').remove();
+                        $('.dataTables_info').remove();
+                    }
+                }
+            });
+        });
+        //shahid
+    });
+</script>
 {{--  Start Hare  --}}
+{{-- ! End hare --}}
 {{-- *  --}}
 {{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            // 'l' for the length menu
+            dom: 'lBfrtip',
+            columnDefs: [{
+                targets: [1, 2, 3, 4, 5],
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Assignment Viewer List',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    //   remove extra spaces
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
 {{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- *  --}}
+{{--  Start Hare  --}}
+
+<script>
+    $(document).ready(function() {
+        // Function to handle change event for client select
+
+        // function handleClientChange(clientId) {
+        //     $('#' + clientId).on('change', function() {
+        //         var cid = $(this).val();
+        //         var datepickers = $('#datepickers').val();
+        //         var clientNumber = parseInt(clientId.replace('client', ''));
+
+        //         if (cid == 33) {
+        //             $.ajax({
+        //                 type: "get",
+        //                 url: "{{ url('holidaysselect') }}",
+        //                 data: {
+        //                     cid: cid,
+        //                     datepickers: datepickers
+        //                 },
+        //                 success: function(response) {
+        //                     $('.row.row-sm.showdiv').addClass('d-none');
+        //                     var location = 'N/A';
+        //                     var time = 0;
+        //                     var holidayName = response.holidayName;
+        //                     var saturday = response.saturday;
+        //                     if (holidayName == 'null') {
+        //                         var workitem = saturday;
+        //                     } else if (saturday == 'null') {
+        //                         var workitem = holidayName;
+        //                     } else {
+        //                         var workitem = holidayName;
+        //                     }
+
+        //                     if (!isNaN(clientNumber)) {
+        //                         var assignmentSelect = $('.assignmentvalue' + clientNumber);
+        //                         assignmentSelect.empty();
+        //                         assignmentSelect.append($('<option>', {
+        //                             value: response.assignmentgenerate_id,
+        //                             text: response.assignment_name + ' (' +
+        //                                 response
+        //                                 .assignmentname + '/' + response
+        //                                 .assignmentgenerate_id + ')'
+        //                         }));
+
+        //                         var assignmentSelect = $('.partnervalue' + clientNumber);
+        //                         assignmentSelect.empty();
+        //                         assignmentSelect.append($('<option>', {
+        //                             value: response.team_memberid,
+        //                             text: response.team_member
+        //                         }));
+
+        //                         $('.workitemnvalue' + clientNumber).val(workitem).prop(
+        //                             'readonly', true);
+        //                         $('.locationvalue' + clientNumber).val(location).prop(
+        //                             'readonly', true);
+        //                         $('#totalhours').val(time);
+        //                         $('#hour' + (clientNumber + 1)).prop('readonly', true);
+        //                     } else {
+
+        //                         var assignmentSelect = $('.assignmentvalue');
+        //                         assignmentSelect.empty();
+        //                         assignmentSelect.append($('<option>', {
+        //                             value: response.assignmentgenerate_id,
+        //                             text: response.assignment_name + ' (' +
+        //                                 response
+        //                                 .assignmentname + '/' + response
+        //                                 .assignmentgenerate_id + ')'
+        //                         }));
+
+        //                         var assignmentSelect = $('.partnervalue');
+        //                         assignmentSelect.empty();
+        //                         assignmentSelect.append($('<option>', {
+        //                             value: response.team_memberid,
+        //                             text: response.team_member
+        //                         }));
+
+
+        //                         $('.workitemnvalue').val(workitem).prop('readonly', true);
+        //                         $('.locationvalue').val(location).prop('readonly', true);
+        //                         $('#totalhours').val(time);
+        //                         $("#hour1").prop("readonly", true);
+        //                     }
+
+        //                 },
+        //                 error: function() {
+        //                     // Handle error if AJAX request fails
+        //                 }
+        //             });
+        //         } else {
+        //             $.ajax({
+        //                 type: "get",
+        //                 url: "{{ url('timesheet/create') }}",
+        //                 data: {
+        //                     cid: cid,
+        //                     datepickers: datepickers
+        //                 },
+        //                 success: function(res) {
+        //                     $('.row.row-sm.d-none').removeClass('d-none');
+        //                     // clear previous data 
+        //                     if (!isNaN(clientNumber)) {
+        //                         $('.assignmentvalue' + clientNumber).empty();
+        //                         $('.partnervalue' + clientNumber).empty();
+        //                         $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+        //                             false);
+        //                         $('.locationvalue' + clientNumber).val('').prop('readonly',
+        //                             false);
+        //                         $("#hour" + (clientNumber + 1)).prop("readonly", false);
+
+        //                     } else {
+        //                         $('.assignmentvalue').empty();
+        //                         $('.partnervalue').empty();
+        //                         $('.workitemnvalue').val('').prop('readonly', false);
+        //                         $('.locationvalue').val('').prop('readonly', false);
+        //                         $("#hour1").prop("readonly", false);
+        //                     }
+
+        //                     $('#' + clientId.replace('client', 'assignment')).html(res);
+
+        //                 },
+        //                 error: function() {
+        //                     // Handle error if AJAX request fails
+        //                 },
+        //             });
+        //         }
+        //     });
+        // }
+
+
+        //   function handleClientChange(clientId) {
+        //       $('#' + clientId).on('change', function() {
+        //           var cid = $(this).val();
+        //           var datepickers = $('#datepickers').val();
+        //           var clientNumber = parseInt(clientId.replace('client', ''));
+
+        //           if (cid == 33) {
+        //               $.ajax({
+        //                   type: "get",
+        //                   url: "{{ url('holidaysselect') }}",
+        //                   data: {
+        //                       cid: cid,
+        //                       datepickers: datepickers
+        //                   },
+        //                   success: function(response) {
+
+        //                       $('.row.row-sm.showdiv').addClass('d-none').find(
+        //                           'input,textarea, select').val('').prop(
+        //                           'readonly', false);
+
+        //                       var location = 'N/A';
+        //                       var time = 0;
+        //                       var holidayName = response.holidayName;
+        //                       var saturday = response.saturday;
+        //                       if (holidayName == 'null') {
+        //                           var workitem = saturday;
+        //                       } else if (saturday == 'null') {
+        //                           var workitem = holidayName;
+        //                       } else {
+        //                           var workitem = holidayName;
+        //                       }
+
+        //                       if (!isNaN(clientNumber)) {
+        //                           var assignmentSelect = $('.assignmentvalue' + clientNumber);
+        //                           assignmentSelect.empty();
+        //                           assignmentSelect.append($('<option>', {
+        //                               value: response.assignmentgenerate_id,
+        //                               text: response.assignment_name + ' (' +
+        //                                   response
+        //                                   .assignmentname + '/' + response
+        //                                   .assignmentgenerate_id + ')'
+        //                           }));
+
+        //                           var assignmentSelect = $('.partnervalue' + clientNumber);
+        //                           assignmentSelect.empty();
+        //                           assignmentSelect.append($('<option>', {
+        //                               value: response.team_memberid,
+        //                               text: response.team_member
+        //                           }));
+
+        //                           $('.workitemnvalue' + clientNumber).val(workitem).prop(
+        //                               'readonly', true);
+        //                           $('.locationvalue' + clientNumber).val(location).prop(
+        //                               'readonly', true);
+        //                           $('#totalhours').val(time);
+        //                           $('#hour' + (clientNumber + 1)).prop('readonly', true);
+        //                       } else {
+
+        //                           var assignmentSelect = $('.assignmentvalue');
+        //                           assignmentSelect.empty();
+        //                           assignmentSelect.append($('<option>', {
+        //                               value: response.assignmentgenerate_id,
+        //                               text: response.assignment_name + ' (' +
+        //                                   response
+        //                                   .assignmentname + '/' + response
+        //                                   .assignmentgenerate_id + ')'
+        //                           }));
+
+        //                           var assignmentSelect = $('.partnervalue');
+        //                           assignmentSelect.empty();
+        //                           assignmentSelect.append($('<option>', {
+        //                               value: response.team_memberid,
+        //                               text: response.team_member
+        //                           }));
+
+
+        //                           $('.workitemnvalue').val(workitem).prop('readonly', true);
+        //                           $('.locationvalue').val(location).prop('readonly', true);
+        //                           $('#totalhours').val(time);
+        //                           $("#hour1").prop("readonly", true);
+        //                       }
+
+        //                   },
+        //                   error: function() {
+        //                       // Handle error if AJAX request fails
+        //                   }
+        //               });
+        //           } else {
+        //               $.ajax({
+        //                   type: "get",
+        //                   url: "{{ url('timesheet/create') }}",
+        //                   data: {
+        //                       cid: cid,
+        //                       datepickers: datepickers
+        //                   },
+        //                   success: function(res) {
+        //                       $('.row.row-sm.d-none').removeClass('d-none');
+        //                       // clear previous data 
+        //                       if (!isNaN(clientNumber)) {
+        //                           $('.assignmentvalue' + clientNumber).empty();
+        //                           $('.partnervalue' + clientNumber).empty();
+        //                           $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+        //                               false);
+        //                           $('.locationvalue' + clientNumber).val('').prop('readonly',
+        //                               false);
+        //                           $("#hour" + (clientNumber + 1)).prop("readonly", false);
+
+        //                       } else {
+        //                           $('.assignmentvalue').empty();
+        //                           $('.partnervalue').empty();
+        //                           $('.workitemnvalue').val('').prop('readonly', false);
+        //                           $('.locationvalue').val('').prop('readonly', false);
+        //                           $("#hour1").prop("readonly", false);
+        //                       }
+
+        //                       $('#' + clientId.replace('client', 'assignment')).html(res);
+
+        //                   },
+        //                   error: function() {
+        //                       // Handle error if AJAX request fails
+        //                   },
+        //               });
+        //           }
+        //       });
+        //   }
+
+
+        function handleClientChange(clientId) {
+            $('#' + clientId).on('change', function() {
+                var cid = $(this).val();
+                var datepickers = $('#datepickers').val();
+                var clientNumber = parseInt(clientId.replace('client', ''));
+
+                if (cid == 33) {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ url('holidaysselect') }}",
+                        data: {
+                            cid: cid,
+                            datepickers: datepickers
+                        },
+                        success: function(response) {
+                            // Hide div and clear all form fields
+                            $('.row.row-sm.showdiv').addClass('d-none').find(
+                                'input, textarea, select').val('').prop('readonly',
+                                false);
+
+                            var location = 'N/A';
+                            var time = 0;
+                            var holidayName = response.holidayName;
+                            var saturday = response.saturday;
+                            var workitem = holidayName === 'null' ? saturday : holidayName;
+
+                            if (!isNaN(clientNumber)) {
+                                var assignmentSelect = $('.assignmentvalue' + clientNumber);
+                                assignmentSelect.empty();
+                                assignmentSelect.append($('<option>', {
+                                    value: response.assignmentgenerate_id,
+                                    text: response.assignment_name + ' (' +
+                                        response.assignmentname + '/' + response
+                                        .assignmentgenerate_id + ')'
+                                }));
+
+                                var partnerSelect = $('.partnervalue' + clientNumber);
+                                partnerSelect.empty();
+                                partnerSelect.append($('<option>', {
+                                    value: response.team_memberid,
+                                    text: response.team_member
+                                }));
+
+                                $('.workitemnvalue' + clientNumber).val(workitem).prop(
+                                    'readonly', true);
+                                $('.locationvalue' + clientNumber).val(location).prop(
+                                    'readonly', true);
+                                $('#totalhours').val(time);
+                                $('#hour' + (clientNumber + 1)).prop('readonly', true);
+                            } else {
+                                var assignmentSelect = $('.assignmentvalue');
+                                assignmentSelect.empty();
+                                assignmentSelect.append($('<option>', {
+                                    value: response.assignmentgenerate_id,
+                                    text: response.assignment_name + ' (' +
+                                        response.assignmentname + '/' + response
+                                        .assignmentgenerate_id + ')'
+                                }));
+
+                                var partnerSelect = $('.partnervalue');
+                                partnerSelect.empty();
+                                partnerSelect.append($('<option>', {
+                                    value: response.team_memberid,
+                                    text: response.team_member
+                                }));
+
+                                $('.workitemnvalue').val(workitem).prop('readonly', true);
+                                $('.locationvalue').val(location).prop('readonly', true);
+                                $('#totalhours').val(time);
+                                $("#hour1").prop('readonly', true);
+                            }
+                        },
+                        error: function() {
+                            // Handle error if AJAX request fails
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ url('timesheet/create') }}",
+                        data: {
+                            cid: cid,
+                            datepickers: datepickers
+                        },
+                        success: function(res) {
+                            // Show div and clear all form fields
+                            $('.row.row-sm.d-none').removeClass('d-none').find(
+                                'input, textarea, select').val('').prop('readonly',
+                                false);
+
+                            if (!isNaN(clientNumber)) {
+                                $('.assignmentvalue' + clientNumber).empty();
+                                $('.partnervalue' + clientNumber).empty();
+                                $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+                                    false);
+                                $('.locationvalue' + clientNumber).val('').prop('readonly',
+                                    false);
+                                $("#hour" + (clientNumber + 1)).prop('readonly', false);
+                            } else {
+                                $('.assignmentvalue').empty();
+                                $('.partnervalue').empty();
+                                $('.workitemnvalue').val('').prop('readonly', false);
+                                $('.locationvalue').val('').prop('readonly', false);
+                                $("#hour1").prop('readonly', false);
+                            }
+
+                            $('#' + clientId.replace('client', 'assignment')).html(res);
+                        },
+                        error: function() {
+                            // Handle error if AJAX request fails
+                        }
+                    });
+                }
+            });
+        }
+
+
+
+
+        // Function to handle change event for assignment select
+        function handleAssignmentChange(assignmentId) {
+            $('#' + assignmentId).on('change', function() {
+                var assignment = $(this).val();
+
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: "assignment=" + assignment,
+                    success: function(res) {
+                        $('#' + assignmentId.replace('assignment', 'partner')).html(res);
+                    },
+                    error: function() {},
+                });
+            });
+        }
+
+        // Dynamically add client fields
+        var maxField = 4;
+        var addButton = $('.add_button');
+        var wrapper = $('.field_wrapper');
+        var x = 1;
+        var h = 2;
+
+        $(addButton).click(function() {
+            if (x < maxField) {
+                x++;
+                h++;
+                var fieldHTML = `<div class="row row-sm">
+          <div class="col-2">
+              <div class="form-group">
+                  <label class="font-weight-600">Client Name</label>
+                  <select class="language form-control refresh" name="client_id[]" id="client${x}">
+                      <option value="">Select Client</option>
+                      @foreach ($client as $clientData)
+                          <option value="{{ $clientData->id }}">
+                              {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                          </option>
+                      @endforeach
+                  </select>
+              </div>
+          </div>
+          <div class="col-2">
+              <div class="form-group">
+                  <label class="font-weight-600">Assignment Name</label>
+                  <select class="form-control key refreshoption" name="assignment_id[]" id="assignment${x}">
+                  </select>
+              </div>
+          </div>
+          <div class="col-2">
+              <div class="form-group">
+                  <label class="font-weight-600">Partner</label>
+                  <select class="language form-control refreshoption" id="partner${x}" name="partner[]">
+                  </select>
+              </div>
+          </div>
+          <div class="col-2">
+              <div class="form-group">
+                  <label class="font-weight-600" style="width:100px;">Work Item</label>
+                  <textarea type="text" name="workitem[]" id="key" value="{{ $timesheet->workitem ?? '' }}" class="form-control key refresh workitemnvalue${x}" rows="2"></textarea>
+              </div>
+          </div>
+          <div class="col-2">
+              <div class="form-group">
+                  <label class="font-weight-600" style="width:100px;">Location</label>
+                  <input type="text" name="location[]" id="key" value="{{ $timesheet->location ?? '' }}" class="form-control key refresh locationvalue${x}">
+              </div>
+          </div>
+          <div class="col-1">
+              <div class="form-group">
+                  <label class="font-weight-600">Hour</label>
+                  <input type="text" class="form-control refresh" id="hour${h}" name="hour[]" min="0" oninput="calculateTotal(this)" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="0" step="1">
+                  <span style="font-size: 10px;margin-left: 10px;"></span>
+              </div>
+          </div>
+          <div class="col-1">
+              <div class="form-group" style="margin-top: 36px;">
+                  <a style="margin-top: 36px;" href="javascript:void(0);" class="remove_button"><img src="{{ url('backEnd/image/remove-icon.png') }}"/></a>
+              </div>
+          </div>
+      </div>`;
+
+                $(wrapper).append(fieldHTML);
+
+                var clientId = 'client' + x;
+                var assignmentId = 'assignment' + x;
+
+                handleClientChange(clientId);
+                handleAssignmentChange(assignmentId);
+            }
+        });
+
+        handleClientChange('client');
+        handleClientChange('client1');
+        handleAssignmentChange('assignment');
+        handleAssignmentChange('assignment1');
+
+        //Once remove button is clicked
+        $(wrapper).on('click', '.remove_button', function(e) {
+            e.preventDefault();
+            $(this).closest('.row-sm').remove();
+            x--;
+        });
+    });
+
+    function calculateTotal() {
+        var totalSum = 0;
+        $('input[name^="hour"]').each(function() {
+            totalSum += parseInt($(this).val()) || 0;
+        });
+
+        document.getElementById("totalhours").value = totalSum;
+    }
+</script>
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- *  --}}
+
+{{--  Start Hare  --}}
+<script>
+    if (valueofIdattribute == 'client' || valueofIdattribute == 'client1') {
+        $('.row.row-sm.showdiv').addClass('d-none').find(
+            'input,textarea').val('').prop(
+            'readonly', false);
+        $('#assignment1, #partner1').empty();
+        //   $('#client1').val('');
+        //   $('#client1').val('Select Client');
+        // Select the "Select Client" option by text
+        $('#client1 option').filter(function() {
+            return $(this).text() ===
+                'Select Client'; // Find the option with the text 'Select Client'
+        }).prop('selected', true); // Set it as selected
+    }
+</script>
+{{--  Start Hare  --}}
+
+<script>
+    $('.row.row-sm.showdiv').removeClass('d-none').find('input, textarea').val('').prop('readonly', false);
+
+    // Clear only the select boxes with specific IDs
+    $('#assignment1, #partner1').empty().prop('readonly', false);
+
+    // Set the default option for the client dropdown
+    $('#client1').html('<option value="">Select Client</option>').val('');
+    $('.row.row-sm.showdiv').addClass('d-none').find('input, select').val('').prop(
+        'readonly', false);
+
+
+    $('.row.row-sm.d-none').removeClass('d-none').find('input, select,textarea').val('').prop(
+        'readonly', false);
+
+    $('.row.row-sm.d-none').removeClass('d-none');
+    $('.row.row-sm.showdiv').addClass('d-none');
+    var valueofIdattribute = $(this).attr('id');
+
+    var valueofIdattribute = $(this).attr('id');
+
+    if (valueofIdattribute == 'client' || valueofIdattribute == 'client1') {
+        $('.row.row-sm.showdiv').addClass('d-none').find(
+            'input,textarea').val('').prop(
+            'readonly', false);
+        $('#assignment1, #partner1').empty();
+        //   $('#client1').val('');
+        $('#client1').val('Select Client');
+    }
+
+    //   if (valueofIdattribute == 'client' || valueofIdattribute == 'client1') {
+    //       //   $('.row.row-sm.d-none').removeClass('d-none');
+    //       $('.row.row-sm.showdiv').removeClass('d-none').find(
+    //           'input,textarea').val('').prop(
+    //           'readonly', false);
+    //       $('#assignment1, #partner1').empty();
+    //       //   $('#client1').val('');
+    //   }
+</script>
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * dynamic target  --}}
+{{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        const nonOrderableColumns = [2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+            21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+            36, 37, 38, 39, 40, 41, 42
+        ];
+
+        const exportColumns = [0, ':visible'];
+
+        $('#examplee').DataTable({
+            pageLength: 100,
+            dom: 'Bfrtip',
+            order: [
+                [0, 'desc']
+            ],
+            columnDefs: [{
+                targets: nonOrderableColumns,
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: exportColumns
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+{{--  Start Hare  --}}
+
+<script>
+    $(document).ready(function() {
+        const exportColumns = [0, ':visible'];
+        const nonOrderableColumns = Array.from({
+            length: 41
+        }, (_, i) => i + 2);
+
+        $('#examplee').DataTable({
+            pageLength: 100,
+            dom: 'Bfrtip',
+            order: [
+                [0, "desc"]
+            ],
+            columnDefs: [{
+                targets: nonOrderableColumns,
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: exportColumns
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+{{--  Start Hare  --}}
+{{-- * regarding fresh datatable  --}}
+{{--  Start Hare  --}}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "pageLength": 100,
+            dom: 'Bfrtip',
+            "order": [
+                [0, "desc"]
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+{{--  Start Hare  --}}
+{{-- * regarding model box validation --}}
+{{--  Start Hare  --}}
+
+{{-- ###################################################################################################### --}}
+{{-- shahid script start hare  --}}
+<script>
+    $(document).ready(function() {
+        $('.saveform').each(function() {
+            $(this).click(function(event) {
+                //  return button tag
+                //  console.log(this);
+                // Get the index from the button's ID
+                //  return value of id ;
+                //  var index = $(this).attr('id');
+
+                //  ['saveform', '45']
+                //  var index = $(this).attr('id').split('-');
+
+                // Get the index from the button's ID
+                var index = $(this).attr('id').split('-')[
+                    1];
+                // Use the dynamic ID
+                var reasonInputVal = $('#reasoninput-' + index).val()
+                    .trim();
+
+                if (reasonInputVal === "") {
+                    alert('Please enter a reason.');
+                    event.preventDefault();
+                    return false;
+                }
+
+                // Confirmation prompt
+                var confirmSubmit = confirm('Are you sure you want to submit?');
+                if (!confirmSubmit) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#timesheetrequest').click(function(event) {
+            var reasoninputvalve = $('#timesheetrequestinput').val().trim();
+
+            if (reasoninputvalve === "") {
+                alert('Please enter a reason.');
+                event.preventDefault();
+                return false;
+            }
+
+            // return true and false in confirmSubmit vairable 
+            var confirmSubmit = confirm('Are you sure you want to submit ?');
+            if (!confirmSubmit) {
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#exampleModal12').on('hidden.bs.modal', function() {
+            //  var formElement1 = $(this).find('form');
+            //  var formElement = $(this).find('form')[0];
+            //  console.log('Form Element:', formElement);
+            //  console.log('Form Element:', formElement1);
+            $(this).find('form')[0].reset();
+        });
+    });
+</script>
+
+{{-- <script>
+   $(document).ready(function() {
+       $('#exampleModal12').on('hidden.bs.modal', function() {
+           console.log('Modal is closing'); // Check if the event is triggered
+           var formElement = $(this).find('form');
+           console.log('Form Element:', formElement); // Log the form element
+
+           if (formElement.length > 0) {
+               console.log('Form found, resetting now...');
+               formElement[0].reset(); // Reset the form
+           } else {
+               console.log('Form not found');
+           }
+       });
+   });
+</script> --}}
+
+
+{{--  Start Hare  --}}
+{{-- * regarding split function / regarding split() --}}
+{{--  Start Hare --}}
+Scenario:
+You have an id attribute value like "saveform-44".
+
+Breakdown of split('-'):
+$(this).attr('id'):
+
+This gets the id attribute of the current element, so in this case, it returns the string "saveform-44".
+.split('-'):
+
+The split('-') method takes the string "saveform-44" and splits it into an array based on the hyphen (-) delimiter.
+The result of this operation is ["saveform", "44"]. This is an array with two elements:
+Index 0: "saveform"
+Index 1: "44"
+[1]:
+
+The [1] accesses the second element of the array, which is "44".
+Summary:
+split('-')[0] would give you "saveform".
+split('-')[1] gives you "44".
+{{--  Start Hare --}}
+<script>
+    // 1. Basic Use: Split a String into an Array
+    let str1 = "apple,banana,orange";
+    let fruits1 = str1.split(",");
+    console.log(fruits1); // Output: ["apple", "banana", "orange"]
+
+    // 2. Splitting by Space
+    let sentence = "Hello world! How are you?";
+    let words = sentence.split(" ");
+    console.log(words); // Output: ["Hello", "world!", "How", "are", "you?"]
+
+    // 3. Splitting by Each Character
+    let str2 = "hello";
+    let chars = str2.split("");
+    console.log(chars); // Output: ["h", "e", "l", "l", "o"]
+
+    // 4. Limit the Number of Splits
+    let str3 = "apple,banana,orange,grape";
+    let fruits2 = str3.split(",", 2);
+    console.log(fruits2); // Output: ["apple", "banana"]
+
+    // 5. Splitting with a Regular Expression
+    let str4 = "Hello123World456";
+    let parts = str4.split(/\d+/); // Splits by one or more digits
+    console.log(parts); // Output: ["Hello", "World", ""]
+
+    // 6. Using Split with No Delimiter
+    let str5 = "Hello World";
+    let result = str5.split();
+    console.log(result); // Output: ["Hello World"]
+
+    // 7. Removing Unwanted Characters
+    let str6 = "1-800-123-4567";
+    let digits = str6.split("-").join(""); // Split by "-" and join the result
+    console.log(digits); // Output: "18001234567"
+
+    // 8. Extracting a Specific Part
+    let url = "https://www.example.com/path/page";
+    let domain = url.split("/")[2];
+    console.log(domain); // Output: "www.example.com"
+
+    // 9. Splitting by Multiple Delimiters
+    let str7 = "apple, banana; orange:grape";
+    let fruits3 = str7.split(/[,;:]/);
+    console.log(fruits3); // Output: ["apple", " banana", " orange", "grape"]
+
+    // 10. Splitting HTML Content
+    let htmlString = "<div>Hello</div><div>World</div>";
+    let parts2 = htmlString.split(/<\/?div>/);
+    console.log(parts2); // Output: ["", "Hello", "", "World", ""]
+
+    // 11. Extracting the Extension from a Filename
+    let filename = "document.pdf";
+    let extension = filename.split(".").pop();
+    console.log(extension); // Output: "pdf"
+
+    // 12. Handling Multiple Delimiters with Empty Results
+    let str8 = "apple--banana,,orange";
+    let fruits4 = str8.split(/[-,]/);
+    console.log(fruits4); // Output: ["apple", "", "banana", "", "orange"]
+
+    // 13. Using split() for String Reversal
+    let str9 = "Hello";
+    let reversed = str9.split("").reverse().join("");
+    console.log(reversed); // Output: "olleH"
+
+    // 14. Handling Leading and Trailing Delimiters
+    let str10 = ",apple,banana,orange,";
+    let fruits5 = str10.split(",");
+    console.log(fruits5); // Output: ["", "apple", "banana", "orange", ""]
+</script>
+
+
+
 {{-- * regarding are you sure  --}}
 {{--  Start Hare --}}
 
@@ -121,7 +1267,51 @@
     });
 </script>
 {{--  Start Hare  --}}
-{{-- * regarding data table / regarding datatable  --}}
+{{-- * regarding data table / regarding datatable / regarding excell  --}}
+{{--  Start Hare --}}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "pageLength": 100,
+            dom: 'Bfrtip',
+            "order": [
+                [0, "desc"]
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
 {{--  Start Hare --}}
 {{-- add this code on top of page  --}}
 <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -388,7 +1578,7 @@ style="display:block">Please Select One</option>
         });
     </script>
     {{--  Start Hare  --}}
-    {{-- * regarding model box closed  --}}
+    {{-- * regarding model box closed / regarding udin  --}}
     {{--  Start Hare  regarding model box closed  --}}
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
     <script>
@@ -2639,7 +3829,49 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
     </script>
 
 
-    {{-- * Regarding date selection  --}}
+    {{-- * Regarding date selection / regarding date blocked  --}}
+    {{--  Start Hare  --}}
+    <!-- End Date Filter -->
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="form-group">
+            <strong><label for="enddate">End Date <span class="text-danger">*</span></label></strong>
+            <input required type="date" class="form-control" id="enddate" name="enddate"
+                value="{{ old('enddate') }}">
+        </div>
+    </div>
+
+    <!-- JavaScript to set the max date for end date -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const endDateField = document.getElementById('enddate');
+            const today = new Date().toISOString().split('T')[0];
+            endDateField.setAttribute('max', today);
+        });
+    </script>
+
+
+    <!-- JavaScript to set the max date for end date -->
+    {{-- <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const endDateField = document.getElementById('enddate');
+          const today = new Date().toISOString().split('T')[0];
+          endDateField.setAttribute('max', today);
+      });
+  </script> --}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0]; // Get today's date once
+
+            // Set max date for the Start Date field
+            const startdateField = document.getElementById('startdate');
+            startdateField.setAttribute('max', today);
+
+            // Set max date for the End Date field
+            const endDateField = document.getElementById('enddate');
+            endDateField.setAttribute('max', today);
+        });
+    </script>
     {{--  Start Hare  --}}
     <script>
         $('#client').on('change', function() {
@@ -2666,6 +3898,37 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
     </script>
     {{--  Start Hare  --}}
 
+    @if (Request::is('invoice/create') ||
+            Request::is('invoice/*/edit') ||
+            Request::is('timesheet/create') ||
+            Request::is('attendance'))
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <script>
+            $(function() {
+                $('#datepicker').datepicker({
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+            $(function() {
+                $("#datepickers").datepicker({
+                    maxDate: new Date,
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+
+            //     $(function() {
+            //      $("#datepickers").datepicker({
+            //          maxDate: new Date(), // Restrict future date selection
+            //          dateFormat: 'dd-mm-yy' // Set the desired date format
+            //      });
+            //  });
+        </script>
+    @endif
+
+
     <div class="col-md-5">
         <p style="float: right;color: white"><b>Select Date : </b> <input type="text" id="datepickers"
                 name="date" value="{{ date('d-m-Y') }}" readonly></p>
@@ -2689,6 +3952,29 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
         });
     </script>
     {{--  Start Hare  --}}
+
+    @if (Request::is('invoice/create') ||
+            Request::is('invoice/*/edit') ||
+            Request::is('timesheet/create') ||
+            Request::is('attendance'))
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <script>
+            $(function() {
+                $('#datepicker').datepicker({
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+            $(function() {
+                $("#datepickers").datepicker({
+                    maxDate: new Date,
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+        </script>
+    @endif
     <style>
         td a.ui-state-default {
             background-color: green !important;
@@ -2821,7 +4107,28 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
     {{--  Start Hare  --}}
     {{--  Start Hare  --}}
     {{-- regarding date formate  --}}
+    @if (Request::is('invoice/create') ||
+            Request::is('invoice/*/edit') ||
+            Request::is('timesheet/create') ||
+            Request::is('attendance'))
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+        <script>
+            $(function() {
+                $('#datepicker').datepicker({
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+            $(function() {
+                $("#datepickers").datepicker({
+                    maxDate: new Date,
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+        </script>
+    @endif
     <script>
         $(function() {
             var startDate = new Date();
@@ -3516,6 +4823,96 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            function validateDateRange(startSelector, endSelector, errorMessage) {
+                var startDateInput = $(startSelector);
+                var endDateInput = $(endSelector);
+
+                function compareDates() {
+                    var startDate = new Date(startDateInput.val());
+                    var endDate = new Date(endDateInput.val());
+
+                    if (startDate > endDate) {
+                        alert(errorMessage);
+                        endDateInput.val('');
+                    }
+                }
+
+                startDateInput.on('input', compareDates);
+                endDateInput.on('blur', compareDates);
+            }
+
+            function validateYearInput(inputSelector) {
+                $(inputSelector).on('change', function() {
+                    var input = $(this);
+                    var dateValue = new Date(input.val());
+                    var year = dateValue.getFullYear();
+                    if (year.toString().length > 4) {
+                        alert('Enter four digits for the year');
+                        input.val('');
+                    }
+                });
+            }
+
+            // Apply date range validation
+            validateDateRange('#start1', '#end1',
+                "'End Request Date' should be greater than or equal to the 'Start Request Date'");
+            validateDateRange('#startperiod1', '#endperiod1',
+                "'End Leave Period' should be greater than or equal to the 'Start Leave Period'");
+
+            // Apply year validation
+            validateYearInput('#start1');
+            validateYearInput('#end1');
+            validateYearInput('#startperiod1');
+            validateYearInput('#endperiod1');
+
+
+            // Validation on submit button click 
+            $('form').submit(function(event) {
+                var fields = ['#employee1', '#leave1', '#status1', '#start1', '#end1', '#startperiod1',
+                    '#endperiod1'
+                ];
+
+                var allEmpty = fields.every(function(selector) {
+                    return $(selector).val() === "";
+                });
+
+                if (allEmpty) {
+                    alert("Please select data for filter");
+                    event.preventDefault(); // Prevent form submission if all fields are empty
+                }
+
+                // Validate date pairs
+                var startDate = $('#start1').val();
+                var endDate = $('#end1').val();
+                var startPeriod = $('#startperiod1').val();
+                var endPeriod = $('#endperiod1').val();
+
+                function validateDatePair(start, end, asteriskId, message) {
+                    if (start && !end) {
+                        alert(message);
+                        $(asteriskId).removeClass("d-none"); // Show the asterisk
+                        event.preventDefault();
+                        return false;
+                    }
+                    $(asteriskId).addClass("d-none"); // Hide the asterisk if validation passes
+                    return true;
+                }
+
+                // Validate both date ranges and show the corresponding asterisk
+                if (!validateDatePair(startDate, endDate, "#endDateAsterisk",
+                        "Please select an 'End Request Date'.") ||
+                    !validateDatePair(startPeriod, endPeriod, "#endPeriodAsterisk",
+                        "Please select an 'End Leave Period'.")) {
+                    return; // Stop if any validation fails
+                }
+                // Validate date pairs end hare 
+
+            });
+        });
+    </script>
+
 
     {{-- <script>
     $(document).ready(function() {
@@ -3976,6 +5373,530 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
         });
     </script>
 
+
+    {{-- validation for comparision date and block year for 4 disit optimize this code --}}
+    <form method="POST" action="{{ url('/filtering-applyleve') }}" enctype="multipart/form-data">
+        @csrf
+        <div class="row">
+            <!-- Employee Dropdown -->
+            <div class="col-3">
+                <div class="form-group">
+                    <strong><label for="employee">Employee</label></strong>
+                    <select class="form-control" id="employee1" name="employee">
+                        <option value="">Please Select One</option>
+                        @php $displayedValues = []; @endphp
+                        @foreach ($teamapplyleaveDatasfilter as $applyleaveDatas)
+                            @if (!in_array($applyleaveDatas->emailid, $displayedValues))
+                                <option value="{{ $applyleaveDatas->createdby }}"
+                                    {{ old('employee') == $applyleaveDatas->createdby ? 'selected' : '' }}>
+                                    {{ $applyleaveDatas->team_member }}
+                                    ({{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->staffcode ?? '') }})
+                                </option>
+                                @php $displayedValues[] = $applyleaveDatas->emailid; @endphp
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- Leave Type Dropdown -->
+            <div class="col-3">
+                <div class="form-group">
+                    <strong><label for="leave">Leave Type</label></strong>
+                    <select class="form-control" id="leave1" name="leave">
+                        <option value="">Please Select One</option>
+                        @php $displayedValues = []; @endphp
+                        @foreach ($teamapplyleaveDatasfilter as $applyleaveDatas)
+                            @if (!in_array($applyleaveDatas->name, $displayedValues))
+                                <option value="{{ $applyleaveDatas->leavetype }}"
+                                    {{ old('leave') == $applyleaveDatas->leavetype ? 'selected' : '' }}>
+                                    {{ $applyleaveDatas->name }}
+                                </option>
+                                @php $displayedValues[] = $applyleaveDatas->name; @endphp
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- Status Dropdown -->
+            <div class="col-3">
+                <div class="form-group">
+                    <strong><label for="status">Status</label></strong>
+                    <select class="form-control" id="status1" name="status">
+                        <option value="">Please Select One</option>
+                        @php $displayedValues = []; @endphp
+                        @foreach ($teamapplyleaveDatasfilter as $applyleaveDatas)
+                            @if (!in_array($applyleaveDatas->status, $displayedValues))
+                                <option value="{{ $applyleaveDatas->status }}">
+                                    {{ $applyleaveDatas->status == 0 ? 'Created' : ($applyleaveDatas->status == 1 ? 'Approved' : 'Rejected') }}
+                                </option>
+                                @php $displayedValues[] = $applyleaveDatas->status; @endphp
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- Request Date Range -->
+            <div class="col-3">
+                <div class="form-group">
+                    <strong><label for="start">Start Request Date</label></strong>
+                    <input type="date" class="form-control" id="start1" name="start"
+                        value="{{ old('start') }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <strong><label for="end">End Request Date</label></strong>
+                    <input type="date" class="form-control" id="end1" name="end"
+                        value="{{ old('end') }}">
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="form-group">
+                    <strong><label for="startperiod">Start Leave Period</label></strong>
+                    <input type="date" class="form-control" id="startperiod1" name="startperiod"
+                        value="{{ old('startperiod') }}">
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="form-group">
+                    <strong><label for="endperiod">End Leave Period</label></strong>
+                    <input type="date" class="form-control" id="endperiod1" name="endperiod"
+                        value="{{ old('endperiod') }}">
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-md-2 col-sm-6 mb-3">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-success btn-block">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            function validateDateRange(startSelector, endSelector, errorMessage) {
+                var startDateInput = $(startSelector);
+                var endDateInput = $(endSelector);
+
+                function compareDates() {
+                    var startDate = new Date(startDateInput.val());
+                    var endDate = new Date(endDateInput.val());
+
+                    if (startDate > endDate) {
+                        alert(errorMessage);
+                        endDateInput.val('');
+                    }
+                }
+
+                startDateInput.on('input', compareDates);
+                endDateInput.on('blur', compareDates);
+            }
+
+            function validateYearInput(inputSelector) {
+                $(inputSelector).on('change', function() {
+                    var input = $(this);
+                    var dateValue = new Date(input.val());
+                    var year = dateValue.getFullYear();
+                    if (year.toString().length > 4) {
+                        alert('Enter four digits for the year');
+                        input.val('');
+                    }
+                });
+            }
+
+            // Apply date range validation
+            validateDateRange('#start1', '#end1',
+                "'End Request Date' should be greater than or equal to the 'Start Request Date'");
+            validateDateRange('#startperiod1', '#endperiod1',
+                "'End Leave Period' should be greater than or equal to the 'Start Leave Period'");
+
+            // Apply year validation
+            validateYearInput('#start1');
+            validateYearInput('#end1');
+            validateYearInput('#startperiod1');
+            validateYearInput('#endperiod1');
+
+            $('form').submit(function(event) {
+                var fields = ['#employee1', '#leave1', '#status1', '#start1', '#end1', '#startperiod1',
+                    '#endperiod1'
+                ];
+                var allEmpty = fields.every(function(selector) {
+                    return $(selector).val() === "";
+                });
+
+                if (allEmpty) {
+                    alert("Please select any input");
+                    event.preventDefault(); // Prevent form submission if all fields are empty
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            function validateDateRange(startSelector, endSelector, errorMessage) {
+                var startDateInput = $(startSelector);
+                var endDateInput = $(endSelector);
+
+                function compareDates() {
+                    var startDate = new Date(startDateInput.val());
+                    var endDate = new Date(endDateInput.val());
+
+                    if (startDate > endDate) {
+                        alert(errorMessage);
+                        endDateInput.val(''); // Clear the end date input
+                    }
+                }
+
+                startDateInput.on('input', compareDates);
+                endDateInput.on('blur', compareDates);
+            }
+
+            function validateYearInput(inputSelector) {
+                $(inputSelector).on('change', function() {
+                    var input = $(this);
+                    var dateValue = new Date(input.val());
+                    var year = dateValue.getFullYear();
+                    if (year.toString().length > 4) {
+                        alert('Enter four digits for the year');
+                        input.val('');
+                    }
+                });
+            }
+
+            // Apply date range validation
+            validateDateRange('#start1', '#end1',
+                "'End Request Date' should be greater than or equal to the 'Start Request Date'");
+            validateDateRange('#startperiod1', '#endperiod1',
+                "'End Leave Period' should be greater than or equal to the 'Start Leave Period'");
+
+            // Apply year validation
+            validateYearInput('#start1');
+            validateYearInput('#end1');
+            validateYearInput('#startperiod1');
+            validateYearInput('#endperiod1');
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Validation on submit button click
+            $('form').submit(function(event) {
+                var fields = ['#employee1', '#leave1', '#status1', '#start1', '#end1', '#startperiod1',
+                    '#endperiod1'
+                ];
+
+                // Check if all fields are empty
+                var allEmpty = fields.every(selector => !$(selector).val());
+
+                if (allEmpty) {
+                    alert("Please select any input");
+                    event.preventDefault(); // Prevent form submission if all fields are empty
+                    return;
+                }
+
+                var startDate = $('#start1').val();
+                var endDate = $('#end1').val();
+                var startPeriod = $('#startperiod1').val();
+                var endPeriod = $('#endperiod1').val();
+
+                // Create a reusable function to validate date pairs
+                function validateDatePair(start, end, message) {
+                    if (start && !end) {
+                        alert(message);
+                        event.preventDefault();
+                        return false;
+                    }
+                    return true;
+                }
+
+                // Validate both date ranges
+                if (!validateDatePair(startDate, endDate, "Please select an 'End Request Date'.") ||
+                    !validateDatePair(startPeriod, endPeriod, "Please select an 'End Leave Period'.")) {
+                    return; // Stop if any validation fails
+                }
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Validation on submit button click
+            // Validation on submit button click
+            $('form').submit(function(event) {
+                var fields = ['#employee1', '#leave1', '#status1', '#start1', '#end1', '#startperiod1',
+                    '#endperiod1'
+                ];
+
+                // Check if all fields are empty
+                var allEmpty = fields.every(function(selector) {
+                    return $(selector).val() === "";
+                });
+
+                if (allEmpty) {
+                    alert("Please select any input");
+                    event.preventDefault(); // Prevent form submission if all fields are empty
+                    return;
+                }
+
+                var startDate = $('#start1').val();
+                var endDate = $('#end1').val();
+
+                var startPeriod = $('#startperiod1').val();
+                var endPeriod = $('#endperiod1').val();
+
+                // Validate if startDate is provided but endDate is missing
+                if (startDate && !endDate) {
+                    alert("Please select an 'End Request Date'.");
+                    event.preventDefault();
+                    return;
+                }
+
+                // Validate if startPeriod is provided but endPeriod is missing
+                if (startPeriod && !endPeriod) {
+                    alert("Please select an 'End Leave Period'.");
+                    event.preventDefault();
+                    return;
+                }
+            });
+
+
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Function to validate date range
+            function validateDateRange(startSelector, endSelector, errorMessage) {
+                var startDateInput = $(startSelector);
+                var endDateInput = $(endSelector);
+
+                function compareDates() {
+                    var startDate = new Date(startDateInput.val());
+                    var endDate = new Date(endDateInput.val());
+
+                    if (startDate > endDate) {
+                        alert(errorMessage);
+                        endDateInput.val(''); // Clear the end date input
+                    }
+                }
+
+                startDateInput.on('input', compareDates);
+                endDateInput.on('blur', compareDates);
+            }
+
+            // Function to validate year input
+            function validateYearInput(inputSelector) {
+                $(inputSelector).on('change', function() {
+                    var input = $(this);
+                    var year = new Date(input.val()).getFullYear();
+                    if (year.toString().length > 4) {
+                        alert('Enter four digits for the year');
+                        input.val(''); // Clear the invalid year input
+                    }
+                });
+            }
+
+            // Apply date range validation
+            validateDateRange('#start1', '#end1',
+                "'End Request Date' should be greater than or equal to the 'Start Request Date'");
+            validateDateRange('#startperiod1', '#endperiod1',
+                "'End Leave Period' should be greater than or equal to the 'Start Leave Period'");
+
+            // Apply year validation for all date inputs
+            ['#start1', '#end1', '#startperiod1', '#endperiod1'].forEach(validateYearInput);
+
+            // Form submit validation
+            $('form').submit(function(event) {
+                var fields = ['#employee1', '#leave1', '#status1', '#start1', '#end1', '#startperiod1',
+                    '#endperiod1'
+                ];
+                var allEmpty = fields.every(function(selector) {
+                    return $(selector).val() === "";
+                });
+
+                if (allEmpty) {
+                    alert("Please select any input");
+                    event.preventDefault(); // Prevent form submission if all fields are empty
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function(event) {
+                var employee = $('#employee1').val();
+                var leave = $('#leave1').val();
+                var status = $('#status1').val();
+                var startDate = $('#start1').val();
+                var endDate = $('#end1').val();
+                var startPeriod = $('#startperiod1').val();
+                var endPeriod = $('#endperiod1').val();
+
+                if (employee === "" && leave === "" && status === "" && startDate === "" && endDate ===
+                    "" &&
+                    startPeriod === "" && endPeriod === "") {
+                    alert("Please select Any input ");
+                    event.preventDefault();
+                    return;
+                }
+            });
+        });
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function() {
+            var startDateInput = $('#start1');
+            var endDateInput = $('#end1');
+
+            function compareDates() {
+                var startDate = new Date(startDateInput.val());
+                var endDate = new Date(endDateInput.val());
+
+                if (startDate > endDate) {
+                    alert("'End Request Date' should be greater than or equal to the 'Start Request Date'");
+                    endDateInput.val(''); // Clear the end date input
+                }
+            }
+
+            startDateInput.on('input', compareDates);
+            endDateInput.on('blur', compareDates);
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#start1').on('change', function() {
+                var startclear = $('#start1');
+                var startDateInput1 = $('#start1').val();
+                var startDate = new Date(startDateInput1);
+                var startyear = startDate.getFullYear();
+                var yearLength = startyear.toString().length;
+                if (yearLength > 4) {
+                    alert('Enter four digits for the year');
+                    startclear.val('');
+                }
+            });
+            $('#end1').on('change', function() {
+                var endclear = $('#end1');
+                var endDateInput1 = $('#end1').val();
+                var endtDate = new Date(endDateInput1);
+                var endyear = endtDate.getFullYear();
+                var endyearLength = endyear.toString().length;
+                if (endyearLength > 4) {
+                    alert('Enter four digits for the year');
+                    endclear.val('');
+                }
+            });
+        });
+    </script>
+
+    {{-- End leave period date and Start Leave Period date validation --}}
+    <script>
+        $(document).ready(function() {
+            var startDateInput = $('#startperiod1');
+            var endDateInput = $('#endperiod1');
+
+            function compareDates() {
+                var startDate = new Date(startDateInput.val());
+                var endDate = new Date(endDateInput.val());
+
+                if (startDate > endDate) {
+                    alert(
+                        "'End leave period date' should be greater than or equal to the 'Start Leave Period date'"
+                    );
+                    endDateInput.val('');
+                }
+            }
+
+            startDateInput.on('input', compareDates);
+            endDateInput.on('blur', compareDates);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#startperiod1').on('change', function() {
+                var startclear = $('#startperiod1');
+                var startDateInput1 = $('#startperiod1').val();
+                var startDate = new Date(startDateInput1);
+                var startyear = startDate.getFullYear();
+                var yearLength = startyear.toString().length;
+                if (yearLength > 4) {
+                    alert('Enter four digits for the year');
+                    startclear.val('');
+                }
+            });
+            $('#endperiod1').on('change', function() {
+                var endclear = $('#endperiod1');
+                var endDateInput1 = $('#endperiod1').val();
+                var endtDate = new Date(endDateInput1);
+                var endyear = endtDate.getFullYear();
+                var endyearLength = endyear.toString().length;
+                if (endyearLength > 4) {
+                    alert('Enter four digits for the year');
+                    endclear.val('');
+                }
+            });
+        });
+    </script>
+    {{-- Include jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var startDateInput = $('#startdate');
+            var endDateInput = $('#enddate');
+
+            // Function to compare start and end dates
+            function compareDates() {
+                var startDate = new Date(startDateInput.val());
+                var endDate = new Date(endDateInput.val());
+
+                if (startDate > endDate) {
+                    alert('End date should be greater than or equal to the Start date');
+                    endDateInput.val(''); // Clear the end date input
+                }
+            }
+
+            // Function to validate the year length
+            function validateYear(input) {
+                var date = new Date(input.val());
+                var year = date.getFullYear();
+
+                if (year.toString().length > 4) {
+                    alert('Enter four digits for the year');
+                    input.val(''); // Clear the invalid date
+                }
+            }
+
+            // Attach event listeners
+            startDateInput.on('input', compareDates);
+            endDateInput.on('blur', compareDates);
+
+            startDateInput.on('change', function() {
+                validateYear(startDateInput);
+            });
+
+            endDateInput.on('change', function() {
+                validateYear(endDateInput);
+            });
+        });
+    </script>
 
     {{-- validation for comparision date and block year for 4 disit --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -6902,6 +8823,831 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
             });
         });
     </script> --}}
+
+    {{-- 222222222222222222222222222222222222222 --}}
+
+
+    {{-- add library for excell download after filter  --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script> --}}
+
+    {{-- filter on apply leave --}}
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
+    {{-- <script>
+     $(document).ready(function() {
+         // Common function to render table rows
+         function renderTableRows(data) {
+             $('table tbody').html("");
+             $('#clickExcell').show();
+
+             if (data.length === 0) {
+                 $('table tbody').append('<tr><td colspan="8" class="text-center">No data found</td></tr>');
+             } else {
+                 $.each(data, function(index, item) {
+                     var url = '/applyleave/' + item.id;
+                     var createdAt = formatDate(item.created_at);
+                     var fromDate = formatDate(item.from);
+                     var toDate = formatDate(item.to);
+                     var holidays = Math.floor((new Date(item.to) - new Date(item.from)) / (24 * 60 *
+                         60 * 1000)) + 1;
+
+                     $('table tbody').append('<tr>' +
+                         '<td><a href="' + url + '">' + item.team_member + '</a></td>' +
+                         //  '<td>' + item.staffcode + '</td>' +
+                         '<td>' + (item.teamnewstaffcode ? item.teamnewstaffcode : item.staffcode) +
+                         '</td>' +
+                         '<td>' + createdAt + '</td>' +
+                         '<td>' + getStatusBadge(item.status) + '</td>' +
+                         '<td>' + item.name + '</td>' +
+                         '<td>' + fromDate + ' to ' + toDate + '</td>' +
+                         '<td>' + holidays + '</td>' +
+                         '<td>' + item.approvernames + '</td>' +
+                         //  '<td>' + item.approvernames + '</td>' +
+                         '<td>' + (item.newstaff_code ? item.newstaff_code : item
+                             .approverstaffcode) + '</td>' +
+                         '<td style="width: 7rem;text-wrap: wrap;">' + item.reasonleave + '</td>' +
+                         '</tr>');
+                 });
+             }
+         }
+
+         // Common function to export data to Excel
+         function exportToExcel(data) {
+             const filteredData = data.map(item => {
+                 const holidays = Math.floor((new Date(item.to) - new Date(item.from)) / (24 * 60 * 60 *
+                     1000)) + 1;
+                 const createdAt = formatDate(item.created_at);
+                 const fromDate = formatDate(item.from);
+                 const toDate = formatDate(item.to);
+
+                 return {
+                     Employee: item.team_member,
+                     Staff_code: item.teamnewstaffcode ? item.teamnewstaffcode : item.staffcode,
+                     Date_of_Request: createdAt,
+                     status: getStatusText(item.status),
+                     Leave_Type: item.name,
+                     from: fromDate,
+                     to: toDate,
+                     Days: holidays,
+                     Approver: item.approvernames,
+                     Approver_Code: item.newstaff_code ? item.newstaff_code : item.approverstaffcode,
+                     Reason_for_Leave: item.reasonleave
+                 };
+             });
+
+             const ws = XLSX.utils.json_to_sheet(filteredData);
+             const headerCellStyle = {
+                 font: {
+                     bold: true
+                 }
+             };
+
+             ws['!cols'] = [{
+                     wch: 15
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 15
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 15
+                 },
+                 {
+                     wch: 15
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 30
+                 }
+             ];
+
+             Object.keys(ws).filter(key => key.startsWith('A')).forEach(key => {
+                 ws[key].s = headerCellStyle;
+             });
+
+             const wb = XLSX.utils.book_new();
+             XLSX.utils.book_append_sheet(wb, ws, "FilteredData");
+             const excelBuffer = XLSX.write(wb, {
+                 bookType: "xlsx",
+                 type: "array"
+             });
+             const dataBlob = new Blob([excelBuffer], {
+                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+             });
+             saveAs(dataBlob, "Apply_Report_Filter_List.xlsx");
+         }
+
+         // Common function to format date
+         function formatDate(dateString) {
+             return new Date(dateString).toLocaleDateString('en-GB', {
+                 day: '2-digit',
+                 month: '2-digit',
+                 year: 'numeric'
+             });
+         }
+
+         // Common function to get status text
+         function getStatusText(status) {
+             return status === 0 ? 'Created' : status === 1 ? 'Approved' : status === 2 ? 'Rejected' : '';
+         }
+
+         // Common function to get status badge
+         function getStatusBadge(status) {
+             if (status === 0) {
+                 return '<span class="badge badge-pill badge-warning"><span style="display: none;">A</span>Created</span>';
+             } else if (status === 1) {
+                 return '<span class="badge badge-success"><span style="display: none;">B</span>Approved</span>';
+             } else if (status === 2) {
+                 return '<span class="badge badge-danger">Rejected</span>';
+             } else {
+                 return '';
+             }
+         }
+
+         // Function to handle status change
+         function handleStatusChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Function to handle leave type change
+         function handleLeaveTypeChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Function to handle employee change
+         function handleEmployeeChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     console.log(data)
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Function to handle leave period end date change
+         function handleleaveperiodendChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         //  end Request Date end date wise
+         function handleEndRequestDateChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Event handlers
+         $('#employee1').change(handleEmployeeChange);
+         $('#leave1').change(handleLeaveTypeChange);
+         $('#status1').change(handleStatusChange);
+         $('#end1').change(handleEndRequestDateChange);
+         $('#endperiod1').change(handleleaveperiodendChange);
+     });
+ </script> --}}
+
+    {{-- 
+ <script>
+     $(document).ready(function() {
+         function renderTableRows(data) {
+             $('table tbody').html(""); // Clear the existing rows
+             $('#clickExcell').show();
+
+             if (data.length === 0) {
+                 $('table tbody').append('<tr><td colspan="8" class="text-center">No data found</td></tr>');
+             } else {
+                 $.each(data, function(index, item) {
+                     var url = '/applyleave/' + item.id;
+                     var createdAt = formatDate(item.created_at);
+                     var fromDate = formatDate(item.from);
+                     var toDate = formatDate(item.to);
+                     var holidays = Math.floor((new Date(item.to) - new Date(item.from)) / (24 * 60 *
+                         60 * 1000)) + 1;
+
+                     var approverCode = item.newstaff_code ? item.newstaff_code : item.approverstaffcode;
+
+                     // Append each row to the table
+                     $('table tbody').append('<tr>' +
+                         '<td><a href="' + url + '">' + item.team_member + '</a></td>' +
+                         '<td>' + (item.teamnewstaffcode ? item.teamnewstaffcode : item.staffcode) +
+                         '</td>' +
+                         '<td>' + createdAt + '</td>' +
+                         '<td>' + getStatusBadge(item.status) + '</td>' +
+                         '<td>' + item.name + '</td>' +
+                         '<td>' + fromDate + ' to ' + toDate + '</td>' +
+                         '<td>' + holidays + '</td>' +
+                         '<td>' + item.approvernames + '</td>' +
+                         '<td>' + approverCode + '</td>' +
+                         '<td style="width: 7rem;text-wrap: wrap;">' + item.reasonleave + '</td>' +
+                         '<td>' +
+                         '<button class="btn btn-success approve-btn" data-id="' + item.id +
+                         '">Approve</button> ' +
+                         '<button class="btn btn-danger reject-btn" data-id="' + item.id +
+                         '">Reject</button>' +
+                         '</td>' +
+                         '</tr>');
+                 });
+             }
+         }
+
+         // Function to handle approve action
+         function handleApprove(id) {
+             $.ajax({
+                 type: 'POST',
+                 url: '/approve-leave/' + id,
+                 success: function(response) {
+                     alert('Leave approved successfully');
+                     handleStatusChange(); // Re-filter the data to refresh the table
+                 }
+             });
+         }
+
+         // Function to handle reject action
+         function handleReject(id) {
+             $.ajax({
+                 type: 'POST',
+                 url: '/reject-leave/' + id,
+                 success: function(response) {
+                     alert('Leave rejected successfully');
+                     handleStatusChange(); // Re-filter the data to refresh the table
+                 }
+             });
+         }
+
+         // Delegate event listeners to dynamically created buttons
+         $('table tbody').on('click', '.approve-btn', function() {
+             var id = $(this).data('id');
+             handleApprove(id);
+         });
+
+         $('table tbody').on('click', '.reject-btn', function() {
+             var id = $(this).data('id');
+             handleReject(id);
+         });
+
+         // Common function to export data to Excel
+         function exportToExcel(data) {
+             const filteredData = data.map(item => {
+                 const holidays = Math.floor((new Date(item.to) - new Date(item.from)) / (24 * 60 * 60 *
+                     1000)) + 1;
+                 const createdAt = formatDate(item.created_at);
+                 const fromDate = formatDate(item.from);
+                 const toDate = formatDate(item.to);
+
+                 return {
+                     Employee: item.team_member,
+                     Staff_code: item.teamnewstaffcode ? item.teamnewstaffcode : item.staffcode,
+                     Date_of_Request: createdAt,
+                     status: getStatusText(item.status),
+                     Leave_Type: item.name,
+                     from: fromDate,
+                     to: toDate,
+                     Days: holidays,
+                     Approver: item.approvernames,
+                     Approver_Code: item.newstaff_code ? item.newstaff_code : item.approverstaffcode,
+                     Reason_for_Leave: item.reasonleave
+                 };
+             });
+
+             const ws = XLSX.utils.json_to_sheet(filteredData);
+             const headerCellStyle = {
+                 font: {
+                     bold: true
+                 }
+             };
+
+             ws['!cols'] = [{
+                     wch: 15
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 15
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 15
+                 },
+                 {
+                     wch: 15
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 20
+                 },
+                 {
+                     wch: 30
+                 }
+             ];
+
+             Object.keys(ws).filter(key => key.startsWith('A')).forEach(key => {
+                 ws[key].s = headerCellStyle;
+             });
+
+             const wb = XLSX.utils.book_new();
+             XLSX.utils.book_append_sheet(wb, ws, "FilteredData");
+             const excelBuffer = XLSX.write(wb, {
+                 bookType: "xlsx",
+                 type: "array"
+             });
+             const dataBlob = new Blob([excelBuffer], {
+                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+             });
+             saveAs(dataBlob, "Apply_Report_Filter_List.xlsx");
+         }
+
+         // Common function to format date
+         function formatDate(dateString) {
+             return new Date(dateString).toLocaleDateString('en-GB', {
+                 day: '2-digit',
+                 month: '2-digit',
+                 year: 'numeric'
+             });
+         }
+
+         // Common function to get status text
+         function getStatusText(status) {
+             return status === 0 ? 'Created' : status === 1 ? 'Approved' : status === 2 ? 'Rejected' : '';
+         }
+
+         // Common function to get status badge
+         function getStatusBadge(status) {
+             if (status === 0) {
+                 return '<span class="badge badge-pill badge-warning"><span style="display: none;">A</span>Created</span>';
+             } else if (status === 1) {
+                 return '<span class="badge badge-success"><span style="display: none;">B</span>Approved</span>';
+             } else if (status === 2) {
+                 return '<span class="badge badge-danger">Rejected</span>';
+             } else {
+                 return '';
+             }
+         }
+
+         // Function to handle status change
+         function handleStatusChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Function to handle leave type change
+         function handleLeaveTypeChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Function to handle employee change
+         function handleEmployeeChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     console.log(data)
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Function to handle leave period end date change
+         function handleleaveperiodendChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     // Remove previus attachment on download button 
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         //  end Request Date end date wise
+         function handleEndRequestDateChange() {
+             var endperiod1 = $('#endperiod1').val();
+             var startperiod1 = $('#startperiod1').val();
+             var employee1 = $('#employee1').val();
+             var leave1 = $('#leave1').val();
+             var status1 = $('#status1').val();
+             var end1 = $('#end1').val();
+             var start1 = $('#start1').val();
+             $('#clickExcell').hide();
+
+
+             $.ajax({
+                 type: 'GET',
+                 url: '/filtering-applyleve',
+                 data: {
+                     end: end1,
+                     start: start1,
+                     startperiod: startperiod1,
+                     endperiod: endperiod1,
+                     status: status1,
+                     employee: employee1,
+                     leave: leave1
+                 },
+                 success: function(data) {
+                     renderTableRows(data);
+                     $('.paging_simple_numbers').remove();
+                     $('.dataTables_info').remove();
+                     $('#clickExcell').off('click');
+                     if (data.length > 0) {
+                         $('#clickExcell').on('click', function() {
+                             exportToExcel(data);
+                         });
+                     }
+                     $('#clickExcell').show();
+                 }
+             });
+         }
+
+         // Event handlers
+         $('#employee1').change(handleEmployeeChange);
+         $('#leave1').change(handleLeaveTypeChange);
+         $('#status1').change(handleStatusChange);
+         $('#end1').change(handleEndRequestDateChange);
+         $('#endperiod1').change(handleleaveperiodendChange);
+     });
+ </script> --}}
+
+    {{-- Start Request Date and End Request Date validation --}}
+
+    {{-- Date validation --}}
+    {{-- <script>
+     $(document).ready(function() {
+         function validateDateRange(startSelector, endSelector, errorMessage) {
+             var startDateInput = $(startSelector);
+             var endDateInput = $(endSelector);
+
+             function compareDates() {
+                 var startDate = new Date(startDateInput.val());
+                 var endDate = new Date(endDateInput.val());
+
+                 if (startDate > endDate) {
+                     alert(errorMessage);
+                     endDateInput.val(''); // Clear the end date input
+                 }
+             }
+
+             startDateInput.on('input', compareDates);
+             endDateInput.on('blur', compareDates);
+         }
+
+         function validateYearInput(inputSelector) {
+             $(inputSelector).on('change', function() {
+                 var input = $(this);
+                 var dateValue = new Date(input.val());
+                 var year = dateValue.getFullYear();
+                 if (year.toString().length > 4) {
+                     alert('Enter four digits for the year');
+                     input.val('');
+                 }
+             });
+         }
+
+         // Apply date range validation
+         validateDateRange('#start1', '#end1',
+             "'End Request Date' should be greater than or equal to the 'Start Request Date'");
+         validateDateRange('#startperiod1', '#endperiod1',
+             "'End Leave Period' should be greater than or equal to the 'Start Leave Period'");
+
+         // Apply year validation
+         validateYearInput('#start1');
+         validateYearInput('#end1');
+         validateYearInput('#startperiod1');
+         validateYearInput('#endperiod1');
+     });
+ </script>
+ <script>
+     $(document).ready(function() {
+         $('form').submit(function(event) {
+             var employee = $('#employee1').val();
+             var leave = $('#leave1').val();
+             var status = $('#status1').val();
+             var startDate = $('#start1').val();
+             var endDate = $('#end1').val();
+             var startPeriod = $('#startperiod1').val();
+             var endPeriod = $('#endperiod1').val();
+
+             if (employee === "" && leave === "" && status === "" && startDate === "" && endDate ===
+                 "" &&
+                 startPeriod === "" && endPeriod === "") {
+                 alert("Please select Any input ");
+                 event.preventDefault();
+                 return;
+             }
+         });
+     });
+ </script> --}}
 
 
 

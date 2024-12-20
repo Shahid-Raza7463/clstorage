@@ -1,0 +1,477 @@
+
+task se related bugs task wale file me hi daale aur other bugs yaha dale 
+
+vsademo done 
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\timesheetrequestapprovelform.blade.php
+
+valid to se valid till
+
+
+vsalive, vsalocal done ,
+222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\savedtimesheetedit.blade.php
+
+                        <form method="post" action="{{ url('/savedtimesheet/update') }}" enctype="multipart/form-data"
+                            id="detailsForm" style="margin-bottom: 0px;">
+                            @csrf
+
+                            <div class="row row-sm" style="margin-bottom: 19px;">
+                                <div class="col-sm-6">
+                                    <label for="">Employee Name</label>
+                                    <input required type="text" name="teammember" class="form-control"
+                                        value="{{ $timesheetedit->team_member }}" placeholder="Enter Employee Name"
+                                        readonly>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label for="">Date</label>
+                                    <input required type="text" name="teammember" class="form-control"
+                                        value=" {{ date('d-m-Y', strtotime($timesheetedit->date)) }}"
+                                        placeholder="Enter Employee Name" readonly>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600">Client Name *</label>
+                                        <select required class="language form-control" name="client_id" id="client"
+                                            @if (Request::is('timesheet/*/edit')) > <option disabled style="display:block">Select
+                                                Client
+                                                </option>
+                            
+                                                @foreach ($client as $clientData)
+                                                <option value="{{ $clientData->id }}">
+                                                    {{ $clientData->client_name }}</option>
+                                                @endforeach
+                                                
+                            
+                                                @else
+                                                <option></option>
+                                                <option value="">Select Client</option>
+                                                @foreach ($client as $clientData)
+                                                <option value="{{ $clientData->id }}"{{ $timesheetedit->client_id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
+                                                    {{ $clientData->client_name }}</option>
+                            
+                                                @endforeach @endif
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600">Assignment Name *</label>
+                                        @php
+                                            $assignment = app('App\Models\Assignment')
+                                                ->where('id', $timesheetedit->assignment_id)
+                                                ->first();
+
+                                        @endphp
+                                        <select class="form-control key assignmentvalue" name="assignment_id"
+                                            id="assignment">
+
+                                            @if (!empty($timesheetedit->assignment_id))
+                                                @php
+                                                    $assignment = app('App\Models\Assignment')
+                                                        ->where('id', $timesheetedit->assignment_id)
+                                                        ->first();
+                                                @endphp
+                                                @if ($assignment)
+                                                    <option value="{{ $assignment->id }}">
+                                                        {{ $assignment->assignment_name }}
+                                                    </option>
+                                                @endif
+                                            @endif
+                                            @if (!empty($timesheet->assignment_id))
+                                                <option value="{{ $assignment->id }}"
+                                                    {{ $timesheetedit->assignment_id == $assignment->id ? 'selected' : '' }}>
+                                                    {{ App / Models / Assignment::where('id', $timesheet->assignment_id)->first()->assignment_name ?? '' }}
+                                                </option>
+                                            @endif
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600">Partner *</label>
+
+                                        <select class="language form-control partnervalue" id="partner" name="partner">
+                                            @if (!empty($timesheetedit->partner))
+                                                @php
+                                                    $assignment = app('App\Models\Teammember')
+                                                        ->where('id', $timesheetedit->partner)
+                                                        ->first();
+                                                @endphp
+                                                @if ($assignment)
+                                                    <option value="{{ $timesheetedit->partner }}">
+                                                        {{ $assignment->team_member }}
+                                                    </option>
+                                                @endif
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600" style="width:100px;">Location *</label>
+                                        <input required type="text" name="location" id="location"
+                                            value="{{ $timesheetedit->location }}" class="form-control locationvalue"
+                                            placeholder="Enter Location">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600" style="width:100px;">Work Item *</label>
+                                        <input required type="text" name="workitem"
+                                            value="{{ $timesheetedit->workitem }}" class="form-control workitemnvalue"
+                                            placeholder="Enter Name">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="status" value="{{ $timesheetedit->status }}"
+                                            class="form-control" placeholder="Enter Location">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="timesheetusersid" value="{{ $timesheetedit->id }}"
+                                            class="form-control" placeholder="Enter Location">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="timesheetid" value="{{ $timesheetedit->timesheetid }}"
+                                            class="form-control" placeholder="Enter Location">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="createdby" value="{{ $timesheetedit->createdby }}"
+                                            class="form-control" placeholder="Enter Location">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="date" id="date1" class="form-control"
+                                            value=" {{ date('d-m-Y', strtotime($timesheetedit->date ?? '')) }}"
+                                            placeholder="Enter Date" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600">Hour *</label>
+                                        <input required type="text" name="hour" id="hour"
+                                            value="{{ $timesheetedit->hour }}" class="form-control"
+                                            placeholder="Enter Location">
+
+                                        <span style="font-size: 10px;margin-left: 10px;"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success" style="float:right">Submit</button>
+                                <a class="btn btn-secondary" href="{{ url('timesheet/mylist') }}">
+                                    Back</a>
+                            </div>
+
+                        </form>
+						
+				
+
+
+vsalive, vsademo done 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+find text   $todayBirthdays = Teammember::whereNotNull('dateofbirth')
+
+
+ $todayBirthdays = Teammember::whereNotNull('dateofbirth')
+      ->where('status', '1')
+      ->whereNotIn('id', [447])
+      ->get()
+      ->filter(function ($birthday) {
+        $dateofbirth = Carbon::parse($birthday->dateofbirth);
+        $currentDate = Carbon::now();
+
+        // Compare the month and day without considering the current year
+        return $dateofbirth->month == $currentDate->month && $dateofbirth->day == $currentDate->day;
+      })
+      ->sortBy('dateofbirth');
+
+
+
+    $upcomingBirthdays = Teammember::where('status', '1')
+      ->whereNotIn('id', [447])
+      ->whereRaw('DATE_FORMAT(dateofbirth, "%m-%d") > DATE_FORMAT(NOW(), "%m-%d")')
+      ->orderByRaw('DATE_FORMAT(dateofbirth, "%m-%d")')
+      ->limit(7)
+      ->get();
+				
+						
+						
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+regarding attendance 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\attendance\adminattendance.blade.php
+
+                            @foreach ($attendanceDatas as $attendanceData)
+                                <tr>
+                                    {{-- @php
+                                        dd($attendanceData);
+                                    @endphp --}}
+
+                                    @php
+                                        $permotioncheck = DB::table('teamrolehistory')
+                                            ->where('teammember_id', $attendanceData->employee_name)
+                                            ->first();
+
+                                        $datadate = $attendanceData->fulldate
+                                            ? Carbon\Carbon::createFromFormat('Y-m-d', $attendanceData->fulldate)
+                                            : null;
+
+                                        $permotiondate = null;
+                                        if ($permotioncheck) {
+                                            $permotiondate = Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $permotioncheck->created_at,
+                                            );
+                                        }
+
+                                    @endphp
+                                    <td style="display: none;">{{ $attendanceData->id }}</td>
+                                    <td>{{ $attendanceData->team_member }}</td>
+                                    {{-- <td class="text-center">
+                                        {{ $attendanceData->newstaff_code ?? ($attendanceData->staffcode ?? '') }}</td> --}}
+                                    {{-- <td class="text-center">{{ $attendanceData->final_staff_code }}</td> --}}
+                                    @if ($permotiondate && $datadate && $datadate->greaterThan($permotiondate))
+                                        <td>{{ $permotioncheck->newstaff_code }}</td>
+                                    @else
+                                        <td>{{ $attendanceData->staffcode }}</td>
+                                    @endif
+                                    <td>{{ $attendanceData->rolename }}</td>
+                                    {{-- <td> {{ $attendanceData->joining_date ? date('d-m-Y', strtotime($attendanceData->joining_date)) : 'NA' }}
+                                    </td> --}}
+                                    <td> {{ $attendanceData->final_rejoining_date ? date('d-m-Y', strtotime($attendanceData->final_rejoining_date)) : date('d-m-Y', strtotime($attendanceData->joining_date)) }}
+                                    </td>
+                                    <td> {{ $attendanceData->month }}</td>
+                                    <td> {{ $attendanceData->year }}</td>
+                                    <td> {{ $attendanceData->one ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->two ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->three ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->four ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->five ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->six ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->seven ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->eight ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->nine ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->ten ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->eleven ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twelve ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->thirteen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->fourteen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->fifteen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->sixteen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->seventeen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->eighteen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->ninghteen ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twenty ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentyone ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentytwo ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentythree ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentyfour ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentyfive ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentysix ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentyseven ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentyeight ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->twentynine ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->thirty ?? '…....' }}</td>
+                                    <td> {{ $attendanceData->thirtyone ?? '…....' }}</td>
+
+                                    <td class="text-center"> {{ $attendanceData->total_no_of_days ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->no_of_days_present ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->casual_leave ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->exam_leave ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->travel ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->offholidays ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->sundaycount ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->holidays ?? '0' }}</td>
+                                </tr>
+                            @endforeach
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AttendanceController.php
+
+    public function adminattendancereport(Request $request)
+    {
+        $teamnid = $request->input('teammemberId');
+        $startdate = Carbon::parse($request->input('startdate'));
+        $enddate = Carbon::parse($request->input('enddate'));
+
+        // Convert start and end dates to their respective month numbers like Month number (1-12)
+        $startMonth = $startdate->format('n');
+        $startYear = $startdate->format('Y');
+
+        $endMonth = $enddate->format('n');
+        $endYear = $enddate->format('Y');
+
+        // Retrieve all team members
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 13) {
+            $teammembers = DB::table('teammembers')
+                ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                ->whereIn('teammembers.role_id', [14, 15, 13, 11])
+                ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
+                ->orderBy('team_member', 'ASC')
+                ->get();
+        } else {
+            $teammembers = DB::table('teammembers')
+                ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                ->where('teammembers.id', auth()->user()->teammember_id)
+                ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
+                ->orderBy('team_member', 'ASC')
+                ->get();
+        }
+
+        // Fetch single user data
+        $singleusersearched = DB::table('teammembers')
+            ->where('id', $teamnid)
+            ->select('team_member', 'staffcode', 'id', 'leavingdate', 'joining_date')
+            ->first();
+
+        // Check leaving date validation
+        if ($singleusersearched && $singleusersearched->leavingdate) {
+            $leavingdate = Carbon::parse($singleusersearched->leavingdate);
+            if ($startdate->gt($leavingdate)) {
+                $output = ['msg' => 'User left on ' . $leavingdate->format('d-m-Y') . ', cannot select beyond this date.'];
+                $request->flash();
+                return redirect()->to('attendance')->with('statuss', $output);
+            }
+        }
+
+        // Check joining date validation
+        if ($singleusersearched && $singleusersearched->joining_date) {
+            $joiningdate = Carbon::parse($singleusersearched->joining_date);
+            if ($joiningdate->gt($enddate)) {
+                $output = ['msg' => 'User joined on ' . $joiningdate->format('d-m-Y') . ', cannot select before this date.'];
+                $request->flash();
+                return redirect()->to('attendance')->with('statuss', $output);
+            }
+        }
+
+        // Build attendance query filtered by month
+        // $query = DB::table('attendances')
+        //     ->leftJoin('teammembers', 'teammembers.id', 'attendances.employee_name')
+        //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+        //     ->leftJoin('roles', 'roles.id', 'teammembers.role_id')
+        //     // ->whereNotNull('attendances.id')
+        //     ->select(
+        //         'attendances.*',
+        //         'teammembers.team_member',
+        //         'teammembers.staffcode',
+        //         'teamrolehistory.newstaff_code',
+        //         'teammembers.employment_status',
+        //         'roles.rolename',
+        //         'teammembers.joining_date'
+        //     );
+
+        // Build attendance query filtered by month
+        $query = DB::table('attendances')
+            ->join('teammembers', 'teammembers.id', '=', 'attendances.employee_name')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->select([
+                'attendances.*',
+                'teammembers.team_member',
+                'teammembers.staffcode',
+                'teammembers.employment_status',
+                'roles.rolename',
+                'teamrolehistory.newstaff_code',
+                'teammembers.staffcode',
+                // Combine rejoining dates
+                // DB::raw('COALESCE(teamrolehistory.newstaff_code, teammembers.staffcode) AS final_staff_code'),
+                // Combine rejoining dates
+                DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate,teamrolehistory.promotion_date) AS final_rejoining_date'),
+                // 'teamrolehistory.promotion_date',
+                'teammembers.joining_date'
+            ]);
+
+        if ($teamnid) {
+            $query->where('attendances.employee_name', $teamnid);
+        }
+
+        // // Filter where the attendance month falls between the start and end month
+        // if ($startMonth && $endMonth) {
+        //     $query->whereBetween(DB::raw('MONTH(STR_TO_DATE(CONCAT(attendances.month, " 1, 2000"), "%M %d, %Y"))'), [$startMonth, $endMonth]);
+        // }
+
+        // Filter attendance records by month and year
+        if ($startMonth && $endMonth && $startYear && $endYear) {
+            $query->whereBetween(DB::raw('MONTH(STR_TO_DATE(CONCAT(attendances.month, " 1, 2000"), "%M %d, %Y"))'), [$startMonth, $endMonth])
+                ->whereBetween('attendances.year', [$startYear, $endYear]);
+        }
+
+        // ordering using month name like Dec,Nov,Oct etc
+        $query->orderBy('attendances.year', 'desc')
+            ->orderBy(DB::raw('MONTH(STR_TO_DATE(CONCAT(attendances.month, " 1, 2000"), "%M %d, %Y"))'), 'desc');
+
+        $attendanceDatas = $query->get();
+        $request->flash();
+        // dd($attendanceDatas);
+
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 13) {
+            return view('backEnd.attendance.adminattendance', compact('attendanceDatas', 'teammembers'));
+        } else {
+            return view('backEnd.attendance.teamattendance', compact('attendanceDatas', 'teammembers'));
+        }
+    }
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

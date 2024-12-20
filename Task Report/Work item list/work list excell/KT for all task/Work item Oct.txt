@@ -1,0 +1,167 @@
+01-10-24
+02-10-24
+03-10-24
+04-10-24
+05-10-24
+06-10-24
+
+07-10-24
+1.KT for all tasks from Akshay.
+2.Akshay worked on uploading the code to my local environment.
+3.The client wants the Staffcode to be included in the attendance module.
+4.Fixed the bug related to total working days.
+5.The client wants the values in the attendance table to be centered.
+
+08-10-24
+1.Tasks discuss with client and our teams 
+2.Upload 3 task on vsalive and tested all point 
+
+
+09-10-24
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+1.The client wants to know the active and inactive users in the attendance report.
+
+10-10-24
+1.Dev khurana problem checked and upload code on vsalive 16/17 days blocked
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+1.The client wants to know the active and inactive users in the attendance report.
+
+
+11-10-24
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+3.functional testing on local done 
+
+
+12-10-24
+13-10-24
+14-10-24  
+1. All code uploaded on vsademo and tested by me (functional testing)  ########################
+2. all description uploaded 
+3.some QA passed code uploaded on vsalive and tested by me 
+
+ 
+
+15-10-24
+1.Attendance create after new teammeber creating time 
+2.Anju kumari timesheet blocked problem fixed 
+4.attendance filter bugs fixed by me
+
+
+
+
+
+16-10-24
+1.attendance filter bugs fixed by me
+2.client want to change filter formate on applyleave page currently working using ajax but client want to serach button
+3.bhasker kumar timesheet not submit problem fixed 
+
+
+
+17-10-24
+2.client want to change filter formate on applyleave page currently working using ajax but client want to serach button
+2.Table Design fixed on applyleave page 
+3.Validation on filter like validation on date 
+4.show approved and reject button on applyleave page 
+5.fixed accending order and descending order after filter data 
+6.Fixed data width inside excell after export data in excell 
+7.i have done functional testing done on local
+8.Documentation done 
+
+
+
+18-10-24
+3.You can not select attendance date  in future 
+2.i have done 4 bugs created by pooja kumari 
+3.functional testing done on local
+4.documentation done
+
+
+19-10-24
+1.all task uploaded on vsademo and functional testing done   #################################
+2.All task description updated on jira 
+3.all previous task uploaded on vsalive only left functional testing 
+
+
+20-10-24
+21-10-24
+1.all uploded task,Functional testing done on vsalive 
+1.combination of offholidays and travel cliet and combination of offholidays and any cliet name (not urgent according client
+
+
+22-10-24
+1.combination of offholidays and travel cliet and combination of offholidays and any cliet name (not urgent according client
+
+done timesheet 
+
+23-10-24
+1.When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+
+
+
+24-10-24
+1.Prateek kumar and radhika agarwal problem fixed problem was timesheet missing
+2.upload previous 2 work on vsademo 
+
+25-10-24
+1.functional testing done on vsademo 
+2. all 6 task QA passed upload on vsalive and functional testing done, updated descreption on jira
+
+ 
+26-10-24
+27-10-24
+28-10-24
+2. all 6 task QA passed upload on vsalive and functional testing done, updated descreption on jira
+1.Deepak kumar problem fixed applylevae on timesheet rejected date 
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+
+29-10-24
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+
+30-10-24
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+	
+31-10-24
+01-11-24
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+
+
+

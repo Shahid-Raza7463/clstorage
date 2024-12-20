@@ -1,0 +1,84 @@
+01-09-24
+02-09-24
+1.Admin can export excel report all users
+2.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+3.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+
+
+03-09-24
+1.Admin can export excel report all users
+2.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+3.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+
+
+04-09-24
+1.Admin can export excel report all users
+2.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+3.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+
+
+05-09-24  
+1.Admin can export excel report all users
+2.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+3.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+
+
+06-09-24
+1.i have done functional testing on admin and after tested occure some calculation count problem so i have fixed like sunday count, Exam leave count 
+2.Excel sorting icon remove and column width fix in excel
+3.staff, partner and manager total working days list completed 
+
+07-09-24
+1.i have done functional testing on admin and after tested occure some calculation count problem so i have fixed like sunday count, Exam leave count 
+2.Excel sorting icon remove and column width fix in excel
+3.staff, partner and manager total working days list completed 
+
+08-09-24
+attendance module
+
+09-09-24
+1.i have done functional testing on admin and after tested occure some calculation count problem so i have fixed like sunday count, Exam leave count 
+2.Excel sorting icon remove and column width fix in excel
+3.staff, partner and manager total working days list completed 
+
+10-09-24  timesheet done 
+attendance module completed 
+1.The client wants to remove the 'type' input field from the team member addition form when the assignment is closed, and display it only when the assignment is open.
+
+11-09-24
+2.The client wants to send an email with the leave reason, staff code, and updated email formate.
+3.The client wants to send an email with the timesheet request reason, staff code, and updated email formate.
+3.explain all point in meating for testing
+
+12-09-24
+4.The client wants to modify the timesheet block for tasks. They want the timesheet to be blocked after 16 days, but if the last submitted date falls on a Saturday, it will block after 17 days. If the last submitted date falls on a Sunday, it will block after 16 days.
+5.The client wants to modify the timesheet request approval email
+6.timesheet not fill staff reminder {client said about bugs}( i have cheked no any bugs)
+
+
+13-09-24
+1.All 6 task updated on vsademo and tested by me 
+2.timesheet rejected more than one days 
+
+14-09-24
+15-09-24
+16-09-24
+17-09-24
+18-09-24
+19-09-24
+20-09-24
+21-09-24
+22-09-24
+23-09-24
+24-09-24
+25-09-24
+26-09-24
+27-09-24
+28-09-24
+29-09-24
+30-09-24
+31-09-24

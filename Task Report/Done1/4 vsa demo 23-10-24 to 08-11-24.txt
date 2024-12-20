@@ -1,0 +1,642 @@
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+28-10-24
+2. all 6 task QA passed upload on vsalive and functional testing done, updated descreption on jira
+1.Deepak kumar problem fixed applylevae on timesheet rejected date 
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+
+5.clent want to Assignment viewer list on admin and partner.
+5.clent want to Attendance inside report tab.
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+
+
+} elseif ($permotioncheck && auth()->user()->role_id == 13) {
+
+
+   // total working days start using financial year
+      $currentDate = Carbon::now();
+      $currentMonth = $currentDate->format('F');
+      if ($currentDate->month >= 4) {
+        // Current year financial year
+        $startDate = Carbon::create($currentDate->year, 4, 1);
+        $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+      } else {
+        // Previous year financial year
+        $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+        $endDate = Carbon::create($currentDate->year, 3, 31);
+      }
+
+      // $totalworkingdays = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('no_of_days_present');
+
+      $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+
+      // total working days end hare 
+      return view('backEnd.index', compact('notification', 'opentimesheetrequests', 'openleave', 'mentor', 'mentees', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+elseif (auth()->user()->role_id == 13) {
+
+
+
+  // total working days start using financial year
+      $currentDate = Carbon::now();
+      $currentMonth = $currentDate->format('F');
+      if ($currentDate->month >= 4) {
+        // Current year financial year
+        $startDate = Carbon::create($currentDate->year, 4, 1);
+        $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+      } else {
+        // Previous year financial year
+        $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+        $endDate = Carbon::create($currentDate->year, 3, 31);
+      }
+
+      // $totalworkingdays = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('no_of_days_present');
+      $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+      // total working days end hare 
+
+      return view('backEnd.index', compact('opentimesheetrequests', 'openleave', 'tender', 'mentor', 'mentees', 'notification', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
+      
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+} elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {	  
+
+
+
+ // total working days start using financial year
+      $currentDate = Carbon::now();
+      $currentMonth = $currentDate->format('F');
+      if ($currentDate->month >= 4) {
+        // Current year financial year
+        $startDate = Carbon::create($currentDate->year, 4, 1);
+        $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+      } else {
+        // Previous year financial year
+        $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+        $endDate = Carbon::create($currentDate->year, 3, 31);
+      }
+
+      // $totalworkingdays = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('no_of_days_present');
+
+      // $totalcasualleave = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('casual_leave');
+
+      // $totalexamleave = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('exam_leave');
+
+      $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+      // total working days end hare 
+      // manager
+      return view('backEnd.index', compact('notification', 'mentor', 'mentees', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
+      
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function totalworkingdays(Request $request, $teamid)
+  {
+
+    // $attendanceDates = DB::table('attendances')
+    //   ->where('employee_name', $teamid)
+    //   ->select(DB::raw('MIN(created_at) as startDate, MAX(created_at) as endDate'))
+    //   ->first();
+
+    // // dd($attendanceDates);
+    // // $attendancesstartDate = Carbon::parse($attendanceDates->startDate)->format('Y-m-d H:i:s');
+    // $attendancesstartDate = Carbon::parse($attendanceDates->startDate)->subSecond(30)->format('Y-m-d H:i:s');
+    // // $attendancesendDate = Carbon::parse($attendanceDates->endDate)->addMinutes(2)->format('Y-m-d H:i:s');
+
+    // // find last date of this date $attendanceDates->endDate
+    // $attendancesendDate = Carbon::parse($attendanceDates->endDate)->endOfMonth()->setTime(23, 59, 0)->format('Y-m-d H:i:s');
+
+
+
+    // total working days start using financial year
+    $currentDate = Carbon::now();
+    $currentMonth = $currentDate->format('F');
+    if ($currentDate->month >= 4) {
+      // Current year financial year
+      $startDate = Carbon::create($currentDate->year, 4, 1);
+      $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+    } else {
+      // Previous year financial year
+      $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+      $endDate = Carbon::create($currentDate->year, 3, 31);
+    }
+
+    // $startDate = Carbon::create('01-04-2024');
+    // $endDate = Carbon::create('30-09-2024');
+
+    // $home = DB::table('timesheetusers')
+    //   ->where('createdby', 847)
+    //   ->whereIn('status', [1, 2, 3])
+    //   ->whereNotIn('assignmentgenerate_id', ['OFF100004', 'OFF100003'])
+    //   ->whereNotIn('client_id', [134])
+    //   ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+    //   ->select('date') // Select only the date column
+    //   ->distinct() // Apply distinct on the selected columns
+    //   ->get();
+
+    // dd($home);
+
+    // dd($attendancesstartDate);
+    $query = DB::table('timesheetusers')
+      ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+      ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+      ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+      ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+      ->select(
+        'timesheetusers.*',
+        'assignments.assignment_name',
+        'clients.client_name',
+        'clients.client_code',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'patnerid.team_member as patnername',
+        'patnerid.staffcode as patnerstaffcode',
+        'assignmentbudgetings.assignmentname',
+        'teamrolehistory.newstaff_code',
+        'assignmentbudgetings.created_at as assignmentcreateddate'
+      )
+      ->where('timesheetusers.createdby', $teamid)
+      ->whereIn('timesheetusers.status', [1, 2, 3])
+      // ->whereBetween('timesheetusers.updated_at', [$attendancesstartDate, $attendancesendDate])
+      ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      // hide offholidays and travel timesheet
+      // ->whereNotIn('timesheetusers.assignmentgenerate_id', ['OFF100004'])
+      ->whereNotIn('timesheetusers.assignmentgenerate_id', ['OFF100004', 'OFF100003'])
+      // ->whereNotNull('timesheetusers.assignmentgenerate_id')
+      // hide  casual leave and exam leave timesheet
+      ->whereNotIn('timesheetusers.client_id', [134])
+      ->orderBy('timesheetusers.date', 'DESC');
+
+    // Apply role-specific filters if necessary
+    if (auth()->user()->role_id == 13) {
+      // Add any specific conditions or modifications for role_id 13 if needed.
+    }
+
+    $timesheetData = $query->get();
+    // dd($timesheetData);
+    return view('backEnd.timesheet.totalworkingdays', compact('timesheetData'));
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\index.blade.php
+
+{{ $approvedleavesvaluecount ?? '0' }}
+
+
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $totalLeaveDays ?? '0' }}
+                            </div>
+                            <small style="color:white;">Days (April to {{ $currentMonth }})</small>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Console\Commands\CreateAttendance.php
+
+use Illuminate\Console\Command;
+use App\Models\Attendance;
+use App\Models\Teammember;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+
+
+
+       public function handle()
+    {
+        //current date
+        $currentDate = now();
+        // $currentDate = Carbon::parse('2024-11-01 13:30:00');
+
+        if ($currentDate->day == 1) {
+            $teammembers = Teammember::where('status', 1)
+                ->whereNotIn('role_id', ['11'])
+                ->select('id', 'team_member', 'joining_date', 'role_id')
+                ->get();
+
+            $currentMonth = $currentDate->format('F');
+            $currentYear = $currentDate->year;
+            $totalDaysInMonth = $currentDate->daysInMonth;
+
+            // dd($teammembers);
+            foreach ($teammembers as $teammember) {
+                // Check if the attendance record already exists for the employee and month
+                $attendanceexist = Attendance::where('employee_name', $teammember->id)
+                    ->where('month', $currentMonth)
+                    ->first();
+
+                if ($attendanceexist == null) {
+                    Attendance::create([
+                        'employee_name' => $teammember->id,
+                        'month' => $currentMonth,
+                        'year' => $currentYear,
+                        'dateofjoining' => $teammember->joining_date,
+                        'total_no_of_days' => $totalDaysInMonth,
+                        'fulldate' => $currentDate->format('Y-m-d'),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+routes\web.php
+
+Route::get('/assignmentviewer', [StepController::class, 'assignmentviewer']);
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+
+
+    public function assignmentviewer()
+    {
+        $assignmentviwerteams = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+            ->join('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+            ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'assignmentteammappings.teammember_id')
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->where('assignmentteammappings.viewerteam', 1)
+            ->select(
+                'teammembers.*',
+                'roles.rolename',
+                'assignmentteammappings.type',
+                'titles.title',
+                'assignmentteammappings.id As assignmentteammappingsId',
+                'assignmentteammappings.status as assignmentteammappingsStatus',
+                'assignmentmappings.assignmentgenerate_id as assignmentgenerateid',
+                'assignmentteammappings.teamhour',
+                'assignmentmappings.leadpartner',
+                'teamrolehistory.newstaff_code',
+                'assignmentbudgetings.assignmentname',
+                'assignments.assignment_name',
+                'assignmentteammappings.viewerteam'
+            )
+            ->get();
+
+        // dd($assignmentviwerteams);
+
+        return view('backEnd.assignmentviewer', compact('assignmentviwerteams'));
+    }
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentviewer.blade.php
+
+
+@extends('backEnd.layouts.layout') @section('backEnd_content')
+    <!--Content Header (Page header)-->
+    <div class="content-header row align-items-center m-0">
+        <div class="col-sm-8 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-user-add-outline"></i></div>
+                <div class="media-body">
+                    <a href="{{ url('home') }}">
+                        <h1 class="font-weight-bold" style="color:black;">Assignment Viewer List</h1>
+                    </a>
+                    <small>Team List</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="body-content">
+        <div class="card mb-4">
+            @component('backEnd.components.alert')
+            @endcomponent
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="examplee" class="table display table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="textfixed">Staff Code</th>
+                                <th>Mobile No</th>
+                                <th>Patner</th>
+                                <th class="textfixed">Assignment Id</th>
+                                <th>Assignment Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $hasData = false;
+                            @endphp
+                            @foreach ($assignmentviwerteams as $assignmentviwerteams)
+                                @php
+                                    $hasData = true;
+                                @endphp
+                                <tr>
+                                    <td class="textfixed">{{ $assignmentviwerteams->title }}
+                                        {{ $assignmentviwerteams->team_member }}</td>
+                                    <td>
+                                        {{ $assignmentviwerteams->newstaff_code ?? ($assignmentviwerteams->staffcode ?? '') }}
+                                    </td>
+                                    <td>
+                                        <a
+                                            href="tel:={{ $assignmentviwerteams->mobile_no }}">{{ $assignmentviwerteams->mobile_no }}</a>
+                                    </td>
+                                    <td class="textfixed">
+                                        {{ App\Models\Teammember::select('team_member')->where('id', $assignmentviwerteams->leadpartner)->first()->team_member ?? '' }}
+                                    </td>
+                                 <td><a
+                                            href="{{ url('/viewassignment/' . $assignmentviwerteams->assignmentgenerateid) }}">{{ $assignmentviwerteams->assignmentgenerateid }}</a>
+                                    </td>
+                                    <td class="textfixed">{{ $assignmentviwerteams->assignment_name }}
+                                        ({{ $assignmentviwerteams->assignmentname }})
+                                    </td>
+                                </tr>
+                            @endforeach
+                            @if (!$hasData)
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">Data not available</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<style>
+    .dt-buttons {
+        margin-bottom: -34px;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            // 'l' for the length menu
+            dom: 'lBfrtip',
+            columnDefs: [{
+                targets: [1, 2, 3, 4, 5],
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Assignment Viewer List',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        //   remove extra spaces
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+find text 
+
+                                  @if (Auth::user()->role_id == 11)
+                                      <li><a href="{{ url('totaltimeshow') }}">Assignment Time Report</a></li>
+                                      <li><a href="{{ url('permotionrejoiningreport') }}">Permotion/Rejoining
+                                              Report</a></li>
+                                  @endif
+								  
+								  
+add this code after it 
+
+	                            @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 13)
+                                      <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
+                                      </li>
+                                      <li><a href="{{ url('attendance') }}">Attendance</a></li>
+                                  @endif
+
+
+
+find text and comment this it is exist two place 
+<li><a href="{{ url('attendance') }}">Attendance</a></li>								  
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentviewer.blade.php
+find text  $assignmentviwerteams->mobile_no
+replace td tag on vsalive 
+
+ <td> {{ $assignmentviwerteams->mobile_no }} </td>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+
+05-06-24
+1.We cannot export the "Apply Leave List" with applying filter as given in the module.
+2.While adding User in an assignment, the "User List" should not display inactive users
+3.Option for rejoining date should only be there in case of Inactive user and not also for active user.
+4.Count for Approved leaves for the Year (Jan to Dec) should be visible to the User in their portal.
+
+
+06-06-24
+1.No toggle for Hide and Show of amount in the module it should be only in the Excel File.
+2.Once the confirmation module is closed, the responder (Debtor, Creditor, or Bank) cannot respond to the confirmation mail; i.e., the link should expire.
+
+
+############
+3.Users want the mail content to be displayed on the confirmation page, and while accepting and refusing further 
+options (for amount, remarks and attachment) to be displayed on the same page.
+
+3.1.The confirmation screen displays the email content, which contains a spelling mistake in the word "video" and 
+shows an incorrect date.
+
+
+
+####################3
+4.While closing the assignment, user will get error / notified if in case balance confirmation module is not closed.
+4.1 After closing the assignment, the user is still able to open the confirmation module. @Prashant Pandey  @Simmi Puri 
+
+
+
+####################3
+
+While closing confirmation module OTP is required from Partner as a validation. 
+
+
+07-06-24
+
+
+4.While closing confirmation module OTP is required from Partner as a validation. 
+Option for file uploading should be there while Accepting the Confirmation (optional).
+

@@ -1,0 +1,421 @@
+
+now start are you sure module 
+07-09-24
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+all code replace below file 
+
+resources\views\backEnd\applyleave\adminopen.blade.php
+
+resources\views\backEnd\applyleave\index.blade.php
+
+resources\views\backEnd\applyleave\openindex.blade.php
+
+resources\views\backEnd\applyleave\teamapplication.blade.php
+
+resources\views\backEnd\applyleave\view.blade.php
+
+resources\views\backEnd\timesheetrequest\view.blade.php
+resources\views\backEnd\applyleave\adminrevertleave.blade.php
+
+
+resources\views\backEnd\layouts\includes\js.blade.php
+
+ {{-- ###################################################################################################### --}}
+ {{-- shahid script start hare  --}}
+
+ {{-- <script>
+     $(document).ready(function() {
+         //   alert('hi');
+         $('#saveform').click(function(event) {
+             //   alert('hi');
+             var reasoninputvalve = $('#reasoninput').val().trim();
+
+             if (reasoninputvalve === "") {
+                 alert('Please enter a reason.');
+                 event.preventDefault();
+                 return false;
+             }
+
+             // Confirmation prompt
+             var confirmSubmit = confirm('Are you sure you want to submit ?');
+             if (!confirmSubmit) {
+                 event.preventDefault();
+                 return false;
+             }
+         });
+     });
+ </script> --}}
+
+
+ <script>
+     $(document).ready(function() {
+         $('.saveform').each(function() {
+             $(this).click(function(event) {
+                 var index = $(this).attr('id').split('-')[
+                     1]; // Get the index from the button's ID
+                 var reasonInputVal = $('#reasoninput-' + index).val()
+                     .trim(); // Use the dynamic ID
+
+                 if (reasonInputVal === "") {
+                     alert('Please enter a reason.');
+                     event.preventDefault();
+                     return false;
+                 }
+
+                 // Confirmation prompt
+                 var confirmSubmit = confirm('Are you sure you want to submit?');
+                 if (!confirmSubmit) {
+                     event.preventDefault();
+                     return false;
+                 }
+             });
+         });
+     });
+ </script>
+
+ <script>
+     $(document).ready(function() {
+         //   alert('hi');
+         $('#timesheetrequest').click(function(event) {
+             //   alert('hi');
+             var reasoninputvalve = $('#timesheetrequestinput').val().trim();
+
+             if (reasoninputvalve === "") {
+                 alert('Please enter a reason.');
+                 event.preventDefault();
+                 return false;
+             }
+
+             // Confirmation prompt
+             var confirmSubmit = confirm('Are you sure you want to submit ?');
+             if (!confirmSubmit) {
+                 event.preventDefault();
+                 return false;
+             }
+         });
+     });
+ </script>
+
+ <script>
+     $(document).ready(function() {
+         $('#exampleModal12').on('hidden.bs.modal', function() {
+             $(this).find('form')[0].reset();
+         });
+     });
+ </script>
+
+
+now start are you sure module end 
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+add this code 
+
+
+ {{-- ###################################################################################################### --}}
+ {{-- shahid script start hare  --}}
+
+ {{-- <script>
+     $(document).ready(function() {
+         //   alert('hi');
+         $('#saveform').click(function(event) {
+             //   alert('hi');
+             var reasoninputvalve = $('#reasoninput').val().trim();
+
+             if (reasoninputvalve === "") {
+                 alert('Please enter a reason.');
+                 event.preventDefault();
+                 return false;
+             }
+
+             // Confirmation prompt
+             var confirmSubmit = confirm('Are you sure you want to submit ?');
+             if (!confirmSubmit) {
+                 event.preventDefault();
+                 return false;
+             }
+         });
+     });
+ </script> --}}
+
+
+ <script>
+     $(document).ready(function() {
+         $('.saveform').each(function() {
+             $(this).click(function(event) {
+                 var index = $(this).attr('id').split('-')[
+                     1]; // Get the index from the button's ID
+                 var reasonInputVal = $('#reasoninput-' + index).val()
+                     .trim(); // Use the dynamic ID
+
+                 if (reasonInputVal === "") {
+                     alert('Please enter a reason.');
+                     event.preventDefault();
+                     return false;
+                 }
+
+                 // Confirmation prompt
+                 var confirmSubmit = confirm('Are you sure you want to submit?');
+                 if (!confirmSubmit) {
+                     event.preventDefault();
+                     return false;
+                 }
+             });
+         });
+     });
+ </script>
+
+ <script>
+     $(document).ready(function() {
+         //   alert('hi');
+         $('#timesheetrequest').click(function(event) {
+             //   alert('hi');
+             var reasoninputvalve = $('#timesheetrequestinput').val().trim();
+
+             if (reasoninputvalve === "") {
+                 alert('Please enter a reason.');
+                 event.preventDefault();
+                 return false;
+             }
+
+             // Confirmation prompt
+             var confirmSubmit = confirm('Are you sure you want to submit ?');
+             if (!confirmSubmit) {
+                 event.preventDefault();
+                 return false;
+             }
+         });
+     });
+ </script>
+
+ <script>
+     $(document).ready(function() {
+         $('#exampleModal12').on('hidden.bs.modal', function() {
+             $(this).find('form')[0].reset();
+         });
+     });
+ </script>
+
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\openindex.blade.php
+
+total 5 file 
+
+serch text using <textarea rows="6" name="remark" 
+
+
+
+
+add on model 
+
+ @if ($applyleaveDatas->status == 0)
+ 
+ @endif
+ 
+ 
+ 
+ 
+ 
+ 
+ in form tag 
+ id="formdata"
+
+
+
+
+                                                            <div class="col-12">
+                                                                <label for="">Reason : <span class="text-danger">*</span> </label>
+                                                            </div>
+
+
+
+
+
+
+
+       <textarea rows="6" name="remark" class="form-control" placeholder="" id="reasoninput-{{ $loop->index }}"></textarea>
+
+
+
+
+
+
+                                                                      <button type="submit" style="float: right"
+                                                                          class="btn btn-success saveform"
+                                                                          id="saveform-{{ $loop->index }}">Save</button>
+                                                                            
+																			  
+																			  
+		
+
+
+
+                                                  <script>
+                                                      $(document).ready(function() {
+                                                          $('#exampleModal12{{ $loop->index }}').on('hidden.bs.modal', function() {
+                                                              $(this).find('form')[0].reset();
+                                                          });
+                                                      });
+                                                  </script>		
+																			  
+																		
+
+
+
+
+
+
+for approve button 
+
+
+onclick="return confirm('Are you sure you want to approve this ?');"															  
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheetrequest\view.blade.php
+
+all update only this file 
+
+
+search using this keyboard
+Rejection</h5>
+
+
+
+
+onclick="return confirm('Are you sure you want to approve this ?');"
+
+
+
+                        <div class="col-12">
+                            <label for="">Reason : <span class="text-danger">*</span> </label>
+                        </div>
+						
+						
+						
+						                            <textarea rows="6" name="remark" class="form-control" placeholder="" id="timesheetrequestinput"></textarea>
+													
+													
+													
+													
+                    <button type="submit" style="float: right" class="btn btn-success" id="timesheetrequest">Save
+                    </button>
+
+
+
+
+
+ <script>
+     $(document).ready(function() {
+         $('#exampleModal12').on('hidden.bs.modal', function() {
+             $(this).find('form')[0].reset();
+         });
+     });
+ </script>					
+
+
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\examrequestlist.blade.php
+
+
+
+
+                                            @if ($hasPendingRequests)
+                                                <td>
+                                                    @if ($timesheetrequestsDatass->status == 0)
+                                                        <form method="post"
+                                                            action="{{ route('examleaveapprove', $timesheetrequestsDatass->id) }}"
+                                                            enctype="multipart/form-data" style="text-align: center;">
+                                                            @method('PATCH')
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-success"
+                                                                style="border-radius: 7px; font-size: 10px; padding: 5px;"
+                                                                onclick="return confirm('Are you sure you want to approve this ?');">
+                                                                Approve</button>
+                                                            <input type="text" hidden id="example-date-input"
+                                                                name="status" value="1" class="form-control">
+
+                                                            <input type="hidden" name="leavetype"
+                                                                value="{{ $timesheetrequestsDatass->leavetype }}"
+                                                                class="form-control" placeholder="">
+                                                        </form>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($timesheetrequestsDatass->status == 0)
+                                                        <form method="post"
+                                                            action="{{ route('examleaveapprove', $timesheetrequestsDatass->id) }}"
+                                                            enctype="multipart/form-data" style="text-align: center;">
+                                                            @method('PATCH')
+                                                            @csrf
+                                                            <button
+                                                                style="border-radius: 7px; font-size: 10px; padding: 5px;"
+                                                                type="submit" class="btn btn-danger"
+                                                                onclick="return confirm('Are you sure you want to reject this ?');">
+                                                                Reject</button>
+                                                            <input hidden type="text" id="example-date-input"
+                                                                name="status" value="2" class="form-control"
+                                                                placeholder="Enter Location">
+                                                        </form>
+                                                    @endif
+                                                </td>
+                                            @endif
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Admin 
+resources\views\backEnd\applyleave\adminrevertleave.blade.php
+
+
+
+                                     @if ($hasPendingRequests)
+                                         <td>
+                                             @if ($timesheetrequestsData->status == 0)
+                                                 <form method="post"
+                                                     action="{{ route('examleaveapprove', $timesheetrequestsData->id) }}"
+                                                     enctype="multipart/form-data" style="text-align: center;">
+                                                     @method('PATCH')
+                                                     @csrf
+                                                     <button type="submit" class="btn btn-success"
+                                                         style="border-radius: 7px; font-size: 10px; padding: 5px;"
+                                                         onclick="return confirm('Are you sure you want to approve this ?');">
+                                                         Approve</button>
+                                                     <input type="text" hidden id="example-date-input" name="status"
+                                                         value="1" class="form-control">
+
+                                                     <input type="hidden" name="leavetype"
+                                                         value="{{ $timesheetrequestsData->leavetype }}"
+                                                         class="form-control" placeholder="">
+                                                 </form>
+                                             @endif
+                                         </td>
+                                         <td>
+                                             @if ($timesheetrequestsData->status == 0)
+                                                 <form method="post"
+                                                     action="{{ route('examleaveapprove', $timesheetrequestsData->id) }}"
+                                                     enctype="multipart/form-data" style="text-align: center;">
+                                                     @method('PATCH')
+                                                     @csrf
+                                                     <button style="border-radius: 7px; font-size: 10px; padding: 5px;"
+                                                         type="submit" class="btn btn-danger"
+                                                         onclick="return confirm('Are you sure you want to reject this ?');">
+                                                         Reject</button>
+                                                     <input hidden type="text" id="example-date-input" name="status"
+                                                         value="2" class="form-control" placeholder="Enter Location">
+                                                 </form>
+                                             @endif
+                                         </td>
+                                     @endif
+
+
+
+done on vsalive only 

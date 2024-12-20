@@ -1,0 +1,1322 @@
+
+notification start 
+222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\header.blade.php
+if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
+
+
+  $userId = auth()->user()->teammember_id;
+                    // $clientnotification = DB::table('notifications')
+                    //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    //         $join
+                    //             ->on('notificationreadorunread.notifications_id', 'notifications.id')
+                    //             ->where('notificationreadorunread.readedby', $userId);
+                    //     })
+                    //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                    //     ->latest()
+                    //     ->distinct()
+                    //     ->paginate(5);
+
+                    $clientnotification = DB::table('notifications')
+                        ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                            $join
+                                ->on('notificationreadorunread.notifications_id', 'notifications.id')
+                                ->where('notificationreadorunread.readedby', $userId);
+                        })
+                        ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                        ->whereIn('notifications.id', function ($subquery) {
+                            // Subquery to get the latest ID for each duplicate_notifications value
+                            $subquery->from('notifications')->selectRaw('MAX(id) as id')->groupBy('duplicate_notifications');
+                        })
+                        ->latest('notifications.created_at')
+                        ->paginate(5);
+						
+						
+
+
+
+
+
+
+
+
+
+} elseif (auth()->user()->role_id == 13) {
+						
+$userId = auth()->user()->teammember_id;
+
+                    // $clientnotification = DB::table('notifications')
+                    //     ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                    //     ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                    //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    //         $join
+                    //             ->on('notificationreadorunread.notifications_id', 'notifications.id')
+                    //             ->where('notificationreadorunread.readedby', $userId);
+                    //     })
+                    //     ->Where(function ($query) {
+                    //         $query->where('targettype', '3')->orWhere('targettype', '2');
+                    //     })
+                    //     ->orWhere(function ($query) use ($userId) {
+                    //         $query
+                    //             ->where('notificationtargets.teammember_id', $userId)
+                    //             ->where('notificationreadorunread.readedby', $userId);
+                    //     })
+                    //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                    //     ->latest()
+                    //     ->paginate(5);
+
+                    $clientnotification = DB::table('notifications')
+                        ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                        ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                        ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                            $join
+                                ->on('notificationreadorunread.notifications_id', 'notifications.id')
+                                ->where('notificationreadorunread.readedby', $userId);
+                        })
+                        ->where(function ($query) use ($userId) {
+                            $query
+                                ->where('targettype', '3')
+                                ->orWhere('targettype', '2')
+                                ->orWhere(function ($innerQuery) use ($userId) {
+                                    $innerQuery->where('notificationtargets.teammember_id', $userId);
+                                });
+                        })
+                        ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                        ->distinct()
+                        ->orderBy('notifications.id', 'desc')
+                        ->paginate(5);					
+	
+	
+	
+
+	
+						
+2222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\NotificationController.php
+
+     public function index()
+    {
+
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
+            $userId = auth()->user()->teammember_id;
+            // $notificationDatas = DB::table('notifications')
+            //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+            //         $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+            //             ->where('notificationreadorunread.readedby', $userId);
+            //     })
+            //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+            //     ->latest()
+            //     ->distinct()
+            //     ->paginate(20);
+
+
+            $notificationDatas = DB::table('notifications')
+                ->leftJoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', '=', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->select(
+                    'notifications.*',
+                    'notificationreadorunread.status as readstatus'
+                )
+                ->whereIn('notifications.id', function ($subquery) {
+                    // Subquery to get the latest ID for each duplicate_notifications value
+                    $subquery->from('notifications')
+                        ->selectRaw('MAX(id) as id')
+                        ->groupBy('duplicate_notifications');
+                })
+                ->latest('notifications.created_at') // Sort by the latest created_at
+                ->paginate(20);
+
+
+
+
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        } elseif (auth()->user()->role_id == 13) {
+
+            $userId = auth()->user()->teammember_id;
+
+            // $notificationDatas = DB::table('notifications')
+            //     ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+            //     ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+            //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+            //         $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+            //             ->where('notificationreadorunread.readedby', $userId);
+            //     })
+            //     ->Where(function ($query) {
+            //         $query->where('targettype', '3')->orWhere('targettype', '2');
+            //     })
+            //     ->orWhere(function ($query) use ($userId) {
+            //         $query->where('notificationtargets.teammember_id', $userId)
+            //             ->where('notificationreadorunread.readedby', $userId);
+            //     })
+            //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+            //     ->latest()
+            //     ->distinct()
+            //     ->get();
+
+            $notificationDatas = DB::table('notifications')
+                ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->where(function ($query) use ($userId) {
+                    $query->where('targettype', '3')
+                        ->orWhere('targettype', '2')
+                        ->orWhere(function ($innerQuery) use ($userId) {
+                            $innerQuery->where('notificationtargets.teammember_id', $userId);
+                        });
+                })
+                ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                ->distinct()
+                ->orderBy('notifications.id', 'desc')
+                ->get();
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        } elseif (auth()->user()->role_id == 14) {
+            $userId = auth()->user()->teammember_id;
+
+            $notificationDatas = DB::table('notifications')
+                ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->where(function ($query) use ($userId) {
+                    $query->where('targettype', '4')
+                        ->orWhere('targettype', '2')
+                        ->orWhere(function ($innerQuery) use ($userId) {
+                            $innerQuery->where('notificationtargets.teammember_id', $userId);
+                        });
+                })
+                ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                ->distinct()
+                ->orderBy('notifications.id', 'desc')
+                ->get();
+
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        } elseif (auth()->user()->role_id == 15) {
+            $userId = auth()->user()->teammember_id;
+
+            $notificationDatas = DB::table('notifications')
+                ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->where(function ($query) use ($userId) {
+                    $query->where('targettype', '5')
+                        ->orWhere('targettype', '2')
+                        ->orWhere(function ($innerQuery) use ($userId) {
+                            $innerQuery->where('notificationtargets.teammember_id', $userId);
+                        });
+                })
+                ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                ->distinct()
+                ->orderBy('notifications.id', 'desc')
+                ->get();
+
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        } elseif (auth()->user()->role_id == 16) {
+            $userId = auth()->user()->teammember_id;
+
+            $notificationDatas = DB::table('notifications')
+                ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->where(function ($query) use ($userId) {
+                    $query->where('targettype', '6')
+                        ->orWhere('targettype', '2')
+                        ->orWhere(function ($innerQuery) use ($userId) {
+                            $innerQuery->where('notificationtargets.teammember_id', $userId);
+                        });
+                })
+                ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                ->distinct()
+                ->get();
+
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        } elseif (auth()->user()->role_id == 17) {
+            $userId = auth()->user()->teammember_id;
+
+            $notificationDatas = DB::table('notifications')
+                ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->where(function ($query) use ($userId) {
+                    $query->where('targettype', '7')
+                        ->orWhere('targettype', '2')
+                        ->orWhere(function ($innerQuery) use ($userId) {
+                            $innerQuery->where('notificationtargets.teammember_id', $userId);
+                        });
+                })
+                ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+                ->distinct()
+                ->get();
+
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        } else {
+            $userId = auth()->user()->teammember_id;
+
+            $notificationDatas = DB::table('notifications')
+                ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+                ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+                ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+                    $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+                        ->where('notificationreadorunread.readedby', $userId);
+                })
+                ->where(function ($query) use ($userId) {
+                    $query->where('notifications.targettype', '2')
+                        ->orWhere('notificationtargets.teammember_id', $userId);
+                })
+                ->select('notifications.*', 'teammembers.team_member', 'teammembers.profilepic', 'notificationreadorunread.status as readstatus')
+                ->distinct()
+                ->get();
+
+            return view('backEnd.notification.index', compact('notificationDatas'));
+        }
+    }
+				
+	
+
+
+	
+
+		
+2222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+elseif (auth()->user()->role_id == 13) {
+
+
+ elseif (auth()->user()->role_id == 13) {
+      $authidd = Assignmentteammapping::where('teammember_id', auth()->user()->teammember_id)->select('assignmentmapping_id')->pluck('assignmentmapping_id')->first();
+      $authid = auth()->user()->teammember_id;
+
+      // $notificationDatas =  DB::table('notifications')
+      //   ->join('teammembers', 'teammembers.id', 'notifications.created_by')
+      //   ->Where('targettype', '3')
+      //   ->orWhere('targettype', '2')
+      //   ->select(
+      //     'notifications.*',
+      //     'teammembers.profilepic',
+      //     'teammembers.team_member'
+      //   )->orderBy('created_at', 'desc')->paginate('2');
+
+      $notificationDatas = DB::table('notifications')
+        ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+        ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+        ->leftjoin('notificationreadorunread', function ($join) use ($authid) {
+          $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+            ->where('notificationreadorunread.readedby', $authid);
+        })
+        ->where(function ($query) use ($authid) {
+          $query->where('targettype', '3')
+            ->orWhere('targettype', '2')
+            ->orWhere(function ($innerQuery) use ($authid) {
+              $innerQuery->where('notificationtargets.teammember_id', $authid);
+            });
+        })
+        ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+        ->distinct()
+        ->orderBy('notifications.id', 'desc')
+        ->paginate('2');
+
+      //  dd($notificationDatas);
+
+      $notification = Notification::count();
+      $client = Client::count();
+      $tender = Tender::where('teammember_id', auth()->user()->teammember_id)->count();
+      $teammember = Teammember::where('status', '1')->count();
+      $userid = auth()->user()->role_id;
+      $pageid = Permission::where('role_id', $userid)->select('page_id')->pluck('page_id')->first();
+
+      $openleave = DB::table('applyleaves')
+        ->where('approver', auth()->user()->teammember_id)
+        ->where('status', 0)
+        ->count();
+
+      $assetticket = DB::table('assettickets')
+        ->leftjoin('teammembers', 'teammembers.id', 'assettickets.created_by')->where('assettickets.created_by', auth()->user()->teammember_id)
+        ->select('assettickets.*', 'teammembers.team_member')->orderBy('created_at', 'desc')->get();
+      $assignment =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+        })
+
+        ->select(
+          'assignmentmappings.*',
+          'clients.client_name',
+          'assignmentbudgetings.assignmentname',
+          'assignments.assignment_name',
+          'assignmentbudgetings.assignmentgenerate_id'
+        )
+        ->where('assignmentbudgetings.status', 1)
+        ->take(5)->get();
+
+      $assignmentcount = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+        })
+
+        ->select(
+          'assignmentmappings.*',
+          'clients.client_name',
+          'assignmentbudgetings.assignmentname',
+          'assignments.assignment_name',
+          'assignmentbudgetings.assignmentgenerate_id'
+        )
+        ->where('assignmentbudgetings.status', 1)
+        ->count();
+
+      $opentimesheetrequests = DB::table('timesheetrequests')
+        ->where('status', 0)
+        ->where(function ($query) {
+          $query->where('timesheetrequests.partner', auth()->user()->teammember_id)
+            ->orWhere('timesheetrequests.createdby', auth()->user()->teammember_id);
+        })
+        ->count();
+
+      //Aproved leave jan to dec 
+      $currentYear = date('Y');
+      $approvedleavesvalue = DB::table('applyleaves')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 1)
+        ->whereYear('from',  $currentYear)
+        ->get();
+
+      $leaveDurations = [];
+      foreach ($approvedleavesvalue as $approvedleavesvalues) {
+        $to = Carbon::createFromFormat('Y-m-d', $approvedleavesvalues->to ?? '');
+        $from = Carbon::createFromFormat('Y-m-d', $approvedleavesvalues->from);
+
+        $diff_in_days = $to->diffInDays($from) + 1;
+
+        $holidaycount = DB::table('holidays')
+          ->where('startdate', '>=', $approvedleavesvalues->from)
+          ->where('enddate', '<=', $approvedleavesvalues->to)
+          ->count();
+
+        $leaveDurationcount = $diff_in_days - $holidaycount;
+        $leaveDurations[] = $leaveDurationcount;
+      }
+
+      $approvedleavesvaluecount = array_sum($leaveDurations);
+      // dd($approvedleavesvaluecount);
+      //Aproved leave jan to dec end hare
+
+      // total working days start using financial year
+      $currentDate = Carbon::now();
+      $currentMonth = $currentDate->format('F');
+      if ($currentDate->month >= 4) {
+        // Current year financial year
+        $startDate = Carbon::create($currentDate->year, 4, 1);
+        $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+      } else {
+        // Previous year financial year
+        $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+        $endDate = Carbon::create($currentDate->year, 3, 31);
+      }
+
+      // $totalworkingdays = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('no_of_days_present');
+      $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+      // total working days end hare 
+
+      return view('backEnd.index', compact('opentimesheetrequests', 'openleave', 'tender', 'mentor', 'mentees', 'notification', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
+		
+
+
+
+
+
+
+
+		
+2222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+
+elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15)
+
+ elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+      //Aproved leave jan to dec 
+
+      $currentYear = date('Y');
+      $approvedleavesvalue = DB::table('applyleaves')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 1)
+        ->whereYear('from',  $currentYear)
+        ->get();
+
+      $leaveDurations = [];
+      foreach ($approvedleavesvalue as $approvedleavesvalues) {
+        $to = Carbon::createFromFormat('Y-m-d', $approvedleavesvalues->to ?? '');
+        $from = Carbon::createFromFormat('Y-m-d', $approvedleavesvalues->from);
+
+        $diff_in_days = $to->diffInDays($from) + 1;
+
+        $holidaycount = DB::table('holidays')
+          ->where('startdate', '>=', $approvedleavesvalues->from)
+          ->where('enddate', '<=', $approvedleavesvalues->to)
+          ->count();
+
+        $leaveDurationcount = $diff_in_days - $holidaycount;
+        $leaveDurations[] = $leaveDurationcount;
+      }
+
+      $approvedleavesvaluecount = array_sum($leaveDurations);
+      // dd($approvedleavesvaluecount);
+      //Aproved leave jan to dec end hare 
+      // dd(auth()->user()->teammember_id);
+      $authidd = Assignmentteammapping::where('teammember_id', auth()->user()->teammember_id)->select('assignmentmapping_id')->pluck('assignmentmapping_id')->first();
+      $authid = auth()->user()->teammember_id;
+
+      // $notificationDatas =   DB::table('notifications')
+      //   ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+      //   ->where('notifications.targettype', '1')
+      //   ->select('notifications.*', 'teammembers.team_member', 'teammembers.profilepic')->orWhere('targettype', '2')->orderBy('notifications.id', 'desc')->paginate(2);
+
+      $userId = auth()->user()->teammember_id;
+      if (auth()->user()->role_id == 14) {
+        $notificationDatas = DB::table('notifications')
+          ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+          ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+          ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+            $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+              ->where('notificationreadorunread.readedby', $userId);
+          })
+          ->where(function ($query) use ($userId) {
+            $query->where('targettype', '4')
+              ->orWhere('targettype', '2')
+              ->orWhere(function ($innerQuery) use ($userId) {
+                $innerQuery->where('notificationtargets.teammember_id', $userId);
+              });
+          })
+          ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+          ->distinct()
+          ->orderBy('notifications.id', 'desc')
+          ->paginate(2);
+      } else {
+        $notificationDatas = DB::table('notifications')
+          ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
+          ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
+          ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
+            $join->on('notificationreadorunread.notifications_id', 'notifications.id')
+              ->where('notificationreadorunread.readedby', $userId);
+          })
+          ->where(function ($query) use ($userId) {
+            $query->where('targettype', '5')
+              ->orWhere('targettype', '2')
+              ->orWhere(function ($innerQuery) use ($userId) {
+                $innerQuery->where('notificationtargets.teammember_id', $userId);
+              });
+          })
+          ->select('notifications.*', 'notificationreadorunread.status as readstatus')
+          // ->distinct()
+          ->orderBy('notifications.id', 'desc')
+          ->paginate(2);
+      }
+
+      //  dd($notificationDatas);
+      $notification = Notification::count();
+      $client = Client::count();
+      $teammember = Teammember::where('status', '1')->count();
+      $userid = auth()->user()->role_id;
+      $pageid = Permission::where('role_id', $userid)->select('page_id')->pluck('page_id')->first();
+      $assetticket = DB::table('assettickets')
+        ->leftjoin('users', 'users.id', 'assettickets.created_by')
+        ->leftjoin('teammembers', 'teammembers.id', 'users.teammember_id')->where('assettickets.created_by', auth()->user()->teammember_id)
+        ->select('assettickets.*', 'teammembers.team_member')->orderBy('created_at', 'desc')->get();
+
+      //  dd($notificationDatas);
+
+      $assignment =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        // get assignment name only
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->whereNotIn('clients.id', [33, 32, 34, 29])
+        ->select(
+          'assignmentbudgetings.client_id',
+          'clients.client_name',
+          'assignmentbudgetings.assignmentgenerate_id',
+          'assignments.assignment_name',
+          'assignmentbudgetings.assignmentname'
+        )
+        // ->where('clients.status', 0)
+        ->where('assignmentbudgetings.status', 1)
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->take(5)->get();
+
+      // $assignmentcount = count($assignment);
+
+      $assignmentcount = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        // get assignment name only
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->whereNotIn('clients.id', [33, 32, 34, 29])
+        ->select(
+          'assignmentbudgetings.client_id',
+          'clients.client_name',
+          'assignmentbudgetings.assignmentgenerate_id',
+          'assignments.assignment_name',
+          'assignmentbudgetings.assignmentname'
+        )
+        // ->where('clients.status', 0)
+        ->where('assignmentbudgetings.status', 1)
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->count();
+
+      // total working days start using financial year
+      $currentDate = Carbon::now();
+      $currentMonth = $currentDate->format('F');
+      if ($currentDate->month >= 4) {
+        // Current year financial year
+        $startDate = Carbon::create($currentDate->year, 4, 1);
+        $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+      } else {
+        // Previous year financial year
+        $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+        $endDate = Carbon::create($currentDate->year, 3, 31);
+      }
+
+      // $totalworkingdays = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('no_of_days_present');
+
+      // $totalcasualleave = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('casual_leave');
+
+      // $totalexamleave = DB::table('attendances')
+      //   ->where('employee_name', auth()->user()->teammember_id)
+      //   ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      //   ->sum('exam_leave');
+
+      $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+      // total working days end hare 
+      // manager
+      return view('backEnd.index', compact('notification', 'mentor', 'mentees', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
+
+	  
+	  
+	  
+	 
+	  
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\notification\form.blade.php
+replace all code 
+
+
+<div class="row row-sm">
+    <div class="col-6">
+        <div class="form-group">
+            <label class="font-weight-600">Subject *</label>
+            <input type="text" required name="title" value="{{ $notification->title ?? '' }}" class="form-control"
+                placeholder="Enter Subject">
+        </div>
+    </div>
+    {{-- <div class="col-6">
+        <div class="form-group">
+            <label class="font-weight-600">Target.</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="targettype">
+                <option>Please Select One</option>
+                <option value="1">Individual</option>
+                <option value="2">All Member</option>
+                <option value="3">Partner</option>
+                <option value="4">Manager</option>
+                <option value="5">Staff</option>
+                <option value="6">IT Department</option>
+                <option value="7">Accountant</option>
+            </select>
+        </div>
+    </div> --}}
+
+    <div class="col-6">
+        <div class="form-group">
+            <label class="font-weight-600">Target *</label>
+
+            <select required class="form-control basic-multiple" multiple="multiple" id="exampleFormControlSelect111"
+                name="targettype[]">
+                <option value="" disabled> Please Select One</option>
+                <option value="1">Individual</option>
+                <option value="2">All Member</option>
+                <option value="3">Partner</option>
+                <option value="4">Manager</option>
+                <option value="5">Staff</option>
+                <option value="6">IT Department</option>
+                <option value="7">Accountant</option>
+            </select>
+        </div>
+    </div>
+
+
+</div>
+<div class="row row-sm">
+    <!-- <div class="col-6"  style='display:none;' id='designation'>
+        <div class="form-group">
+        <label class="font-weight-600">Employee </label>
+            <select class="form-control " multiple="multiple" name="teammember_id[]">
+                <option value="">Please Select One</option>
+                @foreach ($teammember as $teammemberData)
+<option value="{{ $teammemberData->id }}">
+                    {{ $teammemberData->team_member }} ( {{ $teammemberData->emailid ?? '' }} ) </option>
+@endforeach
+    
+            </select>
+        </div>
+    </div> -->
+    <div class="col-6" style='display:none;' id='designation'>
+        <div class="form-group">
+            <label class="font-weight-600">Employee *</label>
+            <select class="language form-control" multiple="" name="teammember_id[]" id="designationinput">
+                @foreach ($teammember as $teammemberData)
+                    <option value="{{ $teammemberData->id }}">
+                        {{ $teammemberData->team_member }} ( {{ $teammemberData->emailid ?? '' }} )
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label class="font-weight-600">File Upload</label>
+            <input type="file" name="attachment" class="form-control" placeholder="Upload file">
+            <span class="text-danger" style="font-weight: 300">File types: png, pdf, jpeg, jpg, xls, xlsx. Max
+                size: 5
+                MB</span>
+        </div>
+    </div>
+</div>
+<div class="row row-sm">
+    <div class="col-12">
+        <div class="form-group">
+            <label class="font-weight-600">Announcement Content *</label>
+            <textarea rows="4" name="mail_content" class="centered form-control" id="summernote"
+                placeholder="Enter Description" id="editors" style="height:500px;"></textarea>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="form-group">
+    <button type="submit" class="btn btn-success" style="float:right">Send</button>
+    <a class="btn btn-secondary" href="{{ url('notification') }}">
+        Back</a>
+
+</div>
+<script src="{{ url('backEnd/ckeditor/ckeditor.js') }}"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+        })
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
+</script>
+<script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Add required validation
+        $('form').on('submit', function(e) {
+            // Check if Summernote content is empty
+            var summernoteContent = $('#summernote').summernote('isEmpty');
+            if (summernoteContent) {
+                alert('Announcement Content is required.');
+                e.preventDefault(); // Prevent form submission
+                return false;
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#exampleFormControlSelect111').on('change', function() {
+            if (this.value == '1') {
+                $("#designation").show();
+                document.getElementById("designationinput").required = true;
+            } else {
+                $("#designation").hide();
+                document.getElementById("designationinput").required = false;
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+notificationcontroller 
+
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'attachment' => 'nullable|mimes:png,pdf,jpeg,jpg,xls,xlsx|max:4120',
+        ], [
+            'attachment.max' => 'The file may not be greater than 5 MB.',
+        ]);
+
+        // $request->validate([
+        //     'attachment' => 'nullable|mimes:png,pdf,jpeg,jpg,xls,xlsx|max:5120',
+        // ], [
+        //     'attachment.max' => 'The file may not be greater than 5 MB.',
+        //     'attachment.mimes' => 'The file must be a type of: png, pdf, jpeg, jpg, xls, xlsx.',
+        // ]);
+
+
+        try {
+            $authid = auth()->user()->teammember_id;
+            $data = $request->except(['_token']);
+            // Initialize the attachment path
+            $attachmentPath = '';
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $name = $file->getClientOriginalName();
+                $attachmentPath = storage_path('app/public/image/task/' . $name);
+                $file->storeAs('public/image/task', $name);
+            } else {
+                $name = '';
+            }
+
+            // foreach ($request->targettype as $targetType) {
+            //     dd($targetType);
+            //     $notification_id =    DB::table('notifications')->insertGetId([
+            //         'title'         => $request->title,
+            //         'created_by'  => $authid,
+            //         'targettype'         => $targetType,
+            //         'mail_content'         => $request->mail_content,
+            //         'attachment'    => $name,
+            //         'created_at'                =>       date('Y-m-d H:i:s'),
+            //         'updated_at'              =>    date('Y-m-d H:i:s'),
+            //     ]);
+            // }
+            // if ($request->targettype[0] == 1) {
+            //     foreach ($request->teammember_id as $teammember_id) {
+            //         DB::table('notificationtargets')->insert([
+            //             'notification_id'       =>     $notification_id,
+            //             'teammember_id'     =>     $teammember_id,
+            //             'created_at'                =>       date('y-m-d'),
+            //             'updated_at'              =>    date('y-m-d'),
+            //         ]);
+            //     }
+            // }
+
+
+
+            $duplicatecodemax = DB::table('notifications')->max('duplicate_notifications');
+            $maxincreament = $duplicatecodemax ? $duplicatecodemax + 1 : 2001;
+
+            foreach ($request->targettype as $targetType) {
+                $notification_id = DB::table('notifications')->insertGetId([
+                    'title'         => $request->title,
+                    'created_by'    => $authid,
+                    'targettype'    => $targetType,
+                    'mail_content'  => $request->mail_content,
+                    'attachment'    => $name,
+                    'duplicate_notifications'    => $maxincreament,
+                    'created_at'    => date('Y-m-d H:i:s'),
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                ]);
+
+                // Check if the targettype is 1 and insert team member IDs
+                if ($targetType == 1 && isset($request->teammember_id)) {
+                    foreach ($request->teammember_id as $teammember_id) {
+                        DB::table('notificationtargets')->insert([
+                            'notification_id' => $notification_id,
+                            'teammember_id'   => $teammember_id,
+                            'created_at'      => date('Y-m-d'),
+                            'updated_at'      => date('Y-m-d'),
+                        ]);
+                    }
+                }
+            }
+
+            // 1 exist or not in array of $request->targettype
+            if (in_array(1, $request->targettype)) {
+                $teammembers = Teammember::wherein('id', $request->teammember_id)->pluck('emailid')->toArray();
+
+                // dd($teammembers);
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'attachment' =>  $request->attachment,
+                        'emailid' =>  $teammember,
+                    );
+
+                    //   $data['mail']=$teammember;
+
+                    // Mail::send('emails.notificationmail', $data, function ($msg) use ($data) {
+                    //     $msg->to($data['emailid']);
+                    //     $msg->subject($data['title']);
+                    // });
+
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+            if (in_array(2, $request->targettype)) {
+
+                $teammembers = Teammember::where('status', 1)->pluck('emailid')->toArray();
+                //    dd($teammembers);
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+
+                    //  $data['mail']=$teammembers;
+
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+            if (in_array(3, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 13)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+
+
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+            if (in_array(4, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 14)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+            if (in_array(5, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 15)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+            if (in_array(6, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 16)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+            if (in_array(7, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 17)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+
+                    );
+
+
+                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                        $msg->to($data['emailid']);
+                        $msg->subject($data['title']);
+
+                        // Attach the file to the email
+                        if ($attachmentPath != '') {
+                            $msg->attach($attachmentPath, [
+                                'as' => $name,
+                                'mime' => 'image/jpeg',
+                            ]);
+                        }
+                    });
+                }
+            }
+
+            $output = array('msg' => 'Sent Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+                                 @if (Auth::user()->role_id == 11)
+                                      <li><a href="{{ url('totaltimeshow') }}">Assignment Time Report</a></li>
+                                      <li><a href="{{ url('permotionrejoiningreport') }}">Permotion/Rejoining
+                                              Report</a></li>
+                                      <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
+                                      </li>
+                                  @endif
+                                  @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 13)
+                                      {{-- <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
+                                      </li> --}}
+                                      <li><a href="{{ url('attendance') }}">Attendance</a></li>
+                                  @endif
+	
+
+	
+								  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);height:250px;">
+
+                            <div class="card-body">
+                                <div class="card-head">
+                                    <b>Assignment Viewer:</b>
+                                    {{-- @if (auth()->user()->role_id != 15)
+                                        <b><a data-toggle="modal" data-target="#exampleModal14"
+                                                class="btn btn-info-soft btn-sm">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </b>
+                                    @endif --}}
+                                </div>
+
+                                <hr>
+                                <div class="table-responsive example">
+                                    <table class="table display table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th class="textfixed">Staff Code</th>
+                                                {{-- <th>Role</th> --}}
+                                                <th>Mobile No</th>
+                                                <th>Patner</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $hasData = false;
+                                            @endphp
+                                            @foreach ($teammemberDatas as $teammemberData)
+                                                @if ($teammemberData->viewerteam == 1)
+                                                    @php
+                                                        $hasData = true;
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="textfixed">{{ $teammemberData->title }}
+                                                            {{ $teammemberData->team_member }}</td>
+                                                        <td>{{ $teammemberData->staffcode }}</td>
+                                                        {{-- <td class="textfixed">
+                                                            @if ($teammemberData->type == 0)
+                                                                <span>Team Leader</span>
+                                                            @else
+                                                                <span>Staff</span>
+                                                            @endif
+                                                        </td> --}}
+                                                        <td class="textfixed">
+                                                            <a
+                                                                href="tel:={{ $teammemberData->mobile_no }}">{{ $teammemberData->mobile_no }}</a>
+                                                        </td>
+                                                        <td class="textfixed">
+                                                            {{ App\Models\Teammember::select('team_member')->where('id', $teammemberData->leadpartner)->first()->team_member ?? '' }}
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                            @if (!$hasData)
+                                                <tr>
+                                                    <td colspan="7" style="text-align: center;">Data not available
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+duplicate_notifications column in notifications table 
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\notification\index.blade.php
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    @php
+                        $allTargets = DB::table('notifications')
+                            ->whereIn('duplicate_notifications', $notificationDatas->pluck('duplicate_notifications'))
+                            ->select('duplicate_notifications', 'targettype')
+                            ->get()
+                            ->groupBy('duplicate_notifications');
+                        // dd($allTargets);
+                    @endphp
+                    <table id="examplee" class="display nowrap">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">ID</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                                    <th>Target</th>
+                                @endif
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($notificationDatas as $notificationData)
+                                <tr>
+                                    <td style="display: none;">{{ $notificationData->id }}</td>
+                                    <td>
+                                        <a href="{{ url('/notification/' . $notificationData->id) }}"
+                                            style="color: {{ $notificationData->readstatus == 1 ? 'Black' : 'red' }};">
+                                            {{ $notificationData->title }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span style="display: none;">
+                                            {{ date('Y-m-d', strtotime($notificationData->created_at)) }}
+                                        </span>
+                                        {{ date('d-m-Y', strtotime($notificationData->created_at)) }}
+                                    </td>
+                                    @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                                        <td>
+                                            @php
+                                                $targetTypes = $allTargets[$notificationData->duplicate_notifications]
+                                                    ->pluck('targettype')
+                                                    ->unique();
+                                            @endphp
+                                            @foreach ($targetTypes as $key => $targettype)
+                                                @switch($targettype)
+                                                    @case(1)
+                                                        <span>Individual</span>
+                                                    @break
+
+                                                    @case(2)
+                                                        <span>All Member</span>
+                                                    @break
+
+                                                    @case(3)
+                                                        <span>Partner</span>
+                                                    @break
+
+                                                    @case(4)
+                                                        <span>Manager</span>
+                                                    @break
+
+                                                    @case(5)
+                                                        <span>Staff</span>
+                                                    @break
+
+                                                    @case(6)
+                                                        <span>IT Department</span>
+                                                    @break
+
+                                                    @case(7)
+                                                        <span>Accountant</span>
+                                                    @break
+
+                                                    @default
+                                                        <span>NA</span>
+                                                @endswitch
+                                                @if ($key < count($targetTypes) - 1)
+                                                    ,
+                                                @endif
+                                            @endforeach
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+in index fun 
+
+if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12) {
+
+  $notificationDatas =  DB::table('notifications')
+        ->join('teammembers', 'teammembers.id', 'notifications.created_by')
+        ->select(
+          'notifications.*',
+          'teammembers.profilepic',
+          'teammembers.team_member'
+        )
+        ->whereIn('notifications.id', function ($subquery) {
+          // Subquery to get the latest ID for each duplicate value
+          $subquery->from('notifications')
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('duplicate_notifications');
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate('2');
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+notification end
+rejoining ke case me 

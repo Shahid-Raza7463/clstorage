@@ -1,0 +1,447 @@
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+find text   <td>{{ $teammemberData->staffcode }}</td> 
+replace   <tr> tag
+
+
+
+                                                     <tr>
+                                                        <td class="textfixed">{{ $teammemberData->title }}
+                                                            {{ $teammemberData->team_member }}</td>
+                                                        <td>{{ $teammemberData->staffcode }}</td>
+                                                        {{-- <td class="textfixed">
+                                                            @if ($teammemberData->type == 0)
+                                                                <span>Team Leader</span>
+                                                            @else
+                                                                <span>Staff</span>
+                                                            @endif
+                                                        </td> --}}
+                                                        <td class="textfixed">
+                                                            <a
+                                                                href="tel:={{ $teammemberData->mobile_no }}">{{ $teammemberData->mobile_no }}</a>
+                                                        </td>
+                                                        <td class="textfixed">
+                                                            {{ App\Models\Teammember::select('team_member')->where('id', $teammemberData->leadpartner)->first()->team_member ?? '' }}
+                                                        </td>
+                                                    </tr>
+
+
+
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+find text   @foreach ($teammemberall as $teammemberData) 
+replace   <div class="modal-body">
+
+
+                                                <div class="modal-body">
+                                                    <div class="details-form-field form-group row">
+                                                        <div
+                                                            class="col-{{ $assignmentbudgetingDatas->status == 1 ? '6' : '12' }}">
+                                                            <div class="form-group">
+                                                                <label class="font-weight-600">Name</label>
+                                                                <select class="language form-control"
+                                                                    id="exampleFormControlSelect1" name="teammember_id">
+                                                                    <option value="">Please Select One</option>
+                                                                    @foreach ($teammemberall as $teammemberData)
+                                                                        <option value="{{ $teammemberData->id }}">
+                                                                            {{ $teammemberData->team_member }}
+                                                                            ({{ $teammemberData->staffcode }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <input type="hidden" name="assignmentmapping_id"
+                                                                    value="{{ $assignmentbudgetingDatas->id }}"
+                                                                    class="form-control">
+                                                            </div>
+                                                        </div>
+
+                                                        @if ($assignmentbudgetingDatas->status == 1)
+                                                            <div class="col-5">
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-600">Type</label>
+                                                                    <select class="form-control key" id="key"
+                                                                        name="type">
+                                                                        <option value="">Please Select One</option>
+                                                                        <option value="0">Team Leader</option>
+                                                                        <option value="2">Staff</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <input type="hidden" name="type" value="2"
+                                                                class="form-control">
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+replace  function timesheetrequestStore(Request $request)
+
+
+    public function timesheetrequestStore(Request $request)
+  {
+    try {
+      $request->validate([
+        'reason' => 'required',
+        'file' => 'nullable|mimes:png,pdf,jpeg,jpg|max:5120',
+      ], [
+        'file.max' => 'The file may not be greater than 5 MB.',
+      ]);
+
+      $data = $request->except(['_token', 'file']);
+      $latestrequest = DB::table('timesheetrequests')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->latest()
+        ->select('created_at', 'status')
+        ->first();
+      // dd($latestrequest);
+
+      if ($latestrequest != null && $latestrequest->status != 2) {
+        $latestrequesthour = Carbon::parse($latestrequest->created_at);
+        // dd($latestrequest->created_at);
+        $currentDateTime = Carbon::now();
+        // Check if the difference is more than 24 hours
+        if ($latestrequesthour->diffInHours($currentDateTime) > 24) {
+
+
+          $fileName = '';
+          if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            // public\backEnd\image\confirmationfile
+            $destinationPath = 'backEnd/image/confirmationfile';
+            $fileName = $file->getClientOriginalName();
+            $file->move($destinationPath, $fileName);
+          }
+
+          $id = DB::table('timesheetrequests')->insertGetId([
+            'partner'     =>     $request->partner,
+            'reason'     =>     $request->reason,
+            'attachment'     =>     $fileName,
+            'status'     =>     0,
+            'createdby' => auth()->user()->teammember_id,
+            'created_at'          =>     date('Y-m-d H:i:s'),
+            'updated_at'              =>    date('Y-m-d H:i:s'),
+          ]);
+
+          // timesheet request mail to admin
+          $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+          $name = Teammember::where('id', auth()->user()->teammember_id)
+            ->select('team_member', 'staffcode')
+            ->first();
+
+          $data = array(
+            'teammember' => $name ?? '',
+            'reason' => $request->reason ?? '',
+            'created_at' => date('d-m-Y H:i:s'),
+            'email' => $teammembermail ?? '',
+            'id' => $id ?? '',
+          );
+
+          Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+            $msg->to($data['email']);
+            //     $msg->cc('itsupport_delhi@vsa.co.in');
+            $msg->subject('Timesheet Submission Request');
+          });
+          // timesheet request mail to admin
+          return response()->json(['success' => true, 'msg' => 'Request Successfully']);
+        } else {
+          $msg = 'You can submit new timesheet request after 24 hour from ' . date('h:i:s A', strtotime($latestrequest->created_at));
+          return response()->json(['success' => false, 'msg' => $msg]);
+        }
+      } else {
+
+
+        $fileName = '';
+        if ($request->hasFile('file')) {
+          $file = $request->file('file');
+          // public\backEnd\image\confirmationfile
+          $destinationPath = 'backEnd/image/confirmationfile';
+          $fileName = $file->getClientOriginalName();
+          $file->move($destinationPath, $fileName);
+        }
+
+        $id = DB::table('timesheetrequests')->insertGetId([
+          'partner'     =>     $request->partner,
+          'reason'     =>     $request->reason,
+          'attachment'     =>     $fileName,
+          'status'     =>     0,
+          'createdby' => auth()->user()->teammember_id,
+          'created_at'          =>     date('Y-m-d H:i:s'),
+          'updated_at'              =>    date('Y-m-d H:i:s'),
+        ]);
+
+        // timesheet request mail to admin
+        $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+        $name = Teammember::where('id', auth()->user()->teammember_id)
+          ->select('team_member', 'staffcode')
+          ->first();
+
+        $data = array(
+          'teammember' => $name ?? '',
+          'reason' => $request->reason ?? '',
+          'created_at' => date('d-m-Y H:i:s'),
+          'email' => $teammembermail ?? '',
+          'id' => $id ?? '',
+        );
+        Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+          $msg->to($data['email']);
+          //   $msg->cc('itsupport_delhi@vsa.co.in');
+          $msg->subject('Timesheet Submission Request');
+        });
+        // timesheet request mail to admin
+        return response()->json(['success' => true, 'msg' => 'Request Successfully Done']);
+      }
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+    }
+  }
+
+
+
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\timesheetrequestform.blade.php
+replace  all code in this file
+
+<h3>Dear Sir/Madam,</h3>
+<br>
+<p>
+    You have received a new request for Timesheet Submission.
+</p>
+<p>
+    <strong>Name:</strong> {{ $teammember->team_member ?? '' }} ({{ $teammember->staffcode ?? '' }})<br>
+    <strong>Reason:</strong> {{ $reason ?? '' }}<br>
+    <strong>Request Date:</strong> {{ $created_at ?? '' }}
+</p>
+
+<p>
+    After your approval, the employee will be able to submit his/her timesheet.
+</p>
+<p>
+    To approve or reject the request, please click <a href="{{ url('/timesheetrequest/view/' . $id) }}">here</a>.
+</p>
+
+
+{{-- <h3>Dear Sir/Madam</h3>
+<br><br>
+<p>
+    You have a new request for Timesheet Submission from {{ $teammember ?? '' }}.
+    Please click <a href="{{ url('/timesheetrequest/view/' . $id) }}"> here </a> to Approve/Reject.</p>
+<p>
+    After your approval, the employee will be able to submit his/her timesheet.
+</p> --}}
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\applyleaveform.blade.php
+replace all code hare 
+
+<h3>Dear Sir/Madam,</h3>
+<br>
+<p>
+    You have received a new request for leave.
+</p>
+<p>
+    <strong>Name:</strong> {{ $teammembername ?? '' }} ({{ $teamstaffcode ?? '' }})<br>
+    <strong>Leave Period:</strong> from {{ date('d-m-Y', strtotime($from)) }} to
+    {{ date('d-m-Y', strtotime($to)) }}.<br>
+    <strong>Reason for leave:</strong> {{ $reasonleave ?? '' }}<br>
+    <strong>Request Date:</strong> {{ date('d-m-Y H:i:s') }}
+</p>
+<p>
+    To approve or reject the request, please click <a href="{{ url('/applyleave/' . $id) }}">here</a>.
+</p>
+
+{{-- Dear Sir/Madam,
+<br><br>
+{{ $teammembername ?? '' }} has made a leave request from {{ date('F d,Y', strtotime($from)) }} to
+{{ date('F d,Y', strtotime($to)) }}.
+<br>Please click <a href="{{ url('/applyleave/' . $id) }}">here</a> to approve/reject. --}}
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+find text  Mail::send('emails.applyleaveform', $data, function ($msg) use ($data) {
+replace below code hare 
+
+   $data = array(
+        'id' => $id,
+        'leavetype'         =>     $request->leavetype,
+        'from'         =>     $request->from,
+        'to'         =>     $request->to,
+        'reasonleave'         =>     $request->reasonleave,
+        'teammembername'         =>    $teammembername->team_member,
+        'teamstaffcode'         =>    $teammembername->staffcode,
+        'teammemberemail' => $teammemberemail->emailid ?? '',
+        'id' => $id ?? ''
+
+      );
+
+      Mail::send('emails.applyleaveform', $data, function ($msg) use ($data) {
+        $msg->to($data['teammemberemail']);
+        $msg->cc('itsupport_delhi@vsa.co.in');
+        $msg->subject('VSA Apply Leave Request');
+      });
+	  
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetrequestController.php
+
+
+       public function update(Request $request, $id)
+    {
+        try {
+            $data = $request->except(['_token']);
+            if ($request->status == 1) {
+                $currentdate = date('Y-m-d');
+                $date = Carbon::createFromFormat('Y-m-d', $currentdate ?? '')->addDays(3);
+                $holidaydate = $date->format('Y-m-d');
+                $data['validate'] = $holidaydate;
+            }
+
+            // When approve btn click 
+            if ($request->status == 1) {
+                // Current Data that is click by admin
+                $timesheetrequestdata = DB::table('timesheetrequests')
+                    ->where('id', $id)
+                    ->first();
+                // Find latest timesheet Request
+                $latestrequest = DB::table('timesheetrequests')
+                    ->where('createdby', $timesheetrequestdata->createdby)
+                    ->latest()->first();
+                // check latest timesheet Request == Current Data that is click by admin
+                if ($latestrequest->id == $timesheetrequestdata->id) {
+                    // approve timesheet request
+                    // dd($data);
+                    if ($latestrequest) {
+                        DB::table('timesheetrequests')
+                            ->where('id', $latestrequest->id)
+                            // ->update(['status' => 1]);
+                            ->update($data);
+                    }
+                } else {
+                    $output = array('msg' => 'Please Approve Latest Timesheet Request');
+                    return redirect('timesheetrequestlist')->with('statuss', $output);
+                }
+                // Find all rest data after approving
+                $allrestrequest =  DB::table('timesheetrequests')->where('createdby', $timesheetrequestdata->createdby)->where('status', 0)->get();
+                // reject all reset timesheet request
+                foreach ($allrestrequest as $allrestrequestdata) {
+                    DB::table('timesheetrequests')->where('createdby', $allrestrequestdata->createdby)->where('status', 0)->update([
+                        'status'  => 2,
+                        'remark'  => 'Duplicate Request',
+                    ]);
+                }
+            }
+            // When Reject btn click 
+            else {
+                // dd($request->remark);
+                // Current Data that is click by admin
+                $timesheetrequestdata = DB::table('timesheetrequests')
+                    ->where('id', $id)
+                    ->first();
+                // Find latest timesheet Request
+                $latestrequest = DB::table('timesheetrequests')
+                    ->where('createdby', $timesheetrequestdata->createdby)
+                    ->latest()->first();
+                // check latest timesheet Request == Current Data that is click by admin
+                if ($latestrequest->id == $timesheetrequestdata->id) {
+                    // approve timesheet request
+                    if ($latestrequest) {
+                        DB::table('timesheetrequests')
+                            ->where('id', $latestrequest->id)
+                            ->update([
+                                'status' => 2,
+                                'remark' => $request->remark,
+                            ]);
+                    }
+                } else {
+                    $output = array('msg' => 'Please Reject Latest Timesheet Request');
+                    return redirect('timesheetrequestlist')->with('statuss', $output);
+                }
+                // Find all rest data after approving
+                $allrestrequest =  DB::table('timesheetrequests')->where('createdby', $timesheetrequestdata->createdby)->where('status', 0)->get();
+                // reject all reset timesheet request
+                foreach ($allrestrequest as $allrestrequestdata) {
+                    DB::table('timesheetrequests')->where('createdby', $allrestrequestdata->createdby)->where('status', 0)->update([
+                        'status'  => 2,
+                        'remark'  => 'Duplicate Request',
+                    ]);
+                }
+            }
+
+            // timesheet request list rejected end 
+            $created = DB::table('timesheetrequests')->where('id', $id)->first();
+            // $validateDate = Carbon::parse($created->validate)->subDay();  // This will subtract 1 day
+            $validateDate = $created->validate ? Carbon::parse($created->validate)->subDay() : null;
+            $teammembermail = Teammember::where('id', $created->createdby)->first();
+
+            $data = array(
+                'email' => $teammembermail->emailid ?? '',
+                'status' => $created->status ?? '',
+                'date' => $validateDate ? $validateDate->toDateString() : '',
+                'id' => $id ?? ''
+            );
+
+            Mail::send('emails.timesheetrequestapprovelform', $data, function ($msg) use ($data) {
+                $msg->to($data['email']);
+                $msg->subject('VSA Timesheet Approval');
+            });
+            $output = array('msg' => 'Update Successfully');
+            return redirect('timesheetrequestlist')->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Staff Code</th>
+                                                {{-- <th>Role</th> --}}
+                                                <th>Mobile No</th>
+                                                <th>Patner</th>
+                                            </tr>
+done on vsademo and vsalive 
+

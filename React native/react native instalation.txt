@@ -1,4 +1,50 @@
+After setup
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.Open android Studio
+2.open project in vs code 
+5.create virtual device
+3.open cmd 
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
+npx react-native start --reset-cache  if neede then other was skip it 
+5.npx react-native start
+4.open cmd
+6.npx react-native run-android  ye command always run using adminstration cmd
+
+2222222222222222222222222222222222222
+
+ assets\images\FB_IMG_1545560289018.jpg
+ npm install -g npm@10.9.2 if update new version then
+
+ 2222222222222222222222222222222222222222222222222
+sequence me is command ko run kare / regarding reset all / restart /clean data 
+npm cache clean --force
+rmdir /s /q node_modules
+rmdir /s /q android\app\build
+npm install
+cd android
+ise clean n kare sabhi download remove kar deta hai fir se npx react-native run-android chalana parta hai    ye command always run using adminstration cmd
+gradlew clean
+cd ..
+npx react-native start --reset-cache
+npx react-native run-android
+
+2222222222222222222222222222222222222222222222222222222222222222222222
+cd android
+gradlew clean
+cd ..
+npm cache clean --force
+npx react-native-clean-project
+npm install react-native-reanimated@latest
+npx react-native run-android --variant=release
+cd android
+gradlew clean
+gradlew assembleRelease
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 setup enviroment
+1024   *  768
 cd C:\Users\KGS-429\Desktop\secondapp\Projects
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
@@ -105,7 +151,7 @@ open powershell using administrate
 
 npm uninstall -g react-native-cli @react-native-community/cli
 
-npx @react-native-community/cli@latest init FriendsList
+npx @react-native-community/cli@latest init FriendsList   or npx react-native init LinearGradientExample
 
 npx react-native start
 
@@ -128,27 +174,34 @@ npx react-native init Projects --version 0.70.0
 13.
 npx react-native start
 
-npx react-native run-android --port=8082
+npx react-native run-android --port=8082   ye command always run using adminstration cmd
 
 
 
-make app 
+firs time then make app / create app / regarding app 
 222222222222222222222222222222222222
-
+firstly run android studio and run project then after that run below command
 1
 hare point 1 nahi use kare sirf point 2 and 3 use kare 
-1.npx react-native run-android --variant=release
+1.npx react-native run-android --variant=release   ye command always run using adminstration cmd
 
 2.cd C:\Users\KGS-429\Desktop\firstapp\FirstProjectApp\android
+   or cd C:\Users\KGS-429\Desktop\shahidapp\FriendList\android
 3.gradlew assembleRelease
 
 your app on that path 
-1C:\Users\KGS-429\Desktop\firstapp\FirstProjectApp\android\app\build\outputs\apk\release\app-release.apk
-2android\app\build\outputs\apk\release\app-release.apk
+1. C:\Users\KGS-429\Desktop\firstapp\FirstProjectApp\android\app\build\outputs\apk\release\app-release.apk
+2. android\app\build\outputs\apk\release\app-release.apk
+
+
+Note:
+No, you don't need to delete the existing app-release.apk to generate a new one.
+
+When you run the command gradlew assembleRelease again, it will overwrite the existing app-release.apk file with the newly generated APK. The previous file will be replaced automatically in the following directory:
 
 
 2222222222222222222222222222222222222222
-rebuild app again 
+rebuild app again / create app again 
 cd android
 ./gradlew assembleRelease
 
@@ -172,13 +225,13 @@ cd "C:\Users\KGS-429\Desktop\firstapp\FirstProjectApp"
 
 22222222222222222222222222
 npx react-native start --port=8082
-npx react-native run-android --port=8082
+npx react-native run-android --port=8082   ye command always run using adminstration cmd
 npx react-native start --reset-cache
 
 project related command go to project folder install 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 cd android
-ise clean n kare sabhi download remove kar deta hai fir se npx react-native run-android chalana parta hai 
+ise clean n kare sabhi download remove kar deta hai fir se npx react-native run-android chalana parta hai    ye command always run using adminstration cmd
 gradlew clean
 cd ..
 npx react-native start --reset-cache
@@ -338,7 +391,9 @@ end hare
 }
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222
-test json using postman / post man 
+test json using postman / postman / regarding postman / api create
+
+1.we can see output of dd in postman inside preview section
 
 1.get data 
 1.Get  http://localhost:3000/users
@@ -374,6 +429,42 @@ hare ddca id hai jo copy karenge get karke
     }
 
 click send button 
+
+
+# Api testing practicaly / Api test / regarding postman
+1.Get all data (index function)
+Get    http://127.0.0.1:8000/api/posts 
+on server
+http://shahid1.infinityfreeapp.com/api/posts
+
+
+2.single data get (show function)
+Get    http://127.0.0.1:8000/api/posts/8 
+
+3.insert one data (store / create function)  pass data using params / pass data using body->form data, not body->raw   
+Post   http://127.0.0.1:8000/api/posts
+
+4.update one data  (update function)  pass data using params not body->raw 
+Put    http://127.0.0.1:8000/api/posts/7
+
+5.delete one data (destroy function)
+Delete http://127.0.0.1:8000/api/posts/5  
+
+
+signup,login and logout 
+1.(signup) pass data using body->form data, not body->raw
+Post http://127.0.0.1:8000/api/signup
+
+2.(login) pass data using body->form data, not body->raw 
+post http://127.0.0.1:8000/api/login
+
+3.(logout) pass token for logout, Authorization->select type (bearer token) and enter token hare 
+post http://127.0.0.1:8000/api/logout 
+
+
+
+https://jsonplaceholder.typicode.com/users
+
 
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -422,7 +513,7 @@ npm install @react-navigation/native @react-navigation/native-stack
 npm install react-native-screens react-native-safe-area-context
 npx react-native run-android
 
-2nd step run this below command 
+2nd step run this below command which navigation do you want 
 11111111
 
 for tab navigation /  bottom navigation
@@ -436,7 +527,10 @@ for drawer
 npm install @react-navigation/drawer
 npm install react-native-gesture-handler react-native-reanimated
 
+this below code is mandatry after draweer installation 
 npm install metro-react-native-babel-preset --save-dev
+
+npx react-native run-android
 
 
 
@@ -528,13 +622,27 @@ react-native-vector-icons/Ionicons
 
 
 
+
+
 rm -rf node_modules
 rm package-lock.json  # or yarn.lock if using Yarn
 npm install            # or yarn install if using Yarn
 
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222
+all installation
+
+npm install react-native-linear-gradient
+npm install react-native-vector-icons
+
 222222222222222222222222222222222222222222222222222222222222222222222222222222
+shortcut keys
+reload app 
+control+M / ctrl+m
+rr on screen 
+cmd me d and r 
+Ctrl + S  screenshot
+
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 
@@ -579,3 +687,299 @@ npm install            # or yarn install if using Yarn
     }
   ]
 }
+
+npm install --save-dev @babel/plugin-transform-class-properties
+npm install --save-dev @babel/plugin-transform-private-methods
+npm install --save-dev @babel/plugin-transform-private-property-in-object
+2222222222222222222222222222222222222222222222222222222222222222
+mere pass ek dura application hai jise mai almost 4 month se use nahi kiya hai develope ke liye to mai use fir se use kar raha hu to aisa kaun sa command chalao so that mere savi dependencie work karne lage aur mere application bhi 
+regarding problem 
+
+1st step important
+npm install
+npm install react-native-reanimated@latest
+npx react-native run-android  using administration cmd
+
+or
+
+npm install
+npm outdated
+npm update
+npm start --reset-cache
+
+or
+
+rm -rf node_modules
+npm cache clean --force
+npm install
+npx react-native run-android  using administration cmd
+npx react-native doctor
+222222222222222222222222222222222222222222222222222222222222222222222222222222222
+types of navigation 
+
+
+In React Native, navigation is primarily implemented using the React Navigation library. React Navigation offers various types of navigators that can be combined to create a seamless navigation experience. Below are the main types of navigation:
+
+1. Stack Navigation
+Represents a stack-based navigation, where screens are stacked on top of each other.
+Typically used for navigating between screens in a "push-and-pop" manner.
+Example:
+
+jsx
+Copy code
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
+2. Tab Navigation
+Used for bottom or top tab bars to switch between different screens.
+Each tab can represent a separate feature or section of the app.
+Example:
+
+jsx
+Copy code
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+const Tab = createBottomTabNavigator();
+3. Drawer Navigation
+Provides a side menu (drawer) for navigation.
+Often used for displaying navigation options in a collapsible menu.
+Example:
+
+jsx
+Copy code
+import { createDrawerNavigator } from '@react-navigation/drawer';
+const Drawer = createDrawerNavigator();
+4. Nested Navigation
+Combines multiple navigators (e.g., Stack inside a Tab, Drawer with Stack navigators).
+Helps in managing complex navigation flows.
+Example: A Stack inside a Tab Navigator:
+
+jsx
+Copy code
+<Tab.Navigator>
+  <Tab.Screen name="Home" component={HomeStack} />
+  <Tab.Screen name="Settings" component={SettingsScreen} />
+</Tab.Navigator>
+5. Bottom Sheet Navigation
+Allows navigation using a modal-like bottom sheet.
+Can be implemented using libraries like react-native-screens or react-navigation-bottom-sheet.
+6. Modal Navigation
+Screens are displayed as modals over the existing screens.
+Typically configured within a stack navigator.
+Example:
+
+jsx
+Copy code
+<Stack.Navigator screenOptions={{ presentation: 'modal' }}>
+  <Stack.Screen name="Main" component={MainScreen} />
+  <Stack.Screen name="Modal" component={ModalScreen} />
+</Stack.Navigator>
+7. Custom Navigation
+Allows the creation of entirely custom navigators for specific use cases.
+Useful for highly customized navigation behavior.
+Choosing the Right Navigator:
+Use Stack Navigator for simple screen transitions.
+Use Tab Navigator for bottom or top navigation bars.
+Use Drawer Navigator for collapsible side menus.
+Combine navigators as needed for complex apps.
+If you need help implementing any specific type of navigation, feel free to ask!
+
+
+
+maine botom navigation implement kiya hai now ab aap isi code ko top navigation me convert kar de  
+
+
+2. Reinstall Dependencies
+Delete node_modules and reinstall all dependencies:
+222222222222222222222222222222222222222222222222222222222222222222222222222
+rm -rf node_modules
+npm install
+
+2222222222222222222222222222222222222222222
+react-native --version
+
+
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222
+npm install react-native-vector-icons@latest
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+npm uninstall react-native-vector-icons
+npm install react-native-vector-icons
+
+Link the Library (if required): For React Native versions >= 0.60, the library should be
+react-native link react-native-vector-icons
+
+
+const MyComponent = () => (
+  <Icon name="home" size={30} color="#900" />
+);
+
+
+2222222222222222222222222222222222222222222222222222222222
+
+
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: [
+    'react-native-reanimated/plugin',
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-private-methods',
+    '@babel/plugin-transform-private-property-in-object',
+  ],
+};
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: ['react-native-reanimated/plugin'],
+};
+
+
+
+// ddd
+
+module.exports = {
+  presets: ['module:@react-native/babel-preset'],
+};
+
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: ['react-native-reanimated/plugin'],
+};
+
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: [
+    'react-native-reanimated/plugin',
+    '@babel/plugin-transform-private-methods'
+  ],
+};
+
+//* dd
+// module.exports = {
+//   presets: ['module:@react-native/babel-preset'],
+// };
+
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: [
+    'react-native-reanimated/plugin',
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-private-methods',
+    '@babel/plugin-transform-private-property-in-object',
+  ],
+};
+//* dd
+// module.exports = {
+//   presets: ['module:metro-react-native-babel-preset'],
+// };
+
+module.exports = {
+  presets: [
+    'module:metro-react-native-babel-preset',
+  ],
+  plugins: [
+    'react-native-reanimated/plugin',
+  ],
+};
+//* dd
+
+
+222222222222222222222222222222222222222222222
+
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: [
+    'react-native-reanimated/plugin',
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-private-methods',
+    '@babel/plugin-transform-private-property-in-object',
+  ],
+};
+
+222222222222222222222222222222222
+
+
+// module.exports = {
+//   presets: ['module:metro-react-native-babel-preset'],
+// };
+
+module.exports = {
+  presets: [
+    'module:metro-react-native-babel-preset',
+  ],
+  plugins: [
+    'react-native-reanimated/plugin',
+  ],
+};
+22222222222222222222222
+
+cd android
+./gradlew clean
+cd ..
+npx react-native run-android
+
+
+
+
+
+
+
+
+
+
+
+
+
+C:\Users\KGS-429\Desktop\shahidapp\FriendList\android> ./gradlew clean
+'.' is not recognized as an internal or external command,
+operable program or batch file.
+
+
+> Configure project :react-native-reanimated
+Android gradle plugin: 8.2.1
+Gradle: 8.6
+
+> Task :react-native-screens:externalNativeBuildCleanDebug
+Clean rnscreens-armeabi-v7a
+Clean rnscreens-arm64-v8a
+Clean rnscreens-x86
+Clean rnscreens-x86_64
+
+BUILD SUCCESSFUL in 59s
+19 actionable tasks: 15 executed, 4 up-to-date
+C:\Users\KGS-429\Desktop\shahidapp\FriendList\android>cd ..
+
+C:\Users\KGS-429\Desktop\shahidapp\FriendList>npx react-native run-android
+
+
+22222222222223333333333333333333333333333333333333333333333
+If you don’t have the specified version installed:
+
+Open Android Studio.
+Go to File > Settings > Appearance & Behavior > System Settings > Android SDK.
+Select the SDK Tools tab.
+Check NDK (Side by side).
+Click Show Package Details and select the required version (e.g., 25.2.9519653).
+Click OK to install.
+
+222222222222222222222222222222222222222222222222
+icon install/ regarding icon 
+
+1.npm install react-native-vector-icons
+2.npx react-native link react-native-vector-icons
+3.react-native.config.js file create and paste this code inside it 
+       module.exports = {
+           assets: ['./node_modules/react-native-vector-icons/Fonts'],
+        };
+
+4.npx react-native-asset
+5.npx react-native run-android
+
+for testing 
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+<Icon name="home" size={24} color="blue" />

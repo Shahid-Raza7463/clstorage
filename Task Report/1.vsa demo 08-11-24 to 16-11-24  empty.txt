@@ -1,0 +1,56 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Comment all places on vsademo
+app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+itsupport_delhi@vsa.co.in  ise comment kar de 
+
+
+
+agar is per koi bhi update ho to profile me 10th and 12th ka documnet check karle ek baar ye baar baar problem aata hai 
+independence ke ander create and view file insert karna hai 
+IndependenceController.php
+TeammemberController (1).php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

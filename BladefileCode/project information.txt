@@ -1,6 +1,34 @@
+bugs occure in testing 
 
-  public function assignmentotpstore(Request $request)
-  resources\views\backEnd\timesheet\timesheetdownload.blade.php
+222222222222222222222222222222222222
+itsupport_delhi@vsa.co.in mail comment kar do
+https://vsa.capitall.io/create-attendance
+
+https://capitallio.atlassian.net/wiki/x/AYCADw
+
+
+https://capitallio-my.sharepoint.com/:w:/r/personal/poojakumari_capitall_io/_layouts/15/Doc.aspx?sourcedoc=%7BE5ACE42F-E3A8-4267-83FD-9C4200CD53DF%7D&file=Document.docx&fromShare=true&action=default&mobileredirect=true
+
+
+
+Meeting ID: 465 880 761 796
+
+Passcode: 6DzVZk
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+VS-200  to  VS-204
+
+ftp://192.168.43.223.4703
+
+
+ //   $msg->cc('itsupport_delhi@vsa.co.in');
+
+backEnd\image\vlogo.png
+vsalogo.png
+#############################################################
+wifi password 
+vsacapi
+SysCap@Set%9313
+
 #############################################################
 25-07-24  updated on vsalocal,vsademo,vsalive
 
@@ -18,31 +46,13 @@ teamrolehistory
 
   1.1   Azaz~12345    vsalive
 
-#############################################################
-1.live vsademo
-
-Super admin- sukhbahadur1993@gmail.com
-password - Sukh@2023
-
-Manager id- manojsangwan@capitall.io
-password - Manoj@123
-
-Partner - harish@capitall.io
-password - Manoj@123
-
-Staff - sangwanm242@gmail.com
-password - X9L2pk9NKh@2023
-
-Manager : Poojakumari@capitall.io
-Password : ZXGBfThUec@2023
-
 ##############################################################
 credential
 1.itsupport
-2.sunny
-3.bhasker
-4.kritikas@vsa.co.in
-itsupport_delhi@vsa.co.in
+2.sunny    844
+3.bhasker     847 
+4.kritikas@vsa.co.in    882
+itsupport_delhi@vsa.co.in   
 
 
 http://127.0.0.1:8000/assignmentconfirmation/ABD100411
@@ -146,16 +156,165 @@ app\Http\Controllers\BackEndController.php
 
 bugs
 ################################################################################################################################
+vsademo trick / regarding vsademo testing
+
+
+it is for send bahadur 
+applyleaves   
+leaveapprove   
+leaverequest   
+timesheets   
+timesheetreport    
+timesheetusers   
+teammembers
+Users
+attendances
 
 
 applyleaves   all data remove
+leaveapprove   all data remove
 leaverequest    all data remove
-timesheetreport    all data remove
-timesheetrequests    all data remove
+
 timesheets     all data remove
+timesheetreport    all data remove
 timesheetusers   all data remove 
 
-and jis user se test karega us user se timesheet create kare one days ka 
+joining date update to all tested users
 
 teammembers
 Users
+attendances
+
+and jis user se test karega us user se timesheet create kare one days ka 
+
+
+
+if you need to create client then 
+OFF100003 official travel
+ 
+1.client table 
+2.assignmentbudgetings
+3.assignmentmappings
+4.assignmentteammappings
+5.assignments
+
+
+#############################################################
+1.live vsademo credential
+http://127.0.0.1:8000/teamstatus?status=1
+
+Super admin- sukhbahadur1993@gmail.com
+password - Sukh@2023
+447
+
+Staff - Guneet@capitall.io
+password - Azaz~12345
+937
+
+Partner - harish@capitall.io
+password - Manoj@123
+933
+
+Manager : poojakumari@capitall.io
+Password : Manoj@123
+Password : Azaz~12345
+
+
+ZXGBfThUec@2023
+
+Manager id- manojsangwan@capitall.io
+password - Manoj@123
+
+Partner - harish@capitall.io
+password - Manoj@123
+
+Staff - sangwanm242@gmail.com
+password - X9L2pk9NKh@2023
+
+
+222222222222222222222222222222222222222222222222222222222
+regarding table 
+i need this table to update 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+
+11.applyleaves  
+12.attendances
+
+13.Users
+14.teammembers
+15.Clients
+
+16.teamrolehistory
+17.rejoiningsamepost
+
+
+update for testing only on vsademo
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+07.applyleaves  
+08.attendances
+
+
+
+
+
+if any problem on timesheet page to vsalive then ye table maange
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+07.applyleaves  
+08.attendances
+
+
+222222222222222222222222222222222222222222222222222222222
+after update on vsalive plase ye table maange 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+ 
+5.leaveapprove   
+6.leaverequest
+ 
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+ 
+11.applyleaves  
+12.attendances
+
+
+ye 12 table chahiye vsalive se 
+
+222222222222222222222222222222222222222222222222222222222
+
+
+APP_URL=https://shahidrportfolio.infinityfreeapp.com
+ASSET_URL=https://shahidrportfolio.infinityfreeapp.com/assets

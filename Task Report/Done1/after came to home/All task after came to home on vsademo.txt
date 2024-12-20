@@ -1,0 +1,736 @@
+Task id 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+VS-200  to  VS-204
+
+bugs 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+updated only vsalive 
+
+ // i have faced some problem hare so i have done new code when current week running and monday not update for current week then submit button not came
+                    $timesheetcount = DB::table('timesheets')
+                        ->where('status', '0')
+                        ->where('created_by', auth()->user()->teammember_id)
+                        ->where('date', '<', $currentdate)
+                        ->count();
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.The client wants to know the active and inactive users in the attendance report.
+app\Http\Controllers\TeammemberController.php
+
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'team_member' => "required"
+        ]);
+
+        try {
+
+            if ($request->leavingdate != null) {
+                if ($request->rejoining_date == null) {
+                    // update cross sign after exit date of users 
+                    // Delete timesheet records after the exit date
+                    $checksavetimesheet = DB::table('timesheetusers')
+                        ->where('createdby', $id)
+                        ->where('date', '>', $request->leavingdate)
+                        ->where('status', 0)
+                        // ->delete();
+                        ->first();
+
+                    if ($checksavetimesheet) {
+                        $output = array('msg' => 'Please delete save timesheet after leaving date');
+                        return back()->with('statuss', $output);
+                    }
+
+                    $exitDate = Carbon::parse($request->leavingdate);
+                    $exitMonth = $exitDate->format('F');
+                    $exitYear = $exitDate->year;
+                    $dayOfExit = $exitDate->day;
+                    $totalDaysInExitMonth = $exitDate->daysInMonth;
+
+                    // Check if the attendance record exists for the exit month
+                    $exitmonthattendances = DB::table('attendances')
+                        ->where('employee_name', $id)
+                        ->where('month', $exitMonth)
+                        ->first();
+
+                    // If not, insert a new record
+                    if (!$exitmonthattendances) {
+                        DB::table('attendances')->insert([
+                            'employee_name' => $id,
+                            'month' => $exitMonth,
+                            'year' => $exitYear,
+                            'fulldate' => $exitDate->format('Y-m-d'),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+
+                        // Fetch the newly inserted attendance record
+                        $exitmonthattendances = DB::table('attendances')
+                            ->where('employee_name', $id)
+                            ->where('month', $exitMonth)
+                            ->first();
+                    }
+
+                    // Map day numbers to column names
+                    $daysToColumns = [
+                        1 => 'one',
+                        2 => 'two',
+                        3 => 'three',
+                        4 => 'four',
+                        5 => 'five',
+                        6 => 'six',
+                        7 => 'seven',
+                        8 => 'eight',
+                        9 => 'nine',
+                        10 => 'ten',
+                        11 => 'eleven',
+                        12 => 'twelve',
+                        13 => 'thirteen',
+                        14 => 'fourteen',
+                        15 => 'fifteen',
+                        16 => 'sixteen',
+                        17 => 'seventeen',
+                        18 => 'eighteen',
+                        19 => 'ninghteen',
+                        20 => 'twenty',
+                        21 => 'twentyone',
+                        22 => 'twentytwo',
+                        23 => 'twentythree',
+                        24 => 'twentyfour',
+                        25 => 'twentyfive',
+                        26 => 'twentysix',
+                        27 => 'twentyseven',
+                        28 => 'twentyeight',
+                        29 => 'twentynine',
+                        30 => 'thirty',
+                        31 => 'thirtyone'
+                    ];
+
+                    // Prepare the update data
+                    $updateData = [];
+                    foreach ($daysToColumns as $day => $column) {
+                        if ($day > $dayOfExit && $day <= $totalDaysInExitMonth) {
+                            $updateData[$column] = 'X';
+                            // $updateData[$column] = null;
+                        }
+                    }
+
+                    // Update the attendance record
+                    if (!empty($updateData)) {
+                        DB::table('attendances')
+                            ->where('id', $exitmonthattendances->id)
+                            ->update($updateData);
+                    }
+                    // update cross sign after exit date of users end hare 
+                    $timesheetsave = DB::table('timesheetusers')
+                        ->where('createdby', $id)
+                        ->where('status', 0)
+                        ->orderBy('date', 'ASC')
+                        ->get();
+
+
+                    // Chunk the $timesheetsave data for one week
+                    $weeksData = $timesheetsave->chunk(6);
+                    foreach ($weeksData as $weekData) {
+
+                        foreach ($weekData as $timesheet) {
+                            $startdate = Carbon::parse($timesheet->date);
+                            $nextSaturday = $startdate->copy()->next(Carbon::SATURDAY);
+
+                            $startdateformat = $startdate->format('Y-m-d');
+                            $nextSaturdayformat = $nextSaturday->format('Y-m-d');
+
+                            DB::table('timesheetusers')
+                                ->where('timesheetid', $timesheet->timesheetid)
+                                ->update([
+                                    'status' => 1,
+                                    'updated_at' => now(),
+                                ]);
+
+                            DB::table('timesheets')
+                                ->where('id', $timesheet->timesheetid)
+                                ->update([
+                                    'status' => 1,
+                                    'updated_at' => now(),
+                                ]);
+
+                            // Attendance code start hare 
+                            $hdatess = Carbon::parse($timesheet->date)->format('Y-m-d');
+                            $day = Carbon::parse($hdatess)->format('d');
+                            $month = Carbon::parse($hdatess)->format('F');
+                            $yeardata = Carbon::parse($hdatess)->format('Y');
+
+                            $dates = [
+                                '01' => 'one',
+                                '02' => 'two',
+                                '03' => 'three',
+                                '04' => 'four',
+                                '05' => 'five',
+                                '06' => 'six',
+                                '07' => 'seven',
+                                '08' => 'eight',
+                                '09' => 'nine',
+                                '10' => 'ten',
+                                '11' => 'eleven',
+                                '12' => 'twelve',
+                                '13' => 'thirteen',
+                                '14' => 'fourteen',
+                                '15' => 'fifteen',
+                                '16' => 'sixteen',
+                                '17' => 'seventeen',
+                                '18' => 'eighteen',
+                                '19' => 'ninghteen',
+                                '20' => 'twenty',
+                                '21' => 'twentyone',
+                                '22' => 'twentytwo',
+                                '23' => 'twentythree',
+                                '24' => 'twentyfour',
+                                '25' => 'twentyfive',
+                                '26' => 'twentysix',
+                                '27' => 'twentyseven',
+                                '28' => 'twentyeight',
+                                '29' => 'twentynine',
+                                '30' => 'thirty',
+                                '31' => 'thirtyone',
+                            ];
+
+                            $column = $dates[$day];
+
+                            // check attendenace record exist or not 
+                            $attendances = DB::table('attendances')
+                                ->where('employee_name', $timesheet->createdby)
+                                ->where('month', $month)
+                                ->first();
+
+                            if ($attendances == null) {
+                                DB::table('attendances')->insert([
+                                    'employee_name' => $timesheet->createdby,
+                                    'month' => $month,
+                                    'year' => $yeardata,
+                                    // 'dateofjoining' => $teammember->joining_date,
+                                    'fulldate' => date('Y-m-d'),
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => date('Y-m-d H:i:s'),
+                                ]);
+                            }
+
+
+                            $attendances = DB::table('attendances')
+                                ->where('employee_name', $timesheet->createdby)
+                                ->where('month', $month)
+                                ->first();
+
+                            if ($attendances && property_exists($attendances, $column)) {
+
+                                $client = $timesheet->client_id;
+                                $assignmentid = $timesheet->assignment_id;
+                                // $updatewording = match (true) {
+                                //     // Travel
+                                //     $client == 32 => 'T',
+                                //     // Off holidays
+                                //     $client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $timesheet->workitem) == 'Saturday' => 'OH',
+                                //     // Other holidays from calendar
+                                //     $client == 33 => 'H',
+                                //     // Casual leave
+                                //     $client == 134 && $assignmentid == 215 => 'CL',
+                                //     // Exam leave
+                                //     $client == 134 && $assignmentid == 214 => 'EL',
+                                //         // Default presence
+                                //     default => 'P',
+                                // };
+
+                                if ($client == 32) {
+                                    $updatewording = 'T'; // Travel
+                                } elseif ($client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $timesheet->workitem) == 'Saturday') {
+                                    $updatewording = 'OH'; // Off holidays
+                                } elseif ($client == 33) {
+                                    $updatewording = 'H'; // Other holidays from calendar
+                                } elseif ($client == 134 && $assignmentid == 215) {
+                                    $updatewording = 'CL'; // Casual leave
+                                } elseif ($client == 134 && $assignmentid == 214) {
+                                    $updatewording = 'EL'; // Exam leave
+                                } else {
+                                    $updatewording = 'P'; // Default presence
+                                }
+                            }
+
+                            $totalCountMapping = [
+                                'P' => 'no_of_days_present',
+                                'CL' => 'casual_leave',
+                                'EL' => 'exam_leave',
+                                'T' => 'travel',
+                                'OH' => 'offholidays',
+                                'W' => 'sundaycount',
+                                'H' => 'holidays'
+                            ];
+
+                            // Update the total count and attendance record if applicable
+                            if (isset($totalCountMapping[$updatewording])) {
+                                $totalcountColumn = $totalCountMapping[$updatewording];
+                                $totalcountupdate = $attendances->$totalcountColumn + 1;
+
+                                DB::table('attendances')
+                                    ->where('id', $attendances->id)
+                                    ->update([
+                                        $column => $updatewording,
+                                        $totalcountColumn => $totalcountupdate,
+                                    ]);
+                            }
+                            // Attendance code end hare 
+                        }
+
+                        // update sunday data in attendance
+                        $prevSunday = $startdate->copy()->previous(Carbon::SUNDAY);
+                        $day1 = Carbon::parse($prevSunday)->format('d');
+                        $month1 = $prevSunday->format('F');
+                        $yeardata = $prevSunday->format('Y');
+                        $fulldate = $prevSunday->format('Y-m-d');
+
+                        $numberWords = [
+                            '1' => 'one',
+                            '2' => 'two',
+                            '3' => 'three',
+                            '4' => 'four',
+                            '5' => 'five',
+                            '6' => 'six',
+                            '7' => 'seven',
+                            '8' => 'eight',
+                            '9' => 'nine',
+                            '10' => 'ten',
+                            '11' => 'eleven',
+                            '12' => 'twelve',
+                            '13' => 'thirteen',
+                            '14' => 'fourteen',
+                            '15' => 'fifteen',
+                            '16' => 'sixteen',
+                            '17' => 'seventeen',
+                            '18' => 'eighteen',
+                            '19' => 'nineteen',
+                            '20' => 'twenty',
+                            '21' => 'twentyone',
+                            '22' => 'twentytwo',
+                            '23' => 'twentythree',
+                            '24' => 'twentyfour',
+                            '25' => 'twentyfive',
+                            '26' => 'twentysix',
+                            '27' => 'twentyseven',
+                            '28' => 'twentyeight',
+                            '29' => 'twentynine',
+                            '30' => 'thirty',
+                            '31' => 'thirtyone'
+                        ];
+
+                        $dayWord = $numberWords[(int)$day1];
+
+                        $getdateformated = $prevSunday->format('Y-m-d');
+
+                        $getholidaysss = DB::table('holidays')
+                            ->where('startdate', '=', $getdateformated)
+                            ->orWhere('enddate', '=', $getdateformated)
+                            ->first();
+
+                        if ($getholidaysss != null) {
+                            $updateddata = 'H';
+                        } else {
+                            $updateddata = 'W';
+                        }
+
+                        $attendances = DB::table('attendances')
+                            ->where('employee_name', $timesheet->createdby)
+                            ->where('month', $month1)
+                            ->first();
+
+                        if ($attendances == null) {
+                            DB::table('attendances')->insert([
+                                'employee_name' => $timesheet->createdby,
+                                'month' => $month1,
+                                'year' => $yeardata,
+                                // 'dateofjoining' => $teammember->joining_date,
+                                'fulldate' => $fulldate,
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                            ]);
+                        }
+
+                        $attendances = DB::table('attendances')
+                            ->where('employee_name', $timesheet->createdby)
+                            ->where('month', $month1)
+                            ->first();
+
+                        $totalCountMapping = [
+                            'P' => 'no_of_days_present',
+                            'CL' => 'casual_leave',
+                            'EL' => 'exam_leave',
+                            'T' => 'travel',
+                            'OH' => 'offholidays',
+                            'W' => 'sundaycount',
+                            'H' => 'holidays'
+                        ];
+
+                        $prevcheck = DB::table('attendances')
+                            ->where('employee_name', $timesheet->createdby)
+                            ->where('month', $month1)
+                            ->whereNotNull($dayWord)
+                            ->first();
+
+
+                        if ($prevcheck == null && isset($totalCountMapping[$updateddata])) {
+                            $totalcountColumn = $totalCountMapping[$updateddata];
+                            $sundaycountget = DB::table('attendances')
+                                ->where('employee_name', $timesheet->createdby)
+                                ->where('month', $month1)
+                                ->first();
+
+                            if ($sundaycountget) {
+                                $totalcountupdate = $sundaycountget->$totalcountColumn + 1;
+                                DB::table('attendances')
+                                    ->where('id', $sundaycountget->id)
+                                    ->update([
+                                        $dayWord => $updateddata,
+                                        $totalcountColumn => $totalcountupdate,
+                                    ]);
+                                // $updateddata = $getholidaysss ? 'H' : 'W';
+                            }
+                        }
+                        // update sunday data in attendance end hare
+
+                        // Insert data into the timesheetreport table for the current week
+                        $startdate = Carbon::parse($weekData->first()->date);
+                        $nextSaturday = $startdate->copy()->next(Carbon::SATURDAY);
+
+                        $startdateformat = $startdate->format('Y-m-d');
+                        $nextSaturdayformat = $nextSaturday->format('Y-m-d');
+
+                        $week = date('d-m-Y', strtotime($startdateformat)) . ' to ' . date('d-m-Y', strtotime($nextSaturdayformat));
+
+                        $co = DB::table('timesheetusers')
+                            ->where('createdby', $id)
+                            ->whereBetween('date', [$startdateformat, $nextSaturdayformat])
+                            ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                            ->groupBy('partner')
+                            ->get();
+                        // dd($co);
+
+                        foreach ($co as $codata) {
+                            DB::table('timesheetreport')->insert([
+                                'teamid'       =>     $id,
+                                'week'       =>     $week,
+                                'totaldays'       =>     $codata->row_count,
+                                'totaltime' =>  $codata->total_hours,
+                                'partnerid'  => $codata->partner,
+                                'startdate'  => $startdateformat,
+                                'enddate'  => $nextSaturdayformat,
+                                'created_at'                =>      date('y-m-d H:i:s'),
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            $data = $request->except(['_token', 'qualification', 'document_file']);
+            if ($request->hasFile('cancelcheque')) {
+                $file = $request->file('cancelcheque');
+                $destinationPath = 'backEnd/image/teammember/cancelcheque';
+                $name = time() . $file->getClientOriginalName();
+                $s = $file->move($destinationPath, $name);
+                //  dd($s); die;
+                $data['cancelcheque'] = $name;
+            }
+            if ($request->hasFile('profilepic')) {
+                $avatar = $request->file('profilepic');
+                $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+                Image::make($avatar)->resize(800, 600)->save('backEnd/image/teammember/profilepic/' . $filename);
+                $data['profilepic'] = $filename;
+            }
+            if ($request->hasFile('appointment_letter')) {
+                $file = $request->file('appointment_letter');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move('backEnd/image/teammember/appointmentletter/', $filename);
+                $data['appointment_letter'] = $filename;
+            }
+            if ($request->hasFile('nda')) {
+                $file = $request->file('nda');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+                $file->move('backEnd/image/teammember/nda/', $filename);
+                $data['nda'] = $filename;
+            }
+            if ($request->hasFile('panupload')) {
+                $file = $request->file('panupload');
+                $destinationPath = 'backEnd/image/teammember/panupload';
+                $name = time() . $file->getClientOriginalName();
+                $s = $file->move($destinationPath, $name);
+                //  dd($s); die;
+                $data['panupload'] = $name;
+            }
+            if ($request->hasFile('addressupload')) {
+                $file = $request->file('addressupload');
+                $destinationPath = 'backEnd/image/teammember/addressupload';
+                $name = time() . $file->getClientOriginalName();
+                $s = $file->move($destinationPath, $name);
+                //  dd($s); die;
+                $data['addressupload'] = $name;
+            }
+            if ($request->hasFile('aadharupload')) {
+                $file = $request->file('aadharupload');
+                $destinationPath = 'backEnd/image/teammember/aadharupload';
+                $name = time() . $file->getClientOriginalName();
+                $s = $file->move($destinationPath, $name);
+                //  dd($s); die;
+                $data['aadharupload'] = $name;
+            }
+
+            // Teammember::find($id)->update($data);
+            if ($request->leavingdate != null && $request->status == 1) {
+                $oldstatusvalue = Teammember::find($id);
+                if ($oldstatusvalue->status == 1 && $oldstatusvalue->rejoining_date == null) {
+                    $data = $request->except(['_token', 'qualification', 'document_file', 'status']);
+                    $emilid = $data['emailid'];
+                    $data['status'] = '0';
+                    Teammember::find($id)->update($data);
+                    DB::table('users')->where('email', $emilid)->update([
+                        'status'         =>  0,
+                        'remember_token' => null
+                    ]);
+                } else {
+                    $data = $request->except(['_token', 'qualification', 'document_file']);
+                    $emilid = $data['emailid'];
+                    Teammember::find($id)->update($data);
+                    $oldstatususer = User::where('email', $emilid)->first();
+                    if ($oldstatususer->status == 0) {
+                        DB::table('users')->where('email', $emilid)->update([
+                            'status'         =>  1,
+                        ]);
+                    }
+                }
+            } else {
+                Teammember::find($id)->update($data);
+            }
+
+            if ($request->document_file != null) {
+                $qualifications = $request->qualification;
+                $documentFiles = $request->document_file;
+
+                for ($i = 0; $i < count($qualifications); $i++) {
+                    // Process each qualification and document file entry
+                    $documentFile = $documentFiles[$i];
+                    if ($documentFile) {
+                        $documentFileName = time() . $documentFile->getClientOriginalName();
+                        $documentFilePath = 'backEnd/image/teammember/document_file';
+                        $documentFile->move($documentFilePath, $documentFileName);
+
+                        DB::table('teammember_document_files')->insert([
+                            'teamember_id' => $id,
+                            'qualification' => $qualifications[$i],
+                            'document_file' => $documentFileName,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+            }
+
+            DB::table('users')->where('teammember_id', $id)->update([
+                'role_id'         =>  $request->role_id,
+                'email'         =>  $request->emailid,
+            ]);
+            $actionName = class_basename($request->route()->getActionname());
+            $pagename = substr($actionName, 0, strpos($actionName, "Controller"));
+            $id = auth()->user()->teammember_id;
+            DB::table('activitylogs')->insert([
+                'user_id' => $id,
+                'ip_address' => $request->ip(),
+                'activitytitle' => $pagename,
+                'description' => ' Team Member Data Edit' . ' ' . '( ' . $request->team_member . ' )',
+                'created_at' => date('y-m-d'),
+                'updated_at' => date('y-m-d')
+            ]);
+            $output = array('msg' => 'Updated Successfully');
+            return redirect('teammember')->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+3.if select employee name, start date and end date then client want to check leaving date if start date selected after leaving date then client want to warning message you can note select date after leaving date 
+
+app\Http\Controllers\AttendanceController.php
+
+
+    public function adminattendancereport(Request $request)
+    {
+
+        // dd($request);
+        $teamnid = $request->input('teammemberId');
+        $startdate = $request->input('startdate');
+        $enddate = $request->input('enddate');
+        // Convert start date to a date object for accurate comparison
+        $startdate = \Carbon\Carbon::parse($startdate);
+        $enddate = \Carbon\Carbon::parse($enddate);
+
+        // All teammember 
+        $teammembers = DB::table('teammembers')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->whereIn('teammembers.role_id', [14, 15, 13, 11])
+            ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
+            ->orderBy('team_member', 'ASC')
+            ->get();
+
+
+        $singleusersearched = DB::table('teammembers')
+            ->where('id', $teamnid)
+            ->select('team_member', 'staffcode', 'id', 'leavingdate', 'joining_date')
+            ->first();
+        // dd($singleusersearched);
+        // Check if leavingdate exists and is after the startdate
+        if ($singleusersearched && $singleusersearched->leavingdate != null) {
+            $leavingdate = \Carbon\Carbon::parse($singleusersearched->leavingdate);
+            if ($startdate->gt($leavingdate)) {
+                // $output = array('msg' => 'You cannot select this user as their leaving date is before the start date.');
+                $output = ['msg' => 'You cannot select this user as their leaving date (' . $leavingdate->format('d-m-Y') . ') is before the start date.'];
+                // return back()->with('statuss', $output);
+                $request->flash();
+                return redirect()->to('attendance')->with('statuss', $output);
+            }
+        }
+
+        if ($singleusersearched && $singleusersearched->joining_date != null) {
+            $joiningdate = \Carbon\Carbon::parse($singleusersearched->joining_date);
+            if ($joiningdate->gt($enddate)) {
+                // $output = array('msg' => 'You cannot select this user as their Joining date is After the end date.');
+                $output = ['msg' => 'You cannot select this user as their Joining date (' . $leavingdate->format('d-m-Y') . ') is After the end date.'];
+                // return back()->with('statuss', $output);
+                $request->flash();
+                return redirect()->to('attendance')->with('statuss', $output);
+            }
+        }
+
+        // only attendance user 
+        // $teammembers = DB::table('attendances')
+        //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'attendances.employee_name')
+        //     ->leftJoin('teammembers', 'teammembers.id', '=', 'attendances.employee_name')
+        //     ->whereIn('teammembers.role_id', [14, 15, 13, 11])
+        //     ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
+        //     ->distinct()
+        //     ->orderBy('teammembers.team_member', 'ASC')
+        //     ->get();
+
+        // $query  = DB::table('attendances')
+        //     ->leftjoin('teammembers', 'teammembers.id', 'attendances.employee_name')
+        //     ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        //     ->select('attendances.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.employment_status', 'roles.rolename', 'teammembers.joining_date');
+
+        $query  = DB::table('attendances')
+            ->leftjoin('teammembers', 'teammembers.id', 'attendances.employee_name')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->select('attendances.*', 'teammembers.team_member', 'teammembers.staffcode', 'teamrolehistory.newstaff_code', 'teammembers.employment_status', 'roles.rolename', 'teammembers.joining_date');
+
+        if ($teamnid) {
+            $query->where('attendances.employee_name', $teamnid);
+        }
+
+        //akshay code
+        if ($startdate && $enddate) {
+            // Convert the start and end dates to full month names
+            $startMonth = Carbon::parse($startdate)->format('F'); // e.g., "January"
+            $endMonth = Carbon::parse($enddate)->format('F');     // e.g., "December"
+
+            // Map months to numbers for correct comparison
+            $months = [
+                'January' => 1,
+                'February' => 2,
+                'March' => 3,
+                'April' => 4,
+                'May' => 5,
+                'June' => 6,
+                'July' => 7,
+                'August' => 8,
+                'September' => 9,
+                'October' => 10,
+                'November' => 11,
+                'December' => 12,
+            ];
+
+            $startMonthNumber = $months[$startMonth];
+            $endMonthNumber = $months[$endMonth];
+
+            // Filter by month names by converting the stored string month to its respective number
+            $query->whereBetween(DB::raw("FIELD(attendances.month, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')"), [$startMonthNumber, $endMonthNumber]);
+        }
+
+        //and akshay code 
+
+        // if ($startdate) {
+        //     $query->where('applyleaves.leavetype', $startdate);
+        // }
+
+        $attendanceDatas = $query->get();
+        $request->flash();
+
+        // dd($attendanceDatas);
+        return view('backEnd.attendance.adminattendance', compact('attendanceDatas', 'teammembers'));
+    }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Route::get('/create-attendance', [HomeController::class, 'createAttendance']);
+
+
+all above code uploaded on vsademo 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,8 +6,957 @@ class ZipController extends Controller
 //*
 //*
 //*
-//*
-//*
+public function handle()
+{
+    // if (now()->format('H:i') === '18:00') {
+    if ('Thursday' == date('l', time()) || 'Saturday' == date('l', time())) {
+        // Get data that is not fill timesheet
+        // $teammember =  DB::table('teammembers')
+        //     ->whereNotIn('id', function ($query) {
+        //         $query->select('createdby')->from('timesheetusers');
+        //     })
+        //     ->where('teammembers.status', 1)
+        //     ->whereIn('teammembers.role_id', [13, 14, 15]);
+
+        // $teammemberChunks = array_chunk($teammember->pluck('id')->toArray(), 1000);
+
+        // foreach ($teammemberChunks as $chunk) {
+        //     $teammembersChunk = DB::table('teammembers')
+        //         ->whereIn('id', $chunk)
+        //         ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.id')
+        //         ->get();
+        //     // dd($teammembersChunk);
+        //     foreach ($teammembersChunk as $teammembermail) {
+        //         $data = array(
+        //             'subject' => "Reminder || Timesheet not filled till date",
+        //             'name' =>   $teammembermail->team_member,
+        //             'email' =>   $teammembermail->emailid,
+        //         );
+        //         Mail::send('emails.timesheetnotfilledstaffremidner', $data, function ($msg) use ($data) {
+        //             $msg->to($data['email']);
+        //             $msg->subject($data['subject']);
+        //         });
+        //     }
+        // }
+
+
+        // 222222222222222222222222222222222222
+        // another mail start from hare
+        $teammembers = DB::table('teammembers')
+            ->leftJoin('timesheetusers', 'timesheetusers.createdby', 'teammembers.id')
+            ->where('teammembers.status', 1)
+            ->where('timesheetusers.date', '<=', now()->subWeeks(1)->endOfWeek())
+            ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.id')
+            ->distinct('timesheetusers.createdby')
+            ->get();
+
+
+        // Get the last submission date for each user only sunday and suterday
+        // foreach ($teammembers as $user) {
+
+        //     $lastSubmissionDate = DB::table('timesheetusers')
+        //         // get all date of this user
+        //         ->where('createdby', $user->id)
+        //         ->where('date', '<=', now()->subWeeks(1)->endOfWeek())
+        //         ->where('status', '!=', 0)
+        //         ->where(function ($query) {
+        //             $query->whereRaw('DAYOFWEEK(date) = 1') // Sunday
+        //                 ->orWhereRaw('DAYOFWEEK(date) = 7'); // Saturday
+        //         })
+        //         ->max('date');
+
+
+        //     // Format the date as 'd-m-y'
+        //     // $lastSubmissionDate = Carbon::parse($lastSubmissionDate)->format('d-m-y');
+        //     $lastSubmissionDate = $lastSubmissionDate ? Carbon::parse($lastSubmissionDate)->format('d-m-Y') : '';
+        //     $user->last_submission_date = $lastSubmissionDate;
+        // }
+
+        // find previus sunday 
+        // $previewsunday = now()->subWeeks(1)->endOfWeek();
+        // $previewsundayformate = $previewsunday->format('d-m-Y');
+
+        $previewsunday1 = Carbon::parse('2024-09-05');
+        $previewsunday =  $previewsunday1->subWeeks(1)->endOfWeek();
+        $previewsundayformate = $previewsunday->format('d-m-Y');
+
+
+        // // find previus saturday
+        // $previewsaturday = now()->subWeeks(1)->endOfWeek();
+        // // Subtract one day from sunday
+        // $previewsaturdaydate = $previewsaturday->subDay();
+        // $previewsaturdaydateformate = $previewsaturdaydate->format('d-m-Y');
+
+
+        $previewsunday11 = Carbon::parse('2024-09-05');
+        $previewsaturday = $previewsunday11->subWeeks(1)->endOfWeek();
+        // Subtract one day from sunday
+        $previewsaturdaydate = $previewsaturday->subDay();
+        $previewsaturdaydateformate = $previewsaturdaydate->format('d-m-Y');
+
+
+        foreach ($teammembers as $teammembermail) {
+            // both date store in an array 
+            $validDates = [$previewsundayformate, $previewsaturdaydateformate];
+            dd($validDates);
+            if (!in_array($teammembermail->last_submission_date, $validDates)) {
+                $data = array(
+                    'subject' => "Reminder || Timesheet not filled Last Week",
+                    'name' =>   $teammembermail->team_member,
+                    'email' =>   $teammembermail->emailid,
+                );
+
+                Mail::send('emails.timesheetnotfilledstafflastweekremidner', $data, function ($msg) use ($data) {
+                    $msg->to($data['email']);
+                    $msg->subject($data['subject']);
+                });
+            }
+        }
+    }
+    // }
+}
+//*  regarding attendance 
+
+ //! 20-02-2024 understanding
+ public function handle()
+ {
+
+
+
+     // $nextweektimesheet1 = DB::table('timesheetusers')
+     //     ->where('createdby', 847)
+     //     ->whereBetween('date', ['2024-07-15', '2024-07-20'])
+     //     // ->get();
+     //     ->update(['status' => 0]);
+
+
+     // $nextweektimesheet2 = DB::table('timesheets')
+     //     ->where('created_by', 847)
+     //     ->whereBetween('date', ['2024-07-15', '2024-07-20'])
+     //     // ->get();
+     //     ->update(['status' => 0]);
+
+     // $nextweektimesheet3 = DB::table('timesheetreport')
+     //     ->where('teamid', 847)
+     //     ->where('startdate', '2024-07-15')
+     //     // ->get();
+     //     ->delete();
+
+     // dd('hi');
+
+     // 2222222222222222222222222222222222222222222
+
+     $currentDate = now()->subDay(); // Get the previous day from the current date
+     // 2024-07-22
+     $currentMonth = $currentDate->format('F');
+     $currentYear = $currentDate->format('Y');
+
+
+     // Define the attendance period from 26th of the previous month to 25th of the current month
+     $attendanceStartDate = Carbon::create($currentYear, $currentDate->copy()->subMonth()->format('m'), 26);
+     // 2024-07-26
+     $attendanceEndDate = Carbon::create($currentYear, $currentDate->format('m'), 25);
+     // 2024-08-25
+
+     // Calculate total days in the period (from 26th of prev month to 25th of current month)
+     $totalDays = $attendanceStartDate->diffInDays($attendanceEndDate) + 1;
+     // 31 days
+
+
+     $teammembers = Attendance::join('teammembers', 'teammembers.id', 'attendances.employee_name')
+         ->where('attendances.month', $currentMonth)
+         ->whereYear('attendances.created_at', $currentYear)
+         ->whereNotNull('teammembers.joining_date')
+         //->where('teammembers.id',739)
+         ->get();
+
+
+     foreach ($teammembers as $team) {
+         $attendanceStartDate = Carbon::parse($attendanceStartDate, 'Asia/Kolkata')->startOfDay()->setTimezone('UTC');
+         // 2024-07-25 
+         $attendanceEndDate = Carbon::parse($attendanceEndDate, 'Asia/Kolkata')->endOfDay()->setTimezone('UTC');
+         // 2024-08-25
+
+
+         $getholidaydates = DB::table('holidays')
+             ->where(function ($query) use ($attendanceStartDate, $attendanceEndDate) {
+                 $query->whereBetween('startdate', [$attendanceStartDate, $attendanceEndDate])
+                     ->orWhereBetween('enddate', [$attendanceStartDate, $attendanceEndDate]);
+             })
+             ->where('startdate', '>', $team->joining_date)
+             ->get();
+
+
+         $holidayCount = 0;
+         foreach ($getholidaydates as $holiday) {
+             $holidayCount += intval($holiday->number_of_dates);
+         }
+         // 2
+         // dd($holidayCount);
+         // remove date hare 
+         $keysToFilter = [
+             'twentysix',
+             'twentyseven',
+             'twentyeight',
+             'twentynine',
+             'thirty',
+             'thirtyone',
+             'one',
+             'two',
+             'three',
+             'four',
+             'five',
+             'six',
+             'seven',
+             'eight',
+             'nine',
+             'ten',
+             'eleven',
+             'twelve',
+             'thirteen',
+             'fourteen',
+             'fifteen',
+             'sixteen',
+             'seventeen',
+             'eighteen',
+             'ninghteen',
+             'twenty',
+             'twentyone',
+             'twentytwo',
+             'twentythree',
+             'twentyfour',
+             'twentyfive'
+         ];
+
+         $dayMapping = [
+             'twentysix' => 26,
+             'twentyseven' => 27,
+             'twentyeight' => 28,
+             'twentynine' => 29,
+             'thirty' => 30,
+             'thirtyone' => 31,
+             'one' => 1,
+             'two' => 2,
+             'three' => 3,
+             'four' => 4,
+             'five' => 5,
+             'six' => 6,
+             'seven' => 7,
+             'eight' => 8,
+             'nine' => 9,
+             'ten' => 10,
+             'eleven' => 11,
+             'twelve' => 12,
+             'thirteen' => 13,
+             'fourteen' => 14,
+             'fifteen' => 15,
+             'sixteen' => 16,
+             'seventeen' => 17,
+             'eighteen' => 18,
+             'ninghteen' => 19,
+             'twenty' => 20,
+             'twentyone' => 21,
+             'twentytwo' => 22,
+             'twentythree' => 23,
+             'twentyfour' => 24,
+             'twentyfive' => 25,
+         ];
+
+         $daysToRemove = [];
+         if ($totalDays < 31) {
+             $daysToRemove[] = 'thirtyone';
+         }
+
+         if ($totalDays < 30) {
+             $daysToRemove[] = 'thirty';
+         }
+
+         if ($totalDays < 29) {
+             $daysToRemove[] = 'twentynine';
+         }
+         $keysToFilter = array_diff($keysToFilter, $daysToRemove);
+
+         // remove date hare end
+
+
+         $days = array_intersect_key($team->toArray(), array_flip($keysToFilter));
+
+         $casualLeaveCount = 0;
+         $sickLeaveCount = 0;
+         $dayspresent = 0;
+         $absentCount = 0;
+
+
+         foreach ($days as $key => $value) {
+
+             // hare $keys= twentysix
+             $dayOfMonth = $dayMapping[$key] ?? 0;
+             // 26
+             $month = $currentMonth;
+             $year = $currentYear;
+
+             if (in_array($dayOfMonth, [26, 27, 28, 29, 30, 31])) {
+
+                 // previous months date 
+                 $previousMonthDate = $currentDate->copy()->subMonth();
+                 // 2024-07-22
+                 $month = $previousMonthDate->format('m');
+                 // "07"
+                 $year = $previousMonthDate->format('Y');
+             } else {
+                 $month = $currentDate->format('m');
+                 // "08"
+                 $year = $currentDate->format('Y');
+             }
+
+
+
+             // Correctly format the target date
+             $targetDate = Carbon::createFromFormat('Y-m-d', "$year-$month-$dayOfMonth")->format('Y-m-d');
+             // hare  "$year-$month-$dayOfMonth" 2024-07-26
+             // hare   targetDate  = "2024-07-26"
+
+             $isHoliday = DB::table('holidays')->where(function ($query) use ($targetDate) {
+                 $query->where('startdate', '<=', $targetDate)
+                     ->where('enddate', '>=', $targetDate);
+             })->exists();
+
+             // false
+
+             if ($value === null) {
+                 // hare $value = "SL/C", 8,7,8  basically this is attandance value 
+                 if (!$isHoliday) {
+                     $absentCount++;
+                     //    1
+                 } elseif ($targetDate < $team->joining_date) {
+                     $absentCount++;
+                 }
+             }
+             // else if (is_numeric($value) && !$isHoliday) {
+             //     $dayspresent++;
+             // } 
+             // else if (!is_numeric($value) && !$isHoliday) {
+             //     $dayspresent++;
+             // } 
+             else if ($value == 'P' && !$isHoliday) {
+                 $dayspresent++;
+             } else if ($value == 'CL') {
+                 $casualLeaveCount++;
+             } else if ($value == 'EL') {
+                 $sickLeaveCount++;
+                 // 1
+             }
+         }
+
+
+         //dd($casualLeaveCount);
+         $attendance_existing = DB::table('attendances')->where('employee_name', $team->employee_name)
+             ->where('month', $currentMonth)
+             ->where('year', $currentYear)
+             ->first();
+
+
+         if ($dayspresent == 0) {
+             $holidayCount = 0;
+         }
+         // 4
+
+
+         $casualLeave = $casualLeaveCount;
+         $sickLeave =  $sickLeaveCount;
+         // $lwpLeave = $lwpLeaveCount;
+
+         // $totalCount = $dayspresent + $attendance_existing->casual_leave + $attendance_existing->sick_leave + $attendance_existing->birthday_religious + $holidayCount;
+
+
+         $attendanceData = [
+             'no_of_days_present' => $dayspresent,
+             // 'totaldaystobepaid' => $totalCount,
+             'total_no_of_days' => $totalDays,
+             'absent' => $absentCount,
+             'weekend' => $holidayCount,
+             'casual_leave' => $casualLeave,
+             'sick_leave' => $sickLeave,
+             // 'lwp' => $lwpLeave,
+         ];
+
+         // dd($attendanceData, 1);
+
+
+         DB::table('attendances')->where('employee_name', $team->employee_name)
+             ->where('month', $currentMonth)
+             ->where('year', $currentYear)
+             ->update($attendanceData);
+     }
+
+     return "Attendance updated";
+ }
+ //! 20-02-2024 understanding
+public function store(Request $request)
+{
+
+  try {
+    $Newteammeber = DB::table('timesheetusers')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->first();
+
+    // check promotion data
+    $pormotionandrejoiningdata = DB::table('teammembers')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+      ->where('teammembers.id', auth()->user()->teammember_id)
+      ->select(
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'teammembers.joining_date',
+        'teamrolehistory.newstaff_code',
+        'teamrolehistory.rejoiningdate',
+        'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+      )
+      ->first();
+
+
+
+
+    $joining_date = $pormotionandrejoiningdata->joining_date ?
+      Carbon::parse($pormotionandrejoiningdata->joining_date)->format('d-m-Y') : null;
+
+    $rejoining_date = null;
+    if ($pormotionandrejoiningdata->rejoiningdate || $pormotionandrejoiningdata->samepostrejoiningdate) {
+      $rejoining_date = Carbon::parse($pormotionandrejoiningdata->rejoiningdate ?? $pormotionandrejoiningdata->samepostrejoiningdate)
+        ->format('d-m-Y');
+      $rejoiningDateformate = Carbon::parse($rejoining_date);
+    }
+
+    $requestDate = Carbon::parse($request->date);
+    $joiningDate = Carbon::parse($joining_date);
+
+
+    if ($Newteammeber == null || $rejoining_date != null) {
+      dd($request, 1);
+
+      if ($rejoining_date != null && $requestDate < $rejoiningDateformate) {
+        $output = array('msg' => 'You can not fill timesheet before Rejoining date :' . $rejoining_date);
+        // dd($output, 1);
+        return redirect('timesheet/mylist')->with('statuss', $output);
+      }
+
+      if ($requestDate < $joiningDate) {
+        $output = array('msg' => 'You can not fill timesheet before joining date :' . $joining_date);
+        return redirect('timesheet/mylist')->with('statuss', $output);
+      }
+
+      if ($Newteammeber == null) {
+        // Get previuse sunday from joining date
+        $joining_timestamp = strtotime($joining_date);
+        $day_of_week = date('w', $joining_timestamp);
+        $days_to_subtract = $day_of_week;
+        $previous_sunday_timestamp = strtotime("-$days_to_subtract days", $joining_timestamp);
+
+        $previous_sunday_date = date('d-m-Y', $previous_sunday_timestamp);
+        // Get all dates beetween two dates 
+        $startDate = Carbon::parse($previous_sunday_date);
+        $endDate = Carbon::parse($joining_date);
+        $period = CarbonPeriod::create($startDate, $endDate);
+      }
+      //this code related rejoining teammember 
+      else {
+        $joining_timestamp = strtotime($rejoining_date);
+        $day_of_week = date('w', $joining_timestamp);
+        $days_to_subtract = $day_of_week;
+        $previous_sunday_timestamp = strtotime("-$days_to_subtract days", $joining_timestamp);
+        $previous_sunday_date = date('d-m-Y', $previous_sunday_timestamp);
+        // Get all dates beetween two dates 
+        $startDate = Carbon::parse($previous_sunday_date);
+        $endDate = Carbon::parse($rejoining_date);
+        $period = CarbonPeriod::create($startDate, $endDate);
+      }
+
+      // store all date in $result vairable
+      $result = [];
+      foreach ($period as $key => $date) {
+        if ($key !== 0 && $key !== count($period) - 1) {
+          $result[] = $date->toDateString();
+        }
+      }
+      // return $result;
+      // dd('yes', $result);
+      foreach ($result as $date) {
+        $prevcheck = DB::table('timesheets')->where('date', $date)
+          ->where('created_by', auth()->user()->teammember_id)
+          ->first();
+
+        if (($Newteammeber == null && $prevcheck == null) || ($rejoining_date != null && $prevcheck == null)) {
+          $id = DB::table('timesheets')->insertGetId(
+            [
+              'created_by' => auth()->user()->teammember_id,
+              'month'     =>   date('F', strtotime($date)),
+              'date'     =>    date('Y-m-d', strtotime($date)),
+              'created_at'          =>     date('Y-m-d H:i:s'),
+            ]
+          );
+          DB::table('timesheetusers')->insert([
+            'date'     =>   date('Y-m-d', strtotime($date)),
+            'client_id'     =>     29,
+            'workitem'     =>     'NA',
+            'location'     =>     'NA',
+            //   'billable_status'     =>     $request->billable_status[$i],
+            'timesheetid'     =>     $id,
+            'date'     =>     date('Y-m-d', strtotime($date)),
+            'hour'     =>     0,
+            'totalhour' =>      0,
+            'assignment_id'     =>     213,
+            'partner'     =>     887,
+            'createdby' => auth()->user()->teammember_id,
+            'created_at'          =>     date('Y-m-d H:i:s'),
+            'updated_at'              =>    date('Y-m-d H:i:s'),
+          ]);
+        }
+      }
+    }
+
+    // dd($pormotionandrejoiningdata);
+    if ($requestDate >= $joiningDate) {
+
+
+      if ($rejoining_date != null && $requestDate < $rejoiningDateformate) {
+        // dd('hi', 1);
+        $output = array('msg' => 'You can not fill timesheet before Rejoining date :' . $rejoining_date);
+        return redirect('timesheet')->with('success', $output);
+      }
+      // dd('hi', 0);
+
+      $data = $request->except(['_token', 'teammember_id', 'amount']);
+
+      // check allready submited
+      if (date('w', strtotime($request->date)) == 0) {
+        $previousSaturday = date('Y-m-d', strtotime('-1 day', strtotime($request->date)));
+        $previousSaturdayFilled = DB::table('timesheetusers')
+          ->where('createdby', auth()->user()->teammember_id)
+          ->where('date', $previousSaturday)
+          ->where('status', 1)
+          ->first();
+        // dd('hi1', $previousSaturdayFilled);
+        if ($previousSaturdayFilled != null) {
+          $output = array('msg' => 'You already submitted for this week');
+          return back()->with('success', $output);
+        }
+      }
+
+      // check hour
+      $hours = $request->input('totalhour');
+      if (!is_numeric($hours) || $hours > 12) {
+        $output = array('msg' => 'The total hours cannot be greater than 12');
+        return back()->with('success', $output);
+      }
+      // dd(auth()->user()->teammember_id);
+      //? dd(date('Y-m-d', strtotime($request->date))); "2023-11-30"
+      $previouschck = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('date', date('Y-m-d', strtotime($request->date)))
+        ->where('status', 1)
+        ->first();
+
+      if ($previouschck != null) {
+        //dd('hi');
+        $output = array('msg' => 'You already submitted for this week');
+        return back()->with('success', $output);
+      }
+
+      $previoussavechck = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('date', date('Y-m-d', strtotime($request->date)))
+        ->where('status', 0)
+        ->first();
+
+      if ($previoussavechck != null) {
+        //dd('hi');
+        $output = array('msg' => 'You already submitted for this date');
+        return back()->with('success', $output);
+      }
+
+
+
+      $currentDate = Carbon::now()->format('d-m-Y');
+      //dd($currentHour);
+      if ($currentDate == $request->date && Carbon::now()->hour < 18) {
+        //   //dd('hi');
+        $output = array('msg' => 'You can only fill today timesheet after 6:00 pm');
+        return back()->with('success', $output);
+      }
+
+
+      $leaves = DB::table('applyleaves')
+        ->where('applyleaves.createdby', auth()->user()->teammember_id)
+        ->where('status', '!=', 2)
+        ->select('applyleaves.from', 'applyleaves.to')
+        ->get();
+      // dd('hi 1', $leaves);
+      foreach ($leaves as $leave) {
+        //Convert each data from table to Y-m-d format to compare
+        $days = CarbonPeriod::create(
+          date('Y-m-d', strtotime($leave->from)),
+          date('Y-m-d', strtotime($leave->to))
+        );
+
+        foreach ($days as $day) {
+          $leavess[] = $day->format('Y-m-d');
+        }
+      }
+      // $currentday = date('Y-m-d', strtotime($request->date));// "2023-11-30"
+      $currentday = date('Y-m-d', strtotime($request->date));
+      // dd('hi 2', $currentday);
+      // $ifcount=0;
+      //  $elsecount=0;
+      if (count($leaves) != 0) {
+
+        //dd('if');
+        foreach ($leavess as $leave) {
+          // echo"<pre>";
+          //  print_r($leave);
+
+          if ($leave == $currentday) {
+            //dd('if');
+            // $ifcount=$ifcount+1;
+            $output = array('msg' => 'You Have Leave for the Day (' . date('d-m-Y', strtotime($leave)) . ')');
+            return redirect('timesheet')->with('statuss', $output);
+          }
+        }
+      }
+
+      // insert data in timesheet from request and get id 
+      // $id = DB::table('timesheets')->insertGetId(
+      //   [
+      //     'created_by' => auth()->user()->teammember_id,
+      //     'month'     =>    date('F', strtotime($request->date)),
+      //     'date'     =>    date('Y-m-d', strtotime($request->date)),
+      //     'created_at'          =>     date('Y-m-d H:i:s'),
+      //   ]
+      // );
+
+
+      $count = count($request->assignment_id);
+
+      // dd('hi 3', $count);
+      for ($i = 0; $i < $count; $i++) {
+        //dd($request->workitem[$i]);
+        $assignment =  DB::table('assignmentmappings')->where('assignmentgenerate_id', $request->assignment_id[$i])->first();
+
+        // $a = DB::table('timesheetusers')->insert([
+        //   'date'     =>     $request->date,
+        //   'client_id'     =>     $request->client_id[$i],
+        //   'assignmentgenerate_id'     =>     $request->assignment_id[$i],
+        //   'workitem'     =>     $request->workitem[$i],
+        //   'location'     =>     $request->location[$i],
+        //   //   'billable_status'     =>     $request->billable_status[$i],
+        //   'timesheetid'     =>     $id,
+        //   'date'     =>     date('Y-m-d', strtotime($request->date)),
+        //   'hour'     =>     $request->hour[$i],
+        //   'totalhour' =>      $request->totalhour,
+        //   'assignment_id'     =>     $assignment->assignment_id,
+        //   'partner'     =>     $request->partner[$i],
+        //   'createdby' => auth()->user()->teammember_id,
+        //   'created_at'          =>     date('Y-m-d H:i:s'),
+        //   'updated_at'              =>    date('Y-m-d H:i:s'),
+        // ]);
+
+        if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+          // dd($request);
+          $gettotalteamhour = DB::table('assignmentmappings')
+            ->leftJoin(
+              'assignmentteammappings',
+              'assignmentteammappings.assignmentmapping_id',
+              'assignmentmappings.id',
+            )
+            ->where(
+              'assignmentmappings.assignmentgenerate_id',
+              $request->assignment_id[$i]
+            )
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->first();
+
+          if ($gettotalteamhour) {
+            $gettotalteamhour = $gettotalteamhour->teamhour;
+            // dd($gettotalteamhour);
+
+            $finalresult =  $gettotalteamhour + $request->hour[$i];
+
+            $totalteamhourupdate = DB::table('assignmentmappings')
+              ->leftJoin(
+                'assignmentteammappings',
+                'assignmentteammappings.assignmentmapping_id',
+                'assignmentmappings.id',
+              )
+              ->where(
+                'assignmentmappings.assignmentgenerate_id',
+                $request->assignment_id[$i]
+              )
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              // ->get();
+              ->update(['teamhour' =>  $finalresult]);
+          }
+        }
+
+        // if (auth()->user()->role_id == 13) {
+        //   $assignmentdata = DB::table('assignmentmappings')
+        //     ->where('assignmentgenerate_id', $request->assignment_id[$i])
+        //     ->first();
+        //   $finalresultleadpatner =  $assignmentdata->leadpartnerhour + $request->hour[$i];
+        //   $finalresultotherpatner =  $assignmentdata->otherpartnerhour + $request->hour[$i];
+
+        //   if ($assignmentdata->leadpartner == auth()->user()->teammember_id) {
+        //     $update = DB::table('assignmentmappings')
+        //       ->where('assignmentgenerate_id', $request->assignment_id[$i])
+        //       ->where('leadpartner', auth()->user()->teammember_id)
+        //       ->update(['leadpartnerhour' => $finalresultleadpatner]);
+        //   }
+        //   if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+        //     $update = DB::table('assignmentmappings')
+        //       ->where('assignmentgenerate_id', $request->assignment_id[$i])
+        //       ->where('otherpartner', auth()->user()->teammember_id)
+        //       ->update(['otherpartnerhour' => $finalresultotherpatner]);
+        //   }
+        // }
+      }
+    } else {
+      // dd(auth()->user()->teammember_id);
+      $output = array('msg' => 'You can not fill timesheet before Rejoining date :' . $joining_date);
+      return redirect('timesheet')->with('success', $output);
+    }
+
+
+
+
+    $hdatess = Carbon::parse($request->date)->format('Y-m-d');
+    // 21-08-2024
+    $day = Carbon::parse($hdatess)->format('d');
+    // 21
+    $month = Carbon::parse($hdatess)->format('F');
+
+    $currentDate = now();
+    // 22-08-2024
+
+    $currentMonth = $currentDate->format('F');
+
+
+    $dates = [
+      '26' => 'twentysix',
+      '27' => 'twentyseven',
+      '28' => 'twentyeight',
+      '29' => 'twentynine',
+      '30' => 'thirty',
+      '31' => 'thirtyone',
+      '01' => 'one',
+      '02' => 'two',
+      '03' => 'three',
+      '04' => 'four',
+      '05' => 'five',
+      '06' => 'six',
+      '07' => 'seven',
+      '08' => 'eight',
+      '09' => 'nine',
+      '10' => 'ten',
+      '11' => 'eleven',
+      '12' => 'twelve',
+      '13' => 'thirteen',
+      '14' => 'fourteen',
+      '15' => 'fifteen',
+      '16' => 'sixteen',
+      '17' => 'seventeen',
+      '18' => 'eighteen',
+      '19' => 'ninghteen',
+      '20' => 'twenty',
+      '21' => 'twentyone',
+      '22' => 'twentytwo',
+      '23' => 'twentythree',
+      '24' => 'twentyfour',
+      '25' => 'twentyfive',
+    ];
+
+
+
+    if ($month != $currentMonth && $day > 25) {
+      dd('hi', 1);
+      $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess)->addMonth();
+      $month = $dateTime->format('F');
+    } elseif ($month != $currentMonth && $day < 25) {
+      $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess);
+      $month = $dateTime->format('F');
+      dd('hi', 2);
+    } elseif ($month == $currentMonth && $day > 25) {
+      $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess)->addMonth();
+      $month = $dateTime->format('F');
+      dd('hi', 3);
+    }
+
+
+    $column = $dates[$day];
+    // "twentyone"
+
+    // check attendenace record exist or not 
+    $attendances = DB::table('attendances')
+      ->where('employee_name', auth()->user()->teammember_id)
+      ->where('month', $month)
+      ->first();
+
+
+
+    if ($attendances == null) {
+      // $teammember = DB::table('teammembers')->where('id', $request->createdby)->first();
+      $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+
+
+      // DB::table('attendances')->insert([
+      //   'employee_name' => $teammember->id,
+      //   'month' => $month,
+      //   'dateofjoining' => $teammember->joining_date,
+      //   'created_at' => date('Y-m-d H:i:s'),
+      //   'updated_at' => date('Y-m-d H:i:s'),
+      // ]);
+
+    }
+
+    if ($attendances != null && property_exists($attendances, $column)) {
+      // twentyone in column 
+      $updatedtotalhour = $request->totalhour + $attendances->$column;
+      // 7  ye seven attendance me jata hai ok 
+    } else {
+      $updatedtotalhour = $request->totalhour;
+    }
+
+
+
+    DB::table('attendances')
+      ->where('employee_name', auth()->user()->teammember_id)
+      ->where('month', $month)
+      ->update([$column => $updatedtotalhour]);
+    // hare $column is twentyone and $updatedtotalhour is 7
+
+
+    $output = array('msg' => 'Create Successfully');
+
+
+    dd($output);
+
+    // //Attendance code
+    // $hdatess = date('Y-m-d', strtotime($request->date));
+    // $day =  DateTime::createFromFormat('Y-m-d', $hdatess)->format('d');      //
+    // $month =  DateTime::createFromFormat('Y-m-d', $hdatess)->format('F');   //
+    // $currentDate = new DateTime();
+    // $currentMonth = $currentDate->format('F');
+    // //dd($month);
+    // //   if ($currentDate->format('j') > 25) {
+    // //     $currentDate->modify('-1 month');
+    // //     $currentMonth = $currentDate->format('F');
+    // // }
+
+
+
+    // $dates = [
+    //   '26' => 'twentysix',
+    //   '27' => 'twentyseven',
+    //   '28' => 'twentyeight',
+    //   '29' => 'twentynine',
+    //   '30' => 'thirty',
+    //   '31' => 'thirtyone',
+    //   '01' => 'one',
+    //   '02' => 'two',
+    //   '03' => 'three',
+    //   '04' => 'four',
+    //   '05' => 'five',
+    //   '06' => 'six',
+    //   '07' => 'seven',
+    //   '08' => 'eight',
+    //   '09' => 'nine',
+    //   '10' => 'ten',
+    //   '11' => 'eleven',
+    //   '12' => 'twelve',
+    //   '13' => 'thirteen',
+    //   '14' => 'fourteen',
+    //   '15' => 'fifteen',
+    //   '16' => 'sixteen',
+    //   '17' => 'seventeen',
+    //   '18' => 'eighteen',
+    //   '19' => 'ninghteen',
+    //   '20' => 'twenty',
+    //   '21' => 'twentyone',
+    //   '22' => 'twentytwo',
+    //   '23' => 'twentythree',
+    //   '24' => 'twentyfour',
+    //   '25' => 'twentyfive',
+    // ];
+
+
+
+    // if ($month != $currentMonth && $day > 25) {
+    //   $dateTime = DateTime::createFromFormat('Y-m-d', $hdatess);
+    //   $dateTime->modify('+1 month');
+    //   $month = $dateTime->format('F');
+    // }
+    // if ($month != $currentMonth && $day < 25) {
+    //   $dateTime = DateTime::createFromFormat('Y-m-d', $hdatess);
+    //   $month = $dateTime->format('F');
+    // }
+    // if ($month == $currentMonth && $day > 25) {
+
+    //   $dateTime = DateTime::createFromFormat('Y-m-d', $hdatess);
+    //   $dateTime->modify('+1 month');
+    //   $month = $dateTime->format('F');
+    // }
+
+    // //dd($month);
+
+
+    // $column = $dates[$day];
+
+    // $attendances = DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+    //   ->where('month', $month)->first();
+
+    // if ($attendances ==  null) {
+    //   $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+
+    //   $a = DB::table('attendances')->insert([
+    //     'employee_name'         =>     auth()->user()->teammember_id,
+    //     'month'         =>    $month,
+    //     'dateofjoining' =>   $teammember->joining_date,
+    //     'created_at'          =>     date('Y-m-d H:i:s'),
+    //     //   'exam_leave'      =>$value->date_total,
+    //   ]);
+    //   //dd($a);
+    // }
+
+
+    // //   dd($noofdaysaspertimesheet);
+
+    // // $updatedtotalhour = $request->totalhour;
+    // // if ($attendances != null && property_exists($attendances, $column)) {
+    // //   if ($attendances->$column != "LWP") {
+    // //     $updatedtotalhour = $request->totalhour + $attendances->$column;
+    // //   }
+    // // }
+    // // DB::table('attendances')
+    // //   ->where('employee_name', auth()->user()->teammember_id)
+    // //   ->where('month', $month)
+    // //   ->update([$column => $updatedtotalhour]);
+
+
+    // //end attendance
+
+
+    $output = array('msg' => 'Create Successfully');
+    if (auth()->user()->role_id == 14 || auth()->user()->role_id == 13 || auth()->user()->role_id == 15) {
+      return redirect('timesheet/mylist')->with('success', $output);
+    } else {
+      return redirect('timesheet')->with('success', $output);
+    }
+  } catch (Exception $e) {
+    DB::rollBack();
+    Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+    report($e);
+    $output = array('msg' => $e->getMessage());
+    return back()->withErrors($output)->withInput();
+  }
+}
 //*
     //! 20-02-2024 understanding
     public function store(Request $request)

@@ -502,7 +502,7 @@ log error
 check command running or not 
 1.goto handle function and dd('hi); and run below code 
 php artisan command:submittedexamleaveTimesheet
- php artisan command:holidayreminder
+ php artisan attendance:calculate
 
 
 PS C:\xampp\htdocs\vsanew> php artisan command:timesheetreminder
@@ -852,5 +852,196 @@ ncpa.cpl
 
 {{-- * trakaff end --}}
 
+{{-- ###################################################################### --}}
+
+######################################################################################
+Api created / api make / regarding postman
+
+1.we can see output of dd in postman inside preview section
+
+1.php artisan install:api
+  php artisan install:api  run karne per composer require laravel/sanctum  install kar dega ager nahi karega to command run kare (composer require laravel/sanctum) and run also this (php artisan migrate)
+  php artisan install:api run karne per below point done ho jayega 
+  install sanctum package
+  route/api.php
+
+2.Model/user.php
+  use Laravel\Sanctum\HasApiTokens;
+  use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+3.Go to .env file 
+  Session_driver = file
+
+4.create Postapis table in database
+1. create model php artisan make:model Postapis
+2.create php artisan make:controller PostapisController --api
+
+
+if you want to create login api then 
+1. create AuthenticationUser controler
+
+4. Test the API
+Use a tool like Postman to test the API endpoints:
+Signup: POST /api/signup
+Login: POST /api/login
+Logout: POST /api/logout (with token in the header)
+Get All Posts: GET /api/posts (with token)
+Create Post: POST /api/posts (with token)
+Update Post: PUT /api/posts/{id} (with token)
+Delete Post: DELETE /api/posts/{id} (with token)
+
+
+
+1.get data 
+1.Get  http://localhost:3000/users
+2.click send
+
+
+2.Insert data 
+1.post http://localhost:3000/users 
+2, go to body and select raw 
+3. id yaha se kabhi bhi nahi bheje id auto generate karta hai ok
+   {
+      "name": "Moshahid",
+      "color": "pink1"
+    }
+
+ clisk send btn 
+
+
+
+3 delete data 
+1.delete  http://localhost:3000/users/ddca 
+hare ddca id hai jo copy karenge get karke 
+
+
+4 Update data 
+1 put http://localhost:3000/users/ddca
+2 hare ddca is id yaani is id ko update karna hai 
+3.go to body and then raw and add below code 
+3. jo bhi field update karna hai uska name and value pass kare 
+   {
+      "name": "Moshahid",
+      "color": "pink1"
+    }
+
+click send button 
+
+
+# Api testing practicaly / Api test / regarding postman
+1.Get all data (index function)
+Get    http://127.0.0.1:8000/api/posts 
+
+2.single data get (show function)
+Get    http://127.0.0.1:8000/api/posts/8 
+
+3.insert one data (store / create function)  pass data using params / pass data using body->form data, not body->raw   
+Post   http://127.0.0.1:8000/api/posts?title=hamid&description=yellow 
+
+4.update one data  (update function)  pass data using params / pass data using body->form data, not body->raw 
+Put    http://127.0.0.1:8000/api/posts/7?title=raza 1111&description=yahu
+
+5.delete one data (destroy function)
+Delete http://127.0.0.1:8000/api/posts/5  
+
+
+signup,login and logout 
+1.(signup) pass data using body->form data, not body->raw
+Post http://127.0.0.1:8000/api/signup
+
+2.(login) pass data using body->form data, not body->raw 
+post http://127.0.0.1:8000/api/login
+
+3.(logout) pass token for logout, Authorization->select type (bearer token) and enter token hare 
+post http://127.0.0.1:8000/api/logout 
+
+
+
+######################################################################################
+upload all code on hosting / web hosting / regarding web hosting / regarding hosting
+
+1.install filezilla
+2.connect filezilla to server 
+
+3.all code inside public folder upload in htdocs folder on server 
+4. create laravel folder inside htdocs folder 
+5.all code upload inside laravel folder only left public folder,git folder ,vender folder
+6. now upload vender folder inside laravel folder 
+
+7.go to index file in htdocs folder and add laravel
+   /.. (hare forwarded salash ..) replace with laravel
+like   if (file_exists($maintenance = __DIR__.'/laravel/storage/framework/maintenance.php')) {
+    require $maintenance;
+}  
+
+
+8.go to htdocs/laravel/bootstrap/cache/  and check hare config file exist then delete it
+
+9. create database and import database hare 
+   1.steps go to home page 
+   2.click on controll panel 
+   3. clisk on MySQL Databases
+   4.enter database name and click create database 
+   5.click admin button for that database and import your database hare 
+
+9.go to .env file and config database hare 
+    1 all below data you can see hare MySQL Databases and hare your database list will be display and all below data also listed hare
+
+      APP_NAME=Portfolio
+      APP_ENV=productiondata
+      APP_KEY=base64:b+T1cDytr5sqBHK9sdtms5OioouaRZ2puTIRkhQ/xIg=
+      APP_DEBUG=true
+      APP_URL=https://shahidportfolio.wuaze.com
+      before ssl certificate replace https://  to http://
+      ASSET_URL=https://shahidportfolio.wuaze.com/assets or 
+      ASSET_URL=https://linkchecker.infinityfreeapp.com/laravel/public/
+      
+      DB_CONNECTION=mysql
+      DB_HOST=sql111.infinityfree.com
+      DB_PORT=3306
+      DB_DATABASE=if0_37261598_portfolio
+      DB_USERNAME=if0_37261598
+      DB_PASSWORD=PWRXLP2sKho
+
+    2. password you can see hare go to home page click your project account and click account section and click MySQL Databases
+    and now you can see hare MySQL Connection Details
+
+10. if you want to check css working or not use this url on chrome 
+  http://shahid1.infinityfreeapp.com/
+  http://linkchecker.infinityfreeapp.com/
+  http://shahid1.infinityfreeapp.com/assets/web/css/index.css
+  http://linkchecker.infinityfreeapp.com/assets/web/css/index.css
+  http://expertaff.infinityfreeapp.com/assets/web/css/index.css
+  http://shahid1.infinityfreeapp.com/assets/web/css/responsive.css
+
+  https://shahidportfolio.wuaze.com/assets/css/main.css
+
+11. if yor assets folder in htdocs then 
+    like ASSET_URL=https://shahidportfolio.wuaze.com/assets
+    1.your all blade file contain css and javascript like <link rel="stylesheet" href="{{ asset('assets/web/css/index.css') }}"> then yaha assets remove karna hoga like 
+    <link rel="stylesheet" href="{{ asset('web/css/index.css') }}">
+
+    and if yor assets folder in laravel/public folder then
+    like ASSET_URL=https://linkchecker.infinityfreeapp.com/laravel/public/
+    you dont need to any editing in blade file 
+
+
+12.end all steps 
+######################################################################################
+ftp infinityfree
+host name     ftpupload.net
+user name     if0_37101140
+port name     21
+password      Azaz7463086672 
+
+ftp infinityfree
+host name     ftpupload.net
+user name     if0_37261598
+port name     21
+password      PWRXLP2sKho  
+
+https://linktr.ee/Sainikirti
+https://kirtisaini573.wixsite.com/kreative
+https://linktr.ee/admin?welcome=true
 {{-- ###################################################################### --}}
 {{--  --------------------- 18 May 2023 joining date--------------- --}}

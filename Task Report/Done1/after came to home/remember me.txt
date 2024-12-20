@@ -1,0 +1,116 @@
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+replace changeteamStatus() function 
+
+
+  public function changeteamStatus($id, $status, $teamid)
+    {
+        try {
+            if ($status == 1) {
+                DB::table('teammembers')->where('id', $teamid)->update([
+                    'status'         =>  1,
+                ]);
+                DB::table('users')->where('teammember_id', $teamid)->update([
+                    'status'         =>  1,
+                ]);
+            } else {
+                DB::table('teammembers')->where('id', $teamid)->update([
+                    'status'         =>  0,
+                ]);
+                DB::table('users')->where('teammember_id', $teamid)->update([
+                    'status' => 0,
+                    'remember_token' => null
+                ]);
+            }
+            $output = array('msg' => 'Update Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+find text if ($oldstatusvalue->status == 1 && $oldstatusvalue->rejoining_date == null) { 
+replace if statment
+
+
+                if ($oldstatusvalue->status == 1 && $oldstatusvalue->rejoining_date == null) {
+                    $data = $request->except(['_token', 'qualification', 'document_file', 'status']);
+                    $emilid = $data['emailid'];
+                    $data['status'] = '0';
+                    Teammember::find($id)->update($data);
+                    DB::table('users')->where('email', $emilid)->update([
+                        'status'         =>  0,
+                        'remember_token' => null
+                    ]);
+                }
+
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+find text   public function index()
+
+use Illuminate\Support\Facades\Auth;
+
+
+
+    // Fetch the user's status
+    $checkuserstatus = DB::table('users')
+      ->where('teammember_id', auth()->user()->teammember_id)
+      ->where('status', 1)
+      ->first();
+
+    if (!$checkuserstatus) {
+      Auth::logout();
+      return redirect()->route('login')->with('message', 'You have been logged out due to your account inactive.');
+    }
+
+
+
+
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+find text  public function index()
+
+use Illuminate\Support\Facades\Auth;
+
+
+    // Fetch the user's status
+    $checkuserstatus = DB::table('users')
+      ->where('teammember_id', auth()->user()->teammember_id)
+      ->where('status', 1)
+      ->first();
+
+    if (!$checkuserstatus) {
+      Auth::logout();
+      return redirect()->route('login')->with('message', 'You have been logged out due to your account inactive.');
+    }
+
+
+222222222222222222222222222222222222222222222222222
+
+
+resources\views\backEnd\clientlist.blade.php
+find text  {{ $clientassignmentDatas->client_name }}
+replace td tag
+
+                                            <td class="textfixed"><span><b> Client Name :</b></span>
+                                                {{ $clientassignmentDatas->client_name }}<br><span><b>Assignment
+                                                        :</b></span>
+                                                {{ $clientassignmentDatas->assignment_name }}
+                                                ({{ $clientassignmentDatas->assignmentname }})
+                                            </td>
+
+

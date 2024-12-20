@@ -83,8 +83,9 @@ app.post("/commission", (req, res) => {
 const url = 'http://localhost:5000/commission/' + name;
 alert(url);
 //Start hare
-//* regarding postman 
+//* regarding postman
 //Start hare
+
 //Start hare
 // create
 http://localhost:5000/commission?id=7&name=sss
@@ -176,6 +177,7 @@ app.get("/commission/:id", (req, res) => {
 import express from 'express'
 import mysql from 'mysql'
 import cors from 'cors'
+import { Script } from 'vm';
 
 
 const app = express()

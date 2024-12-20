@@ -1,19 +1,3086 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{{-- original applylevae --}}
+
+<table id="examplee" class="display nowrap">
+    <thead>
+        <tr>
+            <div class="refresh-btn-container"
+                style="position: relative; left: 305px; top: 34px; z-index: 1;">
+                <a href="{{ url('/applyleave') }}" class="btn btn-success">Refresh</a>
+            </div>
+        </tr>
+        <tr>
+            <th style="display: none;">id</th>
+            <th>Employee</th>
+            <th class="textfixed">Staff Code</th>
+            <th class="textfixed">Date of Request</th>
+            <th>Status</th>
+            <th class="textfixed">Leave Type</th>
+            <th>Leave Period</th>
+            <th>Days</th>
+            <th>Approver</th>
+            <th class="textfixed">Approver Code</th>
+            <th>Reason for Leave</th>
+            @if ($hasPendingRequests)
+                <th>Approved</th>
+                <th>Reject</th>
+            @endif
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach ($teamapplyleaveDatas as $applyleaveDatas)
+            <tr>
+                <td style="display: none;">{{ $applyleaveDatas->id }}</td>
+                <td class="textfixed"> <a
+                        href="{{ route('applyleave.show', $applyleaveDatas->id) }}">
+                        {{ $applyleaveDatas->team_member ?? '' }}</a>
+                </td>
+                {{-- <td>{{ $applyleaveDatas->staffcode }}</td> --}}
+                <td>{{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->staffcode ?? '') }}</td>
+                {{-- <td class="textfixed">
+                    {{ date('d-m-Y', strtotime($applyleaveDatas->created_at)) ?? '' }}</td> --}}
+
+                <td class="textfixed">
+                    <span style="display: none;">
+                        {{ date('Y-m-d', strtotime($applyleaveDatas->created_at)) }}
+                    </span>
+                    {{ date('d-m-Y', strtotime($applyleaveDatas->created_at)) }}
+                </td>
+                <td class="columnSize">
+                    @if ($applyleaveDatas->status == 0)
+                        <span class="badge badge-pill badge-warning"><span
+                                style="display: none;">A</span>Created</span>
+                    @elseif($applyleaveDatas->status == 1)
+                        <span class="badge badge-success"><span
+                                style="display: none;">B</span>Approved</span>
+                    @elseif($applyleaveDatas->status == 2)
+                        <span class="badge badge-danger">Rejected</span>
+                    @endif
+                </td>
+
+                <td class="textfixed">
+
+                    {{ $applyleaveDatas->name ?? '' }}
+                    @if ($applyleaveDatas->type == '0')
+                        <b>Type :</b> <span>Birthday</span><br>
+                        <span><b>Birthday Date :
+                            </b>{{ date(
+                                'F d,Y',
+                                strtotime(
+                                    App\Models\Teammember::select('dateofbirth')->where('id', $applyleaveDatas->createdby)->first()->dateofbirth,
+                                ),
+                            ) ?? '' }}</span>
+                    @elseif($applyleaveDatas->type == '1')
+                        <span>Religious Festival</span>
+                    @endif
+                </td>
+                <td class="textfixed">{{ date('d-m-Y', strtotime($applyleaveDatas->from)) ?? '' }} -
+                    {{ date('d-m-Y', strtotime($applyleaveDatas->to)) ?? '' }}</td>
+                @php
+                    $to = Carbon\Carbon::createFromFormat('Y-m-d', $applyleaveDatas->to ?? '');
+                    $from = Carbon\Carbon::createFromFormat('Y-m-d', $applyleaveDatas->from);
+                    $diff_in_days = $to->diffInDays($from) + 1;
+                    $holidaycount = DB::table('holidays')
+                        ->where('startdate', '>=', $applyleaveDatas->from)
+                        ->where('enddate', '<=', $applyleaveDatas->to)
+                        ->count();
+                @endphp
+                <td>{{ $diff_in_days - $holidaycount ?? '' }}</td>
+
+                @php
+                    $approvelpartner = DB::table('teammembers')
+                        ->leftJoin(
+                            'teamrolehistory',
+                            'teamrolehistory.teammember_id',
+                            '=',
+                            'teammembers.id',
+                        )
+                        ->where('teammembers.id', $applyleaveDatas->approver)
+                        ->select(
+                            'teammembers.team_member',
+                            'teammembers.staffcode',
+                            'teamrolehistory.newstaff_code',
+                            'teamrolehistory.created_at',
+                        )
+                        ->first();
+
+                    $datadate = Carbon\Carbon::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $applyleaveDatas->created_at,
+                    );
+
+                    $permotiondate = null;
+                    if ($approvelpartner->created_at) {
+                        $permotiondate = Carbon\Carbon::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $approvelpartner->created_at,
+                        );
+                    }
+                @endphp
+
+
+                <td class="textfixed">
+                    {{ $approvelpartner->team_member ?? '' }}
+                </td>
+                <td>
+                    @if ($permotiondate && $datadate->greaterThan($permotiondate))
+                        {{ $approvelpartner->newstaff_code }}
+                    @else
+                        {{ $approvelpartner->staffcode }}
+                    @endif
+                </td>
+                {{-- <td class="textfixed">
+                    {{ $applyleaveDatas->reasonleave ?? '' }}
+                </td> --}}
+                {{-- <td class="textfixed">
+                    @if (strlen($applyleaveDatas->reasonleave) > 25)
+                        <span class="reasonleave-truncated" data-toggle="tooltip"
+                            title="{{ $applyleaveDatas->reasonleave }}">
+                            {{ substr($applyleaveDatas->reasonleave, 0, 25) }}...
+                        </span>
+                    @else
+                        {{ $applyleaveDatas->reasonleave ?? '' }}
+                    @endif
+                </td> --}}
+                {{-- examplee --}}
+                <td class="textfixed">
+                    @if (strlen($applyleaveDatas->reasonleave) > 25)
+                        <span id="reasonleave-{{ $applyleaveDatas->id }}"
+                            class="reasonleave-truncated"
+                            title="{{ $applyleaveDatas->reasonleave }}">
+                            {{ substr($applyleaveDatas->reasonleave, 0, 25) }}.....
+                            <span style="color: #37A000; cursor: pointer;" data-toggle="tooltip"
+                                title="Show full text"
+                                onclick="showFullText('{{ $applyleaveDatas->reasonleave }}')">View
+                                Detail</span>
+                        </span>
+                    @else
+                        {{ $applyleaveDatas->reasonleave ?? '' }}
+                    @endif
+                </td>
+                <td style="align-content: center;">
+                    @if ($applyleaveDatas->status == 0)
+                        <form method="post"
+                            action="{{ route('applyleave.update', $applyleaveDatas->id) }}"
+                            enctype="multipart/form-data" style="text-align: center;margin: 0px;">
+                            @method('PATCH')
+                            @csrf
+                            <input type="text" hidden id="example-date-input" name="status"
+                                value="1" class="form-control" placeholder="Enter Location">
+                            <button type="submit" class="btn btn-success"
+                                style="border-radius: 7px; font-size: 10px; padding: 5px;"
+                                onclick="return confirm('Are you sure you want to approve this ?');">
+                                Approve</button>
+                        </form>
+                    @endif
+                </td>
+                <td style="align-content: center;">
+                    @if ($applyleaveDatas->status == 0)
+                        <button data-toggle="modal" data-target="#exampleModal12{{ $loop->index }}"
+                            class="btn btn-danger"
+                            style="border-radius: 7px; font-size: 10px; padding: 5px;">
+                            Reject</button>
+                    @endif
+                </td>
+
+                {{-- model box --}}
+                @if ($applyleaveDatas->status == 0)
+                    <div class="modal fade" id="exampleModal12{{ $loop->index }}" tabindex="-1"
+                        role="dialog" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header" style="background:#37A000">
+                                    <h5 style="color: white" class="modal-title font-weight-600"
+                                        id="exampleModalLabel1">Reason For
+                                        Rejection</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="post"
+                                    action="{{ url('applyleave/update', $applyleaveDatas->id) }}"
+                                    enctype="multipart/form-data" id="formdata">
+                                    @csrf
+                                    <div class="modal-body">
+                                        <div class="row row-sm">
+                                            <div class="col-12">
+                                                <label for="">Reason : <span
+                                                        class="text-danger">*</span> </label>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <textarea rows="6" name="remark" class="form-control" placeholder="" id="reasoninput-{{ $loop->index }}"></textarea>
+                                                    <input hidden type="text"
+                                                        id="example-date-input" name="status"
+                                                        value="2" class="form-control"
+                                                        placeholder="Enter Reason">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-danger"
+                                            data-dismiss="modal">Close</button>
+                                        <button type="submit" style="float: right"
+                                            class="btn btn-success saveform"
+                                            id="saveform-{{ $loop->index }}">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                            $('#exampleModal12{{ $loop->index }}').on('hidden.bs.modal', function() {
+                                $(this).find('form')[0].reset();
+                            });
+                        });
+                    </script>
+                @endif
+            </tr>
+
+
+            <script>
+                $(function() {
+                    $('[data-toggle="tooltip"]').tooltip({
+                        html: true,
+                        placement: 'top',
+                        container: 'body'
+                    });
+                });
+            </script>
+            <style>
+                .reasonleave-truncated {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .textfixed {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            </style>
+        @endforeach
+    </tbody>
+</table>
+
+
+@php
+    
+public function timesheetrequestStore(Request $request)
+{
+
+
+  try {
+    $request->validate([
+      'reason' => 'required',
+      'file' => 'nullable|mimes:png,pdf,jpeg,jpg|max:5120',
+    ], [
+      'file.max' => 'The file may not be greater than 5 MB.',
+    ]);
+
+    $data = $request->except(['_token', 'file']);
+    $latestrequest = DB::table('timesheetrequests')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->latest()
+      ->select('created_at', 'status')
+      ->first();
+    // dd($latestrequest);
+    if ($latestrequest != null && $latestrequest->status != 2) {
+
+      $latestrequesthour = Carbon::parse($latestrequest->created_at);
+      // dd($latestrequest->created_at);
+      $currentDateTime = Carbon::now();
+      // Check if the difference is more than 24 hours
+      if ($latestrequesthour->diffInHours($currentDateTime) < 24) {
+
+
+        $fileName = '';
+        if ($request->hasFile('file')) {
+          $file = $request->file('file');
+          // public\backEnd\image\confirmationfile
+          $destinationPath = 'backEnd/image/confirmationfile';
+          $fileName = $file->getClientOriginalName();
+          $file->move($destinationPath, $fileName);
+        }
+
+        $id = DB::table('timesheetrequests')->insertGetId([
+          'partner'     =>     $request->partner,
+          'reason'     =>     $request->reason,
+          'attachment'     =>     $fileName,
+          'status'     =>     0,
+          'createdby' => auth()->user()->teammember_id,
+          'created_at'          =>     date('Y-m-d H:i:s'),
+          'updated_at'              =>    date('Y-m-d H:i:s'),
+        ]);
+
+        // timesheet request mail to admin
+        $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+        $name = Teammember::where('id', auth()->user()->teammember_id)
+          ->select('team_member', 'staffcode')
+          ->first();
+
+        $data = array(
+          'teammember' => $name ?? '',
+          'reason' => $request->reason ?? '',
+          'created_at' => date('d-m-Y H:i:s'),
+          'email' => $teammembermail ?? '',
+          'id' => $id ?? '',
+        );
+        Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+          $msg->to($data['email']);
+          //     $msg->cc('itsupport_delhi@vsa.co.in');
+          $msg->subject('Timesheet Submission Request');
+        });
+        dd('hi', 4);
+        // timesheet request mail to admin
+        return response()->json(['success' => true, 'msg' => 'Request Successfully']);
+      } else {
+        dd('hi', 3);
+        $msg = 'You can submit new timesheet request after 24 hour from ' . date('h:i:s A', strtotime($latestrequest->created_at));
+        return response()->json(['success' => false, 'msg' => $msg]);
+      }
+    } else {
+      dd('hi', 2);
+
+      $fileName = '';
+      if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        // public\backEnd\image\confirmationfile
+        $destinationPath = 'backEnd/image/confirmationfile';
+        $fileName = $file->getClientOriginalName();
+        $file->move($destinationPath, $fileName);
+      }
+
+      $id = DB::table('timesheetrequests')->insertGetId([
+        'partner'     =>     $request->partner,
+        'reason'     =>     $request->reason,
+        'attachment'     =>     $fileName,
+        'status'     =>     0,
+        'createdby' => auth()->user()->teammember_id,
+        'created_at'          =>     date('Y-m-d H:i:s'),
+        'updated_at'              =>    date('Y-m-d H:i:s'),
+      ]);
+
+      // timesheet request mail to admin
+      $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+      $name = Teammember::where('id', auth()->user()->teammember_id)->pluck('team_member')->first();
+
+      $data = array(
+        'teammember' => $name ?? '',
+        'email' => $teammembermail ?? '',
+        'id' => $id ?? '',
+      );
+      Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+        $msg->to($data['email']);
+        //   $msg->cc('itsupport_delhi@vsa.co.in');
+        $msg->subject('Timesheet Submission Request');
+      });
+      // timesheet request mail to admin
+      return response()->json(['success' => true, 'msg' => 'Request Successfully Done']);
+    }
+  } catch (Exception $e) {
+    DB::rollBack();
+    Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+    report($e);
+    return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+  }
+}
+@endphp
+{{--  --}}
+<div class="modal-body">
+    <div class="details-form-field form-group row">
+        @if ($assignmentbudgetingDatas->status == 1)
+            <div class="col-6">
+            @else
+                <div class="col-12">
+        @endif
+        <div class="form-group">
+            <label class="font-weight-600">Name</label>
+            <select class="language form-control"
+                id="exampleFormControlSelect1" name="teammember_id">
+                <option value="">Please Select One</option>
+                @foreach ($teammemberall as $teammemberData)
+                    <option value="{{ $teammemberData->id }}">
+                        {{ $teammemberData->team_member }}
+                        ({{ $teammemberData->staffcode }})
+                    </option>
+                @endforeach
+            </select>
+            <input type="text" hidden name="assignmentmapping_id"
+                value="{{ $assignmentbudgetingDatas->id }}"
+                class=" form-control" placeholder="Enter Client Name">
+        </div>
+    </div>
+    @if ($assignmentbudgetingDatas->status == 1)
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Type</label>
+                <select class="form-control key" id="key"
+                    name="type">
+                    <option value="">Please Select One</option>
+                    <option value="0">Team Leader</option>
+                    <option value="2">Staff</option>
+                </select>
+            </div>
+        </div>
+    @else
+        <input type="text" hidden name="type" value="2"
+            class=" form-control" placeholder="Enter Client Name">
+    @endif
+</div>
+{{--  --}}
+mai yaha aap ko site ke baare me bta raha hu fir iske aacording content dena ok basically This project is a related tracking url yaha user koi bhi link ko test kar sakta hai ki is url me kitna redirection url hai aur us redirection url ko result section me display karta hai aur fir ek url genrate karta hai so that us url se us result koi koi bhi dekh sakta hai jab vo url share karega kisi ke saath 
+{{--  --}}
+      // when submit timesheet before joining date
+                                $assignmentid == 213 && $getsixdata->workitem == 'NA' => null,
+
+                                $totalCountMapping = [
+                                    'P' => 'no_of_days_present',
+                                    'CL' => 'casual_leave',
+                                    'EL' => 'exam_leave',
+                                    'T' => 'travel',
+                                    'OH' => 'offholidays',
+                                    'W' => 'sundaycount',
+                                    'H' => 'holidays',
+                                    null => 'lwp'
+                                ];
+{{--  --}}
+<div class="col-md-6 col-lg-3">
+    <div class="p-2 text-white rounded mb-3 p-3 shadow-sm text-center" style="background: #00548bfa;green">
+        <a href="{{ url('totalworkingdays', auth()->user()->teammember_id) }}">
+            <div style="color:white;"
+                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Total Working Days
+            </div>
+            <div style="color:white;" class="fs-32 text-monospace">{{ $totalworkingdays ?? '0' }}
+            </div>
+            <small style="color:white;">Days (April to {{ $currentMonth }})</small>
+        </a>
+    </div>
+</div>
+{{--  --}}
+// total working days start using financial year
+      $currentDate = Carbon::now();
+      $currentMonth = $currentDate->format('F');
+      if ($currentDate->month >= 4) {
+        // Current year financial year
+        $startDate = Carbon::create($currentDate->year, 4, 1);
+        $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+      } else {
+        // Previous year financial year
+        $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+        $endDate = Carbon::create($currentDate->year, 3, 31);
+      }
+
+      $totalworkingdays = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->sum('no_of_days_present');
+      // total working days end hare 
+{{--  --}}
+'totalworkingdays', 'currentMonth'
+{{--  --}}
+// // only agust months
+// $nextweektimesheet1 = DB::table('timesheetusers')
+//     ->where('createdby', 847)
+//     ->whereBetween('date', ['2024-08-26', '2024-08-31'])
+//     // ->get();
+//     ->update(['status' => 0]);
+// // ->delete();
+
+
+// $nextweektimesheet2 = DB::table('timesheets')
+//     ->where('created_by', 847)
+//     ->whereBetween('date', ['2024-08-26', '2024-08-31'])
+//     // ->get();
+//     ->update(['status' => 0]);
+// // ->delete();
+// // more than one week delete 
+// // $result = ['2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+// $result = ['2024-08-26'];
+// foreach ($result as $date) {
+//     $nextweektimesheet3 = DB::table('timesheetreport')
+//         ->where('teamid', 847)
+//         ->where('startdate', $date)
+//         // ->get();
+//         ->delete();
+// }
+// dd('hi');
+
+
+// $nextweektimesheet1 = DB::table('timesheetusers')
+//     ->where('createdby', 847)
+//     ->whereBetween('date', ['2024-08-19', '2024-08-31'])
+//     // ->get();
+//     ->update(['status' => 0]);
+
+
+// $nextweektimesheet2 = DB::table('timesheets')
+//     ->where('created_by', 847)
+//     ->whereBetween('date', ['2024-08-19', '2024-08-31'])
+//     // ->get();
+//     ->update(['status' => 0]);
+// // more than one week delete 
+// // $result = ['2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+// // $result = ['2024-07-01', '2024-07-08', '2024-07-15', '2024-07-22', '2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+// $result = ['2024-08-19', '2024-08-26'];
+// foreach ($result as $date) {
+//     $nextweektimesheet3 = DB::table('timesheetreport')
+//         ->where('teamid', 847)
+//         ->where('startdate', $date)
+//         // ->get();
+//         ->delete();
+// }
+// dd('hi');
+
+// 22222222222222
+{{--  --}}
+$iftwotimesheetinday = DB::table('attendances')
+->where('id', $attendances->id)
+->value($column);
+
+if ($iftwotimesheetinday == "P") {
+$updatewording = "P";
+$totalcountupdate = $attendances->$totalcountColumn + 0;
+} elseif ($iftwotimesheetinday == 'T') {
+$updatewording = "P";
+$totalcountupdate = $attendances->$totalcountColumn + 0;
+}
+{{--  --}}
+if ($prevcheck == null) {
+
+    // DB::table('attendances')
+    //     ->where('employee_name', auth()->user()->teammember_id)
+    //     ->where('month', $month1)
+    //     ->update([$dayWord => $updateddata]);
+
+    // Update the total count and attendance record if applicable
+    if (isset($totalCountMapping[$updateddata])) {
+        $totalcountColumn = $totalCountMapping[$updateddata];
+        $totalcountupdate = $attendances->$totalcountColumn + 1;
+        // DB::table('attendances')
+        //     ->where('id', $attendances->id)
+        //     ->update([
+        //         $dayWord => $updateddata,
+        //         $totalcountColumn => $totalcountupdate,
+        //     ]);
+        DB::table('attendances')
+            ->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $month1)
+            ->update([
+                $dayWord => $updateddata,
+                $totalcountColumn => $totalcountupdate,
+            ]);
+    }
+}
+
+if ($prevcheck == null && isset($totalCountMapping[$updateddata])) {
+    $totalcountColumn = $totalCountMapping[$updateddata];
+    $sundaycountget = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->where('month', $month1)
+        ->first();
+
+    if ($sundaycountget) {
+        $totalcountupdate = $sundaycountget->$totalcountColumn + 1;
+        DB::table('attendances')
+            ->where('id', $sundaycountget->id)
+            ->update([
+                $dayWord => $updateddata,
+                $totalcountColumn => $totalcountupdate,
+            ]);
+        // $updateddata = $getholidaysss ? 'H' : 'W';
+    }
+}
+{{--  --}}
+    public function timesheetsubmission(Request $request)
+    {
+        try {
+
+            // only agust months
+            // $nextweektimesheet1 = DB::table('timesheetusers')
+            //     ->where('createdby', 847)
+            //     ->whereBetween('date', ['2024-07-29', '2024-08-31'])
+            //     // ->get();
+            //     ->update(['status' => 0]);
+
+
+            // $nextweektimesheet2 = DB::table('timesheets')
+            //     ->where('created_by', 847)
+            //     ->whereBetween('date', ['2024-07-29', '2024-08-31'])
+            //     // ->get();
+            //     ->update(['status' => 0]);
+            // // more than one week delete 
+            // // $result = ['2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+            // $result = ['2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+            // foreach ($result as $date) {
+            //     $nextweektimesheet3 = DB::table('timesheetreport')
+            //         ->where('teamid', 847)
+            //         ->where('startdate', $date)
+            //         // ->get();
+            //         ->delete();
+            // }
+            // dd('hi');
+
+
+            // $nextweektimesheet1 = DB::table('timesheetusers')
+            //     ->where('createdby', 847)
+            //     ->whereBetween('date', ['2024-07-01', '2024-08-31'])
+            //     // ->get();
+            //     ->update(['status' => 0]);
+
+
+            // $nextweektimesheet2 = DB::table('timesheets')
+            //     ->where('created_by', 847)
+            //     ->whereBetween('date', ['2024-07-01', '2024-08-31'])
+            //     // ->get();
+            //     ->update(['status' => 0]);
+            // // more than one week delete 
+            // // $result = ['2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+            // $result = ['2024-07-01', '2024-07-08', '2024-07-15', '2024-07-22', '2024-07-29', '2024-08-05', '2024-08-12', '2024-08-19', '2024-08-26'];
+            // foreach ($result as $date) {
+            //     $nextweektimesheet3 = DB::table('timesheetreport')
+            //         ->where('teamid', 847)
+            //         ->where('startdate', $date)
+            //         // ->get();
+            //         ->delete();
+            // }
+            // dd('hi');
+
+            // 22222222222222
+
+
+
+
+
+
+            $checksavetimesheet = DB::table('timesheetusers')
+                ->where('createdby', auth()->user()->teammember_id)
+                ->where('status', 0)
+                ->first();
+
+            if ($checksavetimesheet == null) {
+                $output = array('msg' => "You have not saved any timesheets. Please save your timesheet.");
+                return back()->with('statuss', $output);
+            }
+
+            $latesttimesheetreport =  DB::table('timesheetreport')
+                ->where('teamid', auth()->user()->teammember_id)
+                ->orderBy('id', 'desc')
+                ->first();
+
+            // $latesttimesheetreport is not null 
+            if ($latesttimesheetreport !== null) {
+                // dd('hi 1');
+                $timesheetreportenddate = Carbon::parse($latesttimesheetreport->enddate);
+
+                // find next sturday 
+                $nextSaturday = $timesheetreportenddate->copy()->next(Carbon::SATURDAY);
+                $formattedNextSaturday = $nextSaturday->format('Y-m-d');
+                $formattedNextSaturday1 = $timesheetreportenddate->format('d-m-Y');
+
+                // find next week timesheet filled or not 
+                $nextweektimesheet = DB::table('timesheetusers')
+                    ->where('createdby', auth()->user()->teammember_id)
+                    ->whereIn('status', [0, 1])
+                    ->where('date', $formattedNextSaturday)
+                    ->first();
+
+                // Fetch the rejoining data
+                $rejoiningcheck = DB::table('teammembers')
+                    ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                    ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+                    ->where('teammembers.id', auth()->user()->teammember_id)
+                    ->select(
+                        'teammembers.team_member',
+                        'teammembers.staffcode',
+                        'teammembers.joining_date',
+                        'teamrolehistory.newstaff_code',
+                        'teamrolehistory.rejoiningdate',
+                        'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+                    )
+                    ->first();
+
+
+                // Initialize the variable
+                $rejoiningchecktimesheet = null;
+
+                // Check if any rejoining date is set
+                $rejoiningDate = $rejoiningcheck->rejoiningdate ?? $rejoiningcheck->samepostrejoiningdate;
+
+                // Check if the rejoining date is set
+                if ($rejoiningDate) {
+                    $rejoining = Carbon::parse($rejoiningDate);
+                    $nextweek = Carbon::parse($formattedNextSaturday);
+
+                    // Check if the rejoining date is before next week's Saturday
+                    if ($rejoining < $nextweek) {
+                        $rejoiningchecktimesheet = DB::table('timesheetusers')
+                            ->where('createdby', auth()->user()->teammember_id)
+                            ->whereIn('status', [0, 1])
+                            ->where('date', $formattedNextSaturday)
+                            ->first();
+                    }
+                }
+
+                // Determine the next week's timesheet status
+
+
+                if ($nextweektimesheet == null && $rejoiningchecktimesheet == null && $rejoiningDate == null) {
+                    $output = array('msg' => "Fill the Week timesheet After this week: $formattedNextSaturday1");
+                    return back()->with('statuss', $output);
+                } else {
+                    $usertimesheetfirstdate =  DB::table('timesheets')
+                        ->where('status', '0')
+                        ->where('created_by', auth()->user()->teammember_id)->orderBy('date', 'ASC')->first();
+
+                    $lastdate = Carbon::createFromFormat('Y-m-d', $usertimesheetfirstdate->date ?? '')->addDays(6);
+
+                    if ($usertimesheetfirstdate) {
+
+                        $firstDate = new DateTime($usertimesheetfirstdate->date);
+                        $dayOfWeek = $firstDate->format('w');
+                        $daysToAdd = 0;
+
+                        if ($dayOfWeek !== '0') {
+                            $daysToAdd = 7 - $dayOfWeek;
+                        } else {
+                            $output = array('msg' => 'Submit the timesheet from Monday to Sunday.');
+                            return back()->with('success', $output);
+                        }
+
+                        if ($dayOfWeek > 0) {
+                            $daysToSubtract = $dayOfWeek - 1;
+                        } else {
+                            $daysToSubtract = $dayOfWeek;
+                        }
+
+                        $upcomingSunday = (new DateTime($firstDate->format('Y-m-d')))->modify("+$daysToAdd days")->format('Y-m-d');
+
+                        $presentWeekMonday = (new DateTime($firstDate->format('Y-m-d')))->modify("-$daysToSubtract days")->format('Y-m-d');
+                    }
+
+                    $get_six_Data = DB::table('timesheetusers')
+                        ->where('status', '0')
+                        ->where('createdby', auth()->user()->teammember_id)
+                        ->whereBetween('date', [$firstDate->format('Y-m-d'), $upcomingSunday])
+                        ->orderBy('date', 'ASC')
+                        ->get();
+
+
+
+                    $lastdate = $get_six_Data->max('date');
+
+
+
+                    //copy dates in retrievedDates array in datetime format
+                    $retrievedDates = [];
+
+                    foreach ($get_six_Data as $entry) {
+                        $date = new DateTime($entry->date);
+                        $retrievedDates[] = $date->format('Y-m-d');
+                    }
+
+                    $expectedDates = [];   // will contain ALL the dates occurs b/w first day to upcoming sunday
+                    $firstDate = new DateTime($presentWeekMonday);
+                    $upcomingSundayDate = new DateTime($upcomingSunday);
+
+                    // Clone $firstDate so that it is not modified
+                    $currentDate = clone $firstDate;
+
+                    while ($currentDate->format('Y-m-d') < $upcomingSundayDate->format('Y-m-d')) {  //excluding sunday
+                        $expectedDates[] = $currentDate->format('Y-m-d');
+
+
+                        $currentDate->modify("+1 day");
+                    }
+
+                    $missingDates = array_diff($expectedDates, $retrievedDates);
+
+                    if (!empty($missingDates)) {
+                        $missingDatesString = implode(', ', $missingDates);
+                        $output = array('msg' => "Timesheet Submit Failed Missing dates: $missingDatesString");
+                        return back()->with('success', $output);
+                    } else {
+                        foreach ($get_six_Data as $getsixdata) {
+
+                            // Convert the requested date to a Carbon instance
+                            $requestedDate = Carbon::createFromFormat('Y-m-d', $getsixdata->date);
+
+                            if (date('l', strtotime(date('d-m-Y', strtotime($getsixdata->date)))) == 'Monday') {
+                                $previousMonday = $requestedDate->copy()->previous(Carbon::MONDAY);
+
+                                // Find the nearest next Saturday to the requested date
+                                $nextSaturday = $requestedDate->copy()->next(Carbon::SATURDAY);
+
+                                // Format the dates in 'Y-m-d' format
+                                $previousMondayFormatted = $getsixdata->date;
+                                $nextSaturdayFormatted = $nextSaturday->format('Y-m-d');
+                                $nextSaturdayFormatted = $lastdate;
+
+
+                                $week =  date('d-m-Y', strtotime($previousMondayFormatted))  . ' to ' . date('d-m-Y', strtotime($nextSaturdayFormatted));
+                                $co = DB::table('timesheetusers')
+                                    ->where('createdby', auth()->user()->teammember_id)
+                                    ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                    ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                                    ->groupBy('partner')
+                                    ->get();
+
+                                foreach ($co as $codata) {
+                                    // DB::table('timesheetreport')->insert([
+                                    //     'teamid'       =>     auth()->user()->teammember_id,
+                                    //     'week'       =>     $week,
+                                    //     'totaldays'       =>     $codata->row_count,
+                                    //     'totaltime' =>  $codata->total_hours,
+                                    //     'partnerid'  => $codata->partner,
+                                    //     'startdate'  => $previousMondayFormatted,
+                                    //     'enddate'  => $nextSaturdayFormatted,
+                                    //     // 'created_at'                =>       date('y-m-d'),
+                                    //     'created_at'                =>      date('y-m-d H:i:s'),
+                                    // ]);
+                                }
+
+                                $totaldays = DB::table('timesheetusers')
+                                    ->where('createdby', auth()->user()->teammember_id)
+                                    ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                    ->select('date')
+                                    ->groupBy('date')
+                                    ->get();
+
+                                $totaldaysCount = $totaldays->count();
+                                $latesttimesheetreport = DB::table('timesheetreport')
+                                    ->where('teamid', auth()->user()->teammember_id)
+                                    ->where('startdate', $previousMondayFormatted)
+                                    ->first();
+
+                                if ($latesttimesheetreport) {
+                                    // DB::table('timesheetreport')
+                                    //     ->where('id', $latesttimesheetreport->id)
+                                    //     ->update(['dayscount' => $totaldaysCount]);
+                                }
+                            }
+
+                            // DB::table('timesheetusers')->where('timesheetid', $getsixdata->timesheetid)->update([
+                            //     'status'         =>     1,
+                            //     'updated_at'              =>    date('y-m-d'),
+                            // ]);
+                            // DB::table('timesheets')->where('id', $getsixdata->timesheetid)->update([
+                            //     'status'         =>     1,
+                            //     'updated_at'              =>    date('y-m-d'),
+                            // ]);
+
+                            // Attendance code start hare 
+                            $hdatess = Carbon::parse($getsixdata->date)->format('Y-m-d');
+                            $day = Carbon::parse($hdatess)->format('d');
+                            $month = Carbon::parse($hdatess)->format('F');
+                            $yeardata = Carbon::parse($hdatess)->format('Y');
+
+                            $dates = [
+                                '26' => 'twentysix',
+                                '27' => 'twentyseven',
+                                '28' => 'twentyeight',
+                                '29' => 'twentynine',
+                                '30' => 'thirty',
+                                '31' => 'thirtyone',
+                                '01' => 'one',
+                                '02' => 'two',
+                                '03' => 'three',
+                                '04' => 'four',
+                                '05' => 'five',
+                                '06' => 'six',
+                                '07' => 'seven',
+                                '08' => 'eight',
+                                '09' => 'nine',
+                                '10' => 'ten',
+                                '11' => 'eleven',
+                                '12' => 'twelve',
+                                '13' => 'thirteen',
+                                '14' => 'fourteen',
+                                '15' => 'fifteen',
+                                '16' => 'sixteen',
+                                '17' => 'seventeen',
+                                '18' => 'eighteen',
+                                '19' => 'ninghteen',
+                                '20' => 'twenty',
+                                '21' => 'twentyone',
+                                '22' => 'twentytwo',
+                                '23' => 'twentythree',
+                                '24' => 'twentyfour',
+                                '25' => 'twentyfive',
+                            ];
+
+                            $column = $dates[$day];
+                            // check attendenace record exist or not 
+                            $attendances = DB::table('attendances')
+                                ->where('employee_name', auth()->user()->teammember_id)
+                                ->where('month', $month)
+                                ->first();
+
+                            if ($attendances == null) {
+                                $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+                                DB::table('attendances')->insert([
+                                    'employee_name' => $teammember->id,
+                                    'month' => $month,
+                                    'year' => $yeardata,
+                                    'dateofjoining' => $teammember->joining_date,
+                                    'fulldate' => date('Y-m-d'),
+                                    'created_at' => date('Y-m-d H:i:s'),
+                                    'updated_at' => date('Y-m-d H:i:s'),
+                                ]);
+                            }
+
+                            $attendances = DB::table('attendances')
+                                ->where('employee_name', auth()->user()->teammember_id)
+                                ->where('month', $month)
+                                ->first();
+
+                            if ($attendances != null && property_exists($attendances, $column)) {
+
+                                $client = $getsixdata->client_id;
+                                $assignmentid = $getsixdata->assignment_id;
+
+                                $updatewording = match (true) {
+                                    // Travel
+                                    $client == 32 => 'T',
+                                    // Off holidays
+                                    $client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $request->workitem) == 'Saturday' => 'OH',
+                                    // Other holidays from calendar
+                                    $client == 33 => 'H',
+                                    // Casual leave
+                                    $client == 134 && $assignmentid == 215 => 'CL',
+                                    // Exam leave
+                                    $client == 134 && $assignmentid == 214 => 'EL',
+                                        // Default presence
+                                    default => 'P',
+                                };
+                            }
+
+                            $totalCountMapping = [
+                                'P' => 'no_of_days_present',
+                                'CL' => 'casual_leave',
+                                'EL' => 'exam_leave',
+                                'T' => 'travel',
+                                'OH' => 'offholidays',
+                                'W' => 'sundaycount',
+                                'H' => 'holidays'
+                            ];
+
+                            // Update the total count and attendance record if applicable
+                            if (isset($totalCountMapping[$updatewording])) {
+                                $totalcountColumn = $totalCountMapping[$updatewording];
+                                $totalcountupdate = $attendances->$totalcountColumn + 1;
+
+                                // DB::table('attendances')
+                                //     ->where('id', $attendances->id)
+                                //     ->update([
+                                //         $column => $updatewording,
+                                //         $totalcountColumn => $totalcountupdate,
+                                //     ]);
+                            }
+                            // Attendance code end hare  
+                        }
+
+
+                        // update sunday data in attendance
+                        $lastdateFormate = Carbon::createFromFormat('Y-m-d', $lastdate);
+                        $prevSunday = $lastdateFormate->copy()->previous(Carbon::SUNDAY);
+                        $day1 = Carbon::parse($prevSunday)->format('d');
+                        $month1 = $prevSunday->format('F');
+
+                        $numberWords = [
+                            '1' => 'one',
+                            '2' => 'two',
+                            '3' => 'three',
+                            '4' => 'four',
+                            '5' => 'five',
+                            '6' => 'six',
+                            '7' => 'seven',
+                            '8' => 'eight',
+                            '9' => 'nine',
+                            '10' => 'ten',
+                            '11' => 'eleven',
+                            '12' => 'twelve',
+                            '13' => 'thirteen',
+                            '14' => 'fourteen',
+                            '15' => 'fifteen',
+                            '16' => 'sixteen',
+                            '17' => 'seventeen',
+                            '18' => 'eighteen',
+                            '19' => 'nineteen',
+                            '20' => 'twenty',
+                            '21' => 'twentyone',
+                            '22' => 'twentytwo',
+                            '23' => 'twentythree',
+                            '24' => 'twentyfour',
+                            '25' => 'twentyfive',
+                            '26' => 'twentysix',
+                            '27' => 'twentyseven',
+                            '28' => 'twentyeight',
+                            '29' => 'twentynine',
+                            '30' => 'thirty',
+                            '31' => 'thirtyone'
+                        ];
+
+                        $dayWord = $numberWords[(int)$day1];
+
+                        if (!in_array($prevSunday, $retrievedDates)) {
+                            $getdateformated = $prevSunday->format('Y-m-d');
+                            $getholidaysss = DB::table('holidays')
+                                ->where('startdate', '=', $getdateformated)
+                                ->orWhere('enddate', '=', $getdateformated)
+                                ->first();
+
+                            if ($getholidaysss != null) {
+                                $updateddata = 'H';
+                            } else {
+                                $updateddata = 'W';
+                            }
+
+                            $totalCountMapping = [
+                                'P' => 'no_of_days_present',
+                                'CL' => 'casual_leave',
+                                'EL' => 'exam_leave',
+                                'T' => 'travel',
+                                'OH' => 'offholidays',
+                                'W' => 'sundaycount',
+                                'H' => 'holidays'
+                            ];
+
+                            $prevcheck = DB::table('attendances')
+                                ->where('employee_name', auth()->user()->teammember_id)
+                                ->where('month', $month1)
+                                ->whereNotNull($dayWord)
+                                ->first();
+
+                            if ($prevcheck == null) {
+
+                                // DB::table('attendances')
+                                //     ->where('employee_name', auth()->user()->teammember_id)
+                                //     ->where('month', $month1)
+                                //     ->update([$dayWord => $updateddata]);
+
+                                // Update the total count and attendance record if applicable
+                                if (isset($totalCountMapping[$updateddata])) {
+                                    $totalcountColumn = $totalCountMapping[$updateddata];
+                                    $sundaycountget = DB::table('attendances')
+                                        ->where('employee_name', auth()->user()->teammember_id)
+                                        ->where('month', $month1)
+                                        ->first();
+                                    $totalcountupdate = $sundaycountget->$totalcountColumn + 1;
+
+                                    dd($totalcountupdate);
+                                    // DB::table('attendances')
+                                    //     ->where('id', $attendances->id)
+                                    //     ->update([
+                                    //         $dayWord => $updateddata,
+                                    //         $totalcountColumn => $totalcountupdate,
+                                    //     ]);
+
+
+                                    DB::table('attendances')
+                                        ->where('employee_name', auth()->user()->teammember_id)
+                                        ->where('month', $month1)
+                                        ->update([
+                                            $dayWord => $updateddata,
+                                            $totalcountColumn => $totalcountupdate,
+                                        ]);
+                                }
+                            }
+                        }
+                        // update sunday data in attendance end hare
+                    }
+                    $output = array('msg' => "Timesheet Submit Successfully till " . Carbon::createFromFormat('Y-m-d', $previousMondayFormatted)->format('d-m-Y') . " to " . Carbon::createFromFormat('Y-m-d', $nextSaturdayFormatted)->format('d-m-Y'));
+                    return back()->with('success', $output);
+                }
+            } else {
+                $usertimesheetfirstdate =  DB::table('timesheets')
+                    ->where('status', '0')
+                    ->where('created_by', auth()->user()->teammember_id)->orderBy('date', 'ASC')->first();
+                $lastdate = Carbon::createFromFormat('Y-m-d', $usertimesheetfirstdate->date ?? '')->addDays(6);
+
+                if ($usertimesheetfirstdate) {
+                    $firstDate = new DateTime($usertimesheetfirstdate->date);
+                    $dayOfWeek = $firstDate->format('w');
+                    $daysToAdd = 0;
+
+                    if ($dayOfWeek !== '0') {
+                        $daysToAdd = 7 - $dayOfWeek;
+                    } else {
+                        $output = array('msg' => 'Submit the timesheet from Monday to Sunday.');
+                        return back()->with('success', $output);
+                    }
+
+                    if ($dayOfWeek > 0) {
+                        $daysToSubtract = $dayOfWeek - 1;
+                    } else {
+                        $daysToSubtract = $dayOfWeek;
+                    }
+
+                    $upcomingSunday = (new DateTime($firstDate->format('Y-m-d')))->modify("+$daysToAdd days")->format('Y-m-d');
+
+                    $presentWeekMonday = (new DateTime($firstDate->format('Y-m-d')))->modify("-$daysToSubtract days")->format('Y-m-d');
+                }
+
+
+                // $get_six_Data = DB::table('timesheets')
+                //     ->where('status', '0')
+                //     ->where('created_by', auth()->user()->teammember_id)
+                //     ->whereBetween('date', [$firstDate->format('Y-m-d'), $upcomingSunday])
+                //     ->orderBy('date', 'ASC')
+                //     ->get();
+
+
+                $get_six_Data = DB::table('timesheetusers')
+                    ->where('status', '0')
+                    ->where('createdby', auth()->user()->teammember_id)
+                    ->whereBetween('date', [$firstDate->format('Y-m-d'), $upcomingSunday])
+                    ->orderBy('date', 'ASC')
+                    ->get();
+
+
+                $lastdate = $get_six_Data->max('date');
+
+                $retrievedDates = [];   //copy dates in retrievedDates array in datetime format
+
+                foreach ($get_six_Data as $entry) {
+                    $date = new DateTime($entry->date);
+                    $retrievedDates[] = $date->format('Y-m-d');
+                }
+
+                $expectedDates = [];   // will contain ALL the dates occurs b/w first day to upcoming sunday
+                $firstDate = new DateTime($presentWeekMonday);
+                $upcomingSundayDate = new DateTime($upcomingSunday);
+                // Clone $firstDate so that it is not modified
+                $currentDate = clone $firstDate;
+
+                while ($currentDate->format('Y-m-d') < $upcomingSundayDate->format('Y-m-d')) {  //excluding sunday
+                    $expectedDates[] = $currentDate->format('Y-m-d');
+                    $currentDate->modify("+1 day");
+                }
+
+                $missingDates = array_diff($expectedDates, $retrievedDates);
+
+                if (!empty($missingDates)) {
+                    $missingDatesString = implode(', ', $missingDates);
+                    $output = array('msg' => "Timesheet Submit Failed Missing dates: $missingDatesString");
+                    return back()->with('success', $output);
+                } else {
+                    foreach ($get_six_Data as $getsixdata) {
+                        // Convert the requested date to a Carbon instance
+                        $requestedDate = Carbon::createFromFormat('Y-m-d', $getsixdata->date);
+
+                        if (date('l', strtotime(date('d-m-Y', strtotime($getsixdata->date)))) == 'Monday') {
+                            $previousMonday = $requestedDate->copy()->previous(Carbon::MONDAY);
+                            // Find the nearest next Saturday to the requested date
+                            $nextSaturday = $requestedDate->copy()->next(Carbon::SATURDAY);
+                            // Format the dates in 'Y-m-d' format
+                            $previousMondayFormatted = $getsixdata->date;
+                            $nextSaturdayFormatted = $nextSaturday->format('Y-m-d');
+                            $nextSaturdayFormatted = $lastdate;
+
+                            $week =  date('d-m-Y', strtotime($previousMondayFormatted))  . ' to ' . date('d-m-Y', strtotime($nextSaturdayFormatted));
+                            $co = DB::table('timesheetusers')
+                                ->where('createdby', auth()->user()->teammember_id)
+                                ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                                ->groupBy('partner')
+                                ->get();
+
+                            foreach ($co as $codata) {
+                                DB::table('timesheetreport')->insert([
+                                    'teamid'       =>     auth()->user()->teammember_id,
+                                    'week'       =>     $week,
+                                    'totaldays'       =>     $codata->row_count,
+                                    'totaltime' =>  $codata->total_hours,
+                                    'partnerid'  => $codata->partner,
+                                    'startdate'  => $previousMondayFormatted,
+                                    'enddate'  => $nextSaturdayFormatted,
+                                    // 'created_at'                =>       date('y-m-d'),
+                                    'created_at'                =>      date('y-m-d H:i:s'),
+                                ]);
+                            }
+
+                            $totaldays = DB::table('timesheetusers')
+                                ->where('createdby', auth()->user()->teammember_id)
+                                ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                ->select('date')
+                                ->groupBy('date')
+                                ->get();
+
+                            $totaldaysCount = $totaldays->count();
+                            $latesttimesheetreport = DB::table('timesheetreport')
+                                ->where('teamid', auth()->user()->teammember_id)
+                                ->where('startdate', $previousMondayFormatted)
+                                ->first();
+
+                            if ($latesttimesheetreport) {
+                                DB::table('timesheetreport')
+                                    ->where('id', $latesttimesheetreport->id)
+                                    ->update(['dayscount' => $totaldaysCount]);
+                            }
+                        }
+
+                        // DB::table('timesheetusers')->where('timesheetid', $getsixdata->id)->update([
+                        //     'status'         =>     1,
+                        //     'updated_at'              =>    date('y-m-d'),
+                        // ]);
+                        // DB::table('timesheets')->where('id', $getsixdata->id)->update([
+                        //     'status'         =>     1,
+                        //     'updated_at'              =>    date('y-m-d'),
+                        // ]);
+
+                        DB::table('timesheetusers')->where('timesheetid', $getsixdata->timesheetid)->update([
+                            'status'         =>     1,
+                            'updated_at'              =>    date('y-m-d'),
+                        ]);
+                        DB::table('timesheets')->where('id', $getsixdata->timesheetid)->update([
+                            'status'         =>     1,
+                            'updated_at'              =>    date('y-m-d'),
+                        ]);
+
+                        // Attendance code start hare 
+                        $hdatess = Carbon::parse($getsixdata->date)->format('Y-m-d');
+                        $day = Carbon::parse($hdatess)->format('d');
+                        $month = Carbon::parse($hdatess)->format('F');
+                        $yeardata = Carbon::parse($hdatess)->format('Y');
+
+                        $dates = [
+                            '26' => 'twentysix',
+                            '27' => 'twentyseven',
+                            '28' => 'twentyeight',
+                            '29' => 'twentynine',
+                            '30' => 'thirty',
+                            '31' => 'thirtyone',
+                            '01' => 'one',
+                            '02' => 'two',
+                            '03' => 'three',
+                            '04' => 'four',
+                            '05' => 'five',
+                            '06' => 'six',
+                            '07' => 'seven',
+                            '08' => 'eight',
+                            '09' => 'nine',
+                            '10' => 'ten',
+                            '11' => 'eleven',
+                            '12' => 'twelve',
+                            '13' => 'thirteen',
+                            '14' => 'fourteen',
+                            '15' => 'fifteen',
+                            '16' => 'sixteen',
+                            '17' => 'seventeen',
+                            '18' => 'eighteen',
+                            '19' => 'ninghteen',
+                            '20' => 'twenty',
+                            '21' => 'twentyone',
+                            '22' => 'twentytwo',
+                            '23' => 'twentythree',
+                            '24' => 'twentyfour',
+                            '25' => 'twentyfive',
+                        ];
+
+                        $column = $dates[$day];
+                        // check attendenace record exist or not 
+                        $attendances = DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month)
+                            ->first();
+
+                        if ($attendances == null) {
+                            $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+                            DB::table('attendances')->insert([
+                                'employee_name' => $teammember->id,
+                                'month' => $month,
+                                'year' => $yeardata,
+                                'dateofjoining' => $teammember->joining_date,
+                                'fulldate' => date('Y-m-d'),
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                            ]);
+                        }
+
+                        $attendances = DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month)
+                            ->first();
+
+                        if ($attendances != null && property_exists($attendances, $column)) {
+
+                            $client = $getsixdata->client_id;
+                            $assignmentid = $getsixdata->assignment_id;
+
+                            $updatewording = match (true) {
+                                // Travel
+                                $client == 32 => 'T',
+                                // Off holidays
+                                $client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $request->workitem) == 'Saturday' => 'OH',
+                                // Other holidays from calendar
+                                $client == 33 => 'H',
+                                // Casual leave
+                                $client == 134 && $assignmentid == 215 => 'CL',
+                                // Exam leave
+                                $client == 134 && $assignmentid == 214 => 'EL',
+                                    // Default presence
+                                default => 'P',
+                            };
+                        }
+
+                        $totalCountMapping = [
+                            'P' => 'no_of_days_present',
+                            'CL' => 'casual_leave',
+                            'EL' => 'exam_leave',
+                            'T' => 'travel',
+                            'OH' => 'offholidays',
+                            'W' => 'sundaycount',
+                            'H' => 'holidays'
+                        ];
+
+                        // Update the total count and attendance record if applicable
+                        if (isset($totalCountMapping[$updatewording])) {
+                            $totalcountColumn = $totalCountMapping[$updatewording];
+                            $totalcountupdate = $attendances->$totalcountColumn + 1;
+
+                            DB::table('attendances')
+                                ->where('id', $attendances->id)
+                                ->update([
+                                    $column => $updatewording,
+                                    $totalcountColumn => $totalcountupdate,
+                                ]);
+                        }
+                        // Attendance code end hare  
+                    }
+
+                    // update sunday data in attendance
+                    $lastdateFormate = Carbon::createFromFormat('Y-m-d', $lastdate);
+                    $prevSunday = $lastdateFormate->copy()->previous(Carbon::SUNDAY);
+                    $day1 = Carbon::parse($prevSunday)->format('d');
+                    $month1 = $prevSunday->format('F');
+
+                    $numberWords = [
+                        '1' => 'one',
+                        '2' => 'two',
+                        '3' => 'three',
+                        '4' => 'four',
+                        '5' => 'five',
+                        '6' => 'six',
+                        '7' => 'seven',
+                        '8' => 'eight',
+                        '9' => 'nine',
+                        '10' => 'ten',
+                        '11' => 'eleven',
+                        '12' => 'twelve',
+                        '13' => 'thirteen',
+                        '14' => 'fourteen',
+                        '15' => 'fifteen',
+                        '16' => 'sixteen',
+                        '17' => 'seventeen',
+                        '18' => 'eighteen',
+                        '19' => 'nineteen',
+                        '20' => 'twenty',
+                        '21' => 'twentyone',
+                        '22' => 'twentytwo',
+                        '23' => 'twentythree',
+                        '24' => 'twentyfour',
+                        '25' => 'twentyfive',
+                        '26' => 'twentysix',
+                        '27' => 'twentyseven',
+                        '28' => 'twentyeight',
+                        '29' => 'twentynine',
+                        '30' => 'thirty',
+                        '31' => 'thirtyone'
+                    ];
+
+                    $dayWord = $numberWords[(int)$day1];
+                    if (!in_array($prevSunday, $retrievedDates)) {
+                        $getdateformated = $prevSunday->format('Y-m-d');
+                        $getholidaysss = DB::table('holidays')
+                            ->where('startdate', '=', $getdateformated)
+                            ->orWhere('enddate', '=', $getdateformated)
+                            ->first();
+
+                        if ($getholidaysss != null) {
+                            $updateddata = 'H';
+                        } else {
+                            $updateddata = 'W';
+                        }
+
+                        $totalCountMapping = [
+                            'P' => 'no_of_days_present',
+                            'CL' => 'casual_leave',
+                            'EL' => 'exam_leave',
+                            'T' => 'travel',
+                            'OH' => 'offholidays',
+                            'W' => 'sundaycount',
+                            'H' => 'holidays'
+                        ];
+
+                        $prevcheck = DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month1)
+                            ->whereNotNull($dayWord)
+                            ->first();
+
+                        if ($prevcheck == null) {
+
+                            // DB::table('attendances')
+                            //     ->where('employee_name', auth()->user()->teammember_id)
+                            //     ->where('month', $month1)
+                            //     ->update([$dayWord => $updateddata]);
+
+                            // Update the total count and attendance record if applicable
+                            if (isset($totalCountMapping[$updateddata])) {
+                                $totalcountColumn = $totalCountMapping[$updateddata];
+                                $totalcountupdate = $attendances->$totalcountColumn + 1;
+                                // DB::table('attendances')
+                                //     ->where('id', $attendances->id)
+                                //     ->update([
+                                //         $dayWord => $updateddata,
+                                //         $totalcountColumn => $totalcountupdate,
+                                //     ]);
+                                DB::table('attendances')
+                                    ->where('employee_name', auth()->user()->teammember_id)
+                                    ->where('month', $month1)
+                                    ->update([
+                                        $dayWord => $updateddata,
+                                        $totalcountColumn => $totalcountupdate,
+                                    ]);
+                            }
+                        }
+                    }
+                    // update sunday data in attendance end hare
+                }
+
+                $output = array('msg' => "Timesheet Submit Successfully till " . Carbon::createFromFormat('Y-m-d', $previousMondayFormatted)->format('d-m-Y') . " to " . Carbon::createFromFormat('Y-m-d', $nextSaturdayFormatted)->format('d-m-Y'));
+                return back()->with('success', $output);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+{{--  --}}
+{{--  --}}
+{{-- Route::get('/portfolio-details', function () {
+    return view('web.pages.portfolio-details');
+});
+Route::get('/index-page', function () {
+    return view('web.pages.index');
+});
+Route::get('/service-details', function () {
+    return view('web.pages.service-details');
+});
+Route::get('/starter-page', function () {
+    return view('web.pages.starter-page');
+}); --}}
+{{--  --}}
+   <!-- Custom CSS -->
+   <link href="{{ asset('web/css/index.css') }}" rel="stylesheet">
+   <script src="{{ asset('web/js/index.js') }}"></script>
+   <img src="{{ asset($blog->preview_image) }}"class="img-fluid " alt="..."></a>
+   <!--responsive css -->
+   <link href="{{ asset('web/css/responsive.css') }}" rel="stylesheet">
+{{--  --}}
+
+public function timesheetsubmission(Request $request)
+{
+    try {
+
+
+        // $nextweektimesheet1 = DB::table('timesheetusers')
+        //     ->where('createdby', 847)
+        //     ->whereBetween('date', ['2024-07-22', '2024-08-10'])
+        //     // ->get();
+        //     ->update(['status' => 0]);
+
+
+        // $nextweektimesheet2 = DB::table('timesheets')
+        //     ->where('created_by', 847)
+        //     ->whereBetween('date', ['2024-07-22', '2024-08-10'])
+        //     // ->get();
+        //     ->update(['status' => 0]);
+        // // more than one week delete 
+        // $result = ['2024-07-22', '2024-07-29'];
+        // foreach ($result as $date) {
+        //     $nextweektimesheet3 = DB::table('timesheetreport')
+        //         ->where('teamid', 847)
+        //         ->where('startdate', $date)
+        //         // ->get();
+        //         ->delete();
+        // }
+        // dd('hi');
+
+        // 22222222222222
+
+
+
+
+
+
+        $checksavetimesheet = DB::table('timesheetusers')
+            ->where('createdby', auth()->user()->teammember_id)
+            ->where('status', 0)
+            ->first();
+
+        if ($checksavetimesheet == null) {
+            $output = array('msg' => "You have not saved any timesheets. Please save your timesheet.");
+            return back()->with('statuss', $output);
+        }
+
+        $latesttimesheetreport =  DB::table('timesheetreport')
+            ->where('teamid', auth()->user()->teammember_id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        // $latesttimesheetreport is not null 
+        if ($latesttimesheetreport !== null) {
+            // dd('hi 1');
+            $timesheetreportenddate = Carbon::parse($latesttimesheetreport->enddate);
+
+            // find next sturday 
+            $nextSaturday = $timesheetreportenddate->copy()->next(Carbon::SATURDAY);
+            $formattedNextSaturday = $nextSaturday->format('Y-m-d');
+            $formattedNextSaturday1 = $timesheetreportenddate->format('d-m-Y');
+
+            // find next week timesheet filled or not 
+            $nextweektimesheet = DB::table('timesheetusers')
+                ->where('createdby', auth()->user()->teammember_id)
+                ->whereIn('status', [0, 1])
+                ->where('date', $formattedNextSaturday)
+                ->first();
+
+            // Fetch the rejoining data
+            $rejoiningcheck = DB::table('teammembers')
+                ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+                ->where('teammembers.id', auth()->user()->teammember_id)
+                ->select(
+                    'teammembers.team_member',
+                    'teammembers.staffcode',
+                    'teammembers.joining_date',
+                    'teamrolehistory.newstaff_code',
+                    'teamrolehistory.rejoiningdate',
+                    'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+                )
+                ->first();
+
+
+            // Initialize the variable
+            $rejoiningchecktimesheet = null;
+
+            // Check if any rejoining date is set
+            $rejoiningDate = $rejoiningcheck->rejoiningdate ?? $rejoiningcheck->samepostrejoiningdate;
+
+            // Check if the rejoining date is set
+            if ($rejoiningDate) {
+                $rejoining = Carbon::parse($rejoiningDate);
+                $nextweek = Carbon::parse($formattedNextSaturday);
+
+                // Check if the rejoining date is before next week's Saturday
+                if ($rejoining < $nextweek) {
+                    $rejoiningchecktimesheet = DB::table('timesheetusers')
+                        ->where('createdby', auth()->user()->teammember_id)
+                        ->whereIn('status', [0, 1])
+                        ->where('date', $formattedNextSaturday)
+                        ->first();
+                }
+            }
+
+            // Determine the next week's timesheet status
+
+
+            if ($nextweektimesheet == null && $rejoiningchecktimesheet == null && $rejoiningDate == null) {
+                $output = array('msg' => "Fill the Week timesheet After this week: $formattedNextSaturday1");
+                return back()->with('statuss', $output);
+            } else {
+                $usertimesheetfirstdate =  DB::table('timesheets')
+                    ->where('status', '0')
+                    ->where('created_by', auth()->user()->teammember_id)->orderBy('date', 'ASC')->first();
+
+                $lastdate = Carbon::createFromFormat('Y-m-d', $usertimesheetfirstdate->date ?? '')->addDays(6);
+
+                if ($usertimesheetfirstdate) {
+
+                    $firstDate = new DateTime($usertimesheetfirstdate->date);
+                    $dayOfWeek = $firstDate->format('w');
+                    $daysToAdd = 0;
+
+                    if ($dayOfWeek !== '0') {
+                        $daysToAdd = 7 - $dayOfWeek;
+                    } else {
+                        $output = array('msg' => 'Submit the timesheet from Monday to Sunday.');
+                        return back()->with('success', $output);
+                    }
+
+                    if ($dayOfWeek > 0) {
+                        $daysToSubtract = $dayOfWeek - 1;
+                    } else {
+                        $daysToSubtract = $dayOfWeek;
+                    }
+
+                    $upcomingSunday = (new DateTime($firstDate->format('Y-m-d')))->modify("+$daysToAdd days")->format('Y-m-d');
+
+                    $presentWeekMonday = (new DateTime($firstDate->format('Y-m-d')))->modify("-$daysToSubtract days")->format('Y-m-d');
+                }
+
+                $get_six_Data = DB::table('timesheetusers')
+                    ->where('status', '0')
+                    ->where('createdby', auth()->user()->teammember_id)
+                    ->whereBetween('date', [$firstDate->format('Y-m-d'), $upcomingSunday])
+                    ->orderBy('date', 'ASC')
+                    ->get();
+
+
+
+                $lastdate = $get_six_Data->max('date');
+
+
+
+                //copy dates in retrievedDates array in datetime format
+                $retrievedDates = [];
+
+                foreach ($get_six_Data as $entry) {
+                    $date = new DateTime($entry->date);
+                    $retrievedDates[] = $date->format('Y-m-d');
+                }
+
+                $expectedDates = [];   // will contain ALL the dates occurs b/w first day to upcoming sunday
+                $firstDate = new DateTime($presentWeekMonday);
+                $upcomingSundayDate = new DateTime($upcomingSunday);
+
+                // Clone $firstDate so that it is not modified
+                $currentDate = clone $firstDate;
+
+                while ($currentDate->format('Y-m-d') < $upcomingSundayDate->format('Y-m-d')) {  //excluding sunday
+                    $expectedDates[] = $currentDate->format('Y-m-d');
+
+
+                    $currentDate->modify("+1 day");
+                }
+
+                $missingDates = array_diff($expectedDates, $retrievedDates);
+
+                if (!empty($missingDates)) {
+                    $missingDatesString = implode(', ', $missingDates);
+                    $output = array('msg' => "Timesheet Submit Failed Missing dates: $missingDatesString");
+                    return back()->with('success', $output);
+                } else {
+                    foreach ($get_six_Data as $getsixdata) {
+
+                        // Convert the requested date to a Carbon instance
+                        $requestedDate = Carbon::createFromFormat('Y-m-d', $getsixdata->date);
+
+                        if (date('l', strtotime(date('d-m-Y', strtotime($getsixdata->date)))) == 'Monday') {
+                            $previousMonday = $requestedDate->copy()->previous(Carbon::MONDAY);
+
+                            // Find the nearest next Saturday to the requested date
+                            $nextSaturday = $requestedDate->copy()->next(Carbon::SATURDAY);
+
+                            // Format the dates in 'Y-m-d' format
+                            $previousMondayFormatted = $getsixdata->date;
+                            $nextSaturdayFormatted = $nextSaturday->format('Y-m-d');
+                            $nextSaturdayFormatted = $lastdate;
+
+
+                            $week =  date('d-m-Y', strtotime($previousMondayFormatted))  . ' to ' . date('d-m-Y', strtotime($nextSaturdayFormatted));
+                            $co = DB::table('timesheetusers')
+                                ->where('createdby', auth()->user()->teammember_id)
+                                ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                                ->groupBy('partner')
+                                ->get();
+
+                            foreach ($co as $codata) {
+                                DB::table('timesheetreport')->insert([
+                                    'teamid'       =>     auth()->user()->teammember_id,
+                                    'week'       =>     $week,
+                                    'totaldays'       =>     $codata->row_count,
+                                    'totaltime' =>  $codata->total_hours,
+                                    'partnerid'  => $codata->partner,
+                                    'startdate'  => $previousMondayFormatted,
+                                    'enddate'  => $nextSaturdayFormatted,
+                                    // 'created_at'                =>       date('y-m-d'),
+                                    'created_at'                =>      date('y-m-d H:i:s'),
+                                ]);
+                            }
+
+                            $totaldays = DB::table('timesheetusers')
+                                ->where('createdby', auth()->user()->teammember_id)
+                                ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                ->select('date')
+                                ->groupBy('date')
+                                ->get();
+
+                            $totaldaysCount = $totaldays->count();
+                            $latesttimesheetreport = DB::table('timesheetreport')
+                                ->where('teamid', auth()->user()->teammember_id)
+                                ->where('startdate', $previousMondayFormatted)
+                                ->first();
+
+                            if ($latesttimesheetreport) {
+                                DB::table('timesheetreport')
+                                    ->where('id', $latesttimesheetreport->id)
+                                    ->update(['dayscount' => $totaldaysCount]);
+                            }
+                        }
+
+                        DB::table('timesheetusers')->where('timesheetid', $getsixdata->timesheetid)->update([
+                            'status'         =>     1,
+                            'updated_at'              =>    date('y-m-d'),
+                        ]);
+                        DB::table('timesheets')->where('id', $getsixdata->timesheetid)->update([
+                            'status'         =>     1,
+                            'updated_at'              =>    date('y-m-d'),
+                        ]);
+
+                        // Attendance code start hare 
+                        $hdatess = Carbon::parse($getsixdata->date)->format('Y-m-d');
+                        $day = Carbon::parse($hdatess)->format('d');
+                        $month = Carbon::parse($hdatess)->format('F');
+                        $yeardata = Carbon::parse($hdatess)->format('Y');
+
+                        $dates = [
+                            '26' => 'twentysix',
+                            '27' => 'twentyseven',
+                            '28' => 'twentyeight',
+                            '29' => 'twentynine',
+                            '30' => 'thirty',
+                            '31' => 'thirtyone',
+                            '01' => 'one',
+                            '02' => 'two',
+                            '03' => 'three',
+                            '04' => 'four',
+                            '05' => 'five',
+                            '06' => 'six',
+                            '07' => 'seven',
+                            '08' => 'eight',
+                            '09' => 'nine',
+                            '10' => 'ten',
+                            '11' => 'eleven',
+                            '12' => 'twelve',
+                            '13' => 'thirteen',
+                            '14' => 'fourteen',
+                            '15' => 'fifteen',
+                            '16' => 'sixteen',
+                            '17' => 'seventeen',
+                            '18' => 'eighteen',
+                            '19' => 'ninghteen',
+                            '20' => 'twenty',
+                            '21' => 'twentyone',
+                            '22' => 'twentytwo',
+                            '23' => 'twentythree',
+                            '24' => 'twentyfour',
+                            '25' => 'twentyfive',
+                        ];
+
+                        $column = $dates[$day];
+                        // check attendenace record exist or not 
+                        $attendances = DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month)
+                            ->first();
+
+                        if ($attendances == null) {
+                            $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+                            DB::table('attendances')->insert([
+                                'employee_name' => $teammember->id,
+                                'month' => $month,
+                                'year' => $yeardata,
+                                'dateofjoining' => $teammember->joining_date,
+                                'fulldate' => date('Y-m-d'),
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s'),
+                            ]);
+                        }
+
+                        $attendances = DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month)
+                            ->first();
+
+                        if ($attendances != null && property_exists($attendances, $column)) {
+
+                            $client = $getsixdata->client_id;
+                            $assignmentid = $getsixdata->assignment_id;
+
+                            $updatewording = match (true) {
+                                // Travel
+                                $client == 32 => 'T',
+                                // Off holidays
+                                $client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $request->workitem) == 'Saturday' => 'OH',
+                                // Other holidays from calendar
+                                $client == 33 => 'H',
+                                // Casual leave
+                                $client == 134 && $assignmentid == 215 => 'CL',
+                                // Exam leave
+                                $client == 134 && $assignmentid == 214 => 'EL',
+                                    // Default presence
+                                default => 'P',
+                            };
+                        }
+
+                        $totalCountMapping = [
+                            'P' => 'no_of_days_present',
+                            'CL' => 'casual_leave',
+                            'EL' => 'exam_leave',
+                            'T' => 'travel',
+                            'OH' => 'offholidays',
+                            'W' => 'sundaycount',
+                            'H' => 'holidays'
+                        ];
+
+                        // Update the total count and attendance record if applicable
+                        if (isset($totalCountMapping[$updatewording])) {
+                            $totalcountColumn = $totalCountMapping[$updatewording];
+                            $totalcountupdate = $attendances->$totalcountColumn + 1;
+
+                            DB::table('attendances')
+                                ->where('id', $attendances->id)
+                                ->update([
+                                    $column => $updatewording,
+                                    $totalcountColumn => $totalcountupdate,
+                                ]);
+                        }
+                        // Attendance code end hare  
+                    }
+
+
+                    // update sunday data in attendance
+                    $lastdateFormate = Carbon::createFromFormat('Y-m-d', $lastdate);
+                    $prevSunday = $lastdateFormate->copy()->previous(Carbon::SUNDAY);
+                    $day1 = Carbon::parse($prevSunday)->format('d');
+                    $month1 = $prevSunday->format('F');
+
+                    $numberWords = [
+                        '1' => 'one',
+                        '2' => 'two',
+                        '3' => 'three',
+                        '4' => 'four',
+                        '5' => 'five',
+                        '6' => 'six',
+                        '7' => 'seven',
+                        '8' => 'eight',
+                        '9' => 'nine',
+                        '10' => 'ten',
+                        '11' => 'eleven',
+                        '12' => 'twelve',
+                        '13' => 'thirteen',
+                        '14' => 'fourteen',
+                        '15' => 'fifteen',
+                        '16' => 'sixteen',
+                        '17' => 'seventeen',
+                        '18' => 'eighteen',
+                        '19' => 'nineteen',
+                        '20' => 'twenty',
+                        '21' => 'twentyone',
+                        '22' => 'twentytwo',
+                        '23' => 'twentythree',
+                        '24' => 'twentyfour',
+                        '25' => 'twentyfive',
+                        '26' => 'twentysix',
+                        '27' => 'twentyseven',
+                        '28' => 'twentyeight',
+                        '29' => 'twentynine',
+                        '30' => 'thirty',
+                        '31' => 'thirtyone'
+                    ];
+
+                    $dayWord = $numberWords[(int)$day1];
+                    if (!in_array($prevSunday, $retrievedDates)) {
+                        $getdateformated = $prevSunday->format('Y-m-d');
+                        $getholidaysss = DB::table('holidays')
+                            ->where('startdate', '=', $getdateformated)
+                            ->orWhere('enddate', '=', $getdateformated)
+                            ->first();
+
+                        if ($getholidaysss != null) {
+                            $updateddata = 'H';
+                        } else {
+                            $updateddata = 'W';
+                        }
+                        $prevcheck = DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month1)
+                            ->whereNotNull($dayWord)
+                            ->first();
+
+                        if ($prevcheck == null) {
+                            DB::table('attendances')
+                                ->where('employee_name', auth()->user()->teammember_id)
+                                ->where('month', $month1)
+                                ->update([$dayWord => $updateddata]);
+                        }
+                    }
+                    // update sunday data in attendance end hare
+                }
+                $output = array('msg' => "Timesheet Submit Successfully till " . Carbon::createFromFormat('Y-m-d', $previousMondayFormatted)->format('d-m-Y') . " to " . Carbon::createFromFormat('Y-m-d', $nextSaturdayFormatted)->format('d-m-Y'));
+                return back()->with('success', $output);
+            }
+        } else {
+            dd('hi 2');
+            $usertimesheetfirstdate =  DB::table('timesheets')
+                ->where('status', '0')
+                ->where('created_by', auth()->user()->teammember_id)->orderBy('date', 'ASC')->first();
+            $lastdate = Carbon::createFromFormat('Y-m-d', $usertimesheetfirstdate->date ?? '')->addDays(6);
+
+            if ($usertimesheetfirstdate) {
+                $firstDate = new DateTime($usertimesheetfirstdate->date);
+                $dayOfWeek = $firstDate->format('w');
+                $daysToAdd = 0;
+
+                if ($dayOfWeek !== '0') {
+                    $daysToAdd = 7 - $dayOfWeek;
+                } else {
+                    $output = array('msg' => 'Submit the timesheet from Monday to Sunday.');
+                    return back()->with('success', $output);
+                }
+
+                if ($dayOfWeek > 0) {
+                    $daysToSubtract = $dayOfWeek - 1;
+                } else {
+                    $daysToSubtract = $dayOfWeek;
+                }
+
+                $upcomingSunday = (new DateTime($firstDate->format('Y-m-d')))->modify("+$daysToAdd days")->format('Y-m-d');
+
+                $presentWeekMonday = (new DateTime($firstDate->format('Y-m-d')))->modify("-$daysToSubtract days")->format('Y-m-d');
+            }
+
+
+            // $get_six_Data = DB::table('timesheets')
+            //     ->where('status', '0')
+            //     ->where('created_by', auth()->user()->teammember_id)
+            //     ->whereBetween('date', [$firstDate->format('Y-m-d'), $upcomingSunday])
+            //     ->orderBy('date', 'ASC')
+            //     ->get();
+
+
+            $get_six_Data = DB::table('timesheetusers')
+                ->where('status', '0')
+                ->where('createdby', auth()->user()->teammember_id)
+                ->whereBetween('date', [$firstDate->format('Y-m-d'), $upcomingSunday])
+                ->orderBy('date', 'ASC')
+                ->get();
+
+
+            $lastdate = $get_six_Data->max('date');
+
+            $retrievedDates = [];   //copy dates in retrievedDates array in datetime format
+
+            foreach ($get_six_Data as $entry) {
+                $date = new DateTime($entry->date);
+                $retrievedDates[] = $date->format('Y-m-d');
+            }
+
+            $expectedDates = [];   // will contain ALL the dates occurs b/w first day to upcoming sunday
+            $firstDate = new DateTime($presentWeekMonday);
+            $upcomingSundayDate = new DateTime($upcomingSunday);
+            // Clone $firstDate so that it is not modified
+            $currentDate = clone $firstDate;
+
+            while ($currentDate->format('Y-m-d') < $upcomingSundayDate->format('Y-m-d')) {  //excluding sunday
+                $expectedDates[] = $currentDate->format('Y-m-d');
+                $currentDate->modify("+1 day");
+            }
+
+            $missingDates = array_diff($expectedDates, $retrievedDates);
+
+            if (!empty($missingDates)) {
+                $missingDatesString = implode(', ', $missingDates);
+                $output = array('msg' => "Timesheet Submit Failed Missing dates: $missingDatesString");
+                return back()->with('success', $output);
+            } else {
+                foreach ($get_six_Data as $getsixdata) {
+                    // Convert the requested date to a Carbon instance
+                    $requestedDate = Carbon::createFromFormat('Y-m-d', $getsixdata->date);
+
+                    if (date('l', strtotime(date('d-m-Y', strtotime($getsixdata->date)))) == 'Monday') {
+                        $previousMonday = $requestedDate->copy()->previous(Carbon::MONDAY);
+                        // Find the nearest next Saturday to the requested date
+                        $nextSaturday = $requestedDate->copy()->next(Carbon::SATURDAY);
+                        // Format the dates in 'Y-m-d' format
+                        $previousMondayFormatted = $getsixdata->date;
+                        $nextSaturdayFormatted = $nextSaturday->format('Y-m-d');
+                        $nextSaturdayFormatted = $lastdate;
+
+                        $week =  date('d-m-Y', strtotime($previousMondayFormatted))  . ' to ' . date('d-m-Y', strtotime($nextSaturdayFormatted));
+                        $co = DB::table('timesheetusers')
+                            ->where('createdby', auth()->user()->teammember_id)
+                            ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                            ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                            ->groupBy('partner')
+                            ->get();
+
+                        foreach ($co as $codata) {
+                            DB::table('timesheetreport')->insert([
+                                'teamid'       =>     auth()->user()->teammember_id,
+                                'week'       =>     $week,
+                                'totaldays'       =>     $codata->row_count,
+                                'totaltime' =>  $codata->total_hours,
+                                'partnerid'  => $codata->partner,
+                                'startdate'  => $previousMondayFormatted,
+                                'enddate'  => $nextSaturdayFormatted,
+                                // 'created_at'                =>       date('y-m-d'),
+                                'created_at'                =>      date('y-m-d H:i:s'),
+                            ]);
+                        }
+
+                        $totaldays = DB::table('timesheetusers')
+                            ->where('createdby', auth()->user()->teammember_id)
+                            ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                            ->select('date')
+                            ->groupBy('date')
+                            ->get();
+
+                        $totaldaysCount = $totaldays->count();
+                        $latesttimesheetreport = DB::table('timesheetreport')
+                            ->where('teamid', auth()->user()->teammember_id)
+                            ->where('startdate', $previousMondayFormatted)
+                            ->first();
+
+                        if ($latesttimesheetreport) {
+                            DB::table('timesheetreport')
+                                ->where('id', $latesttimesheetreport->id)
+                                ->update(['dayscount' => $totaldaysCount]);
+                        }
+                    }
+
+                    // DB::table('timesheetusers')->where('timesheetid', $getsixdata->id)->update([
+                    //     'status'         =>     1,
+                    //     'updated_at'              =>    date('y-m-d'),
+                    // ]);
+                    // DB::table('timesheets')->where('id', $getsixdata->id)->update([
+                    //     'status'         =>     1,
+                    //     'updated_at'              =>    date('y-m-d'),
+                    // ]);
+
+                    DB::table('timesheetusers')->where('timesheetid', $getsixdata->timesheetid)->update([
+                        'status'         =>     1,
+                        'updated_at'              =>    date('y-m-d'),
+                    ]);
+                    DB::table('timesheets')->where('id', $getsixdata->timesheetid)->update([
+                        'status'         =>     1,
+                        'updated_at'              =>    date('y-m-d'),
+                    ]);
+
+                    // Attendance code start hare 
+                    $hdatess = Carbon::parse($getsixdata->date)->format('Y-m-d');
+                    $day = Carbon::parse($hdatess)->format('d');
+                    $month = Carbon::parse($hdatess)->format('F');
+                    $yeardata = Carbon::parse($hdatess)->format('Y');
+                    $currentDate = now();
+                    $currentMonth = $currentDate->format('F');
+
+                    $dates = [
+                        '26' => 'twentysix',
+                        '27' => 'twentyseven',
+                        '28' => 'twentyeight',
+                        '29' => 'twentynine',
+                        '30' => 'thirty',
+                        '31' => 'thirtyone',
+                        '01' => 'one',
+                        '02' => 'two',
+                        '03' => 'three',
+                        '04' => 'four',
+                        '05' => 'five',
+                        '06' => 'six',
+                        '07' => 'seven',
+                        '08' => 'eight',
+                        '09' => 'nine',
+                        '10' => 'ten',
+                        '11' => 'eleven',
+                        '12' => 'twelve',
+                        '13' => 'thirteen',
+                        '14' => 'fourteen',
+                        '15' => 'fifteen',
+                        '16' => 'sixteen',
+                        '17' => 'seventeen',
+                        '18' => 'eighteen',
+                        '19' => 'ninghteen',
+                        '20' => 'twenty',
+                        '21' => 'twentyone',
+                        '22' => 'twentytwo',
+                        '23' => 'twentythree',
+                        '24' => 'twentyfour',
+                        '25' => 'twentyfive',
+                    ];
+
+                    // if ($month != $currentMonth && $day > 25) {
+                    //     $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess)->addMonth();
+                    //     $month = $dateTime->format('F');
+                    // } elseif ($month != $currentMonth && $day < 25) {
+                    //     $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess);
+                    //     $month = $dateTime->format('F');
+                    // } elseif ($month == $currentMonth && $day > 25) {
+                    //     $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess)->addMonth();
+                    //     $month = $dateTime->format('F');
+                    // }
+
+                    $column = $dates[$day];
+                    // check attendenace record exist or not 
+                    $attendances = DB::table('attendances')
+                        ->where('employee_name', auth()->user()->teammember_id)
+                        ->where('month', $month)
+                        ->first();
+
+                    if ($attendances == null) {
+                        $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+                        DB::table('attendances')->insert([
+                            'employee_name' => $teammember->id,
+                            'month' => $month,
+                            'year' => $yeardata,
+                            'dateofjoining' => $teammember->joining_date,
+                            'fulldate' => date('Y-m-d'),
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        ]);
+                    }
+
+                    if ($attendances != null && property_exists($attendances, $column)) {
+                        $client = $getsixdata->client_id;
+                        $assignmentid = $getsixdata->assignment_id;
+
+                        if ($client == 32) {
+                            // Travel
+                            $updatewording = 'T';
+                        } elseif ($client == 33) {
+                            // Assume this is "1th Saturday or 2ndh Saturday or 3rd Saturday or 4th Saturday"
+                            $workitem = $getsixdata->workitem;
+                            $workitem = str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $workitem);
+                            // Now $workitem should be "Saturday"
+                            if ($workitem == 'Saturday') {
+                                // Off holidays only select Saturdays
+                                $updatewording = 'OH';
+                            } else {
+                                // holidays from calaneder
+                                $updatewording = 'H';
+                            }
+                        } elseif ($client == 134) {
+                            // casual leave
+                            $updatewording = 'CL';
+                        } else {
+                            // Default case
+                            $updatewording = 'P';
+                        }
+                    } else {
+
+                        $client = $getsixdata->client_id;
+                        $assignmentid = $getsixdata->client_id;
+
+                        if ($client == 32) {
+                            // Travel
+                            $updatewording = 'T';
+                        } elseif ($client == 33) {
+                            // Assume this is "1th Saturday or 2ndh Saturday or 3rd Saturday or 4th Saturday"
+                            $workitem = $getsixdata->workitem;
+                            $workitem = str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $workitem);
+                            // Now $workitem should be "Saturday"
+                            if ($workitem == 'Saturday') {
+                                // Off holidays only select Saturdays
+                                $updatewording = 'OH';
+                            } else {
+                                // holidays from calaneder
+                                $updatewording = 'H';
+                            }
+                        } elseif ($client == 134) {
+                            // casual leave
+                            $updatewording = 'CL';
+                        } else {
+                            // Default case
+                            $updatewording = 'P';
+                        }
+                    }
+
+                    DB::table('attendances')
+                        ->where('employee_name', auth()->user()->teammember_id)
+                        ->where('month', $month)
+                        ->update([$column => $updatewording]);
+                    // Attendance code end hare 
+                }
+
+                // update sunday data in attendance
+                $lastdateFormate = Carbon::createFromFormat('Y-m-d', $lastdate);
+                $prevSunday = $lastdateFormate->copy()->previous(Carbon::SUNDAY);
+                $day1 = Carbon::parse($prevSunday)->format('d');
+                $month1 = $prevSunday->format('F');
+
+                $numberWords = [
+                    '1' => 'one',
+                    '2' => 'two',
+                    '3' => 'three',
+                    '4' => 'four',
+                    '5' => 'five',
+                    '6' => 'six',
+                    '7' => 'seven',
+                    '8' => 'eight',
+                    '9' => 'nine',
+                    '10' => 'ten',
+                    '11' => 'eleven',
+                    '12' => 'twelve',
+                    '13' => 'thirteen',
+                    '14' => 'fourteen',
+                    '15' => 'fifteen',
+                    '16' => 'sixteen',
+                    '17' => 'seventeen',
+                    '18' => 'eighteen',
+                    '19' => 'nineteen',
+                    '20' => 'twenty',
+                    '21' => 'twentyone',
+                    '22' => 'twentytwo',
+                    '23' => 'twentythree',
+                    '24' => 'twentyfour',
+                    '25' => 'twentyfive',
+                    '26' => 'twentysix',
+                    '27' => 'twentyseven',
+                    '28' => 'twentyeight',
+                    '29' => 'twentynine',
+                    '30' => 'thirty',
+                    '31' => 'thirtyone'
+                ];
+
+                $dayWord = $numberWords[(int)$day1];
+                if (!in_array($prevSunday, $retrievedDates)) {
+                    $getdateformated = $prevSunday->format('Y-m-d');
+                    $getholidaysss = DB::table('holidays')
+                        ->where('startdate', '=', $getdateformated)
+                        ->orWhere('enddate', '=', $getdateformated)
+                        ->first();
+
+                    if ($getholidaysss != null) {
+                        $updateddata = 'H';
+                    } else {
+                        $updateddata = 'W';
+                    }
+                    $prevcheck = DB::table('attendances')
+                        ->where('employee_name', auth()->user()->teammember_id)
+                        ->where('month', $month1)
+                        ->whereNotNull($dayWord)
+                        ->first();
+
+                    if ($prevcheck == null) {
+                        DB::table('attendances')
+                            ->where('employee_name', auth()->user()->teammember_id)
+                            ->where('month', $month1)
+                            ->update([$dayWord => $updateddata]);
+                    }
+                }
+                // update sunday data in attendance end hare
+            }
+
+            $output = array('msg' => "Timesheet Submit Successfully till " . Carbon::createFromFormat('Y-m-d', $previousMondayFormatted)->format('d-m-Y') . " to " . Carbon::createFromFormat('Y-m-d', $nextSaturdayFormatted)->format('d-m-Y'));
+            return back()->with('success', $output);
+        }
+    } catch (Exception $e) {
+        DB::rollBack();
+        Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+        report($e);
+        $output = array('msg' => $e->getMessage());
+        return back()->withErrors($output)->withInput();
+    }
+}
+{{--  --}}
+{{--  --}}
+{{--  --}}
+
+if (isset($totalCountMapping[$updatewording])) {
+    $totalcountColumn = $totalCountMapping[$updatewording];
+    $totalcountupdate = isset($attendances->$totalcountColumn) ? $attendances->$totalcountColumn + 1 : 1;
+
+    DB::table('attendances')
+        ->where('id', $attendances->id)
+        ->update([
+            $column => $updatewording,
+            $totalcountColumn => $totalcountupdate,
+        ]);
+}
+ $updatewording = match (true) {
+                                        // Travel
+                                        $client == 32 => 'T',
+                                        // Off holidays
+                                        $client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $request->workitem) == 'Saturday' => 'OH',
+                                        // Other holidays from calendar
+                                        $client == 33 => 'H',
+                                        // Casual leave
+                                        $client == 134 && $assignmentid == 215 => 'CL',
+                                        // Exam leave
+                                        $client == 134 && $assignmentid == 214 => 'EL',
+                                            // Default presence
+                                        default => 'P',
+                                    };
+
+  if (is_numeric($request->assignment_id)) {
+        $getassignmentgenerateId = DB::table('timesheetusers')->where('id', $request->timesheetusersid)->first();
+        $assignmentgenerateId = $getassignmentgenerateId->assignmentgenerate_id;
+        $request->assignment_id = $assignmentgenerateId;
+        dd($assignmentgenerateId, 1);
+      }
+      dd($request->assignment_id, 2);
+
+      // if (!is_numeric($request->assignment_id)) {
+
+      dd($request->assignment_id);
 
 {{--  --}}
+{{-- PAo005pJo9fuFkl2TWFEI2PdAbpr72WSimuFBpUzylGhVggL5FNY4RfZb6j0
+resources\views\errors\419.blade.php
+resources\views\auth\login.blade.php
+vendor\laravel\ui\auth-backend\AuthenticatesUsers.php
+app\Http\Controllers\Auth\LoginController.php
+resources\views\auth\twoFactor.blade.php
+app\Http\Controllers\Auth\TwoFactorController.php
+Route::resource('verify', TwoFactorController::class)->only(['index', 'store']); --}}
+{{-- attendance   --}}
 {{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
-{{--  --}}
+@php
+    public function store(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'client_id' => 'required',
+        'assignment_id' => 'required',
+        'partner' => 'required',
+        'workitem' => 'required',
+        'billable_status' => 'required',
+        'hour' => 'required',
+        'createdby' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+        $response['msg'] = $validator->errors();
+        $response['status'] = 0;
+
+        return $response;
+    }
+    try {
+        $data = $request->except(['_token']);
+
+        $leaves = DB::table('applyleaves')
+            ->where('applyleaves.createdby', $request->createdby)
+            ->where('status', '!=', 2)
+            ->select('applyleaves.from', 'applyleaves.to')
+            ->get();
+
+        $leavess = [];
+        foreach ($leaves as $leave) {
+            $days = Carbon::parse($leave->from)->range(Carbon::parse($leave->to))->toArray();
+            $leavess = array_merge($leavess, $days);
+        }
+
+        $currentday = Carbon::parse($request->date)->format('Y-m-d');
+
+        if (in_array($currentday, $leavess)) {
+            $output = array('msg' => 'You Have Leave for the Day (' . date('d-m-Y', strtotime($currentday)) . ')');
+            return response()->json($output, 400);
+        }
+
+        $mytime = Carbon::now();
+        $currentdate = $mytime->toDateString();
+		//dd($currentday);
+
+        if ($currentday > $currentdate) {
+		
+			 $output = array('msg' => 'You Can Not Fill Timesheet For Future Date (' . date('d-m-Y', strtotime($currentday)) . ')');
+            
+			return response()->json($output, 400);
+        }
+
+        $timesheet = DB::table('timesheets')->insertGetId([
+            'created_by' => $request->createdby,
+            'month' => Carbon::parse($request->date)->format('F'),
+            'date' => Carbon::parse($request->date)->format('Y-m-d'),
+            'created_at' => now(),
+        ]);
+
+        $count = count($request->assignment_id);
+
+        for ($i = 0; $i < $count; $i++) {
+            $assignment = DB::table('assignmentmappings')->where('assignmentgenerate_id', $request->assignment_id[$i])->first();
+
+            DB::table('timesheetusers')->insert([
+                'date' => $request->date,
+                'client_id' => $request->client_id[$i],
+                'workitem' => $request->workitem[$i],
+                'billable_status' => $request->billable_status[$i],
+                'timesheetid' => $timesheet,
+                'date' => Carbon::parse($request->date)->format('d-m-Y'),
+                'hour' => $request->hour[$i],
+                'totalhour' => $request->totalhour,
+                'assignment_id' => $assignment->assignment_id,
+                'partner' => $request->partner[$i],
+                'createdby' => $request->createdby,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Check if total hours exceed 24
+        if ($request->totalhour > 24) {
+            $output = array('msg' => 'Total hours cannot exceed 24 hours.');
+            return response()->json($output, 400);
+        }
+
+        $hdatess = Carbon::parse($request->date)->format('Y-m-d');
+        $day = Carbon::parse($hdatess)->format('d');
+        $month = Carbon::parse($hdatess)->format('F');
+        $currentDate = now();
+        $currentMonth = $currentDate->format('F');
+
+        $dates = [
+            '26' => 'twentysix',
+            '27' => 'twentyseven',
+            '28' => 'twentyeight',
+            '29' => 'twentynine',
+            '30' => 'thirty',
+            '31' => 'thirtyone',
+            '01' => 'one',
+            '02' => 'two',
+            '03' => 'three',
+            '04' => 'four',
+            '05' => 'five',
+            '06' => 'six',
+            '07' => 'seven',
+            '08' => 'eight',
+            '09' => 'nine',
+            '10' => 'ten',
+            '11' => 'eleven',
+            '12' => 'twelve',
+            '13' => 'thirteen',
+            '14' => 'fourteen',
+            '15' => 'fifteen',
+            '16' => 'sixteen',
+            '17' => 'seventeen',
+            '18' => 'eighteen',
+            '19' => 'ninghteen',
+            '20' => 'twenty',
+            '21' => 'twentyone',
+            '22' => 'twentytwo',
+            '23' => 'twentythree',
+            '24' => 'twentyfour',
+            '25' => 'twentyfive',
+        ];
+
+        if ($month != $currentMonth && $day > 25) {
+            $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess)->addMonth();
+            $month = $dateTime->format('F');
+        } elseif ($month != $currentMonth && $day < 25) {
+            $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess);
+            $month = $dateTime->format('F');
+        } elseif ($month == $currentMonth && $day > 25) {
+            $dateTime = Carbon::createFromFormat('Y-m-d', $hdatess)->addMonth();
+            $month = $dateTime->format('F');
+        }
+
+        $column = $dates[$day];
+
+        $attendances = DB::table('attendances')
+            ->where('employee_name', $request->createdby)
+            ->where('month', $month)
+            ->first();
+
+        if ($attendances == null) {
+            $teammember = DB::table('teammembers')->where('id', $request->createdby)->first();
+
+            DB::table('attendances')->insert([
+                'employee_name' => $request->createdby,
+                'month' => $month,
+                'dateofjoining' => $teammember->joining_date,
+            ]);
+        }
+
+        if ($attendances != null && property_exists($attendances, $column)) {
+            $updatedtotalhour = $request->totalhour + $attendances->$column;
+        } else {
+            $updatedtotalhour = $request->totalhour;
+        }
+
+        DB::table('attendances')
+            ->where('employee_name', $request->createdby)
+            ->where('month', $month)
+            ->update([$column => $updatedtotalhour]);
+
+        $output = array('msg' => 'Create Successfully');
+        return response()->json($output, 200);
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+        report($e);
+        $output = array('msg' => $e->getMessage());
+        return response()->json($output, 500);
+    }
+}
+@endphp
+
+<table id="examplee" class="display nowrap">
+    <thead>
+        <tr>
+            <th style="display: none;">id</th>
+            <th>Employee Name1</th>
+            <th>Role</th>
+            <th>Employee Status</th>
+            <th>Date Of Joining</th>
+            <th>Month</th>
+            <th>26</th>
+            <th>27 </th>
+            <th>28</th>
+            <th>29</th>
+            <th>30</th>
+            <th>31</th>
+            <th>01</th>
+            <th>02</th>
+            <th>03</th>
+            <th>04</th>
+            <th>05</th>
+            <th>06</th>
+            <th>07</th>
+            <th>08</th>
+            <th>09</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>13</th>
+            <th>14</th>
+            <th>15</th>
+            <th>16</th>
+            <th>17</th>
+            <th>18</th>
+            <th>19</th>
+            <th>20</th>
+            <th>21</th>
+            <th>22</th>
+            <th>23</th>
+            <th>24</th>
+            <th>25</th>
+            <th>Total Number of days
+            </th>
+            <th>No of days Present
+            </th>
+            <th>Casual Leave (CL)
+            </th>
+            <th>Sick Leave (SL)
+            </th>
+            <th>Comp Off (CO)
+            </th>
+            <th>Birthday/religious Holiday
+            </th>
+            <th>LWP (Leave Without Pay)
+            </th>
+            <th>Exam Leave</th>
+            <th>Absent</th>
+            <th>Total Days to be paid
+            </th>
+            <th>Comment (If any)
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach ($attendanceDatas as $attendanceData)
+            <tr data-toggle="modal" data-target="#updateModal{{ $attendanceData->id }}">
+                <td style="display: none;">{{ $attendanceData->id }}</td>
+                <td>{{ $attendanceData->team_member }}</td>
+                <td>{{ $attendanceData->rolename }}</td>
+                <td>{{ $attendanceData->employment_status }}</td>
+                <td>
+                    @if ($attendanceData->joining_date != null)
+                        {{ date('F d, Y', strtotime($attendanceData->joining_date ?? '')) }}
+                    @endif
+                </td>
+                <td> {{ $attendanceData->month }}</td>
+                <td> {{ $attendanceData->twentysix ?? '0' }}</td>
+                <td> {{ $attendanceData->twentyseven ?? '0' }}</td>
+                <td> {{ $attendanceData->twentyeight ?? '0' }}</td>
+                <td> {{ $attendanceData->twentynine ?? '0' }}</td>
+                <td> {{ $attendanceData->thirty ?? '0' }}</td>
+                <td> {{ $attendanceData->thirtyone ?? '0' }}</td>
+                <td> {{ $attendanceData->one ?? '0' }}</td>
+                <td> {{ $attendanceData->two ?? '0' }}</td>
+                <td> {{ $attendanceData->three ?? '0' }}</td>
+                <td> {{ $attendanceData->four ?? '0' }}</td>
+                <td> {{ $attendanceData->five ?? '0' }}</td>
+                <td> {{ $attendanceData->six ?? '0' }}</td>
+                <td> {{ $attendanceData->seven ?? '0' }}</td>
+                <td> {{ $attendanceData->eight ?? '0' }}</td>
+                <td> {{ $attendanceData->nine ?? '0' }}</td>
+                <td> {{ $attendanceData->ten ?? '0' }}</td>
+                <td> {{ $attendanceData->eleven ?? '0' }}</td>
+                <td> {{ $attendanceData->twelve ?? '0' }}</td>
+                <td> {{ $attendanceData->thirteen ?? '0' }}</td>
+                <td> {{ $attendanceData->fourteen ?? '0' }}</td>
+                <td> {{ $attendanceData->fifteen ?? '0' }}</td>
+                <td> {{ $attendanceData->sixteen ?? '0' }}</td>
+                <td> {{ $attendanceData->seventeen ?? '0' }}</td>
+                <td> {{ $attendanceData->eighteen ?? '0' }}</td>
+                <td> {{ $attendanceData->ninghteen ?? '0' }}</td>
+                <td> {{ $attendanceData->twenty ?? '0' }}</td>
+                <td> {{ $attendanceData->twentyone ?? '0' }}</td>
+                <td> {{ $attendanceData->twentytwo ?? '0' }}</td>
+                <td> {{ $attendanceData->twentythree ?? '0' }}</td>
+                <td> {{ $attendanceData->twentyfour ?? '0' }}</td>
+                <td> {{ $attendanceData->twentyfive ?? '0' }}</td>
+                <td> {{ $attendanceData->total_no_of_days }}</td>
+                <td> {{ $attendanceData->no_of_days_present }}</td>
+                <td> {{ $attendanceData->casual_leave }}</td>
+                <td> {{ $attendanceData->sick_leave }}</td>
+                <td> {{ $attendanceData->comp_off }}</td>
+                <td> {{ $attendanceData->birthday_religious }}</td>
+                <td> {{ $attendanceData->lwp }}</td>
+                <td> {{ $attendanceData->exam_leave ?? '' }}</td>
+                <td> {{ $attendanceData->absent ?? '' }}</td>
+                <td> {{ $attendanceData->totaldaystobepaid }}</td>
+                <td> {{ $attendanceData->comment }}</td>
+            </tr>
+            <!-- Update Modal -->
+            <div class="modal fade" id="updateModal{{ $attendanceData->id }}" tabindex="-1"
+                role="dialog" aria-labelledby="updateModal{{ $attendanceData->id }}Label"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"
+                                id="updateModal{{ $attendanceData->id }}Label">Update
+                                Attendance Data</h5>
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{{ route('updateAttendance') }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+
+                                <input type="hidden" name="attendance_id"
+                                    value="{{ $attendanceData->id }}">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="team_member">Employee Name :</label>
+                                            <input type="text" name="team_member"
+                                                id="team_member" class="form-control"
+                                                value="{{ $attendanceData->team_member }}"
+                                                disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="total_no_of_days">Total Number of
+                                                days:</label>
+                                            <input type="number" name="total_no_of_days"
+                                                id="total_no_of_days" class="form-control"
+                                                value="{{ $attendanceData->total_no_of_days }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="no_of_days_present">No of days
+                                                Present:</label>
+                                            <input type="number" name="no_of_days_present"
+                                                id="no_of_days_present" class="form-control"
+                                                value="{{ $attendanceData->no_of_days_present }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="casual_leave">Casual Leave
+                                                (CL)
+                                                :</label>
+                                            <input type="number" name="casual_leave"
+                                                id="casual_leave" class="form-control"
+                                                value="{{ $attendanceData->casual_leave }}">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="sick_leave">Sick Leave (SL):</label>
+                                            <input type="number" name="sick_leave"
+                                                id="sick_leave" class="form-control"
+                                                value="{{ $attendanceData->sick_leave }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="comp_off">Comp Off (CO):</label>
+                                            <input type="number" name="comp_off"
+                                                id="comp_off" class="form-control"
+                                                value="{{ $attendanceData->comp_off }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="birthday_religious">Birthday/Religious
+                                                Holiday:</label>
+                                            <input type="number" name="birthday_religious"
+                                                id="birthday_religious" class="form-control"
+                                                value="{{ $attendanceData->birthday_religious }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="lwp">LWP (Leave Without
+                                                Pay):</label>
+                                            <input type="number" name="lwp"
+                                                id="lwp" class="form-control"
+                                                value="{{ $attendanceData->lwp }}">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="absent">Absent:</label>
+                                            <input type="number" name="absent"
+                                                id="absent" class="form-control"
+                                                value="{{ $attendanceData->absent }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="totaldaystobepaid">Total Days to be
+                                                paid:</label>
+                                            <input type="number" name="totaldaystobepaid"
+                                                id="totaldaystobepaid" class="form-control"
+                                                value="{{ $attendanceData->totaldaystobepaid }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="comment">Comment (If any):</label>
+                                            <textarea name="comment" id="comment" class="form-control">{{ $attendanceData->comment }}</textarea>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="one">One:</label>
+                                            <input type="text" name="one"
+                                                id="one" class="form-control"
+                                                value="{{ $attendanceData->one ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="two">Two:</label>
+                                            <input type="text" name="two"
+                                                id="two" class="form-control"
+                                                value="{{ $attendanceData->two ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="three">Three:</label>
+                                            <input type="text" name="three"
+                                                id="three" class="form-control"
+                                                value="{{ $attendanceData->three ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="four">Four:</label>
+                                            <input type="text" name="four"
+                                                id="four" class="form-control"
+                                                value="{{ $attendanceData->four ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="five">Five:</label>
+                                            <input type="text" name="five"
+                                                id="five" class="form-control"
+                                                value="{{ $attendanceData->five ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="six">Six:</label>
+                                            <input type="text" name="six"
+                                                id="six" class="form-control"
+                                                value="{{ $attendanceData->six ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="seven">Seven:</label>
+                                            <input type="text" name="seven"
+                                                id="seven" class="form-control"
+                                                value="{{ $attendanceData->seven ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="eight">Eight:</label>
+                                            <input type="text" name="eight"
+                                                id="eight" class="form-control"
+                                                value="{{ $attendanceData->eight ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="nine">Nine:</label>
+                                            <input type="text" name="nine"
+                                                id="nine" class="form-control"
+                                                value="{{ $attendanceData->nine ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="ten">Ten:</label>
+                                            <input type="text" name="ten"
+                                                id="ten" class="form-control"
+                                                value="{{ $attendanceData->ten ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="eleven">Eleven:</label>
+                                            <input type="text" name="eleven"
+                                                id="eleven" class="form-control"
+                                                value="{{ $attendanceData->eleven ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twelve">Twelve:</label>
+                                            <input type="text" name="twelve"
+                                                id="twelve" class="form-control"
+                                                value="{{ $attendanceData->twelve ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="thirteen">Thirteen:</label>
+                                            <input type="text" name="thirteen"
+                                                id="thirteen" class="form-control"
+                                                value="{{ $attendanceData->thirteen ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="fourteen">Fourteen:</label>
+                                            <input type="text" name="fourteen"
+                                                id="fourteen" class="form-control"
+                                                value="{{ $attendanceData->fourteen ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="fifteen">Fifteen:</label>
+                                            <input type="text" name="fifteen"
+                                                id="fifteen" class="form-control"
+                                                value="{{ $attendanceData->fifteen ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="sixteen">Sixteen:</label>
+                                            <input type="text" name="sixteen"
+                                                id="sixteen" class="form-control"
+                                                value="{{ $attendanceData->sixteen ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="seventeen">Seventeen:</label>
+                                            <input type="text" name="seventeen"
+                                                id="seventeen" class="form-control"
+                                                value="{{ $attendanceData->seventeen ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="eighteen">Eighteen:</label>
+                                            <input type="text" name="eighteen"
+                                                id="eighteen" class="form-control"
+                                                value="{{ $attendanceData->eighteen ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="nineteen">Nineteen:</label>
+                                            <input type="text" name="ninghteen"
+                                                id="ninghteen" class="form-control"
+                                                value="{{ $attendanceData->ninghteen ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twenty">Twenty:</label>
+                                            <input type="text" name="twenty"
+                                                id="twenty" class="form-control"
+                                                value="{{ $attendanceData->twenty ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentyone">Twenty-One:</label>
+                                            <input type="text" name="twentyone"
+                                                id="twentyone" class="form-control"
+                                                value="{{ $attendanceData->twentyone ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentytwo">Twenty-Two:</label>
+                                            <input type="text" name="twentytwo"
+                                                id="twentytwo" class="form-control"
+                                                value="{{ $attendanceData->twentytwo ?? '' }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentythree">Twenty-Three:</label>
+                                            <input type="text" name="twentythree"
+                                                id="twentythree" class="form-control"
+                                                value="{{ $attendanceData->twentythree ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentyfour">Twenty-Four:</label>
+                                            <input type="text" name="twentyfour"
+                                                id="twentyfour" class="form-control"
+                                                value="{{ $attendanceData->twentyfour ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentyfive">Twenty-Five:</label>
+                                            <input type="text" name="twentyfive"
+                                                id="twentyfive" class="form-control"
+                                                value="{{ $attendanceData->twentyfive ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentysix">Twenty-Six:</label>
+                                            <input type="text" name="twentysix"
+                                                id="twentysix" class="form-control"
+                                                value="{{ $attendanceData->twentysix ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentyseven">Twenty-Seven:</label>
+                                            <input type="text" name="twentyseven"
+                                                id="twentyseven" class="form-control"
+                                                value="{{ $attendanceData->twentyseven ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentyeight">Twenty-Eight:</label>
+                                            <input type="text" name="twentyeight"
+                                                id="twentyeight" class="form-control"
+                                                value="{{ $attendanceData->twentyeight ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="twentynine">Twenty-Nine:</label>
+                                            <input type="text" name="twentynine"
+                                                id="twentynine" class="form-control"
+                                                value="{{ $attendanceData->twentynine ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="thirty">Thirty:</label>
+                                            <input type="text" name="thirty"
+                                                id="thirty" class="form-control"
+                                                value="{{ $attendanceData->thirty ?? '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="thirtyone">Thirty-One:</label>
+                                            <input type="text" name="thirtyone"
+                                                id="thirtyone" class="form-control"
+                                                value="{{ $attendanceData->thirtyone ?? '' }}">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save
+                                    Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- End of Update Modal -->
+        @endforeach
+    </tbody>
+</table>
+
 {{--  --}}
 
 <td class="textfixed">

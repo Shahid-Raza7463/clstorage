@@ -1,0 +1,100 @@
+
+Admin role
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Dashboard
+
+1.
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+1.if we select holiday as one of the clients and add more entries then attendance data could reflect incorrectly
+2. Doj to be linked to attendance as user can becomes active and fill timesheet
+3. Leaving date - attendance will show a cross after auto-submissions of timesheet
+4. User will not be visible in attendance for next payroll cycle
+5. User fills timesheet for mon-Fri but can’t submit before Saturday. Thereafter user is in leave till payroll cycle gets initiated. TS will not be auto-submitted as user is active.
+6. Holiday list to be in sync with attendance data
+
+
+
+1.link teams with attendance data, if user is 'active' in teams then will be visible in attendance
+2.Holiday list (dynamic) is updated and reflected in attendance
+3.Attendance column enable after DOJ, check if there is a new joinee this month
+4.Attendance data updated when user exits (leaves) - TS is auto-submitted and user should not be in Nov Cycle
+5.dates after exit date will show cross (x) in attendance
+6.CL credit rule if user joins after 15th day of the month (not directly linked but will show leave balance) 
+7.Un-submitted TS data is 'active' user goes on extended leave without submission 
+8.Till EL approval is 'in progress' user can not fill TS; this works
+9.If leave rejected then TS will be available - this works too
+10.Holiday + Travel is pending. 
+
+
+
+
+
+
+
+22222222222222222222222222
+
+
+1.The client wants to know the active and inactive users in the attendance report.
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+222222222222222222222222222222222
+
+Dear Sir/Ma'am,
+
+I am writing to formally raise my concerns regarding the working environment I experienced at the client site.
+
+Working Conditions: The overall working environment was not conducive to productivity. The seating arrangement was overcrowded, with more team members than the space was designed to accommodate.
+
+Lighting Issue: I was frequently stopped from turning on the lights.
+
+Basic Requirement: When I requested a plate for my meal, it was not provided, and I had to arrange one myself.
+
+Washing Facilities: After meals, when I needed to wash my hands, I was initially not allowed to use the kitchen area. However, after the driver intervened, I was permitted to use it.
+
+Thank you for your time and understanding. Please let me know if further details are required.
+
+Best regards,
+Md Shahid Raza
+
+
+
+The client wants to remove the 'type' input field from the team member addition form when the assignment is closed and display it only when the assignment is open. 
+
+
+1.Assignment Details on mail when assignment closed by otp. 
+2.The date format should be 01-01-2024 on the webpage and also 01-01-2024 in Excel. 
+3.Implemented checkbox on assignment create page so that user submit form without select team member currently user cannot create assignment without team member selection. 
+4.Assignment viewer list on assignment view page to view user only. 
+5.Total hours will be shown on assignment view page to partner, manager and staff. 
+6.Assignment total hour show on assignment report tab. 
+7.Assignment total hour show on admin panel according teamwise. 
+8.Assignment total hours show on the assignment time report tab. 
+9.The partner list and their total hours on assignment view page. 
+10.The user should not be able to fill in the timesheet before the rejoining date. 
+
+
+
+
+
+This task needs to be retested because the description I provided earlier was you understood in another way So, please retest it
+
+
+
+The task I uploaded on VSAlive is a separate task that is not currently in Jira. I needed to fix some data in the attendance report, and that specific task has been uploaded to VSAlive. It was not possible to provide it on VSADemo for testing.
+
+
+
+
+
+
+
+

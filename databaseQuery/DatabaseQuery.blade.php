@@ -8,20 +8,93 @@
 {{-- *   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- *   --}}
+{{-- *merge database    --}}
+{{--  Start Hare --}}
+INSERT INTO attendances
+SELECT * FROM attendances1212;
+
+INSERT INTO attendances
+SELECT * FROM attendancescopy1;
+
+SELECT * FROM attendances_400
+UNION ALL
+SELECT * FROM attendances_600;
+
+1350
+
+1351 nahi hona chahiye
+
+
+{{--  Start Hare --}}
+{{-- * regarding database time / regarding sql  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- *   --}}
+SQL Server COALESCE() Function
+
+1.
+{{-- SELECT COALESCE(NULL, NULL, NULL, 'W3Schools.com', NULL, 'Example.com');
+ output W3Schools.com
+
+2.
+SELECT COALESCE(NULL, 1, 2, 'W3Schools.com');
+  output 1 --}}
 {{--  Start Hare --}}
+// SELECT email
+// FROM users
+// GROUP BY email
+// HAVING COUNT(*) > 1;
+
+
+// SELECT DISTINCT email, teammember_id
+// FROM users
+// WHERE email IN (
+// SELECT email
+// FROM users
+// GROUP BY email
+// HAVING COUNT(*) > 1
+// );
+
+SELECT teammember_id, email FROM users GROUP BY email HAVING COUNT(*) > 1;
 {{--  Start Hare --}}
-{{-- *   --}}
+C:\xampp\php\php.ini
+
+some mandatery modification in
+find text one by one
+
+max_execution_time=-1
+hare -1 is unlimited
+
+max_execution_time=240
+hare 240 is 2 minutes
+
+
+below all field will be edit
+max_execution_time=360
+max_input_time=360
+
+default_socket_timeout=360
+memory_limit = 1024M
+
+
+max_execution_time=-1
+max_input_time=-1
+
+
 {{--  Start Hare --}}
+{{-- * regarding work item    --}}
+{{--  Start Hare --}}
+April excell.......
+Work item May
+june ka excell ..........
+july Daily Work item july from client send folder ,,,,,,,,,,,,
+August Work item aug
+september Work item aug
 {{--  Start Hare --}}
 {{-- *regarding beetween  --}}
 {{--  Start Hare --}}
 SELECT * FROM `timesheetusers` WHERE `date` BETWEEN '2024-07-10' AND '2024-07-20' AND `createdby` = 932
 {{--  Start Hare --}}
-using search tab using date column 
+using search tab using date column
 2024-07-10,2024-07-20
 {{-- * teammembers table   --}}
 {{--  Start Hare --}}
@@ -201,6 +274,13 @@ NULL, NULL, NULL, NULL, NULL, '2023-09-20 06:25:19', NULL
 );
 
 {{--  Start Hare --}}
+{{-- * regarding vs code    --}}
+Theme use only
+1.monokai
+2.monokai diamond
+
+
+
 {{-- * regarding chatgpt text    --}}
 {{--  Start Hare --}}
 {{-- give me all LIKE related quey with uses description 
@@ -211,6 +291,12 @@ i want to copy above table and paste inside vs code  --}}
 mujhe ye sab ek frame do so that mai ek baar me hi copy karke vs code me paste kar saku
 {{-- Start hare --}}
 mujhe sabhi query chahiye jisme return redirect() aata ho in laravel
+{{--  Start Hare --}}
+give me content <p>content</p> basically mai yaha aap ko site ke baare me bta raha hu fir iske aacording content dena ok
+basically This project is
+a related tracking url yaha user koi bhi link ko test kar sakta hai ki is url me kitna redirection url hai aur us
+redirection url ko result section me display karta hai aur fir ek url genrate karta hai so that us url se us result koi
+koi bhi dekh sakta hai jab vo url share karega kisi ke saath
 {{--  Start Hare --}}
 {{-- * my sql search using like  --}}
 {{--  Start Hare --}}
@@ -277,6 +363,10 @@ SELECT * FROM `assignmentbudgetings` WHERE `created_at` BETWEEN '2024-01-01 16:4
 
 
 {{--  Start Hare --}}
+{{-- *regarding recording / regarding record --}}
+1. For Windows 10/11 (Using Xbox Game Bar):
+Shortcut Keys: Windows Key + Alt + R
+This will start and stop screen recording using the built-in Xbox Game Bar.
 {{-- *regarding trigger --}}
 {{--  Start Hare create trigger using sql tab --}}
 {{-- 1.create users table 
