@@ -606,103 +606,72 @@ Total hour count bugs fixed, bugs no is vs-224.
 I spoke to the client regarding assignments being displayed on one page. However, when I checked, the functionality to show all assignments already exists, and I have informed the client about it
 
 
-
+Start hare ```
 222222222222222222222222222222222222222222222222222222222222222222222
 To do 
-
-1.Stop sending timesheet reminder emails to a specific partner as requested by the client.
-2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
-
-4.Add a CreatedBy column to display on the assignment folder file listing page.
-5.Restrict users from entering time in the format 08:00.
-6.Add a Partner button on the assignment view page as requested by the client.
-7.Udin date format needs to be fixed.
-8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug fix).
-9.Restrict admin from rejecting casual leave timesheets if submitted.
-
-
-
-13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.
-14.Assignment viewer implementation on open assignment. 
-15.Client list edit functionality on the assignment view page. 
-16.Data handover form implementation. 
-
-
-
-
-
-
-1.Investigate why the Admin account is getting automatically inactivated as reported by the client.
-2.Implement a feature to calculate and display the total hours for all closed assignments before 2024.  ##########
-3.Add a travel box on the dashboard as requested by the client.  ##########
-4.Implement ascending and descending order sorting for open and closed assignments.  ##########
-5.Add a Resend OTP button during the closed assignment process.  ##########
-6.Ensure OTP for closing an assignment is not generated if there are any pending independencies.  ##########
-
-
-working on it 
-2.All applyleave resterected condition implemented on submitted timesheet rejected page when user apply leave for submitted timesheet rejected date like user can not apply leave on sunday,holidays etc 
-10.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
-11.Display the joining date in the attendance module.
-12.Fixed attendance data for users who applied for leave before October.
-3.In the attendance module, insert "H" for 5 users who applied for leave before October.
-4.The client wants to get the notification section tested
-5.client said birthday reminder not goes to user but i chaked reminder goes to users 
-8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
-
-
-assivment viewve partner 
-miss k replace karna hai ms. se and all places on portal ignore 
-file upload problem and content problem on notification all type testing will be done 
-implementation on add timesheet calander 
-last submission report goes to mail that is problem 
-client want to edit functionality on timesheet request list so that user can edit and sumbit again
-on timesheet saved listing page, client want to fix content on work item.
-clent want to edit button in first on saved timeshett listing page 
-client want to assignment inactive users date 
-
-
-
-
-
-
-
-
-
-
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 below task approved by manager and hr
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 1.Stop sending timesheet reminder emails to a specific partner as requested by the client.
 2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
-3.In the attendance module, insert "H" for 5 users who applied for leave before October.
 4.Add a CreatedBy column to display on the assignment folder file listing page.
 5.Restrict users from entering time in the format 08:00.
 6.Add a Partner button on the assignment view page as requested by the client.
 7.Udin date format needs to be fixed.
-8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
-
 9.Restrict admin from rejecting casual leave timesheets if submitted.
-10.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
-11.Display the joining date in the attendance module.
-12.Fixed attendance data for users who applied for leave before October.
 13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.
 14.Assignment viewer implementation on open assignment.
 15.Client list edit functionality on the assignment view page.
 16.Data handover form implementation.
 17.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+done on jira 
 
+New task taken by me 
 
+27.only one udin for one assignment if user create another udin in that case udin will be not create (implmnt)
+28.Replace "Miss" with "Ms." across all places on the portal. (Not implement )
+29.Implement a calendar feature on the Add Timesheet page.
+31.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request.
+32.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.
+33.Move the Edit button to the first position on the Timesheet Saved Listing page.
+34.Implement functionality to display inactive user's date from assignment.
+
+2222222222222222222222222222
 Not implement
 18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
-19.Add a travel box on the dashboard as requested by the client.
 20.Implement ascending and descending order sorting for open and closed assignments.
 21.Add a Resend OTP button during the closed assignment process.
 22.Ensure OTP for closing an assignment is not generated if there are any pending independencies.
 
-23 the client wants to get the notification section tested
-24.client said birthday reminder not goes to user but i chaked reminder goes to users 
 
+2222222222222222222222222222
+working on it
+ 
+19.Add a travel box on the dashboard as requested by the client.
+
+
+2222222222222222222222222222
+Working done 
+3.In the attendance module, insert "H" for 5 users who applied for leave before October.
+8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
+10.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+11.Display the joining date in the attendance module.
+12.Fixed attendance data for users who applied for leave before October.
+2.All applyleave resterected condition implemented on submitted timesheet rejected page when user apply leave for submitted timesheet rejected date like user can not apply leave on sunday,holidays etc 
+
+New task taken by me worked
+
+24.assivment viewve partner 
+23 the client wants to get the notification section tested
+25.client said birthday reminder not goes to user but i chaked reminder goes to users 
+26.Display the joining date in the attendance module modification.
+30.Fix the issue with the Last Submission Report on mail.
+31.Fix the issue with the Timesheet not Submission Report on mail.
+35.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+2222222222222222222222222222
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+end hare ```
 
 
 

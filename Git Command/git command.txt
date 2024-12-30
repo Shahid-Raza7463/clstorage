@@ -1,3 +1,4 @@
+GIT AND GITHUB
 #################################################################################
 i am using this 
 1.Go to git hub and create repositery 
@@ -143,7 +144,36 @@ git add .gitignore
 git commit -m "Update .gitignore to ignore the public folder"
 
 
+regarding gitignore
 ######################################################################################
+backEnd/
+/backEnd  git ignore file me is dono ka matlab btaye 
+
+
+1. backEnd/
+This pattern ignores all directories named backEnd, no matter where they appear in the repository.
+For example:
+   Ignores backEnd/ in the root directory.
+   Ignores subdir/backEnd/, src/backEnd/, etc.
+
+
+2. /backEnd
+This pattern ignores the backEnd directory only in the root of the repository.
+For example:
+    Ignores backEnd/ at the root.
+    Does not ignore subdir/backEnd/ or src/backEnd/.
+
+Example Use Case:
+Use backEnd/ if you want to ignore all occurrences of backEnd directories throughout the project.
+Use /backEnd if you want to specifically target the backEnd directory located at the root of your repository.
+
+Practical Example:
+
+# Ignore backEnd directory globally
+backEnd/
+
+# Ignore backEnd directory only at the root
+/backEnd
 
 
 

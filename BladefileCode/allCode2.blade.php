@@ -40,14 +40,212 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<tbody>
+    @php $hasData = false; @endphp
+    @foreach ($timesheetData as $timesheetDatas)
+        @php
+            $timesheetanotherdata = $timesheetCounts[$timesheetDatas->timesheetid] ?? 0;
+            $datadate = isset($timesheetDatas->date)
+                ? Carbon\Carbon::parse($timesheetDatas->date)
+                : null;
+        @endphp
+        @if ($timesheetanotherdata <= 1)
+            @php $hasData = true; @endphp
+            <tr>
+                <td style="display: none;">{{ $timesheetDatas->id }}</td>
+                @if (Auth::user()->role_id == 11 ||
+                        Request::is('adminsearchtimesheet') ||
+                        (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                    <td>{{ $timesheetDatas->team_member ?? '' }}</td>
+                    <td>
+                        @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                            {{ $permotioncheck->newstaff_code }}
+                        @else
+                            {{ $timesheetDatas->staffcode }}
+                        @endif
+                    </td>
+                @endif
+                <td>{{ date('d-m-Y', strtotime($timesheetDatas->date)) }}</td>
+                <td>{{ date('l', strtotime($timesheetDatas->date)) }}</td>
+                <td>{{ $timesheetDatas->client_name ?? '' }}</td>
+                <td>{{ $timesheetDatas->client_code ?? '' }}</td>
+                <td>
+                    {{ $timesheetDatas->assignment_name ?? '' }}
+                    @if ($timesheetDatas->assignmentname)
+                        ({{ $timesheetDatas->assignmentname ?? '' }})
+                    @endif
+                </td>
+                <td>{{ $timesheetDatas->assignmentgenerate_id ?? '' }}</td>
+                <td>{{ $timesheetDatas->workitem ?? '' }}</td>
+                <td>{{ $timesheetDatas->location ?? '' }}</td>
+                <td>{{ $timesheetDatas->patnername ?? '' }}</td>
+                <td>
+                    @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                        {{ $timesheetDatas->newstaff_code }}
+                    @else
+                        {{ $timesheetDatas->patnerstaffcode }}
+                    @endif
+                </td>
+                <td>{{ $timesheetDatas->hour ?? '' }}</td>
+            </tr>
+        @endif
+    @endforeach
+    @if (!$hasData)
+        <tr>
+            <td colspan="7" style="text-align: center;">Data not available</td>
+        </tr>
+    @endif
+</tbody>
+{{--  Start Hare --}}
+{{-- ! End hare --}}
+{{-- * regarding total travel count  --}}
+{{--  Start Hare --}}
+@php
+    // public function totaltraveldays(Request $request, $teamid)
+    //   {
+    // Define the financial year start and end dates
+    $currentDate = Carbon::now();
+    $startDate =
+        $currentDate->month >= 4
+            ? Carbon::create($currentDate->year, 4, 1)
+            : Carbon::create($currentDate->year - 1, 4, 1);
+    $endDate =
+        $currentDate->month >= 4
+            ? Carbon::create($currentDate->year + 1, 3, 31)
+            : Carbon::create($currentDate->year, 3, 31);
+
+    // Fetch necessary data
+    $timesheetData = DB::table('timesheetusers')
+        ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+        ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+        ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+        ->leftJoin('teammembers as partner', 'partner.id', 'timesheetusers.partner')
+        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', 'partner.id')
+        ->leftJoin(
+            'assignmentbudgetings',
+            'assignmentbudgetings.assignmentgenerate_id',
+            'timesheetusers.assignmentgenerate_id',
+        )
+        ->select(
+            'timesheetusers.*',
+            'assignments.assignment_name',
+            'clients.client_name',
+            'clients.client_code',
+            'teammembers.team_member',
+            'teammembers.staffcode',
+            'partner.team_member as partner_name',
+            'partner.staffcode as partner_staffcode',
+            'assignmentbudgetings.assignmentname',
+            'teamrolehistory.newstaff_code',
+            'assignmentbudgetings.created_at as assignment_created_date',
+        )
+        ->where('timesheetusers.createdby', $teamid)
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->whereBetween('timesheetusers.date', [$startDate->toDateString(), $endDate->toDateString()])
+        ->where('timesheetusers.assignmentgenerate_id', 'OFF100003')
+        ->orderBy('timesheetusers.date', 'DESC')
+        ->get()
+
+        ->map(function ($timesheet) {
+            $promotionCheck = DB::table('teamrolehistory')
+                ->where('teammember_id', $timesheet->createdby)
+                ->first();
+
+            $assignmentDate = $timesheet->assignment_created_date
+                ? Carbon::parse($timesheet->assignment_created_date)
+                : null;
+
+            $promotionDate = $promotionCheck ? Carbon::parse($promotionCheck->created_at) : null;
+
+            // Add computed fields to the object
+            $timesheet->display_staffcode =
+                $promotionCheck && $assignmentDate && $assignmentDate->greaterThan($promotionDate)
+                    ? $promotionCheck->newstaff_code
+                    : $timesheet->staffcode;
+
+            $timesheet->display_partner_code =
+                $promotionCheck && $assignmentDate && $assignmentDate->greaterThan($promotionDate)
+                    ? $timesheet->newstaff_code
+                    : $timesheet->partner_staffcode;
+
+            $timesheet->formatted_date = Carbon::parse($timesheet->date)->format('d-m-Y');
+            $timesheet->day_of_week = Carbon::parse($timesheet->date)->format('l');
+
+            return $timesheet;
+        });
+
+    return view('backEnd.timesheet.totaltraveldays', compact('timesheetData'));
+    //   }
+@endphp
+
+<div class="card-body">
+    @component('backEnd.components.alert')
+    @endcomponent
+    <div class="table-responsive">
+        <table id="examplee" class="table display table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="display: none;">ID</th>
+                    @if (Auth::user()->role_id == 11 ||
+                            Request::is('adminsearchtimesheet') ||
+                            (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                        <th>Employee Name</th>
+                        <th>Employee Code</th>
+                    @endif
+                    <th>Date</th>
+                    <th>Day</th>
+                    <th>Client Name</th>
+                    <th>Client Code</th>
+                    <th>Assignment Name</th>
+                    <th>Assignment ID</th>
+                    <th>Work Item</th>
+                    <th>Location</th>
+                    <th>Partner</th>
+                    <th>Partner Code</th>
+                    <th>Hour</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($timesheetData as $timesheet)
+                    <tr>
+                        <td style="display: none;">{{ $timesheet->id }}</td>
+                        @if (Auth::user()->role_id == 11 ||
+                                Request::is('adminsearchtimesheet') ||
+                                (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                            <td>{{ $timesheet->team_member ?? '' }}</td>
+                            <td>{{ $timesheet->display_staffcode ?? '' }}</td>
+                        @endif
+                        <td>{{ $timesheet->formatted_date }}</td>
+                        <td>{{ $timesheet->day_of_week }}</td>
+                        <td>{{ $timesheet->client_name ?? '' }}</td>
+                        <td>{{ $timesheet->client_code ?? '' }}</td>
+                        <td>
+                            {{ $timesheet->assignment_name ?? '' }}
+                            @if ($timesheet->assignmentname)
+                                ({{ $timesheet->assignmentname }})
+                            @endif
+                        </td>
+                        <td>{{ $timesheet->assignmentgenerate_id ?? '' }}</td>
+                        <td>{{ $timesheet->workitem ?? '' }}</td>
+                        <td>{{ $timesheet->location ?? '' }}</td>
+                        <td>{{ $timesheet->partner_name ?? '' }}</td>
+                        <td>{{ $timesheet->display_partner_code ?? '' }}</td>
+                        <td>{{ $timesheet->hour ?? '' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="13" class="text-center">Data not available</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
 {{--  Start Hare --}}
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
-{{--  Start Hare --}}
-{{-- ! End hare --}}
-{{-- * regarding  --}}
-{{--  Start Hare --}}
+
 <pre>
     
 </pre>

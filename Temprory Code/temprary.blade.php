@@ -1,7 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
+    // // Check for rejoining users
+    $rejoiningDataall = DB::table('teammembers')
+        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+        ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+        ->where('teammembers.id', $user->id)
+        ->select(
+            'teamrolehistory.rejoiningdate',
+            'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+        )
+        ->first();
 
+    if ($rejoiningDataall) {
+        $rejoiningDatestore = $rejoiningDataall->samepostrejoiningdate ?? $rejoiningDataall->rejoiningdate;
+
+        if ($rejoiningDatestore) {
+            $rejoiningDateCarbon = Carbon::parse($rejoiningDatestore);
+
+            if ($lastSubmissionDate) {
+                $lastSubmissionCarbon = Carbon::parse($lastSubmissionDate);
+
+                if (!$lastSubmissionCarbon->greaterThan($rejoiningDateCarbon)) {
+                    $user->last_submission_date = ''; // Skip user
+                }
+            } else {
+                $user->last_submission_date = ''; // Skip user
+            }
+        }
+    }
 {{-- original applylevae --}}
+if ($permotioncheck && $permotioncheck->rejoiningcreated) {
+    // $datadate = Carbon::parse($lastSubmissionDate);
+    // $permotiondate = Carbon::parse($permotioncheck->rejoiningcreated);
+    // if ($datadate->greaterThan($permotiondate)) {
+    //     dd($lastSubmissionDate, 11);
+    // } else {
+    //     dd($lastSubmissionDate, 1100);
+    // }
+
+    // $lastSubmissionDate = Carbon::parse('2024-07-27');
+    // $rejoiningcreated = Carbon::parse('2024-12-02');
+    // $lastSubmissionDate = Carbon::parse('2024-12-02');
+    // $rejoiningcreated = Carbon::parse('2024-07-27');
+
+    $lastSubmissionDate = Carbon::parse('2024-07-27');
+    $rejoiningcreated = Carbon::parse('2024-12-02');
+    // Check rejoiningcreated date greater than lastSubmissionDate
+    if ($lastSubmissionDate->greaterThan($rejoiningcreated)) {
+        dd($lastSubmissionDate, 11);
+    } else {
+        dd($lastSubmissionDate, 1100);
+    }
+}
+
+<table id="examplee" class="display nowrap">
+    <thead>
+        <tr>
+            <th style="display: none;">id</th>
+            <th>Employee Name</th>
+            <th>Staff Code</th>
+            <th>Role</th>
+            <th>Joinig Date</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th><span class="d-none">0</span>01</th>
+            <th><span class="d-none">0</span>02</th>
+            <th><span class="d-none">0</span>03</th>
+            <th><span class="d-none">0</span>04</th>
+            <th><span class="d-none">0</span>05</th>
+            <th><span class="d-none">0</span>06</th>
+            <th><span class="d-none">0</span>07</th>
+            <th><span class="d-none">0</span>08</th>
+            <th><span class="d-none">0</span>09</th>
+            <th><span class="d-none">0</span>10</th>
+            <th><span class="d-none">0</span>11</th>
+            <th><span class="d-none">0</span>12</th>
+            <th><span class="d-none">0</span>13</th>
+            <th><span class="d-none">0</span>14</th>
+            <th><span class="d-none">0</span>15</th>
+            <th><span class="d-none">0</span>16</th>
+            <th><span class="d-none">0</span>17</th>
+            <th><span class="d-none">0</span>18</th>
+            <th><span class="d-none">0</span>19</th>
+            <th><span class="d-none">0</span>20</th>
+            <th><span class="d-none">0</span>21</th>
+            <th><span class="d-none">0</span>22</th>
+            <th><span class="d-none">0</span>23</th>
+            <th><span class="d-none">0</span>24</th>
+            <th><span class="d-none">0</span>25</th>
+            <th><span class="d-none">0</span>26</th>
+            <th><span class="d-none">0</span>27</th>
+            <th><span class="d-none">0</span>28</th>
+            <th><span class="d-none">0</span>29</th>
+            <th><span class="d-none">0</span>30</th>
+            <th><span class="d-none">0</span>31</th>
+            <th>Total Number of days</th>
+            <th>Total Working days</th>
+            <th>Total Casual Leave</th>
+            <th>Total Exam Leave</th>
+            <th>Total Travel</th>
+            <th>Total Offholidays</th>
+            <th>Total Weekend</th>
+            <th>Total Holidays</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($attendanceDatas as $attendanceData)
+            <tr>
+                @php
+                    $permotioncheck = DB::table('teamrolehistory')
+                        ->where('teammember_id', $attendanceData->employee_name)
+                        ->first();
+
+                    $datadate = $attendanceData->fulldate
+                        ? Carbon\Carbon::createFromFormat('Y-m-d', $attendanceData->fulldate)
+                        : null;
+
+                    $permotiondate = null;
+                    if ($permotioncheck) {
+                        $permotiondate = Carbon\Carbon::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $permotioncheck->created_at,
+                        );
+                    }
+
+                @endphp
+                <td style="display: none;">{{ $attendanceData->id }}</td>
+                <td>{{ $attendanceData->team_member }}</td>
+                {{-- <td class="text-center">
+                    {{ $attendanceData->newstaff_code ?? ($attendanceData->staffcode ?? '') }}</td> --}}
+                {{-- <td class="text-center">{{ $attendanceData->final_staff_code }}</td> --}}
+                @if ($permotiondate && $datadate && $datadate->greaterThan($permotiondate))
+                    <td>{{ $permotioncheck->newstaff_code }}</td>
+                @else
+                    <td>{{ $attendanceData->staffcode }}</td>
+                @endif
+                <td>{{ $attendanceData->rolename }}</td>
+                {{-- <td> {{ $attendanceData->joining_date ? date('d-m-Y', strtotime($attendanceData->joining_date)) : 'NA' }}
+                </td> --}}
+                <td> {{ $attendanceData->final_rejoining_date ? date('d-m-Y', strtotime($attendanceData->final_rejoining_date)) : date('d-m-Y', strtotime($attendanceData->joining_date)) }}
+                </td>
+                <td> {{ $attendanceData->month }}</td>
+                <td> {{ $attendanceData->year }}</td>
+                <td> {{ $attendanceData->one ?? '…....' }}</td>
+                <td> {{ $attendanceData->two ?? '…....' }}</td>
+                <td> {{ $attendanceData->three ?? '…....' }}</td>
+                <td> {{ $attendanceData->four ?? '…....' }}</td>
+                <td> {{ $attendanceData->five ?? '…....' }}</td>
+                <td> {{ $attendanceData->six ?? '…....' }}</td>
+                <td> {{ $attendanceData->seven ?? '…....' }}</td>
+                <td> {{ $attendanceData->eight ?? '…....' }}</td>
+                <td> {{ $attendanceData->nine ?? '…....' }}</td>
+                <td> {{ $attendanceData->ten ?? '…....' }}</td>
+                <td> {{ $attendanceData->eleven ?? '…....' }}</td>
+                <td> {{ $attendanceData->twelve ?? '…....' }}</td>
+                <td> {{ $attendanceData->thirteen ?? '…....' }}</td>
+                <td> {{ $attendanceData->fourteen ?? '…....' }}</td>
+                <td> {{ $attendanceData->fifteen ?? '…....' }}</td>
+                <td> {{ $attendanceData->sixteen ?? '…....' }}</td>
+                <td> {{ $attendanceData->seventeen ?? '…....' }}</td>
+                <td> {{ $attendanceData->eighteen ?? '…....' }}</td>
+                <td> {{ $attendanceData->ninghteen ?? '…....' }}</td>
+                <td> {{ $attendanceData->twenty ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentyone ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentytwo ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentythree ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentyfour ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentyfive ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentysix ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentyseven ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentyeight ?? '…....' }}</td>
+                <td> {{ $attendanceData->twentynine ?? '…....' }}</td>
+                <td> {{ $attendanceData->thirty ?? '…....' }}</td>
+                <td> {{ $attendanceData->thirtyone ?? '…....' }}</td>
+
+                <td class="text-center"> {{ $attendanceData->total_no_of_days ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->no_of_days_present ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->casual_leave ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->exam_leave ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->travel ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->offholidays ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->sundaycount ?? '0' }}</td>
+                <td class="text-center"> {{ $attendanceData->holidays ?? '0' }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "pageLength": 100,
+            dom: 'Bfrtip',
+            "order": [
+                // [0, "desc"]
+            ],
+            columnDefs: [{
+                targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+                    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38,
+                    39, 40, 41, 42, 43
+                ],
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Team Attendance',
+                    exportOptions: {
+                        columns: ':visible',
+                        format: {
+                            body: function(data, row, column) {
+                                // Remove hidden leading zeros from the export
+                                return data.replace(/^0+/, '');
+                            }
+                        }
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+
 
 <table id="examplee" class="display nowrap">
     <thead>

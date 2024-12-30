@@ -218,6 +218,7 @@ password - Manoj@123
 Manager : poojakumari@capitall.io
 Password : Manoj@123
 Password : Azaz~12345
+936
 
 
 ZXGBfThUec@2023
@@ -315,6 +316,67 @@ ye 12 table chahiye vsalive se
 
 222222222222222222222222222222222222222222222222222222222
 
+ // $tables = [
+    //   //* timesheets
+    //   'timesheetreport',
+    //   'timesheetrequests',
+    //   'timesheets',
+    //   'timesheetusers',
 
-APP_URL=https://shahidrportfolio.infinityfreeapp.com
-ASSET_URL=https://shahidrportfolio.infinityfreeapp.com/assets
+    //   //* applyleaves
+    //   'applyleaves',
+    //   'leaveapprove',
+    //   'leaverequest',
+
+    //   //* attendances
+    //   'attendances',
+
+    //   //* assignments
+    //   // 'assignmentbudgetings',
+    //   // 'assignmentmappings',
+    //   // 'assignmentteammappings',
+    //   // 'assignments',
+
+    //   //* another tables
+    //   // 'Users',
+    //   // 'teammembers',
+    //   // 'Clients',
+    //   // 'teamrolehistory',
+    //   // 'rejoiningsamepost',
+    // ];
+
+    // foreach ($tables as $table) {
+    //   if (Schema::hasTable($table)) {
+    //     Schema::drop($table);
+    //     echo "'{$table}'.<br>";
+    //   } else {
+    //     echo "'{$table}'.<br>";
+    //   }
+    // }
+    // return response('Tables deleted successfully!', 200);
+
+    // DB::table('timesheetreport')
+    //   ->delete();
+    // DB::table('timesheetrequests')
+    //   ->delete();
+    // DB::table('timesheets')
+    //   ->delete();
+    // DB::table('timesheetusers')
+    //   ->delete();
+
+
+    // DB::table('applyleaves')
+    //   ->delete();
+    // DB::table('leaveapprove')
+    //   ->delete();
+    // DB::table('leaverequest')
+    //   ->delete();
+
+
+    // DB::table('attendances')
+    //   ->delete();
+
+    // dd('hi');
+
+
+ 

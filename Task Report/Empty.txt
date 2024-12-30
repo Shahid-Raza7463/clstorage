@@ -31,8 +31,16 @@ replace  <div class="table-responsive"> tag
 
 
 
+I have received 3 bugs from the client, and I asked them if they had thoroughly tested on their side. They confirmed they had. I then tested the 3 bugs, and they were correct. I also informed the client about it. Therefore, I kindly request you please said to client that any bugs are tested at client end before reporting me becouse maine kai baar use ye bol chuka hu ki aap apne side se test karke mujhe bugs do , as it otherwise wastes my time
+
+I have received 3 bugs from the client, and I asked him if they had thoroughly tested them on their side. He confirmed he had. I then tested the 3 bugs, and All 3 bugs were correct. I also informed the client about this. Therefore, I kindly request you to convey to the client that any bugs should be thoroughly tested on their end before reporting them to me. I have mentioned this to them multiple times, asking them to test on their side first, as it otherwise wastes my time
 
 
+
+Listed 3 Bugs
+1.The total timesheet count on the dashboard is showing incorrectly for Bhaskar Kumar.
+2.The total approved leave count on the dashboard is showing incorrectly for Rahul Singhal
+3.The total timesheet count on the dashboard is showing incorrectly for Supreet Singh.
 
 
 

@@ -739,11 +739,89 @@ Akansha Prakash
 
 
 2222222222222222222222222222222222222222222222222
-1.When a user's timesheet is rejected continuously for more than 8 days, & if the user has submitted or not submitted the Sunday date timesheet....
-2.The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
-3.The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
-4.The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
-5.The user cannot apply for leave on a holiday.
-6.The user cannot apply for leave on a Sunday.
-7.When admin delete save timesheet in that time total hour not reduce (bugs fixed)
-			
+
+1.In attandance module, Some modification on joining date 
+2.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+3.Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
+
+# this is for promotion and rejoining on other post
+ 1.if user worked on attendance as a manager in that case staffcode will be show as a manager if user worked on attendance as a partner in that case staffcode will be show as a partner
+ 2.in joinig date,joining date will be show newest.
+
+you have to check Admin ,partner, manager and staff id
+Steps:-
+1.Navigate to the application
+2.Click on 'Report' dropdown.
+4.click on 'Attendance' hare you can see Joining date column 
+
+
+
+
+
+
+
+
+
+# When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+
+on Admin id
+Steps:-
+1.Navigate to the application
+2.Click on 'dashboard',
+3.Click on 'Team member box'
+4.Click on 'team member name' hyperlink, you can see hare Timesheet Access field.
+
+you have to check partner, manager and staff id
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet.
+4.click on 'Add Timesheet'
+
+
+
+# Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
+  1. If admin inactive karta hai users ko kisi bhi assignment se to vo assignment show nahi hoga us user ko 
+
+on Admin id
+Steps:-
+1.Navigate to the application
+2.Click on 'View All Assignment in Assignment Section',
+3.Click on 'Assignment Id hyperlink',
+4.Go to Teammember list section hare you can see active/inactive button
+
+you have to check manager and staff id
+Steps:-
+1.Navigate to the application
+2.Click on 'dashboard',
+3.Click on 'Open Assignment box' hare will be hide
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Assignment Section',
+
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year,
+
+
+
+this tab only for manager not for staff
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Client List' page.
+4.Click on Client name hyperlink, click on Assignment,
+
+
+
+Keshav Chowdhary		
+780
+
+"2024-12-02"  rejoining date 
+"2024-07-27"  last submission date
+
+bhasker ( timesheet count) supreet(unlocated not consider) rahul (count leave )

@@ -1,0 +1,21 @@
+GIT AND BITBUCKET
+######################################################################################
+i am using this fot bitbucket for first time 
+
+git init
+git clone https://capitall-india-admin@bitbucket.org/capitall-india/vsalive.git
+after that you will get vsalive folder and go inside it and run below command
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://capitall-india-admin@bitbucket.org/capitall-india/vsalive.git
+git push -u origin main
+
+######################################################################################
+for already connected bitbucet then 
+
+git status
+git add .
+git commit -m "first commit"
+git push -u origin main

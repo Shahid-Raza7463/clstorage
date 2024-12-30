@@ -25,11 +25,14 @@ When a user's timesheet is rejected continuously for more than 8 days, if the us
 In attendance module total no of days 0 for october months fixed on vsalive
 Total hour count bugs fixed, bugs no is vs-224
 
+
+vsalocal,vsademo,vsalive ```start
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
+use Illuminate\Http\RedirectResponse;
 
-  public function store(Request $request)
+   public function store(Request $request)
   {
     // dd($request, 23);
     $request->validate([
@@ -98,6 +101,12 @@ app\Http\Controllers\ApplyleaveController.php
       if ($softwarermaked->greaterThan($from)) {
         $output = ['msg' => 'You cannot apply leave before 11-09-2023'];
         return back()->with('statuss', $output);
+      }
+
+      $result = $this->applyleaverestrected($from, $to);
+
+      if ($result instanceof RedirectResponse) {
+        return $result;  // Redirects the user back with the error message.
       }
 
       $rejectedtimesheetdata = DB::table('timesheetusers')
@@ -466,52 +475,13 @@ app\Http\Controllers\ApplyleaveController.php
       }
     }
 
+    $result = $this->applyleaverestrected($from, $to);
 
-    if (auth()->user()->role_id == 15) {
-      // Check if the from or to date falls on Saturday or Sunday
-      $restrictedDays = [Carbon::SATURDAY, Carbon::SUNDAY];
-
-      if (in_array($from->dayOfWeek, $restrictedDays)) {
-        return back()->with('statuss', ['msg' => 'You cannot select the from date on a weekend (Saturday or Sunday)']);
-      }
-
-      if (in_array($to->dayOfWeek, $restrictedDays)) {
-        return back()->with('statuss', ['msg' => 'You cannot select the to date on a weekend (Saturday or Sunday)']);
-      }
-    } else {
-      // Check if either the start or end date falls on a Sunday
-      if ($from->dayOfWeek === Carbon::SUNDAY) {
-        return back()->with('statuss', ['msg' => 'You cannot select from date on Sunday']);
-      }
-
-      if ($to->dayOfWeek === Carbon::SUNDAY) {
-        return back()->with('statuss', ['msg' => 'You cannot select to date on Sunday']);
-      }
+    if ($result instanceof RedirectResponse) {
+      return $result;  // Redirects the user back with the error message.
     }
-
-    // Check if the start date is a holiday
-    $isHolidayFrom = DB::table('holidays')
-      ->whereDate('startdate', '=', $from)
-      ->orWhereDate('enddate', '=', $from)
-      ->exists();
-
-    if ($isHolidayFrom) {
-      return back()->with('statuss', ['msg' => 'You cannot select the from date on a holiday']);
-    }
-
-    // Check if the end date is a holiday
-    $isHolidayTo = DB::table('holidays')
-      ->whereDate('startdate', '=', $to)
-      ->orWhereDate('enddate', '=', $to)
-      ->exists();
-
-    if ($isHolidayTo) {
-      return back()->with('statuss', ['msg' => 'You cannot select the to date on a holiday']);
-    }
-
 
     // If start and end dates are the same, perform additional checks
-
 
     // timesheetcheck 
     $timesheetcheck = DB::table('timesheets')
@@ -1242,7 +1212,7 @@ app\Http\Controllers\ApplyleaveController.php
 
       Mail::send('emails.applyleaveform', $data, function ($msg) use ($data) {
         $msg->to($data['teammemberemail']);
-        $msg->cc('itsupport_delhi@vsa.co.in');
+        // $msg->cc('itsupport_delhi@vsa.co.in');
         $msg->subject('VSA Apply Leave Request');
       });
 
@@ -1256,10 +1226,12 @@ app\Http\Controllers\ApplyleaveController.php
       return back()->withErrors($output)->withInput();
     }
   }
+  
+  
+  
+  
 
-
-
-vsademo done, red line on apply leave page 
+vsademo, vsalive done, red line on apply leave page 
 22222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\applyleave\create.blade.php
 find    @include('backEnd.applyleave.form')
@@ -1276,7 +1248,7 @@ abhi ise update n kare  basically isme admin jab save timesheet delete karta hai
 app\Http\Controllers\TimesheetController.php
 
 
-  public function destroy($id)
+   public function destroy($id)
   {
     try {
       $timesheetdelete = DB::table('timesheetusers')->where('timesheetid', $id)->first();
@@ -1401,7 +1373,7 @@ app\Http\Controllers\TimesheetController.php
         $assignment = Assignmentmapping::where('assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
           ->select('assignment_id')
           ->first();
-
+        // dd($timesheetdelete);
         $teammemberrole =  DB::table('teammembers')
           ->where('id', $timesheetdelete->createdby)
           ->select('team_member', 'role_id')
@@ -1485,12 +1457,15 @@ app\Http\Controllers\TimesheetController.php
 
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
 after store function 
 
-  function applyleaverestrected($from, $to)
+    function applyleaverestrected($from, $to)
   {
     if (auth()->user()->role_id == 15) {
       // Check if the from or to date falls on Saturday or Sunday
@@ -1540,253 +1515,117 @@ after store function
 
 
 
-joining date in attendance ```start vsalocal,demo
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\AttendanceController.php
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php  
 
-   public function adminattendancereport(Request $request)
-    {
-        $teamnid = $request->input('teammemberId');
-        $startdate = Carbon::parse($request->input('startdate'));
-        $enddate = Carbon::parse($request->input('enddate'));
+                                 @if (Auth::user()->role_id == 11)
+                                      <li><a href="{{ url('totaltimeshow') }}">Assignment Time Report</a></li>
+                                      <li><a href="{{ url('permotionrejoiningreport') }}">Permotion/Rejoining
+                                              Report</a></li>
+                                      <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
+                                      </li>
+                                  @endif
+                                  @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 13)
+                                      {{-- <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
+                                      </li> --}}
+                                      <li><a href="{{ url('attendance') }}">Attendance</a></li>
+                                  @endif
+	
 
-        // Convert start and end dates to their respective month numbers like Month number (1-12)
-        $startMonth = $startdate->format('n');
-        $startYear = $startdate->format('Y');
+	
+	
+	
+	
 
-        $endMonth = $enddate->format('n');
-        $endYear = $enddate->format('Y');
-
-        // Retrieve all team members
-        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 13) {
-            $teammembers = DB::table('teammembers')
-                ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
-                ->whereIn('teammembers.role_id', [14, 15, 13, 11])
-                ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
-                ->orderBy('team_member', 'ASC')
-                ->get();
-        } else {
-            $teammembers = DB::table('teammembers')
-                ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
-                ->where('teammembers.id', auth()->user()->teammember_id)
-                ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
-                ->orderBy('team_member', 'ASC')
-                ->get();
-        }
-
-        // Fetch single user data
-        $singleusersearched = DB::table('teammembers')
-            ->where('id', $teamnid)
-            ->select('team_member', 'staffcode', 'id', 'leavingdate', 'joining_date')
-            ->first();
-
-        // Check leaving date validation
-        if ($singleusersearched && $singleusersearched->leavingdate) {
-            $leavingdate = Carbon::parse($singleusersearched->leavingdate);
-            if ($startdate->gt($leavingdate)) {
-                $output = ['msg' => 'User left on ' . $leavingdate->format('d-m-Y') . ', cannot select beyond this date.'];
-                $request->flash();
-                return redirect()->to('attendance')->with('statuss', $output);
-            }
-        }
-
-        // Check joining date validation
-        if ($singleusersearched && $singleusersearched->joining_date) {
-            $joiningdate = Carbon::parse($singleusersearched->joining_date);
-            if ($joiningdate->gt($enddate)) {
-                $output = ['msg' => 'User joined on ' . $joiningdate->format('d-m-Y') . ', cannot select before this date.'];
-                $request->flash();
-                return redirect()->to('attendance')->with('statuss', $output);
-            }
-        }
-
-        // Build attendance query filtered by month
-        // $query = DB::table('attendances')
-        //     ->leftJoin('teammembers', 'teammembers.id', 'attendances.employee_name')
-        //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
-        //     ->leftJoin('roles', 'roles.id', 'teammembers.role_id')
-        //     // ->whereNotNull('attendances.id')
-        //     ->select(
-        //         'attendances.*',
-        //         'teammembers.team_member',
-        //         'teammembers.staffcode',
-        //         'teamrolehistory.newstaff_code',
-        //         'teammembers.employment_status',
-        //         'roles.rolename',
-        //         'teammembers.joining_date'
-        //     );
-
-        // Build attendance query filtered by month
-        $query = DB::table('attendances')
-            ->join('teammembers', 'teammembers.id', '=', 'attendances.employee_name')
-            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
-            ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
-            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
-            ->select([
-                'attendances.*',
-                'teammembers.team_member',
-                'teammembers.staffcode',
-                'teammembers.employment_status',
-                'roles.rolename',
-                // Combine rejoining dates
-                DB::raw('COALESCE(teamrolehistory.newstaff_code, teammembers.staffcode) AS final_staff_code'),
-                // Combine rejoining dates
-                DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate,teamrolehistory.promotion_date) AS final_rejoining_date'),
-                // 'teamrolehistory.promotion_date',
-                'teammembers.joining_date'
-            ]);
-
-        if ($teamnid) {
-            $query->where('attendances.employee_name', $teamnid);
-        }
-
-        // // Filter where the attendance month falls between the start and end month
-        // if ($startMonth && $endMonth) {
-        //     $query->whereBetween(DB::raw('MONTH(STR_TO_DATE(CONCAT(attendances.month, " 1, 2000"), "%M %d, %Y"))'), [$startMonth, $endMonth]);
-        // }
-
-        // Filter attendance records by month and year
-        if ($startMonth && $endMonth && $startYear && $endYear) {
-            $query->whereBetween(DB::raw('MONTH(STR_TO_DATE(CONCAT(attendances.month, " 1, 2000"), "%M %d, %Y"))'), [$startMonth, $endMonth])
-                ->whereBetween('attendances.year', [$startYear, $endYear]);
-        }
-
-        // ordering using month name like Dec,Nov,Oct etc
-        $query->orderBy('attendances.year', 'desc')
-            ->orderBy(DB::raw('MONTH(STR_TO_DATE(CONCAT(attendances.month, " 1, 2000"), "%M %d, %Y"))'), 'desc');
-
-        $attendanceDatas = $query->get();
-        $request->flash();
-        // dd($attendanceDatas);
-
-        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 13) {
-            return view('backEnd.attendance.adminattendance', compact('attendanceDatas', 'teammembers'));
-        } else {
-            return view('backEnd.attendance.teamattendance', compact('attendanceDatas', 'teammembers'));
-        }
-    }
-
-
+							  
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\attendance\adminattendance.blade.php
-find text  $attendanceData->staffcode
+resources\views\backEnd\viewassignment.blade.php 
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);height:250px;">
+
+                            <div class="card-body">
+                                <div class="card-head">
+                                    <b>Assignment Viewer:</b>
+                                    {{-- @if (auth()->user()->role_id != 15)
+                                        <b><a data-toggle="modal" data-target="#exampleModal14"
+                                                class="btn btn-info-soft btn-sm">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </b>
+                                    @endif --}}
+                                </div>
+
+                                <hr>
+                                <div class="table-responsive example">
+                                    <table class="table display table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th class="textfixed">Staff Code</th>
+                                                {{-- <th>Role</th> --}}
+                                                <th>Mobile No</th>
+                                                <th>Patner</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $hasData = false;
+                                            @endphp
+                                            @foreach ($teammemberDatas as $teammemberData)
+                                                @if ($teammemberData->viewerteam == 1)
+                                                    @php
+                                                        $hasData = true;
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="textfixed">{{ $teammemberData->title }}
+                                                            {{ $teammemberData->team_member }}</td>
+                                                        <td>{{ $teammemberData->staffcode }}</td>
+                                                        {{-- <td class="textfixed">
+                                                            @if ($teammemberData->type == 0)
+                                                                <span>Team Leader</span>
+                                                            @else
+                                                                <span>Staff</span>
+                                                            @endif
+                                                        </td> --}}
+                                                        <td class="textfixed">
+                                                            <a
+                                                                href="tel:={{ $teammemberData->mobile_no }}">{{ $teammemberData->mobile_no }}</a>
+                                                        </td>
+                                                        <td class="textfixed">
+                                                            {{ App\Models\Teammember::select('team_member')->where('id', $teammemberData->leadpartner)->first()->team_member ?? '' }}
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                            @if (!$hasData)
+                                                <tr>
+                                                    <td colspan="7" style="text-align: center;">Data not available
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+				
 
 
 
-
-  <td class="text-center">{{ $attendanceData->final_staff_code }}</td>
-  
-
-find text  $attendanceData->joining_date
-
-                                    <td> {{ $attendanceData->final_rejoining_date ? date('d-m-Y', strtotime($attendanceData->final_rejoining_date)) : date('d-m-Y', strtotime($attendanceData->joining_date)) }}
-                                    </td>
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\attendance\teamattendance.blade.php
-find text  $attendanceData->staffcode
-
-        <td class="text-center">{{ $attendanceData->final_staff_code }}</td>
-		
-		
-		
-find text  $attendanceData->joining_date
-
-
-                                               <td> {{ $attendanceData->final_rejoining_date ? date('d-m-Y', strtotime($attendanceData->final_rejoining_date)) : date('d-m-Y', strtotime($attendanceData->joining_date)) }}
-                                    </td>
-
-
-
-
-13-12-24
-exit users ```start
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\TeammemberController.php
-
-Route::get('/changetimesheetaccess/{teamid}/{status}', [TeammemberController::class, 'changetimesheetaccess']);
-
-
-    public function changetimesheetaccess($teamid, $status)
-    {
-        try {
-            if ($status == 0) {
-                DB::table('teammembers')->where('id', $teamid)->update([
-                    'timesheet_access'         =>  1,
-                ]);
-                $output = array('msg' => 'The user can fill the timesheet before 6 PM');
-            } else {
-                DB::table('teammembers')->where('id', $teamid)->update([
-                    'timesheet_access'         =>  0,
-                ]);
-                $output = array('msg' => 'The user cannot fill the timesheet before 6 PM');
-            }
-            return back()->with('success', $output);
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
-            report($e);
-            $output = array('msg' => $e->getMessage());
-            return back()->withErrors($output)->withInput();
-        }
-    }
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\teammember\form.blade.php
- <label class="font-weight-600">Location <span class="tx-danger"></span></label>
- 
-<div class="col-3">
-        <div class="form-group">
-            <label class="font-weight-600">Timesheet Access</label>
-            <div class="access" style="width: fit-content; margin-left: 30px;">
-                @if ($teammember->timesheet_access == 0)
-                    <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
-                        onclick="return confirm('Are you sure you want to Active timesheet access?');">
-                        <span class="btn"
-                            style="background: #37A000;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Inactive</span>
-                    </a>
-                @else
-                    <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
-                        onclick="return confirm('Are you sure you want to Inactive timesheet access?');">
-                        <span class="btn"
-                            style="background: #dc3545;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Active</span>
-                    </a>
-                @endif
-            </div>
-        </div>
-    </div>
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\TimesheetController.php
-
-        $timesheetAccess = DB::table('teammembers')
-          ->where('id', auth()->user()->teammember_id)
-          ->value('timesheet_access');
-
-        $currentDate = Carbon::now()->format('d-m-Y');
-        if ($timesheetAccess == 0  && $currentDate == $request->date && Carbon::now()->hour < 18) {
-          $output = array('msg' => 'You can only fill today timesheet after 6:00 pm');
-          return back()->with('success', $output);
-        }
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-timesheet_access column in teammembers tables after status colum
-exit users ```end
-
-
-notification ```start vsalocal,vsademo
+notification ```start vsalocal,vsademo,vsalive done
 222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\header.blade.php
 if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
 
 
-  $userId = auth()->user()->teammember_id;
+   $userId = auth()->user()->teammember_id;
                     // $clientnotification = DB::table('notifications')
                     //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
                     //         $join
@@ -1807,7 +1646,10 @@ if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
                         ->select('notifications.*', 'notificationreadorunread.status as readstatus')
                         ->whereIn('notifications.id', function ($subquery) {
                             // Subquery to get the latest ID for each duplicate_notifications value
-                            $subquery->from('notifications')->selectRaw('MAX(id) as id')->groupBy('duplicate_notifications');
+                            $subquery
+                                ->from('notifications')
+                                ->selectRaw('MAX(id) as id')
+                                ->groupBy('duplicate_notifications');
                         })
                         ->latest('notifications.created_at')
                         ->paginate(5);
@@ -1822,29 +1664,11 @@ if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
 
 
 
+
+
 } elseif (auth()->user()->role_id == 13) {
 						
-$userId = auth()->user()->teammember_id;
-
-                    // $clientnotification = DB::table('notifications')
-                    //     ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
-                    //     ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
-                    //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
-                    //         $join
-                    //             ->on('notificationreadorunread.notifications_id', 'notifications.id')
-                    //             ->where('notificationreadorunread.readedby', $userId);
-                    //     })
-                    //     ->Where(function ($query) {
-                    //         $query->where('targettype', '3')->orWhere('targettype', '2');
-                    //     })
-                    //     ->orWhere(function ($query) use ($userId) {
-                    //         $query
-                    //             ->where('notificationtargets.teammember_id', $userId)
-                    //             ->where('notificationreadorunread.readedby', $userId);
-                    //     })
-                    //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
-                    //     ->latest()
-                    //     ->paginate(5);
+   $userId = auth()->user()->teammember_id;
 
                     $clientnotification = DB::table('notifications')
                         ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
@@ -1865,7 +1689,9 @@ $userId = auth()->user()->teammember_id;
                         ->select('notifications.*', 'notificationreadorunread.status as readstatus')
                         ->distinct()
                         ->orderBy('notifications.id', 'desc')
-                        ->paginate(5);					
+                        ->paginate(5);			
+	
+	
 	
 	
 	
@@ -1875,22 +1701,11 @@ $userId = auth()->user()->teammember_id;
 2222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\NotificationController.php
 
-     public function index()
+        public function index()
     {
 
         if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
             $userId = auth()->user()->teammember_id;
-            // $notificationDatas = DB::table('notifications')
-            //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
-            //         $join->on('notificationreadorunread.notifications_id', 'notifications.id')
-            //             ->where('notificationreadorunread.readedby', $userId);
-            //     })
-            //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
-            //     ->latest()
-            //     ->distinct()
-            //     ->paginate(20);
-
-
             $notificationDatas = DB::table('notifications')
                 ->leftJoin('notificationreadorunread', function ($join) use ($userId) {
                     $join->on('notificationreadorunread.notifications_id', '=', 'notifications.id')
@@ -1916,26 +1731,6 @@ app\Http\Controllers\NotificationController.php
         } elseif (auth()->user()->role_id == 13) {
 
             $userId = auth()->user()->teammember_id;
-
-            // $notificationDatas = DB::table('notifications')
-            //     ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
-            //     ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
-            //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
-            //         $join->on('notificationreadorunread.notifications_id', 'notifications.id')
-            //             ->where('notificationreadorunread.readedby', $userId);
-            //     })
-            //     ->Where(function ($query) {
-            //         $query->where('targettype', '3')->orWhere('targettype', '2');
-            //     })
-            //     ->orWhere(function ($query) use ($userId) {
-            //         $query->where('notificationtargets.teammember_id', $userId)
-            //             ->where('notificationreadorunread.readedby', $userId);
-            //     })
-            //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
-            //     ->latest()
-            //     ->distinct()
-            //     ->get();
-
             $notificationDatas = DB::table('notifications')
                 ->leftjoin('teammembers', 'teammembers.id', 'notifications.created_by')
                 ->leftjoin('notificationtargets', 'notificationtargets.notification_id', 'notifications.id')
@@ -2073,6 +1868,9 @@ app\Http\Controllers\NotificationController.php
 
 
 
+
+
+
 	
 
 		
@@ -2082,7 +1880,7 @@ elseif (auth()->user()->role_id == 13) {
 
 
  elseif (auth()->user()->role_id == 13) {
-      $authidd = Assignmentteammapping::where('teammember_id', auth()->user()->teammember_id)->select('assignmentmapping_id')->pluck('assignmentmapping_id')->first();
+     $authidd = Assignmentteammapping::where('teammember_id', auth()->user()->teammember_id)->select('assignmentmapping_id')->pluck('assignmentmapping_id')->first();
       $authid = auth()->user()->teammember_id;
 
       // $notificationDatas =  DB::table('notifications')
@@ -2239,7 +2037,10 @@ elseif (auth()->user()->role_id == 13) {
       // total working days end hare 
 
       return view('backEnd.index', compact('opentimesheetrequests', 'openleave', 'tender', 'mentor', 'mentees', 'notification', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
-		
+    
+
+
+
 
 
 
@@ -2347,7 +2148,46 @@ elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15)
 
       //  dd($notificationDatas);
 
-      $assignment =  DB::table('assignmentmappings')
+      // $assignment =  DB::table('assignmentmappings')
+      //   ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      //   ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+      //   ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+      //   // get assignment name only
+      //   ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+      //   ->whereNotIn('clients.id', [33, 32, 34, 29])
+      //   ->select(
+      //     'assignmentbudgetings.client_id',
+      //     'clients.client_name',
+      //     'assignmentbudgetings.assignmentgenerate_id',
+      //     'assignments.assignment_name',
+      //     'assignmentbudgetings.assignmentname'
+      //   )
+      //   // ->where('clients.status', 0)
+      //   ->where('assignmentbudgetings.status', 1)
+      //   ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->take(5)->get();
+
+      // // $assignmentcount = count($assignment);
+
+      // $assignmentcount = DB::table('assignmentmappings')
+      //   ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      //   ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+      //   ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+      //   // get assignment name only
+      //   ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+      //   ->whereNotIn('clients.id', [33, 32, 34, 29])
+      //   ->select(
+      //     'assignmentbudgetings.client_id',
+      //     'clients.client_name',
+      //     'assignmentbudgetings.assignmentgenerate_id',
+      //     'assignments.assignment_name',
+      //     'assignmentbudgetings.assignmentname'
+      //   )
+      //   // ->where('clients.status', 0)
+      //   ->where('assignmentbudgetings.status', 1)
+      //   ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->count();
+
+
+      $assignmentdata =  DB::table('assignmentmappings')
         ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
         ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
         ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
@@ -2363,27 +2203,11 @@ elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15)
         )
         // ->where('clients.status', 0)
         ->where('assignmentbudgetings.status', 1)
-        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->take(5)->get();
-
-      // $assignmentcount = count($assignment);
-
-      $assignmentcount = DB::table('assignmentmappings')
-        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-        // get assignment name only
-        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-        ->whereNotIn('clients.id', [33, 32, 34, 29])
-        ->select(
-          'assignmentbudgetings.client_id',
-          'clients.client_name',
-          'assignmentbudgetings.assignmentgenerate_id',
-          'assignments.assignment_name',
-          'assignmentbudgetings.assignmentname'
-        )
-        // ->where('clients.status', 0)
-        ->where('assignmentbudgetings.status', 1)
-        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->count();
+        ->where('assignmentteammappings.status', 1)
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
+      // dd($assignmentdata);
+      $assignment = $assignmentdata->slice(0, 5);
+      $assignmentcount = count($assignmentdata);
 
       // total working days start using financial year
       $currentDate = Carbon::now();
@@ -2432,7 +2256,10 @@ elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15)
       return view('backEnd.index', compact('notification', 'mentor', 'mentees', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays'));
 
 	  
-	  
+	 
+
+
+	 
 	  
 	  
 	  
@@ -2444,7 +2271,6 @@ elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15)
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\notification\form.blade.php
 replace all code 
-
 
 <div class="row row-sm">
     <div class="col-6">
@@ -2596,26 +2422,32 @@ replace all code
 
 
 
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-notificationcontroller 
+NotificationController 
 
-    public function store(Request $request)
+use Illuminate\Support\Facades\Log;
+
+        public function store(Request $request)
     {
-
+ 
         $request->validate([
             'attachment' => 'nullable|mimes:png,pdf,jpeg,jpg,xls,xlsx|max:4120',
         ], [
             'attachment.max' => 'The file may not be greater than 5 MB.',
         ]);
-
+ 
         // $request->validate([
         //     'attachment' => 'nullable|mimes:png,pdf,jpeg,jpg,xls,xlsx|max:5120',
         // ], [
         //     'attachment.max' => 'The file may not be greater than 5 MB.',
         //     'attachment.mimes' => 'The file must be a type of: png, pdf, jpeg, jpg, xls, xlsx.',
         // ]);
-
-
+ 
+ 
         try {
             $authid = auth()->user()->teammember_id;
             $data = $request->except(['_token']);
@@ -2629,7 +2461,7 @@ notificationcontroller
             } else {
                 $name = '';
             }
-
+ 
             // foreach ($request->targettype as $targetType) {
             //     dd($targetType);
             //     $notification_id =    DB::table('notifications')->insertGetId([
@@ -2652,12 +2484,12 @@ notificationcontroller
             //         ]);
             //     }
             // }
-
-
-
+ 
+ 
+ 
             $duplicatecodemax = DB::table('notifications')->max('duplicate_notifications');
             $maxincreament = $duplicatecodemax ? $duplicatecodemax + 1 : 2001;
-
+ 
             foreach ($request->targettype as $targetType) {
                 $notification_id = DB::table('notifications')->insertGetId([
                     'title'         => $request->title,
@@ -2669,7 +2501,7 @@ notificationcontroller
                     'created_at'    => date('Y-m-d H:i:s'),
                     'updated_at'    => date('Y-m-d H:i:s'),
                 ]);
-
+ 
                 // Check if the targettype is 1 and insert team member IDs
                 if ($targetType == 1 && isset($request->teammember_id)) {
                     foreach ($request->teammember_id as $teammember_id) {
@@ -2682,11 +2514,11 @@ notificationcontroller
                     }
                 }
             }
-
+ 
             // 1 exist or not in array of $request->targettype
             if (in_array(1, $request->targettype)) {
                 $teammembers = Teammember::wherein('id', $request->teammember_id)->pluck('emailid')->toArray();
-
+ 
                 // dd($teammembers);
                 foreach ($teammembers as $teammember) {
                     $data = array(
@@ -2695,30 +2527,36 @@ notificationcontroller
                         'attachment' =>  $request->attachment,
                         'emailid' =>  $teammember,
                     );
-
+ 
                     //   $data['mail']=$teammember;
-
+ 
                     // Mail::send('emails.notificationmail', $data, function ($msg) use ($data) {
                     //     $msg->to($data['emailid']);
                     //     $msg->subject($data['title']);
                     // });
-
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+ 
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+ 
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
             if (in_array(2, $request->targettype)) {
-
+ 
                 $teammembers = Teammember::where('status', 1)->pluck('emailid')->toArray();
                 //    dd($teammembers);
                 foreach ($teammembers as $teammember) {
@@ -2727,21 +2565,25 @@ notificationcontroller
                         'mail_content' =>  $request->mail_content,
                         'emailid' =>  $teammember,
                     );
-
+ 
                     //  $data['mail']=$teammembers;
-
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
             if (in_array(3, $request->targettype)) {
@@ -2752,20 +2594,24 @@ notificationcontroller
                         'mail_content' =>  $request->mail_content,
                         'emailid' =>  $teammember,
                     );
-
-
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+ 
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
             if (in_array(4, $request->targettype)) {
@@ -2776,19 +2622,23 @@ notificationcontroller
                         'mail_content' =>  $request->mail_content,
                         'emailid' =>  $teammember,
                     );
-
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
             if (in_array(5, $request->targettype)) {
@@ -2799,19 +2649,23 @@ notificationcontroller
                         'mail_content' =>  $request->mail_content,
                         'emailid' =>  $teammember,
                     );
-
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
             if (in_array(6, $request->targettype)) {
@@ -2822,18 +2676,23 @@ notificationcontroller
                         'mail_content' =>  $request->mail_content,
                         'emailid' =>  $teammember,
                     );
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
             if (in_array(7, $request->targettype)) {
@@ -2843,25 +2702,29 @@ notificationcontroller
                         'title' =>  $request->title,
                         'mail_content' =>  $request->mail_content,
                         'emailid' =>  $teammember,
-
+ 
                     );
-
-
-                    Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
-                        $msg->to($data['emailid']);
-                        $msg->subject($data['title']);
-
-                        // Attach the file to the email
-                        if ($attachmentPath != '') {
-                            $msg->attach($attachmentPath, [
-                                'as' => $name,
-                                'mime' => 'image/jpeg',
-                            ]);
-                        }
-                    });
+ 
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+ 
+                            // Attach the file to the email
+                            if ($attachmentPath != '') {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => 'image/jpeg',
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
                 }
             }
-
+ 
             $output = array('msg' => 'Sent Successfully');
             return back()->with('success', $output);
         } catch (Exception $e) {
@@ -2879,119 +2742,17 @@ notificationcontroller
 
 
 
-
-
-
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\layouts\includes\leftsidebar.blade.php
-
-                                 @if (Auth::user()->role_id == 11)
-                                      <li><a href="{{ url('totaltimeshow') }}">Assignment Time Report</a></li>
-                                      <li><a href="{{ url('permotionrejoiningreport') }}">Permotion/Rejoining
-                                              Report</a></li>
-                                      <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
-                                      </li>
-                                  @endif
-                                  @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 13)
-                                      {{-- <li><a href="{{ url('assignmentviewer') }}">Assignment Viewer Report </a>
-                                      </li> --}}
-                                      <li><a href="{{ url('attendance') }}">Attendance</a></li>
-                                  @endif
-	
-
-	
-								  
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\viewassignment.blade.php
-
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card" style="box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);height:250px;">
-
-                            <div class="card-body">
-                                <div class="card-head">
-                                    <b>Assignment Viewer:</b>
-                                    {{-- @if (auth()->user()->role_id != 15)
-                                        <b><a data-toggle="modal" data-target="#exampleModal14"
-                                                class="btn btn-info-soft btn-sm">
-                                                <i class="fa fa-plus"></i>
-                                            </a>
-                                        </b>
-                                    @endif --}}
-                                </div>
-
-                                <hr>
-                                <div class="table-responsive example">
-                                    <table class="table display table-bordered table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th class="textfixed">Staff Code</th>
-                                                {{-- <th>Role</th> --}}
-                                                <th>Mobile No</th>
-                                                <th>Patner</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $hasData = false;
-                                            @endphp
-                                            @foreach ($teammemberDatas as $teammemberData)
-                                                @if ($teammemberData->viewerteam == 1)
-                                                    @php
-                                                        $hasData = true;
-                                                    @endphp
-                                                    <tr>
-                                                        <td class="textfixed">{{ $teammemberData->title }}
-                                                            {{ $teammemberData->team_member }}</td>
-                                                        <td>{{ $teammemberData->staffcode }}</td>
-                                                        {{-- <td class="textfixed">
-                                                            @if ($teammemberData->type == 0)
-                                                                <span>Team Leader</span>
-                                                            @else
-                                                                <span>Staff</span>
-                                                            @endif
-                                                        </td> --}}
-                                                        <td class="textfixed">
-                                                            <a
-                                                                href="tel:={{ $teammemberData->mobile_no }}">{{ $teammemberData->mobile_no }}</a>
-                                                        </td>
-                                                        <td class="textfixed">
-                                                            {{ App\Models\Teammember::select('team_member')->where('id', $teammemberData->leadpartner)->first()->team_member ?? '' }}
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @endforeach
-                                            @if (!$hasData)
-                                                <tr>
-                                                    <td colspan="7" style="text-align: center;">Data not available
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <br>
-
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+table update ```111
 duplicate_notifications  int 20, default 0 column in notifications table 
+
+
 
 
 222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\notification\index.blade.php
 
-            <div class="card-body">
+                       <div class="card-body">
                 <div class="table-responsive">
                     @php
                         $allTargets = DB::table('notifications')
@@ -3081,7 +2842,9 @@ resources\views\backEnd\notification\index.blade.php
                 </div>
             </div>
 			
-			
+		
+
+		
 
 222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\BackEndController.php
@@ -3089,7 +2852,7 @@ in index fun
 
 if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12) {
 
-  $notificationDatas =  DB::table('notifications')
+    $notificationDatas =  DB::table('notifications')
         ->join('teammembers', 'teammembers.id', 'notifications.created_by')
         ->select(
           'notifications.*',
@@ -3108,8 +2871,1014 @@ if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12) {
 		
 
 
+
+
 222222222222222222222222222222222222222222222222222222222222222222222222222
 notification ```end
+
+
+
+
+Ensure assignments do not appear for users after being marked inactive on that assignment (bug). ```start
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+
+} elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+$assignment =  DB::table('assignmentmappings')  remove it 
+
+ $assignmentdata =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        // get assignment name only
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->whereNotIn('clients.id', [33, 32, 34, 29])
+        ->select(
+          'assignmentbudgetings.client_id',
+          'clients.client_name',
+          'assignmentbudgetings.assignmentgenerate_id',
+          'assignments.assignment_name',
+          'assignmentbudgetings.assignmentname'
+        )
+        // ->where('clients.status', 0)
+        ->where('assignmentbudgetings.status', 1)
+        ->where('assignmentteammappings.status', 1)
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
+      // dd($assignmentdata);
+      $assignment = $assignmentdata->slice(0, 5);
+      $assignmentcount = count($assignmentdata);
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ReportController.php
+ public function assignment_report()
+ 
+   } else {
+   
+   
+ $assignmentmappingData =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        ->where('assignmentbudgetings.status', '1')
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        ->where('assignmentteammappings.status', 1)
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentteammappings.teamhour',
+        )->get();
+
+
+      $assignmentmappingcloseData =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        ->where('assignmentteammappings.status', 1)
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentteammappings.teamhour',
+        )->get();
+
+      return view('backEnd.report.assignmentreport', compact('assignmentmappingData', 'assignmentmappingcloseData'));
+    
+
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+
+} elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+
+
+ $assignmentmappingData =  DB::table('assignmentmappings')
+                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
+                // ->where('clients.status', 0)
+                ->whereNotIn('clients.id', [33, 32, 34, 29])
+                ->where('assignmentbudgetings.status', 1)
+                // hide inactive client
+                ->where('assignmentteammappings.status', 1)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
+
+            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
+      
+
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ClientController.php
+   } elseif (auth()->user()->role_id == 14) {
+   
+
+
+
+   $clientDatas = DB::table('assignmentmappings')
+                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->select('clients.*')
+                ->where('clients.status', 1)
+                ->where('assignmentteammappings.status', 1)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
+            // dd($clientDatas);
+            return view('backEnd.client.folderwise', compact('clientDatas'));
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ClientController.php
+  public function viewClient($id)
+  
+    if (auth()->user()->role_id == 11 || auth()->user()->role_id == 13) {
+	
+
+   } else {
+   
+   
+   remove this  $clientassignment =  DB::table('assignmentmappings')
+   
+
+   // dd(auth()->user()->teammember_id);
+            $clientassignment =  DB::table('assignmentmappings')
+                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->where('assignmentbudgetings.client_id', $id)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->where('assignmentteammappings.status', 1)
+                ->select(
+                    'assignmentmappings.*',
+                    'assignmentbudgetings.duedate',
+                    'assignmentbudgetings.assignmentname',
+                    'assignmentbudgetings.status',
+                    'assignments.assignment_name',
+                    'clients.client_code',
+                    'clients.client_name'
+                )->distinct()->get();
+
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+index function 
+  } elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+
+
+    $assignmentmappingData =  DB::table('assignmentmappings')
+                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
+                // ->where('clients.status', 0)
+                ->whereNotIn('clients.id', [33, 32, 34, 29])
+                ->where('assignmentbudgetings.status', 1)
+                // hide inactive client
+                ->where('assignmentteammappings.status', 1)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
+
+            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
+    
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+function yearWise(Request $request)
+
+// assrejected```
+
+
+  $assignmentmappingData =  DB::table('assignmentmappings')
+                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->where('clients.id', $request->clientid)
+                ->where('assignmentmappings.year', $request->year)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                // status 1 is active  so that i can active or inactive assignment
+                ->where('assignmentteammappings.status', 1)
+                ->select(
+                    'assignmentmappings.*',
+                    'assignmentbudgetings.duedate',
+                    'assignmentbudgetings.assignmentname',
+                    'assignments.assignment_name',
+                    'clients.client_name',
+                    'clients.client_code',
+                )->distinct()->get();
+            // assrejected
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+
+       public function  assignmentreject($id, $status, $teamid)
+    {
+        // dd($status);
+        try {
+            if ($status == 1) {
+                DB::table('assignmentteammappings')->where('id', $id)->update([
+                    'status'   => 1,
+                ]);
+
+                $output = array('msg' => 'Active Teammember From this Assignment Successfully');
+            } else {
+                //   Assignment inactive
+                DB::table('assignmentteammappings')->where('id', $id)->update([
+                    'status'   => 0,
+                ]);
+
+                //   Assignment inactive mail to user
+                $assignmentmappingId = DB::table('assignmentteammappings')->where('id', $id)->select('assignmentmapping_id')->first();
+                $assignmentgenerateId = DB::table('assignmentmappings')->where('id', $assignmentmappingId->assignmentmapping_id)->select('assignmentgenerate_id')->first();
+                $assignmentname = DB::table('assignmentbudgetings')->where('assignmentgenerate_id', $assignmentgenerateId->assignmentgenerate_id)->select('assignmentname', 'client_id')->first();
+                $clientname = DB::table('clients')->where('id', $assignmentname->client_id)->select('client_name')->first();
+                $teammname = DB::table('teammembers')
+                    ->where('teammembers.id', $teamid)
+                    ->first();
+
+                $data = array(
+                    'assignmentgenerateId' =>  $assignmentgenerateId->assignmentgenerate_id,
+                    'clientname' =>  $clientname->client_name,
+                    'assignmentname' =>  $assignmentname->assignmentname,
+                    'emailid' =>  $teammname->emailid,
+                    'teammember_name' => $teammname->team_member,
+                );
+
+                Mail::send('emails.assignmentrejected', $data, function ($msg) use ($data) {
+                    $msg->to([$data['emailid']]);
+                    $msg->subject('Your Assignment rejected || ' . $data['assignmentname'] . ' / ' . $data['assignmentgenerateId']);
+                });
+                //   Assignment inactive mail to user end hare 
+                $output = array('msg' => 'Inactive Teammember From this Assignment Successfully');
+            }
+            return back()->with('statuss', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+
+                              <div class="row">
+                    <div class="col-md-12">
+                        <div class="card" style="box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);height:250px;">
+                            <div class="card-body">
+                                <div class="card-head">
+                                    <b>Teammember List:</b>
+                                    @if (auth()->user()->role_id != 15)
+                                        <b><a data-toggle="modal" data-target="#exampleModal14"
+                                                class="btn btn-info-soft btn-sm">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </b>
+                                    @endif
+                                </div>
+
+                                <hr>
+                                <div class="table-responsive example">
+                                    <table class="table display table-bordered table-striped table-hover ">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th class="textfixed">Staff Code</th>
+                                                <th>Role</th>
+                                                <th>Mobile No</th>
+                                                <th class="textfixed">Total Hour</th>
+                                                <th>Patner</th>
+                                                @if (auth()->user()->role_id == 13 || auth()->user()->role_id == 11)
+                                                    <th>Status</th>
+                                                @endif
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $hasData = false;
+                                            @endphp
+                                            @foreach ($teammemberDatas as $teammemberData)
+                                                @if ($teammemberData->viewerteam == 0)
+                                                    @php
+                                                        $hasData = true;
+                                                    @endphp
+                                                    <tr>
+                                                        {{-- @php
+                                                            dd($teammemberData);
+                                                            $totalhour = DB::table('timesheetusers')
+                                                                ->leftJoin(
+                                                                    'teammembers',
+                                                                    'teammembers.id',
+                                                                    'timesheetusers.createdby',
+                                                                )
+                                                                ->where(
+                                                                    'timesheetusers.assignmentgenerate_id',
+                                                                    $teammemberData->assignmentgenerateid,
+                                                                )
+                                                                ->where('timesheetusers.createdby', $teammemberData->id)
+                                                                ->select(DB::raw('SUM(totalhour) as total_hours'))
+                                                                ->first();
+                                
+                                                            $patnername = DB::table('assignmentmappings')
+                                                                ->leftJoin(
+                                                                    'teammembers',
+                                                                    'teammembers.id',
+                                                                    'assignmentmappings.leadpartner',
+                                                                )
+                                                                ->where(
+                                                                    'assignmentgenerate_id',
+                                                                    $teammemberData->assignmentgenerateid,
+                                                                )
+                                                                ->select('teammembers.team_member')
+                                                                ->first();
+                                                        @endphp --}}
+                                                        <td class="textfixed">{{ $teammemberData->title }}
+                                                            {{ $teammemberData->team_member }}
+
+                                                        </td>
+                                                        <td>{{ $teammemberData->staffcode }}
+                                                        </td>
+                                                        <td class="textfixed">
+                                                            @if ($teammemberData->type == 0)
+                                                                <span>Team Leader</span>
+                                                            @else
+                                                                <span>Staff</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="textfixed"><a
+                                                                href="tel:={{ $teammemberData->mobile_no }}">{{ $teammemberData->mobile_no }}</a>
+                                                        </td>
+                                                        {{-- <td>{{ $totalhour->total_hours ?? 0 }}</td> --}}
+                                                        {{-- <td>{{ $patnername->team_member }}</td> --}}
+                                                        <td>{{ $teammemberData->teamhour ?? 0 }}</td>
+                                                        </td>
+                                                        <td class="textfixed">
+                                                            {{ App\Models\Teammember::select('team_member')->where('id', $teammemberData->leadpartner)->first()->team_member ?? '' }}
+                                                        </td>
+                                                        @if (auth()->user()->role_id == 13 || auth()->user()->role_id == 11)
+                                                            <td>
+                                                                @if ($teammemberData->assignmentteammappingsStatus == 0)
+                                                                    <a href="{{ url('/assignment/reject/' . $teammemberData->assignmentteammappingsId . '/1/' . $teammemberData->id) }}"
+                                                                        onclick="return confirm('Are you sure you want to Active this teammember?');">
+                                                                        <button class="btn btn-danger" data-toggle="modal"
+                                                                            style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px;"
+                                                                            data-target="#requestModal">Inactive</button>
+                                                                    </a>
+                                                                @else
+                                                                    <a href="{{ url('/assignment/reject/' . $teammemberData->assignmentteammappingsId . '/0/' . $teammemberData->id) }}"
+                                                                        onclick="return confirm('Are you sure you want to Inactive this teammember?');">
+                                                                        <button class="btn btn-primary" data-toggle="modal"
+                                                                            style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px;"
+                                                                            data-target="#requestModal">Active</button>
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+                                                        @endif
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                            @if (!$hasData)
+                                                <tr>
+                                                    <td colspan="7" style="text-align: center;">Data not available</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                                <div class="modal fade" id="exampleModal14" tabindex="-1" role="dialog"
+                                    aria-labelledby="exampleModalLabel4" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <form id="detailsForm" method="post" action="{{ url('teammapping/update') }}"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title font-weight-600" id="exampleModalLabel4">Add Team
+                                                        Member</h5>
+                                                    <div>
+                                                        <ul>
+                                                            @foreach ($errors->all() as $e)
+                                                                <li style="color:red;">{{ $e }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                {{-- <div class="modal-body">
+                                                    <div class="details-form-field form-group row">
+                                                        <div class="col-6">
+                                                            <div class="form-group">
+                                                                <label class="font-weight-600">Name</label>
+                                                                <select class="language form-control"
+                                                                    id="exampleFormControlSelect1" name="teammember_id">
+                                                                    <option value="">Please Select One</option>
+                                                                    @foreach ($teammemberall as $teammemberData)
+                                                                        <option value="{{ $teammemberData->id }}">
+                                                                            {{ $teammemberData->team_member }}
+                                                                            ({{ $teammemberData->staffcode }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <input type="text" hidden name="assignmentmapping_id"
+                                                                    value="{{ $assignmentbudgetingDatas->id }}"
+                                                                    class=" form-control" placeholder="Enter Client Name">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-5">
+                                                            <div class="form-group">
+                                                                <label class="font-weight-600">Type</label>
+                                                                <select class="form-control key" id="key"
+                                                                    name="type">
+                                                                    <option value="">Please Select One</option>
+                                                                    <option value="0">Team Leader</option>
+                                                                    <option value="2">Staff</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> --}}
+                                                <div class="modal-body">
+                                                    <div class="details-form-field form-group row">
+                                                        <div
+                                                            class="col-{{ $assignmentbudgetingDatas->status == 1 ? '6' : '12' }}">
+                                                            <div class="form-group">
+                                                                <label class="font-weight-600">Name</label>
+                                                                <select class="language form-control"
+                                                                    id="exampleFormControlSelect1" name="teammember_id">
+                                                                    <option value="">Please Select One</option>
+                                                                    @foreach ($teammemberall as $teammemberData)
+                                                                        <option value="{{ $teammemberData->id }}">
+                                                                            {{ $teammemberData->team_member }}
+                                                                            ({{ $teammemberData->staffcode }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                <input type="hidden" name="assignmentmapping_id"
+                                                                    value="{{ $assignmentbudgetingDatas->id }}"
+                                                                    class="form-control">
+                                                            </div>
+                                                        </div>
+
+                                                        @if ($assignmentbudgetingDatas->status == 1)
+                                                            <div class="col-5">
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-600">Type</label>
+                                                                    <select class="form-control key" id="key"
+                                                                        name="type">
+                                                                        <option value="">Please Select One</option>
+                                                                        <option value="0">Team Leader</option>
+                                                                        <option value="2">Staff</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            <input type="hidden" name="type" value="2"
+                                                                class="form-control">
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Save</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentrejected.blade.php
+
+<b>Dear {{ $teammember_name ?? '' }}</b>
+<br><br>
+<p>Your Assignment rejected.</p>
+<br>
+<p>Thanks and Regards<br>Admin<br>V Sankar Aiyar & Co.</p>
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ReportController.php
+
+
+   public function assignment_report()
+  {
+    $permotioncheck = DB::table('teamrolehistory')
+      ->where('teammember_id', auth()->user()->teammember_id)->first();
+
+    if (auth()->user()->role_id == 11) {
+      $assignmentmappingData =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentbudgetings.status', '1')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code'
+        )
+        ->get();
+      $assignmentmappingcloseData =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentbudgetings.status', '0')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code'
+        )
+        ->get();
+      return view('backEnd.report.assignmentreport', compact('assignmentmappingData', 'assignmentmappingcloseData'));
+    } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+      $assignmentmappingDatabefore =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        ->where('assignmentbudgetings.status', '1')
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentteammappings.teamhour',
+        )->get();
+
+
+
+      $assignmentmappingOpenleadpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '1')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.leadpartner',
+        )
+        ->get();
+
+      $assignmentmappingOpenotherpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '1')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.otherpartner',
+
+        )
+        ->get();
+      $assignmentmappingData = $assignmentmappingOpenotherpartner->merge($assignmentmappingOpenleadpartner)->merge($assignmentmappingDatabefore);
+
+      $assignmentmappingcloseDatabefore =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentteammappings.teamhour',
+        )->get();
+
+      // dd($assignmentmappingData);
+      $assignmentmappingClosedleadpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.leadpartner',
+        )->get();
+
+      $assignmentmappingClosedotherpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.otherpartner',
+        )->get();
+
+      $assignmentmappingcloseData =       $assignmentmappingClosedotherpartner->merge($assignmentmappingClosedleadpartner)->merge($assignmentmappingcloseDatabefore);
+
+      // dd($assignmentmappingData);
+      return view('backEnd.report.assignmentreport', compact('assignmentmappingData', 'assignmentmappingcloseData'));
+    } elseif (auth()->user()->role_id == 13) {
+
+      $assignmentmappingOpenleadpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '1')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.leadpartner',
+        )
+        ->get();
+
+      $assignmentmappingOpenotherpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '1')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.otherpartner',
+
+        )
+        ->get();
+
+      $assignmentmappingData = $assignmentmappingOpenotherpartner->merge($assignmentmappingOpenleadpartner);
+
+      // dd($assignmentmappingData);
+      $assignmentmappingClosedleadpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.leadpartner',
+        )->get();
+
+      $assignmentmappingClosedotherpartner =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->where('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        //------------------- Shahid's code start---------------------
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.otherpartner',
+        )->get();
+
+      $assignmentmappingcloseData = $assignmentmappingClosedotherpartner->merge($assignmentmappingClosedleadpartner);
+      // dd($assignmentmappingcloseData);
+      return view('backEnd.report.assignmentreport', compact('assignmentmappingData', 'assignmentmappingcloseData'));
+    } else {
+
+      $assignmentmappingData =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        ->where('assignmentbudgetings.status', '1')
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        ->where('assignmentteammappings.status', 1)
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentteammappings.teamhour',
+        )->get();
+
+
+      $assignmentmappingcloseData =  DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        ->where('assignmentbudgetings.status', '0')
+        ->where('assignmentteammappings.status', 1)
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentteammappings.teamhour',
+        )->get();
+
+      return view('backEnd.report.assignmentreport', compact('assignmentmappingData', 'assignmentmappingcloseData'));
+    }
+  }
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+Ensure assignments do not appear for users after being marked inactive on that assignment (bug). ```end hare
+
+
+above all code uploded on vsalocal,vsademo,vsalive ```end
+
+
+exit users ```start hare second part
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+Route::get('/changetimesheetaccess/{teamid}/{status}', [TeammemberController::class, 'changetimesheetaccess']);
+
+
+    public function changetimesheetaccess($teamid, $status)
+    {
+        try {
+            if ($status == 0) {
+                DB::table('teammembers')->where('id', $teamid)->update([
+                    'timesheet_access'         =>  1,
+                ]);
+                $output = array('msg' => 'The user can fill the timesheet before 6 PM');
+            } else {
+                DB::table('teammembers')->where('id', $teamid)->update([
+                    'timesheet_access'         =>  0,
+                ]);
+                $output = array('msg' => 'The user cannot fill the timesheet before 6 PM');
+            }
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+ <label class="font-weight-600">Location <span class="tx-danger"></span></label>
+ 
+<div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Timesheet Access</label>
+            <div class="access" style="width: fit-content; margin-left: 30px;">
+                @if ($teammember->timesheet_access == 0)
+                    <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
+                        onclick="return confirm('Are you sure you want to Active timesheet access?');">
+                        <span class="btn"
+                            style="background: #37A000;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Inactive</span>
+                    </a>
+                @else
+                    <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
+                        onclick="return confirm('Are you sure you want to Inactive timesheet access?');">
+                        <span class="btn"
+                            style="background: #dc3545;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Active</span>
+                    </a>
+                @endif
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+        $timesheetAccess = DB::table('teammembers')
+          ->where('id', auth()->user()->teammember_id)
+          ->value('timesheet_access');
+
+        $currentDate = Carbon::now()->format('d-m-Y');
+        if ($timesheetAccess == 0  && $currentDate == $request->date && Carbon::now()->hour < 18) {
+          $output = array('msg' => 'You can only fill today timesheet after 6:00 pm');
+          return back()->with('success', $output);
+        }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+table update 
+timesheet_access int 20 default 0 column in teammembers tables after status colum
+
+
+222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+
+     @if (Request::is('teammember/*/edit'))
+        <div class="col-3">
+            <div class="form-group">
+                <label class="font-weight-600">Timesheet Access</label>
+                <div class="access" style="width: fit-content; margin-left: 30px;">
+                    @if ($teammember->timesheet_access == 0)
+                        <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
+                            onclick="return confirm('Are you sure you want to Active timesheet access?');">
+                            <span class="btn"
+                                style="background: #37A000;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Inactive</span>
+                        </a>
+                    @else
+                        <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
+                            onclick="return confirm('Are you sure you want to Inactive timesheet access?');">
+                            <span class="btn"
+                                style="background: #dc3545;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Active</span>
+                        </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+
+remove comment it
+
+        {{-- @component('backEnd.components.alert')
+        @endcomponent --}}
+
+
+exit users ```end
+
+
 
 joining date modification ```start
 222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -3239,6 +4008,9 @@ app\Http\Controllers\AttendanceController.php
         }
     }
 
+
+
+
 222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\attendance\adminattendance.blade.php
 
@@ -3322,6 +4094,8 @@ resources\views\backEnd\attendance\adminattendance.blade.php
                                     <td class="text-center"> {{ $attendanceData->holidays ?? '0' }}</td>
                                 </tr>
                             @endforeach
+
+
 
 
 
@@ -3409,224 +4183,10 @@ resources\views\backEnd\attendance\teamattendance.blade.php
                             @endforeach
 
 
-Ensure assignments do not appear for users after being marked inactive on that assignment (bug). ```start
-222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\BackEndController.php
-
-} elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
-$assignment =  DB::table('assignmentmappings')  remove it 
-
-
-$assignmentdata =  DB::table('assignmentmappings')
-        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-        // get assignment name only
-        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-        ->whereNotIn('clients.id', [33, 32, 34, 29])
-        ->select(
-          'assignmentbudgetings.client_id',
-          'clients.client_name',
-          'assignmentbudgetings.assignmentgenerate_id',
-          'assignments.assignment_name',
-          'assignmentbudgetings.assignmentname'
-        )
-        // ->where('clients.status', 0)
-        ->where('assignmentbudgetings.status', 1)
-        ->where('assignmentteammappings.status', 1)
-        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
-
-      $assignment = $assignmentdata->slice(0, 5);
-      $assignmentcount = count($assignmentdata);
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ReportController.php
-
-   } else {
-   
-   
- $assignmentmappingData =  DB::table('assignmentmappings')
-        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-        ->where('assignmentbudgetings.status', '1')
-        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-        ->where('assignmentteammappings.status', 1)
-        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
-        ->select(
-          'assignmentmappings.*',
-          'assignmentbudgetings.duedate',
-          'assignmentbudgetings.assignmentname',
-          'assignmentbudgetings.status',
-          'assignments.assignment_name',
-          'clients.client_name',
-          'clients.client_code',
-          'assignmentteammappings.teamhour',
-        )->get();
-
-
-      $assignmentmappingcloseData =  DB::table('assignmentmappings')
-        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-        ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-        ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-        ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-        ->where('assignmentbudgetings.status', '0')
-        ->where('assignmentteammappings.status', 1)
-        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
-        ->select(
-          'assignmentmappings.*',
-          'assignmentbudgetings.duedate',
-          'assignmentbudgetings.assignmentname',
-          'assignmentbudgetings.status',
-          'assignments.assignment_name',
-          'clients.client_name',
-          'clients.client_code',
-          'assignmentteammappings.teamhour',
-        )->get();
 
 
 
-222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\AssignmentmappingController.php
-
-} elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
-
-
- $assignmentmappingData =  DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                // ->where('clients.status', 0)
-                ->whereNotIn('clients.id', [33, 32, 34, 29])
-                ->where('assignmentbudgetings.status', 1)
-                // hide inactive client
-                ->where('assignmentteammappings.status', 1)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
-
-
-
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ClientController.php
-   } elseif (auth()->user()->role_id == 14) {
-   
-
-
-
-         $clientDatas =      DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->select('clients.*')
-                ->where('clients.status', 1)
-                ->where('assignmentteammappings.status', 1)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
-            // dd($clientDatas);
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ClientController.php
-    $clientassignment =  DB::table('assignmentmappings')
-
-   } else {
-   
-   
-
-  // dd(auth()->user()->teammember_id);
-            $clientassignment =  DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-                ->where('assignmentbudgetings.client_id', $id)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-                ->where('assignmentteammappings.status', 1)
-                ->select(
-                    'assignmentmappings.*',
-                    'assignmentbudgetings.duedate',
-                    'assignmentbudgetings.assignmentname',
-                    'assignmentbudgetings.status',
-                    'assignments.assignment_name',
-                    'clients.client_code',
-                    'clients.client_name'
-                )->distinct()->get();
-
-            // dd($clientassignment);
-
-
-2222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\AssignmentmappingController.php
-index function 
-  } elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
-
-
-    $assignmentmappingData =  DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                // ->where('clients.status', 0)
-                ->whereNotIn('clients.id', [33, 32, 34, 29])
-                ->where('assignmentbudgetings.status', 1)
-                // hide inactive client
-                ->where('assignmentteammappings.status', 1)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\AssignmentmappingController.php
-function yearWise(Request $request)
-
- } else {
-
-
-  $assignmentmappingData =  DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-                ->where('clients.id', $request->clientid)
-                ->where('assignmentmappings.year', $request->year)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-                // status 1 is active  so that i can active or inactive assignment
-                ->where('assignmentteammappings.status', 1)
-                ->select(
-                    'assignmentmappings.*',
-                    'assignmentbudgetings.duedate',
-                    'assignmentbudgetings.assignmentname',
-                    'assignments.assignment_name',
-                    'clients.client_name',
-                    'clients.client_code',
-                )->distinct()->get();
-
-
-end hare 
-222222222222222222222222222222222222222222222222222222222222222222222222222
-
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
-
-
-
-222222222222222222222222222222222222222222222222222222222222222222222222222
+joining date modification ```end hare
 
 
 

@@ -8,6 +8,7 @@
 
 class ZipController extends Controller
 {
+      // -----------------------------30-12-2024------------------------------------------
   public function store(Request $request) {
 //*
 // Start Hare
@@ -31,16 +32,314 @@ class ZipController extends Controller
 
 //*
 // Start Hare
+ // public function totaltraveldays(Request $request, $teamid)
+  // {
+
+  //   // total working days start using financial year
+  //   $currentDate = Carbon::now();
+  //   $currentMonth = $currentDate->format('F');
+  //   if ($currentDate->month >= 4) {
+  //     // Current year financial year
+  //     $startDate = Carbon::create($currentDate->year, 4, 1);
+  //     $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+  //   } else {
+  //     // Previous year financial year
+  //     $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+  //     $endDate = Carbon::create($currentDate->year, 3, 31);
+  //   }
+
+  //   $query = DB::table('timesheetusers')
+  //     ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+  //     ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+  //     ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+  //     ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+  //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+  //     ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+  //     ->select(
+  //       'timesheetusers.*',
+  //       'assignments.assignment_name',
+  //       'clients.client_name',
+  //       'clients.client_code',
+  //       'teammembers.team_member',
+  //       'teammembers.staffcode',
+  //       'patnerid.team_member as patnername',
+  //       'patnerid.staffcode as patnerstaffcode',
+  //       'assignmentbudgetings.assignmentname',
+  //       'teamrolehistory.newstaff_code',
+  //       'assignmentbudgetings.created_at as assignmentcreateddate'
+  //     )
+  //     ->where('timesheetusers.createdby', $teamid)
+  //     ->whereIn('timesheetusers.status', [1, 2, 3])
+  //     ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+  //     // Get only travel data
+  //     ->whereIn('timesheetusers.assignmentgenerate_id', ['OFF100003'])
+  //     ->orderBy('timesheetusers.date', 'DESC');
+
+  //   // Apply role-specific filters if necessary
+  //   if (auth()->user()->role_id == 13) {
+  //     // Add any specific conditions or modifications for role_id 13 if needed.
+  //   }
+
+  //   $timesheetData = $query->get();
+  //   return view('backEnd.timesheet.totaltraveldays', compact('timesheetData'));
+  // }
+
+  // public function totaltraveldays(Request $request, $teamid)
+  // {
+  //   // Define the financial year start and end dates
+  //   $currentDate = Carbon::now();
+  //   $startDate = ($currentDate->month >= 4)
+  //     ? Carbon::create($currentDate->year, 4, 1)
+  //     : Carbon::create($currentDate->year - 1, 4, 1);
+  //   $endDate = ($currentDate->month >= 4)
+  //     ? Carbon::create($currentDate->year + 1, 3, 31)
+  //     : Carbon::create($currentDate->year, 3, 31);
+
+  //   // Fetch necessary data
+  //   $timesheetData = DB::table('timesheetusers')
+  //     ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+  //     ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+  //     ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+  //     ->leftJoin('teammembers as partner', 'partner.id', 'timesheetusers.partner')
+  //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', 'partner.id')
+  //     ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+  //     ->select(
+  //       'timesheetusers.*',
+  //       'assignments.assignment_name',
+  //       'clients.client_name',
+  //       'clients.client_code',
+  //       'teammembers.team_member',
+  //       'teammembers.staffcode',
+  //       'partner.team_member as partner_name',
+  //       'partner.staffcode as partner_staffcode',
+  //       'assignmentbudgetings.assignmentname',
+  //       'teamrolehistory.newstaff_code',
+  //       'assignmentbudgetings.created_at as assignment_created_date'
+  //     )
+  //     ->where('timesheetusers.createdby', $teamid)
+  //     ->whereIn('timesheetusers.status', [1, 2, 3])
+  //     ->whereBetween('timesheetusers.date', [$startDate->toDateString(), $endDate->toDateString()])
+  //     ->where('timesheetusers.assignmentgenerate_id', 'OFF100003')
+  //     ->orderBy('timesheetusers.date', 'DESC')
+  //     ->get()
+
+  //     ->map(function ($timesheet) {
+  //       $promotionCheck = DB::table('teamrolehistory')
+  //         ->where('teammember_id', $timesheet->createdby)
+  //         ->first();
+
+  //       $assignmentDate = $timesheet->assignment_created_date
+  //         ? Carbon::parse($timesheet->assignment_created_date)
+  //         : null;
+
+  //       $promotionDate = $promotionCheck
+  //         ? Carbon::parse($promotionCheck->created_at)
+  //         : null;
+
+  //       // Add computed fields to the object
+  //       $timesheet->display_staffcode = ($promotionCheck && $assignmentDate && $assignmentDate->greaterThan($promotionDate))
+  //         ? $promotionCheck->newstaff_code
+  //         : $timesheet->staffcode;
+
+  //       $timesheet->display_partner_code = ($promotionCheck && $assignmentDate && $assignmentDate->greaterThan($promotionDate))
+  //         ? $timesheet->newstaff_code
+  //         : $timesheet->partner_staffcode;
+
+  //       $timesheet->formatted_date = Carbon::parse($timesheet->date)->format('d-m-Y');
+  //       $timesheet->day_of_week = Carbon::parse($timesheet->date)->format('l');
+
+  //       return $timesheet;
+  //     });
+
+  //   return view('backEnd.timesheet.totaltraveldays', compact('timesheetData'));
+  // }
+
+  // public function totaltraveldays(Request $request, $teamid)
+  // {
+  //   $currentDate = Carbon::now();
+  //   $startDate = ($currentDate->month >= 4)
+  //     ? Carbon::create($currentDate->year, 4, 1)
+  //     : Carbon::create($currentDate->year - 1, 4, 1);
+  //   $endDate = $startDate->copy()->addYear()->subDay();
+
+  //   $timesheetData = DB::table('timesheetusers')
+  //     ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+  //     ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+  //     ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+  //     ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+  //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+  //     ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+  //     ->select(
+  //       'timesheetusers.*',
+  //       'assignments.assignment_name',
+  //       'clients.client_name',
+  //       'clients.client_code',
+  //       'teammembers.team_member',
+  //       'teammembers.staffcode',
+  //       'patnerid.team_member as patnername',
+  //       'patnerid.staffcode as patnerstaffcode',
+  //       'assignmentbudgetings.assignmentname',
+  //       'teamrolehistory.newstaff_code',
+  //       'assignmentbudgetings.created_at as assignmentcreateddate'
+  //     )
+  //     ->where('timesheetusers.createdby', $teamid)
+  //     ->whereIn('timesheetusers.status', [1, 2, 3])
+  //     ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+  //     ->whereIn('timesheetusers.assignmentgenerate_id', ['OFF100003'])
+  //     ->orderBy('timesheetusers.date', 'DESC')
+  //     ->get();
+
+  //   // Precompute counts
+  //   $timesheetCounts = DB::table('timesheetusers')
+  //     ->select('timesheetid', DB::raw('COUNT(*) as count'))
+  //     ->groupBy('timesheetid')
+  //     ->pluck('count', 'timesheetid');
+
+  //   return view('backEnd.timesheet.totaltraveldays', compact('timesheetData', 'timesheetCounts'));
+  // }
+
+
+  // public function totaltraveldays(Request $request, $teamid)
+  // {
+  //   $currentDate = Carbon::now();
+  //   $startDate = ($currentDate->month >= 4)
+  //     ? Carbon::create($currentDate->year, 4, 1)
+  //     : Carbon::create($currentDate->year - 1, 4, 1);
+  //   $endDate = $startDate->copy()->addYear()->subDay();
+
+  //   // Fetch timesheet data
+  //   $timesheetData = DB::table('timesheetusers')
+  //     ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+  //     ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+  //     ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+  //     ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+  //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+  //     ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+  //     ->select(
+  //       'timesheetusers.*',
+  //       'assignments.assignment_name',
+  //       'clients.client_name',
+  //       'clients.client_code',
+  //       'teammembers.team_member',
+  //       'teammembers.staffcode',
+  //       'patnerid.team_member as patnername',
+  //       'patnerid.staffcode as patnerstaffcode',
+  //       'assignmentbudgetings.assignmentname',
+  //       'teamrolehistory.newstaff_code',
+  //       'assignmentbudgetings.created_at as assignmentcreateddate'
+  //     )
+  //     ->where('timesheetusers.createdby', $teamid)
+  //     ->whereIn('timesheetusers.status', [1, 2, 3])
+  //     ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+  //     ->whereIn('timesheetusers.assignmentgenerate_id', ['OFF100003'])
+  //     ->orderBy('timesheetusers.date', 'DESC')
+  //     ->get();
+
+  //   // Precompute counts
+  //   $timesheetCounts = DB::table('timesheetusers')
+  //     ->select('timesheetid', DB::raw('COUNT(*) as count'))
+  //     ->groupBy('timesheetid')
+  //     ->pluck('count', 'timesheetid');
+
+  //   return view('backEnd.timesheet.totaltraveldays', compact('timesheetData', 'timesheetCounts'));
+  // }
+
+  public function totaltraveldays(Request $request, $teamid)
+  {
+    $currentDate = Carbon::now();
+    $startDate = ($currentDate->month >= 4)
+      ? Carbon::create($currentDate->year, 4, 1)
+      : Carbon::create($currentDate->year - 1, 4, 1);
+    $endDate = $startDate->copy()->addYear()->subDay();
+
+    // Fetch timesheet data
+    $timesheetData = DB::table('timesheetusers')
+      ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+      ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+      ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+      ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+      ->select(
+        'timesheetusers.*',
+        'assignments.assignment_name',
+        'clients.client_name',
+        'clients.client_code',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'patnerid.team_member as patnername',
+        'patnerid.staffcode as patnerstaffcode',
+        'assignmentbudgetings.assignmentname',
+        'teamrolehistory.newstaff_code',
+        'assignmentbudgetings.created_at as assignmentcreateddate'
+      )
+      ->where('timesheetusers.createdby', $teamid)
+      ->whereIn('timesheetusers.status', [1, 2, 3])
+      ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      ->whereIn('timesheetusers.assignmentgenerate_id', ['OFF100003'])
+      ->orderBy('timesheetusers.date', 'DESC')
+      ->get();
+
+    // Precompute counts
+    $timesheetCounts = DB::table('timesheetusers')
+      ->select('timesheetid', DB::raw('COUNT(*) as count'))
+      ->groupBy('timesheetid')
+      ->pluck('count', 'timesheetid');
+
+    dd($timesheetCounts);
+
+    // Fetch promotion data for checks (mock logic, replace as per your DB structure)
+    $permotioncheck = DB::table('teamrolehistory')
+      ->where('teammember_id', $teamid)
+      ->latest('promotion_date') // Assuming 'promotion_date' exists
+      ->first();
+
+    // Determine promotion date (mock logic, replace with your condition)
+    $permotiondate = $permotioncheck ? Carbon::parse($permotioncheck->promotion_date) : null;
+
+    return view('backEnd.timesheet.totaltraveldays', compact('timesheetData', 'timesheetCounts', 'permotioncheck', 'permotiondate'));
+  }
 //! End hare 
 //*
 //*
+        $rejoiningusersonanotherpost = DB::table('teamrolehistory')
+            ->pluck('teammember_id');
+
+        $rejoiningusersonsamepost = DB::table('rejoiningsamepost')
+            ->pluck('teammember_id');
+
+$teammembers = $rejoiningusersonanotherpost->merge($rejoiningusersonsamepost)->toArray();
 // Start Hare
 //! End hare 
 
-//*
+//* regarding timesheet total count on dashboard
+$startDate = Carbon::create('01-04-2024');
+$endDate = Carbon::create('21-12-2024');
+
+$home = DB::table('timesheetusers')
+  // ->where('createdby', 847)
+  ->where('createdby', $teamid)
+  ->whereIn('status', [1, 2, 3])
+  // hide offholidays and travel timesheet
+  ->whereNotIn('assignmentgenerate_id', ['OFF100004', 'OFF100003'])
+  // hide  casual leave and exam leave timesheet
+  ->whereNotIn('client_id', [134])
+  ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+  ->select('date') // Select only the date column
+  ->distinct() // Apply distinct on the selected columns
+  ->get();
+
+dd($home);
 // Start Hare
 //! End hare 
 //*
+try {
+              
+  Log::info("Email sent successfully to: " . $data['emailid']);
+} catch (\Exception $e) {
+  Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+}
+
 //*
 // Start Hare
 public function adminattendancereport(Request $request)
@@ -288,6 +587,7 @@ public function adminattendancereport(Request $request)
         return view('backEnd.attendance.teamattendance', compact('attendanceDatas', 'teammembers'));
     }
 }
+
 //! End hare 
 
 //* regarding notification 

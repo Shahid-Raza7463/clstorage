@@ -197,6 +197,107 @@ Steps:-
 3. fill form and click send button 
 
 
+22222222222222222222222222222222222222222222222222222222222222222222222222222
+Notifications Behavior Across Portals:
+•	Admin Portal: All notifications will be displayed.
+•	Partner Portal: Only partner-specific notifications will be displayed.
+•	Manager Portal: Only manager-specific notifications will be displayed.
+•	Staff Portal: Only staff-specific notifications will be displayed.
+Targeted Notifications:
+•	When sending notifications to specific individuals, a Teammember Selection Box will appear. Notifications will only be displayed on the targeted individual's portal and the Admin portal.
+Read/Unread Functionality:
+•	Unread notifications will appear in red color.
+•	Read notifications will appear in black color.
+1st Notification
+Steps:
+1.	Navigate to the application.
+2.	On the dashboard, locate the notification section.
+2nd Notification
+Steps:
+1.	Navigate to the application.
+2.	Click on the "Notification List" dropdown.
+3rd Notification
+Steps:
+1.	Navigate to the application.
+2.	On the dashboard, locate the notification icon in the top header area.
+Admin-Only Feature: Add Announcement
+Steps:
+1.	Navigate to the application.
+2.	Click on the "Notification List" dropdown.
+3.	Click on "Add Announcement."
+4.	Fill out the form and click the "Send" button.
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222
+Promotion and Rejoining on Other Posts
+1.	If a user worked on attendance as a manager, the staff code will display as a manager.
+2.	If a user worked on attendance as a partner, the staff code will display as a partner.
+3.	In the joining date column, the newest joining date will be displayed.
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Attendance'.
+4.	Locate the Joining Date column.
+________________________________________
+Timesheet Access on Exit Day
+When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+On Admin ID
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+o	Here, you can see the Timesheet Access field.
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+________________________________________
+Inactive Assignments for Users
+Ensure assignments do not appear for users after being marked inactive for that assignment.
+For Admin ID
+Steps:
+1.	Navigate to the application.
+2.	Click on 'View All Assignments' in the Assignment Section.
+3.	Click on the Assignment ID hyperlink.
+4.	Go to the Teammember List section.
+o	Here, you can see the Active/Inactive button.
+For Manager and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+o	Inactive assignments will be hidden.
+Additional Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard.
+Inactive assignments will be hidden in Assignment Section 
+
+Alternative Steps:
+1.	Navigate to the application.
+2.	Click on the 'Client' dropdown.
+3.	Navigate to the 'Assignment List' page.
+4.	Click on the Client Name hyperlink and click on year.
+Inactive assignments will be hidden.
+
+________________________________________
+Manager-Specific Tab
+This tab is available only for managers and not for staff.
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Client' dropdown.
+3.	Navigate to the 'Client List' page.
+4.	Click on the Client Name hyperlink and select Assignment.
+       Inactive assignments will be hidden.
+
+this is my updated code isme mai chahta hu ki 01 se 31 tak jo firs 0 hai jise hide kiya hai vo excell me nahi jaye 
+
+
+
 
 
 

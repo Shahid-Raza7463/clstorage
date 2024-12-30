@@ -6,6 +6,7 @@ After setup
 3.open cmd 
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
+cd C:\Users\KGS-429\Desktop\shahidapp\UsersList
 npx react-native start --reset-cache  if neede then other was skip it 
 5.npx react-native start
 4.open cmd
@@ -20,7 +21,6 @@ npx react-native start --reset-cache  if neede then other was skip it
 sequence me is command ko run kare / regarding reset all / restart /clean data 
 npm cache clean --force
 rmdir /s /q node_modules
-rmdir /s /q android\app\build
 npm install
 cd android
 ise clean n kare sabhi download remove kar deta hai fir se npx react-native run-android chalana parta hai    ye command always run using adminstration cmd
@@ -145,9 +145,11 @@ C:\Users\KGS-429\AppData\Local\Android\Sdk\platform-tools
 22222222222222222222222222222222222222222222222222222222222222
 # react native instalation
 
+open powershell using administrate
+
 Step 1: Creating a folder where do you want project
 
-open powershell using administrate
+cd C:\Users\KGS-429\Desktop\shahidapp
 
 npm uninstall -g react-native-cli @react-native-community/cli
 
@@ -168,6 +170,7 @@ npx react-native run-android
 
 npx react-native init Projects --version 0.70
 npx react-native init Projects --version 0.70.0
+npx @react-native-community/cli@0.74.5 init AwesomeProject --version 0.74.5
 
 
 
@@ -180,13 +183,20 @@ npx react-native run-android --port=8082   ye command always run using adminstra
 
 firs time then make app / create app / regarding app 
 222222222222222222222222222222222222
+cd android
+React Native Mein Typical Android Build Commands:
+gradlew assembleDebug: Debug version of APK ko build karta hai.
+gradlew assembleRelease: Release version of APK ko build karta hai (production use ke liye).
+gradlew clean: Previous build ko clean karta hai, taaki nayi build fresh ho.
+
 firstly run android studio and run project then after that run below command
 1
 hare point 1 nahi use kare sirf point 2 and 3 use kare 
 1.npx react-native run-android --variant=release   ye command always run using adminstration cmd
 
 2.cd C:\Users\KGS-429\Desktop\firstapp\FirstProjectApp\android
-   or cd C:\Users\KGS-429\Desktop\shahidapp\FriendList\android
+   or cd C:\Users\KGS-429\Desktop\shahidapp\FriendList\android Or
+   cd android
 3.gradlew assembleRelease
 
 your app on that path 
@@ -202,6 +212,13 @@ When you run the command gradlew assembleRelease again, it will overwrite the ex
 
 2222222222222222222222222222222222222222
 rebuild app again / create app again 
+cd android
+React Native Mein Typical Android Build Commands:
+gradlew assembleDebug: Debug version of APK ko build karta hai.
+gradlew assembleRelease: Release version of APK ko build karta hai (production use ke liye).
+gradlew clean: Previous build ko clean karta hai, taaki nayi build fresh ho.
+
+
 cd android
 ./gradlew assembleRelease
 
@@ -272,7 +289,6 @@ Press Cmd + R to reload the app.
 For Android Emulator:
 
 Press Ctrl + M (or Cmd + M on macOS) to open the Developer Menu, then select "Reload."
-
 
 delete / remove / del 
 cd C:\Users\KGS-429\Desktop\shahidapp
@@ -983,3 +999,80 @@ for testing
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 <Icon name="home" size={24} color="blue" />
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding instalation error/ regarding error
+1.HAXM instaaler error 
+  steps:
+  1.Open bios setting 
+  2.enable Vertualization Technology system option--->advance 
+  3.open andoroide studio --->SDK manager-->SDK tools--> download Haxm installer 
+  end and fixed problem 
+
+explaitions
+1.Virtualization Technology
+Ye general virtualization feature ko enable karta hai.
+Agar aapko Virtual Machines (VMware, VirtualBox, Hyper-V) chalani hain ya Docker containers use karna hai, to is option ko enable karna zaroori hai.
+
+
+2.Virtualization Technology for Direct I/O
+Ye ek advanced feature hai jo Direct Input/Output (I/O) operations ke liye hardware virtualization ko optimize karta hai.
+Iska use virtualization ke dauraan GPU acceleration ya device passthrough ke liye hota hai. Ye feature zyadatar high-performance workloads (e.g., gaming VMs, heavy computational tasks) ke liye hota hai.
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding bios setting in HP
+1.restart your pc and click f10 button reapetly then automatic on will be bios Settings
+anther keys also will be work like 
+
+1.F10
+2.esc keys 
+3.F2 keys
+
+2222222222222222222222222222222222222222222222222222222222
+gradle download
+search in google "Gradle Releases"
+you can see hare like Download: binary-only or complete (checksums)
+and click on binary-only it will be dowlod start
+
+
+https://services.gradle.org/distributions/
+
+222222222222222222222222222222222222222222222222222222222222222222
+cd android
+gradle -v
+gradlew clean
+gradlew build
+gradlew init
+gradlew tasks
+gradlew test
+gradlew build --stacktrace
+gradlew cleanBuildCache
+gradle wrapper
+gradlew assembleDebug
+gradlew assembleDebug --stacktrace
+gradlew assembleRelease
+gradlew assemble
+npx react-native run-android
+
+22222222222222222222222222222222222222222222222222222222222
+React Native Mein Typical Android Build Commands:
+gradlew assembleDebug: Debug version of APK ko build karta hai.
+gradlew assembleRelease: Release version of APK ko build karta hai (production use ke liye).
+gradlew clean: Previous build ko clean karta hai, taaki nayi build fresh ho.
+
+cd android
+./gradlew clean
+cd ..
+npx react-native run-android
+
+222222222222222222222222222222222222222222222
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
+cd android
+gradlew.bat assembleRelease
+
+2222222222222222222222222222222222222222222222222
+npx react-native-rename "UsersList"\
+
+
+
