@@ -1,11 +1,34 @@
 After setup
+C:\ReactNativeApp\FriendsList
+
+module.exports = {
+  presets: ['module:metro-react-native-babel-preset'],
+  plugins: [
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-private-methods',
+    '@babel/plugin-transform-private-property-in-object',
+    'react-native-reanimated/plugin', // Must be the last plugin
+  ],
+};
+
+    <View style={[Styles.contentcenter]}>
+      <ImageBackground
+        source={require('../assets/images/leaves.jpg')}
+        style={{height: '100%'}}
+      />
+      <View style={Styles.setPosition}>
+        <Text style={Styles.heading}>Welcome to My Portfolio</Text>
+      </View>
+    </View>
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 1.Open android Studio
 2.open project in vs code 
 5.create virtual device
 3.open cmd 
-cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
+cd C:\ReactNativeApp\FriendsList
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
+cd C:\ReactNativeApp\FriendList
 cd C:\Users\KGS-429\Desktop\shahidapp\UsersList
 npx react-native start --reset-cache  if neede then other was skip it 
 5.npx react-native start
@@ -18,10 +41,10 @@ npx react-native start --reset-cache  if neede then other was skip it
  npm install -g npm@10.9.2 if update new version then
 
  2222222222222222222222222222222222222222222222222
-sequence me is command ko run kare / regarding reset all / restart /clean data 
+sequence me is command ko run kare / regarding reset all / restart /clean data / regarding error
 npm cache clean --force
 rmdir /s /q node_modules
-npm install
+npm install   ......
 cd android
 ise clean n kare sabhi download remove kar deta hai fir se npx react-native run-android chalana parta hai    ye command always run using adminstration cmd
 gradlew clean
@@ -93,6 +116,7 @@ npm install
 
 https://github.com/anil-sidhu/react-redux-saga/tree/master/src
 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+# react native instalation
 1 install choclate 
    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
@@ -195,7 +219,6 @@ hare point 1 nahi use kare sirf point 2 and 3 use kare
 1.npx react-native run-android --variant=release   ye command always run using adminstration cmd
 
 2.cd C:\Users\KGS-429\Desktop\firstapp\FirstProjectApp\android
-   or cd C:\Users\KGS-429\Desktop\shahidapp\FriendList\android Or
    cd android
 3.gradlew assembleRelease
 
@@ -714,6 +737,7 @@ regarding problem
 1st step important
 npm install
 npm install react-native-reanimated@latest
+npx react-native-reanimated upgrade
 npx react-native run-android  using administration cmd
 
 or
@@ -1075,4 +1099,49 @@ gradlew.bat assembleRelease
 npx react-native-rename "UsersList"\
 
 
+2222222222222222222222222222222222222222222222222222222222222222222
+regarding uninstall android studio
+Android Studio ko Completely Uninstall Karne ka Tarika
+1. Android Studio Ko Uninstall Karein
+1.	Control Panel > Programs and Features > Android Studio ko search karein.
+2.	Right-click karein aur Uninstall ko select karein.
 
+_______________________________________
+2. Extra Folders Ko Remove Karein
+Android Studio aur SDK se related residual files ko manually delete karna zaroori hai.
+    o	Navigate karein aur ye folders delete karein:
+    like C:\Users\<YourUsername>\.android below
+    1.	C:\Users\KGS-429\.android                                1. cd ..    2. rmdir /s /q .android
+    2.	C:\Users\KGS-429\.gradle                                  rmdir /s /q .gradle
+    3.	C:\Users\KGS-429\AppData\Local\Android\Sdk                rmdir /s /q Sdk
+    4.	C:\Users\KGS-429\AppData\Roaming\Google\AndroidStudio     rmdir /s /q AndroidStudio 
+    5.	C:\Users\KGS-429\AppData\Local\Google\AndroidStudio       rmdir /s /q AndroidStudio   rmdir /s /q AndroidStudio2024.1   rmdir /s /q AndroidStudio2024.2
+    o	AppData folder hidden ho sakta hai; ise dekhne ke liye View > Show Hidden Items ko enable karein.
+
+________________________________________
+3. Environment Variables Ko Reset Karein
+   o	System Properties > Environment Variables.
+   o	ANDROID_HOME aur Android se related Path variables ko delete karein.
+
+________________________________________
+Fresh Installation Ke Steps
+1. Android Studio Download Karein
+    •	Official website se download karein: Android Studio Download.
+2. Installation Karein
+    •	Installation process follow karein, aur ensure karein ki Android Virtual Device (AVD) aur SDK Manager bhi install ho rahe hain.
+3. Android SDK Platforms Install Karein
+    •	Android Studio > Settings > System Settings > Android SDK par jayein aur required SDK platforms install karein (e.g., API 33 or above).
+4. React Native Environment Setup Karein
+    •	ANDROID_HOME environment variable ko phir se set karein (steps pehle mention kiye gaye hain).
+5. React Native Project Test Karein
+    •	Install complete hone ke baad:
+
+Copy code
+npx react-native doctor
+ •	Ensure karein ki sab kuchh green checkmarks mein ho.
+
+22222222222222222222222222222222222222
+rm -rf node_modules
+rm package-lock.json
+npm cache clean --force
+npm install

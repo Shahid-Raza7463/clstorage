@@ -1,8 +1,24 @@
 
 task se related bugs task wale file me hi daale aur other bugs yaha dale 
 
+vsalive, vsalocal
+2222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+find text   $leavetype = DB::table('leavetypes')
+ 
+replace serced tesxt
+ 
+    $leavetype = DB::table('leavetypes')
+      ->leftjoin('leaveroles', 'leaveroles.leavetype_id', 'leavetypes.id')
+      ->where('leavetypes.year', '=', '2025')
+      ->where('leaveroles.role', auth()->user()->role_id)
+      ->whereIn('leavetypes.id', [9, 11])
+      ->select('leavetypes.*')->get();
+	  
+	  leavetypes table me  year column me replace 2024 to 2025
 
-vsalive done 
+
+vsalive vsalocal done 
 222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\AssignmentmappingController.php
 
@@ -91,7 +107,7 @@ app\Http\Controllers\AssignmentmappingController.php
         }
     }
 
-vsalive done 
+vsalive vsalocal done 
 22222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\header.blade.php
  if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
@@ -157,54 +173,8 @@ if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
 
 
 
-vsademo done 
-222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\teammember\form.blade.php
 
- @if (Request::is('teammember/*/edit'))
-        <div class="col-3">
-            <div class="form-group">
-                <label class="font-weight-600">Timesheet Access</label>
-                <div class="access" style="width: fit-content; margin-left: 30px;">
-                    @if ($teammember->timesheet_access == 0)
-                        <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
-                            onclick="return confirm('Are you sure you want to Active timesheet access?');">
-                            <span class="btn"
-                                style="background: #37A000;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Inactive</span>
-                        </a>
-                    @else
-                        <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
-                            onclick="return confirm('Are you sure you want to Inactive timesheet access?');">
-                            <span class="btn"
-                                style="background: #dc3545;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Active</span>
-                        </a>
-                    @endif
-                </div>
-            </div>
-        </div>
-    @endif
-
-
-vsademo done 
-2222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\teammember\form.blade.php
-
-remove comment it
-
-        {{-- @component('backEnd.components.alert')
-        @endcomponent --}}
-
-
-vsademo, vsalive done, red line on apply leave page 
-22222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\applyleave\create.blade.php
-find    @include('backEnd.applyleave.form')
-
-                             {{-- <div style="text-align: center;"> <span style="color:red;">Please apply leave from 11/09/2023,
-                                     Monday Onwards</span></div> --}}
-                             {{-- <hr>
-                             <br> --}}
-vsalive,done
+vsalive, vsalocal done
 22222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 show function 
@@ -223,7 +193,7 @@ show function
 	  
 	  
 app\Http\Controllers\TimesheetoldController.php
-   $getauth =  DB::table('timesheets')
+ find   $client = Client::select('id', 'client_name')->get();
    
    
    
@@ -237,23 +207,9 @@ fix this line
 
 $timesheetData =  $timesheetData = DB::table('timesheets')
 
-vsademo, vsalive done 
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\emails\timesheetrequestapprovelform.blade.php
 
-valid to se valid till
 
-vsademo, vsalive done, red line on apply leave page ````` 
-22222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\applyleave\create.blade.php
-find    @include('backEnd.applyleave.form')
-
-                             {{-- <div style="text-align: center;"> <span style="color:red;">Please apply leave from 11/09/2023,
-                                     Monday Onwards</span></div> --}}
-                             {{-- <hr>
-                             <br> --}}
-							 
-							 
+						 
 vsalive, vsalocal done ,
 222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\savedtimesheetedit.blade.php
@@ -423,66 +379,5 @@ resources\views\backEnd\timesheet\savedtimesheetedit.blade.php
 				
 
 
-vsalive, vsademo done 
+					
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\BackEndController.php
-find text   $todayBirthdays = Teammember::whereNotNull('dateofbirth')
-
-
- $todayBirthdays = Teammember::whereNotNull('dateofbirth')
-      ->where('status', '1')
-      ->whereNotIn('id', [447])
-      ->get()
-      ->filter(function ($birthday) {
-        $dateofbirth = Carbon::parse($birthday->dateofbirth);
-        $currentDate = Carbon::now();
-
-        // Compare the month and day without considering the current year
-        return $dateofbirth->month == $currentDate->month && $dateofbirth->day == $currentDate->day;
-      })
-      ->sortBy('dateofbirth');
-
-
-
-    $upcomingBirthdays = Teammember::where('status', '1')
-      ->whereNotIn('id', [447])
-      ->whereRaw('DATE_FORMAT(dateofbirth, "%m-%d") > DATE_FORMAT(NOW(), "%m-%d")')
-      ->orderByRaw('DATE_FORMAT(dateofbirth, "%m-%d")')
-      ->limit(7)
-      ->get();
-				
-						
-						
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -115,13 +115,42 @@ class Sentence extends Command
 
         // I have reviewed all the points, and since the client has changed the requirements, I have implemented them according to the new requirements.
 
+        // There are 4 tasks in QA that need to be tested starting tomorrow
 
+        // There are 4 tasks in QA that we can start testing from tomorrow
+        // There are 4 tasks in QA that can be tested starting tomorrow
+        // I need to test the attendance report on VSAlive urgently
+        // can i meet now Pooja Kumari and Harish
+        // I have added some tasks to In QA that need to be tested starting tomorrow
+        // I have added 4 tasks to In QA that need to be tested starting tomorrow
 
+        // Yamuna Expressway Industrial Development Authority
 
+        // If someone has login with admin login in VSA then please logout for half an hour
 
+        // This is urgent because the client has requested to make it live within 2 to 3 days
 
+        // All 7 tasks have been QA passed. Atishay Jain, please let me know when these can be deployed.
 
+        // Send the code for both vsalocal and vsalive, and send the database only for vsalocal
 
+        // Send the code for both vsalocal and vsalive, and send the below all tables only from vsalive
+
+        // Assignment id HUM100765 was mistakenly closed by Kartik. Please reopen it
+
+        // I just want to know when I will receive this mail
+
+        // Please send the code and database for vsademo
+
+        // 1.Tasks VS-395, VS-367, VS-348, VS-346 has been uploaded to vsademo, and functional testing has been completed 
+        // 1.Test descreption added on jira for VS-395, VS-367, VS-348, VS-346
+
+        // Send the code for both vsalocal and vsalive, and send the database only for vsalocal
+        // This is not required for testing. Please ignore it
+        // I have already spoken to Pooja; I can join after lunch
+
+        // jab kisi ko call karo aur vo call n uthaye to ye message kare teams per
+        // Simmi Ma’am, I tried reaching out to Pooja, but she seems unavailable at the moment
 
 
 

@@ -92,6 +92,236 @@ This task needs to be retested because the description I provided earlier was yo
 The task I uploaded on VSAlive is a separate task that is not currently in Jira. I needed to fix some data in the attendance report, and that specific task has been uploaded to VSAlive. It was not possible to provide it on VSADemo for testing.
 
 
+1	JANUARY - 14	TUESDAY	PONGAL/MAKARA SANKARANTI
+			
+			
+2	JANUARY - 26	SUNDAY	REPUBLIC DAY
+			
+			
+3	 MARCH   - 14	FRIDAY	HOLI
+			
+			
+4	APRIL-14	MONDAY	AMBEDKAR JAYANTHI
+			
+			
+5	AUGUST-9	SATURDAY	RAKSHA BANDHAN
+			
+			
+6	AUGUST - 15	FRIDAY	INDEPENDENCE DAY
+			
+			
+7	AUGUST - 16	SATURDAY	JANMASHTAMI
+			
+			
+8	AUGUST - 27	WEDNESDAY	GANESH (VINAYAKA)CHATURTHI
+			
+			
+9	OCTOBER-1	WEDNESDAY	MAHANAVAMI/SARASWATHI
+			POOJA
+			
+10	OCTOBER -2	THURSDAY	GANDHI JAYANTHI
+			DUSSEHRA VIJAYA DASAMI
+			
+11	OCTOBER-20	MONDAY	DEEPAWALI
+			
+			
+12	OCTOBER-21	TUESDAY	DEEPAWALI
+			
+			
+13	NOVEMBER-5	WEDNESDAY	GURUNANAK JAYANTHI
+			
+			
+14	DECEMBER-25	THURSDAY	CHRISTMAS DAY
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+w2222222222222222222222222222222222222222222222222
+
+$holidays = [
+      [
+        'holidayname' => 'Pongal/Makara Sankaranti',
+        'startdate' => '2025-01-14',
+        'enddate' => '2025-01-14',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Republic Day',
+        'startdate' => '2025-01-26',
+        'enddate' => '2025-01-26',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Holi',
+        'startdate' => '2025-03-14',
+        'enddate' => '2025-03-14',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Ambedkar Jayanthi',
+        'startdate' => '2025-04-14',
+        'enddate' => '2025-04-14',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Raksha Bandhan',
+        'startdate' => '2025-08-09',
+        'enddate' => '2025-08-09',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Independence Day',
+        'startdate' => '2025-08-15',
+        'enddate' => '2025-08-15',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Janmashtami',
+        'startdate' => '2025-08-16',
+        'enddate' => '2025-08-16',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Ganesh (Vinayaka) Chaturthi',
+        'startdate' => '2025-08-27',
+        'enddate' => '2025-08-27',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Mahanavami/Saraswathi Pooja',
+        'startdate' => '2025-10-01',
+        'enddate' => '2025-10-01',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Gandhi Jayanthi / Dussera Vijayadashami',
+        'startdate' => '2025-10-02',
+        'enddate' => '2025-10-02',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Deepawali',
+        'startdate' => '2025-10-20',
+        'enddate' => '2025-10-20',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Deepawali',
+        'startdate' => '2025-10-21',
+        'enddate' => '2025-10-21',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Gurunanak Jayanti',
+        'startdate' => '2025-11-05',
+        'enddate' => '2025-11-05',
+        'number_of_dates' => 1,
+      ],
+      [
+        'holidayname' => 'Christmas Day',
+        'startdate' => '2025-12-25',
+        'enddate' => '2025-12-25',
+        'number_of_dates' => 1,
+      ],
+    ];
+
+
+
+    foreach ($holidays as $holiday) {
+      DB::table('holidays')->insert([
+        'holidayname' => $holiday['holidayname'],
+        'startdate' => $holiday['startdate'],
+        'enddate' => $holiday['enddate'],
+        'number_of_dates' => $holiday['number_of_dates'],
+        'restricted' => 'on',
+        'description' => null,
+        'year' => 2025,
+        'notify' => null,
+        'status' => 1,
+        'createdby' => null,
+        'updatedby' => null,
+        'created_at' => now(),
+        'updated_at' => now(),
+      ]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222
+
+
+
+
+resources\views\backEnd\holiday\index.blade.php
+find text url('/holidays?' . 'year=' . '2024')
+
+                        <div class="dropdown-menu">
+                            <a style="color: #37A000" class="dropdown-item"
+                                href="{{ url('/holidays?' . 'year=' . '2025') }}">2025</a>
+                            <a style="color: #37A000" class="dropdown-item"
+                                href="{{ url('/holidays?' . 'year=' . '2024') }}">2024</a>
+
+                            <a style="color: #37A000" class="dropdown-item"
+                                href="{{ url('/holidays?' . 'year=' . '2023') }}">2023</a>
+                        </div>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\HolidayController.php
+
+    public function index()
+    {
+        $currentDate = Carbon::now();
+        $currentYear = $currentDate->year;
+        // dd($currentYear);
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
+            $holidayDatas  =  DB::table('holidays')
+                ->where('status', 1)
+                ->where('year', $currentYear)
+                ->select('holidays.*')->orderBy('startdate', 'asc')->get();
+            return view('backEnd.holiday.index', compact('holidayDatas'));
+        } else {
+            $holidayDatas  = DB::table('holidays')
+                ->where('status', 1)
+                ->where('year', $currentYear)
+                ->select('holidays.*')->orderBy('startdate', 'asc')->get();
+            return view('backEnd.holiday.index', compact('holidayDatas'));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

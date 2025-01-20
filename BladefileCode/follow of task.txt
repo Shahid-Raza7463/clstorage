@@ -297,6 +297,74 @@ Steps:
 this is my updated code isme mai chahta hu ki 01 se 31 tak jo firs 0 hai jise hide kiya hai vo excell me nahi jaye 
 
 
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+•	The box will display the Total Travel Days based on attendance records.
+•	The total travel days in attendance will be reflected in the Total Travel Days Box on the dashboard.
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Locate and click on the 'Total Travel Days Box'.
+________________________________________
+•	Before applying the filter, data will be displayed created first ,approved and in the last rejected.
+•	After applying the filter, the data should be displayed in ascending order by Request date (latest first).
+For Admin IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Use the filter to sort and display data.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Holidays' tab.
+
+
+
+________________________________________
+•	Every Wednesday and Saturday, an email is sent to the Admin containing an Excel report.
+•	The report includes:
+1.	User's name.
+2.	User's email ID.
+3.	Last timesheet submission date.
+________________________________________
+•	Every Wednesday and Saturday, an email is sent to the Admin containing an Excel report.
+•	The report includes:
+1.	Users who saved the timesheet but did not submit it.
+2.	Users who never filled out the timesheet.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2.Udin date format needs to be fixed.``````````
+The date format in the Udin List section will be: dd-mm-yyyy (like 01-01-1999).
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.you can see hare UDIN List
+
+
+
+3.Restrict users from entering time in the format 08:00.````````
+You cannot edit the Total Hour field here.
+The hour field should not be in the format 00:00; it should only accept whole numbers like 0, 1, 2, 3, etc
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
 
 

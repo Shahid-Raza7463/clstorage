@@ -29,13 +29,177 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding file and folder download --}}
 {{--  Start Hare --}}
+
+
+<li><strong>Download11</strong>:
+    <a href="{{ asset('img/logo.png') }}" class="btn btn-success">Download</a>
+</li>
+<li>
+    <strong>Download22:</strong>
+    <a href="{{ asset('img/logo.png') }}" class="btn btn-success" download="logo.png">Download</a>
+</li>
+<li>
+    <strong>Download33:</strong>
+    <a href="{{ asset('img\creater.xlsx') }}" class="btn btn-success">Download</a>
+</li>
+<li>
+    <strong>Download44:</strong>
+    <a href="{{ asset('img/' . 'creater.xlsx') }}" class="btn btn-success">Download2</a>
+</li>
+<li>
+    <strong>Download55:</strong>
+    <a href="{{ url('img/' . 'creater.xlsx') }}" class="btn btn-success">Download2</a>
+</li>
+
+{{-- Route::get('img/{name}', [ContactUsWebController::class, 'download']);
+
+public function download(Request $request, $name)
+{
+    $path = public_path('assets/img/' . $name);
+    if (!file_exists($path)) {
+        abort(404, 'File not found.');
+    }
+    return response()->download($path);
+} --}}
+
+{{--  Start Hare --}}
+{{-- 
+2222222222222222222222222222
+resources\views\backEnd\assignmentconfirmation\index.blade.php
+
+                              <div class="col-sm-9">
+                                  <a href="{{ url('backEnd/balanceconfirmation.xlsx') }}"
+                                      class="btn btn-success btn">Download<i class="fas fa-file-excel"
+                                          style="margin-left: 3px;font-size: 20px;"></i></a>
+
+                              </div>
+							  
+							  
+222222222222222222222222222222222222222222222222222
+resources\views\backEnd\article\index.blade.php
+
+                                    <td>
+                                        <a target="blank" href="{{ asset('backEnd/image/article/' . $articleData->file) }}">
+                                            {{ $articleData->subject }}
+                                        </a>
+                                    </td>
+									
+									
+22222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+
+                    <a href="{{ url('backEnd/image/teammember/aadharupload/', $teammember->aadharupload) }}"
+                        target="blank" data-toggle="tooltip" title="{{ $teammember->aadharupload ?? '' }}"
+                        class="btn btn-success-soft ml-2"><i class="fas fa-file"></i> View</a> --}}
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding year  --}}
 {{--  Start Hare --}}
+<div class="btn-group mb-2 mr-1">
+
+    @php
+        $selectedYear = Request::query('year');
+        if ($selectedYear == null) {
+            $selectedYear = $currentYear;
+        } else {
+            $selectedYear = Request::query('year');
+        }
+    @endphp
+    <button type="button" class="btn btn-info-soft btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+
+        {{-- @if (Request::query('year') == '2024')
+            2024
+        @elseif (Request::query('year') == '2023')
+            2023
+        @elseif (Request::query('year') == '2025')
+            2025
+        @else
+            Choose Year
+        @endif --}}
+
+        @if (in_array($selectedYear, $years))
+            {{ $selectedYear }}
+        @else
+            Choose Year
+        @endif
+    </button>
+    {{-- <div class="dropdown-menu">
+        <a style="color: #37A000" class="dropdown-item"
+            href="{{ url('/holidays?' . 'year=' . '2025') }}">2025</a>
+        <a style="color: #37A000" class="dropdown-item"
+            href="{{ url('/holidays?' . 'year=' . '2024') }}">2024</a>
+
+        <a style="color: #37A000" class="dropdown-item"
+            href="{{ url('/holidays?' . 'year=' . '2023') }}">2023</a>
+    </div> --}}
+    <div class="dropdown-menu">
+        @foreach ($years as $year)
+            <a style="color: #37A000" class="dropdown-item"
+                href="{{ url('/holidays?year=' . $year) }}">{{ $year }}</a>
+        @endforeach
+    </div>
+</div>
+{{--  Start Hare --}}
+@php
+    $currentDate = Carbon::now();
+
+    $tillyearend = $currentDate->year;
+    $oldyearstart = 2023;
+    $years = range($tillyearend, $oldyearstart);
+
+    $holidayDatas = DB::table('holidays')
+        ->where('status', 1)
+        ->where('year', $request->year)
+        ->select('holidays.*')
+        ->orderBy('startdate', 'asc')
+        ->get();
+@endphp
+<li class="breadcrumb-item">
+    <div class="btn-group mb-2 mr-1">
+
+        @php
+            $selectedYear = Request::query('year');
+        @endphp
+        <button type="button" class="btn btn-info-soft btn-sm dropdown-toggle" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            {{-- @if (Request::query('year') == '2024')
+                2024
+            @elseif (Request::query('year') == '2023')
+                2023
+            @elseif (Request::query('year') == '2025')
+                2025
+            @else
+                Choose Year
+            @endif --}}
+
+            @if (in_array($selectedYear, $years))
+                {{ $selectedYear }}
+            @else
+                Choose Year
+            @endif
+        </button>
+        {{-- <div class="dropdown-menu">
+            <a style="color: #37A000" class="dropdown-item"
+                href="{{ url('/holidays?' . 'year=' . '2025') }}">2025</a>
+            <a style="color: #37A000" class="dropdown-item"
+                href="{{ url('/holidays?' . 'year=' . '2024') }}">2024</a>
+
+            <a style="color: #37A000" class="dropdown-item"
+                href="{{ url('/holidays?' . 'year=' . '2023') }}">2023</a>
+        </div> --}}
+        <div class="dropdown-menu">
+            @foreach ($years as $year)
+                <a style="color: #37A000" class="dropdown-item"
+                    href="{{ url('/holidays?year=' . $year) }}">{{ $year }}</a>
+            @endforeach
+        </div>
+    </div>
+</li>
 {{--  Start Hare --}}
 {{-- ! End hare --}}
 {{-- * regarding  --}}
@@ -45,9 +209,7 @@
     @foreach ($timesheetData as $timesheetDatas)
         @php
             $timesheetanotherdata = $timesheetCounts[$timesheetDatas->timesheetid] ?? 0;
-            $datadate = isset($timesheetDatas->date)
-                ? Carbon\Carbon::parse($timesheetDatas->date)
-                : null;
+            $datadate = isset($timesheetDatas->date) ? Carbon\Carbon::parse($timesheetDatas->date) : null;
         @endphp
         @if ($timesheetanotherdata <= 1)
             @php $hasData = true; @endphp

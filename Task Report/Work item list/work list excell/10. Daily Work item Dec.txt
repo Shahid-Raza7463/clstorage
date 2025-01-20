@@ -123,9 +123,9 @@ All applyleave resterected condition implemented on submitted timesheet rejected
 
 22-12-24
 23-12-24
-1.I have uploaded 4 in process task on vsademo 
+1.I have uploaded 4 in process task on vsademo 23-12-24
 2.functional testing done
-2.Test Cases uploaded on jira 
+2.Test Cases uploaded on jira 23-12-24
 4.Attendance excell problem checked and inform to client 
 5.Notification problem on server not on local fixed 
 
@@ -139,35 +139,41 @@ All applyleave resterected condition implemented on submitted timesheet rejected
 timesheet done 
 
 25-12-24
+26-12-24
 1.Fix the issue with the Last Submission Report on mail.
 2.Fix the issue with the Timesheet not Submission Report on mail.
 2.I have uploaded 2 QA Passed task on vsalive 
    2.1 The client wants to get the notification section tested
    2.2 Ensure assignments do not appear for users after being marked inactive on that assignment(manager,staff and partner).
 
+27-12-24
+1.Functional testing done above tasks
+2.Documentation created by me below tasks 
+  1.Fix the issue with the Last Submission Report on mail.
+  2.Fix the issue with the Timesheet not Submission Report on mail.
 
-26-12-24
+28-12-24
+29-12-24
+
+30-12-24
+01.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
 Listed 3 Bugs
 1.The total timesheet count on the dashboard is showing incorrectly for Bhaskar Kumar.
 2.The total approved leave count on the dashboard is showing incorrectly for Rahul Singhal
 3.The total timesheet count on the dashboard is showing incorrectly for Supreet Singh.
-4.Documentation created by me below tasks 
-  1.Fix the issue with the Last Submission Report on mail.
-  2.Fix the issue with the Timesheet not Submission Report on mail.
 
-27-12-24
-28-12-24
-29-12-24
-35.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
-19.Add a travel box on the dashboard as requested by the client.
 
-30-12-24
 31-12-24
+19.Add a travel box on the dashboard as requested by the client.
+2.I have uploaded 1 QA Passed task on vsalive (VS-342) and tested done 
+
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 coding 
-functional testing 
+functional testing
 documentation 
 upload on vsademo
 functional testing 
 
+ 

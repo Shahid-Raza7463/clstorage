@@ -824,4 +824,275 @@ Keshav Chowdhary
 "2024-12-02"  rejoining date 
 "2024-07-27"  last submission date
 
-bhasker ( timesheet count) supreet(unlocated not consider) rahul (count leave )
+222222222222222222222222222222222222222222222222222222222222222222
+
+
+01.Add a travel box on the dashboard as requested by the client.
+We have to test total travel days in attendance after that on dasboard, jitna total days hai us attendance me vo total travel days show hoga total travel days box
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'total travel days Box'.
+4.	Click on the total travel days Box.
+
+
+02.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+before filter applying on apply leave data data will be show created first 
+after filter applying on apply leave data data will be show latest 
+
+
+For Admin IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Apply Leave tab',
+4.Hare you have to filter data 
+
+
+03.Fix the issue with the Last Submission Report on mail.
+Every wedenesday and sturdays mail sent on admin in which ek excell jata hai us excell me jitne bhi user hai us user ka timesheet last submision date and name and mail id jata hai 
+
+
+
+04.Fix the issue with the Timesheet not Submission Report on mail.
+Every wedenesday and sturdays mail sent on admin in which ek excell jata hai us excell me jitne bhi user hai jo timesheet saved karke chhor diya hai us user ka name jata hai aur jo timesheet kabhi nahi bhara hai us user ka name jata hai 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222
+1.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+2.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+
+
+1.Implement a calendar feature on the Add Timesheet page.
+222222222222222222
+
+
+bhaskar
+1.if timesheet submitted on sturday then date will be enable next mondays `````` 1
+2.if timesheet submitted on sunday then date will be enable next mondays ``````  2
+3.when user saved timesheet data then date will be show next days  ``````````````3
+
+4.after timesheet submited data continuesly casual leave applyled then after end date, date will be show ````````4
+5.after timesheet submited data continuesly exam leave applyled then after end date, date will be show  `````````5
+6.when casual leave apply and gap date will be exist between save timesheet and startdate of casual leave then, date will be show after saved timesheet date  `````6  and 8
+8.when exam leave apply and gap date will be exist between save timesheet and startdate of exam leave then, date will be show after saved timesheet date    ``````````` 6  and 8
+7.when casual leave apply and gap date will be not exist between save timesheet and startdate of casual leave then, after casual leave end date will be show  ``````7 and 9
+9.when exam leave apply and gap date will be not exist between save timesheet and startdate of exam leave then, after exam leave end date will be show      ```````````7 and 9
+10.when user has a casual leave timesheet after submitted timesheet date will be show casual leaveend date  ( sunday submit)
+11.when user has a exam leave timesheet after submitted timesheet date will be show exam leaveend date    ( sunday submit)
+
+14.if you are not working on sunday and want to date enable for monday then you have to submit timesheet of that week.  `````
+15.if date is enable in future and user try submit there timesheet on that time user can not submit timesheet
+16. if user submit current date timesheet then date not enable in future this is for only saved timesheet  ``````
+
+Cratika Singh   cratikas@vsa.co.in  id 973
+12.When user new joinee then on that time also will be problem   `````````12 
+    not implement it rest only when user new joinee and saved timesheet and leave apply then will be error occure
+	
+Ankesh Chandra ankeshc@vsa.co.in   908 on same post
+13.when user rejoining and promoting in that case will be also problem  ````````` 13
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+revised version 
+1.If a timesheet is submitted on Saturday, the next date will be enabled on the following Monday.
+2.If a timesheet is submitted on Sunday, the next date will also be enabled on the following Monday.
+3.When a user saves timesheet data, the next date will be displayed.
+4.For casual leave, after the end date, the next date will be displayed.
+5.For exam leave, after the end date, the next date will be displayed.
+6.When casual leave is applied, and there is a gap between the saved timesheet date and the start date of casual leave, the next date will be displayed after the saved timesheet date.
+7.When casual leave is applied, and there is no gap between the saved timesheet date and the start date of casual leave, the next date will be displayed after the casual leave end date.
+
+
+8.When exam leave is applied, and there is a gap between the saved timesheet date and the start date of exam leave, the next date will be displayed after the saved timesheet date.
+9.When exam leave is applied, and there is no gap between the saved timesheet date and the start date of exam leave, the next date will be displayed after the exam leave end date.
+
+
+10.When a user has a casual leave timesheet, the next date will be displayed after the casual leave end date.
+11.When a user has an exam leave timesheet, the next date will be displayed after the exam leave end date.
+12.For new joiners, there may also be issues with the date logic.
+13.For users who are rejoining or getting promoted, there may also be issues with the date logic.
+
+
+
+bhasker 
+chetan for new joinee
+ankesh chandra for rejoining
+
+1 ,2 , 3, 4, 5, 6, 7, 8, 9, 10, 11
+      //* timesheets
+      'timesheetreport',
+      // 'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+12
+
+ //* timesheets
+      'timesheetreport',
+      // 'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+      //* attendances
+      // 'attendances',
+
+      //* assignments
+      // 'assignmentbudgetings',
+      // 'assignmentmappings',
+      // 'assignmentteammappings',
+      // 'assignments',
+
+      //* another tables
+      'Users',
+      'teammembers',	
+	
+13
+
+      //* timesheets
+      'timesheetreport',
+      // 'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+      //* attendances
+      // 'attendances',
+
+      //* assignments
+      // 'assignmentbudgetings',
+      // 'assignmentmappings',
+      // 'assignmentteammappings',
+      // 'assignments',
+
+      //* another tables
+      'Users',
+      'teammembers',
+      'teamrolehistory',
+      'rejoiningsamepost',
+
+
+
+
+
+
+
+
+
+1.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+2.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+3.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+4.Fix the issue with the Timesheet not Submission Report on mail.
+5.Add a travel box on the dashboard as requested by the client.
+6.Fix the issue with the Last Submission Report on mail.
+7.Total count in attendance data is not showing correct.(bugs for travel box)
+8.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+
+
+
+
+1.Implement a calendar feature on the Add Timesheet page
+2.Udin date format needs to be fixed.``````````
+3.Restrict users from entering time in the format 08:00.````````
+4.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+
+
+
+
+
+2.Udin date format needs to be fixed.``````````
+The date format in the Udin List section will be: dd-mm-yyyy (like 01-01-1999).
+
+
+
+
+3.Restrict users from entering time in the format 08:00.````````
+
+you can not edit Total Hour field.
+hour field should be not in this formate 00:00 only accept hour like 0,1,2,3, 3tc
+
+
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+07.applyleaves  
+08.attendances
+
+09.teamrolehistory
+10.rejoiningsamepost
+
+
+1.if timesheet submitted on sturday then date will be enable next mondays 
+2.if timesheet submitted on sunday then date will be enable next mondays 
+3.when user saved timesheet data then date will be show next days 
+4.after timesheet submited data continuesly casual leave applyled then after end date, date will be show
+5.after timesheet submited data continuesly exam leave applyled then after end date, date will be show
+6.when casual leave apply and gap date will be exist between save timesheet and startdate of casual leave then, date will be show after saved timesheet date
+7.when casual leave apply and gap date will be not exist between save timesheet and startdate of casual leave then, after casual leave end date will be show
+8.when exam leave apply and gap date will be exist between save timesheet and startdate of exam leave then, date will be show after saved timesheet date
+9.when exam leave apply and gap date will be not exist between save timesheet and startdate of exam leave then, after exam leave end date will be show
+10.when user has a casual leave timesheet after submitted timesheet date on sunday then will be show casual leaveend date 
+11.when user has a exam leave timesheet after submitted timesheet date on starday then will be show exam leaveend date 
+12.When user new joinee then on that time also will be problem
+13.when user rejoining and promoting in that case will be also problem
+14.if you are not working on sunday and want to date enable for monday then you have to submit timesheet of that week.
+15.if date is enable in future and user try submit there timesheet on that time user can not submit timesheet
+16. if user submit current date timesheet then date not enable in future this is for only saved timesheet 
+
+
+
+1.If a timesheet is submitted on Saturday, the date will be enabled the following Monday.
+2.If a timesheet is submitted on Sunday, the date will be enabled the following Monday.
+3.When a user saves timesheet data, the next day's date will be displayed.
+4.If casual leave is applied immediately after submitting the timesheet, the date will be displayed after the leave's end date.
+5.If exam leave is applied immediately after submitting the timesheet, the date will be displayed after the leave's end date.
+6.When casual leave is applied and there is a gap between the saved timesheet date and the casual leave start date, the date will be displayed after the saved timesheet date.
+7.When casual leave is applied without any gap between the saved timesheet date and the casual leave start date, the date will be displayed after the casual leave's end date.
+8.When exam leave is applied and there is a gap between the saved timesheet date and the exam leave start date, the date will be displayed after the saved timesheet date.
+9.When exam leave is applied without any gap between the saved timesheet date and the exam leave start date, the date will be displayed after the exam leave's end date.
+10.If you are not working on Sunday and want the date to be enabled on Monday, you must submit the timesheet for that week.
+11.If a date is enabled in the future and the user tries to submit their timesheet, they will not be able to submit it.
+12.If a user submits a timesheet for the current date, future dates will not be enabled. This applies only to saved timesheets.
+13. New Joiner Case
+  1.If a user is a new joiner, their date will be enabled on their joining date.
+  2.After submitting timesheets for one week post-joining, all previous test cases will apply.
+
+14. After Rejoining (Same Post or Different Post)
+   1.If a user rejoins, their date will be enabled on their rejoining date.
+   2.After submitting timesheets for one week post-rejoining, all previous test cases will apply.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222

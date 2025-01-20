@@ -1,18 +1,533 @@
-{{-- *  --}}
+{{-- resources\views\backEnd\layouts\includes\js.blade.php --}}
+{{-- * regarding  --}}
 {{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding date validation  --}}
+{{--  Start Hare  --}}
+
+{{-- validation for block 4 digit to  year --}}
+{{-- <script>
+     $(document).ready(function() {
+         $('#udindate').on('change', function() {
+             alert('hi');
+             var startclear = $(this);
+             var startDateInput1 = startclear.val();
+             var startDate = new Date(startDateInput1);
+             var startyear = startDate.getFullYear();
+             var yearLength = startyear.toString().length;
+             if (yearLength > 4) {
+                 alert('Enter four digits for the year');
+                 startclear.val('');
+             }
+         });
+     });
+ </script> --}}
+{{-- <script>
+     $(document).ready(function() {
+         $('#udindate').on('change', function() {
+             //  alert('hi');
+             const dateInput = $(this); // Input element
+             const dateValue = dateInput.val(); // Date string
+             const today = new Date(); // Today's date
+             const selectedDate = new Date(dateValue); // Selected date
+
+             // Validation: Check if the field is empty
+             if (!dateValue) {
+                 alert('Please select a date.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Validation: Ensure the year has exactly 4 digits
+             const year = selectedDate.getFullYear();
+             if (year.toString().length !== 4) {
+                 alert('Enter a valid year with four digits.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Validation: Ensure the date is not in the future
+             if (selectedDate > today) {
+                 alert('Future dates are not allowed.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Validation: Ensure the date is valid
+             if (isNaN(selectedDate.getTime())) {
+                 alert('The selected date is invalid.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Optional Validation: Check if the date is within a custom range (e.g., last 10 years)
+             const tenYearsAgo = new Date();
+             tenYearsAgo.setFullYear(today.getFullYear() - 10);
+
+             if (selectedDate < tenYearsAgo) {
+                 alert('The date must be within the last 10 years.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // If all validations pass
+             alert('Date is valid!');
+         });
+     });
+ </script> --}}
+
+{{-- <script>
+     $(document).ready(function() {
+         $('#udindate').on('input', function(event) {
+             event.preventDefault(); // Prevent form submission or refresh if used in a form
+             const dateInput = $(this); // Input element
+             const dateValue = dateInput.val(); // Date string
+             const today = new Date(); // Today's date
+
+             // Validation: Check if the field is empty
+             if (!dateValue) {
+                 alert('Please select a date.');
+                 dateInput.val('');
+                 return;
+             }
+
+             const selectedDate = new Date(dateValue); // Selected date
+
+             // Validation: Ensure the date is valid
+             if (isNaN(selectedDate.getTime())) {
+                 alert('The selected date is invalid.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Validation: Ensure the year has exactly 4 digits
+             const year = selectedDate.getFullYear();
+             if (year.toString().length !== 4) {
+                 return; // Wait for the user to finish typing the full year
+             }
+
+             // Validation: Ensure the date is not in the future
+             if (selectedDate > today) {
+                 alert('Future dates are not allowed.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Optional Validation: Check if the date is within a custom range (e.g., last 10 years)
+             const tenYearsAgo = new Date();
+             tenYearsAgo.setFullYear(today.getFullYear() - 10);
+
+             if (selectedDate < tenYearsAgo) {
+                 alert('The date must be within the last 10 years.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // If all validations pass
+             console.log('Date is valid:', dateValue);
+         });
+     });
+ </script> --}}
+
+{{-- <script>
+     $(document).ready(function() {
+         $('#udindate').on('input', function(event) {
+             event.preventDefault(); // Prevent any default behavior
+             const dateInput = $(this); // Input element
+             const dateValue = dateInput.val(); // Date string
+             const today = new Date(); // Today's date
+
+             // Validation: Check if the field is empty
+             if (!dateValue) {
+                 alert('Please select a date.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Validation: Ensure the input matches the format YYYY-MM-DD
+             const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // Regular expression for YYYY-MM-DD format
+             if (!dateRegex.test(dateValue)) {
+                 alert('Enter a valid date in the format YYYY-MM-DD.');
+                 dateInput.val('');
+                 return;
+             }
+
+             const selectedDate = new Date(dateValue); // Parse the selected date
+
+             // Validation: Ensure the date is valid
+             if (isNaN(selectedDate.getTime())) {
+                 alert('The selected date is invalid.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Validation: Ensure the date is not in the future
+             if (selectedDate > today) {
+                 alert('Future dates are not allowed.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // Optional Validation: Check if the date is within a custom range (e.g., last 10 years)
+             const tenYearsAgo = new Date();
+             tenYearsAgo.setFullYear(today.getFullYear() - 10);
+
+             if (selectedDate < tenYearsAgo) {
+                 alert('The date must be within the last 10 years.');
+                 dateInput.val('');
+                 return;
+             }
+
+             // If all validations pass
+             console.log('Date is valid:', dateValue);
+         });
+     });
+ </script> --}}
+
+
+<script>
+    $(document).ready(function() {
+        $('#datevalid').on('change', function() {
+            var startclear = $('#datevalid');
+            var startDateInput1 = $('#datevalid').val();
+            var startDate = new Date(startDateInput1);
+            var startyear = startDate.getFullYear();
+            var yearLength = startyear.toString().length;
+            if (yearLength > 4) {
+                alert('Enter four digits for the year');
+                startclear.val('');
+            }
+        });
+    });
+</script>
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding date  --}}
+{{--  Start Hare  --}}
+<script>
+    $("#datepickers").datepicker({
+        maxDate: endDate, // Maximum date allowed
+        minDate: null, // Minimum date allowed (null means no restriction)
+        dateFormat: 'dd-mm-yy', // Date format
+        onSelect: function(dateText) {
+            console.log("Selected date: " + dateText);
+        }
+    });
+
+    // Start Date Picker
+    $("#startDate").datepicker({
+        dateFormat: 'dd-mm-yy',
+        onSelect: function(selectedDate) {
+            var startDate = $(this).datepicker('getDate');
+            var maxDate = new Date(startDate);
+            maxDate.setDate(maxDate.getDate() + 7); // 7 din ka range
+            $("#endDate").datepicker("option", "minDate", startDate);
+            $("#endDate").datepicker("option", "maxDate", maxDate);
+        }
+    });
+
+    // End Date Picker
+    $("#endDate").datepicker({
+        dateFormat: 'dd-mm-yy',
+        onSelect: function(dateText) {
+            console.log("End date selected: " + dateText);
+        }
+    });
+</script>
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- *regarding date --}}
+{{--  Start Hare  --}}
+@if (Request::is('assignmentmapping/create'))
+    <script>
+        $(document).ready(function() {
+            //     alert('hi');
+            $("#EndDate").change(function() {
+                var startDate = document.getElementById("StartDate").value;
+                var endDate = document.getElementById("EndDate").value;
+                //alert(startDate);
+
+                if ((Date.parse(startDate) >= Date.parse(endDate))) {
+                    alert("End date should be greater than Start date");
+                    document.getElementById("EndDate").value = "";
+                }
+
+            });
+        });
+    </script>
+@endif
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding week in javascript  --}}
+{{--  Start Hare  --}}
+{{-- 
+ Sunday=0
+ Monday=1
+ Tuesday=2
+ Wednesday=3
+ Thursday=4
+ Friday=5
+ Saturday=6
+ --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 {{-- *  --}}
 {{--  Start Hare  --}}
+@php
+    $user = DB::table('users')->latest()->first();
+@endphp
+
+<script>
+    // Safely encode PHP data to JSON for use in JavaScript
+    var user = @json($user);
+    console.log("users data:", user);
+</script>
 {{--  Start Hare  --}}
-{{-- ! End hare --}}
-{{-- *  --}}
+<script>
+    $(function() {
+        $('#datepicker').datepicker({
+            dateFormat: 'dd-mm-yy'
+        });
+    });
+    //  $(function() {
+    //      $("#datepickers").datepicker({
+    //          maxDate: new Date,
+    //          dateFormat: 'dd-mm-yy'
+    //      });
+    //  });
+    //  console.log("Client datea:", lasttimesheetsubmiteddata);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lasttimesheetsubmiteddata !== 'undefined' && lasttimesheetsubmiteddata) {
+            console.log("End date:", lasttimesheetsubmiteddata.enddate);
+
+            // Parse enddate from latestTimesheetSubmitted to a valid Date object
+            var endDate = new Date(lasttimesheetsubmiteddata.enddate);
+
+            if (!isNaN(endDate)) { // Ensure the date is valid
+                $("#datepickers").datepicker({
+                    maxDate: endDate, // Use the parsed Date object
+                    minDate: endDate, // Set the same date for minDate if needed
+                    dateFormat: 'dd-mm-yy'
+                });
+            } else {
+                console.error("Invalid date format for enddate:", latestTimesheetSubmitted.enddate);
+            }
+        } else {
+            console.log("No latest timesheet data found.");
+        }
+    });
+</script>
 {{--  Start Hare  --}}
-{{--  Start Hare  --}}
-{{-- ! End hare --}}
-{{-- *  --}}
-{{--  Start Hare  --}}
-{{--  Start Hare  --}}
+@if (Request::is('invoice/create') || Request::is('invoice/*/edit'))
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function() {
+            $('#datepicker').datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+        $(function() {
+            $("#datepickers").datepicker({
+                maxDate: new Date,
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+    </script>
+    {{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof latestTimesheetSubmitted !== 'undefined' && latestTimesheetSubmitted) {
+            console.log("End date:", latestTimesheetSubmitted.enddate);
+
+            // Parse enddate from latestTimesheetSubmitted to a valid Date object
+            var endDate = new Date(latestTimesheetSubmitted.enddate);
+
+            if (!isNaN(endDate)) { // Ensure the date is valid
+                $("#datepickers").datepicker({
+                    maxDate: endDate, // Use the parsed Date object
+                    minDate: endDate, // Set the same date for minDate if needed
+                    dateFormat: 'dd-mm-yy'
+                });
+            } else {
+                console.error("Invalid date format for enddate:", latestTimesheetSubmitted.enddate);
+            }
+        } else {
+            console.log("No latest timesheet data found.");
+        }
+    });
+</script> --}}
+
+    <script>
+        // Pass the PHP data to JavaScript
+        var latestTimesheetSubmitted = @json($latesttimesheetsubmitted);
+
+        console.log("Latest Timesheet Submitted:", latestTimesheetSubmitted);
+    </script>
+    936
+    775 dev khurana
+    {{-- @include('backEnd.layouts.includes.js') --}}
+    {{-- @include('backEnd.layouts.includes.jstest') --}}
+
+    $latesttimesheetsubmitted = DB::table('timesheetreport')
+    ->where('teamid', auth()->user()->teammember_id)
+    ->latest()
+    ->first();
+
+    return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner',
+    'timesheetrejectData', 'latesttimesheetsubmitted'));
+
+    @php
+        $latesttimesheetsubmittedq = DB::table('timesheetreport')
+            ->where('teamid', auth()->user()->teammember_id)
+            ->latest()
+            ->first();
+    @endphp
+    <script>
+        // Pass the PHP data to JavaScript
+        var latestTimesheetSubmittedq = @json($latesttimesheetsubmittedq);
+
+        console.log("Latest Timesheet Submitted:", latesttimesheetsubmittedq);
+    </script>
+@endif
+
+
+
+
+
+@if (Request::is('invoice/create') || Request::is('invoice/*/edit') || Request::is('timesheet/create'))
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function() {
+            $('#datepicker').datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+        //  $(function() {
+        //      $("#datepickers").datepicker({
+        //          maxDate: new Date,
+        //          dateFormat: 'dd-mm-yy'
+        //      });
+        //  });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof latestTimesheetSubmittedq !== 'undefined' && latestTimesheetSubmittedq) {
+                console.log("End date:", latestTimesheetSubmittedq.enddate);
+
+                // Parse enddate from latestTimesheetSubmitted to a valid Date object
+                var endDate = new Date(latestTimesheetSubmittedq.enddate);
+
+                if (!isNaN(endDate)) { // Ensure the date is valid
+                    $("#datepickers").datepicker({
+                        maxDate: endDate, // Use the parsed Date object
+                        minDate: endDate, // Set the same date for minDate if needed
+                        dateFormat: 'dd-mm-yy'
+                    });
+                } else {
+                    console.error("Invalid date format for enddate:", latestTimesheetSubmittedq.enddate);
+                }
+            } else {
+                console.log("No latest timesheet data found.");
+            }
+        });
+    </script>
+@endif
+
 {{-- ! End hare --}}
 {{-- * regarding summernote --}}
 {{--  Start Hare  --}}
@@ -3925,6 +4440,44 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
             //          dateFormat: 'dd-mm-yy' // Set the desired date format
             //      });
             //  });
+        </script>
+        <script>
+            $(function() {
+                $('#datepicker').datepicker({
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+            //  $(function() {
+            //      $("#datepickers").datepicker({
+            //          maxDate: new Date,
+            //          dateFormat: 'dd-mm-yy'
+            //      });
+            //  });
+
+            $(function() {
+                var startDate = new Date();
+                var endDate = new Date();
+
+                $("#datepickers").datepicker({
+                    minDate: startDate,
+                    maxDate: endDate,
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+        </script>
+
+        <script>
+            $(function() {
+                var startDate = new Date();
+                var endDate = new Date();
+                endDate.setDate(startDate.getDate() + 7); // Add 7 days to the current date
+
+                $("#datepickers").datepicker({
+                    minDate: startDate,
+                    maxDate: endDate,
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
         </script>
     @endif
 

@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Facades\Log;
 // April excell
 // Work item May
 // june ka excell 
@@ -22,11 +23,234 @@ class ZipController extends Controller
 // Start Hare
 //! End hare 
 
-//*
+//* regarding holidays update / regarding holidays 
 // Start Hare
+$holidays = [
+  [
+    'holidayname' => 'Pongal/Makara Sankaranti',
+    'startdate' => '2025-01-14',
+    'enddate' => '2025-01-14',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Republic Day',
+    'startdate' => '2025-01-26',
+    'enddate' => '2025-01-26',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Holi',
+    'startdate' => '2025-03-14',
+    'enddate' => '2025-03-14',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Ambedkar Jayanthi',
+    'startdate' => '2025-04-14',
+    'enddate' => '2025-04-14',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Raksha Bandhan',
+    'startdate' => '2025-08-09',
+    'enddate' => '2025-08-09',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Independence Day',
+    'startdate' => '2025-08-15',
+    'enddate' => '2025-08-15',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Janmashtami',
+    'startdate' => '2025-08-16',
+    'enddate' => '2025-08-16',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Ganesh (Vinayaka) Chaturthi',
+    'startdate' => '2025-08-27',
+    'enddate' => '2025-08-27',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Mahanavami/Saraswathi Pooja',
+    'startdate' => '2025-10-01',
+    'enddate' => '2025-10-01',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Gandhi Jayanthi / Dussera Vijayadashami',
+    'startdate' => '2025-10-02',
+    'enddate' => '2025-10-02',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Deepawali',
+    'startdate' => '2025-10-20',
+    'enddate' => '2025-10-20',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Deepawali',
+    'startdate' => '2025-10-21',
+    'enddate' => '2025-10-21',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Gurunanak Jayanti',
+    'startdate' => '2025-11-05',
+    'enddate' => '2025-11-05',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Christmas Day',
+    'startdate' => '2025-12-25',
+    'enddate' => '2025-12-25',
+    'number_of_dates' => 1,
+  ],
+];
+
+
+
+foreach ($holidays as $holiday) {
+  DB::table('holidays')->insert([
+    'holidayname' => $holiday['holidayname'],
+    'startdate' => $holiday['startdate'],
+    'enddate' => $holiday['enddate'],
+    'number_of_dates' => $holiday['number_of_dates'],
+    'restricted' => 'on',
+    'description' => null,
+    'year' => 2025,
+    'notify' => null,
+    'status' => 1,
+    'createdby' => null,
+    'updatedby' => null,
+    'created_at' => now(),
+    'updated_at' => now(),
+  ]);
+}
+
+dd('done');
+// Start Hare
+DB::table('holidays')->insert([
+  [
+      'id' => 1,
+      'holidayname' => 'Pongal/Makara Sankaranti',
+      'startdate' => '2024-01-14',
+      'enddate' => '2024-01-14',
+      'restricted' => 0,
+      'description' => 'Festival celebrated in January.',
+      'number_of_dates' => 1,
+      'year' => 2024,
+      'notify' => 1,
+      'status' => 1,
+      'createdby' => 1, // Replace with your user ID
+      'updatedby' => 1, // Replace with your user ID
+      'created_at' => now(),
+      'updated_at' => now(),
+  ],
+  [
+      'id' => 2,
+      'holidayname' => 'Republic Day',
+      'startdate' => '2024-01-26',
+      'enddate' => '2024-01-26',
+      'restricted' => 0,
+      'description' => 'National holiday celebrated in January.',
+      'number_of_dates' => 1,
+      'year' => 2024,
+      'notify' => 1,
+      'status' => 1,
+      'createdby' => 1,
+      'updatedby' => 1,
+      'created_at' => now(),
+      'updated_at' => now(),
+  ],
+  [
+      'id' => 3,
+      'holidayname' => 'Holi',
+      'startdate' => '2024-03-14',
+      'enddate' => '2024-03-14',
+      'restricted' => 0,
+      'description' => 'Festival of colors celebrated in March.',
+      'number_of_dates' => 1,
+      'year' => 2024,
+      'notify' => 1,
+      'status' => 1,
+      'createdby' => 1,
+      'updatedby' => 1,
+      'created_at' => now(),
+      'updated_at' => now(),
+  ],
+  [
+      'id' => 4,
+      'holidayname' => 'Ambedkar Jayanthi',
+      'startdate' => '2024-04-14',
+      'enddate' => '2024-04-14',
+      'restricted' => 0,
+      'description' => 'Birthday of Dr. B.R. Ambedkar celebrated in April.',
+      'number_of_dates' => 1,
+      'year' => 2024,
+      'notify' => 1,
+      'status' => 1,
+      'createdby' => 1,
+      'updatedby' => 1,
+      'created_at' => now(),
+      'updated_at' => now(),
+  ],
+  // Continue adding similar entries for other holidays
+]);
+
 //! End hare 
 //*
 //*
+
+if ($iftwotimesheetinday == "P") {
+  $updatewording = "P";
+  $totalcountupdate = $attendances->$totalcountColumn; // No increment needed, use as is
+} elseif ($iftwotimesheetinday == 'T') {
+  $totalcountupdatetravel = $attendances->travel + 1; // Increment travel count
+  DB::table('attendances')
+      ->where('id', $attendances->id)
+      ->update([
+          'travel' => $totalcountupdatetravel,
+      ]);
+  $updatewording = "P";
+  $totalcountupdate = $attendances->$totalcountColumn; // No increment needed, use as is
+}
+
+
+if ($iftwotimesheetinday == "P") {
+  $updatewording = "P";
+  $totalcountupdate = $attendances->$totalcountColumn; // No change needed
+} elseif ($iftwotimesheetinday == 'T') {
+  $totalcountupdatetravel = max(0, $attendances->travel - 1); // Subtract 1 but ensure it doesn't go below 0
+  DB::table('attendances')
+      ->where('id', $attendances->id)
+      ->update([
+          'travel' => $totalcountupdatetravel,
+      ]);
+  $updatewording = "P";
+  $totalcountupdate = $attendances->$totalcountColumn; // No change needed
+}
+
+
+
+                                        // this code running on live isme travelcount ka issue aa sakta hai in future may be
+                                        // $updatewording = "P";
+                                        // $totalcountupdate = $attendances->$totalcountColumn + 0;
+
+                                        // this code running on local only isme travelcount ka issue fixed kiya gya hai
+                                        $totalcountupdatetravel = max(0, $attendances->travel - 1); // Subtract 1 but ensure it doesn't go below 0
+                                        DB::table('attendances')
+                                            ->where('id', $attendances->id)
+                                            ->update([
+                                                'travel' => $totalcountupdatetravel,
+                                            ]);
+                                        $updatewording = "P";
+                                        $totalcountupdate = $attendances->$totalcountColumn + 1;
+
 // Start Hare
 //! End hare 
 
@@ -2979,15 +3203,35 @@ if ($checksavetimesheet->isNotEmpty()) {
         // Get the day of the month (8 for "2024-10-08")
         $dayOfLeaving = $leavingDate->day;
 // Start Hare 
-//* regarding command list / command schedule list/ command scheduling list 
+//* regarding command list / command schedule list/ command scheduling list / command test 
 // Start Hare 
-// Start Hare Check Scheduled Commands run or not 
-# Check Scheduled Commands run or not 
-// 1.php artisan attendance:calculate
+// 1.Temporarily Change the Schedule
+$schedule->command('command:Leavetypesupdate')
+    ->dailyAt('23:59') // Run every day at 11:59 PM for testing
+    ->withoutOverlapping();
+
+// 2.After testing, revert this back to:
+$schedule->command('command:Leavetypesupdate')
+    ->yearlyOn(12, 31, '23:59')
+    ->withoutOverlapping();
+
+ // 3. Add this line end of your command 
+    $this->info("Leavetypes updated from $previousYear to $currentYear"); // Debug message
+    // When you run the command, it will output:
+    // Leavetypes updated from 2024 to 2025
+
+
+ // 4. run below command point number 2
+
+ # Check Scheduled Commands run or not 
+//  1.php artisan schedule:run
 
 # Manually Run the Scheduler
-//2. php artisan schedule:run
+//  2.php artisan command:Leavetypesupdate
 
+//? end hare
+
+// Start Hare 
 #Email Notification for Failures or Output
 $schedule->command('attendance:calculate')
          ->lastDayOfMonth('18:00')
@@ -3259,6 +3503,9 @@ $schedule->command('attendance:calculate')
     ->unlessBetween('02:00', '06:00');
 
 $schedule->command('attendance:calculate')
+
+$schedule->command('command:Leavetypesupdate')
+->yearlyOn(12, 31, '23:59')->withoutOverlapping();
 
     // Run the task only when a certain condition is met
     ->when(function () {
@@ -4463,6 +4710,7 @@ $recordsToDelete = DB::table('leaveapprove')
 dd($recordsToDelete);
 // Start Hare 
 
+// 12-jul-2024
 date('d-M-Y', strtotime($udinData->udindate))
 'date' => date('d/m/Y', $unixTimestamp),
 'created_at' => $firstDate->format('Y-m-d') . ' ' . now()->format('H:i:s'),
@@ -8906,6 +9154,7 @@ https://www.microsoft365.com/launch/excel?auth=1
 
 
 //* regarding year / year wise filter
+
 $approvedleavesvalue = DB::table('applyleaves')
 ->where('createdby', auth()->user()->teammember_id)
 ->where('status', 1)
@@ -12308,26 +12557,39 @@ $update2 = DB::table('assignmentmappings')
    'otherpartnerhour' => 0,
  ]);
 
-DB::table('timesheetreport')
-->delete();
+
+
+
+ DB::table('timesheetreport')
+ ->delete();
 DB::table('timesheetrequests')
-->delete();
+ ->delete();
 DB::table('timesheets')
-->delete();
+ ->delete();
 DB::table('timesheetusers')
-->delete();
+ ->delete();
 
 
 DB::table('applyleaves')
-->delete();
+ ->delete();
 DB::table('leaveapprove')
-->delete();
+ ->delete();
 DB::table('leaverequest')
-->delete();
+ ->delete();
 
 
 DB::table('attendances')
-->delete();
+ ->delete();
+
+
+// DB::table('Users')
+//   ->delete();
+// DB::table('teammembers')
+//   ->delete();
+DB::table('teamrolehistory')
+ ->delete();
+DB::table('rejoiningsamepost')
+ ->delete();
 
 dd('hi');
 
@@ -12393,6 +12655,73 @@ dd('hi');
 
 
 // timesheet,timesheetusers,timesheetreports table
+// timesheet,timesheetusers,timesheetreports table
+$authteamid = 847;
+$startdate = '2025-01-06';
+$enddate = '2025-01-12';
+
+$nextweektimesheet1 = DB::table('timesheetusers')
+  ->where('createdby', $authteamid)
+  ->whereBetween('date', [$startdate,  $enddate])
+  // ->get();
+  ->update(['createdby' => 8471]);
+// ->update(['status' => 0]);
+
+$nextweektimesheet2 = DB::table('timesheets')
+  ->where('created_by', $authteamid)
+  ->whereBetween('date', [$startdate,  $enddate])
+  // ->get();
+  ->update(['created_by' => 8471]);
+// ->update(['status' => 0]);
+
+// more than one week delete 
+$result = ['2025-01-06'];
+foreach ($result as $date) {
+  $nextweektimesheet3 = DB::table('timesheetreport')
+    ->where('teamid', $authteamid)
+    ->where('startdate', $date)
+    // ->get();
+    ->update(['teamid' => 8471]);
+  // ->delete();
+}
+
+// $attendanceexist = DB::table('attendances')
+//   ->where('employee_name', $authteamid)
+//   // ->where('month', 'December')
+//   ->delete();
+
+dd('hi');
+// timesheet,timesheetusers,timesheetreports table
+$authteamid = 847;
+$startdate = '2024-07-22';
+$enddate = '2024-07-22';
+$nextweektimesheet1 = DB::table('timesheetusers')
+  ->where('createdby', $authteamid)
+  ->whereBetween('date', [$startdate,  $enddate])
+  // ->get();
+  ->update(['status' => 0]);
+
+$nextweektimesheet2 = DB::table('timesheets')
+  ->where('created_by', $authteamid)
+  ->whereBetween('date', [$startdate,  $enddate])
+  // ->get();
+  ->update(['status' => 0]);
+// more than one week delete 
+$result = ['2024-07-22', '2024-07-29'];
+foreach ($result as $date) {
+  $nextweektimesheet3 = DB::table('timesheetreport')
+    ->where('teamid', $authteamid)
+    ->where('startdate', $date)
+    // ->get();
+    ->delete();
+}
+
+$attendanceexist = DB::table('attendances')
+  ->where('employee_name', $authteamid)
+  // ->where('month', 'December')
+  ->delete();
+
+dd('hi');
 // timesheet,timesheetusers,timesheetreports table
 $nextweektimesheet1 = DB::table('timesheetusers')
 ->where('createdby', 847)

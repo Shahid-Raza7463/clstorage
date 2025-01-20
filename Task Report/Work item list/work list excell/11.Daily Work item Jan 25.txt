@@ -1,0 +1,105 @@
+01-01-2025
+new year Leave
+
+02-01-2025
+1.i have created documentation for (Add a travel box on the dashboard as requested by the client.)
+1.Apply leave year problem fixed; this occurred because of the year change in 2025.
+2.Sunny Sir wants to delete the empty team member list.
+3.Holidays for 2025 have been uploaded on VSA, and functional testing has been completed.
+4.I have uploaded 4 in process tasks on VSAdemo (VS-377, 373, 372, 368), and functional testing has been completed
+
+03-01-2025
+1.I have uploaded 4 in process tasks on VSAdemo (VS-377, 373, 372, 368), and functional testing has been completed
+2.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+3.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+
+04-01-2025
+1.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+2.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+3.I have created documentation
+4.I have uploaded 2 in process tasks on VSAdemo (VS-388, 389), and functional testing has been completed
+5.The client wants to delete 2 submitted timesheets of Tulsi Ray
+
+05-01-2025
+06-01-2025
+1.Udin date format needs to be fixed.
+2.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+3.Restrict users from entering time in the format 08:00.
+
+07-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+2.The client approved a leave request by mistake and now wants to correct the data for that user
+3.The client wants to update the assignment number from LAN100683 to BIR100683.
+4.The client wants to transfer the data from LAN100683 to LAN100684.
+5.kt for pooja 
+
+08-01-2025
+1.The client wants to update the assignment number from LAN100683 to BIR100683.
+2.The client wants to transfer the data from LAN100683 to LAN100684.
+3.Implement a calendar feature on the Add Timesheet page.
+4.Total count in attendance data is not showing correct (bugs created by pooja).
+
+``````````````````````````````
+
+09-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+
+10-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+
+11-01-2025
+12-01-2025
+13-01-2025
+1.I have deployed 7 QA Passed task on vsalive (VS-389, VS-388, VS-377, VS-373, VS-372, VS-368, VS-302)
+2.My Attendance report verification shared by atishay jain after that i have verified
+
+14-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+2.optimize all code 
+3.Functional testing done for all 16 scenerio (Implement a calendar feature on the Add Timesheet page.)
+
+15-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+2.Functional testing done for all 16 scenerio after optimize the code (Implement a calendar feature on the Add Timesheet page.)
+
+
+16-01-2025
+1.Tasks VS-395, VS-367, VS-348, VS-346 has been uploaded to vsademo, and functional testing has been completed 
+2.Test descreption added on jira for VS-395, VS-367, VS-348, VS-346
+
+17-01-2025
+1.The Assignment is not coming to user I need to test
+2.Bugs raised by pooja, Udin date format needs to be fixed.
+3.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+
+
+18-01-2025
+  sick leave
+19-01-2025
+   Sunday 
+
+20-01-2025
+1.Move the Edit button to the first position on the Timesheet Saved Listing page.
+
+
+21-01-2025
+22-01-2025
+23-01-2025
+24-01-2025
+25-01-2025
+26-01-2025
+27-01-2025
+28-01-2025
+29-01-2025
+30-01-2025
+31-01-2025
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+coding 
+functional testing
+documentation 
+upload on vsademo
+functional testing 
+
+

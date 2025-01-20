@@ -1,57 +1,1129 @@
 <!DOCTYPE html>
 <html lang="en">
-    // // Check for rejoining users
-    $rejoiningDataall = DB::table('teammembers')
+
+{{-- regarding calander --}}
+
+
+
+     {{-- 10-01-2025 --}}
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Declare endDate outside of the conditions
+            var endDate = null;
+
+            //  if (typeof timesheetmaxDateRecord !== 'undefined' && timesheetmaxDateRecord) {
+            //      console.log("Latest timesheet data:", timesheetmaxDateRecord);
+            //      endDate = new Date(timesheetmaxDateRecord);
+
+            //      if (isNaN(endDate)) {
+            //          console.error("Invalid date format for timesheetmaxDateRecord:", timesheetmaxDateRecord);
+            //          endDate = null; // Reset endDate to null if invalid
+            //      }
+            //  }
+
+
+            //  If timesheet saved data,leave data exist in saved and last timesheet submitted end data exist also
+            if (timesheetmaxDateRecord && leavedataforcalander1) {
+                if (differenceInDays > 1) {
+                    if (typeof timesheetmaxDateRecord !== 'undefined' && timesheetmaxDateRecord) {
+                        console.log("Latest timesheet data:", timesheetmaxDateRecord);
+                        endDate = new Date(timesheetmaxDateRecord);
+
+                        if (isNaN(endDate)) {
+                            console.error("Invalid date format for timesheetmaxDateRecord:",
+                                timesheetmaxDateRecord);
+                            endDate = null; // Reset endDate to null if invalid
+                        }
+                    }
+                } else {
+                    if (typeof leavedataforcalander1 !== 'undefined' && leavedataforcalander1) {
+                        console.log("Latest timesheet data:", leavedataforcalander1);
+                        endDate = new Date(leavedataforcalander1);
+
+                        if (isNaN(endDate)) {
+                            console.error("Invalid date format for leavedataforcalander:", leavedataforcalander1);
+                            endDate = null; // Reset endDate to null if invalid
+                        }
+                    }
+                }
+
+                if (!endDate && typeof lasttimesheetsubmiteddata !== 'undefined' && lasttimesheetsubmiteddata) {
+                    console.log("Latest submitted data:", lasttimesheetsubmiteddata.enddate);
+                    endDate = new Date(lasttimesheetsubmiteddata.enddate);
+
+                    // Check if the incremented date is a Sunday
+                    if (endDate.getDay() === 6) {
+                        console.log("Incremented date is Sunday, adding another day.");
+                        endDate.setDate(endDate.getDate() + 1); // Increment by one more day
+                    }
+
+                    if (isNaN(endDate)) {
+                        console.error("Invalid date format for lasttimesheetsubmiteddata.enddate:",
+                            lasttimesheetsubmiteddata.enddate);
+                        endDate = null; // Reset endDate to null if invalid
+                    }
+                }
+            }
+            //  If timesheet saved data,leave data not exist in saved and last timesheet submitted  end data only exist
+            else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+                rejoiningdate) {
+                if (typeof lasttimesheetsubmiteddata !== 'undefined' && lasttimesheetsubmiteddata) {
+                    console.log("Latest submitted data:", lasttimesheetsubmiteddata.enddate);
+                    endDate = new Date(lasttimesheetsubmiteddata.enddate);
+
+                    // Check if the incremented date is a Sunday
+                    if (endDate.getDay() === 6) {
+                        console.log("Incremented date is Sunday, adding another day.");
+                        endDate.setDate(endDate.getDate() + 1); // Increment by one more day
+                    }
+
+                    if (isNaN(endDate)) {
+                        console.error("Invalid date format for lasttimesheetsubmiteddata.enddate:",
+                            lasttimesheetsubmiteddata.enddate);
+                        endDate = null; // Reset endDate to null if invalid
+                    }
+                }
+            }
+            //  If timesheet saved data,leave data not exist in saved and last timesheet submitted  end data only exist
+            else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
+                if (typeof timesheetmaxDateRecord !== 'undefined' && timesheetmaxDateRecord) {
+                    console.log("Latest timesheet data:", timesheetmaxDateRecord);
+                    endDate = new Date(timesheetmaxDateRecord);
+
+                    if (isNaN(endDate)) {
+                        console.error("Invalid date format for timesheetmaxDateRecord:",
+                            timesheetmaxDateRecord);
+                        endDate = null; // Reset endDate to null if invalid
+                    }
+                }
+            }
+            // New joining user
+            //  else if (newteammember && !lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !
+            //      leavedataforcalander1) {
+            else if (newteammember) {
+                if (typeof newteammember !== 'undefined' && newteammember) {
+                    console.log("Latest timesheet data:", newteammember);
+
+                    if (timesheetmaxDateRecord) {
+                        endDate = new Date(timesheetmaxDateRecord);
+                    } else {
+                        endDate = new Date(newteammember);
+                        endDate.setDate(endDate.getDate() - 1);
+                    }
+
+                    if (isNaN(endDate)) {
+                        console.error("Invalid date format for timesheetmaxDateRecord:",
+                            timesheetmaxDateRecord);
+                        endDate = null; // Reset endDate to null if invalid
+                    }
+                }
+            }
+
+            //rejoining process
+            else if (rejoiningdate) {
+                if (typeof rejoiningdate !== 'undefined' && rejoiningdate) {
+                    console.log("Latest rejoiningdate data:", rejoiningdate);
+
+                    if (rejoiningdate) {
+                        endDate = new Date(rejoiningdate);
+                        endDate.setDate(endDate.getDate() - 1);
+                    }
+
+                    if (isNaN(endDate)) {
+                        console.error("Invalid date format for timesheetmaxDateRecord:",
+                            timesheetmaxDateRecord);
+                        endDate = null; // Reset endDate to null if invalid
+                    }
+                }
+            }
+            //  If timesheet saved data not exist and leave data exist in saved and last timesheet submitted end data exist also
+            else {
+                if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+                    if (differenceInDays == 2 || differenceInDays == 1) {
+                        if (typeof leavedataforcalander1 !== 'undefined' && leavedataforcalander1) {
+                            console.log("Latest timesheet data:", leavedataforcalander1);
+                            endDate = new Date(leavedataforcalander1);
+
+                            if (isNaN(endDate)) {
+                                console.error("Invalid date format for leavedataforcalander:",
+                                    leavedataforcalander1);
+                                endDate = null; // Reset endDate to null if invalid
+                            }
+                        }
+                    } else {
+                        if (typeof lasttimesheetsubmiteddata !== 'undefined' && lasttimesheetsubmiteddata) {
+                            console.log("Latest submitted data:", lasttimesheetsubmiteddata.enddate);
+                            endDate = new Date(lasttimesheetsubmiteddata.enddate);
+
+                            // Check if the incremented date is a Sunday
+                            if (endDate.getDay() === 6) {
+                                console.log("Incremented date is Sunday, adding another day.");
+                                endDate.setDate(endDate.getDate() + 1); // Increment by one more day
+                            }
+
+                            if (isNaN(endDate)) {
+                                console.error("Invalid date format for lasttimesheetsubmiteddata.enddate:",
+                                    lasttimesheetsubmiteddata.enddate);
+                                endDate = null; // Reset endDate to null if invalid
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            //  if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+            //      if (differenceInDays == 2 || differenceInDays == 1) {
+            //          if (typeof leavedataforcalander1 !== 'undefined' && leavedataforcalander1) {
+            //              console.log("Latest timesheet data:", leavedataforcalander1);
+            //              endDate = new Date(leavedataforcalander1);
+
+            //              if (isNaN(endDate)) {
+            //                  console.error("Invalid date format for leavedataforcalander:", leavedataforcalander1);
+            //                  endDate = null; // Reset endDate to null if invalid
+            //              }
+            //          }
+            //      } else {
+            //          if (typeof lasttimesheetsubmiteddata !== 'undefined' && lasttimesheetsubmiteddata) {
+            //              console.log("Latest submitted data:", lasttimesheetsubmiteddata.enddate);
+            //              endDate = new Date(lasttimesheetsubmiteddata.enddate);
+
+            //              // Check if the incremented date is a Sunday
+            //              if (endDate.getDay() === 6) {
+            //                  console.log("Incremented date is Sunday, adding another day.");
+            //                  endDate.setDate(endDate.getDate() + 1); // Increment by one more day
+            //              }
+
+            //              if (isNaN(endDate)) {
+            //                  console.error("Invalid date format for lasttimesheetsubmiteddata.enddate:",
+            //                      lasttimesheetsubmiteddata.enddate);
+            //                  endDate = null; // Reset endDate to null if invalid
+            //              }
+            //          }
+            //      }
+            //  }
+
+
+
+            if (endDate) {
+
+                var today = new Date();
+                today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+                endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+                //  if (endDate.getTime() !== today.getTime()) {
+                endDate.setDate(endDate.getDate() + 1); // Increment endDate by one day
+                //  }
+
+                // Increment the date by 1
+                //  endDate.setDate(endDate.getDate() + 1);
+
+                //  // Check if the incremented date is a Sunday
+                //  if (endDate.getDay() === 0) {
+                //      console.log("Incremented date is Sunday, adding another day.");
+                //      endDate.setDate(endDate.getDate() + 1); // Increment by one more day
+                //  }
+
+                var formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                    ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                    endDate.getFullYear();
+
+                // Set the calculated date in the datepicker input field
+                document.getElementById('datepickers').value = formattedDate;
+
+                // Initialize the datepicker with the calculated maxDate
+                $("#datepickers").datepicker({
+                    maxDate: endDate, // Use the parsed and adjusted Date object
+                    minDate: endDate, // Set the same date for minDate if needed
+                    dateFormat: 'dd-mm-yy'
+                });
+
+                console.log("Adjusted date set in datepicker:", endDate);
+            } else {
+                console.log("No valid timesheet or submitted date data found to set datepicker.");
+            }
+        });
+    </script>
+
+
+<script>
+    // Pass the PHP data to JavaScript
+    var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+    var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
+    var leavedataforcalander1 = @json($leavedataforcalander1);
+    var differenceInDays = @json($differenceInDays);
+    var newteammember = @json($newteammember);
+    var rejoiningdate = @json($rejoiningdate);
+</script>
+
+
+public function create(Request $request)
+{
+
+  $permotioncheck = DB::table('teamrolehistory')
+    ->where('teammember_id', auth()->user()->teammember_id)->first();
+  $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')->get();
+  $teammember = Teammember::where('role_id', '!=', 11)->with('title', 'role')->get();
+  if (auth()->user()->role_id == 11) {
+    $client = Client::where('status', 1)->select('id', 'client_name', 'client_code')->orderBy('client_name', 'ASC')->get();
+    $timesheetrejectData = DB::table('timesheetusers')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->where('status', 2)
+      ->first();
+  } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+    $timesheetrejectData = DB::table('timesheetusers')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->where('status', 2)
+      ->first();
+
+    $clientssbefore = DB::table('assignmentteammappings')
+      ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+      ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+      ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+      // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+      ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+      ->where('assignmentbudgetings.status', 1)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()->get();
+
+    $clientssafter = DB::table('assignmentmappings')
+      ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+      ->where(function ($query) {
+        $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+          ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+      })
+      ->where('assignmentbudgetings.status', 1)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()->get();
+
+    // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+    // $clients = DB::table('clients')
+    //   ->whereIn('id', [29, 32, 33, 34])
+    //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+    //   ->orderBy('client_name', 'ASC')
+    //   ->distinct()->get();
+    // $client = $clientss->merge($clients);
+
+    $selectedDate1 = new \DateTime();
+    $formattedDate = $selectedDate1->format('Y-m-d');
+    $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+    if ($holidaydatecheck) {
+      $clientIds = [29, 32, 33, 34];
+    } else {
+      // if not holidays then go hare
+      $dayOfWeek = $selectedDate1->format('w');
+      if ($selectedDate1->format('l') == 'Saturday') {
+        $dayOfMonth = $selectedDate1->format('j');
+        // Calculate which Saturday of the month it is
+        $saturdayNumber = ceil($dayOfMonth / 7);
+        // offholiday client name will be show on 2nd and 4rth sturday
+        if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+          $clientIds = [29, 32, 33, 34];
+        } else {
+          $clientIds = [29, 32, 34];
+        }
+      } else {
+        $clientIds = [29, 32, 34];
+      }
+    }
+
+    $clients = DB::table('clients')
+      ->whereIn('id', $clientIds)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()
+      ->get();
+
+    $client = $clientssafter->merge($clientssbefore)->merge($clients);
+  } elseif (auth()->user()->role_id == 13) {
+    $timesheetrejectData = DB::table('timesheetusers')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->where('status', 2)
+      ->first();
+
+    $clientss = DB::table('assignmentmappings')
+      ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+      ->where(function ($query) {
+        $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+          ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+      })
+      ->where('assignmentbudgetings.status', 1)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()->get();
+
+    // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+    // $clients = DB::table('clients')
+    //   ->whereIn('id', [29, 32, 33, 34])
+    //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+    //   ->orderBy('client_name', 'ASC')
+    //   ->distinct()->get();
+    // $client = $clientss->merge($clients);
+
+    $selectedDate1 = new \DateTime();
+    $formattedDate = $selectedDate1->format('Y-m-d');
+    $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+    if ($holidaydatecheck) {
+      $clientIds = [29, 32, 33, 34];
+    } else {
+      // if not holidays then go hare
+      $dayOfWeek = $selectedDate1->format('w');
+      if ($selectedDate1->format('l') == 'Saturday') {
+        $dayOfMonth = $selectedDate1->format('j');
+        // Calculate which Saturday of the month it is
+        $saturdayNumber = ceil($dayOfMonth / 7);
+        // offholiday client name will be show on 2nd and 4rth sturday
+        if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+          $clientIds = [29, 32, 33, 34];
+        } else {
+          $clientIds = [29, 32, 34];
+        }
+      } else {
+        $clientIds = [29, 32, 34];
+      }
+    }
+
+
+    $clients = DB::table('clients')
+      ->whereIn('id', $clientIds)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()
+      ->get();
+
+    $client = $clientss->merge($clients);
+  } else {
+    $timesheetrejectData = DB::table('timesheetusers')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->where('status', 2)
+      ->first();
+
+    $clientss = DB::table('assignmentteammappings')
+      ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+      ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+      ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+      // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+      ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+      ->where('assignmentbudgetings.status', 1)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()->get();
+
+    // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+    // $clients = DB::table('clients')
+    //   ->whereIn('id', [29, 32, 33, 34])
+    //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+    //   ->orderBy('client_name', 'ASC')
+    //   ->distinct()->get();
+
+    // $client = $clientss->merge($clients);
+
+    $selectedDate1 = new \DateTime();
+    $formattedDate = $selectedDate1->format('Y-m-d');
+    $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+    if ($holidaydatecheck) {
+      $clientIds = [29, 32, 33, 34];
+    } else {
+      // if not holidays then go hare
+      $dayOfWeek = $selectedDate1->format('w');
+      if ($selectedDate1->format('l') == 'Saturday') {
+        $dayOfMonth = $selectedDate1->format('j');
+        // Calculate which Saturday of the month it is
+        $saturdayNumber = ceil($dayOfMonth / 7);
+        // offholiday client name will be show on 2nd and 4rth sturday
+        if (auth()->user()->role_id == 14) {
+          if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+            $clientIds = [29, 32, 33, 34];
+          } else {
+            $clientIds = [29, 32, 34];
+          }
+        } else {
+          if ($saturdayNumber == 1.0 || $saturdayNumber == 2.0 || $saturdayNumber == 3.0 || $saturdayNumber == 4.0 || $saturdayNumber == 5.0) {
+            $clientIds = [29, 32, 33, 34];
+          }
+        }
+      } else {
+        $clientIds = [29, 32, 34];
+      }
+    }
+    $clients = DB::table('clients')
+      ->whereIn('id', $clientIds)
+      ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      ->orderBy('client_name', 'ASC')
+      ->distinct()
+      ->get();
+
+    $client = $clientss->merge($clients);
+  }
+  $assignment = Assignment::select('id', 'assignment_name')->get();
+  if ($request->ajax()) {
+    // dd($request);
+    if (isset($request->timesheetdate)) {
+      if ($permotioncheck && auth()->user()->role_id == 13) {
+        echo "<option>Select Client</option>";
+
+        $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+        $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+
+
+        $clientssbefore = DB::table('assignmentteammappings')
+          ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+          ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+          ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+          ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+          ->where(function ($query) use ($selectedDate) {
+            $query->whereNull('otpverifydate')
+              ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+          })
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()->get();
+
+        $clientssafter = DB::table('assignmentmappings')
+          ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+          ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+          ->where(function ($query) {
+            $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+              ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+          })
+          ->where(function ($query) use ($selectedDate) {
+            $query->whereNull('otpverifydate')
+              ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+          })
+          // ->whereNotNull('clients.client_name')
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()->get();
+
+        // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+        // $clients = DB::table('clients')
+        //   ->whereIn('id', [29, 32, 33, 34])
+        //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        //   ->orderBy('client_name', 'ASC')
+        //   ->distinct()->get();
+
+        // if you selected sturday date then offholydays client will be show otherwise not
+
+        $formattedDate = $selectedDate1->format('Y-m-d');
+        $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+        if ($holidaydatecheck) {
+          $clientIds = [29, 32, 33, 34];
+        } else {
+          // if not holidays then go hare
+          $dayOfWeek = $selectedDate1->format('w');
+          if ($selectedDate1->format('l') == 'Saturday') {
+            $dayOfMonth = $selectedDate1->format('j');
+            // Calculate which Saturday of the month it is
+            $saturdayNumber = ceil($dayOfMonth / 7);
+            // offholiday client name will be show on 2nd and 4rth sturday
+            if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+              $clientIds = [29, 32, 33, 34];
+            } else {
+              $clientIds = [29, 32, 34];
+            }
+          } else {
+            $clientIds = [29, 32, 34];
+          }
+        }
+        $clients = DB::table('clients')
+          ->whereIn('id', $clientIds)
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()
+          ->get();
+
+        // $client = $clientss->merge($clients);
+        $client = $clientssafter->merge($clientssbefore)->merge($clients);
+        foreach ($client as $clients) {
+          echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+        }
+      } elseif (auth()->user()->role_id == 13) {
+        echo "<option>Select Client</option>";
+
+        $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+        $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+
+        $clientss = DB::table('assignmentmappings')
+          ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+          ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+          ->where(function ($query) {
+            $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+              ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+          })
+          ->where(function ($query) use ($selectedDate) {
+            $query->whereNull('otpverifydate')
+              ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+          })
+          // ->whereNotNull('clients.client_name')
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()->get();
+
+        // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+        // $clients = DB::table('clients')
+        //   ->whereIn('id', [29, 32, 33, 34])
+        //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        //   ->orderBy('client_name', 'ASC')
+        //   ->distinct()->get();
+
+        // if you selected sturday date then offholydays client will be show otherwise not
+
+        $formattedDate = $selectedDate1->format('Y-m-d');
+        $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+        if ($holidaydatecheck) {
+          $clientIds = [29, 32, 33, 34];
+        } else {
+          // if not holidays then go hare
+          $dayOfWeek = $selectedDate1->format('w');
+          if ($selectedDate1->format('l') == 'Saturday') {
+            $dayOfMonth = $selectedDate1->format('j');
+            // Calculate which Saturday of the month it is
+            $saturdayNumber = ceil($dayOfMonth / 7);
+            // offholiday client name will be show on 2nd and 4rth sturday
+            if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+              $clientIds = [29, 32, 33, 34];
+            } else {
+              $clientIds = [29, 32, 34];
+            }
+          } else {
+            $clientIds = [29, 32, 34];
+          }
+        }
+        $clients = DB::table('clients')
+          ->whereIn('id', $clientIds)
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()
+          ->get();
+
+        $client = $clientss->merge($clients);
+
+        // foreach ($client as $clients) {
+        //   if ($clients->client_name !== 'Official Travel') {
+        //     echo "<option value='" . $clients->id . "'>" . $clients->client_name . ' ( ' . $clients->client_code . ' )' . "</option>";
+        //   }
+        // }
+
+        foreach ($client as $clients) {
+          echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+        }
+      } else {
+
+        echo "<option>Select Client</option>";
+
+        $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+        $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+        $clientss = DB::table('assignmentteammappings')
+          ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+          ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+          ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+          ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+          ->where(function ($query) use ($selectedDate) {
+            $query->whereNull('otpverifydate')
+              ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+          })
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()->get();
+        // ->get();
+
+        // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+        // $clients = DB::table('clients')
+        //   ->whereIn('id', [29, 32, 33, 34])
+        //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        //   ->orderBy('client_name', 'ASC')
+        //   ->distinct()->get();
+
+        // $client = $clientss->merge($clients);
+
+
+
+        $formattedDate = $selectedDate1->format('Y-m-d');
+        $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+        if ($holidaydatecheck) {
+          $clientIds = [29, 32, 33, 34];
+        } else {
+          // if not holidays then go hare
+          $dayOfWeek = $selectedDate1->format('w');
+          if ($selectedDate1->format('l') == 'Saturday') {
+            $dayOfMonth = $selectedDate1->format('j');
+            // Calculate which Saturday of the month it is
+            $saturdayNumber = ceil($dayOfMonth / 7);
+            // offholiday client name will be show on 2nd and 4rth sturday
+            if (auth()->user()->role_id == 14) {
+              if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+                $clientIds = [29, 32, 33, 34];
+              } else {
+                $clientIds = [29, 32, 34];
+              }
+            } else {
+              if ($saturdayNumber == 1.0 || $saturdayNumber == 2.0 || $saturdayNumber == 3.0 || $saturdayNumber == 4.0 || $saturdayNumber == 5.0) {
+                $clientIds = [29, 32, 33, 34];
+              }
+            }
+          } else {
+            $clientIds = [29, 32, 34];
+          }
+        }
+        $clients = DB::table('clients')
+          ->whereIn('id', $clientIds)
+          ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          ->orderBy('client_name', 'ASC')
+          ->distinct()
+          ->get();
+
+        $client = $clientss->merge($clients);
+
+        foreach ($client as $clients) {
+          echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+        }
+      }
+    }
+
+    if (isset($request->cid)) {
+      if ($permotioncheck && auth()->user()->role_id == 13) {
+        echo "<option>Select Assignment</option>";
+
+        if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+          $clients = DB::table('clients')
+            ->where('id', $request->cid)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          $id = $clients[0]->id;
+          $assignments = DB::table('assignmentbudgetings')->where('client_id', $id)
+            ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignments.assignmentname')
+            ->orderBy('assignment_name');
+        } else {
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+          $assignments = DB::table('assignmentbudgetings')
+            ->where('assignmentbudgetings.client_id', $request->cid)
+            ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname');
+
+          $additionalAssignments = DB::table('assignmentbudgetings')
+            ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+            ->leftJoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+            ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+            ->where('assignmentbudgetings.client_id', $request->cid)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->where(function ($query) {
+              $query->whereNull('assignmentteammappings.status')
+                ->orWhere('assignmentteammappings.status', '=', 1);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname');
+
+          $assignments = $assignments->union($additionalAssignments)->orderBy('assignment_name')->get();
+          // dd($assignments);
+        }
+
+        foreach ($assignments as $sub) {
+          echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+        }
+      }
+
+      // 22222222
+      elseif (auth()->user()->role_id == 13) {
+
+        echo "<option>Select Assignment</option>";
+        if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+          $clients = DB::table('clients')
+            // ->whereIn('id', [29, 32, 33, 34])
+            ->where('id', $request->cid)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+          // dd($clients);
+          $id = $clients[0]->id;
+          foreach (
+            DB::table('assignmentbudgetings')->where('client_id', $id)
+              ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->orderBy('assignment_name')->get() as $sub
+          ) {
+            echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+          }
+        } else {
+          // dd('hi 3');
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+          foreach (
+            DB::table('assignmentbudgetings')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->where(function ($query) {
+                $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                  ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+              })
+              ->where(function ($query) use ($selectedDate) {
+                $query->whereNull('otpverifydate')
+                  ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+              })
+              ->orderBy('assignment_name')->get() as $sub
+          ) {
+            echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+          }
+        }
+      } else {
+
+        echo "<option>Select Assignment</option>";
+
+        if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+          $clients = DB::table('clients')
+            // ->whereIn('id', [29, 32, 33, 34])
+            ->where('id', $request->cid)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+          // dd($clients);
+          $id = $clients[0]->id;
+          foreach (
+            DB::table('assignmentbudgetings')->where('client_id', $id)
+              ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->orderBy('assignment_name')->get() as $sub
+          ) {
+            echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+          }
+        } else {
+          //  i have add this code after kartic bindal problem 
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+          foreach (
+            DB::table('assignmentbudgetings')
+              ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+              ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              //  ->where('assignmentteammappings.status', '!=', 0)
+              // ->whereNull('assignmentteammappings.status')
+              ->where(function ($query) {
+                $query->whereNull('assignmentteammappings.status')
+                  ->orWhere('assignmentteammappings.status', '=', 1);
+              })
+              ->where(function ($query) use ($selectedDate) {
+                $query->whereNull('otpverifydate')
+                  //   ->orWhere('otpverifydate', '>=', $selectedDate);
+                  // // ->orWhere('otpverifydate', '>=', $selectedDate);
+                  ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+              })
+              ->orderBy('assignment_name')->get() as $sub
+          ) {
+            echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+          }
+        }
+      }
+    }
+
+    if (isset($request->assignment)) {
+      // dd($request->assignment);
+      if (auth()->user()->role_id == 11) {
+        echo "<option value=''>Select Partner</option>";
+        foreach (
+          DB::table('assignmentmappings')
+
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+            ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+            ->get() as $subs
+        ) {
+          echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+        }
+      } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+        echo "<option value=''>Select Partner</option>";
+        // dd($request->assignment);
+        $partnerbefore = DB::table('assignmentmappings')
+          ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+          ->leftJoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+          ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+          ->select('teammembers.id', 'teammembers.team_member');
+
+        // $partnerafter = DB::table('assignmentmappings')
+        //   ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+        //   ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+        //   ->select('teammembers.id', 'teammembers.team_member');
+
+        $partnerafter = DB::table('assignmentmappings')
+          ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+          ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+          ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+          ->where(function ($query) {
+            $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+              ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+          })
+          ->select(DB::raw("
+        CASE
+            WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.id
+            WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.id
+        END as id,
+        CASE
+            WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.team_member
+            WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.team_member
+        END as team_member
+    "));
+
+        $partnerresult = $partnerafter->union($partnerbefore)->get();
+        foreach ($partnerresult as $subs) {
+          echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+        }
+      } elseif (auth()->user()->role_id == 13) {
+        echo "<option value=''>Select Partner</option>";
+        foreach (
+          DB::table('teammembers')
+            ->where('id', auth()->user()->teammember_id)
+            ->select('teammembers.id', 'teammembers.team_member')
+            ->get() as $subs
+        ) {
+          echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+        }
+      } else {
+
+        echo "<option value=''>Select Partner</option>";
+        foreach (
+          DB::table('assignmentmappings')
+
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+            ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+            ->get() as $subs
+        ) {
+          echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+        }
+      }
+    }
+  } else {
+
+    $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+      ->where('teamid', auth()->user()->teammember_id)
+      ->latest()
+      ->first();
+
+
+    // $timesheetmaxDateRecord = DB::table('timesheetusers')
+    //   ->where('status', '0')
+    //   ->where('createdby', auth()->user()->teammember_id)
+    //   ->orderBy('date', 'desc')
+    //   ->first();
+
+    $timesheetmaxDateRecord = DB::table('timesheetusers')
+      ->where('status', '0')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->whereNotIn('client_id', ['134'])
+      ->orderBy('date', 'desc')
+      ->first();
+
+
+
+    $leavedataforcalander = DB::table('timesheetusers')
+      ->where('status', '0')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->whereIn('client_id', ['134'])
+      ->orderBy('date', 'asc')
+      ->first();
+
+
+
+    $leavedataforcalander1 = DB::table('timesheetusers')
+      ->where('status', '0')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->whereIn('client_id', ['134'])
+      ->orderBy('date', 'desc')
+      ->first();
+
+
+    // dd($leavedataforcalander);
+
+
+    // if ($timesheetmaxDateRecord && $leavedataforcalander) {
+    //   // Parse dates using Carbon
+    //   $date1 = Carbon::parse($timesheetmaxDateRecord->date);
+    //   $date2 = Carbon::parse($leavedataforcalander->date);
+
+    //   // Calculate the difference in days
+    //   $differenceInDays = $date1->diffInDays($date2);
+
+    //   // dd($differenceInDays); // This will show the difference in days
+    // } else {
+    //   // Parse dates using Carbon
+    //   $date1 = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+    //   $date2 = Carbon::parse($leavedataforcalander->date);
+
+    //   // Calculate the difference in days
+    //   $differenceInDays = $date1->diffInDays($date2);
+
+    //   // dd($differenceInDays); // This will show the difference in days
+    // }
+
+    // Rejoining proceesss
+
+    if ($lasttimesheetsubmiteddata && !$timesheetmaxDateRecord) {
+      $rejoiningDataall = DB::table('teammembers')
         ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
         ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
-        ->where('teammembers.id', $user->id)
+        ->where('teammembers.id', auth()->user()->teammember_id)
         ->select(
-            'teamrolehistory.rejoiningdate',
-            'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+          'teamrolehistory.rejoiningdate',
+          'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
         )
         ->first();
 
-    if ($rejoiningDataall) {
+      if ($rejoiningDataall) {
         $rejoiningDatestore = $rejoiningDataall->samepostrejoiningdate ?? $rejoiningDataall->rejoiningdate;
 
         if ($rejoiningDatestore) {
-            $rejoiningDateCarbon = Carbon::parse($rejoiningDatestore);
+          $rejoiningDateCarbon = Carbon::parse($rejoiningDatestore);
 
-            if ($lastSubmissionDate) {
-                $lastSubmissionCarbon = Carbon::parse($lastSubmissionDate);
+          if ($lasttimesheetsubmiteddata) {
+            $lastSubmissionCarbon = Carbon::parse($lasttimesheetsubmiteddata->enddate);
 
-                if (!$lastSubmissionCarbon->greaterThan($rejoiningDateCarbon)) {
-                    $user->last_submission_date = ''; // Skip user
-                }
+            if ($rejoiningDateCarbon->greaterThan($lastSubmissionCarbon)) {
+              $rejoiningdate = $rejoiningDatestore;
             } else {
-                $user->last_submission_date = ''; // Skip user
+              $rejoiningdate = null;
             }
+          } else {
+            $rejoiningdate = null;
+          }
+        } else {
+          $rejoiningdate = null;
         }
+      } else {
+        $rejoiningdate = null;
+      }
     }
-{{-- original applylevae --}}
-if ($permotioncheck && $permotioncheck->rejoiningcreated) {
-    // $datadate = Carbon::parse($lastSubmissionDate);
-    // $permotiondate = Carbon::parse($permotioncheck->rejoiningcreated);
-    // if ($datadate->greaterThan($permotiondate)) {
-    //     dd($lastSubmissionDate, 11);
-    // } else {
-    //     dd($lastSubmissionDate, 1100);
-    // }
 
-    // $lastSubmissionDate = Carbon::parse('2024-07-27');
-    // $rejoiningcreated = Carbon::parse('2024-12-02');
-    // $lastSubmissionDate = Carbon::parse('2024-12-02');
-    // $rejoiningcreated = Carbon::parse('2024-07-27');
+    // dd('hi');
+    //  If timesheet saved data,leave data exist in saved and last timesheet submitted end data exist also
+    if ($timesheetmaxDateRecord && $leavedataforcalander) {
+      // Parse dates using Carbon
+      $date1 = Carbon::parse($timesheetmaxDateRecord->date);
+      $date2 = Carbon::parse($leavedataforcalander->date);
 
-    $lastSubmissionDate = Carbon::parse('2024-07-27');
-    $rejoiningcreated = Carbon::parse('2024-12-02');
-    // Check rejoiningcreated date greater than lastSubmissionDate
-    if ($lastSubmissionDate->greaterThan($rejoiningcreated)) {
-        dd($lastSubmissionDate, 11);
+      // Calculate the difference in days
+      $differenceInDays = $date1->diffInDays($date2);
+
+      // dd($differenceInDays); // This will show the difference in days
+    }
+    //  If timesheet saved data,leave data not exist in saved and last timesheet submitted  end data only exist
+    elseif ($lasttimesheetsubmiteddata && !$timesheetmaxDateRecord && !$leavedataforcalander && !$rejoiningdate) {
+      // dd('hi 3');
+      $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+        ->where('teamid', auth()->user()->teammember_id)
+        ->latest()
+        ->first();
+
+      $differenceInDays = 1;
+    }
+    //  If timesheet saved data exist and leave data not exist in saved and last timesheet submitted  end data exist
+    elseif ($lasttimesheetsubmiteddata && $timesheetmaxDateRecord && !$leavedataforcalander) {
+
+      // Parse dates using Carbon
+      $date1 = Carbon::parse($timesheetmaxDateRecord->date);
+      // Calculate the difference in days
+      $differenceInDays = 0;
+    }
+    //  new joining 
+    // elseif (!$lasttimesheetsubmiteddata && !$timesheetmaxDateRecord && !$leavedataforcalander) {
+    elseif (!$lasttimesheetsubmiteddata) {
+
+      $newteammember = DB::table('teammembers')
+        ->where('id', auth()->user()->teammember_id)
+        ->first();
+      // // Parse dates using Carbon
+      // $date1 = Carbon::parse($timesheetmaxDateRecord->date);
+      // // Calculate the difference in days
+      $differenceInDays = 0;
+
+      // dd($timesheetmaxDateRecord, 111);
+    }
+    // rejoining process
+    elseif ($rejoiningdate) {
+      // dd('hi 2');
+
+      $rejoiningdate = $rejoiningDatestore;
+      $differenceInDays = 0;
+
+      // dd($timesheetmaxDateRecord, 111);
+    }
+    //  If timesheet saved data not exist and leave data exist in saved and last timesheet submitted end data exist also
+    else {
+      // Parse dates using Carbon
+      $date1 = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+      $date2 = Carbon::parse($leavedataforcalander->date);
+
+      // Calculate the difference in days
+      $differenceInDays = $date1->diffInDays($date2);
+
+      // dd($differenceInDays); // This will show the difference in days
+    }
+
+    // dd('hi 1');
+
+    if ($timesheetmaxDateRecord) {
+      $timesheetmaxDateRecord = $timesheetmaxDateRecord->date;
     } else {
-        dd($lastSubmissionDate, 1100);
+      $timesheetmaxDateRecord = null; // Handle the case where no record is found
     }
+
+    if ($leavedataforcalander1) {
+      $leavedataforcalander1 = $leavedataforcalander1->date;
+    } else {
+      $leavedataforcalander1 = null; // Handle the case where no record is found
+    }
+
+    // if ($newteammember) {
+    if (isset($newteammember)) {
+      $newteammember = $newteammember->joining_date;
+    } else {
+      $newteammember = null; // Handle the case where no record is found
+    }
+
+    // if ($newteammember) {
+    if (isset($rejoiningdate)) {
+      $rejoiningdate = $rejoiningdate;
+    } else {
+      $rejoiningdate = null; // Handle the case where no record is found
+    }
+
+
+    return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord', 'leavedataforcalander1', 'differenceInDays', 'newteammember', 'rejoiningdate'));
+    // return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord'));
+  }
 }
+{{-- regarding calander end--}}
 
 <table id="examplee" class="display nowrap">
     <thead>

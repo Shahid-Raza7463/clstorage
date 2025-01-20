@@ -3753,17 +3753,15 @@ app\Http\Controllers\ReportController.php
 Ensure assignments do not appear for users after being marked inactive on that assignment (bug). ```end hare
 
 
-above all code uploded on vsalocal,vsademo,vsalive ```end
-
-
 exit users ```start hare second part
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TeammemberController.php
 
-Route::get('/changetimesheetaccess/{teamid}/{status}', [TeammemberController::class, 'changetimesheetaccess']);
+  Route::get('/changetimesheetaccess/{teamid}/{status}', [TeammemberController::class, 'changetimesheetaccess']);
+use Illuminate\Support\Facades\Log;
 
 
-    public function changetimesheetaccess($teamid, $status)
+       public function changetimesheetaccess($teamid, $status)
     {
         try {
             if ($status == 0) {
@@ -3790,60 +3788,15 @@ Route::get('/changetimesheetaccess/{teamid}/{status}', [TeammemberController::cl
 
 
 
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\form.blade.php
  <label class="font-weight-600">Location <span class="tx-danger"></span></label>
  
-<div class="col-3">
-        <div class="form-group">
-            <label class="font-weight-600">Timesheet Access</label>
-            <div class="access" style="width: fit-content; margin-left: 30px;">
-                @if ($teammember->timesheet_access == 0)
-                    <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
-                        onclick="return confirm('Are you sure you want to Active timesheet access?');">
-                        <span class="btn"
-                            style="background: #37A000;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Inactive</span>
-                    </a>
-                @else
-                    <a href="{{ url('/changetimesheetaccess/' . $teammember->id . '/' . $teammember->timesheet_access) }}"
-                        onclick="return confirm('Are you sure you want to Inactive timesheet access?');">
-                        <span class="btn"
-                            style="background: #dc3545;color: white; height: 23px; width: 52px; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px; margin-top: 8px;">Active</span>
-                    </a>
-                @endif
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\TimesheetController.php
-
-        $timesheetAccess = DB::table('teammembers')
-          ->where('id', auth()->user()->teammember_id)
-          ->value('timesheet_access');
-
-        $currentDate = Carbon::now()->format('d-m-Y');
-        if ($timesheetAccess == 0  && $currentDate == $request->date && Carbon::now()->hour < 18) {
-          $output = array('msg' => 'You can only fill today timesheet after 6:00 pm');
-          return back()->with('success', $output);
-        }
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-table update 
-timesheet_access int 20 default 0 column in teammembers tables after status colum
-
-
-222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\teammember\form.blade.php
-
-     @if (Request::is('teammember/*/edit'))
+ @if (Request::is('teammember/*/edit'))
         <div class="col-3">
             <div class="form-group">
                 <label class="font-weight-600">Timesheet Access</label>
@@ -3867,17 +3820,48 @@ resources\views\backEnd\teammember\form.blade.php
     @endif
 
 
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+         $timesheetAccess = DB::table('teammembers')
+          ->where('id', auth()->user()->teammember_id)
+          ->value('timesheet_access');
+
+        $currentDate = Carbon::now()->format('d-m-Y');
+        if ($timesheetAccess == 0  && $currentDate == $request->date && Carbon::now()->hour < 18) {
+          $output = array('msg' => 'You can only fill today timesheet after 6:00 pm');
+          return back()->with('success', $output);
+        }
+
+
+
 2222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\form.blade.php
+<div class="card">
 
 remove comment it
 
         {{-- @component('backEnd.components.alert')
         @endcomponent --}}
+	
 
+	
+		
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+table update 
+timesheet_access int 20 default 0 column in teammembers tables after status colum
 
+2222222222222222222222222222222222222222222222222222222222222222222222
 exit users ```end
 
+above all code uploded on vsalocal,vsademo,vsalive ```end
 
 
 joining date modification ```start

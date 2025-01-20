@@ -51,7 +51,7 @@ credential
 1.itsupport
 2.sunny    844
 3.bhasker     847 
-4.kritikas@vsa.co.in    882
+4.nidhia@vsa.co.in  Staff 787
 itsupport_delhi@vsa.co.in   
 
 
@@ -217,20 +217,7 @@ password - Manoj@123
 
 Manager : poojakumari@capitall.io
 Password : Manoj@123
-Password : Azaz~12345
 936
-
-
-ZXGBfThUec@2023
-
-Manager id- manojsangwan@capitall.io
-password - Manoj@123
-
-Partner - harish@capitall.io
-password - Manoj@123
-
-Staff - sangwanm242@gmail.com
-password - X9L2pk9NKh@2023
 
 
 222222222222222222222222222222222222222222222222222222222
@@ -354,6 +341,10 @@ ye 12 table chahiye vsalive se
     //   }
     // }
     // return response('Tables deleted successfully!', 200);
+
+
+222222222222222222222222222222222222222222222222222222222222
+
 
     // DB::table('timesheetreport')
     //   ->delete();
