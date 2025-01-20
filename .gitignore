@@ -6,7 +6,7 @@
 
 # Ignore this directory only at the root
 /TempraryStore file
-/Temprory Code
+/Temprary code
 
 # Ignore this directory globally in this project
 # migration/
