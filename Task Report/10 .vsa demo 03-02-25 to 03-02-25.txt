@@ -1,0 +1,344 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Comment all places on vsademo
+app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+itsupport_delhi@vsa.co.in  ise comment kar de 
+
+
+
+agar is per koi bhi update ho to profile me 10th and 12th ka documnet check karle ek baar ye baar baar problem aata hai 
+independence ke ander create and view file insert karna hai 
+IndependenceController.php
+TeammemberController (1).php
+
+Please check once vsalive bugs hare file
+
+
+
+vsalocal ```start hare 
+
+2.Client wants to add multiple partner in lead partner and other partner column ```start 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ChecklistanswerController.php
+
+   public function otherpatnerUpdate(Request $request)
+    {
+        try {
+            $assignmentId = $request->assignmentgenerate_id;
+            $partnerId = $request->otherpatnerid;
+
+            // Fetch assignment mapping once
+            $assignmentMapping = DB::table('assignmentmappings')
+                ->where('assignmentgenerate_id', $assignmentId)
+                ->first();
+
+            $assignmentTeammapping = DB::table('assignmentteammappings')
+                ->where('assignmentmapping_id', $assignmentMapping->id)
+                ->where('teammember_id', $partnerId)
+                ->first();
+
+            // Check if the partner is already assigned as lead or other partner
+            if ($assignmentMapping->leadpartner == $partnerId || $assignmentMapping->otherpartner == $partnerId || $assignmentTeammapping) {
+                return back()->with('statuss', ['msg' => 'Other Patner is already in Assigned Partner']);
+            }
+
+            // If `otherpartner` is null, update directly
+            if (is_null($assignmentMapping->otherpartner)) {
+                DB::table('assignmentmappings')
+                    ->where('id', $assignmentMapping->id)
+                    ->update(['otherpartner' => $partnerId]);
+            } else {
+                // Insert new mapping into `assignmentteammappings`
+                DB::table('assignmentteammappings')->insert([
+                    'assignmentmapping_id' => $assignmentMapping->id,
+                    'teammember_id' => $partnerId,
+                    'type' => 1,
+                    'status' => 1,
+                    'teamhour' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+            $output = array('msg' => 'Other Partner Added Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+find   public function create(Request $request)
+find } elseif (auth()->user()->role_id == 13) {
+
+$clientss = DB::table('clients')
+->leftJoin('assignmentbudgetings', 'assignmentbudgetings.client_id', '=', 'clients.id')
+->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+->where('assignmentbudgetings.status', 1)
+->where(function ($query) {
+  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+    ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+})
+->select('clients.client_name', 'clients.id', 'clients.client_code')
+->distinct()
+->orderBy('clients.client_name', 'ASC')
+->get();
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+find  public function create(Request $request)
+find  if ($request->ajax()) {
+find  if (isset($request->cid)) 
+find  elseif (auth()->user()->role_id == 13) {{
+
+
+              DB::table('assignmentbudgetings')
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where(function ($query) {
+                  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')->get() as $sub
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+find  public function create(Request $request)
+find  if ($request->ajax()) {
+find  if (isset($request->timesheetdate)) {
+find  } elseif (auth()->user()->role_id == 13) {
+
+
+ $clientss = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            // ->whereNotNull('clients.client_name')
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+   if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+
+
+            if ($assignmentdata->otherpartner != auth()->user()->teammember_id && $assignmentdata->leadpartner != auth()->user()->teammember_id) {
+              $getTotalTeamHour = DB::table('assignmentteammappings')
+                ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->value('teamhour') ?? 0;
+
+              $finalResult = $getTotalTeamHour + $request->hour[$i];
+
+              DB::table('assignmentteammappings')
+                ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->update(['teamhour' => $finalResult]);
+            }
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+total hour for
+          if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+		  
+		  
+		  
+
+            $getTotalTeamHour = DB::table('assignmentteammappings')
+              ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->value('teamhour') ?? 0;
+
+            $finalResult = $getTotalTeamHour + $request->hour[$i];
+
+            DB::table('assignmentteammappings')
+              ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->update(['teamhour' => $finalResult]);
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

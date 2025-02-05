@@ -67,6 +67,8 @@ new year Leave
 1.Tasks VS-395, VS-367, VS-348, VS-346 has been uploaded to vsademo, and functional testing has been completed 
 2.Test descreption added on jira for VS-395, VS-367, VS-348, VS-346
 
+```````````````````````````````
+
 17-01-2025
 1.The Assignment is not coming to user I need to test
 2.Bugs raised by pooja, Udin date format needs to be fixed.
@@ -79,21 +81,100 @@ new year Leave
    Sunday 
 
 20-01-2025
-1.Move the Edit button to the first position on the Timesheet Saved Listing page.
+33.Move the Edit button to the first position on the Timesheet Saved Listing page.  
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date. 
+
+
 
 
 21-01-2025
-22-01-2025
-23-01-2025
-24-01-2025
-25-01-2025
-26-01-2025
-27-01-2025
-28-01-2025
-29-01-2025
-30-01-2025
-31-01-2025
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+3.Create excel file for Affected page before implement task ()
+4.The client mentioned that there is no timesheet for Sarthak for the 2 days. However, I have checked and confirmed that Sarthak had submitted his timesheet only until the 28th, which is why there is no data available for the 30th and 31th december
 
+``````````````````````````````````````
+
+22-01-2025
+1.If a user deletes saved timesheet data, a log entry should be created to record the action
+2.Restrict admin from rejecting casual leave timesheets if submitted.
+3.Clent wants to fill 2 days timesheet for Sarthak kejriwal from backend.
+4.Replace "Miss" with "Ms." across all places on the portal.
+
+23-01-2025
+1.Replace "Miss." with "Ms." across all places on the portal.
+2.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+
+
+
+24-01-2025
+1.functional testing has been completed for (28.Replace "Miss" with "Ms." across all places on the portal.) and (1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request)
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
+3.kt to pooja kumari 
+
+``````````````````````````````````````
+25-01-2025
+Starday
+26-01-2025
+26 january 
+
+27-01-2025
+1.I have uploaded 'in process' tasks on VSAdemo (VS-411, 409, 407, 406, 405, 404, 402, 401, 365, 363, 362, 345), and functional testing has been completed 
+2.all question and all afected points created by me for client on multiple partner adding tasks 
+
+28-01-2025
+1.I have uploaded 'in process' tasks on VSAdemo (VS-411, 409, 407, 406, 405, 404, 402, 401, 365, 363, 362, 345), and functional testing has been completed
+2.Test descreption added on jira for (VS-411, 409, 407, 406, 405, 404, 402, 401, 365, 363, 362, 345)
+
+
+29-01-2025
+1.Implement a feature to calculate and display the total hours for all closed assignments before 2024
+2.old bugs fixed
+
+
+30-01-2025
+1.I have uploaded 'QA paased' tasks on VSAlive (VS-395, 348 ,346), and functional testing has been completed
+2.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(pending)
+3.When the user submitted their timesheet, an error occurred. I have checked and fixed the issue.
+4.There was an attendance data issue on January 19. I have resolved it
+
+
+31-01-2025
+2.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(pending)
+1.i have listed affected point from new scenerio to multiple partner adding tasks
+3.After updated this task Implement a calendar feature on the Add Timesheet page.on vsalve i have recieved bugs offholidays is not coming in clicnt select box
+
+`````````````````````````
+
+o1-02-2025
+1.I received a bug from the client side on task VSA-304, next date is not enable for shanyam agarwal on timesheet page
+2.I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date
+
+o2-02-2025
+sunday
+o3-02-2025
+1.The client mentioned that after rejoining, the user's joining date and leaving date were not displaying correctly. I have checked and implemented the necessary fix
+2.Client wants to add multiple partner in lead partner and other partner column (half days)
+3.I have uploaded 'bugs' tasks on VSAlive and functional testing has been completed
+
+
+o4-02-2025
+2.Client wants to add multiple partner in lead partner and other partner column (half days)
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+3. client want to attence count command run on 24 of every months 
+sachinkg@vsa.co.in  date enable problem 
+
+
+o5-02-2025
+sachinkg@vsa.co.in  date enable problem   fixed
+
+o6-02-2025
+sachinkg@vsa.co.in  date enable problem  test karna hai latest database and done 
+
+
+
+
+o3-02-2025
+WEL100799
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 coding 
@@ -101,5 +182,29 @@ functional testing
 documentation 
 upload on vsademo
 functional testing 
+
+
+Gave review to Ajay Sir, Prepared engagement letter
+Prepared Audit Procedures
+
+
+1.create controlleer
+2.create model
+3.rename model code 
+4.rename controller code 
+5.rename web .php file 
+5 rename view file 
+6.add leftsidebar tab (template file ) 
+
+
+1 Projects
+ 
+
+
+ProjectsController
+projects
+
+Projects
+
 
 

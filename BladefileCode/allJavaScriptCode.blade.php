@@ -87,6 +87,56 @@
 
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "order": [],
+            columnDefs: [{
+                targets: [
+                    0, 1, 2, 3
+                    @if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14 || $teamleader == Auth::user()->teammember_id)
+                        @if ($assignmentbudgeting->status == 1)
+                            , 5
+                        @endif
+                    @endif
+                ],
+                orderable: false
+            }],
+            buttons: []
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "order": [
+                // [4, "desc"] // Set default order on the Date column (index 4)
+            ],
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 5], // Disable ordering for specific columns
+                    orderable: false
+                },
+                {
+                    targets: 4, // Target the Date column
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            return data; // Display the formatted date (d-m-Y h:i A)
+                        }
+                        if (type === 'sort') {
+                            // Convert to sortable format (Y-m-d H:i:s)
+                            const parts = data.split(' '); // Split date and time
+                            const dateParts = parts[0].split('-'); // Split d-m-Y
+                            const time = parts[1] + ' ' + parts[2]; // Add time with AM/PM
+                            return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]} ${time}`;
+                        }
+                        return data;
+                    }
+                }
+            ],
+            buttons: [] // Additional buttons if needed
+        });
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 {{-- * regarding date validation  --}}

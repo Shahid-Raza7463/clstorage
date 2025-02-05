@@ -613,39 +613,63 @@ To do
 below task approved by manager and hr
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
-1.Stop sending timesheet reminder emails to a specific partner as requested by the client.
-9.Restrict admin from rejecting casual leave timesheets if submitted.
-13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.
-14.Assignment viewer implementation on open assignment.
-15.Client list edit functionality on the assignment view page.
-16.Data handover form implementation. (discuss)
-2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
-4.Add a CreatedBy column to display on the assignment folder file listing page.
-6.Add a Partner add button on the assignment view page as requested by the client.
+Approved tasks list
+
+1.Stop sending timesheet reminder emails to a specific partner as requested by the client. ( 1 days )
+2.Assignment viewer implementation on open assignment.  ( 3 days )
+3.Data handover form implementation. (discuss)
+4.Add a Partner add button on the assignment view page as requested by the client. ( 2 days )
+5.Client list edit functionality on the assignment view page.  ( 2 days )
+
+old bugs
+(VS-279) User’s joining date is 26th July & has not filled any timesheet, now he created the leave from 25th nov to 30th nov and submitted the timesheet so timesheet got submitted also Leave was not yet approved but still shows in total count of ‘Approved Leaves’ in user’s account.[Harish Vinod Tale M1067]
 
 
 
-New tasks taken by me 
+
+New tasks taken by me and approval is pending.
 
 27.only one udin for one assignment if user create another udin in that case udin will be not create (implementation)
-28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
-29.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request. (implementation)
-30.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(bugs)
 31.Implement functionality to display inactive user's date from assignment. (implementation)
+32.when user leave apply after that partner recieved mail and partner click on click hare text then redirect on another page.
+33.timesheet page , delete icon will be hide and if more than one timesheet saved on same date then delete icon will be show on only one timesheet
+34.keshav chaudhary after rejoin and upload qualification then warning message sho ho raha hai plaese delete timesheet data after rejoin
+35. Apurva Yadav
+   1 feb leave so i have delet 1 feb data and 
+   31 tak hi khatam hai exit 
+   
+   
 
 
-Not implement
+this task will be not implement (after approval)
 18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
 20.Implement ascending and descending order sorting for open and closed assignments.
 21.Add a Resend OTP button during the closed assignment process.
 22.Ensure OTP for closing an assignment is not generated if there are any pending independencies.
 36.The client wants the functionality to approve or reject timesheet and leave requests directly from the email.
-37.Client wants to add multiple partner in lead partner and other partner column
+
 
 2222222222222222222222222222
 working on it
+
+4.Add a CreatedBy column to display on the assignment folder file listing page. ( 0.5 days )
 36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
-33.Move the Edit button to the first position on the Timesheet Saved Listing page.
+33.Move the Edit button to the first position on the Timesheet Saved Listing page. ( 1 days )
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.  ( 0.5 days )
+`3.timesheet delete logs
+
+
+18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+30.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(bugs)
+
+37.Client wants to add multiple partner in lead partner and other partner column
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+
 
 
 
@@ -664,6 +688,11 @@ Working done
 17.Investigate why the Admin account is getting automatically inactivated as reported by the client.
 5.Restrict users from entering time in the format 08:00.
 33.Move the Edit button to the first position on the Timesheet Saved Listing page.
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+15.Client list edit functionality on the assignment view page.  ( 2 days )
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.  ( 0.5 days )
 
 
 
@@ -678,14 +707,23 @@ New task taken by me worked
 35.Apply leave year problem when year change then applyleave page error ocured
 29.Implement a calendar feature on the Add Timesheet page.
 36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+30.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(bugs)
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
 
 Not implement
 19.Add a travel box on the dashboard as requested by the client.
+18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+37.Client wants to add multiple partner in lead partner and other partner column
 
 2222222222222222222222222222
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 end hare ```
+
+
+aman shingh 
 
 
 

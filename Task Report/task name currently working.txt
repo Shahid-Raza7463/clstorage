@@ -1082,17 +1082,259 @@ hour field should be not in this formate 00:00 only accept hour like 0,1,2,3, 3t
 14. After Rejoining (Same Post or Different Post)
    1.If a user rejoins, their date will be enabled on their rejoining date.
    2.After submitting timesheets for one week post-rejoining, all previous test cases will apply.
+   
+   
+   
+   
+37.Client wants to add multiple partner in lead partner and other partner column
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+manger id
+1.Assignment Report List page per otherpartner column me change karna hoga open and close assignment ke liye 
+2.Assignment Details page per Partner List section me bhi change karna hoga 
+3.jab user leave apply karta hai to us page per bhi change karna hoga 
+4.Clent list ke assignment section me bhi change karna hoga 
+5.Assignment List page per bhi change karna hoga 
+6.jab koi user timesheet request create karge on that time bhi change hoga 
+
+partner id
+7.when partner closed karega assignment ko to change karna hoga 
+8.when assignment create karega admin and partner then change karna hoga 
+9.Assignment List page per 2 section hai assigned partner and other partner to yaha bhi change karna hoga 
+
+admin id 
+10.Assignment List page per other partner column me plus icon yaha se other partner add karta hai admin to yaha bhi change hoga 
+11.Assignment time report page per total hour ke liye bhi change karna hoga 
+
+
+
+
+1. Assignment Report List Page: Update the "Other Partner" column for both open and closed assignments.
+2. Assignment Details Page: Make changes in the "Partner List" section.
+3. Leave Application Page: Update the relevant section when a user applies for leave.
+4. Client List Assignment Section: Reflect changes in the "Assignment" section of the Client List page.
+5. Assignment List Page: Implement changes here as well.
+6. Timesheet Request Creation: Update the process when a user creates a timesheet request.
+7. Closing Assignments by Partner: Apply changes when a partner closes an assignment.
+8. Assignment Creation: Update the process when an admin or partner creates an assignment.
+9. Assignment List Page (Partner Sections): "Assigned Partner" section left and Update and "Other Partner" sections only.
+10. Add Other Partners: Ensure changes are reflected when an admin uses the "+" icon in the "Other Partner" column to add a partner.
+11. Assignment Time Report Page: Make updates for the "Total Hour" section.
+12.Timesheet Deletion: Apply changes when a user deletes a timesheet.
+13.Timesheet Editing: Apply changes when a user edits a timesheet.
+14.Timesheet Saving: Apply changes when a user saves a timesheet.
+
+
+
+
+
+
+
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
+30, 31 dec name user sarthak kejriwal
+
+suryakant verma leaving date 26-09-2024
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+applyleaves  table me 
+809
+id = 975  to column me 2024-09-26 
+
+
+
+
+leaveapprove table me 
+
+id = 985 totaldays 40 se 39 kare 
+
+
+
+timesheets table me
+
+2024-09-27 se aage 01 tak ka timesheet delete karna hai 
+
+
+
+
+timesheetusers table me
+
+2024-09-27 se aage 01 tak ka timesheet delete karna hai 
+
+
+
+
+timesheetreport table me 
+
+id = 10558 totaldays = 4 and dayscount = 4
+
+
+
+attendance table me 
+id = 1355
+27	28	29 ko null kare 
+
+exam_leave  = 25
+Offholidays = 0 
+sundaycount = 0 
+
+
+after that call client and said to insert leaving date 26 september 
+
 
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
+1. Assignment Report List Page: Update the "Other Partner" column for both open and closed assignments.
+2. Assignment Details Page: Make changes in the "Partner List" section.
+3. Client List Assignment Section: Reflect changes in the "Assignment" section of the Client List page.
+4. Assignment List Page: Implement changes here as well.
+5. Closing Assignments by Partner: Apply changes when a partner closes an assignment.
+6. Assignment Creation: Update the process when an admin or partner creates an assignment.
+7. Assignment List Page (Partner Sections): "Assigned Partner" section left and Update and "Other Partner" sections only.
+8. Add Other Partners: Ensure changes are reflected when an admin uses the "+" icon in the "Other Partner" column to add a partner.
+9. Assignment Time Report Page: Make updates for the "Total Hour" section.
+10.Timesheet Deletion: Apply changes when a user deletes a timesheet.
+11.Timesheet Editing: Apply changes when a user edits a timesheet.
+12.Timesheet Saving: Apply changes when a user saves a timesheet.
 
+
+
+
+1.Can all partners involved in an assignment close it?
+2.If multiple partners are added, will the assignment data be accessible only to the lead partner, or to all partners assigned to the assignment?
+3.Wherever the "other partner" column exists, should the details of all other partners be displayed?
+4.For an assignment, should only the total hours of the lead partner and other partners be shown, or the total hours of all partners?
+5.Should an admin have access to add multiple partners, for example, by using a "+" icon?
+6.In the "Assignment" section, do the details of "other partners" need to be displayed for every assignment?
+7.Logs will be implemented
+8.Assignment reopen case will be raise on this case what will be do 
+9.all included partner will be submit timesheet or only lead partner and other partner will be submit timesheet
+
+
+
+
+1.Can all partners involved in an assignment close the assignment, or is this restricted to specific partners?
+2.If multiple partners are added to an assignment, will the assignment data be accessible only to the lead partner, or to all assigned partners?
+3.Should the details of all "other partners" be displayed wherever the "other partner" column exists?
+4.For an assignment, should only the total hours of the lead partner and "other partners" be shown, or should the total hours of all partners be displayed?
+5.Should the admin have the ability to add multiple partners, such as using a "+" icon in the "Other Partner" column?
+6.Will logs be implemented to track changes or actions performed?
+7.If an assignment is reopened, what steps or processes need to be followed?
+8.Should all included partners be able to submit timesheets, or is this limited to only the lead partner and "other partners"?
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+2.Replace "Miss." with "Ms." across all places on the portal
+3.Move the Edit button to the first position on the Timesheet Saved Listing page after that fixed date sorting and data in excel.
+4.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+5.Prevent admin and partner from rejecting submitted timesheets data before the user’s joining date.6.
+6.Restrict admin and partner from rejecting casual leave timesheets data if submitted.
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+8.If a user deletes saved timesheet data, a log entry should be created to record the action
+
+Clent wants to fill 2 days timesheet for Sarthak kejriwal from backend.
+The client mentioned that there is no timesheet for Sarthak for the 2 days
+Add a CreatedBy column to display on the assignment folder file listing page.
+
+
+
+
+2222222222222222222222222222222222222222
+1.Implement a calendar feature on the Add Timesheet page
+2.Udin date format needs to be fixed.
+3.Restrict users from entering time in the format 08:00.
+
+
+The data for existing other partners, will be transferred to a another existing table.
+
+
+
+2025-01-25
+
+vsalive, vsalocal 	
+client
+1.I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date
+2.The client mentioned that after rejoining, the user's joining date and leaving date were not displaying correctly. I have checked and implemented the necessary fix
+
+
+
+
+
+
+
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+leaving date 31-01-2025 and i need to delete 01-02-2025 leave data
+
+Casual leave delete karna ho to 
+
+applyleaves  table me 
+951
+id = 1623  delete
+
+
+timesheets table me
+id = 150673 delete
+
+
+timesheetusers table me
+id = 153401 delete 
+
+
+
+timesheetreport table me 
+
+id = 13798 totaldays = 4 ko replace kare 3
+id = 13797 dayscount 5 
+
+attendance table me 
+id = 1355
+27	28	29 ko null kare 
+
+exam_leave  = 25
+Offholidays = 0 
+sundaycount = 0 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.Changes will be applied on the Assignment Creation page.
+
+2.Changes will be applied on the Add Timesheet page.
+
+3.Changes will be applied in the Partner Section on the Assignment Details page.
+
+4.Changes will be applied on the Independence Confirmation page.
+
+
+user vignesh 
+january month 
+travel 1 hai bta 2 hai
+
+
+sachin 1040 

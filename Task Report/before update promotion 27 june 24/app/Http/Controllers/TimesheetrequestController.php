@@ -11,6 +11,7 @@ use DateTime;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 class TimesheetrequestController extends Controller
 {
     /**
@@ -22,84 +23,87 @@ class TimesheetrequestController extends Controller
     {
         $this->middleware('auth');
     }
-	
-	   public function open_timesheet($id)
+
+    public function open_timesheet($id)
     {
-        if(auth()->user()->role_id == 11 || auth()->user()->role_id == 18){
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
 
             $timesheetrequestsDatas = DB::table('timesheetrequests')
-            ->leftjoin('clients','clients.id','timesheetrequests.client_id')
-            ->leftjoin('assignments','assignments.id','timesheetrequests.assignment_id')
-            ->leftjoin('teammembers','teammembers.id','timesheetrequests.partner')
-            ->leftjoin('teammembers as createdby','createdby.id','timesheetrequests.createdby')
-            ->where('timesheetrequests.status',0)
-            ->select('timesheetrequests.*','clients.client_name','assignments.assignment_name','teammembers.team_member'
-            ,'createdby.team_member as createdbyauth')->get();
-          //  dd($timesheetrequestsDatas);
-           
+                ->leftjoin('clients', 'clients.id', 'timesheetrequests.client_id')
+                ->leftjoin('assignments', 'assignments.id', 'timesheetrequests.assignment_id')
+                ->leftjoin('teammembers', 'teammembers.id', 'timesheetrequests.partner')
+                ->leftjoin('teammembers as createdby', 'createdby.id', 'timesheetrequests.createdby')
+                ->where('timesheetrequests.status', 0)
+                ->select(
+                    'timesheetrequests.*',
+                    'clients.client_name',
+                    'assignments.assignment_name',
+                    'teammembers.team_member',
+                    'createdby.team_member as createdbyauth'
+                )->get();
+            //  dd($timesheetrequestsDatas);
 
-        }
-        else
-        {
+
+        } else {
             $timesheetrequestsDatas = DB::table('timesheetrequests')
-            ->leftjoin('clients','clients.id','timesheetrequests.client_id')
-            ->leftjoin('assignments','assignments.id','timesheetrequests.assignment_id')
-            ->leftjoin('teammembers','teammembers.id','timesheetrequests.partner')
-            ->leftjoin('teammembers as createdby','createdby.id','timesheetrequests.createdby')
-            ->where('timesheetrequests.status',0)
-            ->where(function ($query) {
-              $query->where('timesheetrequests.partner', auth()->user()->teammember_id)
-                    ->orWhere('timesheetrequests.createdby', auth()->user()->teammember_id);
-          })
-            ->select('timesheetrequests.*','clients.client_name','assignments.assignment_name','teammembers.team_member'
-            ,'createdby.team_member as createdbyauth')->get();
+                ->leftjoin('clients', 'clients.id', 'timesheetrequests.client_id')
+                ->leftjoin('assignments', 'assignments.id', 'timesheetrequests.assignment_id')
+                ->leftjoin('teammembers', 'teammembers.id', 'timesheetrequests.partner')
+                ->leftjoin('teammembers as createdby', 'createdby.id', 'timesheetrequests.createdby')
+                ->where('timesheetrequests.status', 0)
+                ->where(function ($query) {
+                    $query->where('timesheetrequests.partner', auth()->user()->teammember_id)
+                        ->orWhere('timesheetrequests.createdby', auth()->user()->teammember_id);
+                })
+                ->select(
+                    'timesheetrequests.*',
+                    'clients.client_name',
+                    'assignments.assignment_name',
+                    'teammembers.team_member',
+                    'createdby.team_member as createdbyauth'
+                )->get();
         }
-        return view('backEnd.timesheetrequest.index',compact('timesheetrequestsDatas'));
+        return view('backEnd.timesheetrequest.index', compact('timesheetrequestsDatas'));
     }
-	
-	   public function timesheetupdatesubmit(Request $request)
-{
-  // dd($request);
-    if ($request->ajax()) {
-        if (isset($request->id)) {
-         //   dd($request->id);
-          $conversion = DB::table('timesheetusers')
-          ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
-        ->where('timesheetusers.id',$request->id)
-        ->select('teammembers.team_member','timesheetusers.*')->first();
-      //  dd($conversion);
-            return response()->json($conversion);
-         }
-        }
 
-}
-	   public function timesheet_submit(Request $request)
-    { 
-//dd($request);
-          try
-          { 
-			  $hours = $request->input('totalhour');
-			   if (! is_numeric($hours) || $hours > 12) {
-          $output = array('msg' => 'The total hours cannot be greater than 12');
-        return back()->with('success', $output);
-      }
-			  
-             DB::table('timesheetusers')->where('id',$request->timesheetid)->update([	
+    public function timesheetupdatesubmit(Request $request)
+    {
+        // dd($request);
+        if ($request->ajax()) {
+            if (isset($request->id)) {
+                //   dd($request->id);
+                $conversion = DB::table('timesheetusers')
+                    ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+                    ->where('timesheetusers.id', $request->id)
+                    ->select('teammembers.team_member', 'timesheetusers.*')->first();
+                //  dd($conversion);
+                return response()->json($conversion);
+            }
+        }
+    }
+    public function timesheet_submit(Request $request)
+    {
+        //dd($request);
+        try {
+            $hours = $request->input('totalhour');
+            if (! is_numeric($hours) || $hours > 12) {
+                $output = array('msg' => 'The total hours cannot be greater than 12');
+                return back()->with('success', $output);
+            }
+
+            DB::table('timesheetusers')->where('id', $request->timesheetid)->update([
                 'client_id' => $request->client_id,
                 'assignment_id' => $request->assignment_id,
                 'workitem' => $request->workitem,
                 'totalhour' => $request->totalhour,
-				'partner' => $request->partner,
-				'location' => $request->location,
+                'partner' => $request->partner,
+                'location' => $request->location,
                 'updatedby'  => auth()->user()->teammember_id,
                 'updated_at'              =>    date('y-m-d'),
-                 ]);
+            ]);
 
-                $output = array('msg' => 'Save Successfully');
-                return back()->with('success', $output);
-            
-
-      
+            $output = array('msg' => 'Save Successfully');
+            return back()->with('success', $output);
         } catch (Exception $e) {
             DB::rollBack();
             Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
@@ -107,9 +111,8 @@ class TimesheetrequestController extends Controller
             $output = array('msg' => $e->getMessage());
             return back()->withErrors($output)->withInput();
         }
-    
-}
-	    public function timesheetsubmission(Request $request)
+    }
+    public function timesheetsubmission(Request $request)
     {
         try {
 
@@ -338,8 +341,7 @@ class TimesheetrequestController extends Controller
                     // $output = array('msg' => "Timesheet Submit Successfully till $previousMondayFormatted to $nextSaturdayFormatted ");
                     return back()->with('success', $output);
                 }
-            }
-            else {
+            } else {
                 // dd($latesttimesheetreport, 1);
                 $usertimesheetfirstdate =  DB::table('timesheets')
                     ->where('status', '0')
@@ -510,32 +512,29 @@ class TimesheetrequestController extends Controller
             return back()->withErrors($output)->withInput();
         }
     }
-	
-	   public function timesheetsubmit(Request $request)
-    { 
-//dd($request);
-        try {if($request->ids==null)
-            {
-               
+
+    public function timesheetsubmit(Request $request)
+    {
+        //dd($request);
+        try {
+            if ($request->ids == null) {
+
                 $output = array('msg' => 'Please tick one of the checkbox');
                 return back()->with('success', $output);
-            }
-            else{
-            
-          foreach ($request->ids as $timsheetid) {
+            } else {
 
-            DB::table('timesheetusers')->where('id',$timsheetid)->update([	
-                'status'         =>     1,
-                'updatedby'  => auth()->user()->teammember_id,
-                'updated_at'              =>    date('y-m-d'),
-                 ]);
-          }
+                foreach ($request->ids as $timsheetid) {
+
+                    DB::table('timesheetusers')->where('id', $timsheetid)->update([
+                        'status'         =>     1,
+                        'updatedby'  => auth()->user()->teammember_id,
+                        'updated_at'              =>    date('y-m-d'),
+                    ]);
+                }
 
                 $output = array('msg' => 'Submit Successfully');
                 return back()->with('success', $output);
             }
-
-      
         } catch (Exception $e) {
             DB::rollBack();
             Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
@@ -543,10 +542,9 @@ class TimesheetrequestController extends Controller
             $output = array('msg' => $e->getMessage());
             return back()->withErrors($output)->withInput();
         }
-    
-}
+    }
     public function index()
-     {
+    {
 
         if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
             $timesheetrequestsDatas = DB::table('timesheetrequests')
@@ -670,14 +668,19 @@ class TimesheetrequestController extends Controller
     public function show($id)
     {
         $timesheetrequest = DB::table('timesheetrequests')
-        ->leftjoin('clients','clients.id','timesheetrequests.client_id')
-        ->leftjoin('assignments','assignments.id','timesheetrequests.assignment_id')
-        ->leftjoin('teammembers','teammembers.id','timesheetrequests.partner')
-        ->leftjoin('teammembers as createdby','createdby.id','timesheetrequests.createdby')
-        ->where('timesheetrequests.id',$id)
-        ->select('timesheetrequests.*','clients.client_name','assignments.assignment_name','teammembers.team_member'
-        ,'createdby.team_member as createdbyauth')->first();
-         return view('backEnd.timesheetrequest.view', compact('id','timesheetrequest'));
+            ->leftjoin('clients', 'clients.id', 'timesheetrequests.client_id')
+            ->leftjoin('assignments', 'assignments.id', 'timesheetrequests.assignment_id')
+            ->leftjoin('teammembers', 'teammembers.id', 'timesheetrequests.partner')
+            ->leftjoin('teammembers as createdby', 'createdby.id', 'timesheetrequests.createdby')
+            ->where('timesheetrequests.id', $id)
+            ->select(
+                'timesheetrequests.*',
+                'clients.client_name',
+                'assignments.assignment_name',
+                'teammembers.team_member',
+                'createdby.team_member as createdbyauth'
+            )->first();
+        return view('backEnd.timesheetrequest.view', compact('id', 'timesheetrequest'));
     }
 
     /**
@@ -698,8 +701,8 @@ class TimesheetrequestController extends Controller
      * @param  \App\Models\Timesheetrequest  $timesheetrequest
      * @return \Illuminate\Http\Response
      */
-   public function update(Request $request, $id)
-   {
+    public function update(Request $request, $id)
+    {
         // dd($request);
         try {
             $data = $request->except(['_token']);

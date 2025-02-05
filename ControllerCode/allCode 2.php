@@ -61,14 +61,133 @@ class Allcode extends Controller
         //! End hare 
 
 
-        //* regarding 
+        //* regarding  file upload
         // Start Hare
+        public function timesheetrequestupdate(Request $request)
+        {
+          try {
+            $request->validate([
+              'reason' => 'required',
+              'file' => 'nullable|mimes:png,pdf,jpeg,jpg|max:5120',
+            ], [
+              'file.max' => 'The file may not be greater than 5 MB.',
+            ]);
+      
+            $fileName =  $request->attachmentexist ?? null;
+            if ($request->hasFile('file')) {
+              // public\backEnd\image\confirmationfile
+              $destinationPath = public_path('backEnd/image/confirmationfile');
+              // Delete the existing file if it exists
+              if ($request->attachmentexist) {
+                $existingFilePath = $destinationPath . '/' . $request->attachmentexist;
+                if (file_exists($existingFilePath)) {
+                  unlink($existingFilePath);
+                }
+              }
+              // Process the new file upload
+              $file = $request->file('file');
+              $fileName = $file->getClientOriginalName();
+              $file->move($destinationPath, $fileName);
+            }
+      
+            DB::table('timesheetrequests')
+              ->where('id', $request->timesheetrequestid)
+              ->update([
+                'reason' => $request->reason,
+                'partner' => $request->approver,
+                'attachment' => $fileName,
+                'updated_at' => date('Y-m-d H:i:s'),
+              ]);
+      
+            $output = array('msg' => 'Updated Successfully');
+            return back()->with('success', $output);
+          } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+          }
+        }
         //! End hare 
 
 
 
-        //* regarding 
+        //* regarding action column 
         // Start Hare
+        public function timesheetrequestform(Request $request, $id)
+        {
+      
+          $timesheetrequestedit = DB::table('timesheetrequests')
+            ->leftjoin('clients', 'clients.id', 'timesheetrequests.client_id')
+            ->leftjoin('assignments', 'assignments.id', 'timesheetrequests.assignment_id')
+            ->leftjoin('teammembers', 'teammembers.id', 'timesheetrequests.partner')
+            ->leftjoin('teammembers as createdby', 'createdby.id', 'timesheetrequests.createdby')
+            ->where('timesheetrequests.id', $id)
+            ->select(
+              'timesheetrequests.*',
+              'clients.client_name',
+              'clients.client_code',
+              'assignments.assignment_name',
+              'teammembers.team_member',
+              'teammembers.staffcode',
+              'createdby.team_member as createdbyauth',
+              'createdby.staffcode as staffcodeid',
+            )
+            ->first();
+      
+          $hasopenRequests = ($timesheetrequestedit && $timesheetrequestedit->status == 0);
+      
+          dd($hasopenRequests);
+      
+          $partner = DB::table('teammembers')
+            ->whereNotIn('id', [887, 663, 841, 836, 843, 447])
+            ->where('role_id', '=', 13)
+            ->where('status', '=', 1)
+            ->select('id', 'team_member', 'staffcode')
+            ->orderBy('team_member', 'asc')
+            // ->distinct()
+            ->get();
+      
+          return view('backEnd.timesheet.timesheetrequestedit', compact('timesheetrequestedit', 'partner'));
+        }
+        // Start Hare
+        public function timesheetrequestform(Request $request, $id)
+        {
+      
+          $timesheetrequestedit = DB::table('timesheetrequests')
+            ->leftjoin('clients', 'clients.id', 'timesheetrequests.client_id')
+            ->leftjoin('assignments', 'assignments.id', 'timesheetrequests.assignment_id')
+            ->leftjoin('teammembers', 'teammembers.id', 'timesheetrequests.partner')
+            ->leftjoin('teammembers as createdby', 'createdby.id', 'timesheetrequests.createdby')
+            ->where('timesheetrequests.id', $id)
+            ->select(
+              'timesheetrequests.*',
+              'clients.client_name',
+              'clients.client_code',
+              'assignments.assignment_name',
+              'teammembers.team_member',
+              'teammembers.staffcode',
+              'createdby.team_member as createdbyauth',
+              'createdby.staffcode as staffcodeid',
+            )
+            ->get();
+
+            $hasopenRequests = $timesheetrequestedit->contains('status', 0);
+      
+            dd($hasopenRequests);
+      
+          $partner = DB::table('teammembers')
+            ->whereNotIn('id', [887, 663, 841, 836, 843, 447])
+            ->where('role_id', '=', 13)
+            ->where('status', '=', 1)
+            ->select('id', 'team_member', 'staffcode')
+            ->orderBy('team_member', 'asc')
+            // ->distinct()
+            ->get();
+      
+      
+          return view('backEnd.timesheet.timesheetrequestedit', compact('timesheetrequestedit', 'partner'));
+        }
         //! End hare 
 
 

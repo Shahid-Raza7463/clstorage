@@ -3,274 +3,272 @@
 {{-- 17-12-2024 closed --}}
 
 @if ($notificationData->duplicate != 0)
-@foreach ($targettypedatas as $key => $targettypedata)
-    @if ($targettypedata == 1)
+    @foreach ($targettypedatas as $key => $targettypedata)
+        @if ($targettypedata == 1)
+            <span>Individual</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @elseif($targettypedata == 2)
+            <span>All Member</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @elseif($targettypedata == 3)
+            <span>Partner</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @elseif($targettypedata == 4)
+            <span>Manager</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @elseif($targettypedata == 5)
+            <span>Staff</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @elseif($targettypedata == 6)
+            <span>IT Department</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @elseif($targettypedata == 7)
+            <span>Accountant</span>
+            @if ($key < count($targettypedatas) - 1)
+                ,
+            @endif
+        @else
+            <span>Partner</span>
+        @endif
+    @endforeach
+@else
+    @if ($notificationData->targettype == 1)
         <span>Individual</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 2)
+    @elseif($notificationData->targettype == 2)
         <span>All Member</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 3)
-        <span>Partner</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 4)
-        <span>Manager</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 5)
-        <span>Staff</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 6)
-        <span>IT Department</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 7)
-        <span>Accountant</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
     @else
         <span>Partner</span>
     @endif
-@endforeach
-@else
-@if ($notificationData->targettype == 1)
-    <span>Individual</span>
-@elseif($notificationData->targettype == 2)
-    <span>All Member</span>
-@else
-    <span>Partner</span>
-@endif
 @endif
 
 
 
 @php
-if ($notificationData->duplicate != 0) {
-$multipletarget = DB::table('notifications')
-->where('duplicate', 1001)
-// ->where('createdby', auth()->user()->teammember_id)
-// ->orderBy('date', 'asc')
-->get();
+    if ($notificationData->duplicate != 0) {
+        $multipletarget = DB::table('notifications')
+            ->where('duplicate', 1001)
+            // ->where('createdby', auth()->user()->teammember_id)
+            // ->orderBy('date', 'asc')
+            ->get();
 
-$targettypedatas = [];
-foreach ($multipletarget as $multipletargetdata) {
-$targettypedatas[] = $multipletargetdata->targettype;
-}
+        $targettypedatas = [];
+        foreach ($multipletarget as $multipletargetdata) {
+            $targettypedatas[] = $multipletargetdata->targettype;
+        }
 
-// foreach ($targettypedatas as $targettypedata) {
-//     dd($targettypedata == 3);
-// }
-}
+        // foreach ($targettypedatas as $targettypedata) {
+        //     dd($targettypedata == 3);
+        // }
+    }
 @endphp
 
 
 @foreach ($notificationDatas as $notificationData)
-@php
-// if ($notificationData->duplicate != 0) {
-dd($notificationData);
-if ($notificationData->duplicate > 1000) {
-$multipletarget = DB::table('notifications')
-->where('duplicate', 1001)
-// ->where('createdby', auth()->user()->teammember_id)
-// ->orderBy('date', 'asc')
-->get();
+    @php
+        // if ($notificationData->duplicate != 0) {
+        dd($notificationData);
+        if ($notificationData->duplicate > 1000) {
+            $multipletarget = DB::table('notifications')
+                ->where('duplicate', 1001)
+                // ->where('createdby', auth()->user()->teammember_id)
+                // ->orderBy('date', 'asc')
+                ->get();
 
-$targettypedatas = [];
-foreach ($multipletarget as $multipletargetdata) {
-$targettypedatas[] = $multipletargetdata->targettype;
-}
+            $targettypedatas = [];
+            foreach ($multipletarget as $multipletargetdata) {
+                $targettypedatas[] = $multipletargetdata->targettype;
+            }
 
-// foreach ($targettypedatas as $targettypedata) {
-//     dd($targettypedata == 3);
-// }
-}
-@endphp
-<tr>
-<td style="display: none;">{{ $notificationData->id }}</td>
-<td>
-<a href="{{ url('/notification/' . $notificationData->id) }}"
-style="color: {{ $notificationData->readstatus == 1 ? 'Black' : 'red' }}">
-{{ $notificationData->title }}
-</a>
-</td>
-{{-- <td>{{ date('d-m-Y', strtotime($notificationData->created_at)) }}</td> --}}
-<td>
-<span style="display: none;">
-{{ date('Y-m-d', strtotime($notificationData->created_at)) }}
-</span>
-{{ date('d-m-Y', strtotime($notificationData->created_at)) }}
-</td>
-@if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
-<td>
-{{-- @if ($notificationData->targettype == 1)
+            // foreach ($targettypedatas as $targettypedata) {
+            //     dd($targettypedata == 3);
+            // }
+        }
+    @endphp
+    <tr>
+        <td style="display: none;">{{ $notificationData->id }}</td>
+        <td>
+            <a href="{{ url('/notification/' . $notificationData->id) }}"
+                style="color: {{ $notificationData->readstatus == 1 ? 'Black' : 'red' }}">
+                {{ $notificationData->title }}
+            </a>
+        </td>
+        {{-- <td>{{ date('d-m-Y', strtotime($notificationData->created_at)) }}</td> --}}
+        <td>
+            <span style="display: none;">
+                {{ date('Y-m-d', strtotime($notificationData->created_at)) }}
+            </span>
+            {{ date('d-m-Y', strtotime($notificationData->created_at)) }}
+        </td>
+        @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+            <td>
+                {{-- @if ($notificationData->targettype == 1)
 <span>Individual</span>
 @elseif($notificationData->targettype == 2)
 <span>All Member</span>
 @else
 <span>Partner</span>
 @endif --}}
-@if ($notificationData->duplicate > 1000)
-@foreach ($targettypedatas as $key => $targettypedata)
-    @if ($targettypedata == 1)
-        <span>Individual</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
+                @if ($notificationData->duplicate > 1000)
+                    @foreach ($targettypedatas as $key => $targettypedata)
+                        @if ($targettypedata == 1)
+                            <span>Individual</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @elseif($targettypedata == 2)
+                            <span>All Member</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @elseif($targettypedata == 3)
+                            <span>Partner</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @elseif($targettypedata == 4)
+                            <span>Manager</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @elseif($targettypedata == 5)
+                            <span>Staff</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @elseif($targettypedata == 6)
+                            <span>IT Department</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @elseif($targettypedata == 7)
+                            <span>Accountant</span>
+                            @if ($key < count($targettypedatas) - 1)
+                                ,
+                            @endif
+                        @else
+                            <span>Partner</span>
+                        @endif
+                    @endforeach
+                @else
+                    @if ($notificationData->targettype == 1)
+                        <span>Individual</span>
+                    @elseif($notificationData->targettype == 2)
+                        <span>All Member</span>
+                    @elseif($notificationData->targettype == 3)
+                        <span>Partner</span>
+                    @elseif($notificationData->targettype == 4)
+                        <span>Partner</span>
+                    @elseif($notificationData->targettype == 5)
+                        <span>Partner</span>
+                    @elseif($notificationData->targettype == 6)
+                        <span>Partner</span>
+                    @elseif($notificationData->targettype == 7)
+                        <span>All Member</span>
+                    @else
+                        <span>Partner</span>
+                    @endif
+                @endif
+            </td>
         @endif
-    @elseif($targettypedata == 2)
-        <span>All Member</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 3)
-        <span>Partner</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 4)
-        <span>Manager</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 5)
-        <span>Staff</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 6)
-        <span>IT Department</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @elseif($targettypedata == 7)
-        <span>Accountant</span>
-        @if ($key < count($targettypedatas) - 1)
-            ,
-        @endif
-    @else
-        <span>Partner</span>
-    @endif
-@endforeach
-@else
-@if ($notificationData->targettype == 1)
-    <span>Individual</span>
-@elseif($notificationData->targettype == 2)
-    <span>All Member</span>
-@elseif($notificationData->targettype == 3)
-    <span>Partner</span>
-@elseif($notificationData->targettype == 4)
-    <span>Partner</span>
-@elseif($notificationData->targettype == 5)
-    <span>Partner</span>
-@elseif($notificationData->targettype == 6)
-    <span>Partner</span>
-@elseif($notificationData->targettype == 7)
-    <span>All Member</span>
-@else
-    <span>Partner</span>
-@endif
-@endif
-</td>
-@endif
-</tr>
+    </tr>
 @endforeach
 
 
 
 <table id="examplee" class="display nowrap">
-<thead>
-<tr>
-<th style="display: none;">id</th>
-<th>Title</th>
-<th>Date</th>
-@if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
-<th>Target</th>
-@endif
-</tr>
-</thead>
-<tbody>
-@foreach ($notificationDatas as $notificationData)
-@php
-$multipletarget = DB::table('notifications')
-->where('duplicate', $notificationData->duplicate)
-->get();
+    <thead>
+        <tr>
+            <th style="display: none;">id</th>
+            <th>Title</th>
+            <th>Date</th>
+            @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                <th>Target</th>
+            @endif
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($notificationDatas as $notificationData)
+            @php
+                $multipletarget = DB::table('notifications')->where('duplicate', $notificationData->duplicate)->get();
 
-$targettypedatas = [];
-foreach ($multipletarget as $multipletargetdata) {
-$targettypedatas[] = $multipletargetdata->targettype;
-}
-@endphp
-<tr>
-<td style="display: none;">{{ $notificationData->id }}</td>
-<td>
-<a href="{{ url('/notification/' . $notificationData->id) }}"
-style="color: {{ $notificationData->readstatus == 1 ? 'Black' : 'red' }}">
-{{ $notificationData->title }}
-</a>
-</td>
-<td>
-<span style="display: none;">
-{{ date('Y-m-d', strtotime($notificationData->created_at)) }}
-</span>
-{{ date('d-m-Y', strtotime($notificationData->created_at)) }}
-</td>
-@if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
-<td>
-@foreach ($targettypedatas as $key => $targettypedata)
-@if ($targettypedata == 1)
-    <span>Individual</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@elseif($targettypedata == 2)
-    <span>All Member</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@elseif($targettypedata == 3)
-    <span>Partner</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@elseif($targettypedata == 4)
-    <span>Manager</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@elseif($targettypedata == 5)
-    <span>Staff</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@elseif($targettypedata == 6)
-    <span>IT Department</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@elseif($targettypedata == 7)
-    <span>Accountant</span>
-    @if ($key < count($targettypedatas) - 1)
-        ,
-    @endif
-@else
-    <span>Partner</span>
-@endif
-@endforeach
-</td>
-@endif
-</tr>
-@endforeach
-</tbody>
+                $targettypedatas = [];
+                foreach ($multipletarget as $multipletargetdata) {
+                    $targettypedatas[] = $multipletargetdata->targettype;
+                }
+            @endphp
+            <tr>
+                <td style="display: none;">{{ $notificationData->id }}</td>
+                <td>
+                    <a href="{{ url('/notification/' . $notificationData->id) }}"
+                        style="color: {{ $notificationData->readstatus == 1 ? 'Black' : 'red' }}">
+                        {{ $notificationData->title }}
+                    </a>
+                </td>
+                <td>
+                    <span style="display: none;">
+                        {{ date('Y-m-d', strtotime($notificationData->created_at)) }}
+                    </span>
+                    {{ date('d-m-Y', strtotime($notificationData->created_at)) }}
+                </td>
+                @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                    <td>
+                        @foreach ($targettypedatas as $key => $targettypedata)
+                            @if ($targettypedata == 1)
+                                <span>Individual</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @elseif($targettypedata == 2)
+                                <span>All Member</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @elseif($targettypedata == 3)
+                                <span>Partner</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @elseif($targettypedata == 4)
+                                <span>Manager</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @elseif($targettypedata == 5)
+                                <span>Staff</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @elseif($targettypedata == 6)
+                                <span>IT Department</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @elseif($targettypedata == 7)
+                                <span>Accountant</span>
+                                @if ($key < count($targettypedatas) - 1)
+                                    ,
+                                @endif
+                            @else
+                                <span>Partner</span>
+                            @endif
+                        @endforeach
+                    </td>
+                @endif
+            </tr>
+        @endforeach
+    </tbody>
 </table>
 
 {{-- ! End hare --}}
@@ -588,7 +586,8 @@ setAttribute('max', today): This tells the browser that the End Date input field
         <div class="col-3">
             <div class="form-group">
                 <strong><label for="end">End Request Date</label></strong>
-                <input type="date" class="form-control" id="end1" name="end" value="{{ old('end') }}">
+                <input type="date" class="form-control" id="end1" name="end"
+                    value="{{ old('end') }}">
             </div>
         </div>
 
@@ -1173,7 +1172,58 @@ split('-')[1] gives you "44".
     });
 </script>
 {{--  Start Hare --}}
-{{-- * regarding long text / long text / substr function  --}}
+{{-- * regarding long text / long text / substr function /regarding tooltip --}}
+{{--  costmize tooltip --}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooltip Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .tooltip-inner {
+            background-color: #000 !important;
+            /* Tooltip background color */
+            color: #fff !important;
+            /* Tooltip text color */
+            font-size: 14px;
+            max-width: 200px;
+            /* Tooltip width */
+            text-align: center;
+        }
+
+        .tooltip.show {
+            opacity: 1 !important;
+            /* Ensures tooltip visibility */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+            title="This is a tooltip!">
+            Hover Me
+        </button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize Bootstrap Tooltip
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+</body>
+
+</html>
+
+
 {{--  Start Hare --}}
 
 <td class="textfixed">
@@ -2277,9 +2327,7 @@ date('d-M-Y', strtotime($udinData->udindate))
     <div class="form-group">
         @if (Request::is('teammember/*/edit'))
             @php
-                $timesheetdata = DB::table('timesheetusers')
-                    ->where('createdby', $teammember->id)
-                    ->first();
+                $timesheetdata = DB::table('timesheetusers')->where('createdby', $teammember->id)->first();
                 // $disabled = $timesheetdata ? 'disabled' : '';
                 $disabled = $timesheetdata ? 'readonly' : '';
             @endphp
@@ -2294,9 +2342,7 @@ date('d-M-Y', strtotime($udinData->udindate))
 {{--  Start Hare --}}
 <div class="form-group">
     @php
-        $timesheetdata = DB::table('timesheetusers')
-            ->where('createdby', $teammember->id)
-            ->first();
+        $timesheetdata = DB::table('timesheetusers')->where('createdby', $teammember->id)->first();
         $disabled = $timesheetdata ? 'disabled' : '';
     @endphp
     <label class="font-weight-600">Email Id <span class="tx-danger">*</span></label>
@@ -3806,6 +3852,34 @@ Client
                 });
             </script>
             {{-- * regarding anchor tag   --}}
+            {{-- Start hare --}}
+            {{-- Start hare --}}
+
+            {{-- @if ($timesheetDatas->status == 2)
+                                                <a href="  {{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
+                                                    onclick="return confirm('Are you sure you want to Reject this timesheet?');">
+                                                    <button class="btn btn-danger" data-toggle="modal"
+                                                        style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px;"
+                                                        data-target="#requestModal" disabled>Reject</button>
+                                                </a>
+                                            @else
+                                                <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
+                                                    onclick="return confirm('Are you sure you want to Reject this timesheet?');">
+                                                    <button class="btn btn-danger" data-toggle="modal"
+                                                        style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px;"
+                                                        data-target="#requestModal">Reject</button>
+                                                </a>
+                                            @endif --}}
+
+            <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
+                onclick="return confirm('Are you sure you want to Reject this timesheet?');">
+                <button class="btn btn-danger"
+                    style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px;"
+                    {{ $timesheetDatas->status == 2 ? 'disabled' : '' }}>
+                    Reject
+                </button>
+            </a>
+            {{-- Start hare --}}
 
             <a
                 href="{{ url('/assignmentconfirmationotp?' . 'type=' . $debtors->type . '&&' . 'status=' . 1 . '&&' . 'assignmentgenerate_id=' . $debtors->assignmentgenerate_id . '&&' . 'debitid=' . $debtors->id) }}">Accept
@@ -4508,8 +4582,8 @@ Client
                                     @endphp
                                     @foreach ($timesheetData as $timesheetDatas)
                                         @if (!in_array($timesheetDatas->createdby, $displayedValues))
-                                            <input type="text" class="form-control" id="teamid" name="teamid"
-                                                value="{{ $timesheetDatas->createdby }}">
+                                            <input type="text" class="form-control" id="teamid"
+                                                name="teamid" value="{{ $timesheetDatas->createdby }}">
                                             @php
                                                 $displayedValues[] = $timesheetDatas->createdby;
                                             @endphp
@@ -4605,8 +4679,8 @@ Client
                                     @endphp
                                     @foreach ($timesheetData as $timesheetDatas)
                                         @if (!in_array($timesheetDatas->createdby, $displayedValues))
-                                            <input type="hidden" class="form-control" id="teamid" name="teamid"
-                                                value="{{ $timesheetDatas->createdby }}">
+                                            <input type="hidden" class="form-control" id="teamid"
+                                                name="teamid" value="{{ $timesheetDatas->createdby }}">
                                             @php
                                                 $displayedValues[] = $timesheetDatas->createdby;
                                             @endphp

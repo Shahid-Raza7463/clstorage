@@ -17,7 +17,7 @@ Please check once vsalive bugs hare file
 
 
 
-vsalocal vsademo, ```start hare 
+vsalocal vsademo vsalive, ```start hare 
 
 7.Udin date format needs to be fixed. ```start
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -45,6 +45,8 @@ resources\views\backEnd\timesheet\form.blade.php
 end hare 
 
 
+
+
 1.Implement a calendar feature on the Add Timesheet page. ```start hare 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
@@ -54,7 +56,7 @@ in create function
 return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData',
 
 
-    } else {
+   } else {
 
       $authUserId = auth()->user()->teammember_id;
 
@@ -105,11 +107,13 @@ return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignm
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 after create fun add this 
 
-  private function getRejoiningDate($userId, $lasttimesheetsubmiteddata)
+   private function getRejoiningDate($userId, $lasttimesheetsubmiteddata)
   {
     $rejoiningData = DB::table('teammembers')
       ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
@@ -135,11 +139,13 @@ after create fun add this
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 after getRejoiningDate($userId, $lasttimesheetsubmiteddata) fun add this 
 
-   private function calculateDateDifference($lastTimesheet, $timesheetMaxDate, $leaveDate, $rejoiningDate)
+    private function calculateDateDifference($lastTimesheet, $timesheetMaxDate, $leaveDate, $rejoiningDate)
   {
     if ($lastTimesheet && !$timesheetMaxDate && !$leaveDate && !$rejoiningDate) {
       return 1; // Default difference
@@ -160,6 +166,9 @@ after getRejoiningDate($userId, $lasttimesheetsubmiteddata) fun add this
   }
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
 find   <script src="{{ url('backEnd/dist/js/pages/forms-basic.active.js') }}"></script> below this script add it 
@@ -173,6 +182,8 @@ find   <script src="{{ url('backEnd/dist/js/pages/forms-basic.active.js') }}"></
       var newteammember = @json($newteammember);
       var rejoiningdate = @json($rejoiningdate);
   </script>
+
+
 
 
 
@@ -202,7 +213,9 @@ resources\views\backEnd\layouts\includes\js.blade.php
 	 
 	 
 	 
-     <script>
+	 
+	 
+         <script>
          document.addEventListener('DOMContentLoaded', function() {
              // Declare endDate outside of the conditions
              let endDate = null;
@@ -315,9 +328,12 @@ resources\views\backEnd\layouts\includes\js.blade.php
  
  
  
+ 
+ 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
 <p style="float: right;color: white"><b>Select Date : </b>
+
 
 
 
@@ -334,7 +350,9 @@ resources\views\backEnd\timesheet\create.blade.php
                                   </div>
 								  
 								  
-								  
+	
+
+	
 								  
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -365,16 +383,18 @@ resources\views\backEnd\viewassignment.blade.php
  
  
 replace it 
-   <input type="date" name="udindate" id="datevalid" value="" class=" form-control">
+                                    <input type="date" name="udindate" id="datevalid" value=""
+                                        class=" form-control">
 
 
 
-								  
+						
+						
 								 						  
 								  
 1.Implement a calendar feature on the Add Timesheet page.  ```end hare
 
-vsalocal vsademo, ```end hare 
+vsalocal vsademo vsalive, ```end hare 
 
 
 
@@ -382,13 +402,15 @@ vsalocal vsademo, ```end hare
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
- elseif ($request->leavetype == 9) {
+ elseif ($request->leavetype == 9) {  add this below code before   foreach ($period as $date) {
 
         // Calculate the total number of days (inclusive of both start and end dates)
         $totaldayscount = $to->diffInDays($from) + 1;
         if ($totaldayscount > 10) {
           return back()->with('statuss', ['msg' => 'You cannot apply casual leave for more than 10 days']);
         }
+
+
 
 
 
@@ -417,6 +439,8 @@ find text  <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
 
 
 
+
+
 Move the Edit button to the first position on the Timesheet Saved Listing page. ```start
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\index.blade.php
@@ -438,11 +462,13 @@ resources\views\backEnd\timesheet\index.blade.php
                                     <th>Total Hour</th>
 									
 									
-									
+	
+
+	
 									
 find text 									
  <td style="display: none;">{{ $timesheetDatas->id }}</td>
- after this code replace till status column 
+ after this line replace till  @endphp
  
  
  
@@ -486,6 +512,27 @@ find text
                                             @endif
                                         </td>
 										
+										
+					
+
+remove this td 
+
+                                         <td>
+                                            @if ($client_id->status == 0)
+                                                @if ($leavesWithinRange->isEmpty())
+                                                    @if ($timesheetDatas->assignmentgenerate_id != null)
+                                                        <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->timesheetid) }}"
+                                                            onclick="return confirm('Are you sure you want to delete this item?');"
+                                                            class="btn btn-danger-soft btn-sm"><i
+                                                                class="far fa-trash-alt"></i></a>
+                                                        <a href="{{ url('/savedtimesheet/edit/' . $timesheetDatas->id) }}"
+                                                            class="btn btn-info-soft btn-sm"><i class="far fa-edit"></i></a>
+                                                    @endif
+                                                @endif
+                                            @else
+                                                delete blocked
+                                            @endif
+                                        </td>					
 										
 										
 										
@@ -551,6 +598,9 @@ find text
 </script>
 
 
+
+
+
 end hare
 
 7.The client wants to fix the ordering of data in the assignment folder based on date and time ```start
@@ -562,10 +612,12 @@ find text  strtotime($assignmentfolderData->created_at)   and replace it
                                     <td>{{ date('d-m-Y h:i A', strtotime($assignmentfolderData->created_at)) }}</td>
 
 
+
 find text <table
 replace table tag                 
 
                            <table id="examplee" class="table display table-bordered table-striped table-hover">
+
 
 
 
@@ -602,6 +654,8 @@ find text @endsection after this line add below code
     });
 </script>
 
+
+
 end hare
 
 timesheet delete logs ```start
@@ -629,17 +683,23 @@ find text  DB::table('timesheetusers')->where('timesheetid', $id)->delete();  af
       ]);
   
  
+ 
+ 
 end hare
   
 
 28.Replace "Miss" with "Ms." across all places on the portal. ((implementation)) start````
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 titles table me 
-Replace "Miss" with "Ms."
+Replace "Miss." with "Ms."
 
 
 
 end hare 
+
+
+
+
 
 
 1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
@@ -663,9 +723,14 @@ app\Http\Controllers\TimesheetrequestController.php
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
  <th class="textfixed">Reason for Reject</th> after it 
+ 
+ 
+ 1
 
 
                                             @if ($hasopenRequests)
@@ -675,7 +740,7 @@ resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
 											
 
 
- {{ $timesheetrequestsData->remark ?? 'NA' }}  find it 
+ {{ $timesheetrequestsData->remark ?? 'NA' }}  find it and after this td 
  
  
  1
@@ -749,7 +814,9 @@ find public function savedtimesheetEdit(Request $request, $id)  add this fun aft
 
 
 
+
 Route::get('/timesheetrequestform/{id}',  [TimesheetController::class, 'timesheetrequestform']);
+
 
 
 
@@ -888,6 +955,8 @@ resources\views\backEnd\timesheet\timesheetrequestedit.blade.php
 
 
 
+
+
 Route::post('/timesheetrequestupdate',  [TimesheetController::class, 'timesheetrequestupdate']);
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -944,12 +1013,16 @@ add this fun  public function savedtimesheeteditstore(Request $request)
 
 
 
+
+
 is function me file store hota hai so please connect s3
  $destinationPath = public_path('backEnd/image/confirmationfile');
 
 
 end hare 
 
+
+vsalocal vsademo, ```end hare 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php

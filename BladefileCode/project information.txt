@@ -212,7 +212,7 @@ password - Azaz~12345
 937
 
 Partner - harish@capitall.io
-password - Manoj@123
+password - Sukh@2024
 933
 
 Manager : poojakumari@capitall.io
@@ -346,6 +346,8 @@ ye 12 table chahiye vsalive se
 222222222222222222222222222222222222222222222222222222222222
 
 
+
+
     // DB::table('timesheetreport')
     //   ->delete();
     // DB::table('timesheetrequests')
@@ -367,7 +369,17 @@ ye 12 table chahiye vsalive se
     // DB::table('attendances')
     //   ->delete();
 
-    // dd('hi');
 
+    DB::table('teamrolehistory')
+      ->delete();
+    DB::table('rejoiningsamepost')
+      ->delete();
+    // DB::table('Users')
+    //   ->delete();
+    // DB::table('teammembers')
+    //   ->delete();
 
- 
+    dd('hi');
+
+<
+

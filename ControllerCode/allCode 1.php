@@ -6103,6 +6103,14 @@ foreach ($weeksData as $weekData) {
         }
     });
 }
+//* regarding console 
+console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+console.log("leavedataforcalander1:", leavedataforcalander1);
+console.log("leavebreakdateassign:", leavebreakdateassign);
+console.log("differenceInDays:", differenceInDays);
+console.log("newteammember:", newteammember);
+console.log("rejoiningdate:", rejoiningdate);
 //* regarding convert / regarding int value 
 // Start Hare 
 $statusdata = intval($request->input('status'));
@@ -13055,6 +13063,7 @@ dd($updatedcode);
 // dd($assignments[0]->assignment_id);
 // dd($assignments[0]->created_at);
 
+//* end hare 
 
 // Start Hare update assignmentgenerate_id in timesheet users table for single user
 
@@ -13575,25 +13584,77 @@ dd('hi');
 // Start hare
 
 //* regarding leave / regarding applyleave update / leave update / regarding update 
-// exam leave delete on sunday 
-teamid 791
-
-timesheets
-id =142296  delete it 
-
-timesheetusers
-id=144633   delete it
-
-attendances
-id =1569  edit it  (one = W,exam_leave=28,holidays=1,sundaycount=1),
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+// 22222222222222222222222222222222222222222222222222222222222222222222
 
 
-leaveapprove
-id=1210   edit it  totaldays = 64
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+// 22222222222222222222222222222222222222222222222222222222222222222222
 
-applyleaves
-id = 1266   edit it  from = 2024-09-02
 
+
+
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+// 1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+// leaving date 31-01-2025 and i need to delete 01-02-2025 leave data
+
+// Casual leave delete karna ho to 
+
+// applyleaves  table me 
+// 951
+// id = 1623  delete
+
+
+// timesheets table me
+// id = 150673 delete
+
+
+// timesheetusers table me
+// id = 153401 delete 
+
+
+
+// timesheetreport table me 
+
+// id = 13798 totaldays = 4 ko replace kare 3
+// id = 13797 dayscount 5 
+
+// attendance table me 
+// id = 1355
+// 27	28	29 ko null kare 
+
+// exam_leave  = 25
+// Offholidays = 0 
+// sundaycount = 0 
+// 22222222222222222222222222222222222222222222222222222222222222222222
+
+
+// start hare
+// exam leave delete on sunday
+
+
+// teamid 791
+
+// timesheets
+// id =142296  delete it 
+
+// timesheetusers
+// id=144633   delete it
+
+// attendances
+// id =1569  edit it  (one = W,exam_leave=28,holidays=1,sundaycount=1),
+
+
+// leaveapprove
+// id=1210   edit it  totaldays = 64
+
+// applyleaves
+// id = 1266   edit it  from = 2024-09-02
+
+// 22222222222222222222222222222222222222222222222222222222222222222222
 // Casula leave 
 $result = ['2024-06-25', '2024-06-26', '2024-06-27', '2024-06-28', '2024-06-29', '2024-06-30', '2024-07-01', '2024-07-02'];
 foreach ($result as $date) {

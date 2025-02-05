@@ -1,383 +1,447 @@
 
 task se related bugs task wale file me hi daale aur other bugs yaha dale 
 
-vsalive, vsalocal
-2222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-find text   $leavetype = DB::table('leavetypes')
- 
-replace serced tesxt
- 
-    $leavetype = DB::table('leavetypes')
-      ->leftjoin('leaveroles', 'leaveroles.leavetype_id', 'leavetypes.id')
-      ->where('leavetypes.year', '=', '2025')
-      ->where('leaveroles.role', auth()->user()->role_id)
-      ->whereIn('leavetypes.id', [9, 11])
-      ->select('leavetypes.*')->get();
-	  
-	  leavetypes table me  year column me replace 2024 to 2025
-
-
-vsalive vsalocal done 
-222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\AssignmentmappingController.php
-
-    public function index()
-    {
-        $permotioncheck = DB::table('teamrolehistory')
-            ->where('teammember_id', auth()->user()->teammember_id)->first();
-
-        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12 || auth()->user()->role_id == 18) {
-            $assignmentmappingData = DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                //  ->leftjoin('assignmentteammappings','assignmentteammappings.assignmentmapping_id','assignmentmappings.id')
-                // ->where('clients.status',1)
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')->distinct()->get();
-            //   dd($assignmentmappingData);
-            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
-        } elseif ($permotioncheck && auth()->user()->role_id == 13) {
-            $assignmentmappingDatabefore =  DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                // ->where('clients.status', 0)
-                ->whereNotIn('clients.id', [33, 32, 34, 29])
-                ->where('assignmentbudgetings.status', 1)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-                ->distinct()->get();
-
-            $assignmentmappingDataafter = DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->where(function ($query) {
-                    $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
-                        ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
-                })
-                ->where('assignmentbudgetings.status', 1)
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                ->distinct()->get();
-
-            $assignmentmappingData = $assignmentmappingDatabefore->merge($assignmentmappingDataafter);
-
-            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
-        } elseif (auth()->user()->role_id == 13) {
-            $assignmentmappingData = DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->where(function ($query) {
-                    $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
-                        ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
-                })
-                ->where('assignmentbudgetings.status', 1)
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                ->distinct()->get();
-            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
-        } elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
-            $assignmentmappingData =  DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                // ->where('clients.status', 0)
-                ->whereNotIn('clients.id', [33, 32, 34, 29])
-                ->where('assignmentbudgetings.status', 1)
-                // hide inactive client
-                // ->where('assignmentteammappings.status', 1)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
-         
-            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
-        } else {
-            $assignmentmappingData = DB::table('assignmentmappings')
-                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
-                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
-
-                ->select('assignmentbudgetings.client_id', 'clients.client_name', 'clients.client_code')
-                ->whereNotIn('clients.id', [33, 32, 34, 29])
-                ->where('clients.status', 1)
-                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)->distinct()->get();
-
-            return view('backEnd.assignmentmapping.index', compact('assignmentmappingData'));
-        }
-    }
-
-vsalive vsalocal done 
-22222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\layouts\includes\header.blade.php
- if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
-                    $userId = auth()->user()->teammember_id;
-                    $clientnotification = DB::table('notifications')
-                        ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
-                            $join
-                                ->on('notificationreadorunread.notifications_id', 'notifications.id')
-                                ->where('notificationreadorunread.readedby', $userId);
-                        })
-                        ->select('notifications.*', 'notificationreadorunread.status as readstatus')
-                        ->whereIn('notifications.id', function ($subquery) {
-                            // Subquery to get the latest ID for each duplicate_notifications value
-                            $subquery
-                                ->from('notifications')
-                                ->selectRaw('MAX(id) as id')
-                                ->groupBy('duplicate_notifications');
-                        })
-                        ->latest('notifications.created_at')
-                        ->distinct()
-                        ->paginate(5);
-                }
-
-app\Http\Controllers\NotificationController.php
-
-if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
-            $userId = auth()->user()->teammember_id;
-
-            // $notificationDatas = DB::table('notifications')
-            //     ->leftjoin('notificationreadorunread', function ($join) use ($userId) {
-            //         $join->on('notificationreadorunread.notifications_id', 'notifications.id')
-            //             ->where('notificationreadorunread.readedby', $userId);
-            //     })
-            //     ->select('notifications.*', 'notificationreadorunread.status as readstatus')
-            //     ->latest()
-            //     ->distinct()
-            //     ->paginate(20);
-
-            $notificationDatas = DB::table('notifications')
-                ->leftJoin('notificationreadorunread', function ($join) use ($userId) {
-                    $join->on('notificationreadorunread.notifications_id', '=', 'notifications.id')
-                        ->where('notificationreadorunread.readedby', $userId);
-                })
-                ->select(
-                    'notifications.*',
-                    'notificationreadorunread.status as readstatus'
-                )
-                ->whereIn('notifications.id', function ($subquery) {
-                    // Subquery to get the latest ID for each duplicate_notifications value
-                    $subquery->from('notifications')
-                        ->selectRaw('MAX(id) as id')
-                        ->groupBy('duplicate_notifications');
-                })
-                ->latest('notifications.created_at') // Sort by the latest created_at
-                ->distinct()
-                ->paginate(20);
-
-
-            // dd($notificationDatas);
-
-            return view('backEnd.notification.index', compact('notificationDatas'));
-        }
-
-
-
-
-vsalive, vsalocal done
-22222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\TimesheetController.php
-show function 
- elseif (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
-
-
-          $timesheetData = DB::table('timesheets')
-        ->leftjoin('teammembers', 'teammembers.id', 'timesheets.created_by')
-        ->where('timesheets.created_by', $request->teammember)
-        ->where('timesheets.month', $request->month)
-        ->whereYear('timesheets.date', '=', $request->year)
-        ->where('timesheets.status', '=', 0)
-        ->select('timesheets.*', 'teammembers.team_member', 'teammembers.staffcode')->get();
-      // dd($timesheetData);
-	  
-	  
-	  
-app\Http\Controllers\TimesheetoldController.php
- find   $client = Client::select('id', 'client_name')->get();
-   
-   
-   
-   fix this line 
-    $timesheetData= DB::table('timesheets')
-	
-	
-	
-app\Http\Controllers\TimesheetController.php
-fix this line 
-
-$timesheetData =  $timesheetData = DB::table('timesheets')
-
-
-
-						 
-vsalive, vsalocal done ,
-222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\savedtimesheetedit.blade.php
-
-                        <form method="post" action="{{ url('/savedtimesheet/update') }}" enctype="multipart/form-data"
-                            id="detailsForm" style="margin-bottom: 0px;">
-                            @csrf
-
-                            <div class="row row-sm" style="margin-bottom: 19px;">
-                                <div class="col-sm-6">
-                                    <label for="">Employee Name</label>
-                                    <input required type="text" name="teammember" class="form-control"
-                                        value="{{ $timesheetedit->team_member }}" placeholder="Enter Employee Name"
-                                        readonly>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <label for="">Date</label>
-                                    <input required type="text" name="teammember" class="form-control"
-                                        value=" {{ date('d-m-Y', strtotime($timesheetedit->date)) }}"
-                                        placeholder="Enter Employee Name" readonly>
-                                </div>
-                            </div>
-                            <div class="row row-sm">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-600">Client Name *</label>
-                                        <select required class="language form-control" name="client_id" id="client"
-                                            @if (Request::is('timesheet/*/edit')) > <option disabled style="display:block">Select
-                                                Client
-                                                </option>
-                            
-                                                @foreach ($client as $clientData)
-                                                <option value="{{ $clientData->id }}">
-                                                    {{ $clientData->client_name }}</option>
-                                                @endforeach
-                                                
-                            
-                                                @else
-                                                <option></option>
-                                                <option value="">Select Client</option>
-                                                @foreach ($client as $clientData)
-                                                <option value="{{ $clientData->id }}"{{ $timesheetedit->client_id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
-                                                    {{ $clientData->client_name }}</option>
-                            
-                                                @endforeach @endif
-                                            </select>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-600">Assignment Name *</label>
-                                        @php
-                                            $assignment = app('App\Models\Assignment')
-                                                ->where('id', $timesheetedit->assignment_id)
-                                                ->first();
-
-                                        @endphp
-                                        <select class="form-control key assignmentvalue" name="assignment_id"
-                                            id="assignment">
-
-                                            @if (!empty($timesheetedit->assignment_id))
-                                                @php
-                                                    $assignment = app('App\Models\Assignment')
-                                                        ->where('id', $timesheetedit->assignment_id)
-                                                        ->first();
-                                                @endphp
-                                                @if ($assignment)
-                                                    <option value="{{ $assignment->id }}">
-                                                        {{ $assignment->assignment_name }}
-                                                    </option>
-                                                @endif
-                                            @endif
-                                            @if (!empty($timesheet->assignment_id))
-                                                <option value="{{ $assignment->id }}"
-                                                    {{ $timesheetedit->assignment_id == $assignment->id ? 'selected' : '' }}>
-                                                    {{ App / Models / Assignment::where('id', $timesheet->assignment_id)->first()->assignment_name ?? '' }}
-                                                </option>
-                                            @endif
-                                        </select>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row row-sm">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-600">Partner *</label>
-
-                                        <select class="language form-control partnervalue" id="partner" name="partner">
-                                            @if (!empty($timesheetedit->partner))
-                                                @php
-                                                    $assignment = app('App\Models\Teammember')
-                                                        ->where('id', $timesheetedit->partner)
-                                                        ->first();
-                                                @endphp
-                                                @if ($assignment)
-                                                    <option value="{{ $timesheetedit->partner }}">
-                                                        {{ $assignment->team_member }}
-                                                    </option>
-                                                @endif
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-600" style="width:100px;">Location *</label>
-                                        <input required type="text" name="location" id="location"
-                                            value="{{ $timesheetedit->location }}" class="form-control locationvalue"
-                                            placeholder="Enter Location">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row row-sm">
-
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-600" style="width:100px;">Work Item *</label>
-                                        <input required type="text" name="workitem"
-                                            value="{{ $timesheetedit->workitem }}" class="form-control workitemnvalue"
-                                            placeholder="Enter Name">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="hidden" name="status" value="{{ $timesheetedit->status }}"
-                                            class="form-control" placeholder="Enter Location">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="hidden" name="timesheetusersid" value="{{ $timesheetedit->id }}"
-                                            class="form-control" placeholder="Enter Location">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="hidden" name="timesheetid" value="{{ $timesheetedit->timesheetid }}"
-                                            class="form-control" placeholder="Enter Location">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="hidden" name="createdby" value="{{ $timesheetedit->createdby }}"
-                                            class="form-control" placeholder="Enter Location">
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <input type="hidden" name="date" id="date1" class="form-control"
-                                            value=" {{ date('d-m-Y', strtotime($timesheetedit->date ?? '')) }}"
-                                            placeholder="Enter Date" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="font-weight-600">Hour *</label>
-                                        <input required type="text" name="hour" id="hour"
-                                            value="{{ $timesheetedit->hour }}" class="form-control"
-                                            placeholder="Enter Location">
-
-                                        <span style="font-size: 10px;margin-left: 10px;"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success" style="float:right">Submit</button>
-                                <a class="btn btn-secondary" href="{{ url('timesheet/mylist') }}">
-                                    Back</a>
-                            </div>
-
-                        </form>
-						
-				
-
-
-					
+vsalive, vsalocal 			
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+find text   // Declare endDate outside of the conditions
+replace <script> tag
+
+
+     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             // Declare endDate outside of the conditions
+             let endDate = null;
+
+             // Function to parse and validate dates
+             function parseDate(date) {
+                 let parsedDate = new Date(date);
+                 if (isNaN(parsedDate)) {
+                     console.error("Invalid date format:", date);
+                     return null;
+                 }
+                 return parsedDate;
+             }
+
+             // Helper function to adjust endDate
+             function adjustEndDateForWeekend(date) {
+                 if (date.getDay() === 6) {
+                     console.log("Incremented date is Sunday, adding another day.");
+                     date.setDate(date.getDate() + 1); // Increment by one more day
+                 }
+             }
+
+             // Check the conditions for calculating the endDate
+             if (timesheetmaxDateRecord && leavedataforcalander1) {
+                 if (differenceInDays > 1) {
+                     endDate = parseDate(timesheetmaxDateRecord.date);
+                 } else {
+                     // endDate = parseDate(leavedataforcalander1);
+                     let maxDate = parseDate(timesheetmaxDateRecord.date);
+                     let leaveDate = parseDate(leavedataforcalander1);
+                     if (maxDate.getTime() > leaveDate.getTime()) {
+                         endDate = maxDate;
+                     } else {
+                         endDate = leaveDate;
+                     }
+                 }
+
+                 if (!endDate && lasttimesheetsubmiteddata) {
+                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                     if (endDate) adjustEndDateForWeekend(endDate);
+                 }
+             } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+                 rejoiningdate) {
+                 console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                 if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
+                 console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
+                 endDate = parseDate(timesheetmaxDateRecord.date);
+             } else if (newteammember && !lasttimesheetsubmiteddata) {
+                 //  } else if (newteammember) {
+
+                 //  console.log("Using newteammember data:", newteammember);
+                 //  endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
+                 //      newteammember);
+                 //  if (endDate) endDate.setDate(endDate.getDate() - 1);
+
+                 if (timesheetmaxDateRecord) {
+                     endDate = parseDate(timesheetmaxDateRecord.date)
+                 } else {
+                     console.log("Using newteammember data:", newteammember);
+                     endDate = parseDate(newteammember);
+                     endDate.setDate(endDate.getDate() - 1);
+                 }
+             } else if (rejoiningdate) {
+                 console.log("Using rejoiningdate data:", rejoiningdate);
+                 endDate = parseDate(rejoiningdate);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+             } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+                 if (differenceInDays === 2 || differenceInDays === 1) {
+                     endDate = parseDate(leavedataforcalander1);
+                 } else {
+                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                     if (endDate) adjustEndDateForWeekend(endDate);
+                 }
+             }
+
+             // Set date in the datepicker if endDate is valid
+             if (endDate) {
+                 let today = new Date();
+                 today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+                 endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+                 // Increment endDate if it's not today's date  or  Increment endDate if enddate lesstahn today date and not increamner end date if enddate greater than today date
+                 //  if (endDate.getTime() !== today.getTime() && endDate.getTime() <= today.getTime()) {
+                 //      endDate.setDate(endDate.getDate() + 1);
+                 //  }
+
+                 //  if (endDate.getTime() <= today.getTime()) {
+                 if (endDate.getTime() < today.getTime()) {
+                     endDate.setDate(endDate.getDate() + 1);
+                 }
+
+
+                 let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                     ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                     endDate.getFullYear();
+
+                 // Set the calculated date in the datepicker input field
+                 document.getElementById('datepickers').value = formattedDate;
+
+                 // Initialize the datepicker with the calculated maxDate
+                 $("#datepickers").datepicker({
+                     maxDate: endDate,
+                     minDate: endDate, // Set the same date for minDate if needed
+                     dateFormat: 'dd-mm-yy'
+                 });
+
+
+                 //  this code will be refresh data according end date
+                 if (endDate.getTime() !== today.getTime()) {
+                     let timesheetdate = formattedDate;
+                     var refreshpage = $('.refresh');
+                     refreshpage.val('').prop("readonly", false);
+                     $('.refreshoption option').remove();
+                     //   $("#hour1,#hour2,#hour3,#hour4,#hour5").prop("readonly", false);
+                     $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+
+                     //   alert(datepickers);
+                     $.ajax({
+                         type: "get",
+                         url: "{{ url('timesheet/create') }}",
+                         data: {
+                             timesheetdate: timesheetdate
+                         },
+                         success: function(res) {
+                             $('#client').html(res);
+                             $('#client1').html(res);
+                             $('#client2').html(res);
+                             $('#client3').html(res);
+                             $('#client4').html(res);
+                         },
+                         error: function() {},
+                     });
+                 }
+                 //  this code will be refresh data according end date end hare 
+
+                 console.log("Adjusted date set in datepicker:", endDate);
+             } else {
+                 console.log("No valid timesheet or submitted date data found to set datepicker.");
+             }
+         });
+     </script>
+
+
+
+vsalocal vsalive,
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+ye sabhi updates in update function me hai 
+
+1
+find text  if ($request->rejoining_date == null) { and replace only this line
+after that 
+
+ // this code will be run in 2 cases like 1. first time exit and second is after rejoin user will exit
+ if (is_null($existingLeavingDate) || (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate)) { replace only this line
+
+
+
+2
+find text  if ($request->leavingdate != null) {   before this line add this code 
+
+            $checkuserleavingdate = DB::table('teammembers')
+                ->where('id', $id)
+                ->first();
+
+            $existingLeavingDate = $checkuserleavingdate->leavingdate ? Carbon::parse($checkuserleavingdate->leavingdate)->format('Y-m-d') : null;
+            $inputLeavingDate = $request->leavingdate ? Carbon::parse($request->leavingdate)->format('Y-m-d') : null;
+
+
+
+
+3
+find text    $output = array('msg' => 'Please delete saved timesheet after leaving date');
+after this  add it 
+
+
+
+                    // update rejoined exit date
+                    if (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate) {
+                        $rejoiningleavedate = DB::table('teamrolehistory')
+                            ->where('teammember_id', $id)
+                            ->whereNotNull('rejoiningdate')
+                            ->first();
+
+                        if ($rejoiningleavedate) {
+                            DB::table('teamrolehistory')
+                                ->where('id', $rejoiningleavedate->id)
+                                ->update([
+                                    'rejoiniedexitdate' => $request->leavingdate,
+                                ]);
+                        } else {
+                            DB::table('rejoiningsamepost')
+                                ->where('teammember_id',  $id)
+                                ->update([
+                                    'rejoiniedexitdate' => $request->leavingdate,
+                                ]);
+                        }
+                    }
+					
+					
+			
+
+			
+					
+					
+find this code if ($request->leavingdate != null && $request->status == 1) {
+replace if block only 				
+					
+					
+					
+           if ($request->leavingdate != null && $request->status == 1) {
+                $oldstatusvalue = Teammember::find($id);
+                if ($oldstatusvalue->status == 1 && $oldstatusvalue->rejoining_date == null) {
+                    $data = $request->except(['_token', 'qualification', 'document_file']);
+                    $emilid = $data['emailid'];
+                    if (is_null($existingLeavingDate) || (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate)) {
+                        if (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate) {
+                            $data = $request->except(['_token', 'qualification', 'document_file', 'status', 'leavingdate']);
+                        } else {
+                            $data = $request->except(['_token', 'qualification', 'document_file', 'status']);
+                        }
+                        $data['status'] = '0';
+                        DB::table('users')->where('email', $emilid)->update([
+                            'status'         =>  0,
+                            'remember_token' => null
+                        ]);
+                    }
+                    Teammember::find($id)->update($data);
+                } else {
+                    $data = $request->except(['_token', 'qualification', 'document_file']);
+                    $emilid = $data['emailid'];
+                    Teammember::find($id)->update($data);
+                    $oldstatususer = User::where('email', $emilid)->first();
+                    if ($oldstatususer->status == 0) {
+                        DB::table('users')->where('email', $emilid)->update([
+                            'status'         =>  1,
+                        ]);
+                    }
+                }
+            }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+$teamrole = Role::latest()->get();
+replace  $teammember =
+
+        $teammember = Teammember::where('teammembers.id', $id)
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+            ->select([
+                'teammembers.*',
+                // Combine leavingdate and joiningdate
+                DB::raw('COALESCE(teamrolehistory.rejoiniedexitdate, rejoiningsamepost.rejoiniedexitdate, teammembers.leavingdate) AS final_leavingdate'),
+                DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date) AS final_joiningdate'),
+            ])
+            ->first();
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Joining Date</label>
+            <input type="date" required id="example-date-input" name="joining_date"
+                value="{{ $teammember->final_joiningdate ?? '' }}" class="form-control leaveDate"
+                placeholder="Enter joining_date">
+        </div>
+    </div>
+	
+	
+	
+	
+	
+another is 
+
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Leaving Date</label>
+            <input type="date" id="example-date-input" name="leavingdate"
+                value="{{ $teammember->final_leavingdate ?? '' }}" class="form-control leaveDate"
+                placeholder="Enter Leaving Date">
+        </div>
+    </div>
+	
+	
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+ $userInfo = Teammember::where('id', $teammemberid)->first();
+ 
+     $userInfo = Teammember::where('teammembers.id', auth()->user()->teammember_id)
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+      ->select([
+        'teammembers.*',
+        'teamrolehistory.newstaff_code',
+        // Combine leavingdate and joiningdate
+        DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date) AS final_joiningdate'),
+      ])
+      ->first();
+
+
+
+
+resources\views\backEnd\userprofile.blade.php
+
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label class="font-weight-600">Joining Date</label>
+                                            <input type="date" id="example-date-input" name="joining_date"
+                                                value="{{ $userInfo->final_joiningdate ?? '' }}" class="form-control"
+                                                placeholder="Enter joining_date">
+                                        </div>
+                                    </div>
+									
+									
+									
+
+
+```111
+22222222222222222222222222222222222222222222222222222222
+teamrolehistory table me 
+add this column rejoiniedexitdate after rejoiningdate column
+varchar 200 null
+
+rejoiningsamepost table me
+add this column rejoiniedexitdate after rejoiningdate column
+varchar 200 null
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222
+fix keshav chadhary leaving date
+teammembers table me 
+780
+leaving date = 2024-07-31
+
+teamrolehistory table me 
+new wla leaving date  rejoiniedexitdate = 2025-01-31
+
+
+
+sachin date enable problem
+vsalocal,
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
+
+
+      $leavebreakdateassign = null;
+      foreach ($leaveDates as $leaveDate) {
+        $increamentonedays = Carbon::parse($leaveDate)->addDay()->format('Y-m-d');
+
+        $timesheetRecord = DB::table('timesheetusers')
+          ->where('status', '0')
+          ->where('createdby', $authUserId)
+          ->where('date', $increamentonedays)
+          ->exists();
+
+        if (!$timesheetRecord) {
+          $leavebreakdateassign = $leaveDate;
+          break; // Terminate loop when first available date is found
+        }
+      }
+
+
+
+pass this leavebreakdateassign in view file 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+find       var rejoiningdate = @json($rejoiningdate); after this line add 
+
+      //   after bugs
+      var leavebreakdateassign = @json($leavebreakdateassign);
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+  let maxDate = parseDate(timesheetmaxDateRecord.date);
+  after else body add this code 
+
+                 if (leavebreakdateassign) {
+                     console.log("Using leavebreakdateassign:", leavebreakdateassign);
+                     endDate = parseDate(leavebreakdateassign);
+                     if (endDate) adjustEndDateForWeekend(endDate);
+                 }
+
+
+sachin date enable problem end hare 
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php

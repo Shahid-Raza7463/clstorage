@@ -26,8 +26,56 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding summernote --}}
 {{--  Start Hare --}}
+
+<div class="row">
+    <div class="col-12 d-flex flex-column  mb-2">
+        <label for="">Description:</label>
+        <textarea class="form-control summernote" name="description">{{ $data->descreption }}</textarea>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 d-flex flex-column  mb-2">
+        <label for="">listdescreption:</label>
+        <textarea class="form-control summernote" name="description1">{{ $data->listdescreption }}</textarea>
+    </div>
+</div>
+
+<script>
+    $('#summernote').summernote({
+        placeholder: 'Enter Description ',
+        tabsize: 2,
+        height: 200
+    });
+</script>
+{{-- <script>
+                $('.summernote').summernote({
+                    placeholder: 'Enter Description ',
+                    tabsize: 2,
+                    height: 200
+                });
+            </script> --}}
+
+<!-- Include Summernote JS -->
+<script>
+    $(document).ready(function() {
+        $('.summernote').summernote({
+            height: 200, // Set height
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
+</script>
 {{--  Start Hare --}}
 
 {{-- ! End hare --}}
@@ -309,9 +357,7 @@ resources\views\backEnd\teammember\form.blade.php
         ->get()
 
         ->map(function ($timesheet) {
-            $promotionCheck = DB::table('teamrolehistory')
-                ->where('teammember_id', $timesheet->createdby)
-                ->first();
+            $promotionCheck = DB::table('teamrolehistory')->where('teammember_id', $timesheet->createdby)->first();
 
             $assignmentDate = $timesheet->assignment_created_date
                 ? Carbon::parse($timesheet->assignment_created_date)

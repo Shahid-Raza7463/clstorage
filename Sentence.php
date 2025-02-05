@@ -152,6 +152,64 @@ class Sentence extends Command
         // jab kisi ko call karo aur vo call n uthaye to ye message kare teams per
         // Simmi Ma’am, I tried reaching out to Pooja, but she seems unavailable at the moment
 
+        // Simmi Ma'am, I kindly request you to ensure that all the tasks currently in QA are tested.
+
+        // I have recieved multiple partner adding on assignment task so i need to discuss on this point so please give me meeting time so that i will create meeting with you 
+
+        // You had asked about the estimated days. The total estimated duration for all the approved tasks I have is 10 days. Additionally, the 'multiple partner adding on assignment' task is estimated to take 10 days. So, the total estimate comes to 20 days. Okay
+        // All Affected Points for Assignment Task Updates
+
+        // You need to test the data in the Excel file and ensure that the ascending/descending icons are functioning correctly on the date column only
+
+        // Can we deploy these tasks to production
+
+        // Atishay Jain, have you reviewed this? If you have checked it, please grant me permission
+        // If you have checked it, please grant me permission
+
+        // Dear Pooja, 'Miss' is used for females, so please check 'Ms' for female users, not male users.
+
+        // As per client discussion, the client only instructed me to replace 'Miss' with 'Ms' wherever it appears. So, I have made the replacement. 'Miss' was only used for female users, and for male users, 'Mr.' was already in place. The client did not mention any changes regarding male users.
+
+        // 3.When the user submitted their timesheet, an error occurred. I have checked and fixed the issue.
+        // 4.There was an attendance data issue on January 19. I have resolved it
+
+        //         Dear Atishay,
+
+        // I understand that the required changes involve applying conditions and restructuring the data for other partners in an existing another table. To achieve this:
+
+        // 1.Changes will be applied on the Assignment Creation page.
+        // 2.Changes will be applied on the Add Timesheet page.
+        // 3.Changes will be applied in the Partner Section on the Assignment Details page.
+        // 4.Changes will be applied on the Independence Confirmation page.
+
+        // Total Development Time: 5 Days.
+
+        // Thanks & regards,
+        // Shahid Raza (7488952139)
+
+        // After the QA passed the task, I received a bug from the client side on task VSA-304.  bugs is when admin update profile of rejoined users after that admin get warning message like Please delete save timesheet after leaving date
+
+
+        // After the QA passed the task, I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date'.
+
+        // I have checked and found that when a user has rejoined and has saved timesheet data, a warning message appears when the admin updates the user's profile.
+
+        // Both of these tasks have been updated on VSA
+
+        // can we deploy this tasks in the production
+
+        // I would like to speak with you. Please let me know if now is a good time
+
+        // I want to talk to you. Can we talk now
+
+        // Yes, this still exists, and it is correct. However, after rejoining, when the admin updates the user's profile, such as their qualification, the warning message is still displayed in that case
+
+        // After the QA passed the task, I received a bug from the client side on  task VS-395. so i am working on it.
+        // After the QA passed the task, I received a bug from the client side on task VS-395. I am currently working on fixing it
+
+        // I have already informed Simmi regarding this bug
+
+
 
 
 

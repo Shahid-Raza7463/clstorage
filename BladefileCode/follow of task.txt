@@ -361,6 +361,123 @@ Steps:
 
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+4.Add a CreatedBy column to display on the assignment folder file listing page. ( 0.5 days )
+36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+33.Move the Edit button to the first position on the Timesheet Saved Listing page. ( 1 days )
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.  ( 0.5 days )
+`3.timesheet delete logs
+
+
+4.Add a CreatedBy column to display on the assignment folder file listing page. ( 0.5 days )
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+5.Click on ‘All Files And Folders’ button.
+6.Click on ‘Folder box’ you can see hare created by column.
+
+
+
+
+
+36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Click on the 'Apply Leave' button.
+4.  fill form and click on send button 
+
+33.Move the Edit button to the first position on the Timesheet Saved Listing page. ( 1 days )
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet.
+
+
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet' tab.
+4.Click on 'Submitted timesheet'.
+4.Click on 'Team Name hyperlink'.
+5.hare you can see action column
+
+
+
+
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet' tab.
+4.Click on 'Submitted timesheet'.
+4.Click on 'Team Name hyperlink'.
+5.hare you can see action column
+
+
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+5.Click on ‘All Files And Folders’ button.
+6.Click on ‘Folder box’ you can see hare date column.
+
+
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Assignment Viewer List'.
+4.	Locate the name column.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Assignment time report'.
+4.	Locate the 	Title column.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+o	Locate the 	Title field.
+
+
+
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet Request List' tab.
+4. Locate the Action column.
+
+
+
+
+
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
