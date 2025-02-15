@@ -22,8 +22,10 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding csrf  --}}
 {{--  Start Hare --}}
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
 {{--  Start Hare --}}
 {{-- ! End hare --}}
 {{-- * regarding summernote --}}

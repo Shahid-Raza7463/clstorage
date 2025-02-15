@@ -1323,18 +1323,42 @@ sundaycount = 0
 
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222
-1.Changes will be applied on the Assignment Creation page.
+1.Changes will be applied on the Assignment Creation page. `````````````````
 
-2.Changes will be applied on the Add Timesheet page.
+2.Changes will be applied on the Add Timesheet page.````````
+   2.1 Modification on client select box and assignment select box 
+   2.1 Total hour update on timesheet create ```
+   2.2 Total hour update on timesheet delete for only users  ````
+   2.3 Total hour update on timesheet edit `````
 
-3.Changes will be applied in the Partner Section on the Assignment Details page.
+3.Changes will be applied in the Partner Section on the Assignment Details page.````````
 
-4.Changes will be applied on the Independence Confirmation page.
+4.Changes will be applied on the Independence Confirmation page. ````````````````` 
+
+5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified ````````````
+
+6.when partner added on that time mail also will be sent mail ````````````````````
+
+7.home pahe per count 15 
+8. data will be on click 15 
 
 
+838
+WEL100799
+TAT100872
 user vignesh 
 january month 
 travel 1 hai bta 2 hai
 
 
 sachin 1040 
+
+2222222222222222222222222222222222222
+client
+
+1.client want to button for latest attendance data on attendance report page...
+2.I received a bug today from the client side. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied...
+3.client want to attedance count command run on every daye of every months
+
+I have checked this, and everything is fine except the mail integration, which is not implemented. I will integrate it
+the approver is still Harish which is why it wasn't visible in Simmi's ID. You had selected it in the dropdown but didn’t save it, so it didn’t reflect in Simmi’s ID Please check again

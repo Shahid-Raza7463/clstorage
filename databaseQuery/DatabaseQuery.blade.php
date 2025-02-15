@@ -2,12 +2,46 @@
 1 current working database is vsa = 27-03-24
 2 before it vsaold
 
-{{-- *   --}}
+{{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- *   --}}
+{{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+{{--  Start Hare --}}
+{{-- * regarding join / regarding left join  --}}
+{{--  Start Hare --}}
+
+
+{{--  Start Hare --}}
+
+
 {{-- *merge database    --}}
 {{--  Start Hare --}}
 INSERT INTO attendances

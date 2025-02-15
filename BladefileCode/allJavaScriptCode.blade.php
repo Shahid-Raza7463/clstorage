@@ -80,9 +80,734 @@
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding date enable / regarding calander featurs   --}}
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Declare endDate outside of the conditions
+        let endDate = null;
+
+        // Function to parse and validate dates
+        function parseDate(date) {
+            let parsedDate = new Date(date);
+            if (isNaN(parsedDate)) {
+                console.error("Invalid date format:", date);
+                return null;
+            }
+            return parsedDate;
+        }
+
+        // Helper function to adjust endDate
+        function adjustEndDateForWeekend(date) {
+            if (date.getDay() === 6) {
+                console.log("Incremented date is Sunday, adding another day.");
+                date.setDate(date.getDate() + 1); // Increment by one more day
+            }
+        }
+
+        // Check the conditions for calculating the endDate
+        if (timesheetmaxDateRecord && leavedataforcalander1) {
+            if (differenceInDays > 1) {
+                endDate = parseDate(timesheetmaxDateRecord.date);
+            } else {
+                // endDate = parseDate(leavedataforcalander1);
+                let maxDate = parseDate(timesheetmaxDateRecord.date);
+                let leaveDate = parseDate(leavedataforcalander1);
+                if (maxDate.getTime() > leaveDate.getTime()) {
+                    endDate = maxDate;
+                } else {
+                    endDate = leaveDate;
+                }
+            }
+
+            if (!endDate && lasttimesheetsubmiteddata) {
+                console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            } else if (leavebreakdateassign) {
+                let leavebreakdate = parseDate(leavebreakdateassign);
+                let timesheetmaxDate = parseDate(timesheetmaxDateRecord.date);
+                let incrementedTimesheetDate = new Date(timesheetmaxDate);
+
+                incrementedTimesheetDate.setDate(incrementedTimesheetDate.getDate() + 1);
+                if (leavebreakdate.getTime() > incrementedTimesheetDate.getTime()) {
+                    getDate = timesheetmaxDate; // Use original date (not incremented)
+                } else {
+                    getDate = leavebreakdate;
+                }
+                console.log("timesheetmaxDate:", timesheetmaxDate);
+                console.log("leavebreakdate:", leavebreakdate);
+                endDate = parseDate(getDate);
+                //  if (endDate) adjustEndDateForWeekend(endDate);
+            }
+        } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+            rejoiningdate) {
+            console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+            endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+            if (endDate) adjustEndDateForWeekend(endDate);
+        } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
+            console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
+            endDate = parseDate(timesheetmaxDateRecord.date);
+        } else if (newteammember && !lasttimesheetsubmiteddata) {
+            //  } else if (newteammember) {
+
+            //  console.log("Using newteammember data:", newteammember);
+            //  endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
+            //      newteammember);
+            //  if (endDate) endDate.setDate(endDate.getDate() - 1);
+
+            if (timesheetmaxDateRecord) {
+                endDate = parseDate(timesheetmaxDateRecord.date)
+            } else {
+                console.log("Using newteammember data:", newteammember);
+                endDate = parseDate(newteammember);
+                endDate.setDate(endDate.getDate() - 1);
+            }
+        } else if (rejoiningdate) {
+            console.log("Using rejoiningdate data:", rejoiningdate);
+            endDate = parseDate(rejoiningdate);
+            if (endDate) endDate.setDate(endDate.getDate() - 1);
+        } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+            if (differenceInDays === 2 || differenceInDays === 1) {
+                endDate = parseDate(leavedataforcalander1);
+            } else {
+                console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            }
+        }
+
+        // Set date in the datepicker if endDate is valid
+        if (endDate) {
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+            endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+            // Increment endDate if it's not today's date  or  Increment endDate if enddate lesstahn today date and not increamner end date if enddate greater than today date
+            //  if (endDate.getTime() !== today.getTime() && endDate.getTime() <= today.getTime()) {
+            //      endDate.setDate(endDate.getDate() + 1);
+            //  }
+
+            //  if (endDate.getTime() <= today.getTime()) {
+            if (endDate.getTime() < today.getTime()) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+
+            let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                endDate.getFullYear();
+
+            // Set the calculated date in the datepicker input field
+            document.getElementById('datepickers').value = formattedDate;
+
+            // Initialize the datepicker with the calculated maxDate
+            $("#datepickers").datepicker({
+                maxDate: endDate,
+                minDate: endDate, // Set the same date for minDate if needed
+                dateFormat: 'dd-mm-yy'
+            });
+
+            //  this code will be refresh data according end date
+            if (endDate.getTime() !== today.getTime()) {
+                let timesheetdate = formattedDate;
+                var refreshpage = $('.refresh');
+                refreshpage.val('').prop("readonly", false);
+                $('.refreshoption option').remove();
+                //   $("#hour1,#hour2,#hour3,#hour4,#hour5").prop("readonly", false);
+                $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+
+                //   alert(datepickers);
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        timesheetdate: timesheetdate
+                    },
+                    success: function(res) {
+                        $('#client').html(res);
+                        $('#client1').html(res);
+                        $('#client2').html(res);
+                        $('#client3').html(res);
+                        $('#client4').html(res);
+                    },
+                    error: function() {},
+                });
+            }
+            //  this code will be refresh data according end date end hare 
+
+            console.log("Adjusted date set in datepicker:", endDate);
+        } else {
+            console.log("No valid timesheet or submitted date data found to set datepicker.");
+        }
+    });
+</script>
+{{--  Start Hare  --}}
+<script>
+    // Determine endDate based on available data
+    if (timesheetmaxDateRecord && leavedataforcalander1) {
+        let maxDate = parseDate(timesheetmaxDateRecord.date);
+        let leaveDate = parseDate(leavedataforcalander1);
+        endDate = (differenceInDays > 1 || maxDate.getTime() > leaveDate.getTime()) ? maxDate : leaveDate;
+    } else if (lasttimesheetsubmiteddata) {
+        endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+        console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+    } else if (timesheetmaxDateRecord) {
+        endDate = parseDate(timesheetmaxDateRecord.date);
+        console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
+    } else if (newteammember) {
+        endDate = parseDate(timesheetmaxDateRecord ? timesheetmaxDateRecord.date : newteammember);
+        if (!timesheetmaxDateRecord) endDate.setDate(endDate.getDate() - 1);
+        console.log("Using newteammember data:", newteammember);
+    } else if (rejoiningdate) {
+        endDate = parseDate(rejoiningdate);
+        endDate.setDate(endDate.getDate() - 1);
+        console.log("Using rejoiningdate data:", rejoiningdate);
+    } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+        endDate = (differenceInDays === 1 || differenceInDays === 2) ?
+            parseDate(leavedataforcalander1) :
+            parseDate(lasttimesheetsubmiteddata.enddate);
+        console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+    }
+</script>
+{{--  Start Hare  --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Declare endDate outside of the conditions
+        let endDate = null;
+
+        // Function to parse and validate dates
+        function parseDate(date) {
+            let parsedDate = new Date(date);
+            if (isNaN(parsedDate)) {
+                console.error("Invalid date format:", date);
+                return null;
+            }
+            return parsedDate;
+        }
+
+        // Helper function to adjust endDate
+        function adjustEndDateForWeekend(date) {
+            if (date.getDay() === 6) {
+                console.log("Incremented date is Sunday, adding another day.");
+                date.setDate(date.getDate() + 1); // Increment by one more day
+            }
+        }
+
+        // Check the conditions for calculating the endDate
+        if (timesheetmaxDateRecord && leavedataforcalander1) {
+            if (differenceInDays > 1) {
+                endDate = parseDate(timesheetmaxDateRecord.date);
+            } else {
+                // endDate = parseDate(leavedataforcalander1);
+                let maxDate = parseDate(timesheetmaxDateRecord.date);
+                let leaveDate = parseDate(leavedataforcalander1);
+                if (maxDate.getTime() > leaveDate.getTime()) {
+                    endDate = maxDate;
+                } else {
+                    endDate = leaveDate;
+                }
+            }
+
+            if (!endDate && lasttimesheetsubmiteddata) {
+                console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            }
+        } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+            rejoiningdate) {
+            console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+            endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+            if (endDate) adjustEndDateForWeekend(endDate);
+        } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
+            console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
+            endDate = parseDate(timesheetmaxDateRecord.date);
+        } else if (newteammember && !lasttimesheetsubmiteddata) {
+            //  } else if (newteammember) {
+
+            //  console.log("Using newteammember data:", newteammember);
+            //  endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
+            //      newteammember);
+            //  if (endDate) endDate.setDate(endDate.getDate() - 1);
+
+            if (timesheetmaxDateRecord) {
+                endDate = parseDate(timesheetmaxDateRecord.date)
+            } else {
+                console.log("Using newteammember data:", newteammember);
+                endDate = parseDate(newteammember);
+                endDate.setDate(endDate.getDate() - 1);
+            }
+        } else if (rejoiningdate) {
+            console.log("Using rejoiningdate data:", rejoiningdate);
+            endDate = parseDate(rejoiningdate);
+            if (endDate) endDate.setDate(endDate.getDate() - 1);
+        } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+            if (differenceInDays === 2 || differenceInDays === 1) {
+                endDate = parseDate(leavedataforcalander1);
+            } else {
+                console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            }
+        }
+
+        // Set date in the datepicker if endDate is valid
+        if (endDate) {
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+            endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+            // Increment endDate if it's not today's date  or  Increment endDate if enddate lesstahn today date and not increamner end date if enddate greater than today date
+            //  if (endDate.getTime() !== today.getTime() && endDate.getTime() <= today.getTime()) {
+            //      endDate.setDate(endDate.getDate() + 1);
+            //  }
+
+            //  if (endDate.getTime() <= today.getTime()) {
+            if (endDate.getTime() < today.getTime()) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+
+            let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                endDate.getFullYear();
+
+            // Set the calculated date in the datepicker input field
+            document.getElementById('datepickers').value = formattedDate;
+
+            // Initialize the datepicker with the calculated maxDate
+            $("#datepickers").datepicker({
+                maxDate: endDate,
+                minDate: endDate, // Set the same date for minDate if needed
+                dateFormat: 'dd-mm-yy'
+            });
+
+            //  this code will be refresh data according end date
+            if (endDate.getTime() !== today.getTime()) {
+                let timesheetdate = formattedDate;
+                var refreshpage = $('.refresh');
+                refreshpage.val('').prop("readonly", false);
+                $('.refreshoption option').remove();
+                //   $("#hour1,#hour2,#hour3,#hour4,#hour5").prop("readonly", false);
+                $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+
+                //   alert(datepickers);
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        timesheetdate: timesheetdate
+                    },
+                    success: function(res) {
+                        $('#client').html(res);
+                        $('#client1').html(res);
+                        $('#client2').html(res);
+                        $('#client3').html(res);
+                        $('#client4').html(res);
+                    },
+                    error: function() {},
+                });
+            }
+            //  this code will be refresh data according end date end hare 
+
+            console.log("Adjusted date set in datepicker:", endDate);
+        } else {
+            console.log("No valid timesheet or submitted date data found to set datepicker.");
+        }
+    });
+</script>
+{{--  Start Hare  --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Declare endDate outside of the conditions
+        let endDate = null;
+
+        // Function to parse and validate dates
+        function parseDate(date) {
+            let parsedDate = new Date(date);
+            if (isNaN(parsedDate)) {
+                console.error("Invalid date format:", date);
+                return null;
+            }
+            return parsedDate;
+        }
+
+        // Helper function to adjust endDate
+        function adjustEndDateForWeekend(date) {
+            if (date.getDay() === 6) {
+                console.log("Incremented date is Sunday, adding another day.");
+                date.setDate(date.getDate() + 1); // Increment by one more day
+            }
+        }
+
+        // Check the conditions for calculating the endDate
+        if (timesheetmaxDateRecord && leavedataforcalander1) {
+
+            console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+            console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+            console.log("leavedataforcalander1:", leavedataforcalander1);
+            console.log("leavebreakdateassign:", leavebreakdateassign);
+            console.log("differenceInDays:", differenceInDays);
+            console.log("newteammember:", newteammember);
+            console.log("rejoiningdate:", rejoiningdate);
+
+            if (differenceInDays > 1) {
+                endDate = parseDate(timesheetmaxDateRecord.date);
+            } else {
+                // endDate = parseDate(leavedataforcalander1);
+                let maxDate = parseDate(timesheetmaxDateRecord.date);
+                let leaveDate = parseDate(leavedataforcalander1);
+                if (maxDate.getTime() > leaveDate.getTime()) {
+                    endDate = maxDate;
+                } else {
+                    endDate = leaveDate;
+                }
+            }
+
+            if (!endDate && lasttimesheetsubmiteddata) {
+                console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            } else if (leavebreakdateassign) {
+                //  if (differenceInDays !== 1) {
+                let leavebreakdate = parseDate(leavebreakdateassign);
+                let timesheetmaxDate = parseDate(timesheetmaxDateRecord.date);
+                let incrementedTimesheetDate = new Date(timesheetmaxDate);
+
+                incrementedTimesheetDate.setDate(incrementedTimesheetDate.getDate() + 1);
+                if (leavebreakdate.getTime() > incrementedTimesheetDate.getTime()) {
+                    getDate = timesheetmaxDate; // Use original date (not incremented)
+                } else {
+                    getDate = leavebreakdate;
+                }
+                console.log("timesheetmaxDate:", timesheetmaxDate);
+                console.log("leavebreakdate:", leavebreakdate);
+                endDate = parseDate(getDate);
+                //  if (endDate) adjustEndDateForWeekend(endDate);
+
+                //  }
+            }
+        } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+            rejoiningdate) {
+            console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+            endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+            if (endDate) adjustEndDateForWeekend(endDate);
+        } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
+            console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
+            endDate = parseDate(timesheetmaxDateRecord.date);
+        } else if (newteammember && !lasttimesheetsubmiteddata) {
+            //  } else if (newteammember) {
+
+            //  console.log("Using newteammember data:", newteammember);
+            //  endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
+            //      newteammember);
+            //  if (endDate) endDate.setDate(endDate.getDate() - 1);
+
+            if (timesheetmaxDateRecord) {
+                endDate = parseDate(timesheetmaxDateRecord.date)
+            } else {
+                console.log("Using newteammember data:", newteammember);
+                endDate = parseDate(newteammember);
+                endDate.setDate(endDate.getDate() - 1);
+            }
+        } else if (rejoiningdate) {
+            console.log("Using rejoiningdate data:", rejoiningdate);
+            endDate = parseDate(rejoiningdate);
+            if (endDate) endDate.setDate(endDate.getDate() - 1);
+        } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+            if (differenceInDays === 2 || differenceInDays === 1) {
+                endDate = parseDate(leavedataforcalander1);
+                //  may be in future any bugs occure then, i have fixed bugs when after weakend leave applyed moltiple in that case
+                //  if (leavebreakdateassign) {
+                //      endDate = parseDate(leavebreakdateassign);
+                //  } else {
+                //      endDate = parseDate(leavedataforcalander1);
+                //  }
+            } else {
+                console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            }
+        }
+
+        // Set date in the datepicker if endDate is valid
+        if (endDate) {
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+            endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+            // Increment endDate if it's not today's date  or  Increment endDate if enddate lesstahn today date and not increamner end date if enddate greater than today date
+            //  if (endDate.getTime() !== today.getTime() && endDate.getTime() <= today.getTime()) {
+            //      endDate.setDate(endDate.getDate() + 1);
+            //  }
+
+            //  if (endDate.getTime() <= today.getTime()) {
+            if (endDate.getTime() < today.getTime()) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+
+            let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                endDate.getFullYear();
+
+            // Set the calculated date in the datepicker input field
+            document.getElementById('datepickers').value = formattedDate;
+
+            // Initialize the datepicker with the calculated maxDate
+            $("#datepickers").datepicker({
+                maxDate: endDate,
+                minDate: endDate, // Set the same date for minDate if needed
+                dateFormat: 'dd-mm-yy'
+            });
+
+            //  this code will be refresh data according end date
+            if (endDate.getTime() !== today.getTime()) {
+                let timesheetdate = formattedDate;
+                var refreshpage = $('.refresh');
+                refreshpage.val('').prop("readonly", false);
+                $('.refreshoption option').remove();
+                //   $("#hour1,#hour2,#hour3,#hour4,#hour5").prop("readonly", false);
+                $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+
+                //   alert(datepickers);
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        timesheetdate: timesheetdate
+                    },
+                    success: function(res) {
+                        $('#client').html(res);
+                        $('#client1').html(res);
+                        $('#client2').html(res);
+                        $('#client3').html(res);
+                        $('#client4').html(res);
+                    },
+                    error: function() {},
+                });
+            }
+            //  this code will be refresh data according end date end hare 
+
+            console.log("Adjusted date set in datepicker:", endDate);
+        } else {
+            console.log("No valid timesheet or submitted date data found to set datepicker.");
+        }
+    });
+</script>
+{{--  Start Hare  --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let endDate = null;
+
+        function parseDate(date) {
+            let parsedDate = new Date(date);
+            return isNaN(parsedDate) ? null : parsedDate;
+        }
+
+        function adjustEndDateForWeekend(date) {
+            if (!date) return;
+            let day = date.getDay();
+            if (day === 6) { // Saturday
+                date.setDate(date.getDate() + 2); // Move to Monday
+            } else if (day === 0) { // Sunday
+                date.setDate(date.getDate() + 1); // Move to Monday
+            }
+        }
+
+        if (timesheetmaxDateRecord && leavedataforcalander1) {
+            let maxDate = parseDate(timesheetmaxDateRecord.date);
+            let leaveDate = parseDate(leavedataforcalander1);
+
+            if (differenceInDays > 1) {
+                endDate = maxDate;
+            } else {
+                endDate = (maxDate && leaveDate && maxDate.getTime() > leaveDate.getTime()) ? maxDate :
+                    leaveDate;
+            }
+
+            if (!endDate && lasttimesheetsubmiteddata) {
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                if (endDate) adjustEndDateForWeekend(endDate);
+            } else if (leavebreakdateassign) {
+                let leavebreakdate = parseDate(leavebreakdateassign);
+                let timesheetmaxDate = parseDate(timesheetmaxDateRecord.date);
+                let incrementedTimesheetDate = new Date(timesheetmaxDate);
+
+                incrementedTimesheetDate.setDate(incrementedTimesheetDate.getDate() + 1);
+                let getDate = (leavebreakdate && leavebreakdate.getTime() > incrementedTimesheetDate
+                        .getTime()) ?
+                    timesheetmaxDate :
+                    leavebreakdate;
+
+                endDate = parseDate(getDate);
+            }
+        } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+            rejoiningdate) {
+            endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+            if (endDate) adjustEndDateForWeekend(endDate);
+        } else if (rejoiningdate) {
+            endDate = parseDate(rejoiningdate);
+            if (endDate) endDate.setDate(endDate.getDate() - 1);
+        } else if (newteammember && !lasttimesheetsubmiteddata) {
+            endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
+                newteammember);
+            if (endDate) endDate.setDate(endDate.getDate() - 1);
+        }
+
+        if (endDate && !isNaN(endDate.getTime())) {
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+
+            if (endDate.getTime() < today.getTime()) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+            let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                endDate.getFullYear();
+
+            document.getElementById('datepickers').value = formattedDate;
+
+            $("#datepickers").datepicker({
+                maxDate: endDate,
+                minDate: endDate,
+                dateFormat: 'dd-mm-yy'
+            });
+
+            if (endDate.getTime() !== today.getTime()) {
+                let timesheetdate = formattedDate;
+                $('.refresh').val('').prop("readonly", false);
+                $('.refreshoption option').remove();
+                $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        timesheetdate: timesheetdate
+                    },
+                    success: function(res) {
+                        $('#client, #client1, #client2, #client3, #client4').html(res);
+                    }
+                });
+            }
+            console.log("Adjusted date set in datepicker:", endDate);
+        } else {
+            console.log("No valid timesheet or submitted date data found to set datepicker.");
+        }
+    });
+</script>
+{{--  Start Hare  --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let endDate = null;
+
+        // Convert Laravel data to usable JavaScript dates
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            let parsedDate = new Date(dateStr);
+            return isNaN(parsedDate) ? null : parsedDate;
+        }
+
+        // Adjust endDate to avoid weekends (Saturday/Sunday)
+        function adjustForWeekend(date) {
+            if (!date) return;
+            let day = date.getDay();
+            if (day === 6) date.setDate(date.getDate() + 2); // Saturday → Monday
+            else if (day === 0) date.setDate(date.getDate() + 1); // Sunday → Monday
+        }
+
+        // If endDate is in the past, move it to today
+        function ensureFutureDate(date) {
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+            date.setHours(0, 0, 0, 0);
+            if (date < today) date.setDate(today.getDate() + 1);
+        }
+
+        // Determine the correct `endDate` based on conditions
+        function calculateEndDate() {
+            if (timesheetmaxDateRecord && leavedataforcalander1) {
+                console.log("Using timesheet and leave data.");
+                let maxDate = parseDate(timesheetmaxDateRecord.date);
+                let leaveDate = parseDate(leavedataforcalander1);
+                if (differenceInDays > 1) {
+                    endDate = maxDate;
+                } else {
+                    endDate = maxDate > leaveDate ? maxDate : leaveDate;
+                }
+            } else if (lasttimesheetsubmiteddata) {
+                console.log("Using last submitted timesheet.");
+                endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+            } else if (newteammember) {
+                console.log("Using new team member joining date.");
+                endDate = parseDate(newteammember);
+                if (endDate) endDate.setDate(endDate.getDate() - 1);
+            } else if (rejoiningdate) {
+                console.log("Using rejoining date.");
+                endDate = parseDate(rejoiningdate);
+                if (endDate) endDate.setDate(endDate.getDate() - 1);
+            }
+        }
+
+        // Set the date in the datepicker
+        function setDatepicker(endDate) {
+            if (!endDate) {
+                console.error("No valid endDate found.");
+                return;
+            }
+
+            ensureFutureDate(endDate);
+            adjustForWeekend(endDate);
+
+            let formattedDate =
+                ('0' + endDate.getDate()).slice(-2) + '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                endDate.getFullYear();
+
+            document.getElementById('datepickers').value = formattedDate;
+
+            $("#datepickers").datepicker({
+                maxDate: endDate,
+                minDate: endDate,
+                dateFormat: "dd-mm-yy"
+            });
+
+            // Fetch data if endDate is not today
+            let today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (endDate.getTime() !== today.getTime()) {
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        timesheetdate: formattedDate
+                    },
+                    success: function(res) {
+                        ['#client', '#client1', '#client2', '#client3', '#client4'].forEach(
+                            selector => {
+                                $(selector).html(res);
+                            });
+                    },
+                    error: function() {
+                        console.error("Failed to refresh data.");
+                    }
+                });
+            }
+        }
+
+        // Execute functions
+        calculateEndDate();
+        setDatepicker(endDate);
+    });
+</script>
 {{-- ! End hare --}}
 
 {{-- * regarding  --}}
@@ -1541,6 +2266,76 @@
 {{--  Start Hare  --}}
 
 {{-- ###################################################################################################### --}}
+{{-- shahid script start hare  --}}
+
+<script>
+    $(document).ready(function() {
+        $('#exampleModal12').on('hidden.bs.modal', function() {
+            $('#detailsFormudin')[0].reset();
+        });
+        $('#exampleModal120').on('hidden.bs.modal', function() {
+            var formElement = $(this).find('form')[0];
+            if (formElement) {
+                formElement.reset();
+            }
+            // Reset Select2 dropdowns
+            $(this).find('select').val(null).trigger('change');
+            $(this).find('input[type="hidden"]').val('');
+            console.log('Form Reset Done');
+        });
+
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#exampleModal12').on('hidden.bs.modal', function() {
+            $('#detailsFormudin')[0].reset();
+        });
+        $('#exampleModal120').on('hidden.bs.modal', function() {
+            var formElement1 = $(this).find('form');
+            var formElement = $(this).find('form')[0];
+            console.log('Form Element:', formElement1);
+            console.log('Form Element:', formElement);
+            $(this).find('form')[0].reset();
+        });
+        $('#exampleModal120').on('hidden.bs.modal', function() {
+            setTimeout(() => {
+                var formElement = $(this).find('form')[0];
+                if (formElement) {
+                    formElement.reset();
+                }
+
+                // Reset Select2 dropdowns
+                $(this).find('select').val(null).trigger('change');
+
+                // Reset hidden fields
+                $(this).find('input[type="hidden"]').val('');
+
+                console.log('Form Reset Done');
+            }, 200);
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#exampleModal12').on('hidden.bs.modal', function() {
+            $('#detailsFormudin')[0].reset();
+        });
+        $('#exampleModal120').on('hidden.bs.modal', function() {
+            var formElement = $(this).find('form')[0];
+            if (formElement) {
+                formElement.reset();
+            }
+            // Reset Select2 dropdowns
+            $(this).find('select').val(null).trigger('change');
+            $(this).find('input[type="hidden"]').val('');
+            console.log('Form Reset Done');
+        });
+
+    });
+</script>
 {{-- shahid script start hare  --}}
 <script>
     $(document).ready(function() {

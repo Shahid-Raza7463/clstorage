@@ -158,23 +158,67 @@ o3-02-2025
 
 
 o4-02-2025
-2.Client wants to add multiple partner in lead partner and other partner column (half days)
-1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
-3. client want to attence count command run on 24 of every months 
-sachinkg@vsa.co.in  date enable problem 
+1.Client wants to add multiple partner in lead partner and other partner column (half days)
+2.Delete the submitted timesheet of Apurva Yadav after their leaving date...
+3.client want to attedance count command run on 24 of every months...
 
 
-o5-02-2025
-sachinkg@vsa.co.in  date enable problem   fixed
+
+o5-02-2025 leave for election delhi
+1.After the QA passed the task, I received a bug today from the client side on task VS-395. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied.
+
 
 o6-02-2025
-sachinkg@vsa.co.in  date enable problem  test karna hai latest database and done 
+1.After the QA passed the task, I received a bug today from the client side on task VS-395. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied.
+
+o7-02-2025
+1.After the QA passed the task, I received a bug today from the client side on task VS-395. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied...
+2.Total travel count problem fixed in excel sheet i have cheked and not met any problrm ...
+3.Some modification on this assignment DIL100754...
+4.client want to button for latest attendance data on attendance report page...
+
+````````````````````````````````````````````````
+
+10-02-2025
+1.I have uploaded 3 tasks on VSAlive and functional testing has been completed...
+1.Client wants to add multiple partner in lead partner and other partner column (half days)
 
 
+11-02-2025
+1.edit testing  done 
+1.edit doc make  done 
+1.Client wants to add multiple partner in lead partner and other partner column full days
+
+12-02-2025
+casual leave
+13-02-2025
+casual leave
+14-02-2025
+casual leave
+
+
+15-02-2025
+1.Client wants to add multiple partner in lead partner and other partner column
+1.final testing on assignment view page 
+3. date enable problem ayush garg
+
+2. http://127.0.0.1:8000/yearwise?year=2024&&clientid=160 
+is page per otherpartner column fix kare 
+
+
+
+17-02-2025
+7.home pahe per count 15 
+8. data will be on click 15 
 
 
 o3-02-2025
 WEL100799
+TAT100872
+⁠
+
+simmi
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 coding 

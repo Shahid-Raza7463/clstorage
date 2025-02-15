@@ -56,8 +56,26 @@ class Allcode extends Controller
         //! End hare 
 
 
-        //* regarding 
+        //* regarding max function
         // Start Hare
+        if ($iftwotimesheetinday == "P") {
+          $updatewording = "P";
+          $totalcountupdate = $attendances->$totalcountColumn + 0;
+      } elseif ($iftwotimesheetinday == 'T') {
+          // this code running on live isme travelcount ka issue aa sakta hai in future may be
+          // $updatewording = "P";
+          // $totalcountupdate = $attendances->$totalcountColumn + 0;
+
+          // this code running on local only isme travelcount ka issue fixed kiya gya hai
+          $totalcountupdatetravel = max(0, $attendances->travel - 1); // Subtract 1 but ensure it doesn't go below 0
+          DB::table('attendances')
+              ->where('id', $attendances->id)
+              ->update([
+                  'travel' => $totalcountupdatetravel,
+              ]);
+          $updatewording = "P";
+          $totalcountupdate = $attendances->$totalcountColumn + 1;
+      }
         //! End hare 
 
 

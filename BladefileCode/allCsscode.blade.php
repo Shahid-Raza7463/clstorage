@@ -4,6 +4,12 @@
 {{-- *   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+<style>
+    .borderstyle {
+        border: 1px solid transparent;
+        border-image: linear-gradient(to right, #0c121e, #698cbf) 1;
+    }
+</style>
 {{-- * regarding cursor   --}}
 {{--  Start Hare --}}
 <!DOCTYPE html>

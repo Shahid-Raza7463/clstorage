@@ -209,11 +209,13 @@ class Sentence extends Command
 
         // I have already informed Simmi regarding this bug
 
+        // Atishay Jain,please get the tasks in QA completed. There are 4 tasks currently in QA
 
+        // Hopefully within 1 week
 
+        // the approver is still Harish which is why it wasn't visible in Simmi's ID. You had selected it in the dropdown but didn’t save it, so it didn’t reflect in Simmi’s ID Please check again
 
-
-
+        // I have checked this, and everything is fine except the mail integration, which is not implemented. I will integrate it
 
 
 

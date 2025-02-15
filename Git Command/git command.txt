@@ -9,12 +9,34 @@ git add README.md ye run n kare skip it
 git add .
 git commit -m "first commit"
 git branch -M main
-git remote add origin https://github.com/Shahid-Raza7463/reactnative-app.git
+git remote add origin https://github.com/Shahid-Raza7463/Vendor_folder_All.git
 git push -u origin main
+git push -u origin vsalive
+git push -u origin main --force
+
+
+if any error occured like / regarding error then ye command run kare git push -u origin main --force
+           C:\xampp\htdocs\expertaff>git push -u origin main
+           To https://github.com/Shahid-Raza7463/Trakafffinal.git
+            ! [rejected]        main -> main (fetch first)
+           error: failed to push some refs to 'https://github.com/Shahid-Raza7463/Trakafffinal.git'
+           hint: Updates were rejected because the remote contains work that you do not
+           hint: have locally. This is usually caused by another repository pushing to
+           hint: the same ref. If you want to integrate the remote changes, use
+           hint: 'git pull' before pushing again.
+           hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+
+
+check kaun sa repositery connected hai 
+git remote -v
+output
+        origin  https://github.com/Shahid-Raza7463/Demo.git (fetch)
+        origin  https://github.com/Shahid-Raza7463/Demo.git (push)
 
 
 if allready set repositry then run below command
-git remote set-url origin https://github.com/Shahid-Raza7463/reactnative-app.git
+git remote set-url origin https://github.com/Shahid-Raza7463/Vendor_folder_All.git
 
 ######################################################################################
 
@@ -119,6 +141,7 @@ output
  git remote set-url origin https://github.com/Shahid-Raza7463/ReactCrudeAppBackend
 
 git branch main
+git branch vsa
 git branch -d vsa (Delete)
 git checkout main
 git checkout -b main
@@ -175,6 +198,49 @@ backEnd/
 # Ignore backEnd directory only at the root
 /backEnd
 
+222222222222222222222222222222222
+
+Pehle remote branches ko fetch karein:
+git fetch --all
+
+Agar aapko remote repository ki sab branches dekhni hain, to yeh command run karein:
+git branch -r
+
+Agar aap local aur remote dono branches dekhna chahte hain, to:
+git branch -a
+
+Agar aap remote ki baaki branches ko local repository me lana chahte hain, to pehle fetch karein:
+git fetch origin
+
+Agar kisi particular branch ko local me lana hai, to:
+git checkout -b vsa origin/vsa
+
+
+Agar aapko saari remote branches ko local me laana hai, to:
+git pull --all
+
+
+Agar aapko saari remote branches ko dekhna hai to , to:
+C:\xampp\htdocs\Github Transfer>git remote show origin
+* remote origin
+  Fetch URL: https://github.com/Shahid-Raza7463/Vendor_folder_All.git
+  Push  URL: https://github.com/Shahid-Raza7463/Vendor_folder_All.git
+  HEAD branch: main
+  Remote branches:
+    main    new (next fetch will store in remotes/origin)
+    vsa     new (next fetch will store in remotes/origin)
+    vsalive new (next fetch will store in remotes/origin)
+  Local ref configured for 'git push':
+    main pushes to main (local out of date)
+
+C:\xampp\htdocs\Github Transfer>
+
+
+ Remote Se vsa Branch Delete Karein
+ git push origin --delete vsa
+
+ Local Se vsa Branch Delete Karein
+ git branch -d vsa
 
 
 

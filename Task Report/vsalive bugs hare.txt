@@ -257,6 +257,7 @@ replace if block only
 
 
 
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TeammemberController.php
 
@@ -278,7 +279,7 @@ replace  $teammember =
 
 
 
-
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\form.blade.php
 
@@ -308,7 +309,7 @@ another is
     </div>
 	
 	
-
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\BackEndController.php
  $userInfo = Teammember::where('id', $teammemberid)->first();
@@ -343,7 +344,7 @@ resources\views\backEnd\userprofile.blade.php
 									
 
 
-```111
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222
 teamrolehistory table me 
 add this column rejoiniedexitdate after rejoiningdate column
@@ -353,7 +354,7 @@ rejoiningsamepost table me
 add this column rejoiniedexitdate after rejoiningdate column
 varchar 200 null
 
-
+vsalocal vsalive,
 2222222222222222222222222222222222222222222222222222222222222222222222
 fix keshav chadhary leaving date
 teammembers table me 
@@ -365,73 +366,308 @@ new wla leaving date  rejoiniedexitdate = 2025-01-31
 
 
 
+
+
 sachin date enable problem
-vsalocal,
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
-      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
 
+
+
+      $leavedataforcalander = $leaveDates->first();
+      $leavedataforcalander1 = $leaveDates->last();
+
+
+      $totalleaveCount = DB::table('applyleaves')
+        ->where('createdby', $authUserId)
+        ->whereBetween('from', [$leavedataforcalander,  $leavedataforcalander1])
+        ->count();
 
       $leavebreakdateassign = null;
-      foreach ($leaveDates as $leaveDate) {
-        $increamentonedays = Carbon::parse($leaveDate)->addDay()->format('Y-m-d');
+      if ($totalleaveCount > 1) {
+        foreach ($leaveDates as $leaveDate) {
+          $increamentonedays = Carbon::parse($leaveDate)->addDay()->format('Y-m-d');
 
-        $timesheetRecord = DB::table('timesheetusers')
-          ->where('status', '0')
-          ->where('createdby', $authUserId)
-          ->where('date', $increamentonedays)
-          ->exists();
+          $timesheetRecord = DB::table('timesheetusers')
+            ->where('status', '0')
+            ->where('createdby', $authUserId)
+            ->where('date', $increamentonedays)
+            ->exists();
 
-        if (!$timesheetRecord) {
-          $leavebreakdateassign = $leaveDate;
-          break; // Terminate loop when first available date is found
+          if (!$timesheetRecord) {
+            $leavebreakdateassign = $leaveDate;
+            break; // Terminate loop when first available date is found
+          }
         }
       }
 
+      // Fetch rejoining data
+      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
+      // Calculate difference in days
+      $differenceInDays = $this->calculateDateDifference(
+        $lasttimesheetsubmiteddata,
+        $timesheetmaxDateRecord,
+        $leavedataforcalander,
+        $rejoiningdate
+      );
 
 
-pass this leavebreakdateassign in view file 
 
 
+
+pass this leavebreakdateassign and totalleaveCount in view file 
+
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
 find       var rejoiningdate = @json($rejoiningdate); after this line add 
 
-      //   after bugs
+      //   after bugs 
+      var totalleaveCount = @json($totalleaveCount);
       var leavebreakdateassign = @json($leavebreakdateassign);
 
 
+
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\js.blade.php
 
   let maxDate = parseDate(timesheetmaxDateRecord.date);
   after else body add this code 
 
-                 if (leavebreakdateassign) {
-                     console.log("Using leavebreakdateassign:", leavebreakdateassign);
-                     endDate = parseDate(leavebreakdateassign);
+
+                 if (!endDate && lasttimesheetsubmiteddata) {
+                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
                      if (endDate) adjustEndDateForWeekend(endDate);
+                 } else if (leavebreakdateassign) {
+                     if (totalleaveCount > 1) {
+                         let leavebreakdate = parseDate(leavebreakdateassign);
+                         let timesheetmaxDate = parseDate(timesheetmaxDateRecord.date);
+                         let incrementedTimesheetDate = new Date(timesheetmaxDate);
+
+                         incrementedTimesheetDate.setDate(incrementedTimesheetDate.getDate() + 1);
+                         if (leavebreakdate.getTime() > incrementedTimesheetDate.getTime()) {
+                             getDate = timesheetmaxDate; // Use original date (not incremented)
+                         } else {
+                             getDate = leavebreakdate;
+                         }
+                         console.log("timesheetmaxDate:", timesheetmaxDate);
+                         console.log("leavebreakdate:", leavebreakdate);
+                         endDate = parseDate(getDate);
+                         //  if (endDate) adjustEndDateForWeekend(endDate);
+                     }
+                 }
+
+
+
+
+and 
+if (differenceInDays === 2 || differenceInDays === 1) {
+replace if statment
+
+                 if (differenceInDays === 2 || differenceInDays === 1) {
+                     endDate = parseDate(leavedataforcalander1);
+                     //  may be in future any bugs occure then, i have fixed bugs when after weakend leave applyed moltiple in that case
+                     //  if (totalleaveCount > 1) {
+                     //      if (leavebreakdateassign) {
+                     //          endDate = parseDate(leavebreakdateassign);
+                     //      } else {
+                     //          endDate = parseDate(leavedataforcalander1);
+                     //      }
+                     //  }
                  }
 
 
 sachin date enable problem end hare 
 
 
-
+vsalocal vsalive,
+4.client want to latest attenadnce data button for update  
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\create.blade.php
+resources\views\backEnd\attendance\index.blade.php
+
+        <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+            @if (Auth::user()->role_id == 11)
+                <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+                    <li>
+                        <a class="btn btn-info" href="{{ url('/attendanceupdatednow') }}">Latest Update</a>
+                    </li>
+                </ol>
+            @endif
+        </nav>
+		
+		
+		
 
 
+
+
+  Route::get('/attendanceupdatednow', [AttendanceController::class, 'attendanceupdatednow']);
+  
+  
+  
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\create.blade.php
+app\Http\Controllers\AttendanceController.php
+
+use App\Models\Attendance;
 
 
+      public function attendanceupdatednow(Request $request)
+    {
+
+        $currentDate = now();
+        $currentMonth = $currentDate->format('F');
+        $currentYear = $currentDate->format('Y');
+        $totalDays = $currentDate->daysInMonth;
+
+        $teammembers = Attendance::join('teammembers', 'teammembers.id', 'attendances.employee_name')
+            ->where('attendances.month', $currentMonth)
+            ->whereYear('attendances.created_at', $currentYear)
+            ->get();
+
+        foreach ($teammembers as $team) {
+            $keysToFilter = [
+                'twentysix',
+                'twentyseven',
+                'twentyeight',
+                'twentynine',
+                'thirty',
+                'thirtyone',
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine',
+                'ten',
+                'eleven',
+                'twelve',
+                'thirteen',
+                'fourteen',
+                'fifteen',
+                'sixteen',
+                'seventeen',
+                'eighteen',
+                'ninghteen',
+                'twenty',
+                'twentyone',
+                'twentytwo',
+                'twentythree',
+                'twentyfour',
+                'twentyfive'
+            ];
+
+            $days = array_intersect_key($team->toArray(), array_flip($keysToFilter));
+
+            $dayspresent = 0;
+            $casualLeaveCount = 0;
+            $examLeaveCount = 0;
+            $travelCount = 0;
+            $offholidaysCount = 0;
+            $sundayCount = 0;
+            $holidaysCount = 0;
+
+            foreach ($days as $key => $value) {
+                if ($value == 'P') {
+                    $dayspresent++;
+                } else if ($value == 'CL') {
+                    $casualLeaveCount++;
+                } else if ($value == 'EL') {
+                    $examLeaveCount++;
+                } else if ($value == 'T') {
+                    $travelCount++;
+                } else if ($value == 'OH') {
+                    $offholidaysCount++;
+                } else if ($value == 'W') {
+                    $sundayCount++;
+                } else if ($value == 'H') {
+                    $holidaysCount++;
+                }
+            }
+
+            $dayspresentcount = $dayspresent;
+            $casualLeave = $casualLeaveCount;
+            $examLeave =  $examLeaveCount;
+            $travel =  $travelCount;
+            $offholidays =  $offholidaysCount;
+            $sunday =  $sundayCount;
+            $holidays =  $holidaysCount;
+
+            $attendanceData = [
+                'total_no_of_days' => $totalDays,
+                'no_of_days_present' => $dayspresentcount,
+                'casual_leave' => $casualLeave,
+                'exam_leave' => $examLeave,
+                'travel' => $travel,
+                'offholidays' => $offholidays,
+                'sundaycount' => $sunday,
+                'holidays' => $holidays,
+            ];
+
+            DB::table('attendances')->where('employee_name', $team->employee_name)
+                ->where('month', $currentMonth)
+                ->where('year', $currentYear)
+                ->update($attendanceData);
+        }
+
+        $output = array('msg' => 'Attendance has been successfully updated.');
+        return back()->with('success', $output);
+    }
+
+
+
+
+
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\create.blade.php
+app\Console\Commands\CalculateAttendance.php
+
+foreach ($teammembers as $team) {
 
 
+ $currentDate = now();
+        $currentMonth = $currentDate->format('F');
+        $currentYear = $currentDate->format('Y');
+        $totalDays = $currentDate->daysInMonth;
+
+        $teammembers = Attendance::join('teammembers', 'teammembers.id', 'attendances.employee_name')
+            ->where('attendances.month', $currentMonth)
+            ->whereYear('attendances.created_at', $currentYear)
+            ->get();
+			
+	
+
+	
+			
+			
+find text  return "Attendance updated";		
+
+
+			
+        $this->info("Attendance calculation command executed successfully on " . now()->toDateTimeString());
+
+        return "Attendance updated";
+
+
+
+vsalocal vsalive,
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\create.blade.php
+app\Console\Kernel.php
+
+ $schedule->command('attendance:calculate')->monthlyOn(24, '18:00')->emailOutputTo('shahidraza@capitall.io');
+
+    $schedule->command('attendance:calculate')
+      ->dailyAt('10:00')  // Runs every day at 10:00 AM
+      ->withoutOverlapping()  // Prevents overlapping if the previous execution is still running
+      ->emailOutputTo('shahidraza@capitall.io');  // Sends email with command output
+	  
+	 
 
 
 

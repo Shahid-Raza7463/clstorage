@@ -631,6 +631,7 @@ New tasks taken by me and approval is pending.
 
 27.only one udin for one assignment if user create another udin in that case udin will be not create (implementation)
 31.Implement functionality to display inactive user's date from assignment. (implementation)
+
 32.when user leave apply after that partner recieved mail and partner click on click hare text then redirect on another page.
 33.timesheet page , delete icon will be hide and if more than one timesheet saved on same date then delete icon will be show on only one timesheet
 34.keshav chaudhary after rejoin and upload qualification then warning message sho ho raha hai plaese delete timesheet data after rejoin
@@ -711,6 +712,14 @@ New task taken by me worked
 1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
 30.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(bugs)
 1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+1.client want to button for latest attendance data on attendance report page...
+2.I received a bug today from the client side. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied...
+3.client want to attedance count command run on every daye of every months
+1.I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date
+2.The client mentioned that after rejoining, the user's joining date and leaving date were not displaying correctly. I have checked and implemented the necessary fix
+
+
+
 
 Not implement
 19.Add a travel box on the dashboard as requested by the client.

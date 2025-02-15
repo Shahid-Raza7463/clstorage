@@ -6107,10 +6107,11 @@ foreach ($weeksData as $weekData) {
 console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
 console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
 console.log("leavedataforcalander1:", leavedataforcalander1);
-console.log("leavebreakdateassign:", leavebreakdateassign);
 console.log("differenceInDays:", differenceInDays);
 console.log("newteammember:", newteammember);
 console.log("rejoiningdate:", rejoiningdate);
+console.log("totalleaveCount:", totalleaveCount);
+console.log("leavebreakdateassign:", leavebreakdateassign);
 //* regarding convert / regarding int value 
 // Start Hare 
 $statusdata = intval($request->input('status'));
@@ -7793,6 +7794,23 @@ $from = $fromformate->subDays(6)->toDateString();
 
 
 //* regarding dd 
+
+// start hare
+// start hare
+// start hare
+// start hare
+dd([
+  'lasttimesheetsubmiteddata' => $lasttimesheetsubmiteddata,
+  'timesheetmaxDateRecord' => $timesheetmaxDateRecord,
+  'leavedataforcalander1' => $leavedataforcalander1,
+  'differenceInDays' => $differenceInDays,
+  'newteammember' => $newteammember,
+  'rejoiningdate' => $rejoiningdate,
+  'totalleaveCount' => $totalleaveCount,
+  'leavebreakdateassign' => $leavebreakdateassign,
+]);
+// start hare
+
 dd('hi2', $request);
 dd($checkopenorclosed->status, $assignmentcloseddate, $requestDate);
 
@@ -12338,6 +12356,47 @@ if ($savetimesheet) {
     
     //* regarding update in table / insert data in timesheet table  / all update 
     // Start Hare 
+    // Start Hare 
+    // Start Hare 
+    // Start Hare 
+
+    $authteamid = 931;
+    $startdate = '2024-12-30';
+    $enddate = '2025-02-01';
+
+    $nextweektimesheet1 = DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate,  $enddate])
+      ->update(['status' => 0]);
+    // ->get();
+    // ->update(['createdby' => 8471]);
+    // ->delete();
+
+
+    $nextweektimesheet2 = DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate,  $enddate])
+      ->update(['status' => 0]);
+    // ->get();
+    // ->update(['created_by' => 8471]);
+    // ->delete();
+
+    $nextweektimesheet3 = DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+    // ->get();
+    // ->update(['teamid' => 8471]);
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('month', ['January', 'February'])
+      ->delete();
+    // ->update(['teamid' => 8471]);
+
+
+    dd('successfully done');
+    // Start Hare 
 
     $date = '08-03-2024';
     $id = DB::table('timesheets')->insertGetId(
@@ -13583,7 +13642,7 @@ dd($attendance_existing);
 dd('hi');
 // Start hare
 
-//* regarding leave / regarding applyleave update / leave update / regarding update 
+//* regarding leave / regarding applyleave update / leave update
 // start hare
 // 22222222222222222222222222222222222222222222222222222222222222222222
 // 22222222222222222222222222222222222222222222222222222222222222222222

@@ -74,6 +74,8 @@ app\Http\Controllers\ChecklistanswerController.php
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
@@ -94,6 +96,8 @@ $clientss = DB::table('clients')
 ->distinct()
 ->orderBy('clients.client_name', 'ASC')
 ->get();
+
+
 
 
 
@@ -159,8 +163,11 @@ find  } elseif (auth()->user()->role_id == 13) {
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
+public function store(Request $request)
    if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
 
 
@@ -186,7 +193,8 @@ app\Http\Controllers\TimesheetController.php
 
 
 total hour for
-          if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+public function store(Request $request)
+if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
 		  
 		  
 		  
@@ -212,59 +220,55 @@ total hour for
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+  public function destroy(Request $request, $id)
+   if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+
+
+      if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+        $getTotalTeamHour = DB::table('assignmentteammappings')
+          ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+          ->where('assignmentmappings.assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+          ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->value('teamhour') ?? 0;
+
+        $finalResult = $getTotalTeamHour - $timesheetdelete->hour;
+
+        if ($finalResult >= 0) {
+          DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->update(['teamhour' => $finalResult]);
+        }
+      }
 
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
 
+public function destroy(Request $request, $id)
+  if (auth()->user()->role_id == 13) {
+   if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {  after this body add this below code 
 
+        if ($assignmentdata->otherpartner != auth()->user()->teammember_id && $assignmentdata->leadpartner != auth()->user()->teammember_id) {
+          $getTotalTeamHour = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->value('teamhour') ?? 0;
 
+          $finalResult = $getTotalTeamHour - $timesheetdelete->hour;
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+          if ($finalResult >= 0) {
+            DB::table('assignmentteammappings')
+              ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+              ->where('assignmentmappings.assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->update(['teamhour' => $finalResult]);
+          }
+        }
 
 
 
@@ -272,13 +276,539 @@ app\Http\Controllers\ApplyleaveController.php
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+ public function savedtimesheetEdit(Request $request, $id)
+ } elseif (auth()->user()->role_id == 13) {
+
+
+
+
+
+      $clientss = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+        })
+        ->where(function ($query) use ($selectedDate) {
+          $query->whereNull('otpverifydate')
+            ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+        })
+        // ->whereNotNull('clients.client_name')
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+  public function timesheeteditonchange(Request $request)
+if (auth()->user()->role_id == 13) {
+
+
+
+              DB::table('assignmentbudgetings')
+                ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname')
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where(function ($query) {
+                  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')
+                ->distinct()
+                ->get() as $sub
 
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+ create function 
+ if (isset($request->cid)) {
+ elseif (auth()->user()->role_id == 13) {
+ 
+              DB::table('assignmentbudgetings')
+                ->select(
+                  'assignmentbudgetings.assignmentgenerate_id',
+                  'assignments.assignment_name',
+                  'assignmentbudgetings.assignmentname'
+                )
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where(function ($query) {
+                  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')
+                ->distinct() // Ensure unique rows
+                ->get() as $sub
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+public function savedtimesheeteditstore(Request $request)
+
+if (!is_numeric($request->assignment_id)) {
+  if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+
+
+      if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+        $gettotalteamhour = DB::table('assignmentteammappings')
+          ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+          ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+          ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->value('teamhour') ?? 0;
+
+
+        $finalresult =  $gettotalteamhour - $oldtimesheetdata->hour;
+        if ($finalresult >= 0) {
+          DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->update(['teamhour' => $finalresult]);
+        }
+
+        $gettotalteamhournew = DB::table('assignmentteammappings')
+          ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+          ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id)
+          ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->value('teamhour') ?? 0;
+
+        $finalresult =   $gettotalteamhournew + $request->hour;
+
+        if ($finalresult >= 0) {
+          DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->update(['teamhour' => $finalresult]);
+        }
+      }
+
+
+
+
+
+
+
+
+find 
+if (!is_numeric($request->assignment_id)) {
+ if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+ after this block add below code 
+ 
+ 
+ 
+ 
+ 
+ 
+  $gettotalteamhour = DB::table('assignmentteammappings')
+          ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+          ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+          ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->value('teamhour') ?? 0;
+
+
+        $finalresult =  $gettotalteamhour - $oldtimesheetdata->hour;
+        if ($finalresult >= 0) {
+          DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->update(['teamhour' => $finalresult]);
+        }
+
+        $gettotalteamhournew = DB::table('assignmentteammappings')
+          ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+          ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id)
+          ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+          ->value('teamhour') ?? 0;
+
+        $finalresult =   $gettotalteamhournew + $request->hour;
+
+        if ($finalresult >= 0) {
+          DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->update(['teamhour' => $finalresult]);
+        }
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+public function savedtimesheeteditstore(Request $request)
+ if (is_numeric($request->assignment_id)) {
+
+
+
+        if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+          $gettotalteamhour = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->value('teamhour') ?? 0;
+
+          $subtractoldhour =  $gettotalteamhour - $oldtimesheetdata->hour;
+          $finalresult =  $subtractoldhour + $request->hour;
+
+          if ($finalresult >= 0) {
+            DB::table('assignmentteammappings')
+              ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+              ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->update(['teamhour' => $finalresult]);
+          }
+        }
+
+
+
+
+
+
+public function savedtimesheeteditstore(Request $request)
+ if (is_numeric($request->assignment_id)) {
+ if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+ after this if block add 
+ 
+ 
+          if ($assignmentdata->otherpartner != auth()->user()->teammember_id && $assignmentdata->leadpartner != auth()->user()->teammember_id) {
+            $gettotalteamhour = DB::table('assignmentteammappings')
+              ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+              ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->value('teamhour') ?? 0;
+
+            $subtractoldhour =  $gettotalteamhour - $oldtimesheetdata->hour;
+            $finalresult =  $subtractoldhour + $request->hour;
+
+            if ($finalresult >= 0) {
+              DB::table('assignmentteammappings')
+                ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->update(['teamhour' => $finalresult]);
+            }
+          }
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+
+$teammemberDatas = DB::table('assignmentmappings')
+
+
+  $teammemberDatas = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->whereNotNull('assignmentteammappings.id')
+            ->where('assignmentteammappings.type', '!=', 1)
+            ->select([
+                'teammembers.*',
+                'roles.rolename',
+                'titles.title',
+                'assignmentteammappings.id AS assignmentteammappingsId',
+                'assignmentteammappings.status AS assignmentteammappingsStatus',
+                'assignmentteammappings.type',
+                'assignmentteammappings.teamhour',
+                'assignmentteammappings.viewerteam',
+                'assignmentmappings.assignmentgenerate_id AS assignmentgenerateid',
+                'assignmentmappings.leadpartner'
+            ])
+            ->orderByDesc('assignmentteammappings.id')
+            ->get();
+
+
+
+
+
+
+find 
+  $leadpartner = DB::table('assignmentmappings')
+
+
+
+
+
+
+        $leadpartner = DB::table('assignmentmappings')
+            ->join('teammembers as team', 'team.id', 'assignmentmappings.leadpartner')
+            ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('team.id', 'team.team_member', 'team.staffcode',  'team.mobile_no', 'team.role_id', 'assignmentmappings.leadpartnerhour as assignmenthour', 'titles.title')
+            ->get();
+
+
+        $otherpartner = DB::table('assignmentmappings')
+            ->join('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('team.id', 'team.team_member', 'team.staffcode', 'team.mobile_no', 'team.role_id', 'assignmentmappings.otherpartnerhour as assignmenthour', 'titles.title',)
+            ->get();
+
+        $teammpartner = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->whereNotNull('assignmentteammappings.id')
+            ->where('assignmentteammappings.type', '=', 1)
+            ->select([
+                'teammembers.id',
+                'teammembers.team_member',
+                'teammembers.staffcode',
+                'teammembers.mobile_no',
+                'teammembers.role_id',
+                'assignmentteammappings.teamhour as assignmenthour',
+                'titles.title',
+            ])
+            ->orderByDesc('assignmentteammappings.id')
+            ->get();
+
+        $partner = $leadpartner->merge($otherpartner)->merge($teammpartner);
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+find and replace 
+{{ $partnerData->leadpartnerhour ?? ($partnerData->otherpartnerhour ?? 0) }}
+
+          <td>{{ $partnerData->assignmenthour ?? 0 }}</td>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+
+
+  $leadpartner = DB::table('assignmentmappings')
+            ->join('teammembers as team', 'team.id', 'assignmentmappings.leadpartner')
+            ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('team.id', 'team.team_member', 'team.staffcode',  'team.mobile_no', 'team.role_id', 'assignmentmappings.leadpartnerhour as assignmenthour', 'titles.title', 'assignmentmappings.created_at as createdat')
+            ->get();
+
+
+        $otherpartner = DB::table('assignmentmappings')
+            ->join('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('team.id', 'team.team_member', 'team.staffcode', 'team.mobile_no', 'team.role_id', 'assignmentmappings.otherpartnerhour as assignmenthour', 'titles.title', 'assignmentmappings.created_at as createdat')
+            ->get();
+
+        $teammpartner = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->whereNotNull('assignmentteammappings.id')
+            ->where('assignmentteammappings.type', '=', 1)
+            ->select([
+                'teammembers.id',
+                'teammembers.team_member',
+                'teammembers.staffcode',
+                'teammembers.mobile_no',
+                'teammembers.role_id',
+                'assignmentteammappings.teamhour as assignmenthour',
+                'assignmentteammappings.created_at as createdat',
+                'titles.title',
+            ])
+            ->orderByDesc('assignmentteammappings.id')
+            ->get();
+
+        // $partner = $leadpartner->merge($otherpartner)->merge($teammpartner);
+        $partner = $leadpartner->merge($otherpartner)->merge($teammpartner)
+            ->sortByDesc('createdat')
+            // ->sortBy('createdat')
+            ->values();
+
+        // dd($partner);
+
+        $addonpartner = Teammember::where('role_id', '=', 13)
+            ->where('status', '=', 1)
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->with('title')
+            ->orderBy('team_member', 'asc')
+            ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+            ->get();
+        // dd($partner);
+		
+		
+		
+pass this addonpartner in view
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+ $('#exampleModal12').on('hidden.bs.modal', function() {
+
+<script>
+    $(document).ready(function() {
+        $('#exampleModal12').on('hidden.bs.modal', function() {
+            $('#detailsFormudin')[0].reset();
+        });
+        $('#exampleModal120').on('hidden.bs.modal', function() {
+            var formElement = $(this).find('form')[0];
+            if (formElement) {
+                formElement.reset();
+            }
+            // Reset Select2 dropdowns
+            $(this).find('select').val(null).trigger('change');
+            $(this).find('input[type="hidden"]').val('');
+            console.log('Form Reset Done');
+        });
+
+    });
+</script>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+
+
+                                    <div class="card-head">
+                                        <b>Partner List:</b>
+                                        @if (auth()->user()->role_id == 11)
+                                            {{-- <b>
+                                                <a data-toggle="modal" data-target="#exampleModal14"
+                                                    class="btn btn-info-soft btn-sm">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            </b> --}}
+                                            <b>
+                                                <a data-toggle="modal" data-target="#exampleModal120"
+                                                    class="btn btn-info-soft btn-sm ml-1"><i class="fa fa-plus"></i></a>
+                                            </b>
+                                        @endif
+                                    </div>
+
+
+
+find text after this div add 
+   <div class="modal fade" id="exampleModal14" tabindex="-1" role="dialog"
+
+
+
+
+                              @if (auth()->user()->role_id == 11)
+                                    <div class="modal fade" id="exampleModal120" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalLabel4" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header" style="background:#37A000;color:white;">
+                                                    <h5 class="modal-title font-weight-600" id="exampleModalLabel4">Add
+                                                        Other Partner</h5>
+                                                    <div>
+                                                        <ul>
+                                                            @foreach ($errors->all() as $e)
+                                                                <li style="color:red;">{{ $e }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    <button style="color: white" type="button" class="close"
+                                                        data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form id="exampleModal120111" method="post"
+                                                    action="{{ url('otherpatner/update') }}"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="details-form-field form-group row">
+                                                            <div class="col-12">
+                                                                <div class="form-group">
+                                                                    <label class="font-weight-600">Other Partner </label>
+                                                                    <select required class="language form-control"
+                                                                        id="exampleFormControlSelect1"
+                                                                        name="otherpatnerid">
+                                                                        <option value="">Please Select One</option>
+                                                                        @foreach ($addonpartner as $teammemberData)
+                                                                            <option value="{{ $teammemberData->id }}">
+                                                                                {{ $teammemberData->team_member }} (
+                                                                                {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <input type="hidden" name="assignmentgenerate_id"
+                                                                        value="{{ $assignmentbudgetingDatas->assignmentgenerate_id }}"
+                                                                        class=" form-control">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        {{-- <button type="button" class="btn btn-danger"
+                                                            data-dismiss="modal">Close</button> --}}
+                                                        <button type="submit" class="btn btn-success">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Middleware\VerifyCsrfToken.php
+
+    protected $except = [
+        'otherpatner/update' // Exclude this route from CSRF protection
+    ];
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\yearwise.blade.php
+
+                                    <td class="textfixed">
+                                        @if ($otherPartner && $otherPartner->team_member != null)
+                                            {{ $otherPartner->team_member ?? '' }}
+                                            {{-- @else
+                                            @if (auth()->user()->role_id == 11)
+                                                <div class="card-head">
+                                                    <a data-toggle="modal" data-target="#exampleModal1{{ $loop->index }}"
+                                                        class="btn btn-info-soft btn-sm"><i class="fa fa-plus"></i></a>
+                                                </div>
+                                            @endif --}}
+                                        @endif
+                                    </td>
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
