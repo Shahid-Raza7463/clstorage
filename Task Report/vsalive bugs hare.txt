@@ -671,6 +671,306 @@ app\Console\Kernel.php
 
 
 
+vsalocal vsalive, vsademo
+multiple leave then date enable problem ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+in create function 
+
+
+} else {
+
+      $authUserId = auth()->user()->teammember_id;
+
+      // Fetch common data
+      $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+        ->where('teamid', $authUserId)
+        ->latest()
+        ->first();
+
+      $datanotexistaftermonday = null;
+      if ($lasttimesheetsubmiteddata) {
+        $carbondate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+        $nextMonday = $carbondate->copy()->next(Carbon::MONDAY);
+        $timesheetRecordcheck = DB::table('timesheetusers')
+          ->where('status', '0')
+          ->where('createdby', $authUserId)
+          ->where('date', $nextMonday->format('Y-m-d'))
+          ->exists();
+
+        if (!$timesheetRecordcheck) {
+          $datanotexistaftermonday = $nextMonday->format('Y-m-d');
+        }
+      }
+
+      $timesheetmaxDateRecord = DB::table('timesheetusers')
+        ->where('status', '0')
+        ->where('createdby', $authUserId)
+        ->orderBy('date', 'desc')
+        ->get();
+
+
+
+      // Available dates extract hare
+      $availableDates = $timesheetmaxDateRecord->pluck('date')->toArray();
+
+      $dateSelectionresult = null;
+      if (!empty($availableDates)) {
+        // Min aur Max Date get
+        $minDate = Carbon::parse(min($availableDates));
+        $maxDate = Carbon::parse(max($availableDates));
+
+        // Continuous date range generate
+        $allDates = [];
+        while ($minDate->lte($maxDate)) {
+          $allDates[] = $minDate->toDateString();
+          $minDate->addDay();
+        }
+
+        // dd($availableDates);
+        // Missing dates find
+        $missingDates = array_diff($allDates, $availableDates);
+        // First missing date get hare
+        $dateSelectionresult = reset($missingDates);
+
+        if (!$dateSelectionresult) {
+          $decrementonedays = $maxDate->copy()->addDay()->toDateString();
+          $dateSelectionresult = $decrementonedays;
+        }
+      }
+
+      // Fetch rejoining data
+      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
+
+
+      $newteammember = null;
+      if (!$lasttimesheetsubmiteddata) {
+        // Fetch new team member joining date
+        $newteammember = DB::table('teammembers')
+          ->where('id', $authUserId)
+          ->value('joining_date');
+      }
+
+      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord', 'newteammember', 'rejoiningdate', 'dateSelectionresult', 'datanotexistaftermonday'));
+    }
+
+
+
+
+
+
+
+
+
+
+  private function getRejoiningDate($userId, $lasttimesheetsubmiteddata)
+  {
+    $rejoiningData = DB::table('teammembers')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+      ->where('teammembers.id', $userId)
+      ->select('teamrolehistory.rejoiningdate', 'rejoiningsamepost.rejoiningdate as samepostrejoiningdate')
+      ->first();
+
+    if ($rejoiningData) {
+      $rejoiningDateStore = $rejoiningData->samepostrejoiningdate ?? $rejoiningData->rejoiningdate;
+
+      if ($rejoiningDateStore && $lasttimesheetsubmiteddata) {
+        $rejoiningdate = Carbon::parse($rejoiningDateStore);
+        $lastSubmissionDate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+
+        return $rejoiningdate->greaterThan($lastSubmissionDate) ? $rejoiningDateStore : null;
+      }
+    }
+
+    return null;
+  }
+
+
+
+
+
+
+
+
+private function calculateDateDifference($lastTimesheet, $timesheetMaxDate, $leaveDate, $rejoiningDate)
+remove this function 
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+find  var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+replace it 
+
+  <script>
+      // Pass the PHP data to JavaScript
+      var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+      var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
+      var dateSelectionresult = @json($dateSelectionresult);
+      var newteammember = @json($newteammember);
+      var rejoiningdate = @json($rejoiningdate);
+      var datanotexistaftermonday = @json($datanotexistaftermonday);
+  </script>
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+find 
+    console.log("No valid timesheet or submitted date data found to set datepicker.");
+	
+	
+	
+     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             // Declare endDate outside of the conditions
+             let endDate = null;
+
+             // Function to parse and validate dates
+             function parseDate(date) {
+                 let parsedDate = new Date(date);
+                 if (isNaN(parsedDate)) {
+                     console.error("Invalid date format:", date);
+                     return null;
+                 }
+                 return parsedDate;
+             }
+
+             // Helper function to adjust endDate
+             function adjustEndDateForWeekend(date) {
+                 if (date.getDay() === 6) {
+                     console.log("Incremented date is Sunday, adding another day.");
+                     date.setDate(date.getDate() + 1); // Increment by one more day
+                 }
+             }
+
+             // Check the conditions for calculating the endDate
+             if (datanotexistaftermonday && !rejoiningdate) {
+                 endDate = parseDate(datanotexistaftermonday);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (rejoiningdate && timesheetmaxDateRecord.length === 0) {
+                 console.log("Using rejoiningdate data:", rejoiningdate);
+                 endDate = parseDate(rejoiningdate);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+             } else if (newteammember && !lasttimesheetsubmiteddata) {
+                 if (!lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0) {
+                     endDate = parseDate(newteammember);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 } else {
+                     endDate = parseDate(dateSelectionresult);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 }
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length > 0 && dateSelectionresult) {
+                 endDate = parseDate(dateSelectionresult);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 //  if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0 && !dateSelectionresult) {
+                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                 if (endDate) adjustEndDateForWeekend(endDate);
+             }
+
+             // Set date in the datepicker if endDate is valid
+             if (endDate) {
+                 let today = new Date();
+                 today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+                 endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+
+                 //  if (endDate.getTime() <= today.getTime()) {
+                 if (endDate.getTime() < today.getTime()) {
+                     endDate.setDate(endDate.getDate() + 1);
+                 }
+
+
+                 let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                     ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                     endDate.getFullYear();
+
+                 // Set the calculated date in the datepicker input field
+                 document.getElementById('datepickers').value = formattedDate;
+
+                 // Initialize the datepicker with the calculated maxDate
+                 $("#datepickers").datepicker({
+                     maxDate: endDate,
+                     minDate: endDate, // Set the same date for minDate if needed
+                     dateFormat: 'dd-mm-yy'
+                 });
+
+                 //  this code will be refresh data according end date
+                 if (endDate.getTime() !== today.getTime()) {
+                     let timesheetdate = formattedDate;
+                     var refreshpage = $('.refresh');
+                     refreshpage.val('').prop("readonly", false);
+                     $('.refreshoption option').remove();
+                     $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+                     $.ajax({
+                         type: "get",
+                         url: "{{ url('timesheet/create') }}",
+                         data: {
+                             timesheetdate: timesheetdate
+                         },
+                         success: function(res) {
+                             $('#client').html(res);
+                             $('#client1').html(res);
+                             $('#client2').html(res);
+                             $('#client3').html(res);
+                             $('#client4').html(res);
+                         },
+                         error: function() {},
+                     });
+                 }
+                 //  this code will be refresh data according end date end hare 
+
+                 console.log("Adjusted date set in datepicker:", endDate);
+             } else {
+                 console.log("No valid timesheet or submitted date data found to set datepicker.");
+             }
+         });
+     </script>	
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	
+	multiple leave then date enable problem ```end
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
 

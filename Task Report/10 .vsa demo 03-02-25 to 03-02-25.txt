@@ -16,15 +16,18 @@ Please check once vsalive bugs hare file
 
 
 
-vsalocal ```start hare 
+vsalocal, vsademo ```start hare 
 
 2.Client wants to add multiple partner in lead partner and other partner column ```start 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ChecklistanswerController.php
 
-   public function otherpatnerUpdate(Request $request)
+
+
+    public function otherpatnerUpdate(Request $request)
     {
         try {
+            // dd($request);
             $assignmentId = $request->assignmentgenerate_id;
             $partnerId = $request->otherpatnerid;
 
@@ -40,7 +43,7 @@ app\Http\Controllers\ChecklistanswerController.php
 
             // Check if the partner is already assigned as lead or other partner
             if ($assignmentMapping->leadpartner == $partnerId || $assignmentMapping->otherpartner == $partnerId || $assignmentTeammapping) {
-                return back()->with('statuss', ['msg' => 'Other Patner is already in Assigned Partner']);
+                return back()->with('statuss', ['msg' => 'This partner is already assigned']);
             }
 
             // If `otherpartner` is null, update directly
@@ -60,7 +63,66 @@ app\Http\Controllers\ChecklistanswerController.php
                     'updated_at' => now()
                 ]);
             }
-            $output = array('msg' => 'Other Partner Added Successfully');
+
+            // assignment assigned mail start from hare
+            $assignmentbudgeting = DB::table('assignmentbudgetings')
+                ->where('assignmentgenerate_id', $assignmentId)
+                ->first();
+
+            $clientname = DB::table('clients')
+                ->where('id', $assignmentbudgeting->client_id)
+                ->select('client_name', 'client_code')
+                ->first();
+
+            $assignment_name = DB::table('assignments')
+                ->where('id', $assignmentbudgeting->assignment_id)->select('assignment_name')->pluck('assignment_name')->first();
+
+
+            $teamemailpartner = DB::table('teammembers')
+                ->where('id', $assignmentMapping->leadpartner)
+                ->select('emailid', 'team_member', 'staffcode')
+                ->first();
+
+
+            // $teamemailotherpartner = DB::table('teammembers')
+            //     ->where('id', $assignmentMapping->otherpartner)
+            //     ->select('emailid', 'team_member', 'staffcode')
+            //     ->first();
+
+
+            $teamemailotherpartner = DB::table('teammembers')
+                ->where('id', $partnerId)
+                ->select('emailid', 'team_member', 'staffcode')
+                ->first();
+
+            $teamleader = DB::table('assignmentteammappings')
+                ->where('assignmentmapping_id',  $assignmentMapping->id)
+                ->where('type', '!=', 1)
+                ->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+                ->select('teammembers.team_member', 'teammembers.staffcode')
+                ->get();
+
+            // Mail for otherpartner
+            if (!empty($assignmentMapping->otherpartner)) {
+                // dd($assignmentMapping->otherpartner);
+                $data = [
+                    'assignmentid'      => $assignmentId,
+                    'clientname'        => $clientname->client_name,
+                    'clientcode'        => $clientname->client_code,
+                    'assignmentname'    => $request->assignmentname,
+                    'assignment_name'   => $assignment_name,
+                    'emailid'           => $teamemailotherpartner->emailid,
+                    'otherpatner'       => $teamemailotherpartner,
+                    'assignmentpartner' => $teamemailpartner,
+                    'teamleader'        => $teamleader,
+                    'periodend' => $assignmentMapping->periodend,
+                    'assignmentgenerate' => $assignmentId,
+                ];
+
+                $this->sendAssignmentEmail($data);
+            }
+            // assignment assigned mail end hare
+            $output = array('msg' => 'This partner has been added successfully.');
             return back()->with('success', $output);
         } catch (Exception $e) {
             DB::rollBack();
@@ -76,26 +138,42 @@ app\Http\Controllers\ChecklistanswerController.php
 
 
 
+
+after above function add it 
+
+    function sendAssignmentEmail($data)
+    {
+        Mail::send('emails.assignmentassign', $data, function ($msg) use ($data) {
+            $msg->to($data['emailid']);
+            $msg->subject('VSA || New Assignment Allocation || ' . $data['assignmentname'] . ' / ' . $data['assignmentid'] . ' || Independence Confirmation ');
+        });
+    }
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
 find   public function create(Request $request)
 find } elseif (auth()->user()->role_id == 13) {
 
-$clientss = DB::table('clients')
-->leftJoin('assignmentbudgetings', 'assignmentbudgetings.client_id', '=', 'clients.id')
-->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
-->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
-->where('assignmentbudgetings.status', 1)
-->where(function ($query) {
-  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
-    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
-    ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
-})
-->select('clients.client_name', 'clients.id', 'clients.client_code')
-->distinct()
-->orderBy('clients.client_name', 'ASC')
-->get();
+      $clientss = DB::table('clients')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.client_id', '=', 'clients.id')
+        ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+        ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+        ->where('assignmentbudgetings.status', 1)
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+        })
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->distinct()
+        ->orderBy('clients.client_name', 'ASC')
+        ->get();
+
+
 
 
 
@@ -113,7 +191,14 @@ find  if (isset($request->cid))
 find  elseif (auth()->user()->role_id == 13) {{
 
 
+
+            foreach (
               DB::table('assignmentbudgetings')
+                ->select(
+                  'assignmentbudgetings.assignmentgenerate_id',
+                  'assignments.assignment_name',
+                  'assignmentbudgetings.assignmentname'
+                )
                 ->where('assignmentbudgetings.client_id', $request->cid)
                 ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
                 ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
@@ -127,7 +212,12 @@ find  elseif (auth()->user()->role_id == 13) {{
                   $query->whereNull('otpverifydate')
                     ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
                 })
-                ->orderBy('assignment_name')->get() as $sub
+                ->orderBy('assignment_name')
+                ->distinct() // Ensure unique rows
+                ->get() as $sub
+            )
+
+
 
 
 
@@ -141,7 +231,8 @@ find  if (isset($request->timesheetdate)) {
 find  } elseif (auth()->user()->role_id == 13) {
 
 
- $clientss = DB::table('assignmentmappings')
+
+          $clientss = DB::table('assignmentmappings')
             ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
             ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
             ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
@@ -165,10 +256,12 @@ find  } elseif (auth()->user()->role_id == 13) {
 
 
 
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 public function store(Request $request)
-   if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+   if ($assignmentdata->otherpartner == auth()->user()->teammember_id) { after this 
+
 
 
             if ($assignmentdata->otherpartner != auth()->user()->teammember_id && $assignmentdata->leadpartner != auth()->user()->teammember_id) {
@@ -188,8 +281,8 @@ public function store(Request $request)
             }
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\TimesheetController.php
+
+
 
 
 total hour for
@@ -199,6 +292,8 @@ if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
 		  
 		  
 
+          if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+            // dd($request);
             $getTotalTeamHour = DB::table('assignmentteammappings')
               ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
               ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
@@ -212,9 +307,7 @@ if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
               ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
               ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
               ->update(['teamhour' => $finalResult]);
-
-
-
+          }
 
 
 
@@ -243,6 +336,8 @@ app\Http\Controllers\TimesheetController.php
             ->update(['teamhour' => $finalResult]);
         }
       }
+
+
 
 
 
@@ -275,11 +370,14 @@ public function destroy(Request $request, $id)
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
  public function savedtimesheetEdit(Request $request, $id)
  } elseif (auth()->user()->role_id == 13) {
+
 
 
 
@@ -305,13 +403,15 @@ app\Http\Controllers\TimesheetController.php
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
   public function timesheeteditonchange(Request $request)
 if (auth()->user()->role_id == 13) {
 
 
-
+            foreach (
               DB::table('assignmentbudgetings')
                 ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname')
                 ->where('assignmentbudgetings.client_id', $request->cid)
@@ -330,6 +430,9 @@ if (auth()->user()->role_id == 13) {
                 ->orderBy('assignment_name')
                 ->distinct()
                 ->get() as $sub
+            )
+
+
 
 
 
@@ -337,10 +440,13 @@ if (auth()->user()->role_id == 13) {
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
- create function 
+function create(Request $request)
+ if ($request->ajax()) {
  if (isset($request->cid)) {
  elseif (auth()->user()->role_id == 13) {
  
+
+            foreach (
               DB::table('assignmentbudgetings')
                 ->select(
                   'assignmentbudgetings.assignmentgenerate_id',
@@ -363,6 +469,9 @@ app\Http\Controllers\TimesheetController.php
                 ->orderBy('assignment_name')
                 ->distinct() // Ensure unique rows
                 ->get() as $sub
+            )
+
+
 
 
 
@@ -418,6 +527,9 @@ if (!is_numeric($request->assignment_id)) {
 
 
 
+
+
+
 find 
 if (!is_numeric($request->assignment_id)) {
  if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
@@ -428,7 +540,8 @@ if (!is_numeric($request->assignment_id)) {
  
  
  
-  $gettotalteamhour = DB::table('assignmentteammappings')
+        // if ($assignmentdata->otherpartner != auth()->user()->teammember_id && $assignmentdata->leadpartner != auth()->user()->teammember_id) {
+        $gettotalteamhour = DB::table('assignmentteammappings')
           ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
           ->where('assignmentmappings.assignmentgenerate_id', $oldtimesheetdata->assignmentgenerate_id)
           ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
@@ -459,12 +572,14 @@ if (!is_numeric($request->assignment_id)) {
             ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
             ->update(['teamhour' => $finalresult]);
         }
+        // }
+		
+		
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 public function savedtimesheeteditstore(Request $request)
  if (is_numeric($request->assignment_id)) {
-
 
 
         if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
@@ -485,6 +600,7 @@ public function savedtimesheeteditstore(Request $request)
               ->update(['teamhour' => $finalresult]);
           }
         }
+
 
 
 
@@ -516,13 +632,16 @@ public function savedtimesheeteditstore(Request $request)
             }
           }
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\StepController.php
 
 $teammemberDatas = DB::table('assignmentmappings')
 
 
-  $teammemberDatas = DB::table('assignmentteammappings')
+
+        $teammemberDatas = DB::table('assignmentteammappings')
             ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
             ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
             ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
@@ -545,6 +664,10 @@ $teammemberDatas = DB::table('assignmentmappings')
             ->orderByDesc('assignmentteammappings.id')
             ->get();
 
+        // dd($teammemberDatas);
+
+
+
 
 
 
@@ -556,13 +679,11 @@ find
 
 
 
-
-
         $leadpartner = DB::table('assignmentmappings')
             ->join('teammembers as team', 'team.id', 'assignmentmappings.leadpartner')
             ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
             ->where('assignmentmappings.assignmentgenerate_id', $id)
-            ->select('team.id', 'team.team_member', 'team.staffcode',  'team.mobile_no', 'team.role_id', 'assignmentmappings.leadpartnerhour as assignmenthour', 'titles.title')
+            ->select('team.id', 'team.team_member', 'team.staffcode',  'team.mobile_no', 'team.role_id', 'assignmentmappings.leadpartnerhour as assignmenthour', 'titles.title', 'assignmentmappings.created_at as createdat')
             ->get();
 
 
@@ -570,7 +691,7 @@ find
             ->join('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
             ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
             ->where('assignmentmappings.assignmentgenerate_id', $id)
-            ->select('team.id', 'team.team_member', 'team.staffcode', 'team.mobile_no', 'team.role_id', 'assignmentmappings.otherpartnerhour as assignmenthour', 'titles.title',)
+            ->select('team.id', 'team.team_member', 'team.staffcode', 'team.mobile_no', 'team.role_id', 'assignmentmappings.otherpartnerhour as assignmenthour', 'titles.title', 'assignmentmappings.created_at as createdat')
             ->get();
 
         $teammpartner = DB::table('assignmentteammappings')
@@ -588,12 +709,21 @@ find
                 'teammembers.mobile_no',
                 'teammembers.role_id',
                 'assignmentteammappings.teamhour as assignmenthour',
+                'assignmentteammappings.created_at as createdat',
                 'titles.title',
             ])
             ->orderByDesc('assignmentteammappings.id')
             ->get();
 
-        $partner = $leadpartner->merge($otherpartner)->merge($teammpartner);
+        // $partner = $leadpartner->merge($otherpartner)->merge($teammpartner);
+        $partner = $leadpartner->merge($otherpartner)->merge($teammpartner)
+            ->sortByDesc('createdat')
+            // ->sortBy('createdat')
+            ->values();
+
+        // dd($partner);
+
+
 
 
 
@@ -603,14 +733,15 @@ resources\views\backEnd\viewassignment.blade.php
 find and replace 
 {{ $partnerData->leadpartnerhour ?? ($partnerData->otherpartnerhour ?? 0) }}
 
-          <td>{{ $partnerData->assignmenthour ?? 0 }}</td>
+                   <td>{{ $partnerData->assignmenthour ?? 0 }}</td>
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\StepController.php
 
 
-  $leadpartner = DB::table('assignmentmappings')
+
+        $leadpartner = DB::table('assignmentmappings')
             ->join('teammembers as team', 'team.id', 'assignmentmappings.leadpartner')
             ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
             ->where('assignmentmappings.assignmentgenerate_id', $id)
@@ -663,7 +794,9 @@ app\Http\Controllers\StepController.php
             ->get();
         // dd($partner);
 		
-		
+	
+
+	
 		
 pass this addonpartner in view
 
@@ -694,6 +827,8 @@ resources\views\backEnd\viewassignment.blade.php
 </script>
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\viewassignment.blade.php
 
@@ -701,19 +836,20 @@ resources\views\backEnd\viewassignment.blade.php
 
                                     <div class="card-head">
                                         <b>Partner List:</b>
-                                        @if (auth()->user()->role_id == 11)
-                                            {{-- <b>
+
+                                        {{-- <b>
                                                 <a data-toggle="modal" data-target="#exampleModal14"
                                                     class="btn btn-info-soft btn-sm">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                             </b> --}}
-                                            <b>
-                                                <a data-toggle="modal" data-target="#exampleModal120"
-                                                    class="btn btn-info-soft btn-sm ml-1"><i class="fa fa-plus"></i></a>
-                                            </b>
-                                        @endif
+                                        <b>
+                                            <a data-toggle="modal" data-target="#exampleModal120"
+                                                class="btn btn-info-soft btn-sm ml-1"><i class="fa fa-plus"></i></a>
+                                        </b>
                                     </div>
+									
+									
 
 
 
@@ -722,15 +858,14 @@ find text after this div add
 
 
 
-
-                              @if (auth()->user()->role_id == 11)
+                                @if (auth()->user()->role_id == 11 || auth()->user()->role_id == 13)
                                     <div class="modal fade" id="exampleModal120" tabindex="-1" role="dialog"
                                         aria-labelledby="exampleModalLabel4" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header" style="background:#37A000;color:white;">
                                                     <h5 class="modal-title font-weight-600" id="exampleModalLabel4">Add
-                                                        Other Partner</h5>
+                                                        Partner</h5>
                                                     <div>
                                                         <ul>
                                                             @foreach ($errors->all() as $e)
@@ -751,7 +886,7 @@ find text after this div add
                                                         <div class="details-form-field form-group row">
                                                             <div class="col-12">
                                                                 <div class="form-group">
-                                                                    <label class="font-weight-600">Other Partner </label>
+                                                                    <label class="font-weight-600">Partner Name : *</label>
                                                                     <select required class="language form-control"
                                                                         id="exampleFormControlSelect1"
                                                                         name="otherpatnerid">
@@ -773,7 +908,7 @@ find text after this div add
                                                     <div class="modal-footer">
                                                         {{-- <button type="button" class="btn btn-danger"
                                                             data-dismiss="modal">Close</button> --}}
-                                                        <button type="submit" class="btn btn-success">Save</button>
+                                                        <button type="submit" class="btn btn-success">Submit</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -784,12 +919,7 @@ find text after this div add
 
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Middleware\VerifyCsrfToken.php
 
-    protected $except = [
-        'otherpatner/update' // Exclude this route from CSRF protection
-    ];
 
 
 
@@ -809,33 +939,204 @@ resources\views\backEnd\assignmentmapping\yearwise.blade.php
                                             @endif --}}
                                         @endif
                                     </td>
+									
+									
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+ public function index()
+    } elseif (auth()->user()->role_id == 13) {
+ $assignmentcount =
+
+
+
+      $assignmentcountall = DB::table('assignmentmappings')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+        ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+        ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+        ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $userId = auth()->user()->teammember_id;
+          $query->where('assignmentmappings.leadpartner', $userId)
+            ->orWhere('assignmentmappings.otherpartner', $userId)
+            ->orWhere('assignmentteammappings.teammember_id', $userId);
+        })
+        ->where('assignmentbudgetings.status', 1)
+        ->select([
+          'assignmentmappings.id',
+          'clients.client_name',
+          'assignmentbudgetings.assignmentname',
+          'assignments.assignment_name',
+          'assignmentbudgetings.assignmentgenerate_id'
+        ])
+        ->distinct()
+        ->get();
+
+      $assignmentcount = $assignmentcountall->count();
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ReportController.php
+
+
+$assignmentmappingData = $assignmentmappingOpenotherpartner->merge($assignmentmappingOpenleadpartner);
+replace  assignmentmappingData varable 
+
+
+      $assignmentmappingData = DB::table('assignmentmappings')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+        ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+        ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+        ->leftJoin('assignments', 'assignments.id', '=', 'assignmentmappings.assignment_id')
+        ->where('assignmentbudgetings.status', '1')
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->where(function ($query) {
+          $userId = auth()->user()->teammember_id;
+          $query->where('assignmentmappings.leadpartner', $userId)
+            ->orWhere('assignmentmappings.otherpartner', $userId)
+            ->orWhere('assignmentteammappings.teammember_id', $userId);
+        })
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.duedate',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'assignmentmappings.leadpartner',
+          'assignmentmappings.otherpartner'
+        )
+        ->distinct()
+        ->get();
+
+      // dd($assignmentmappingData);
+	  
+	  
+
+
+
+2.Client wants to add multiple partner in lead partner and other partner column ```end 
+
+
+vsalocal, vsademo ```end hare 
+
+
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
+after this   $request->validate([
+      'leavetype' => "required",
+      'to' => "required",
+      'from' => "required",
+    ]);
+	
+	
+add this code 
+
+
+ $authUserId = auth()->user()->teammember_id;
+    $joinigandrejoindate = DB::table('teammembers')
+      ->where('teammembers.id',  $authUserId)
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+      ->value(DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date)'));
+
+    if ($joinigandrejoindate) {
+      $date = Carbon::parse($joinigandrejoindate);
+      if ($date->year > 2025) {
+        $timesheetRecordcheck = DB::table('timesheetusers')
+          ->where('status', '0')
+          ->where('createdby', $authUserId)
+          ->where('date', $joinigandrejoindate)
+          ->exists();
+
+        if (!$timesheetRecordcheck) {
+          $output = ['msg' => 'Your timesheet has not been filled on the joining date. Please fill it'];
+          return back()->with('statuss', $output);
+        }
+      }
+    }
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+replace it 
 
+  public function timesheetrequestupdate(Request $request)
+  {
+    try {
+      $request->validate([
+        'reason' => 'required',
+        'file' => 'nullable|mimes:png,pdf,jpeg,jpg|max:5120',
+      ], [
+        'file.max' => 'The file may not be greater than 5 MB.',
+      ]);
 
+      $fileName =  $request->attachmentexist ?? null;
+      if ($request->hasFile('file')) {
+        // public\backEnd\image\confirmationfile
+        $destinationPath = public_path('backEnd/image/confirmationfile');
+        // Delete the existing file if it exists
+        if ($request->attachmentexist) {
+          $existingFilePath = $destinationPath . '/' . $request->attachmentexist;
+          if (file_exists($existingFilePath)) {
+            unlink($existingFilePath);
+          }
+        }
+        // Process the new file upload
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $file->move($destinationPath, $fileName);
+      }
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+      DB::table('timesheetrequests')
+        ->where('id', $request->timesheetrequestid)
+        ->update([
+          'reason' => $request->reason,
+          'partner' => $request->approver,
+          'attachment' => $fileName,
+          'updated_at' => date('Y-m-d H:i:s'),
+        ]);
 
+      // timesheet request mail to partner
+      $teammembermail = Teammember::where('id', $request->approver)->pluck('emailid')->first();
+      $name = Teammember::where('id', auth()->user()->teammember_id)
+        ->select('team_member', 'staffcode')
+        ->first();
 
+      $data = array(
+        'teammember' => $name ?? '',
+        'reason' => $request->reason ?? '',
+        'created_at' => date('d-m-Y H:i:s'),
+        'email' => $teammembermail ?? '',
+        'id' => $id ?? '',
+      );
 
+      Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+        $msg->to($data['email']);
+        // $msg->cc('itsupport_delhi@vsa.co.in');
+        $msg->subject('Timesheet Submission Request has been Edited');
+      });
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
+      $output = array('msg' => 'Updated Successfully');
+      return back()->with('success', $output);
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+    }
+  }
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222

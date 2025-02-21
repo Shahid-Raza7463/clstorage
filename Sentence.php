@@ -134,7 +134,9 @@ class Sentence extends Command
 
         // Send the code for both vsalocal and vsalive, and send the database only for vsalocal
 
-        // Send the code for both vsalocal and vsalive, and send the below all tables only from vsalive
+        // Send the code for both vsademo and vsalive, and send the below all tables only from vsalive
+
+        // Send the code for  vsademo and below listed tables
 
         // Assignment id HUM100765 was mistakenly closed by Kartik. Please reopen it
 
@@ -216,6 +218,29 @@ class Sentence extends Command
         // the approver is still Harish which is why it wasn't visible in Simmi's ID. You had selected it in the dropdown but didn’t save it, so it didn’t reflect in Simmi’s ID Please check again
 
         // I have checked this, and everything is fine except the mail integration, which is not implemented. I will integrate it
+
+        // when can we connect for functional testing of the bugs reported 
+
+        // We can connect after 4:30 PM for the functional testing of the reported bugs. Let me know if that works for you
+
+        // I have fixed the timesheet issue bugs, so I need to deploy them on VSA. Please grant me permission
+
+
+        // I just want to inform all of you that I have resolved the timesheet bugs, and it's ready for deployment. I just want to ask whether it should go through the QA process or be deployed directly to live
+
+
+        // Dear Sir/Ma'am,
+
+        // I just want to inform all of you that I have resolved the timesheet bugs, and it's ready for deployment. I just want to ask whether it should go through the QA process or be deployed directly to live.
+
+        // Thanks & regards,
+        // Shahid Raza (7488952139)
+
+        // I have implemented mail integration, and now the partner will receive a notification after editing the timesheet request
+
+
+
+        // maam leaving date ke baad user can not login isiliye koi bhi leave apply nahi kar sakta hai 
 
 
 

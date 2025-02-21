@@ -76,8 +76,73 @@
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
-{{-- * regarding  --}}
+{{-- * regarding ajax  --}}
 {{--  Start Hare  --}}
+
+<script>
+    if (newteammember) {
+        let timesheetdate = newteammember;
+        $.ajax({
+            type: "GET",
+            url: "{{ url('newteamdata/check') }}",
+            data: {
+                timesheetdate: timesheetdate
+            },
+            success: function(res) {
+                console.log(res.success); // Debugging ke liye
+
+                // **Response ke andar endDate update karein**
+                if (res.success) {
+                    endDate = parseDate(dateSelectionresult);
+                    if (endDate) endDate.setDate(endDate.getDate() - 1);
+
+                    // **Calendar ko Update karna**
+                    updateCalendar(endDate);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+            }
+        });
+    }
+
+
+    function updateCalendar(endDate) {
+        if (endDate) {
+            let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                endDate.getFullYear();
+
+            document.getElementById('datepickers').value = formattedDate;
+
+            $("#datepickers").datepicker({
+                maxDate: endDate,
+                minDate: endDate,
+                dateFormat: 'dd-mm-yy'
+            });
+
+            console.log("Updated Calendar Date:", formattedDate);
+        }
+    }
+</script>
+
+
+public function newteamdatacheck(Request $request)
+{
+if ($request->ajax()) {
+$authUserId = auth()->user()->teammember_id;
+
+$timesheetRecordcheck = DB::table('timesheetusers')
+->where('status', '0')
+->where('createdby', $authUserId)
+->where('date', $request->timesheetdate)
+->exists();
+
+return response()->json(['success' => $timesheetRecordcheck]);
+}
+
+return response()->json(['error' => 'Invalid request'], 400);
+}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 {{-- * regarding date enable / regarding calander featurs   --}}

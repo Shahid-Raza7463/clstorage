@@ -1,0 +1,240 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+stop leave apply if timesheet not submitted on joinig date and rejoinig date 
+
+ public function store(Request $request)
+  {
+
+    $request->validate([
+      'leavetype' => "required",
+      'to' => "required",
+      'from' => "required",
+    ]);
+
+
+      // this is only in local in future will be need 
+    $authUserId = auth()->user()->teammember_id;
+    $joinigandrejoindate = DB::table('teammembers')
+      ->where('teammembers.id',  $authUserId)
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+      ->value(DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date)'));
+
+    if ($joinigandrejoindate) {
+      $date = Carbon::parse($joinigandrejoindate);
+      if ($date->year > 2025) {
+        $timesheetRecordcheck = DB::table('timesheetusers')
+          ->where('status', '0')
+          ->where('createdby', $authUserId)
+          ->where('date', $joinigandrejoindate)
+          ->exists();
+
+        if (!$timesheetRecordcheck) {
+          $output = ['msg' => 'Your timesheet has not been filled on the joining date. Please fill it'];
+          return back()->with('statuss', $output);
+        }
+      }
+    }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+
+  <script>
+      // Pass the PHP data to JavaScript
+      var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+      var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
+      var dateSelectionresult = @json($dateSelectionresult);
+      var newteammember = @json($newteammember);
+      var rejoiningdate = @json($rejoiningdate);
+      var datanotexistaftermonday = @json($datanotexistaftermonday);
+      var notsubmitonjoindate = @json($notsubmitonjoindate);
+  </script>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+             } else if (newteammember && !lasttimesheetsubmiteddata) {
+                 if (!lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0) {
+                     endDate = parseDate(newteammember);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 } else if (notsubmitonjoindate == false) {
+                     endDate = parseDate(newteammember);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 } else {
+                     endDate = parseDate(dateSelectionresult);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 }
+             }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  $notsubmitonjoindate = null;
+      if ($newteammember || $rejoiningdate) {
+        $joiningDateStore = $newteammember ?? $rejoiningdate;
+        if ($joiningDateStore) {
+          $timesheetRecordcheck = DB::table('timesheetusers')
+            ->where('status', '0')
+            ->where('createdby', $authUserId)
+            ->where('date', $joiningDateStore)
+            ->exists();
+
+          if ($timesheetRecordcheck) {
+            $notsubmitonjoindate = $newteammember ?? $rejoiningdate;
+            // $chakeddate = false;
+          } else {
+            $notsubmitonjoindate = false;
+          }
+        }
+      }
+
+pass this notsubmitonjoindate varable in view file 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

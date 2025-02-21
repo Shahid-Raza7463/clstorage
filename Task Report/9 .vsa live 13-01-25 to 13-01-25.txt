@@ -963,7 +963,7 @@ Route::post('/timesheetrequestupdate',  [TimesheetController::class, 'timesheetr
 app\Http\Controllers\TimesheetController.php
 add this fun  public function savedtimesheeteditstore(Request $request)
 
-  public function timesheetrequestupdate(Request $request)
+   public function timesheetrequestupdate(Request $request)
   {
     try {
       $request->validate([
@@ -998,6 +998,26 @@ add this fun  public function savedtimesheeteditstore(Request $request)
           'attachment' => $fileName,
           'updated_at' => date('Y-m-d H:i:s'),
         ]);
+
+      // timesheet request mail to partner
+      $teammembermail = Teammember::where('id', $request->approver)->pluck('emailid')->first();
+      $name = Teammember::where('id', auth()->user()->teammember_id)
+        ->select('team_member', 'staffcode')
+        ->first();
+
+      $data = array(
+        'teammember' => $name ?? '',
+        'reason' => $request->reason ?? '',
+        'created_at' => date('d-m-Y H:i:s'),
+        'email' => $teammembermail ?? '',
+        'id' => $id ?? '',
+      );
+
+      Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+        $msg->to($data['email']);
+        // $msg->cc('itsupport_delhi@vsa.co.in');
+        $msg->subject('Timesheet Submission Request has been Edited');
+      });
 
       $output = array('msg' => 'Updated Successfully');
       return back()->with('success', $output);

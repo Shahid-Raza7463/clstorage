@@ -203,6 +203,12 @@ OFF100003 official travel
 1.live vsademo credential
 http://127.0.0.1:8000/teamstatus?status=1
 
+Link : https://vsademo.capitall.io
+Email : Harish@capitall.io
+Password : Sukh@2024
+Role : Partner
+
+
 Super admin- sukhbahadur1993@gmail.com
 password - Sukh@2023
 447
@@ -262,7 +268,7 @@ update for testing only on vsademo
 08.attendances
 
 
-
+i am am working on it yah kal tak ho jayega aur isme multiple scenreion hai jise mujhe retest karna par raha hai 
 
 
 if any problem on timesheet page to vsalive then ye table maange
@@ -303,7 +309,7 @@ ye 12 table chahiye vsalive se
 
 222222222222222222222222222222222222222222222222222222222
 
- // $tables = [
+  // $tables = [
     //   //* timesheets
     //   'timesheetreport',
     //   'timesheetrequests',
@@ -327,10 +333,11 @@ ye 12 table chahiye vsalive se
     //   //* another tables
     //   // 'Users',
     //   // 'teammembers',
-    //   // 'Clients',
     //   // 'teamrolehistory',
     //   // 'rejoiningsamepost',
+    //   // 'Clients',
     // ];
+
 
     // foreach ($tables as $table) {
     //   if (Schema::hasTable($table)) {
@@ -340,6 +347,7 @@ ye 12 table chahiye vsalive se
     //     echo "'{$table}'.<br>";
     //   }
     // }
+
     // return response('Tables deleted successfully!', 200);
 
 
@@ -381,5 +389,10 @@ ye 12 table chahiye vsalive se
 
     dd('hi');
 
-<
+
+
+// maine ye bugs check kiya hai simmi maam ke saath isme koi issue nahi hai ye client ke according sahi run kar rahi hai and maine simmi maam ko explain bhi kar diya hai ok 
+
+
+
 

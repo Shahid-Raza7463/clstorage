@@ -6103,15 +6103,7 @@ foreach ($weeksData as $weekData) {
         }
     });
 }
-//* regarding console 
-console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
-console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
-console.log("leavedataforcalander1:", leavedataforcalander1);
-console.log("differenceInDays:", differenceInDays);
-console.log("newteammember:", newteammember);
-console.log("rejoiningdate:", rejoiningdate);
-console.log("totalleaveCount:", totalleaveCount);
-console.log("leavebreakdateassign:", leavebreakdateassign);
+
 //* regarding convert / regarding int value 
 // Start Hare 
 $statusdata = intval($request->input('status'));
@@ -7810,6 +7802,7 @@ dd([
   'leavebreakdateassign' => $leavebreakdateassign,
 ]);
 // start hare
+// start hare
 
 dd('hi2', $request);
 dd($checkopenorclosed->status, $assignmentcloseddate, $requestDate);
@@ -7825,6 +7818,22 @@ dd([
   'rejoining_date' => $rejoining_date
 ]);
 // knowlege base modification  
+//* regarding console
+console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+console.log("leavedataforcalander1:", leavedataforcalander1);
+console.log("differenceInDays:", differenceInDays);
+console.log("newteammember:", newteammember);
+console.log("rejoiningdate:", rejoiningdate);
+console.log("totalleaveCount:", totalleaveCount);
+console.log("leavebreakdateassign:", leavebreakdateassign);
+
+console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+console.log("dateSelectionresult:", dateSelectionresult);
+console.log("newteammember:", newteammember);
+console.log("rejoiningdate:", rejoiningdate);
+console.log("datanotexistaftermonday:", datanotexistaftermonday);
 //* regarding otp
 public function assignmentotpstore(Request $request)
 {

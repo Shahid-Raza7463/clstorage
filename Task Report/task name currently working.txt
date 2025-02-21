@@ -870,29 +870,39 @@ Every wedenesday and sturdays mail sent on admin in which ek excell jata hai us 
 
 
 bhaskar
-1.if timesheet submitted on sturday then date will be enable next mondays `````` 1
-2.if timesheet submitted on sunday then date will be enable next mondays ``````  2
-3.when user saved timesheet data then date will be show next days  ``````````````3
+1.if timesheet submitted on sturday then date will be enable next mondays `````` 1   ////   11111111111
+2.if timesheet submitted on sunday then date will be enable next mondays ``````  2   ////    111111111
+3.when user saved timesheet data then date will be show next days  ``````````````3   /////  1111111111
+4.after timesheet submited data continuesly casual leave applyled then after end date, date will be show ````````4  ///// 1111
+5.after timesheet submited data continuesly exam leave applyled then after end date, date will be show  `````````5   ////  1111111
+6.when casual leave apply and gap date will be exist between save timesheet and startdate of casual leave then, date will be show after saved timesheet date  `````6 , 7, 8 and 9  /////  1111111
+8.when exam leave apply and gap date will be exist between save timesheet and startdate of exam leave then, date will be show after saved timesheet date    ``````````` 6 , 7, 8 and 9  /////   1111111111
+7.when casual leave apply and gap date will be not exist between save timesheet and startdate of casual leave then, after casual leave end date will be show  ``````7 and 9   ///// 111
+9.when exam leave apply and gap date will be not exist between save timesheet and startdate of exam leave then, after exam leave end date will be show      ```````````7 and 9  /////  11111111
 
-4.after timesheet submited data continuesly casual leave applyled then after end date, date will be show ````````4
-5.after timesheet submited data continuesly exam leave applyled then after end date, date will be show  `````````5
-6.when casual leave apply and gap date will be exist between save timesheet and startdate of casual leave then, date will be show after saved timesheet date  `````6  and 8
-8.when exam leave apply and gap date will be exist between save timesheet and startdate of exam leave then, date will be show after saved timesheet date    ``````````` 6  and 8
-7.when casual leave apply and gap date will be not exist between save timesheet and startdate of casual leave then, after casual leave end date will be show  ``````7 and 9
-9.when exam leave apply and gap date will be not exist between save timesheet and startdate of exam leave then, after exam leave end date will be show      ```````````7 and 9
-10.when user has a casual leave timesheet after submitted timesheet date will be show casual leaveend date  ( sunday submit)
-11.when user has a exam leave timesheet after submitted timesheet date will be show exam leaveend date    ( sunday submit)
+10.when user has a casual leave timesheet after submitted timesheet date will be show casual leaveend date  ( sunday submit) not need to test 
+11.when user has a exam leave timesheet after submitted timesheet date will be show exam leaveend date    ( sunday submit)   not need to test 
 
-14.if you are not working on sunday and want to date enable for monday then you have to submit timesheet of that week.  `````
-15.if date is enable in future and user try submit there timesheet on that time user can not submit timesheet
-16. if user submit current date timesheet then date not enable in future this is for only saved timesheet  ``````
+
+14.if you are not working on sunday and want to date enable for monday then you have to submit timesheet of that week.  ````` ////   11111111111
+15.if date is enable in future and user try submit there timesheet on that time user can not submit timesheet  ........ ///////
+16. if user submit current date timesheet then date not enable in future this is for only saved timesheet  ``````  //////
+17. fill 2 timesheet in one days
+
+18. apply multiple leave on save timesheet 
+19. user can not leave apply if users not saved timesheet on joinig date and rejoining date 
+
+Ankesh Chandra ankeshc@vsa.co.in   908 on same post
+13.when user rejoining and promoting in that case will be also problem  ````````` 13  1111111111111111
+
 
 Cratika Singh   cratikas@vsa.co.in  id 973
 12.When user new joinee then on that time also will be problem   `````````12 
-    not implement it rest only when user new joinee and saved timesheet and leave apply then will be error occure
-	
-Ankesh Chandra ankeshc@vsa.co.in   908 on same post
-13.when user rejoining and promoting in that case will be also problem  ````````` 13
+
+
+
+
+
 
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -1321,26 +1331,26 @@ sundaycount = 0
 
 
 
-
+Client wants to add multiple partner in lead partner and other partner column
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 1.Changes will be applied on the Assignment Creation page. `````````````````
 
-2.Changes will be applied on the Add Timesheet page.````````
-   2.1 Modification on client select box and assignment select box 
-   2.1 Total hour update on timesheet create ```
-   2.2 Total hour update on timesheet delete for only users  ````
-   2.3 Total hour update on timesheet edit `````
+2.Changes will be applied on the Add Timesheet page.````````  //// 1111111111
+   2.1 Modification on client select box and assignment select box /////// 11111111
+   2.1 Total hour update on timesheet create ```//////
+   2.2 Total hour update on timesheet delete for only users  ````//////
+   2.3 Total hour update on timesheet edit `````//////
 
-3.Changes will be applied in the Partner Section on the Assignment Details page.````````
+3.Changes will be applied in the Partner Section on the Assignment Details page.```````` //// 11111111
 
-4.Changes will be applied on the Independence Confirmation page. ````````````````` 
+4.Changes will be applied on the Independence Confirmation page. ````````````````` ///// 111111111
 
-5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified ````````````
+5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified ````````````//////   11111111111
 
-6.when partner added on that time mail also will be sent mail ````````````````````
+6.when partner added on that time mail also will be sent mail ````````````````````////// 11111111111
 
-7.home pahe per count 15 
-8. data will be on click 15 
+7.home pahe per count 15   ///// 1111111111111
+8. data will be on click 15 ////// 111111111111111111
 
 
 838

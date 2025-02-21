@@ -18,9 +18,18 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding console   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+//* regarding console
+console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+console.log("leavedataforcalander1:", leavedataforcalander1);
+console.log("differenceInDays:", differenceInDays);
+console.log("newteammember:", newteammember);
+console.log("rejoiningdate:", rejoiningdate);
+console.log("totalleaveCount:", totalleaveCount);
+console.log("leavebreakdateassign:", leavebreakdateassign);
 {{-- ! End hare --}}
 {{-- * regarding csrf  --}}
 {{--  Start Hare --}}

@@ -48,11 +48,116 @@ class Allcode extends Controller
 
         //* regarding 
         // Start Hare
+        $authUserId = auth()->user()->teammember_id;
+        $joinigandrejoindate = DB::table('teammembers')
+          ->where('teammembers.id',  $authUserId)
+          ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+          ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+          ->value(DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date)'));
+    
+        dd($joinigandrejoindate);
+    
+        if ($joinigandrejoindate) {
+          $timesheetRecordcheck = DB::table('timesheetusers')
+            ->where('status', '0')
+            ->where('createdby', $authUserId)
+            ->where('date', $joinigandrejoindate)
+            ->exists();
+    
+          if ($timesheetRecordcheck) {
+            $output = ['msg' => 'Your timesheet has not been filled on the ' . ($joinigandrejoindate ? 'joining' : 'rejoining') . ' date. Please fill it.'];
+            return back()->with('statuss', $output);
+          }
+        }
         //! End hare 
 
 
-        //* regarding 
+        //* regarding calander implementation on saved timesheet
         // Start Hare
+        // Start Hare
+        // Start Hare regarding missing date from bulk data 
+ use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
+// Timesheet se data fetch karna
+$timesheetmaxDateRecord = DB::table('timesheetusers')
+    ->where('status', '0')
+    ->where('createdby', $authUserId)
+    ->orderBy('date', 'desc')
+    ->get();
+
+// Available dates extract karo
+$availableDates = $timesheetmaxDateRecord->pluck('date')->toArray();
+
+// Min aur Max Date nikal lo
+$minDate = Carbon::parse(min($availableDates));
+$maxDate = Carbon::parse(max($availableDates));
+
+// Continuous date range generate karo
+$allDates = [];
+while ($minDate->lte($maxDate)) {
+    $allDates[] = $minDate->toDateString();
+    $minDate->addDay();
+}
+
+// Missing dates find karo
+$missingDates = array_diff($allDates, $availableDates);
+
+dd($missingDates);
+
+
+
+
+                return Carbon::parse($timesheetMaxDate->date)->diffInDays(Carbon::parse($leaveDate)) . $timesheetMaxDate->date;
+        // Start Hare
+         // if ($totalleaveCount > 1) {
+      //   for ($i = 0; $i < count($leaveDates) - 1; $i++) {
+      //     $currentDate = Carbon::parse($leaveDates[$i]);
+      //     $nextDate = Carbon::parse($leaveDates[$i + 1]);
+
+
+      //     while ($currentDate->addDay()->lt($nextDate)) {
+      //       // dd($currentDate);
+      //       // 12
+      //       $increamentonedays = $currentDate->format('Y-m-d');
+      //       $timesheetRecord = DB::table('timesheetusers')
+      //         ->where('status', '0')
+      //         ->where('createdby', $authUserId)
+      //         ->where('date', $increamentonedays)
+      //         ->exists();
+      //       // dd($increamentonedays);
+
+      //       if (!$timesheetRecord) {
+      //         $leavebreakdateassign = $increamentonedays;
+      //         break 2; // Loop terminate karna hai
+      //       }
+      //     }
+      //   }
+      // }
+
+      if ($totalleaveCount > 1) {
+        for ($i = 0; $i < count($leaveDates) - 1; $i++) {
+          $currentDate = Carbon::parse($leaveDates[$i]);
+          $nextDate = Carbon::parse($leaveDates[$i + 1]);
+
+          while ($currentDate->copy()->addDay()->lt($nextDate)) {
+            $increamentonedays = $currentDate->copy()->addDay()->format('Y-m-d');
+
+            $timesheetRecord = DB::table('timesheetusers')
+              ->where('status', '0')
+              ->where('createdby', $authUserId)
+              ->where('date', $increamentonedays)
+              ->exists();
+
+            if (!$timesheetRecord) {
+              // Decrement the assigned break date by one day
+              $leavebreakdateassign = Carbon::parse($increamentonedays)->subDay()->format('Y-m-d');
+              break 2; // Exit both loops
+            }
+            $currentDate->addDay(); // Move to the next day
+          }
+        }
+      }
         //! End hare 
 
 
