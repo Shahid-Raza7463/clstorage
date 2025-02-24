@@ -209,6 +209,12 @@ Password : Sukh@2024
 Role : Partner
 
 
+Staff
+Link : https://vsademo.capitall.io
+Email : Guneet@capitall.io
+Password : R9QhzV2vyt@2023
+
+
 Super admin- sukhbahadur1993@gmail.com
 password - Sukh@2023
 447
@@ -222,8 +228,11 @@ password - Sukh@2024
 933
 
 Manager : poojakumari@capitall.io
-Password : Manoj@123
+Password : Poja@2024
 936
+
+simmi@capitall.io
+PW -Sims@123
 
 
 222222222222222222222222222222222222222222222222222222222

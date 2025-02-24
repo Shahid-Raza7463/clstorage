@@ -243,10 +243,46 @@ class Sentence extends Command
         // maam leaving date ke baad user can not login isiliye koi bhi leave apply nahi kar sakta hai 
 
 
+        // client want to redirect url on open leave page when partner click on hare button on mail 
+        // I have attached all QA-passed tasks that are currently pending in UAT 
+        // I have completed this task and moved it to QA
+        // I have completed this task, moved it to QA, and updated the description on Jira
+        // since there is delay in code merge of KYC, we can pick up VSA tasks in QA ?
+
+
+
 
 
 
         // 222222222222222222222222222222222222222222222222222222222222222222222
+
+        // I have completed this task and placed in QA 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // 222222222222222222222222222222222222222222222222222222222222222222222
+
+        // mail formate 
+        // write subject
+
+        // Dear Sir,
+
+        // I have attached all QA-passed tasks that are currently pending in UAT.
+
+        // Thanks & regards,
+        // Shahid Raza (7488952139)
 
     }
 }

@@ -16,6 +16,23 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    @if (isset($myapplyleaveDatas) && count($myapplyleaveDatas) > 0)
+        <li class="nav-item">
+            <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+                aria-controls="pills-home" aria-selected="true">My Application</a>
+        </li>
+    @endif
+
+    @if (Auth::user()->role_id == 13)
+        <li class="nav-item">
+            <a class="nav-link {{ !isset($myapplyleaveDatas) || count($myapplyleaveDatas) == 0 ? 'active' : '' }}"
+                id="pills-user-tab" data-toggle="pill" href="#pills-user" role="tab" aria-controls="pills-user"
+                aria-selected="false">Team Application</a>
+        </li>
+    @endif
+</ul>
+
 {{--  Start Hare --}}
 {{-- ! End hare --}}
 {{-- * regarding console   --}}

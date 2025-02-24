@@ -8170,6 +8170,26 @@ public function sendEmail($usermail)
 
 
 //* regarding url / regarding route /  regarding path
+
+// strat 
+$urlheader = $request->headers->get('referer');
+$url = parse_url($urlheader);
+$path = $url['path'];
+$query = $url['query'] ?? null;
+
+
+// if ($path == '/filtering-applyleve') {
+//   return redirect('applyleave')->with('success', $output);
+// } else {
+//   return back()->with('success', $output);
+// }
+
+if ($path == '/openleave/0' && $query) {
+  return back()->with('success', $output);
+} else {
+  return redirect('applyleave')->with('success', $output);
+}
+// strat 
 public function filterDataAdmin(Request $request)
 {
   $urlheader = $request->headers->get('referer');

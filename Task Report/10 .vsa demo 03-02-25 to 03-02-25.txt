@@ -1139,6 +1139,683 @@ replace it
   }
 
 
+
+
+
+
+
+
+
+vsalocal, vsademo ```start hare 
+1.The client wants the URL to redirect to the open leave page when the partner clicks on the 'Here' button in the email ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\openindex.blade.php
+
+
+      <div class="content-header row align-items-center m-0">
+          <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+              @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 18)
+                  <a href="{{ url('leave/teamapplication/') }}" style="float: right;" class="btn btn-success ml-2">Team
+                      Application</a>
+              @endif
+              @if (isset($myapplyleaveDatas))
+                  <a href="{{ url('applyleave/create/') }}" style="float: right;" class="btn btn-success ml-2">Apply
+                      Leave</a>
+              @endif
+          </nav>
+          <div class="col-sm-8 header-title p-0">
+              <div class="media">
+                  <div class="header-icon text-success mr-3"><i class="typcn typcn-puzzle-outline"></i></div>
+                  <div class="media-body">
+                      <h1 class="font-weight-bold">Open Leave</h1>
+                      <small>From now on you will start your activities.</small>
+                  </div>
+              </div>
+          </div>
+      </div>
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	                <div class="card-body">
+                  @component('backEnd.components.alert')
+                  @endcomponent
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                      <li class="nav-item">
+                          <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home"
+                              role="tab" aria-controls="pills-home" aria-selected="true">
+                              @if (isset($myapplyleaveDatas))
+                                  My Application
+                              @else
+                                  Team Application
+                              @endif
+                          </a>
+                      </li>
+
+                      @if (Auth::user()->role_id == 13)
+                          @if (isset($myapplyleaveDatas))
+                              <li class="nav-item">
+                                  <a class="nav-link" id="pills-user-tab" data-toggle="pill" href="#pills-user"
+                                      role="tab" aria-controls="pills-user" aria-selected="false">Team Application</a>
+                              </li>
+                          @else
+                          @endif
+                      @endif
+                  </ul>
+
+                  <br>
+                  <div class="tab-content" id="pills-tabContent">
+                      @if (isset($myapplyleaveDatas))
+                          <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                              aria-labelledby="pills-home-tab">
+                              <div class="table-responsive">
+                                  <table id="examplee" class="table display table-bordered table-striped table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th class="textfixed">Date of Request</th>
+                                              <th>Employee</th>
+                                              <th class="textfixed">Staff Code</th>
+                                              <th>Leave Type</th>
+                                              <th>Approver</th>
+                                              <th class="textfixed">Approver Code</th>
+                                              <th class="textfixed">Reason for Leave</th>
+                                              <th>Leave Period</th>
+                                              <th>Days</th>
+                                              <th>Status</th>
+                                              @foreach ($myapplyleaveDatas as $applyleaveDatas)
+                                                  @if ($applyleaveDatas->leavetype == 11 && $applyleaveDatas->status == 1 && $loop->first)
+                                                      <th>Action</th>
+                                                  @endif
+                                              @endforeach
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+
+                                          @foreach ($myapplyleaveDatas as $applyleaveDatas)
+                                              <tr>
+                                                  <td>{{ date('d-m-Y', strtotime($applyleaveDatas->created_at)) ?? '' }}
+                                                  </td>
+                                                  <td class="textfixed"> <a
+                                                          href="{{ route('applyleave.show', $applyleaveDatas->id) }}">
+                                                          {{ $applyleaveDatas->team_member ?? '' }}</a></td>
+                                                  {{-- <td>{{ $applyleaveDatas->staffcode ?? '' }}</td> --}}
+                                                  <td>{{ $applyleaveDatas->newstaff_code ?? $applyleaveDatas->staffcode }}
+                                                  </td>
+                                                  <td class="textfixed">
+
+                                                      {{ $applyleaveDatas->name ?? '' }}<br>
+                                                      @if ($applyleaveDatas->type == '0')
+                                                          <b>Type :</b> <span>Birthday</span><br>
+                                                          <span><b>Birthday Date :
+                                                              </b>{{ date(
+                                                                  'F d,Y',
+                                                                  strtotime(
+                                                                      App\Models\Teammember::select('dateofbirth')->where('id', $applyleaveDatas->createdby)->first()->dateofbirth,
+                                                                  ),
+                                                              ) ?? '' }}</span>
+                                                      @elseif($applyleaveDatas->type == '1')
+                                                          <span>Religious Festival</span>
+                                                      @endif
+                                                      @if ($applyleaveDatas->examtype == '0')
+                                                          <b>Exam Type :</b> <span>PCC</span>
+                                                      @elseif($applyleaveDatas->examtype == '1')
+                                                          <b>Exam Type :</b> <span>CA Final</span>
+                                                      @elseif($applyleaveDatas->examtype == '2')
+                                                          <b>Exam Type :</b> <span>B.Com</span>
+                                                      @endif
+                                                      @if ($applyleaveDatas->examtype == '3')
+                                                          <b>Other :</b>
+                                                          <span>{{ $applyleaveDatas->otherexam ?? '' }}</span>
+                                                      @endif
+                                                  </td>
+                                                  <td class="textfixed">
+                                                      {{ App\Models\Teammember::select('team_member')->where('id', $applyleaveDatas->approver)->first()->team_member ?? '' }}
+
+                                                  </td>
+                                                  <td>
+                                                      {{ App\Models\Teammember::select('team_member', 'staffcode')->where('id', $applyleaveDatas->approver)->first()->staffcode ?? '' }}
+                                                  </td>
+
+                                                  {{-- <td class="textfixed">{{ $applyleaveDatas->reasonleave ?? '' }} </td> --}}
+                                                  {{-- <td class="textfixed">
+                                                  @if (strlen($applyleaveDatas->reasonleave) > 25)
+                                                      <span class="reasonleave-truncated" data-toggle="tooltip"
+                                                          title="{{ $applyleaveDatas->reasonleave }}">
+                                                          {{ substr($applyleaveDatas->reasonleave, 0, 25) }}...
+                                                      </span>
+                                                  @else
+                                                      {{ $applyleaveDatas->reasonleave ?? '' }}
+                                                  @endif
+                                              </td> --}}
+
+                                                  <td class="textfixed">
+                                                      @if (strlen($applyleaveDatas->reasonleave) > 25)
+                                                          <span id="reasonleave-{{ $applyleaveDatas->id }}"
+                                                              class="reasonleave-truncated">
+                                                              {{ substr($applyleaveDatas->reasonleave, 0, 25) }}.....
+                                                              <span style="color: #37A000; cursor: pointer;"
+                                                                  data-toggle="tooltip" title="Show full text"
+                                                                  onclick="showFullText('{{ $applyleaveDatas->reasonleave }}')">View
+                                                                  Detail</span>
+                                                          </span>
+                                                      @else
+                                                          {{ $applyleaveDatas->reasonleave ?? '' }}
+                                                      @endif
+                                                  </td>
+
+                                                  <td class="textfixed">
+                                                      {{ date('d-m-Y', strtotime($applyleaveDatas->from)) ?? '' }} -
+                                                      {{ date('d-m-Y', strtotime($applyleaveDatas->to)) ?? '' }}</td>
+                                                  @php
+                                                      $to = Carbon\Carbon::createFromFormat(
+                                                          'Y-m-d',
+                                                          $applyleaveDatas->to ?? '',
+                                                      );
+                                                      $from = Carbon\Carbon::createFromFormat(
+                                                          'Y-m-d',
+                                                          $applyleaveDatas->from,
+                                                      );
+                                                      $diff_in_days = $to->diffInDays($from) + 1;
+                                                      $holidaycount = DB::table('holidays')
+                                                          ->where('startdate', '>=', $applyleaveDatas->from)
+                                                          ->where('enddate', '<=', $applyleaveDatas->to)
+                                                          ->count();
+                                                  @endphp
+                                                  <td>{{ $diff_in_days - $holidaycount ?? '' }}</td>
+
+
+                                                  <td>
+                                                      @if ($applyleaveDatas->status == 0)
+                                                          <span class="badge badge-pill badge-warning">Created</span>
+                                                      @elseif($applyleaveDatas->status == 1)
+                                                          <span class="badge badge-success">Approved</span>
+                                                      @elseif($applyleaveDatas->status == 2)
+                                                          <span class="badge badge-danger">Rejected</span>
+                                                      @endif
+                                                  </td>
+                                                  <td>
+                                                      @if ($applyleaveDatas->leavetype == 11 && $applyleaveDatas->status == 1 && $loop->first)
+                                                          <button class="btn btn-danger" data-toggle="modal"
+                                                              style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center;font-size: 11px;"
+                                                              data-target="#requestModal{{ $applyleaveDatas->id }}">Request</button>
+                                                      @endif
+                                                  </td>
+
+                                              </tr>
+                                              {{-- leaverequest form --}}
+                                              @if ($applyleaveDatas->leavetype == 11)
+                                                  <div class="modal fade" id="requestModal{{ $applyleaveDatas->id }}"
+                                                      tabindex="-1" role="dialog" aria-labelledby="requestModalLabel"
+                                                      aria-hidden="true">
+                                                      <div class="modal-dialog" role="document">
+                                                          <form method="post" action="{{ route('applyleaverequest') }}"
+                                                              enctype="multipart/form-data">
+                                                              @csrf
+                                                              <div class="modal-content">
+                                                                  <div class="modal-header">
+                                                                      {{-- @php
+                                                                  dd($applyleaveDatas);
+                                                              @endphp --}}
+                                                                      <h5 class="modal-title" id="requestModalLabel">
+                                                                          Enter
+                                                                          Request Details</h5>
+                                                                      <button type="button" class="close"
+                                                                          data-dismiss="modal" aria-label="Close">
+                                                                          <span aria-hidden="true">&times;</span>
+                                                                      </button>
+                                                                  </div>
+                                                                  <div class="modal-body">
+                                                                      @if ($errors->any())
+                                                                          <div class="">
+                                                                              <ul>
+                                                                                  @foreach ($errors->all() as $error)
+                                                                                      <li class="text-danger">
+                                                                                          {{ $error }}</li>
+                                                                                  @endforeach
+                                                                              </ul>
+                                                                          </div>
+                                                                      @endif
+                                                                      {{-- <form method="post"
+                                                                  action="{{ url('/applyleaverequest') }}"
+                                                                  enctype="multipart/form-data"> --}}
+
+                                                                      <input type="hidden" name="applyleaveid"
+                                                                          value="{{ $applyleaveDatas->id }}"
+                                                                          class="form-control" placeholder="">
+                                                                      <input type="hidden" name="createdby"
+                                                                          value="{{ $applyleaveDatas->createdby }}"
+                                                                          class="form-control" placeholder="">
+                                                                      <input type="hidden" name="approver"
+                                                                          value="{{ $applyleaveDatas->approver }}"
+                                                                          class="form-control" placeholder="">
+                                                                      <input type="hidden" name="status"
+                                                                          value="{{ $applyleaveDatas->status }}"
+                                                                          class="form-control" placeholder="">
+
+                                                                      <!-- Input fields for request details here -->
+                                                                      <label for="">Reason:*</label>
+
+                                                                      <input type="text" name="reason"
+                                                                          class="form-control" placeholder="Enter Reason"
+                                                                          required>
+                                                                      <label for="">Select Date:*</label>
+                                                                      <input type="date" name="date"
+                                                                          class="form-control yearValidate" maxlength="10"
+                                                                          required>
+                                                                      {{-- validation for year --}}
+                                                                      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                                                      <script>
+                                                                          $(document).ready(function() {
+                                                                              $('.yearValidate').on('change', function() {
+                                                                                  var leaveDate = $('.yearValidate');
+                                                                                  var leaveDateValue = $('.yearValidate').val();
+                                                                                  console.log(leaveDateValue);
+                                                                                  var leaveDateGet = new Date(leaveDateValue);
+                                                                                  var leaveyear = leaveDateGet.getFullYear();
+                                                                                  // console.log(startyear);
+                                                                                  var leaveyearLength = leaveyear.toString().length;
+                                                                                  if (leaveyearLength > 4) {
+                                                                                      alert('Enter four digits for the year');
+                                                                                      leaveDate.val('');
+                                                                                  }
+                                                                              });
+                                                                          });
+                                                                      </script>
+                                                                  </div>
+                                                                  <div class="modal-footer">
+                                                                      <button type="button" class="btn btn-secondary"
+                                                                          data-dismiss="modal">Close</button>
+                                                                      <button type="submit"
+                                                                          class="btn btn-primary">Submit</button>
+                                                                  </div>
+                                                              </div>
+                                                          </form>
+                                                      </div>
+                                                  </div>
+                                              @endif
+                                          @endforeach
+                                      </tbody>
+                                  </table>
+
+                              </div>
+                          </div>
+                      @endif
+
+                      @if (isset($myapplyleaveDatas))
+                          <div class="tab-pane fade" id="pills-user" role="tabpanel" aria-labelledby="pills-user-tab">
+                          @else
+                              <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                  aria-labelledby="pills-home-tab">
+                      @endif
+
+                      <div class="table-responsive">
+                          <table id="example1" class="table display table-bordered table-striped table-hover">
+                              <thead>
+                                  <tr>
+                                      <th>Employee</th>
+                                      <th class="textfixed">Staff Code</th>
+                                      <th>Leave Type</th>
+                                      <th>Approver</th>
+                                      <th class="textfixed">Approver Code</th>
+                                      <th class="textfixed">Reason for Leave</th>
+                                      <th> Leave Period</th>
+                                      <th>Days</th>
+                                      <th class="textfixed">Date of Request</th>
+                                      <th>Status</th>
+                                      <th>Approved</th>
+                                      <th>Reject</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  @foreach ($teamapplyleaveDatas as $applyleaveDatas)
+                                      <tr>
+                                          <td class="textfixed"> <a
+                                                  href="{{ route('applyleave.show', $applyleaveDatas->id) }}">
+                                                  {{ $applyleaveDatas->team_member ?? '' }}</a></td>
+                                          <td>{{ $applyleaveDatas->staffcode ?? '' }}</td>
+                                          <td class="textfixed">
+
+                                              {{ $applyleaveDatas->name ?? '' }}<br>
+                                              @if ($applyleaveDatas->type == '0')
+                                                  <b>Type :</b> <span>Birthday</span><br>
+                                                  <span><b>Birthday Date :
+                                                      </b>{{ date(
+                                                          'd-m-Y',
+                                                          strtotime(
+                                                              App\Models\Teammember::select('dateofbirth')->where('id', $applyleaveDatas->createdby)->first()->dateofbirth,
+                                                          ),
+                                                      ) ?? '' }}</span>
+                                              @elseif($applyleaveDatas->type == '1')
+                                                  <span>Religious Festival</span>
+                                              @endif
+                                              @if ($applyleaveDatas->examtype == '0')
+                                                  <b>Exam Type :</b> <span>PCC</span>
+                                              @elseif($applyleaveDatas->examtype == '1')
+                                                  <b>Exam Type :</b> <span>CA Final</span>
+                                              @elseif($applyleaveDatas->examtype == '2')
+                                                  <b>Exam Type :</b> <span>B.Com</span>
+                                              @endif
+                                              @if ($applyleaveDatas->examtype == '3')
+                                                  <b>Other :</b> <span>{{ $applyleaveDatas->otherexam ?? '' }}</span>
+                                              @endif
+                                          </td>
+
+                                          @php
+                                              $approvelpartner = DB::table('teammembers')
+                                                  ->leftJoin(
+                                                      'teamrolehistory',
+                                                      'teamrolehistory.teammember_id',
+                                                      '=',
+                                                      'teammembers.id',
+                                                  )
+                                                  ->where('teammembers.id', $applyleaveDatas->approver)
+                                                  ->select(
+                                                      'teammembers.team_member',
+                                                      'teammembers.staffcode',
+                                                      'teamrolehistory.newstaff_code',
+                                                      'teamrolehistory.created_at',
+                                                  )
+                                                  ->first();
+
+                                              $datadate = $applyleaveDatas->created_at
+                                                  ? Carbon\Carbon::createFromFormat(
+                                                      'Y-m-d H:i:s',
+                                                      $applyleaveDatas->created_at,
+                                                  )
+                                                  : null;
+
+                                              $permotiondate = null;
+                                              if ($approvelpartner->created_at) {
+                                                  $permotiondate = Carbon\Carbon::createFromFormat(
+                                                      'Y-m-d H:i:s',
+                                                      $approvelpartner->created_at,
+                                                  );
+                                              }
+                                          @endphp
+
+                                          <td class="textfixed">
+                                              {{ $approvelpartner->team_member ?? '' }}
+
+                                          </td>
+                                          <td>
+                                              @if ($permotiondate && $datadate && $datadate->greaterThan($permotiondate))
+                                                  {{ $approvelpartner->newstaff_code }}
+                                              @else
+                                                  {{ $approvelpartner->staffcode }}
+                                              @endif
+                                          </td>
+
+                                          <td class="textfixed">
+                                              @if (strlen($applyleaveDatas->reasonleave) > 25)
+                                                  <span id="reasonleave-{{ $applyleaveDatas->id }}"
+                                                      class="reasonleave-truncated">
+                                                      {{ substr($applyleaveDatas->reasonleave, 0, 25) }}.....
+                                                      <span style="color: #37A000; cursor: pointer;" data-toggle="tooltip"
+                                                          title="Show full text"
+                                                          onclick="showFullText('{{ $applyleaveDatas->reasonleave }}')">View
+                                                          Detail</span>
+                                                  </span>
+                                              @else
+                                                  {{ $applyleaveDatas->reasonleave ?? '' }}
+                                              @endif
+                                          </td>
+
+                                          <td class="textfixed">
+                                              {{ date('d-m-Y', strtotime($applyleaveDatas->from)) ?? '' }} to
+                                              {{ date('d-m-Y', strtotime($applyleaveDatas->to)) ?? '' }}
+                                          </td>
+                                          @php
+                                              $to = Carbon\Carbon::createFromFormat(
+                                                  'Y-m-d',
+                                                  $applyleaveDatas->to ?? '',
+                                              );
+                                              $from = Carbon\Carbon::createFromFormat('Y-m-d', $applyleaveDatas->from);
+                                              $diff_in_days = $to->diffInDays($from) + 1;
+                                              $holidaycount = DB::table('holidays')
+                                                  ->where('startdate', '>=', $applyleaveDatas->from)
+                                                  ->where('enddate', '<=', $applyleaveDatas->to)
+                                                  ->count();
+                                          @endphp
+                                          <td>{{ $diff_in_days - $holidaycount ?? '' }}</td>
+                                          <td> {{ date('d-m-Y', strtotime($applyleaveDatas->created_at)) ?? '' }}</td>
+                                          <td>
+                                              @if ($applyleaveDatas->status == 0)
+                                                  <span class="badge badge-pill badge-warning">Created</span>
+                                              @elseif($applyleaveDatas->status == 1)
+                                                  <span class="badge badge-success">Approved</span>
+                                              @elseif($applyleaveDatas->status == 2)
+                                                  <span class="badge badge-danger">Rejected</span>
+                                              @endif
+                                          </td>
+
+                                          <td>
+                                              @if ($applyleaveDatas->status == 0)
+                                                  <form method="post"
+                                                      action="{{ route('applyleave.update', $applyleaveDatas->id) }}"
+                                                      enctype="multipart/form-data" style="text-align: center;">
+                                                      @method('PATCH')
+                                                      @csrf
+                                                      <input type="text" hidden id="example-date-input" name="status"
+                                                          value="1" class="form-control"
+                                                          placeholder="Enter Location">
+                                                      <button type="submit" class="btn btn-success"
+                                                          style="border-radius: 7px; font-size: 10px; padding: 5px;"
+                                                          onclick="return confirm('Are you sure you want to approve this ?');">
+                                                          Approve</button>
+                                                  </form>
+                                              @endif
+                                          </td>
+                                          <td style="text-align: center;">
+                                              @if ($applyleaveDatas->status == 0)
+                                                  <button data-toggle="modal"
+                                                      data-target="#exampleModal12{{ $loop->index }}"
+                                                      class="btn btn-danger"
+                                                      style="border-radius: 7px; font-size: 10px; padding: 5px; margin-bottom: 16px;">
+                                                      Reject</button>
+                                              @endif
+                                          </td>
+
+                                          <!-- model box / pop up box  -->
+                                          @if ($applyleaveDatas->status == 0)
+                                              <div class="modal fade" id="exampleModal12{{ $loop->index }}"
+                                                  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4"
+                                                  aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header" style="background:#37A000">
+                                                              <h5 style="color: white" class="modal-title font-weight-600"
+                                                                  id="exampleModalLabel1">Reason For
+                                                                  Rejection</h5>
+                                                              <button type="button" class="close" data-dismiss="modal"
+                                                                  aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                              </button>
+                                                          </div>
+                                                          <form method="post"
+                                                              action="{{ url('applyleave/update', $applyleaveDatas->id) }}"
+                                                              enctype="multipart/form-data" id="formdata">
+                                                              @csrf
+                                                              <div class="modal-body">
+                                                                  <div class="row row-sm">
+                                                                      <div class="col-12">
+                                                                          <label for="">Reason : <span
+                                                                                  class="text-danger">*</span> </label>
+                                                                      </div>
+                                                                      <div class="col-12">
+                                                                          <div class="form-group">
+                                                                              {{-- <textarea rows="6" name="remark" class="form-control" placeholder="" id="reasoninput"></textarea> --}}
+                                                                              <textarea rows="6" name="remark" class="form-control" placeholder="" id="reasoninput-{{ $loop->index }}"></textarea>
+                                                                              <input hidden type="text"
+                                                                                  id="example-date-input" name="status"
+                                                                                  value="2" class="form-control"
+                                                                                  placeholder="Enter Reason">
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
+                                                                  <button type="button" class="btn btn-danger"
+                                                                      data-dismiss="modal">Close</button>
+                                                                  {{-- <button type="submit" style="float: right"
+                                                                          class="btn btn-success" id="saveform">Save
+                                                                      </button> --}}
+
+                                                                  <button type="submit" style="float: right"
+                                                                      class="btn btn-success saveform"
+                                                                      id="saveform-{{ $loop->index }}">Save</button>
+                                                              </div>
+                                                          </form>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <script>
+                                                  $(document).ready(function() {
+                                                      $('#exampleModal12{{ $loop->index }}').on('hidden.bs.modal', function() {
+                                                          $(this).find('form')[0].reset();
+                                                      });
+                                                  });
+                                              </script>
+                                          @endif
+                                      </tr>
+                                  @endforeach
+                              </tbody>
+                          </table>
+                      </div>
+
+                  </div>
+              </div>
+	  
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\applyleaveform.blade.php
+
+{{-- <p>
+    To approve or reject the request, please click <a href="{{ url('/applyleave/' . $id) }}">here</a>.
+</p> --}}
+<p>
+    To approve or reject the request, please click <a href="{{ url('/openleave/0?id=' . $id) }}">here</a>.
+</p>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+  public function update(Request $request, $id)
+  find return redirect('applyleave')->with('success', $output);
+  
+  
+      $output = array('msg' => 'Updated Successfully');
+      // return redirect('applyleave')->with('success', $output);
+
+      $urlheader = $request->headers->get('referer');
+      $url = parse_url($urlheader);
+      $path = $url['path'];
+      $query = $url['query'] ?? null;
+
+      if ($path == '/openleave/0' && $query) {
+        return back()->with('success', $output);
+      } else {
+        return redirect('applyleave')->with('success', $output);
+      }
+	  
+	  
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+public function open_leave($id)
+
+    $leaveId = request()->query('id');
+    if (!$leaveId) {
+	
+	
+	
+	rest of code 
+	
+	
+	
+	
+	   } else {
+      $teamapplyleaveDatas  = DB::table('applyleaves')
+        ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+        ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+        ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        ->where('applyleaves.approver', auth()->user()->teammember_id)
+        // ->where('applyleaves.status', 0)
+        ->where('applyleaves.id',  $leaveId)
+        ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->get();
+
+      return view('backEnd.applyleave.openindex', compact(
+        'teamapplyleaveDatas'
+      ));
+    }
+	
+	
+
+
+
+1.The client wants the URL to redirect to the open leave page when the partner clicks on the 'Here' button in the email ```end
+
+vsalocal, vsademo ```end hare 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
