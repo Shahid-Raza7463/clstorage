@@ -203,37 +203,40 @@ OFF100003 official travel
 1.live vsademo credential
 http://127.0.0.1:8000/teamstatus?status=1
 
+
+Link : https://vsademo.capitall.io
+Email : sukhbahadur1993@gmail.com
+Password : Sukh@2023
+Role : Admin
+447
+
 Link : https://vsademo.capitall.io
 Email : Harish@capitall.io
 Password : Sukh@2024
 Role : Partner
+933
 
 
-Staff
 Link : https://vsademo.capitall.io
 Email : Guneet@capitall.io
 Password : R9QhzV2vyt@2023
-
-
-Super admin- sukhbahadur1993@gmail.com
-password - Sukh@2023
-447
-
-Staff - Guneet@capitall.io
-password - Azaz~12345
+Role : Staff
 937
 
-Partner - harish@capitall.io
-password - Sukh@2024
-933
-
-Manager : poojakumari@capitall.io
+Link : https://vsademo.capitall.io
+Email : poojakumari@capitall.io
 Password : Poja@2024
+Role : Manager
 936
 
-simmi@capitall.io
-PW -Sims@123
 
+Link : https://vsademo.capitall.io
+Email : simmi@capitall.io
+Password : Sims@123
+Role : Partner
+935
+
+i ma working with atishay sir to UAT
 
 222222222222222222222222222222222222222222222222222222222
 regarding table 
@@ -275,6 +278,7 @@ update for testing only on vsademo
 
 07.applyleaves  
 08.attendances
+
 
 
 i am am working on it yah kal tak ho jayega aur isme multiple scenreion hai jise mujhe retest karna par raha hai 
@@ -400,8 +404,8 @@ ye 12 table chahiye vsalive se
 
 
 
-// maine ye bugs check kiya hai simmi maam ke saath isme koi issue nahi hai ye client ke according sahi run kar rahi hai and maine simmi maam ko explain bhi kar diya hai ok 
 
 
+222222222222222222222222222222
 
 

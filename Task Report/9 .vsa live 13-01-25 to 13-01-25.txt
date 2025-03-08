@@ -394,7 +394,7 @@ replace it
 								  
 1.Implement a calendar feature on the Add Timesheet page.  ```end hare
 
-vsalocal vsademo vsalive, ```end hare 
+
 
 
 
@@ -404,11 +404,22 @@ app\Http\Controllers\ApplyleaveController.php
 
  elseif ($request->leavetype == 9) {  add this below code before   foreach ($period as $date) {
 
+       $to = Carbon::createFromFormat('Y-m-d', $request->to ?? '');
+        $from = Carbon::createFromFormat('Y-m-d', $request->from);
+        $requestdays = $to->diffInDays($from) + 1;
+        $period = CarbonPeriod::create($request->from, $request->to);
+        $datess = [];
+
         // Calculate the total number of days (inclusive of both start and end dates)
         $totaldayscount = $to->diffInDays($from) + 1;
         if ($totaldayscount > 10) {
           return back()->with('statuss', ['msg' => 'You cannot apply casual leave for more than 10 days']);
         }
+		
+		
+
+
+
 
 
 
@@ -417,6 +428,7 @@ app\Http\Controllers\ApplyleaveController.php
 
 
 13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days ) ```start
+Restrict admin and partner from rejecting casual leave and exam leave timesheets data if submitted.
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\weeklylist.blade.php
 find text  <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
@@ -441,12 +453,18 @@ find text  <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
 
 
 
+
+
+
+
+
+
 Move the Edit button to the first position on the Timesheet Saved Listing page. ```start
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\index.blade.php
 
 
-                                    <th>Action</th>
+                                   <th>Action</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                     <th>Day</th>
@@ -504,7 +522,7 @@ find text
                                                 delete blocked
                                             @endif
                                         </td>
-                                        <td>
+                  <td>
                                             @if ($client_id->status == 0)
                                                 <span class="badge badge-pill badge-warning">saved</span>
                                             @else
@@ -514,7 +532,7 @@ find text
 										
 										
 					
-
+ <td>{{ $total }}</td>
 remove this td 
 
                                          <td>
@@ -601,6 +619,10 @@ remove this td
 
 
 
+
+
+
+
 end hare
 
 7.The client wants to fix the ordering of data in the assignment folder based on date and time ```start
@@ -656,15 +678,17 @@ find text @endsection after this line add below code
 
 
 
+
+
 end hare
 
-timesheet delete logs ```start
+timesheet delete logs ```start  check on live
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
-replace this line 
+public function destroy(Request $request, $id)
+replace this line  and 
 
-  public function destroy(Request $request, $id)
   
   
 find text  DB::table('timesheetusers')->where('timesheetid', $id)->delete();  after this line add this code 
@@ -682,12 +706,14 @@ find text  DB::table('timesheetusers')->where('timesheetid', $id)->delete();  af
         'updated_at' => now(),
       ]);
   
+  
+  
+ 
  
  
  
 end hare
   
-
 28.Replace "Miss" with "Ms." across all places on the portal. ((implementation)) start````
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 titles table me 
@@ -733,7 +759,7 @@ resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
  1
 
 
-                                            @if ($hasopenRequests)
+                                           @if ($hasopenRequests)
                                                 <th>Action</th>
                                             @endif
 											
@@ -756,13 +782,15 @@ resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
                                                         @endif
                                                     @endif
                                                 </td>
-
+												
+												
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 find public function savedtimesheetEdit(Request $request, $id)  add this fun aftr it 
 
+    //! When we update this function from vsalocal then please update partner varable becouse client want to hide admin name sukhbahadur
   public function timesheetrequestform(Request $request, $id)
   {
 
@@ -786,22 +814,30 @@ find public function savedtimesheetEdit(Request $request, $id)  add this fun aft
 
 
     if (auth()->user()->role_id == 13) {
-      $partner = DB::table('teammembers')
-        ->where('role_id', '=', 11)
-        ->whereNotIn('id', [447])
-        ->where('status', '=', 1)
-        ->where('team_member', '!=', 'Partner')
-        ->select('id', 'team_member', 'staffcode')
-        ->get();
+      // for vsalive 
+      // $partner = DB::table('teammembers')
+      //   ->where('role_id', '=', 11)
+      //   ->whereNotIn('id', [447])
+      //   ->where('status', '=', 1)
+      //   ->where('team_member', '!=', 'Partner')
+      //   ->select('id', 'team_member', 'staffcode')
+      //   ->get();
+
+      // for vsademo 
+      $partner = Teammember::where('role_id', '=', 11)->where('status', '=', 1)->where('team_member', '!=', 'Partner')->with('title')->get();
     } else {
-      $partner = DB::table('teammembers')
-        ->whereNotIn('id', [887, 663, 841, 836, 843, 447])
-        ->where('role_id', '=', 13)
-        ->where('status', '=', 1)
-        ->select('id', 'team_member', 'staffcode')
-        ->orderBy('team_member', 'asc')
-        // ->distinct()
-        ->get();
+      // for vsalive 
+      // $partner = DB::table('teammembers')
+      //   ->whereNotIn('id', [887, 663, 841, 836, 843, 447])
+      //   ->where('role_id', '=', 13)
+      //   ->where('status', '=', 1)
+      //   ->select('id', 'team_member', 'staffcode')
+      //   ->orderBy('team_member', 'asc')
+      //   // ->distinct()
+      //   ->get();
+      // for vsademo 
+      $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+        ->orderBy('team_member', 'asc')->get();
     }
 
     // dd($timesheetrequestedit);
@@ -815,14 +851,20 @@ find public function savedtimesheetEdit(Request $request, $id)  add this fun aft
 
 
 
+
+
+
+
 Route::get('/timesheetrequestform/{id}',  [TimesheetController::class, 'timesheetrequestform']);
+
+
 
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\timesheetrequestedit.blade.php
-
+replace all code 
 
 {{-- library  --}}
 <link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
@@ -957,7 +999,12 @@ resources\views\backEnd\timesheet\timesheetrequestedit.blade.php
 
 
 
+
+
+
 Route::post('/timesheetrequestupdate',  [TimesheetController::class, 'timesheetrequestupdate']);
+
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
@@ -1035,6 +1082,8 @@ add this fun  public function savedtimesheeteditstore(Request $request)
 
 
 
+
+
 is function me file store hota hai so please connect s3
  $destinationPath = public_path('backEnd/image/confirmationfile');
 
@@ -1042,7 +1091,8 @@ is function me file store hota hai so please connect s3
 end hare 
 
 
-vsalocal vsademo, ```end hare 
+vsalocal vsademo vsalive, ```end hare 
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php

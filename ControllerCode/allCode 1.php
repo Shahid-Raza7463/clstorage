@@ -4569,6 +4569,17 @@ if ($permotioncheck && auth()->user()->role_id == 13) {
 // Start Hare 
 //* resize image / regarding image
 // Start Hare 
+// Start Hare 
+if ($request->hasFile('profilepic')) {
+  $avatar = $request->file('profilepic');
+  $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+  // public\backEnd\image\confirmationfile
+  $destinationPath = public_path('backEnd/image/teammember/profilepic');
+  // Save the image directly without resizing
+  $avatar->move($destinationPath, $filename);
+  $data['profilepic'] = $filename;
+}
+// Start Hare 
 $assign = Teammember::where('role_id', 14)->latest()->get();
 if ($request->hasFile('profilepic')) {
   $avatar = $request->file('profilepic');

@@ -67,12 +67,668 @@
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
-{{-- * regarding  --}}
+{{-- * regarding pure javascript / regarding javascript --}}
 {{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+<input type="text" name="mobile_no" placeholder="Enter Mobile No">
+<button id="submitBtn">Submit</button>
+
+<script>
+    document.getElementById("submitBtn").addEventListener("click", function(event) {
+        var mobile_no = document.querySelector("[name='mobile_no']").value;
+
+        // Check if input contains only digits
+        if (!/^\d+$/.test(mobile_no)) {
+            alert("Enter mobile number using only digits!");
+            document.querySelector("[name='mobile_no']").value = ''; // Clear input
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
+
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding form submit / on submit / onsubmit / regarding validation  --}}
 {{--  Start Hare  --}}
+@if (Request::is('teammember/*/edit') || Request::is('teammember/create'))
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            //  alert('hi');
+            // Condition on form submit
+            $('form').submit(function(event) {
+                //  alert('hi');
+                var mobile_no = $("[name='mobile_no']").val();
+                var emergencycontactnumber = $("[name='emergencycontactnumber']").val();
+                var mothernumber = $("[name='mothernumber']").val();
+                var fathernumber = $("[name='fathernumber']").val();
+
+                var profilepic = $("[name='profilepic']").val().trim();
+                // file extensions
+                var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+                var bankaccountnumber = $("[name='bankaccountnumber']").val();
+
+                var adharcardnumber = $("[name='adharcardnumber']").val();
+
+                var pancardno = $("[name='pancardno']").val().trim();
+                // PAN Card Pattern AAAAA9999A will be like it
+                var panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+                var personalemail = $("[name='personalemail']").val().trim();
+                var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                var dateofbirth = $("[name='dateofbirth']").val();
+                var joining_date = $("[name='joining_date']").val();
+                var leavingdate = $("[name='leavingdate']").val();
+                // Get today's date
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                var dob = new Date(dateofbirth);
+                var joiningdate = new Date(joining_date);
+                var leavingdateformate = new Date(leavingdate);
+
+                // Check digit
+                if (!/^\d+$/.test(mobile_no)) {
+                    alert('Enter mobile number using only digits');
+                    // $("[name='mobile_no']").val('');
+                    $("[name='mobile_no']").focus();
+                    // Prevent form submission
+                    event.preventDefault();
+                    return false;
+                }
+                if (!/^\d+$/.test(emergencycontactnumber)) {
+                    alert('Enter emergency mobile number using only digits');
+                    // $("[name='emergencycontactnumber']").val('');
+                    $("[name='emergencycontactnumber']").focus();
+                    // Prevent form submission
+                    event.preventDefault();
+                    return false;
+                }
+
+                if (adharcardnumber && !/^\d+$/.test(adharcardnumber)) {
+                    alert('Enter aadhar number using only digits');
+                    // $("[name='adharcardnumber']").val('');
+                    $("[name='adharcardnumber']").focus();
+                    // Prevent form submission
+                    event.preventDefault();
+                    return false;
+                }
+
+                if (mothernumber && !/^\d+$/.test(mothernumber)) {
+                    alert('Enter mother mobile number using only digits');
+                    // $("[name='mobile_no']").val('');
+                    $("[name='mothernumber']").focus();
+                    // Prevent form submission
+                    event.preventDefault();
+                    return false;
+                }
+
+                if (fathernumber && !/^\d+$/.test(fathernumber)) {
+                    alert('Enter father mobile number using only digits');
+                    // $("[name='mobile_no']").val('');
+                    $("[name='fathernumber']").focus();
+                    // Prevent form submission
+                    event.preventDefault();
+                    return false;
+                }
+                if (bankaccountnumber && !/^\d+$/.test(bankaccountnumber)) {
+                    alert('Enter bank account number using only digits');
+                    // $("[name='mobile_no']").val('');
+                    $("[name='bankaccountnumber']").focus();
+                    // Prevent form submission
+                    event.preventDefault();
+                    return false;
+                }
+
+                // // Check if email is valid
+                if (!emailPattern.test(personalemail)) {
+                    alert("Enter a valid email address ");
+                    // $("[name='personalemail']").val('');
+                    $("[name='personalemail']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                // date of birth is in the future
+                if (dob > today) {
+                    alert("Date of Birth cannot be in the future");
+                    // $("[name='dateofbirth']").val('');
+                    $("[name='dateofbirth']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                // date of joining is in the future
+                if (joiningdate > today) {
+                    alert("Date of joinig cannot be in the future");
+                    // $("[name='dateofbirth']").val('');
+                    $("[name='joining_date']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+                // date of leavingdateformate is in the future
+                if (leavingdateformate > today) {
+                    alert("Date of leaving cannot be in the future");
+                    // $("[name='dateofbirth']").val('');
+                    $("[name='leavingdate']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                if (!panPattern.test(pancardno)) {
+                    alert("Enter a valid PAN Card number like AAAAA9999A");
+                    // $("[name='pancardno']").val('');
+                    $("[name='pancardno']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                if (profilepic && !allowedExtensions.test(profilepic)) {
+                    // 'filess.*' => 'mimes:png,jpg,jpeg,csv,xlx,xls,pdf,zip,rar',
+                    alert("Profile picture must be in JPG, JPEG, or PNG format");
+                    $("[name='profilepic']").val('');
+                    $("[name='profilepic']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+@endif
+
+{{--  Start Hare optimized  --}}
+
+
+{{--  Start Hare optimized  --}}
+@if (Request::is('teammember/*/edit') || Request::is('teammember/create'))
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('form').submit(function(event) {
+                let fields = {
+                    mobile_no: "Mobile Number",
+                    emergencycontactnumber: "Emergency Contact Number",
+                    mothernumber: "Mother's Mobile Number",
+                    fathernumber: "Father's Mobile Number",
+                    bankaccountnumber: "Bank Account Number",
+                    adharcardnumber: "Aadhar Number",
+                };
+
+                for (let field in fields) {
+                    let value = $("[name='" + field + "']").val();
+                    if (value && !/^\d+$/.test(value)) {
+                        alert(`Enter ${fields[field]} using only digits`);
+                        $("[name='" + field + "']").focus();
+                        event.preventDefault();
+                        return false;
+                    }
+                }
+
+                let profilepic = $("[name='profilepic']").val().trim();
+                let allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                if (profilepic && !allowedExtensions.test(profilepic)) {
+                    alert("Profile picture must be in JPG, JPEG, or PNG format");
+                    $("[name='profilepic']").val('').focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                let pancardno = $("[name='pancardno']").val().trim();
+                let panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+                if (!panPattern.test(pancardno)) {
+                    alert("Enter a valid PAN Card number like AAAAA9999A");
+                    $("[name='pancardno']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                let personalemail = $("[name='personalemail']").val().trim();
+                let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailPattern.test(personalemail)) {
+                    alert("Enter a valid email address");
+                    $("[name='personalemail']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+
+                let today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                let dates = {
+                    dateofbirth: "Date of Birth",
+                    joining_date: "Date of Joining",
+                    leavingdate: "Date of Leaving",
+                };
+
+                for (let dateField in dates) {
+                    let dateValue = $("[name='" + dateField + "']").val();
+                    if (dateValue) {
+                        let selectedDate = new Date(dateValue);
+                        if (selectedDate > today) {
+                            alert(`${dates[dateField]} cannot be in the future`);
+                            $("[name='" + dateField + "']").focus();
+                            event.preventDefault();
+                            return false;
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+@endif
+{{--  Start Hare optimized  --}}
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            // Function to check if input contains only digits
+            function isValidNumber(fieldName, fieldLabel) {
+                var value = $("[name='" + fieldName + "']").val();
+                if (!/^\d+$/.test(value)) {
+                    alert(`Enter ${fieldLabel} using only digits`);
+                    $("[name='" + fieldName + "']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+                return true;
+            }
+
+            // Function to check if date is in the future
+            function isValidDate(fieldName, fieldLabel) {
+                var dateValue = $("[name='" + fieldName + "']").val();
+                if (!dateValue) return true; // Skip if the field is empty
+                var inputDate = new Date(dateValue);
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (inputDate > today) {
+                    alert(`${fieldLabel} cannot be in the future`);
+                    $("[name='" + fieldName + "']").focus();
+                    event.preventDefault();
+                    return false;
+                }
+                return true;
+            }
+
+            // Check mobile numbers and other numeric fields
+            var numericFields = [{
+                    field: "mobile_no",
+                    label: "mobile number"
+                },
+                {
+                    field: "emergencycontactnumber",
+                    label: "emergency contact number"
+                },
+                {
+                    field: "mothernumber",
+                    label: "mother's number"
+                },
+                {
+                    field: "fathernumber",
+                    label: "father's number"
+                },
+                {
+                    field: "bankaccountnumber",
+                    label: "bank account number"
+                },
+                {
+                    field: "adharcardnumber",
+                    label: "Aadhar number"
+                }
+            ];
+
+            for (var i = 0; i < numericFields.length; i++) {
+                if (!isValidNumber(numericFields[i].field, numericFields[i].label)) return false;
+            }
+
+            // Validate email format
+            var personalemail = $("[name='personalemail']").val().trim();
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(personalemail)) {
+                alert("Enter a valid email address!");
+                $("[name='personalemail']").focus();
+                event.preventDefault();
+                return false;
+            }
+
+            // Validate date fields (must not be in the future)
+            var dateFields = [{
+                    field: "dateofbirth",
+                    label: "Date of Birth"
+                },
+                {
+                    field: "joining_date",
+                    label: "Joining Date"
+                },
+                {
+                    field: "leavingdate",
+                    label: "Leaving Date"
+                }
+            ];
+
+            for (var j = 0; j < dateFields.length; j++) {
+                if (!isValidDate(dateFields[j].field, dateFields[j].label)) return false;
+            }
+
+            // Validate PAN Card format
+            var pancardno = $("[name='pancardno']").val().trim();
+            var panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+            if (!panPattern.test(pancardno)) {
+                alert("Enter a valid PAN Card number (e.g., AAAAA9999A)");
+                $("[name='pancardno']").focus();
+                event.preventDefault();
+                return false;
+            }
+
+            // Validate Profile Picture File Type
+            var profilepic = $("[name='profilepic']").val().trim();
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+            if (profilepic && !allowedExtensions.test(profilepic)) {
+                alert("Profile picture must be in JPG, JPEG, or PNG format");
+                $("[name='profilepic']").focus();
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+{{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        // Condition on form submit
+        $('form').submit(function(event) {
+            var mobile_no = $("[name='mobile_no']").val();
+            var emergencycontactnumber = $("[name='emergencycontactnumber']").val();
+            var mothernumber = $("[name='mothernumber']").val();
+            var fathernumber = $("[name='fathernumber']").val();
+
+            var profilepic = $("[name='profilepic']").val().trim();
+            // file extensions
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+            var bankaccountnumber = $("[name='bankaccountnumber']").val();
+
+            var adharcardnumber = $("[name='adharcardnumber']").val();
+
+            var pancardno = $("[name='pancardno']").val().trim();
+            // PAN Card Pattern AAAAA9999A will be like it
+            var panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+            var personalemail = $("[name='personalemail']").val().trim();
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            var dateofbirth = $("[name='dateofbirth']").val();
+            var joining_date = $("[name='joining_date']").val();
+            var leavingdate = $("[name='leavingdate']").val();
+            // Get today's date
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            var dob = new Date(dateofbirth);
+            var joiningdate = new Date(joining_date);
+            var leavingdateformate = new Date(leavingdate);
+
+            // Check digit
+            if (!/^\d+$/.test(mobile_no)) {
+                alert('Enter mobile number using only digits');
+                // $("[name='mobile_no']").val('');
+                $("[name='mobile_no']").focus();
+                // Prevent form submission
+                event.preventDefault();
+                return false;
+            }
+            if (!/^\d+$/.test(emergencycontactnumber)) {
+                alert('Enter emergencycontactnumber using only digits');
+                // $("[name='emergencycontactnumber']").val('');
+                $("[name='emergencycontactnumber']").focus();
+                // Prevent form submission
+                event.preventDefault();
+                return false;
+            }
+
+            if (!/^\d+$/.test(adharcardnumber)) {
+                alert('Enter aadhar number using only digits');
+                // $("[name='adharcardnumber']").val('');
+                $("[name='adharcardnumber']").focus();
+                // Prevent form submission
+                event.preventDefault();
+                return false;
+            }
+
+            if (!/^\d+$/.test(mothernumber)) {
+                alert('Enter mobile number using only digits');
+                // $("[name='mobile_no']").val('');
+                $("[name='mothernumber']").focus();
+                // Prevent form submission
+                event.preventDefault();
+                return false;
+            }
+
+            if (fathernumber && !/^\d+$/.test(fathernumber)) {
+                alert('Enter mobile number using only digits');
+                // $("[name='mobile_no']").val('');
+                $("[name='fathernumber']").focus();
+                // Prevent form submission
+                event.preventDefault();
+                return false;
+            }
+            if (!/^\d+$/.test(bankaccountnumber)) {
+                alert('Enter bank account number using only digits');
+                // $("[name='mobile_no']").val('');
+                $("[name='bankaccountnumber']").focus();
+                // Prevent form submission
+                event.preventDefault();
+                return false;
+            }
+
+            // // Check if email is valid
+            if (!emailPattern.test(personalemail)) {
+                alert("Enter a valid email address!");
+                // $("[name='personalemail']").val('');
+                $("[name='personalemail']").focus();
+                event.preventDefault();
+                return false;
+            }
+
+            // date of birth is in the future
+            if (dob > today) {
+                alert("Date of Birth cannot be in the future");
+                // $("[name='dateofbirth']").val('');
+                $("[name='dateofbirth']").focus();
+                event.preventDefault();
+                return false;
+            }
+
+            // date of joining is in the future
+            if (joiningdate > today) {
+                alert("Date of Birth cannot be in the future");
+                // $("[name='dateofbirth']").val('');
+                $("[name='dateofbirth']").focus();
+                event.preventDefault();
+                return false;
+            }
+            // date of leavingdateformate is in the future
+            if (leavingdateformate > today) {
+                alert("Date of leavingdate cannot be in the future");
+                // $("[name='dateofbirth']").val('');
+                $("[name='leavingdate']").focus();
+                event.preventDefault();
+                return false;
+            }
+
+            if (!panPattern.test(pancardno)) {
+                alert("Enter a valid PAN Card number like AAAAA9999A");
+                // $("[name='pancardno']").val('');
+                $("[name='pancardno']").focus();
+                event.preventDefault();
+                return false;
+            }
+
+            if (profilepic && !allowedExtensions.test(profilepic)) {
+                // 'filess.*' => 'mimes:png,jpg,jpeg,csv,xlx,xls,pdf,zip,rar',
+                alert("Profile picture must be in JPG, JPEG, or PNG format");
+                $("[name='profilepic']").focus();
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#startdate').on('change', function() {
+            var startclear = $('#startdate');
+            var startDateInput1 = $('#startdate').val();
+            var startDate = new Date(startDateInput1);
+            var startyear = startDate.getFullYear();
+            var yearLength = startyear.toString().length;
+            if (yearLength > 4) {
+                alert('Enter four digits for the year');
+                startclear.val('');
+            }
+        });
+
+        $('#enddate').on('change', function() {
+            var endclear = $('#enddate');
+            var endDateInput1 = $('#enddate').val();
+            var endtDate = new Date(endDateInput1);
+            var endyear = endtDate.getFullYear();
+            var endyearLength = endyear.toString().length;
+            if (endyearLength > 4) {
+                alert('Enter four digits for the year');
+                endclear.val('');
+            }
+        });
+
+        //   condition on submit
+        $('form').submit(function(event) {
+            var year = $('#year').val();
+            var startdate = $('#startdate').val();
+            var enddate = $('#enddate').val();
+
+            var teammemberId = $('#teammemberId').val();
+            var clientId = $('#clientId').val();
+            var assignmentId = $('#assignmentId').val();
+
+            var startclear = $('#startdate');
+            var startDateInput1 = $('#startdate').val();
+            var startDate = new Date(startDateInput1);
+            var startyear = startDate.getFullYear();
+            var yearvalue = $('#year').val();
+            if (year && startdate) {
+                if (yearvalue != startyear) {
+                    alert('Enter Start Date According Year');
+                    startclear.val('');
+                    // Prevent form submission
+                    event.preventDefault();
+                    // Exit the function
+                    return;
+                }
+            }
+
+            var endclear = $('#enddate');
+            var endDateInput1 = $('#enddate').val();
+            var endtDate = new Date(endDateInput1);
+            var endyear = endtDate.getFullYear();
+            var yearvalue = $('#year').val();
+            if (year && enddate) {
+                if (yearvalue != endyear) {
+                    alert('Enter End Date According Year');
+                    endclear.val('');
+                    // Prevent form submission
+                    event.preventDefault();
+                    // Exit the function
+                    return;
+                }
+            }
+
+            if (year === "" && startdate === "" && enddate === "") {
+                alert("Please select year.");
+                event.preventDefault();
+                return;
+            }
+            if (startdate !== "" && enddate === "") {
+                alert("Please select End date.");
+                event.preventDefault();
+                return;
+            }
+            @if (Auth::user()->role_id == 11 ||
+                    Request::is('adminsearchtimesheet') ||
+                    (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+
+                //   if (clientId !== "" && assignmentId !== "" && teammemberId !== "") {
+                //       alert("Please select only Employee name/ Client name/ Assignment name.");
+                //       event.preventDefault();
+                //       return;
+                //   }
+
+                //   if (teammemberId !== "" && clientId !== "") {
+                //       alert("Please select only Employee name/ Client name.");
+                //       event.preventDefault();
+                //       return;
+                //   }
+                //   if (teammemberId !== "" && assignmentId !== "") {
+                //       alert("Please select only Employee name/ Assignment name.");
+                //       event.preventDefault();
+                //       return;
+                //   }
+            @endif
+        });
+    });
+</script>
+
+
+<script>
+    $(function() {
+        // select client 1
+        $('#detailsForm').on('submit', function(e) {
+            var clientvalue = $('#client').val();
+            var assmentvalue = $('#assignment').val();
+            var partnervalue = $('#partner').val();
+
+            if (clientvalue != "" || clientvalue != "Select Client") {
+                if (assmentvalue == "Select Assignment" || assmentvalue == "") {
+                    alert("Please select a assignment");
+                    e.preventDefault();
+                    $('#assignment1').focus();
+                } else if (partnervalue == "Select Partner" || partnervalue == "") {
+                    alert("Please select a partner");
+                    e.preventDefault();
+                    $('#partner1').focus();
+                }
+            }
+        });
+
+    });
+</script>
+
+
+<script>
+    $(function() {
+        // select client 1
+        $('#detailsForm').on('submit', function(e) {
+            var clientvalue = $('#client').val();
+            var assmentvalue = $('#assignment').val();
+            var partnervalue = $('#partner').val();
+
+            if (clientvalue != "" || clientvalue != "Select Client") {
+                if (assmentvalue == "Select Assignment" || assmentvalue == "") {
+                    alert("Please select a assignment");
+                    e.preventDefault();
+                    $('#assignment1').focus();
+                } else if (partnervalue == "Select Partner" || partnervalue == "") {
+                    alert("Please select a partner");
+                    e.preventDefault();
+                    $('#partner1').focus();
+                }
+            }
+        });
+
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
@@ -1375,8 +2031,8 @@ return response()->json(['error' => 'Invalid request'], 400);
     <div class="col-12">
         <div class="form-group">
             <label class="font-weight-600">Announcement Content *</label>
-            <textarea rows="4" name="mail_content" class="centered form-control" id="summernote" placeholder="Enter Description"
-                id="editors" style="height:500px;"></textarea>
+            <textarea rows="4" name="mail_content" class="centered form-control" id="summernote"
+                placeholder="Enter Description" id="editors" style="height:500px;"></textarea>
         </div>
     </div>
 </div>

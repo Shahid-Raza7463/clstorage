@@ -1335,22 +1335,23 @@ Client wants to add multiple partner in lead partner and other partner column
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 1.Changes will be applied on the Assignment Creation page. `````````````````
 
-2.Changes will be applied on the Add Timesheet page.````````  //// 1111111111
-   2.1 Modification on client select box and assignment select box /////// 11111111
-   2.1 Total hour update on timesheet create ```//////
-   2.2 Total hour update on timesheet delete for only users  ````//////
-   2.3 Total hour update on timesheet edit `````//////
+2.Changes will be applied on the Add Timesheet page
+   2.1 Modification on client select box and assignment select box on add timesheet page 7`````` 11111111
+   2.1 Total hour update on timesheet create 8``` 1111111111
+   2.2 Total hour update on timesheet delete for only users  9```` 1111111
+   2.3 Total hour update on timesheet edit 10 ````` 111111
 
-3.Changes will be applied in the Partner Section on the Assignment Details page.```````` //// 11111111
+3.Changes will be applied in the Partner Section on the Assignment Details page.  1```````` 1111 
 
-4.Changes will be applied on the Independence Confirmation page. ````````````````` ///// 111111111
+4.Changes will be applied on the Independence Confirmation page. 2````````````````` ///// 111111
+  
+6.when partner added on that time mail also will be sent mail 3````````````````````////// 111111111
 
-5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified ````````````//////   11111111111
+7.home pahe per count 15   4 ///// 11111111
+8. data will be on click 15 5 ////// 111111111111
 
-6.when partner added on that time mail also will be sent mail ````````````````````////// 11111111111
-
-7.home pahe per count 15   ///// 1111111111111
-8. data will be on click 15 ////// 111111111111111111
+5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified  6 ````````````////// 111111111111 
+http://127.0.0.1:8000/yearwise?year=2024&&clientid=140  vsademo
 
 
 838
@@ -1361,7 +1362,15 @@ january month
 travel 1 hai bta 2 hai
 
 
-sachin 1040 
+vsademo
+1.one assignment me will be not leadpartner, otherpartner , assignmentteammaping 
+2.only will be exit leadpartner
+MNA100030
+MAN100044
+
+
+
+
 
 2222222222222222222222222222222222222
 client
@@ -1372,3 +1381,65 @@ client
 
 I have checked this, and everything is fine except the mail integration, which is not implemented. I will integrate it
 the approver is still Harish which is why it wasn't visible in Simmi's ID. You had selected it in the dropdown but didn’t save it, so it didn’t reflect in Simmi’s ID Please check again
+
+
+
+
+I am working on profile validation
+222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+5.  fill data and click submit button
+
+Steps: 2
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Add Teammember.
+5.  fill data and click submit button
+
+
+
+1.	All mandatory fields are required.
+2.	Profile picture should be in .jpg, .jpeg, or .png format.
+3.	Personal Email ID should be valid.
+4.	Mobile Number should contain only digits, not text.
+5.	Emergency Mobile Number should contain only digits, not text.
+6.	Date of Birth should not be in the future.
+7.	Aadhaar Number should contain only digits, not text.
+8.	PAN Card Number should be valid.
+9.	Mother's Mobile Number should contain only digits, not text.
+10.	Father's Mobile Number should contain only digits, not text.
+11.	Bank Account Number should contain only digits, not text.
+12.	Joining Date should not be in the future.
+13.	Leaving Date should not be in the future.
+
+
+
+22222222222222222222222222
+
+
+1.mandatry filed requared ``````
+2.mobile number should be not text 
+3.Adhhar number should not be text 
+4.IN PAN CARD FIELD, validation on digit and space.
+5Bank proof view filed will be fix 
+6.validation on leaving date user can not select in future 
+933
+
+
+I have uploaded tasks on VSAdemo, and functional testing has been completed
+
+3.Approved Leave Count visible to user..
+
+
+atishay 
+1. timesheet request seplrate on 
+signout 
+
+
+222222222222222222222222222222222222222222

@@ -1,7 +1,91 @@
 
 task se related bugs task wale file me hi daale aur other bugs yaha dale 
 
-vsalive, vsalocal 			
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+
+vsademo 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+  public function index()
+ if (auth()->user()->role_id == 11) {
+
+
+        if (auth()->user()->role_id == 11) {
+            $teammemberDatas = Teammember::with(['title', 'role'])
+                ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                ->whereNotIn('teammembers.id', [793, 878, 447])
+                ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+                ->get();
+
+            // $teammemberDatas = Teammember::with(['title', 'role'])
+            //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            //     ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+            //     ->whereNotIn('teammembers.id', [793, 878, 447])
+            //     ->select([
+            //         'teammembers.*',
+            //         'teamrolehistory.newstaff_code',
+            //         // Combine leavingdate and joiningdate
+            //         DB::raw('COALESCE(teamrolehistory.rejoiniedexitdate, rejoiningsamepost.rejoiniedexitdate, teammembers.leavingdate) AS final_leavingdate'),
+            //         DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date) AS final_joiningdate'),
+            //     ])
+            //     // ->groupBy('teammembers.id')
+            //     ->get();
+            // dd($teammemberDatas);
+
+            return view('backEnd.teammember.index', compact('teammemberDatas'));
+        }
+
+
+
+
+resources\views\backEnd\teammember\index.blade.php
+1
+<td>{{ date('d-m-Y', strtotime($teammemberData->joining_date)) }}</td>
+                                    @else
+                                        <td>{{ date('d-m-Y', strtotime($teammemberData->joining_date)) }}</td>
+                                        {{-- <td>{{ date('d-m-Y', strtotime($teammemberData->final_joiningdate)) }}</td> --}}
+                                    @endif
+									
+									
+
+2
+ <td>{{ date('d-m-Y', strtotime($teammemberData->leavingdate)) }}</td>
+                                    @else
+                                        <td>{{ date('d-m-Y', strtotime($teammemberData->leavingdate)) }}</td>
+                                        {{-- <td>{{ date('d-m-Y', strtotime($teammemberData->final_leavingdate)) }}</td> --}}
+                                    @endif
+
+
+
+
+vsademo,			
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\index.blade.php
+
+   <td>{{ date('F d,Y', strtotime($teammemberData->leavingdate)) }}</td>
+   
+ replace it 
+ 
+  <td>{{ date('d-m-Y', strtotime($teammemberData->leavingdate)) }}</td>
+
+
+
+vsalive, vsalocal, vsademo 			
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\js.blade.php
 
@@ -9,7 +93,7 @@ find text   // Declare endDate outside of the conditions
 replace <script> tag
 
 
-     <script>
+          <script>
          document.addEventListener('DOMContentLoaded', function() {
              // Declare endDate outside of the conditions
              let endDate = null;
@@ -33,60 +117,29 @@ replace <script> tag
              }
 
              // Check the conditions for calculating the endDate
-             if (timesheetmaxDateRecord && leavedataforcalander1) {
-                 if (differenceInDays > 1) {
-                     endDate = parseDate(timesheetmaxDateRecord.date);
-                 } else {
-                     // endDate = parseDate(leavedataforcalander1);
-                     let maxDate = parseDate(timesheetmaxDateRecord.date);
-                     let leaveDate = parseDate(leavedataforcalander1);
-                     if (maxDate.getTime() > leaveDate.getTime()) {
-                         endDate = maxDate;
-                     } else {
-                         endDate = leaveDate;
-                     }
-                 }
-
-                 if (!endDate && lasttimesheetsubmiteddata) {
-                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
-                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
-                     if (endDate) adjustEndDateForWeekend(endDate);
-                 }
-             } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
-                 rejoiningdate) {
-                 console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
-                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+             if (datanotexistaftermonday && !rejoiningdate) {
+                 endDate = parseDate(datanotexistaftermonday);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
                  if (endDate) adjustEndDateForWeekend(endDate);
-             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
-                 console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
-                 endDate = parseDate(timesheetmaxDateRecord.date);
-             } else if (newteammember && !lasttimesheetsubmiteddata) {
-                 //  } else if (newteammember) {
-
-                 //  console.log("Using newteammember data:", newteammember);
-                 //  endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
-                 //      newteammember);
-                 //  if (endDate) endDate.setDate(endDate.getDate() - 1);
-
-                 if (timesheetmaxDateRecord) {
-                     endDate = parseDate(timesheetmaxDateRecord.date)
-                 } else {
-                     console.log("Using newteammember data:", newteammember);
-                     endDate = parseDate(newteammember);
-                     endDate.setDate(endDate.getDate() - 1);
-                 }
-             } else if (rejoiningdate) {
+             } else if (rejoiningdate && timesheetmaxDateRecord.length === 0) {
                  console.log("Using rejoiningdate data:", rejoiningdate);
                  endDate = parseDate(rejoiningdate);
                  if (endDate) endDate.setDate(endDate.getDate() - 1);
-             } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
-                 if (differenceInDays === 2 || differenceInDays === 1) {
-                     endDate = parseDate(leavedataforcalander1);
+             } else if (newteammember && !lasttimesheetsubmiteddata) {
+                 if (!lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0) {
+                     endDate = parseDate(newteammember);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
                  } else {
-                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
-                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
-                     if (endDate) adjustEndDateForWeekend(endDate);
+                     endDate = parseDate(dateSelectionresult);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
                  }
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length > 0 && dateSelectionresult) {
+                 endDate = parseDate(dateSelectionresult);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 //  if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0 && !dateSelectionresult) {
+                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                 if (endDate) adjustEndDateForWeekend(endDate);
              }
 
              // Set date in the datepicker if endDate is valid
@@ -95,10 +148,6 @@ replace <script> tag
                  today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
                  endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
 
-                 // Increment endDate if it's not today's date  or  Increment endDate if enddate lesstahn today date and not increamner end date if enddate greater than today date
-                 //  if (endDate.getTime() !== today.getTime() && endDate.getTime() <= today.getTime()) {
-                 //      endDate.setDate(endDate.getDate() + 1);
-                 //  }
 
                  //  if (endDate.getTime() <= today.getTime()) {
                  if (endDate.getTime() < today.getTime()) {
@@ -120,17 +169,13 @@ replace <script> tag
                      dateFormat: 'dd-mm-yy'
                  });
 
-
                  //  this code will be refresh data according end date
                  if (endDate.getTime() !== today.getTime()) {
                      let timesheetdate = formattedDate;
                      var refreshpage = $('.refresh');
                      refreshpage.val('').prop("readonly", false);
                      $('.refreshoption option').remove();
-                     //   $("#hour1,#hour2,#hour3,#hour4,#hour5").prop("readonly", false);
                      $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
-
-                     //   alert(datepickers);
                      $.ajax({
                          type: "get",
                          url: "{{ url('timesheet/create') }}",
@@ -158,7 +203,11 @@ replace <script> tag
 
 
 
-vsalocal vsalive,
+
+
+
+
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TeammemberController.php
 ye sabhi updates in update function me hai 
@@ -168,7 +217,7 @@ find text  if ($request->rejoining_date == null) { and replace only this line
 after that 
 
  // this code will be run in 2 cases like 1. first time exit and second is after rejoin user will exit
- if (is_null($existingLeavingDate) || (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate)) { replace only this line
+                if (is_null($existingLeavingDate) || (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate)) {
 
 
 
@@ -185,13 +234,15 @@ find text  if ($request->leavingdate != null) {   before this line add this code
 
 
 
+
+
 3
 find text    $output = array('msg' => 'Please delete saved timesheet after leaving date');
 after this  add it 
 
 
 
-                    // update rejoined exit date
+                     // update rejoined exit date
                     if (!is_null($existingLeavingDate) && !is_null($inputLeavingDate) && $existingLeavingDate !== $inputLeavingDate) {
                         $rejoiningleavedate = DB::table('teamrolehistory')
                             ->where('teammember_id', $id)
@@ -215,6 +266,8 @@ after this  add it
 					
 					
 			
+			
+			
 
 			
 					
@@ -224,7 +277,8 @@ replace if block only
 					
 					
 					
-           if ($request->leavingdate != null && $request->status == 1) {
+             // Teammember::find($id)->update($data);
+            if ($request->leavingdate != null && $request->status == 1) {
                 $oldstatusvalue = Teammember::find($id);
                 if ($oldstatusvalue->status == 1 && $oldstatusvalue->rejoining_date == null) {
                     $data = $request->except(['_token', 'qualification', 'document_file']);
@@ -253,11 +307,13 @@ replace if block only
                         ]);
                     }
                 }
-            }
+            } 
 
 
 
-vsalocal vsalive,
+
+
+vsalocal vsalive,vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TeammemberController.php
 
@@ -279,15 +335,17 @@ replace  $teammember =
 
 
 
-vsalocal vsalive,
+
+
+vsalocal vsalive,vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\form.blade.php
 
-    <div class="col-4">
+    <div class="col-3">
         <div class="form-group">
-            <label class="font-weight-600">Joining Date</label>
+            <label class="font-weight-600">Joining Date <span class="text-danger">*</span></label>
             <input type="date" required id="example-date-input" name="joining_date"
-                value="{{ $teammember->final_joiningdate ?? '' }}" class="form-control leaveDate"
+                value="{{ $teammember->final_joiningdate ?? '' }}" class="form-control datevalidation"
                 placeholder="Enter joining_date">
         </div>
     </div>
@@ -296,25 +354,29 @@ resources\views\backEnd\teammember\form.blade.php
 	
 	
 	
+	
+	
 another is 
 
 
-    <div class="col-4">
+    <div class="col-3">
         <div class="form-group">
             <label class="font-weight-600">Leaving Date</label>
             <input type="date" id="example-date-input" name="leavingdate"
-                value="{{ $teammember->final_leavingdate ?? '' }}" class="form-control leaveDate"
+                value="{{ $teammember->final_leavingdate ?? '' }}" class="form-control datevalidation"
                 placeholder="Enter Leaving Date">
         </div>
     </div>
 	
 	
-vsalocal vsalive,
+	
+	
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\BackEndController.php
  $userInfo = Teammember::where('id', $teammemberid)->first();
  
-     $userInfo = Teammember::where('teammembers.id', auth()->user()->teammember_id)
+    $userInfo = Teammember::where('teammembers.id', auth()->user()->teammember_id)
       ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
       ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
       ->select([
@@ -324,6 +386,8 @@ app\Http\Controllers\BackEndController.php
         DB::raw('COALESCE(teamrolehistory.rejoiningdate, rejoiningsamepost.rejoiningdate, teammembers.joining_date) AS final_joiningdate'),
       ])
       ->first();
+
+
 
 
 
@@ -340,13 +404,15 @@ resources\views\backEnd\userprofile.blade.php
                                         </div>
                                     </div>
 									
-									
+		
+
+		
 									
 
 
-vsalocal vsalive,
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222
-teamrolehistory table me 
+teamrolehistory table me `````table
 add this column rejoiniedexitdate after rejoiningdate column
 varchar 200 null
 
@@ -354,168 +420,151 @@ rejoiningsamepost table me
 add this column rejoiniedexitdate after rejoiningdate column
 varchar 200 null
 
-vsalocal vsalive,
-2222222222222222222222222222222222222222222222222222222222222222222222
-fix keshav chadhary leaving date
-teammembers table me 
-780
-leaving date = 2024-07-31
-
-teamrolehistory table me 
-new wla leaving date  rejoiniedexitdate = 2025-01-31
 
 
 
 
 
 sachin date enable problem
-vsalocal vsalive,
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
 
+} else {
 
-      $leavedataforcalander = $leaveDates->first();
-      $leavedataforcalander1 = $leaveDates->last();
+      $authUserId = auth()->user()->teammember_id;
 
+      // Fetch common data
+      $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+        ->where('teamid', $authUserId)
+        ->latest()
+        ->first();
 
-      $totalleaveCount = DB::table('applyleaves')
+      $datanotexistaftermonday = null;
+      if ($lasttimesheetsubmiteddata) {
+        $carbondate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+        $nextMonday = $carbondate->copy()->next(Carbon::MONDAY);
+        $timesheetRecordcheck = DB::table('timesheetusers')
+          ->where('status', '0')
+          ->where('createdby', $authUserId)
+          ->where('date', $nextMonday->format('Y-m-d'))
+          ->exists();
+
+        if (!$timesheetRecordcheck) {
+          $datanotexistaftermonday = $nextMonday->format('Y-m-d');
+        }
+      }
+
+      $timesheetmaxDateRecord = DB::table('timesheetusers')
+        ->where('status', '0')
         ->where('createdby', $authUserId)
-        ->whereBetween('from', [$leavedataforcalander,  $leavedataforcalander1])
-        ->count();
+        ->orderBy('date', 'desc')
+        ->get();
 
-      $leavebreakdateassign = null;
-      if ($totalleaveCount > 1) {
-        foreach ($leaveDates as $leaveDate) {
-          $increamentonedays = Carbon::parse($leaveDate)->addDay()->format('Y-m-d');
 
-          $timesheetRecord = DB::table('timesheetusers')
-            ->where('status', '0')
-            ->where('createdby', $authUserId)
-            ->where('date', $increamentonedays)
-            ->exists();
 
-          if (!$timesheetRecord) {
-            $leavebreakdateassign = $leaveDate;
-            break; // Terminate loop when first available date is found
-          }
+      // Available dates extract hare
+      $availableDates = $timesheetmaxDateRecord->pluck('date')->toArray();
+
+      $dateSelectionresult = null;
+      if (!empty($availableDates)) {
+        // Min aur Max Date get
+        $minDate = Carbon::parse(min($availableDates));
+        $maxDate = Carbon::parse(max($availableDates));
+
+        // Continuous date range generate
+        $allDates = [];
+        while ($minDate->lte($maxDate)) {
+          $allDates[] = $minDate->toDateString();
+          $minDate->addDay();
+        }
+
+        // dd($availableDates);
+        // Missing dates find
+        $missingDates = array_diff($allDates, $availableDates);
+        // First missing date get hare
+        $dateSelectionresult = reset($missingDates);
+
+        if (!$dateSelectionresult) {
+          $decrementonedays = $maxDate->copy()->addDay()->toDateString();
+          $dateSelectionresult = $decrementonedays;
         }
       }
 
       // Fetch rejoining data
       $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
-      // Calculate difference in days
-      $differenceInDays = $this->calculateDateDifference(
-        $lasttimesheetsubmiteddata,
-        $timesheetmaxDateRecord,
-        $leavedataforcalander,
-        $rejoiningdate
-      );
+
+
+      $newteammember = null;
+      if (!$lasttimesheetsubmiteddata) {
+        // Fetch new team member joining date
+        $newteammember = DB::table('teammembers')
+          ->where('id', $authUserId)
+          ->value('joining_date');
+      }
+
+      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord', 'newteammember', 'rejoiningdate', 'dateSelectionresult', 'datanotexistaftermonday'));
+    }
 
 
 
-
-
-pass this leavebreakdateassign and totalleaveCount in view file 
-
-vsalocal vsalive,
+vsalocal vsalive,vsademo
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
-find       var rejoiningdate = @json($rejoiningdate); after this line add 
-
-      //   after bugs 
-      var totalleaveCount = @json($totalleaveCount);
-      var leavebreakdateassign = @json($leavebreakdateassign);
 
 
-
-vsalocal vsalive,
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\layouts\includes\js.blade.php
-
-  let maxDate = parseDate(timesheetmaxDateRecord.date);
-  after else body add this code 
-
-
-                 if (!endDate && lasttimesheetsubmiteddata) {
-                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
-                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
-                     if (endDate) adjustEndDateForWeekend(endDate);
-                 } else if (leavebreakdateassign) {
-                     if (totalleaveCount > 1) {
-                         let leavebreakdate = parseDate(leavebreakdateassign);
-                         let timesheetmaxDate = parseDate(timesheetmaxDateRecord.date);
-                         let incrementedTimesheetDate = new Date(timesheetmaxDate);
-
-                         incrementedTimesheetDate.setDate(incrementedTimesheetDate.getDate() + 1);
-                         if (leavebreakdate.getTime() > incrementedTimesheetDate.getTime()) {
-                             getDate = timesheetmaxDate; // Use original date (not incremented)
-                         } else {
-                             getDate = leavebreakdate;
-                         }
-                         console.log("timesheetmaxDate:", timesheetmaxDate);
-                         console.log("leavebreakdate:", leavebreakdate);
-                         endDate = parseDate(getDate);
-                         //  if (endDate) adjustEndDateForWeekend(endDate);
-                     }
-                 }
+  <script>
+      // Pass the PHP data to JavaScript
+      var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+      var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
+      var dateSelectionresult = @json($dateSelectionresult);
+      var newteammember = @json($newteammember);
+      var rejoiningdate = @json($rejoiningdate);
+      var datanotexistaftermonday = @json($datanotexistaftermonday);
+  </script>
 
 
 
 
-and 
-if (differenceInDays === 2 || differenceInDays === 1) {
-replace if statment
-
-                 if (differenceInDays === 2 || differenceInDays === 1) {
-                     endDate = parseDate(leavedataforcalander1);
-                     //  may be in future any bugs occure then, i have fixed bugs when after weakend leave applyed moltiple in that case
-                     //  if (totalleaveCount > 1) {
-                     //      if (leavebreakdateassign) {
-                     //          endDate = parseDate(leavebreakdateassign);
-                     //      } else {
-                     //          endDate = parseDate(leavedataforcalander1);
-                     //      }
-                     //  }
-                 }
-
-
-sachin date enable problem end hare 
-
-
-vsalocal vsalive,
+vsalocal vsalive, vsademo
 4.client want to latest attenadnce data button for update  
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\attendance\index.blade.php
 
-        <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
-            @if (Auth::user()->role_id == 11)
-                <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
-                    <li>
-                        <a class="btn btn-info" href="{{ url('/attendanceupdatednow') }}">Latest Update</a>
-                    </li>
-                </ol>
-            @endif
-        </nav>
+          <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+              @if (Auth::user()->role_id == 11)
+                  <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+                      <li>
+                          <a class="btn btn-info" href="{{ url('/attendanceupdatednow') }}">Latest Update</a>
+                      </li>
+                  </ol>
+              @endif
+          </nav>
+		  
+		  
+		  
 		
 		
 		
 
 
 
-
-  Route::get('/attendanceupdatednow', [AttendanceController::class, 'attendanceupdatednow']);
+Route::get('/attendanceupdatednow', [AttendanceController::class, 'attendanceupdatednow']);
   
   
   
-vsalocal vsalive,
+  
+  
+  
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\AttendanceController.php
 
 use App\Models\Attendance;
 
 
-      public function attendanceupdatednow(Request $request)
+       public function attendanceupdatednow(Request $request)
     {
 
         $currentDate = now();
@@ -624,14 +673,15 @@ use App\Models\Attendance;
 
 
 
-vsalocal vsalive,
+
+
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Console\Commands\CalculateAttendance.php
 
-foreach ($teammembers as $team) {
-
-
- $currentDate = now();
+    public function handle()
+    {
+        $currentDate = now();
         $currentMonth = $currentDate->format('F');
         $currentYear = $currentDate->format('Y');
         $totalDays = $currentDate->daysInMonth;
@@ -640,27 +690,117 @@ foreach ($teammembers as $team) {
             ->where('attendances.month', $currentMonth)
             ->whereYear('attendances.created_at', $currentYear)
             ->get();
-			
-	
 
-	
-			
-			
-find text  return "Attendance updated";		
+        foreach ($teammembers as $team) {
 
+            $keysToFilter = [
+                'twentysix',
+                'twentyseven',
+                'twentyeight',
+                'twentynine',
+                'thirty',
+                'thirtyone',
+                'one',
+                'two',
+                'three',
+                'four',
+                'five',
+                'six',
+                'seven',
+                'eight',
+                'nine',
+                'ten',
+                'eleven',
+                'twelve',
+                'thirteen',
+                'fourteen',
+                'fifteen',
+                'sixteen',
+                'seventeen',
+                'eighteen',
+                'ninghteen',
+                'twenty',
+                'twentyone',
+                'twentytwo',
+                'twentythree',
+                'twentyfour',
+                'twentyfive'
+            ];
 
-			
+            $days = array_intersect_key($team->toArray(), array_flip($keysToFilter));
+            $dayspresent = 0;
+            $casualLeaveCount = 0;
+            $examLeaveCount = 0;
+            $travelCount = 0;
+            $offholidaysCount = 0;
+            $sundayCount = 0;
+            $holidaysCount = 0;
+
+            foreach ($days as $key => $value) {
+                if ($value == 'P') {
+                    $dayspresent++;
+                } else if ($value == 'CL') {
+                    $casualLeaveCount++;
+                } else if ($value == 'EL') {
+                    $examLeaveCount++;
+                } else if ($value == 'T') {
+                    $travelCount++;
+                } else if ($value == 'OH') {
+                    $offholidaysCount++;
+                } else if ($value == 'W') {
+                    $sundayCount++;
+                } else if ($value == 'H') {
+                    $holidaysCount++;
+                }
+            }
+
+            $dayspresentcount = $dayspresent;
+            $casualLeave = $casualLeaveCount;
+            $examLeave =  $examLeaveCount;
+            $travel =  $travelCount;
+            $offholidays =  $offholidaysCount;
+            $sunday =  $sundayCount;
+            $holidays =  $holidaysCount;
+
+            $attendanceData = [
+                'total_no_of_days' => $totalDays,
+                'no_of_days_present' => $dayspresentcount,
+                'casual_leave' => $casualLeave,
+                'exam_leave' => $examLeave,
+                'travel' => $travel,
+                'offholidays' => $offholidays,
+                'sundaycount' => $sunday,
+                'holidays' => $holidays,
+            ];
+            // dd($team->employee_name);
+            DB::table('attendances')
+                ->where('employee_name', $team->employee_name)
+                ->where('month', $currentMonth)
+                ->where('year', $currentYear)
+                ->update($attendanceData);
+        }
+
         $this->info("Attendance calculation command executed successfully on " . now()->toDateTimeString());
 
         return "Attendance updated";
+    }
+			
+	
+
+	
+		
+
+
+		
+			
 
 
 
-vsalocal vsalive,
+vsalocal vsalive, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Console\Kernel.php
 
- $schedule->command('attendance:calculate')->monthlyOn(24, '18:00')->emailOutputTo('shahidraza@capitall.io');
+find and remove it  $schedule->command('attendance:calculate')->monthlyOn(24, '18:00')->emailOutputTo('shahidraza@capitall.io');
 
     $schedule->command('attendance:calculate')
       ->dailyAt('10:00')  // Runs every day at 10:00 AM
@@ -671,280 +811,8 @@ app\Console\Kernel.php
 
 
 
-vsalocal vsalive, vsademo
-multiple leave then date enable problem ```start
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\TimesheetController.php
-in create function 
 
 
-} else {
-
-      $authUserId = auth()->user()->teammember_id;
-
-      // Fetch common data
-      $lasttimesheetsubmiteddata = DB::table('timesheetreport')
-        ->where('teamid', $authUserId)
-        ->latest()
-        ->first();
-
-      $datanotexistaftermonday = null;
-      if ($lasttimesheetsubmiteddata) {
-        $carbondate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
-        $nextMonday = $carbondate->copy()->next(Carbon::MONDAY);
-        $timesheetRecordcheck = DB::table('timesheetusers')
-          ->where('status', '0')
-          ->where('createdby', $authUserId)
-          ->where('date', $nextMonday->format('Y-m-d'))
-          ->exists();
-
-        if (!$timesheetRecordcheck) {
-          $datanotexistaftermonday = $nextMonday->format('Y-m-d');
-        }
-      }
-
-      $timesheetmaxDateRecord = DB::table('timesheetusers')
-        ->where('status', '0')
-        ->where('createdby', $authUserId)
-        ->orderBy('date', 'desc')
-        ->get();
-
-
-
-      // Available dates extract hare
-      $availableDates = $timesheetmaxDateRecord->pluck('date')->toArray();
-
-      $dateSelectionresult = null;
-      if (!empty($availableDates)) {
-        // Min aur Max Date get
-        $minDate = Carbon::parse(min($availableDates));
-        $maxDate = Carbon::parse(max($availableDates));
-
-        // Continuous date range generate
-        $allDates = [];
-        while ($minDate->lte($maxDate)) {
-          $allDates[] = $minDate->toDateString();
-          $minDate->addDay();
-        }
-
-        // dd($availableDates);
-        // Missing dates find
-        $missingDates = array_diff($allDates, $availableDates);
-        // First missing date get hare
-        $dateSelectionresult = reset($missingDates);
-
-        if (!$dateSelectionresult) {
-          $decrementonedays = $maxDate->copy()->addDay()->toDateString();
-          $dateSelectionresult = $decrementonedays;
-        }
-      }
-
-      // Fetch rejoining data
-      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
-
-
-      $newteammember = null;
-      if (!$lasttimesheetsubmiteddata) {
-        // Fetch new team member joining date
-        $newteammember = DB::table('teammembers')
-          ->where('id', $authUserId)
-          ->value('joining_date');
-      }
-
-      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord', 'newteammember', 'rejoiningdate', 'dateSelectionresult', 'datanotexistaftermonday'));
-    }
-
-
-
-
-
-
-
-
-
-
-  private function getRejoiningDate($userId, $lasttimesheetsubmiteddata)
-  {
-    $rejoiningData = DB::table('teammembers')
-      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
-      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
-      ->where('teammembers.id', $userId)
-      ->select('teamrolehistory.rejoiningdate', 'rejoiningsamepost.rejoiningdate as samepostrejoiningdate')
-      ->first();
-
-    if ($rejoiningData) {
-      $rejoiningDateStore = $rejoiningData->samepostrejoiningdate ?? $rejoiningData->rejoiningdate;
-
-      if ($rejoiningDateStore && $lasttimesheetsubmiteddata) {
-        $rejoiningdate = Carbon::parse($rejoiningDateStore);
-        $lastSubmissionDate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
-
-        return $rejoiningdate->greaterThan($lastSubmissionDate) ? $rejoiningDateStore : null;
-      }
-    }
-
-    return null;
-  }
-
-
-
-
-
-
-
-
-private function calculateDateDifference($lastTimesheet, $timesheetMaxDate, $leaveDate, $rejoiningDate)
-remove this function 
-
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\create.blade.php
-
-find  var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
-replace it 
-
-  <script>
-      // Pass the PHP data to JavaScript
-      var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
-      var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
-      var dateSelectionresult = @json($dateSelectionresult);
-      var newteammember = @json($newteammember);
-      var rejoiningdate = @json($rejoiningdate);
-      var datanotexistaftermonday = @json($datanotexistaftermonday);
-  </script>
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\layouts\includes\js.blade.php
-
-find 
-    console.log("No valid timesheet or submitted date data found to set datepicker.");
-	
-	
-	
-     <script>
-         document.addEventListener('DOMContentLoaded', function() {
-             // Declare endDate outside of the conditions
-             let endDate = null;
-
-             // Function to parse and validate dates
-             function parseDate(date) {
-                 let parsedDate = new Date(date);
-                 if (isNaN(parsedDate)) {
-                     console.error("Invalid date format:", date);
-                     return null;
-                 }
-                 return parsedDate;
-             }
-
-             // Helper function to adjust endDate
-             function adjustEndDateForWeekend(date) {
-                 if (date.getDay() === 6) {
-                     console.log("Incremented date is Sunday, adding another day.");
-                     date.setDate(date.getDate() + 1); // Increment by one more day
-                 }
-             }
-
-             // Check the conditions for calculating the endDate
-             if (datanotexistaftermonday && !rejoiningdate) {
-                 endDate = parseDate(datanotexistaftermonday);
-                 if (endDate) endDate.setDate(endDate.getDate() - 1);
-                 if (endDate) adjustEndDateForWeekend(endDate);
-             } else if (rejoiningdate && timesheetmaxDateRecord.length === 0) {
-                 console.log("Using rejoiningdate data:", rejoiningdate);
-                 endDate = parseDate(rejoiningdate);
-                 if (endDate) endDate.setDate(endDate.getDate() - 1);
-             } else if (newteammember && !lasttimesheetsubmiteddata) {
-                 if (!lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0) {
-                     endDate = parseDate(newteammember);
-                     if (endDate) endDate.setDate(endDate.getDate() - 1);
-                 } else {
-                     endDate = parseDate(dateSelectionresult);
-                     if (endDate) endDate.setDate(endDate.getDate() - 1);
-                 }
-             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length > 0 && dateSelectionresult) {
-                 endDate = parseDate(dateSelectionresult);
-                 if (endDate) endDate.setDate(endDate.getDate() - 1);
-                 //  if (endDate) adjustEndDateForWeekend(endDate);
-             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0 && !dateSelectionresult) {
-                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
-                 if (endDate) adjustEndDateForWeekend(endDate);
-             }
-
-             // Set date in the datepicker if endDate is valid
-             if (endDate) {
-                 let today = new Date();
-                 today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
-                 endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
-
-
-                 //  if (endDate.getTime() <= today.getTime()) {
-                 if (endDate.getTime() < today.getTime()) {
-                     endDate.setDate(endDate.getDate() + 1);
-                 }
-
-
-                 let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
-                     ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
-                     endDate.getFullYear();
-
-                 // Set the calculated date in the datepicker input field
-                 document.getElementById('datepickers').value = formattedDate;
-
-                 // Initialize the datepicker with the calculated maxDate
-                 $("#datepickers").datepicker({
-                     maxDate: endDate,
-                     minDate: endDate, // Set the same date for minDate if needed
-                     dateFormat: 'dd-mm-yy'
-                 });
-
-                 //  this code will be refresh data according end date
-                 if (endDate.getTime() !== today.getTime()) {
-                     let timesheetdate = formattedDate;
-                     var refreshpage = $('.refresh');
-                     refreshpage.val('').prop("readonly", false);
-                     $('.refreshoption option').remove();
-                     $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
-                     $.ajax({
-                         type: "get",
-                         url: "{{ url('timesheet/create') }}",
-                         data: {
-                             timesheetdate: timesheetdate
-                         },
-                         success: function(res) {
-                             $('#client').html(res);
-                             $('#client1').html(res);
-                             $('#client2').html(res);
-                             $('#client3').html(res);
-                             $('#client4').html(res);
-                         },
-                         error: function() {},
-                     });
-                 }
-                 //  this code will be refresh data according end date end hare 
-
-                 console.log("Adjusted date set in datepicker:", endDate);
-             } else {
-                 console.log("No valid timesheet or submitted date data found to set datepicker.");
-             }
-         });
-     </script>	
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	
-	multiple leave then date enable problem ```end
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php

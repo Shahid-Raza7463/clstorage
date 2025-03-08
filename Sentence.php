@@ -132,7 +132,7 @@ class Sentence extends Command
 
         // All 7 tasks have been QA passed. Atishay Jain, please let me know when these can be deployed.
 
-        // Send the code for both vsalocal and vsalive, and send the database only for vsalocal
+        // Send the code for both vsalocal and vsalive, and send the database only for vsademo
 
         // Send the code for both vsademo and vsalive, and send the below all tables only from vsalive
 
@@ -248,15 +248,57 @@ class Sentence extends Command
         // I have completed this task and moved it to QA
         // I have completed this task, moved it to QA, and updated the description on Jira
         // since there is delay in code merge of KYC, we can pick up VSA tasks in QA ?
+        // Shahid Raza where are we on this
+        // where are we on the ticketing system??
+
+        // I just want to know if I should pick up the new bug reported via email or continue working on my existing in-progress task
+
+        // I am moving the status from IN UAT to Done because this code has been reviewed by Prashant Sir
+
+        // I am moving the status from IN UAT to Done because this is an old task and it is running well on VSA
+        // can we have SAME pw for all
+
+        // I have completed this task and placed in QA 
+        // Pooja Kumari, I have already explained that the user cannot log in after the leaving date, so they cannot submit the timesheet
+        // As per the client's discussion, I have already implemented that when a rejected timesheet is resubmitted, the total hours will be adjusted accordingly (reduced or increased) so this is not required.
+
+        // I have checked this, and everything is fine except the mail integration, which is not implemented. I will integrate it
+        // the approver is still Harish which is why it wasn't visible in Simmi's ID. You had selected it in the dropdown but didn’t save it, so it didn’t reflect in Simmi’s ID Please check again
+        // Steps:
 
 
+        // 1.	All mandatory fields are required.
+        // 2.	Profile picture should be in .jpg, .jpeg, or .png format.
+        // 3.	Personal Email ID should be valid.
+        // 4.	Mobile Number should contain only digits, not text.
+        // 5.	Emergency Mobile Number should contain only digits, not text.
+        // 6.	Date of Birth should not be in the future.
+        // 7.	Aadhaar Number should contain only digits, not text.
+        // 8.	PAN Card Number should be valid.
+        // 9.	Mother's Mobile Number should contain only digits, not text.
+        // 10.	Father's Mobile Number should contain only digits, not text.
+        // 11.	Bank Account Number should contain only digits, not text.
+        // 12.	Joining Date should not be in the future.
+        // 13.	Leaving Date should not be in the future.
+        // I have moved the status from In Process to Code Review. Please check once
+        // I have moved this task to In UAT. Please check once
+        // Hi, Shahid here.
+        // I am available on March 6. Let me know if that works for you.
 
+        // Due to network issue I can't hear your voice properly
+        // i have left comments for simmi and Atishay Jain, please check once.
 
-
+        // i have already moved this task in Code review and manaly maine jo 4 ya 5 place per hi work kiya hai jo unhe chahiye tha iske alawa rest of palce maine koi test nahi kiya aur nahi koi implementation  
+        // All UAT-passed tasks have been deployed on VSA
+        // I am working on it, and it will be deployed by the end of the day.
+        // The appointment letter is not in use, so it is only visible on the admin dashboard and not to any other users
+        // If a user is rejoined and does not have a leaving date for rejoining, the admin can activate or deactivate the user. However, if the rejoined user has a leaving date after rejoining, the admin cannot activate or deactivate them
 
         // 222222222222222222222222222222222222222222222222222222222222222222222
 
-        // I have completed this task and placed in QA 
+
+
+
 
 
 
@@ -283,6 +325,13 @@ class Sentence extends Command
 
         // Thanks & regards,
         // Shahid Raza (7488952139)
+
+
+
+        // vsalocal, vsademo, bugs ```start
+        // vsalocal, vsademo, vsalive ```start
+        // vsalocal, vsademo ```start 
+        // vsalocal, ```start
 
     }
 }
