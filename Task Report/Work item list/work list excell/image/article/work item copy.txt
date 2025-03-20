@@ -1,0 +1,62 @@
+01,24
+1.Balance Confirmation
+
+02,24
+1.exam leave missing data on timesheet save page bugs,
+2. assignment generate Id insert in timesheetusers table
+
+03,24
+1.assignment generate Id insert in timesheetusers table
+
+04,24
+1.assignment generate Id insert in timesheetusers table
+
+15,24
+1.submit time sheet button don't  show on time sheet save page bugs fixed,
+2. assignment total hours show on assignment time report tab.
+
+16,24
+1.assignment total hours show on assignment time report tab completed and documentation completed.
+
+17.24
+1. Notification on dashboard
+2..assignment total hours show on assignment time report tab completed and documentation completed.update on server
+
+20.24
+1. Old details show on casual leave revert request page
+2. Client want to get work items from calendar when user choose of holiday
+
+
+20.24
+1. Old details show on casual leave revert request page
+2. Client want to get work items from calendar when user choose of holiday
+
+05,24
+1.Assignment bugs fixed on patner during creating assignment
+2.filter add on using assignmentname on team timesheet report
+
+06,24
+Apply leave filters design and filter implementation
+
+8,24
+1.Apply leave filter design and filter implementation complete,
+2.Clients want to submit a timesheet forcefully when the user goes ,
+
+09
+1.Clients want to submit timesheet forcefully when the user goes ,
+
+10.
+1.Assignment total hour show on open assignment page
+2.Assignmwnt total hour show on admin according teamwise.
+
+18.4
+1.Separate weekly timesheet on admin on admin,partner,and manager,
+2.client want to implement when user apply leave revert on start leave date then all data should be delete.
+
+19.4
+1.Seprate weekly timesheet on admin on admin,patner,and manager complete ,
+2.client want to implement when user apply leave revert on start leave date then all data should be delete.
+
+Sincerely,
+1.Excel button does not show on assignment report page 
+2. Client want to get work items from calendar when user choose of holiday

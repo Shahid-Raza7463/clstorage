@@ -41,7 +41,66 @@ class Allcode extends Controller
 
 
         //* regarding 
+        if ($request->hasFile('file')) {
+          foreach ($request->file('file') as $file) {
+              $realname = $file->getClientOriginalName();
+              $name = time() . '_' . $realname; // Time add to avoid duplicate names
+              $destinationPath = storage_path('app/public/image/task');
+
+              $sizeKB = round($file->getSize() / 1024, 2); // Get file size before moving
+
+              // Move file to destination
+              $file->move($destinationPath, $name);
+
+              $files[] = [
+                  'name' => $name,
+                  'realname' => $realname,
+                  'size' => $sizeKB, // Already converted to KB
+              ];
+          }
+      }
         // Start Hare
+        public function assignmentfileDownload($id, Request $request)
+    {
+        $foldername = DB::table('assignmentfolderfiles')->where('id', $id)->first();
+        $filePath = $foldername->assignmentgenerateid . '/' . $foldername->filesname;
+        // vsalocal
+        $filePath = storage_path('app/public/image/task/' . $foldername->filesname);
+        if (!file_exists($filePath)) {
+            return back()->with('error', 'File does not exist on local storage.');
+        }
+        return response()->download($filePath, $foldername->realname);
+        // vsalocal end 
+        // vsalive
+        // return Storage::disk('s3')->download($filePath, $foldername->realname);
+        // vsalive end 
+    }
+
+public function assignmentfileDownload($id, Request $request)
+{
+    $foldername = DB::table('assignmentfolderfiles')->where('id', $id)->first();
+
+    if (!$foldername) {
+        return back()->with('error', 'File not found.');
+    }
+
+    // AWS S3 Storage (vsalive)
+    if (env('FILESYSTEM_DISK') === 's3') {
+        $filePath = $foldername->assignmentgenerateid . '/' . $foldername->filesname;
+        return Storage::disk('s3')->download($filePath, $foldername->realname);
+    } 
+    // Local Storage (vsalocal)
+    else {
+        $filePath = storage_path('app/public/image/task/' . $foldername->filesname);
+
+        if (!file_exists($filePath)) {
+            return back()->with('error', 'File does not exist on local storage.');
+        }
+
+        return response()->download($filePath, $foldername->realname);
+    }
+}
+
         //! End hare 
 
 

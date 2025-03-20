@@ -2086,9 +2086,64 @@ remove this code
     });
 </script> --}}
 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+ <label class="font-weight-600">Email Id
+
+    <div class="col-3">
+        <div class="form-group">
+            @if (Request::is('teammember/*/edit'))
+                @php
+
+                    $timesheetdata = DB::table('timesheetusers')->where('createdby', $teammember->id)->first();
+                    // $disabled = $timesheetdata ? 'disabled' : '';
+                    $disabled = $timesheetdata ? 'readonly' : '';
+                @endphp
+            @endif
+            <label class="font-weight-600">Email Id <span class="text-danger"></span></label>
+            <input type="email" name="emailid" value="{{ $teammember->emailid ?? '' }}" class="form-control"
+                placeholder="Enter Email" @if (Request::is('teammember/*/edit')) {{ $disabled }} @endif>
+        </div>
+    </div>
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\stylesheet.blade.php
+find text   .textfixed {
+after this style add this style 
+ 
+<style>
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+ 
+    /* input[type="number"] {
+        -moz-appearance: textfield;
+    } */
+</style>
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+add this code end of file 
+
+ <script>
+     $(document).ready(function() {
+         $('input[name="mobile_no"], input[name="emergencycontactnumber"], input[name="adharcardnumber"], input[name="mothernumber"], input[name="fathernumber"], input[name="bankaccountnumber"], input[name="stdcost"], input[name="esthours"], input[name="fees"], input[name="estcost"]')
+             .on('keypress', function(e) {
+                 if (e.which === 45 || e.which === 43) e.preventDefault(); // Block "-" and "+"
+             });
+     });
+ </script>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\teammember\form.blade.php
+
 
 comment qualification file for vsademo and uncomment live wla 
-
 
 I am working on profile validation ``` end
 
@@ -2467,32 +2522,3952 @@ vsalocal, vsademo, bugs ```end
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\client\clientlist.blade.php
+
+replace it
+{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+
+
+add on tables
+ <table id="examplee" class="table table-bordered table-striped table-hover">
+  
+check </tbody> 
+   
+   
+   
+
+add this style 
+resources\views\backEnd\layouts\includes\stylesheet.blade.php
+
+@if (Request::is('client-list') || Request::is('client-list'))
+    <style>
+        #examplee {
+            width: 100%;
+            table-layout: auto;
+            /* Columns adjust based on content */
+            white-space: nowrap;
+            /* Prevent text wrapping */
+        }
+
+        #examplee th,
+        #examplee td {
+            padding: 8px;
+            /* Add spacing for better readability */
+            text-align: left;
+        }
+
+        #examplee th {
+            white-space: nowrap;
+            /* Prevent column headers from wrapping */
+        }
+    </style>
+@endif
+ 
+
+
+Dashboard - Client Box (UI-Text)
+Dashboard - signout and assignment box (UI-fixed)  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\index.blade.php
+
+1.Active Clients
+
+2.Active Member
+
+
+
+
+resources\views\backEnd\index.blade.php
+  @if (Auth::user()->role_id == 13)
+<a href="{{ url('assignment_report') }}">
+ 
+ 
+                         <a href="{{ url('assignment_report') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
+                            <small style="color:white;">Open Assignment</small>
+                        </a>
+						
+						
+						
+  @if (Auth::user()->role_id == 14)			
+						
+                        <a href="{{ url('assignment_report') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
+                            <small style="color:white;">Open Assignment</small>
+                        </a>				
+						
+						
+resources\views\backEnd\layouts\includes\header.blade.php
+<div class="dropdown-menu dropdown-menu-left"
+
+	 <div class="dropdown-menu dropdown-menu-left" style="margin-left: -110px;">
+
+	 
+
+Dashboard - signout and assignment box (UI-fixed) 
+Dashboard - Client Box (UI-Text)  end
+
+
+
+the exported leave report contains incorrect employee codes.
+vsalocal,vsademo
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
+
+index fun 
+role 13 
+
+replace it 
+
+      $teamapplyleaveDatas  = DB::table('applyleaves')
+        ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+        ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'applyleaves.createdby')
+            ->on('teamrolehistoryteam.created_at', '<', 'applyleaves.created_at');
+        })
+        ->leftJoin('teammembers as approvername', 'approvername.id', '=', 'applyleaves.approver')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'approvername.id')
+            ->on('teamrolehistory.created_at', '<', 'applyleaves.created_at');
+        })
+        ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        // ->where('applyleaves.status', 0)
+        // ->where('teammembers.id', 835)
+        ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.emailid', 'roles.rolename', 'leavetypes.name', 'approvername.team_member as approvernames', 'approvername.staffcode as approverstaffcode', 'teamrolehistory.newstaff_code', 'teamrolehistoryteam.newstaff_code as teamnewstaffcode')
+        ->take(7)
+        ->get();
+		
+		
+		
+		
+app\Http\Controllers\ApplyleaveController.php
+
+index fun 
+role 13 
+
+replace it 
+
+   $teamapplyleaveDatasfilter  = DB::table('applyleaves')
+        ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+        ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+        ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+        ->leftJoin(DB::raw('
+          (SELECT teammember_id, newstaff_code 
+           FROM teamrolehistory 
+           WHERE created_at = (SELECT MAX(created_at) 
+                               FROM teamrolehistory th2 
+                               WHERE th2.teammember_id = teamrolehistory.teammember_id)
+          ) AS teamrolehistory
+      '), function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id');
+        })
+        // ->where('applyleaves.status', 0)
+        ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.emailid', 'roles.rolename', 'leavetypes.name', 'teamrolehistory.newstaff_code')
+        ->distinct()
+        ->get();
+
+
+
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\teamapplication.blade.php
+   <strong><label for="employee">Employee</label></strong>
+replace  <select 
+
+
+                                     <select class="language form-control" id="employee1" name="employee">
+                                         <option value="">Please Select One</option>
+                                         @foreach ($teamapplyleaveDatasfilter->unique('emailid') as $applyleaveDatas)
+                                             <option value="{{ $applyleaveDatas->createdby }}"
+                                                 {{ old('employee') == $applyleaveDatas->createdby ? 'selected' : '' }}>
+                                                 {{ $applyleaveDatas->team_member }}
+                                                 ({{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->staffcode ?? '') }})
+                                             </option>
+                                         @endforeach
+                                     </select>
+									 
+		
+		
+		
+
+		
+									 
+									 
+									 
+resources\views\backEnd\applyleave\teamapplication.blade.php
+{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->staffcode ?? '') }}
+replace  <td>
+
+
+                                     <td>{{ $applyleaveDatas->teamnewstaffcode ?? ($applyleaveDatas->staffcode ?? '') }}
+                                     </td>	
+
+
+
+
+
+
+
+resources\views\backEnd\applyleave\teamapplication.blade.php
+ <td>{{ $diff_in_days - $holidaycount ?? '' }}</td>
+replace below code and remove @php for approver partne wla 
+
+                                     <td class="textfixed">
+                                         {{ $applyleaveDatas->approvernames ?? '' }}
+                                     </td>
+                                     <td>
+                                         {{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->approverstaffcode ?? '') }}
+                                     </td>	
+
+
+
+
+									 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
+function filterDataAdmin(Request $request)
+replace this varable $teamapplyleaveDatasfilter 
+
+
+  $teamapplyleaveDatasfilter  = DB::table('applyleaves')
+      ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+      ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+      ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+      ->leftJoin(DB::raw('
+    (SELECT teammember_id, newstaff_code 
+     FROM teamrolehistory 
+     WHERE created_at = (SELECT MAX(created_at) 
+                         FROM teamrolehistory th2 
+                         WHERE th2.teammember_id = teamrolehistory.teammember_id)
+    ) AS teamrolehistory
+'), function ($join) {
+        $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id');
+      })
+      // ->where('applyleaves.status', 0)
+      ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.emailid', 'roles.rolename', 'leavetypes.name', 'teamrolehistory.newstaff_code')
+      ->distinct()
+      ->get();
+
+
+
+the exported leave report contains incorrect employee codes. end 
+
+
+
+
+Rejoining/Promotion features Deployed ```start
+vsalocal, vsademo ```start 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+ public function allteamsubmitted()
+
+
+    return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'dayscount' => $group->sum('dayscount'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'emailid' => $firstItem->emailid,
+        // Use newstaff_code if available, otherwise staffcode
+        'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+        'partnerid' => $firstItem->partnerid,
+      ];
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+resources\views\backEnd\timesheet\myteamindex.blade.php
+ <select class="language form-control" id="category7" name="teamname">
+ 
+
+                                      <select class="language form-control" id="category7" name="teamname">
+                                          <option value="">Please Select One</option>
+                                          @foreach ($get_date->unique('emailid') as $jobDatas)
+                                              <option value="{{ $jobDatas->teamid }}">
+                                                  {{ $jobDatas->team_member }}(
+                                                  {{ $jobDatas->newstaff_code ?? ($jobDatas->staffcode ?? '') }})
+                                              </option>
+                                          @endforeach
+                                      </select>
+	
+
+	
+									  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\yearwise.blade.php
+ @if ($sub->profilepic == null)
+ 
+ 
+ 1
+
+                                        @foreach (DB::table('assignmentmappings')->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')->on('teamrolehistoryteam.created_at', '<', 'assignmentmappings.created_at');
+            })->where('assignmentmappings.id', $assignmentmappingDatas->id)->where('assignmentteammappings.type', 0)->select('assignmentmappings.*', 'assignmentteammappings.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.profilepic', 'teamrolehistoryteam.newstaff_code')->get() as $sub)
+                                            @if ($sub->profilepic == null)
+                                                <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                    title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                    <img src="{{ url('backEnd/image/dummy.png') }}"
+                                                        class="avatar-img rounded-circle" alt="...">
+                                                @else
+                                                    <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                        title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                        <img src="{{ asset('backEnd/image/teammember/profilepic/' . $sub->profilepic) }}"
+                                                            class="avatar-img rounded-circle" alt="...">
+                                            @endif
+                                        @endforeach
+										
+										
+										
+										
+										
+										
+										
+2
+                                        @foreach (DB::table('assignmentmappings')->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')->leftjoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')->on('teamrolehistoryteam.created_at', '<', 'assignmentmappings.created_at');
+            })->where('assignmentmappings.id', $assignmentmappingDatas->id)->where('assignmentteammappings.type', 2)->select('assignmentmappings.*', 'assignmentteammappings.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.profilepic', 'teamrolehistoryteam.newstaff_code')->get() as $sub)
+                                            @if ($sub->profilepic == null)
+                                                <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                    title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                    <img src="{{ url('backEnd/image/dummy.png') }}"
+                                                        class="avatar-img rounded-circle" alt="...">
+                                                @else
+                                                    <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                        title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                        <img src="{{ asset('backEnd/image/teammember/profilepic/' . $sub->profilepic) }}"
+                                                            class="avatar-img rounded-circle" alt="...">
+                                            @endif
+                                        @endforeach										
+										
+			
+
+			
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ChecklistanswerController.php
+
+  public function assignmentList($id)
+  $teammemberDatas = DB::table('assignmentmappings')
+  
+  
+    $teammemberDatas = DB::table('assignmentmappings')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join
+                    ->on(
+                        'teamrolehistoryteam.teammember_id',
+                        '=',
+                        'assignmentteammappings.teammember_id',
+                    )
+                    ->on(
+                        'teamrolehistoryteam.created_at',
+                        '<',
+                        'assignmentmappings.created_at',
+                    );
+            })
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('teammembers.*', 'assignmentteammappings.type', 'teamrolehistoryteam.newstaff_code')
+            ->get();
+
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+resources\views\backEnd\assignmentlist.blade.php
+
+<td>{{ $teammemberData->staffcode }}</td>
+ 
+ 
+                                             <td>{{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }}
+                                            </td>
+ 
+
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\ChecklistanswerController.php
+ $teammember = Teammember::whereIn('role_id', [15, 14])
+
+        $teammember = DB::table('teammembers')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->whereIn('teammembers.role_id', [15, 14])
+            ->where('teammembers.status', 1)
+            ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+            ->orderBy('team_member', 'ASC')
+            ->get();
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentlist.blade.php
+@foreach ($teammember as $teammemberData)
+
+
+                                        @foreach ($teammember as $teammemberData)
+                                            <option value="{{ $teammemberData->id }}">{{ $teammemberData->team_member }}
+                                                ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                                            </option>
+                                        @endforeach
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+$teammemberall = DB::table('teammembers')
+
+
+        $teammemberall = DB::table('teammembers')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->whereIn('teammembers.role_id', [15, 14])
+            ->where('teammembers.status', 1)
+            ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+            ->orderBy('team_member', 'ASC')
+            ->get();
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+ @foreach ($teammemberall as $teammemberData)
+
+                                                                    @foreach ($teammemberall as $teammemberData)
+                                                                        <option value="{{ $teammemberData->id }}">
+                                                                            {{ $teammemberData->team_member }}
+                                                                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                                                                        </option>
+                                                                    @endforeach
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+ $teammemberDatas = DB::table('assignmentteammappings')
+
+
+        $teammemberDatas = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->whereNotNull('assignmentteammappings.id')
+            ->where('assignmentteammappings.type', '!=', 1)
+            ->select([
+                'teammembers.*',
+                'roles.rolename',
+                'titles.title',
+                'assignmentteammappings.id AS assignmentteammappingsId',
+                'assignmentteammappings.status AS assignmentteammappingsStatus',
+                'assignmentteammappings.type',
+                'assignmentteammappings.teamhour',
+                'assignmentteammappings.viewerteam',
+                'assignmentmappings.assignmentgenerate_id AS assignmentgenerateid',
+                'assignmentmappings.leadpartner',
+                'teamrolehistoryteam.newstaff_code'
+            ])
+            ->orderByDesc('assignmentteammappings.id')
+            ->get();
+
+
+
+
+
+
+
+
+resources\views\backEnd\viewassignment.blade.php
+<td>{{ $teammemberData->staffcode }}</td>
+
+1
+
+    <td>{{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }}</td>
+
+2
+ <td>{{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }}</td>
+ 
+ 
+ 
+ 
+ 
+ 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+   $assignmentfolderfile = DB::table('assignmentfolderfiles')
+
+
+        $assignmentfolderfile = DB::table('assignmentfolderfiles')
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentfolderfiles.createdby')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentfolderfiles.createdby')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentfolderfiles.created_at');
+            })
+            ->where('assignmentfolderfiles.assignmentfolder_id', $id)
+            ->where('assignmentfolderfiles.status', 1)
+            ->select('assignmentfolderfiles.*', 'teammembers.team_member', 'teammembers.staffcode', 'teamrolehistoryteam.newstaff_code')
+            ->latest()
+            ->get();
+			
+			
+		
+
+		
+			
+			
+
+resources\views\backEnd\assignmentfolderfile\index.blade.php	
+<td>{{ $assignmentfolderData->team_member }}
+
+			
+                                    <td>{{ $assignmentfolderData->team_member }}
+                                        ({{ $assignmentfolderData->newstaff_code ?? ($assignmentfolderData->staffcode ?? '') }})
+                                    </td>
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+
+ $teammember = Teammember::where('status', '1')->whereIn('role_id', [14, 15])->with('title', 'role')
+ 
+ 
+         $teammember = DB::table('teammembers')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->whereIn('teammembers.role_id', [15, 14])
+            ->where('teammembers.status', 1)
+            ->select('teammembers.*', 'titles.title', 'roles.rolename', 'teamrolehistory.newstaff_code')
+            ->orderBy('team_member', 'ASC')
+            // ->take(7)
+            ->get();
+			
+	
+
+	
+
+resources\views\backEnd\assignmentmapping\form.blade.php
+ @foreach ($teammember as $teammemberData)
+
+                    @foreach ($teammember as $teammemberData)
+                        <option value="{{ $teammemberData->id }}" @if (!empty($store->financial) && $store->financial == $teammemberData->id) selected @endif>
+                            {{ $teammemberData->team_member }} ( {{ $teammemberData->rolename }} ) (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+
+					
+					
+					
+					
+					
+resources\views\backEnd\assignmentmapping\create.blade.php
+  '{{ $teammemberData->team_member }} ({{ $teammemberData->role->rolename }}) ({{ $teammemberData->staffcode }})</option>' +					
+					
+
+
+                  var fieldHTML =
+                      '<div class="row row-sm hidedive"><div class="col-6"><div class="form-group">' +
+                      '<label class="font-weight-600">Name *</label>' +
+                      '<select required class="language form-control enablefalse" id="teammember_' + x +
+                      '" name="teammember_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($teammember as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->rolename }}) ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<div class="col-5"><div class="form-group">' +
+                      '<label class="font-weight-600">Type *</label>' +
+                      '<select required class="form-control key enablefalse" name="type[]" id="type_' +
+                      x + '">' +
+                      '<option value="">Please Select One</option>' +
+                      '<option value="0">Team Leader</option>' +
+                      '<option value="2">Staff</option></select></div></div>' +
+                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_button">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';				
+					
+
+
+
+
+
+resources\views\backEnd\assignmentmapping\create.blade.php
+ @foreach ($teammember as $teammemberData)
+ 
+
+          @foreach ($teammember as $teammemberData)
+              teamMembers['{{ $teammemberData->id }}'] =
+                  '{{ $teammemberData->team_member }} ({{ $teammemberData->rolename }}) ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})';
+          @endforeach
+				
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\clientlist.blade.php
+@foreach (DB::table('assignmentmappings')->leftjoin('assignmentteammappings', 
+
+
+1
+
+
+                                                @foreach (DB::table('assignmentmappings')->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')->on('teamrolehistoryteam.created_at', '<', 'assignmentmappings.created_at');
+            })->where('assignmentmappings.id', $clientassignmentDatas->id)->where('assignmentteammappings.type', 0)->select('assignmentmappings.*', 'assignmentteammappings.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.profilepic', 'teamrolehistoryteam.newstaff_code')->get() as $sub)
+                                                    @if ($sub->profilepic == null)
+                                                        <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                            title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                            <img src="{{ url('backEnd/image/dummy.png') }}"
+                                                                class="avatar-img rounded-circle" alt="...">
+                                                        @else
+                                                            <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                                title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                                <img src="{{ asset('backEnd/image/teammember/profilepic/' . $sub->profilepic) }}"
+                                                                    class="avatar-img rounded-circle" alt="...">
+                                                    @endif
+                                                @endforeach
+
+
+
+
+
+2
+
+
+
+                                                @foreach (DB::table('assignmentmappings')->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')->leftjoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')->on('teamrolehistoryteam.created_at', '<', 'assignmentmappings.created_at');
+            })->where('assignmentmappings.id', $clientassignmentDatas->id)->where('assignmentteammappings.type', 2)->select('assignmentmappings.*', 'assignmentteammappings.*', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.profilepic', 'teamrolehistoryteam.newstaff_code')->get() as $sub)
+                                                    @if ($sub->profilepic == null)
+                                                        <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                            title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                            <img src="{{ url('backEnd/image/dummy.png') }}"
+                                                                class="avatar-img rounded-circle" alt="...">
+                                                        @else
+                                                            <a class="avatar avatar-xs" data-toggle="tooltip"
+                                                                title="{{ $sub->team_member }} ({{ $sub->newstaff_code ?? ($sub->staffcode ?? '') }})">
+                                                                <img src="{{ asset('backEnd/image/teammember/profilepic/' . $sub->profilepic) }}"
+                                                                    class="avatar-img rounded-circle" alt="...">
+                                                    @endif
+                                                @endforeach
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeamloginController.php
+ $teammemberlist = Teammember::where('status', '0')->get();
+ 
+ 
+            $teammemberlist = Teammember::leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                ->where('teammembers.status', 0)
+                ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+                ->get();
+
+
+
+
+
+resources\views\backEnd\teamlogin\form.blade.php
+@foreach ($teammemberlist as $teammemberlistData)
+
+            <option value="{{ $teammemberlistData->emailid }}">
+                {{ $teammemberlistData->team_member }} ({{ $teammemberlistData->newstaff_code ?? ($teammemberlistData->staffcode ?? '') }})</option>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\adminrevertleave.blade.php
+@foreach ($timesheetrequestsDatas as $timesheetrequestsData)
+
+replace @php
+
+
+                                     @php
+                                         $teamMembers = DB::table('teamrolehistory')
+                                             ->whereIn('teammember_id', [
+                                                 $timesheetrequestsData->createdby,
+                                                 $timesheetrequestsData->approver,
+                                             ])
+                                             ->get()
+                                             ->keyBy('teammember_id');
+
+                                         $datadate = $timesheetrequestsData->created_at
+                                             ? Carbon\Carbon::createFromFormat(
+                                                 'Y-m-d H:i:s',
+                                                 $timesheetrequestsData->created_at,
+                                             )
+                                             : null;
+
+                                         $permotioncheck = $teamMembers[$timesheetrequestsData->createdby] ?? null;
+                                         $approverdata = $teamMembers[$timesheetrequestsData->approver] ?? null;
+
+                                         $permotiondate = $permotioncheck
+                                             ? Carbon\Carbon::createFromFormat(
+                                                 'Y-m-d H:i:s',
+                                                 $permotioncheck->created_at,
+                                             )
+                                             : null;
+                                         $approverdate = $approverdata
+                                             ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $approverdata->created_at)
+                                             : null;
+                                     @endphp
+
+
+
+
+
+1
+ <a href="{{ url('examleaverequest', $timesheetrequestsData->id) }}"> after this td replace staffcode 
+
+                                         <td>
+                                             @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                 {{ $permotioncheck->newstaff_code }}
+                                             @else
+                                                 {{ $timesheetrequestsData->teamstaffcode }}
+                                             @endif
+                                         </td>
+		
+		
+	
+
+
+	
+2
+<td class="textfixed">{{ $timesheetrequestsData->team_member }} after this td replace staffcode 
+
+                                     <td>
+                                         @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                             {{ $approverdata->newstaff_code }}
+                                         @else
+                                             {{ $timesheetrequestsData->staffcode }}
+                                         @endif
+                                     </td>		
+
+									 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function full_list()
+  {
+
+    $teammember = DB::table('teammembers')
+      ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->select('teammembers.id', 'teammembers.team_member', 'teammembers.emailid', 'roles.rolename', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+      ->where('teammembers.status', '1')->distinct()->get();
+
+    $month = collect([
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ]);
+
+    $result = DB::table('timesheetusers')->select(DB::raw('YEAR(date) as year'))
+      ->distinct()->orderBy('year', 'DESC')->limit(5)->get();
+
+    $years = $result->pluck('year');
+
+    $timesheetData = DB::table('timesheets')
+      ->leftJoin('teammembers', 'teammembers.id', '=', 'timesheets.created_by')
+      ->where('timesheets.status', 0)
+      // ->where('timesheets.created_by', 780)
+      ->select([
+        'timesheets.*',
+        'teammembers.team_member',
+        'teammembers.staffcode'
+      ])
+      ->orderByDesc('timesheets.id')
+      ->limit(20)
+      ->get();
+
+    return view('backEnd.timesheet.hrindex', compact('timesheetData', 'teammember', 'month', 'years'));
+  }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\hrindex.blade.php
+
+                <form method="GET" action="{{ url('timesheet/search') }}">
+                    <div class="row row-sm">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label class="font-weight-600">Employee </label>
+                                <select class="language form-control" id="categoryy" name="teammember">
+                                    <option value="">Please Select One</option>
+                                    @foreach ($teammember as $teammemberData)
+                                        <option value="{{ $teammemberData->id }}">
+                                            {{ $teammemberData->team_member }} (
+                                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Select Month *</label>
+                                <select required class="language form-control" id="category" name="month">
+                                    @if (Request::is('timesheet/search'))
+                                        @foreach ($month as $monthData)
+                                            <option value="{{ $monthData }}"
+                                                {{ date('F') == $monthData ? 'selected="selected"' : '' }}>
+                                                {{ $monthData }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="">Please Select One</option>
+                                        @foreach ($month as $monthData)
+                                            <option value="{{ $monthData }}">{{ $monthData }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Select Year *</label>
+                                <select required class="language form-control" id="category" name="year">
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group">
+                                <label class="font-weight-600" style="visibility: hidden;">action</label>
+                                <button type="submit" class="btn btn-success" style="float:right"> Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\hrindex.blade.php
+
+                    <table id="examplee" class="display nowrap">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">id</th>
+                                <th>Employee Name</th>
+                                <th class="textfixed">Staff Code</th>
+                                <th>Date</th>
+                                <th>Day</th>
+                                <th>Client Name</th>
+                                <th class="textfixed">Client Code</th>
+                                <th>Assignment Name</th>
+                                <th>Work Item</th>
+                                <th>Partner</th>
+                                <th class="textfixed">Partner Code</th>
+                                <th>Hour</th>
+                                <th>Total Hour</th>
+                                @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                                    <th>Action</th>
+                                @endif
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @foreach ($timesheetData as $timesheetDatas)
+                                <tr>
+                                    @php
+                                        $client_id = DB::table('timesheetusers')
+                                            ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+                                            ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+                                            ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.partner')
+                                            ->where('timesheetusers.timesheetid', $timesheetDatas->id)
+                                            ->select(
+                                                'clients.client_name',
+                                                'clients.client_code',
+                                                'timesheetusers.hour',
+                                                'assignments.assignment_name',
+                                                'billable_status',
+                                                'workitem',
+                                                'teammembers.id',
+                                                'teammembers.team_member',
+                                                'teammembers.staffcode',
+                                            )
+                                            ->get();
+
+                                        //  dd($client_id);
+                                        $total = DB::table('timesheetusers')
+
+                                            ->where('timesheetusers.timesheetid', $timesheetDatas->id)
+                                            ->sum('hour');
+
+                                        $dates = date('l', strtotime($timesheetDatas->date));
+
+                                        $permotioncheck = DB::table('teamrolehistory')
+                                            ->where('teammember_id', $timesheetDatas->created_by)
+                                            ->first();
+                                        //shshid client
+                                        $datadate = Carbon\Carbon::createFromFormat(
+                                            'Y-m-d H:i:s',
+                                            $timesheetDatas->created_at,
+                                        );
+
+                                        $permotiondate = null;
+                                        if ($permotioncheck) {
+                                            $permotiondate = Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $permotioncheck->created_at,
+                                            );
+                                        }
+                                    @endphp
+                                    <td style="display: none;">{{ $timesheetDatas->id }}</td>
+                                    <td class="textfixed">{{ $timesheetDatas->team_member ?? '' }} </td>
+                                    @if ($permotioncheck && $datadate->greaterThan($permotiondate))
+                                        <td>{{ $permotioncheck->newstaff_code }}</td>
+                                    @else
+                                        <td>{{ $timesheetDatas->staffcode }}</td>
+                                    @endif
+
+                                    <td class="textfixed">{{ date('d-m-Y', strtotime($timesheetDatas->date)) }}
+                                    </td>
+                                    <td class="textfixed">
+                                        @if ($timesheetDatas->date != null)
+                                            {{ $dates ?? '' }}
+                                        @endif
+                                    </td>
+
+
+
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->client_name ?? '' }}
+                                            @if ($item->client_name != 0)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach ($client_id as $item)
+                                            {{ $item->client_code ?? '' }}
+                                            @if ($item->client_code != 0)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->assignment_name ?? '' }}
+                                            @if ($item->assignment_name != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->workitem ?? '' }}@if ($item->workitem != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->team_member ?? '' }}
+                                            @if ($item->team_member != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach ($client_id as $item)
+                                            @php
+
+                                                $partnerpermotioncheck = DB::table('teamrolehistory')
+                                                    ->where('teammember_id', $item->id)
+                                                    ->first();
+                                                //shshid client
+                                                $partnerdatadate = Carbon\Carbon::createFromFormat(
+                                                    'Y-m-d H:i:s',
+                                                    $timesheetDatas->created_at,
+                                                );
+
+                                                $partnerpermotiondate = null;
+                                                if ($partnerpermotioncheck) {
+                                                    $partnerpermotiondate = Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $partnerpermotioncheck->created_at,
+                                                    );
+                                                }
+                                            @endphp
+
+                                            @if ($partnerpermotioncheck && $partnerdatadate && $partnerdatadate->greaterThan($partnerpermotiondate))
+                                                {{ $partnerpermotioncheck->newstaff_code }}
+                                            @else
+                                                {{ $item->staffcode }}
+                                            @endif
+                                            @if ($item->team_member != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->hour ?? '' }} @if ($item->hour != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{ $total }}</td>
+                                    <td>
+                                        @if (auth()->user()->role_id == 18 || auth()->user()->role_id == 11)
+                                            <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->id) }}"
+                                                onclick="return confirm('Are you sure you want to delete this item?');"
+                                                class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a>
+                                        @else
+                                            <!-- <td> <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->id) }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                onclick="return confirm('Are you sure you want to delete this item?');"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        -->
+                                        @endif
+                                    </td>
+
+                                </tr>
+                            @endforeach
+
+                            {{-- @foreach ($timesheetData as $timesheet)
+                                @php
+                                    // dd($timesheet);
+                                    $clientData = $timesheetUsers[$timesheet->id] ?? collect();
+                                    $dates = date('l', strtotime($timesheet->date));
+
+                                    // Check promotion
+                                    $promotion = $promotionData[$timesheet->created_by] ?? null;
+                                    $datadate = \Carbon\Carbon::parse($timesheet->created_at);
+                                    $promotiondate = $promotion ? \Carbon\Carbon::parse($promotion->created_at) : null;
+
+                                    $total = DB::table('timesheetusers')
+                                        ->where('timesheetusers.timesheetid', $timesheet->id)
+                                        ->sum('hour');
+
+                                @endphp
+
+                                <tr>
+                                    <td style="display: none;">{{ $timesheet->id }}</td>
+                                    <td class="textfixed">{{ $timesheet->team_member ?? '' }}</td>
+                                    <td>{{ $promotion && $datadate->greaterThan($promotiondate) ? $promotion->newstaff_code : $timesheet->staffcode }}
+                                    </td>
+                                    <td class="textfixed">{{ date('d-m-Y', strtotime($timesheet->date)) }}</td>
+                                    <td class="textfixed">{{ $timesheet->date ? $dates : '' }}</td>
+
+                                    <td class="textfixed">{{ $clientData->pluck('client_name')->filter()->implode(', ') }}
+                                    </td>
+                                    <td>{{ $clientData->pluck('client_code')->filter()->implode(', ') }}</td>
+                                    <td class="textfixed">
+                                        {{ $clientData->pluck('assignment_name')->filter()->implode(', ') }}</td>
+                                    <td class="textfixed">{{ $clientData->pluck('workitem')->filter()->implode(', ') }}
+                                    </td>
+                                    <td class="textfixed">{{ $clientData->pluck('team_member')->filter()->implode(', ') }}
+                                    </td>
+
+                                    <td>
+                                        @foreach ($clientData as $client)
+                                            @php
+                                                $partnerPromotion = $promotionData[$client->teammember_id] ?? null;
+                                                $partnerdatadate = \Carbon\Carbon::parse($timesheet->created_at);
+                                                $partnerpromotiondate = $partnerPromotion
+                                                    ? \Carbon\Carbon::parse($partnerPromotion->created_at)
+                                                    : null;
+                                            @endphp
+
+                                            {{ $partnerPromotion && $partnerdatadate->greaterThan($partnerpromotiondate) ? $partnerPromotion->newstaff_code : $client->staffcode }}
+
+                                            @if (!$loop->last)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+
+                                    <td class="textfixed">
+                                        {{ $clientData->pluck('hour')->filter()->implode(', ') ?: '0' }}</td>
+
+                                    <td>{{ $total }}</td>
+                                    <td>
+                                        @if (auth()->user()->role_id == 18 || auth()->user()->role_id == 11)
+                                            <a href="{{ url('/timesheet/destroy/' . $timesheet->id) }}"
+                                                onclick="return confirm('Are you sure you want to delete this item?');"
+                                                class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach --}}
+
+                        </tbody>
+                    </table>
+                          
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+public function show(Request $request)
+
+ } elseif (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
+ 
+ 
+ 
+  } elseif (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
+
+      $teammember = DB::table('teammembers')
+        ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+        ->select('teammembers.id', 'teammembers.team_member', 'teammembers.emailid', 'roles.rolename', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->where('teammembers.status', '1')->distinct()->get();
+
+      $month = collect([
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December'
+      ]);
+
+      $timesheetData = DB::table('timesheets')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheets.created_by')
+        ->where('timesheets.created_by', $request->teammember)
+        ->where('timesheets.month', $request->month)
+        ->whereYear('timesheets.date', '=', $request->year)
+        ->where('timesheets.status', '=', 0)
+        ->select('timesheets.*', 'teammembers.team_member', 'teammembers.staffcode')->get();
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+  // this is for team submitted timesheet on Admin
+  
+  
+      // this is for team submitted timesheet on Admin
+    else {
+      // dd(auth()->user()->role_id);
+      $teamname = $request->input('teamname');
+      $start = $request->input('start');
+      $end = $request->input('end');
+      $totalhours = $request->input('totalhours');
+      $partnerId = $request->input('partnersearch');
+
+      $query = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->select('timesheetreport.*', 'teammembers.team_member', 'partners.team_member as partnername', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->orderBy('timesheetreport.startdate', 'desc');
+
+      // teamname with othser field to  filter
+      if ($teamname) {
+        $query->where('timesheetreport.teamid', $teamname);
+      }
+
+      if ($teamname && $totalhours) {
+        $query->where(function ($q) use ($teamname, $totalhours) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+      if ($teamname && $partnerId) {
+        $query->where(function ($q) use ($teamname, $partnerId) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.partnerid', $partnerId);
+        });
+      }
+
+      // patner or othse one data
+      if ($partnerId) {
+        $query->where('timesheetreport.partnerid', $partnerId);
+      }
+
+      if ($partnerId && $totalhours) {
+        $query->where(function ($q) use ($partnerId, $totalhours) {
+          $q->where('timesheetreport.partnerid', $partnerId)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+
+      // total hour wise  wise or othser data
+      if ($totalhours) {
+        $query->where('timesheetreport.totaltime', $totalhours);
+      }
+      //! end date 
+      if ($start && $end) {
+        $query->where(function ($query) use ($start, $end) {
+          $query->whereBetween('timesheetreport.startdate', [$start, $end])
+            ->orWhereBetween('timesheetreport.enddate', [$start, $end])
+            ->orWhere(function ($query) use ($start, $end) {
+              $query->where('timesheetreport.startdate', '<=', $start)
+                ->where('timesheetreport.enddate', '>=', $end);
+            });
+        });
+      }
+
+      $filteredDataaa = $query->get();
+
+      // maping double date ************
+      $groupedData = $filteredDataaa->groupBy(function ($item) {
+        return $item->team_member . '|' . $item->week;
+      })->map(function ($group) {
+        $firstItem = $group->first();
+
+        return (object)[
+          'id' => $firstItem->id,
+          'teamid' => $firstItem->teamid,
+          'week' => $firstItem->week,
+          'totaldays' => $group->sum('totaldays'),
+          'totaltime' => $group->sum('totaltime'),
+          'dayscount' => $group->sum('dayscount'),
+          'startdate' => $firstItem->startdate,
+          'enddate' => $firstItem->enddate,
+          'partnername' => $firstItem->partnername,
+          'created_at' => $firstItem->created_at,
+          'team_member' => $firstItem->team_member,
+          'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+          'partnerid' => $firstItem->partnerid,
+        ];
+      });
+
+      $filteredData = collect($groupedData->values());
+      // dd($filteredData);
+      return response()->json($filteredData);
+    }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function allteamsubmitted()
+  {
+    // Fetch all necessary data in a single query
+    $get_datess = DB::table('timesheetreport')
+      ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+      ->leftJoin('teamrolehistory', function ($join) {
+        $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+          ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+      })
+      ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+      // ->where('timesheetreport.teamid', 868)
+      ->select(
+        'timesheetreport.*',
+        'teamrolehistory.newstaff_code',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'partners.team_member as partnername',
+        'teammembers.emailid'
+      )
+      ->latest()
+      ->get();
+
+    $permissiontimesheet = DB::table('timesheetreport')->first();
+
+    // Map and group data
+    $groupedData = $get_datess->groupBy(function ($item) {
+      return $item->team_member . '|' . $item->week;
+    })->map(function ($group) {
+      $firstItem = $group->first();
+
+      return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'dayscount' => $group->sum('dayscount'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'emailid' => $firstItem->emailid,
+        // Use newstaff_code if available, otherwise staffcode
+        'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+        'partnerid' => $firstItem->partnerid,
+      ];
+    });
+
+    $get_date = collect($groupedData->values());
+
+
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'permissiontimesheet'));
+  }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\hrindex.blade.php
+
+                            @foreach ($timesheetData as $timesheetDatas)
+                                <tr>
+                                    @php
+                                        $client_id = DB::table('timesheetusers')
+                                            ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+                                            ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+                                            ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.partner')
+                                            ->where('timesheetusers.timesheetid', $timesheetDatas->id)
+                                            ->select(
+                                                'clients.client_name',
+                                                'clients.client_code',
+                                                'timesheetusers.hour',
+                                                'assignments.assignment_name',
+                                                'billable_status',
+                                                'workitem',
+                                                'teammembers.id',
+                                                'teammembers.team_member',
+                                                'teammembers.staffcode',
+                                            )
+                                            ->get();
+
+                                        //  dd($client_id);
+                                        $total = DB::table('timesheetusers')
+                                            ->where('timesheetusers.timesheetid', $timesheetDatas->id)
+                                            ->sum('hour');
+
+                                        $dates = date('l', strtotime($timesheetDatas->date));
+
+                                        $permotioncheck = DB::table('teamrolehistory')
+                                            ->where('teammember_id', $timesheetDatas->created_by)
+                                            ->first();
+
+                                        $assignmentcheck = DB::table('timesheetusers')
+                                            ->leftJoin(
+                                                'assignmentbudgetings',
+                                                'assignmentbudgetings.assignmentgenerate_id',
+                                                'timesheetusers.assignmentgenerate_id',
+                                            )
+                                            ->where('timesheetid', $timesheetDatas->id)
+                                            ->select('assignmentbudgetings.created_at')
+                                            ->first();
+
+                                        //shshid client
+
+                                        $datadate = $assignmentcheck->created_at
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $assignmentcheck->created_at,
+                                            )
+                                            : null;
+
+                                        $permotiondate = null;
+                                        if ($permotioncheck) {
+                                            $permotiondate = Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $permotioncheck->created_at,
+                                            );
+                                        }
+                                    @endphp
+                                    <td style="display: none;">{{ $timesheetDatas->id }}</td>
+                                    <td class="textfixed">{{ $timesheetDatas->team_member ?? '' }} </td>
+                                    @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                        <td>{{ $permotioncheck->newstaff_code }}</td>
+                                    @else
+                                        <td>{{ $timesheetDatas->staffcode }}</td>
+                                    @endif
+
+                                    <td class="textfixed">{{ date('d-m-Y', strtotime($timesheetDatas->date)) }}
+                                    </td>
+                                    <td class="textfixed">
+                                        @if ($timesheetDatas->date != null)
+                                            {{ $dates ?? '' }}
+                                        @endif
+                                    </td>
+
+
+
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->client_name ?? '' }}
+                                            @if ($item->client_name != 0)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach ($client_id as $item)
+                                            {{ $item->client_code ?? '' }}
+                                            @if ($item->client_code != 0)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->assignment_name ?? '' }}
+                                            @if ($item->assignment_name != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->workitem ?? '' }}@if ($item->workitem != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->team_member ?? '' }}
+                                            @if ($item->team_member != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        @foreach ($client_id as $item)
+                                            @php
+
+                                                $partnerpermotioncheck = DB::table('teamrolehistory')
+                                                    ->where('teammember_id', $item->id)
+                                                    ->first();
+
+                                                $assignmentcheck = DB::table('timesheetusers')
+                                                    ->leftJoin(
+                                                        'assignmentbudgetings',
+                                                        'assignmentbudgetings.assignmentgenerate_id',
+                                                        'timesheetusers.assignmentgenerate_id',
+                                                    )
+                                                    ->where('timesheetid', $timesheetDatas->id)
+                                                    ->select('assignmentbudgetings.created_at')
+                                                    ->first();
+
+                                                //shshid client
+
+                                                $partnerdatadate = $assignmentcheck->created_at
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $assignmentcheck->created_at,
+                                                    )
+                                                    : null;
+
+                                                $partnerpermotiondate = null;
+                                                if ($partnerpermotioncheck) {
+                                                    $partnerpermotiondate = Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $partnerpermotioncheck->created_at,
+                                                    );
+                                                }
+                                            @endphp
+
+                                            @if ($partnerpermotioncheck && $partnerdatadate && $partnerdatadate->greaterThan($partnerpermotiondate))
+                                                {{ $partnerpermotioncheck->newstaff_code }}
+                                            @else
+                                                {{ $item->staffcode }}
+                                            @endif
+                                            @if ($item->team_member != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td class="textfixed">
+                                        @foreach ($client_id as $item)
+                                            {{ $item->hour ?? '' }} @if ($item->hour != null)
+                                                ,
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td>{{ $total }}</td>
+                                    <td>
+                                        @if (auth()->user()->role_id == 18 || auth()->user()->role_id == 11)
+                                            <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->id) }}"
+                                                onclick="return confirm('Are you sure you want to delete this item?');"
+                                                class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a>
+                                        @else
+                                            <!-- <td> <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->id) }}"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            onclick="return confirm('Are you sure you want to delete this item?');"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a></td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    -->
+                                        @endif
+                                    </td>
+
+                                </tr>
+                            @endforeach
+							
+							
+							
+							
+							
+							
+							
+							
+							
+							
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\rejectedlist.blade.php
+ $assignmentcheck = DB::table('assignmentbudgetings')
+
+
+                                          $assignmentcheck = DB::table('assignmentbudgetings')
+                                            ->where('assignmentgenerate_id', $timesheetDatas->assignmentgenerate_id)
+                                            ->first();
+
+                                        $teamMembers = DB::table('teamrolehistory')
+                                            ->whereIn('teammember_id', [
+                                                $timesheetDatas->createdby,
+                                                $timesheetDatas->partner,
+                                            ])
+                                            ->get()
+                                            ->keyBy('teammember_id');
+
+                                        $datadate = $assignmentcheck
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $assignmentcheck->created_at,
+                                            )
+                                            : null;
+
+                                        // dd($teamMembers);
+
+                                        $permotioncheck = $teamMembers[$timesheetDatas->createdby] ?? null;
+                                        $approverdata = $teamMembers[$timesheetDatas->partner] ?? null;
+
+                                        $permotiondate = $permotioncheck
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $permotioncheck->created_at,
+                                            )
+                                            : null;
+                                        $approverdate = $approverdata
+                                            ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $approverdata->created_at)
+                                            : null;
+                                    @endphp
+									
+									
+									
+									
+									
+									
+									
+									
+ {{ $timesheetDatas->staffcode }}
+ 
+									
+                                    <td>
+                                        @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                            {{ $permotioncheck->newstaff_code }}
+                                        @else
+                                            {{ $timesheetDatas->staffcode }}
+                                        @endif
+                                    </td>
+									
+									
+									
+									
+@if (count((array) $client_id->assignment_name) > 1)
+									
+                                    <td class="textfixed">
+                                        {{ $client_id->assignment_name ?? '' }}
+                                        @if ($timesheetDatas->assignmentname != null)
+                                            ({{ $timesheetDatas->assignmentname ?? '' }})
+                                        @endif
+                                        @if (count((array) $client_id->assignment_name) > 1)
+                                            ,
+                                        @endif
+                                    </td>	
+
+
+
+
+  {{ $client_id->staffcode ?? '' }}
+  
+                                    <td class="textfixed">
+                                        @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                            {{ $approverdata->newstaff_code }}
+                                        @else
+                                            {{ $client_id->staffcode ?? '' }}
+                                        @endif
+                                        @if (count((array) $client_id->team_member) > 1)
+                                            ,
+                                        @endif
+                                    </td>									
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\report\assignmentreport.blade.php
+
+ ->where('teammembers.id', $assignmentmappingDatas->otherpartner)
+
+
+
+                                                 @php
+                                                    $leadpartner = DB::table('teammembers')
+                                                        ->leftJoin(
+                                                            'teamrolehistory',
+                                                            'teamrolehistory.teammember_id',
+                                                            '=',
+                                                            'teammembers.id',
+                                                        )
+                                                        ->where('teammembers.id', $assignmentmappingDatas->leadpartner)
+                                                        ->select(
+                                                            'teammembers.team_member',
+                                                            'teammembers.staffcode',
+                                                            'teamrolehistory.newstaff_code',
+                                                        )
+                                                        ->first();
+
+                                                    $otherPartner = DB::table('teammembers')
+                                                        ->leftJoin(
+                                                            'teamrolehistory',
+                                                            'teamrolehistory.teammember_id',
+                                                            '=',
+                                                            'teammembers.id',
+                                                        )
+                                                        ->where('teammembers.id', $assignmentmappingDatas->otherpartner)
+                                                        ->select(
+                                                            'teammembers.team_member',
+                                                            'teammembers.staffcode',
+                                                            'teamrolehistory.newstaff_code',
+                                                        )
+                                                        ->first();
+
+                                                @endphp
+                                                <td>
+                                                    {{ $leadpartner->team_member ?? '' }}
+                                                </td>
+                                                <td>
+                                                    @if ($leadpartner && $leadpartner->team_member)
+                                                        {{ $leadpartner->newstaff_code ?? ($leadpartner->staffcode ?? '') }}
+                                                    @endif
+                                                </td>
+
+                                                <td>
+                                                    {{ $otherPartner->team_member ?? '' }}
+                                                </td>
+                                                <td>
+                                                    @if ($otherPartner && $otherPartner->team_member)
+                                                        {{ $otherPartner->newstaff_code ?? ($otherPartner->staffcode ?? '') }}
+                                                    @endif
+                                                </td>
+												
+									
+
+									
+												
+												
+ <td>{{ App\Models\Teammember::select('team_member')->where('id', $assignmentmappingcloseDatas->otherpartner)->first()											
+												
+
+
+                                            @php
+                                                $leadpartner = DB::table('teammembers')
+                                                    ->leftJoin(
+                                                        'teamrolehistory',
+                                                        'teamrolehistory.teammember_id',
+                                                        '=',
+                                                        'teammembers.id',
+                                                    )
+                                                    ->where('teammembers.id', $assignmentmappingcloseDatas->leadpartner)
+                                                    ->select(
+                                                        'teammembers.team_member',
+                                                        'teammembers.staffcode',
+                                                        'teamrolehistory.newstaff_code',
+                                                    )
+                                                    ->first();
+
+                                                $otherPartner = DB::table('teammembers')
+                                                    ->leftJoin(
+                                                        'teamrolehistory',
+                                                        'teamrolehistory.teammember_id',
+                                                        '=',
+                                                        'teammembers.id',
+                                                    )
+                                                    ->where(
+                                                        'teammembers.id',
+                                                        $assignmentmappingcloseDatas->otherpartner,
+                                                    )
+                                                    ->select(
+                                                        'teammembers.team_member',
+                                                        'teammembers.staffcode',
+                                                        'teamrolehistory.newstaff_code',
+                                                    )
+                                                    ->first();
+
+                                            @endphp
+                                            <td>
+                                                {{ $leadpartner->team_member ?? '' }}
+                                            </td>
+                                            <td>
+                                                @if ($leadpartner && $leadpartner->team_member)
+                                                    {{ $leadpartner->newstaff_code ?? ($leadpartner->staffcode ?? '') }}
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                {{ $otherPartner->team_member ?? '' }}
+                                            </td>
+                                            <td>
+                                                @if ($otherPartner && $otherPartner->team_member)
+                                                    {{ $otherPartner->newstaff_code ?? ($otherPartner->staffcode ?? '') }}
+                                                @endif
+                                            </td>
+											
+											
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php
+
+    public function assignmentviewer()
+    {
+        // $assignmentviwerteams = DB::table('assignmentmappings')
+        //     ->join('assignmentbudgetings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+        //     ->join('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+        //     ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+        //     ->leftjoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+        //     ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'assignmentteammappings.teammember_id')
+        //     ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+        //     ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        //     ->where('assignmentteammappings.viewerteam', 1)
+        //     ->select(
+        //         'teammembers.*',
+        //         'roles.rolename',
+        //         'assignmentteammappings.type',
+        //         'titles.title',
+        //         'assignmentteammappings.id As assignmentteammappingsId',
+        //         'assignmentteammappings.status as assignmentteammappingsStatus',
+        //         'assignmentmappings.assignmentgenerate_id as assignmentgenerateid',
+        //         'assignmentteammappings.teamhour',
+        //         'assignmentmappings.leadpartner',
+        //         'teamrolehistory.newstaff_code',
+        //         'assignmentbudgetings.assignmentname',
+        //         'assignments.assignment_name',
+        //         'assignmentteammappings.viewerteam'
+        //     )
+        //     ->get();
+
+        $assignmentviwerteams = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+            ->join('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+            ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+            ->leftJoin('teamrolehistory', function ($join) {
+                $join->on('teamrolehistory.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                    ->on('teamrolehistory.created_at', '<', 'assignmentteammappings.created_at');
+            })
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->where('assignmentteammappings.viewerteam', 1)
+            ->select(
+                'teammembers.*',
+                'roles.rolename',
+                'assignmentteammappings.type',
+                'titles.title',
+                'assignmentteammappings.id As assignmentteammappingsId',
+                'assignmentteammappings.status as assignmentteammappingsStatus',
+                'assignmentmappings.assignmentgenerate_id as assignmentgenerateid',
+                'assignmentteammappings.teamhour',
+                'assignmentmappings.leadpartner',
+                'teamrolehistory.newstaff_code',
+                'assignmentbudgetings.assignmentname',
+                'assignments.assignment_name',
+                'assignmentteammappings.viewerteam'
+            )
+            ->get();
+
+        // dd($assignmentviwerteams);
+
+        return view('backEnd.assignmentviewer', compact('assignmentviwerteams'));
+    }
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AttendanceController.php
+ // Fetch single user data
+
+
+        // Fetch single user data
+        // $singleusersearched = DB::table('teammembers')
+        //     ->where('id', $teamnid)
+        //     ->select('team_member', 'staffcode', 'id', 'leavingdate', 'joining_date')
+        //     ->first();
+
+        $singleusersearched = DB::table('teammembers')
+            ->where('teammembers.id', $teamnid)
+            ->leftJoin(
+                'teamrolehistory',
+                'teamrolehistory.teammember_id',
+                '=',
+                'teammembers.id',
+            )
+            ->leftJoin(
+                'rejoiningsamepost',
+                'rejoiningsamepost.teammember_id',
+                '=',
+                'teammembers.id',
+            )
+            ->select([
+                'teammembers.id',
+                'teammembers.team_member',
+                'teammembers.staffcode',
+                'teammembers.joining_date',
+                'teammembers.team_member',
+                DB::raw(
+                    'COALESCE(teamrolehistory.rejoiniedexitdate, rejoiningsamepost.rejoiniedexitdate, teammembers.leavingdate) AS final_leavingdate',
+                ),
+            ])
+            ->first();
+
+        // dd($singleusersearched);
+
+        // Check leaving date validation
+        if ($singleusersearched && $singleusersearched->final_leavingdate) {
+            $final_leavingdate = Carbon::parse($singleusersearched->final_leavingdate);
+            if ($startdate->gt($final_leavingdate)) {
+                $output = ['msg' => 'User left on ' . $final_leavingdate->format('d-m-Y') . ', cannot select beyond this date.'];
+                $request->flash();
+                return redirect()->to('attendance')->with('statuss', $output);
+            }
+        }
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\adminopen.blade.php
+ $permotioncheck = DB::table('teamrolehistory')
+
+                                      @php
+                                        $teamMembers = DB::table('teamrolehistory')
+                                            ->whereIn('teammember_id', [
+                                                $applyleaveDatas->createdby,
+                                                $applyleaveDatas->approver,
+                                            ])
+                                            ->get()
+                                            ->keyBy('teammember_id');
+
+                                        $datadate = $applyleaveDatas->created_at
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $applyleaveDatas->created_at,
+                                            )
+                                            : null;
+
+                                        $permotioncheck = $teamMembers[$applyleaveDatas->createdby] ?? null;
+                                        $approverdata = $teamMembers[$applyleaveDatas->approver] ?? null;
+
+                                        $permotiondate = $permotioncheck
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $permotioncheck->created_at,
+                                            )
+                                            : null;
+                                        $approverdate = $approverdata
+                                            ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $approverdata->created_at)
+                                            : null;
+                                    @endphp
+									
+	
+
+
+
+
+	
+
+ {{ $applyleaveDatas->staffcode }}
+
+					
+	                                    <td>
+                                        @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                            {{ $permotioncheck->newstaff_code }}
+                                        @else
+                                            {{ $applyleaveDatas->staffcode }}
+                                        @endif
+                                    </td>								
+									
+	
+
+	
+									
+				
+
+
+
+
+
+				
+ {{ App\Models\Teammember::select('team_member', 'staffcode')->where('id', $applyleaveDatas->approver)->first()->staffcode ?? '' }}									
+									
+									
+
+                                    <td class="textfixed">
+                                        {{ App\Models\Teammember::select('team_member')->where('id', $applyleaveDatas->approver)->first()->team_member ?? '' }}
+
+                                    </td>
+                                    <td>
+                                        @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                            {{ $approverdata->newstaff_code }}
+                                        @else
+                                            {{ App\Models\Teammember::select('team_member', 'staffcode')->where('id', $applyleaveDatas->approver)->first()->staffcode ?? '' }}
+                                        @endif
+                                    </td>
+									
+									
+									
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\index.blade.php
+ <td>{{ $applyleaveDatas->staffcode }}</td>
+ 
+
+                                              <td> {{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->staffcode ?? '') }}
+                                              </td>
+											  
+											  
+											  
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
+index function 
+ } else {
+ 
+ 
+       $teamapplyleaveDatas  = DB::table('applyleaves')
+        ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+        ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'applyleaves.createdby')
+            ->on('teamrolehistoryteam.created_at', '<', 'applyleaves.created_at');
+        })
+        ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        ->where('applyleaves.approver', auth()->user()->teammember_id)
+        ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name', 'teamrolehistoryteam.newstaff_code')->get();
+
+
+
+
+
+
+
+index function 
+ } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+
+
+
+      $teamapplyleaveDatas  = DB::table('applyleaves')
+        ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+        ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'applyleaves.createdby')
+            ->on('teamrolehistoryteam.created_at', '<', 'applyleaves.created_at');
+        })
+        ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        ->where('applyleaves.approver', auth()->user()->teammember_id)
+        ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name', 'teamrolehistoryteam.newstaff_code')->get();
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\examrequestlist.blade.php
+ @foreach ($timesheetrequestsDatas as $timesheetrequestsData)
+ 
+                                         @php
+                                                $teamMembers = DB::table('teamrolehistory')
+                                                    ->whereIn('teammember_id', [
+                                                        $timesheetrequestsData->createdby,
+                                                        $timesheetrequestsData->approver,
+                                                    ])
+                                                    ->get()
+                                                    ->keyBy('teammember_id');
+
+                                                $datadate = $timesheetrequestsData->created_at
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $timesheetrequestsData->created_at,
+                                                    )
+                                                    : null;
+
+                                                $permotioncheck =
+                                                    $teamMembers[$timesheetrequestsData->createdby] ?? null;
+                                                $approverdata = $teamMembers[$timesheetrequestsData->approver] ?? null;
+
+                                                $permotiondate = $permotioncheck
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $permotioncheck->created_at,
+                                                    )
+                                                    : null;
+                                                $approverdate = $approverdata
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $approverdata->created_at,
+                                                    )
+                                                    : null;
+                                            @endphp
+											
+										
+
+
+
+
+										
+ {{ $timesheetrequestsData->teamstaffcode }}
+ 
+                                            <td>
+                                                @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                    {{ $permotioncheck->newstaff_code }}
+                                                @else
+                                                    {{ $timesheetrequestsData->teamstaffcode }}
+                                                @endif
+                                            </td>
+
+
+
+		
+
+
+ {{ $timesheetrequestsData->staffcode }}
+ 
+ 
+                                          <td>
+                                                @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                                    {{ $approverdata->newstaff_code }}
+                                                @else
+                                                    {{ $timesheetrequestsData->staffcode }}
+                                                @endif
+                                            </td>
+
+
+
+											
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\examrequestlist.blade.php
+ @foreach ($myteamtimesheetrequestsDatas as $timesheetrequestsDatass)
+                   
+				   
+                                            @php
+                                                $teamMembers = DB::table('teamrolehistory')
+                                                    ->whereIn('teammember_id', [
+                                                        $timesheetrequestsDatass->createdby,
+                                                        $timesheetrequestsDatass->approver,
+                                                    ])
+                                                    ->get()
+                                                    ->keyBy('teammember_id');
+
+                                                $datadate = $timesheetrequestsDatass->created_at
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $timesheetrequestsDatass->created_at,
+                                                    )
+                                                    : null;
+
+                                                $permotioncheck =
+                                                    $teamMembers[$timesheetrequestsDatass->createdby] ?? null;
+                                                $approverdata =
+                                                    $teamMembers[$timesheetrequestsDatass->approver] ?? null;
+
+                                                $permotiondate = $permotioncheck
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $permotioncheck->created_at,
+                                                    )
+                                                    : null;
+                                                $approverdate = $approverdata
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $approverdata->created_at,
+                                                    )
+                                                    : null;
+                                            @endphp
+
+
+
+
+
+
+ {{ $timesheetrequestsDatass->teamstaffcode }}
+
+                                            <td>
+                                                @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                    {{ $permotioncheck->newstaff_code }}
+                                                @else
+                                                    {{ $timesheetrequestsDatass->teamstaffcode }}
+                                                @endif
+                                            </td>
+											
+											
+			
+
+			
+
+
+
+{{ $timesheetrequestsDatass->staffcode }}
+
+                                            <td>
+                                                @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                                    {{ $approverdata->newstaff_code }}
+                                                @else
+                                                    {{ $timesheetrequestsDatass->staffcode }}
+                                                @endif
+                                            </td>										
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
+  @foreach ($teamtimesheetrequest as $timesheetrequestsData)
+  
+                                          @php
+                                                $teamMembers = DB::table('teamrolehistory')
+                                                    ->whereIn('teammember_id', [
+                                                        $timesheetrequestsData->createdby,
+                                                        $timesheetrequestsData->partner,
+                                                    ])
+                                                    ->get()
+                                                    ->keyBy('teammember_id');
+
+                                                $datadate = $timesheetrequestsData->created_at
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $timesheetrequestsData->created_at,
+                                                    )
+                                                    : null;
+
+                                                $permotioncheck =
+                                                    $teamMembers[$timesheetrequestsData->createdby] ?? null;
+                                                $approverdata = $teamMembers[$timesheetrequestsData->partner] ?? null;
+
+                                                $permotiondate = $permotioncheck
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $permotioncheck->created_at,
+                                                    )
+                                                    : null;
+                                                $approverdate = $approverdata
+                                                    ? Carbon\Carbon::createFromFormat(
+                                                        'Y-m-d H:i:s',
+                                                        $approverdata->created_at,
+                                                    )
+                                                    : null;
+                                            @endphp
+											
+											
+											
+											
+   {{ $timesheetrequestsData->staffcodeid }}
+   
+                                            <td>
+                                                @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                    {{ $permotioncheck->newstaff_code }}
+                                                @else
+                                                    {{ $timesheetrequestsData->staffcodeid }}
+                                                @endif
+                                            </td>
+											
+											
+											
+											
+	 {{ $timesheetrequestsData->staffcode }}										
+											
+                                            <td>
+                                                @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                                    {{ $approverdata->newstaff_code }}
+                                                @else
+                                                    {{ $timesheetrequestsData->staffcode }}
+                                                @endif
+                                            </td>											
+											
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+  public function timesheet_teamlist()
+  
+  
+  if (auth()->user()->role_id == 13) {
+
+    $get_datess = DB::table('timesheetreport')
+        ->leftJoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftJoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.partnerid', auth()->user()->teammember_id)
+        ->whereColumn('timesheetreport.teamid', '!=', 'timesheetreport.partnerid')
+        ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.staffcode', 'partners.team_member as partnername', 'teammembers.emailid', 'teamrolehistory.newstaff_code')
+        ->latest()
+        ->get();
+		
+		
+		
+		
+		
+and replace 
+
+ return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'emailid' => $firstItem->emailid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'partnerid' => $firstItem->partnerid,
+        'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+      ];
+    });
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+public function filterDataAdmin(Request $request)
+elseif (auth()->user()->role_id == 13 && $path == '/timesheet/teamlist') {
+
+
+
+      $query = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.partnerid', auth()->user()->teammember_id)
+        // ->whereJsonContains('timesheetreport.partnerid', auth()->user()->teammember_id)
+        ->select('timesheetreport.*', 'teammembers.team_member', 'partners.team_member as partnername', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->orderBy('timesheetreport.startdate', 'desc');
+		
+		
+		
+		
+		
+		
+and find 
+  if (auth()->user()->role_id != 11) {
+  
+  
+  
+        return (object)[
+          'id' => $firstItem->id,
+          'teamid' => $firstItem->teamid,
+          'week' => $firstItem->week,
+          'totaldays' => $group->sum('totaldays'),
+          'totaltime' => $group->sum('totaltime'),
+          'startdate' => $firstItem->startdate,
+          'enddate' => $firstItem->enddate,
+          'partnername' => $firstItem->partnername,
+          'created_at' => $firstItem->created_at,
+          'team_member' => $firstItem->team_member,
+          'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+          'partnerid' => $firstItem->partnerid,
+        ];
+      });
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function filterDataAdmin(Request $request)
+  {
+    $urlheader = $request->headers->get('referer');
+    $url = parse_url($urlheader);
+    $path = $url['path'];
+    // dd($url);
+    // this is for patner submitted timesheet 
+    if (auth()->user()->role_id == 13 && $path == '/timesheet/partnersubmitted') {
+      // dd('patner');
+      $teamname = $request->input('teamname');
+      $start = $request->input('start');
+      $end = $request->input('end');
+      $totalhours = $request->input('totalhours');
+      $partnerId = $request->input('partnersearch');
+
+
+      $query = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->select('timesheetreport.*', 'teammembers.team_member', 'partners.team_member as partnername', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->latest();
+
+      // teamname with othser field to  filter
+      if ($teamname) {
+        $query->where('timesheetreport.teamid', $teamname);
+      }
+
+      if ($teamname && $totalhours) {
+        $query->where(function ($q) use ($teamname, $totalhours) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+      if ($teamname && $partnerId) {
+        $query->where(function ($q) use ($teamname, $partnerId) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.partnerid', $partnerId);
+        });
+      }
+
+      // patner or othse one data
+      if ($partnerId) {
+        $query->where('timesheetreport.partnerid', $partnerId);
+      }
+
+      if ($partnerId && $totalhours) {
+        $query->where(function ($q) use ($partnerId, $totalhours) {
+          $q->where('timesheetreport.partnerid', $partnerId)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+
+      // total hour wise  wise or othser data
+      if ($totalhours) {
+        $query->where('timesheetreport.totaltime', $totalhours);
+      }
+      //! end date 
+      if ($start && $end) {
+        $query->where(function ($query) use ($start, $end) {
+          $query->whereBetween('timesheetreport.startdate', [$start, $end])
+            ->orWhereBetween('timesheetreport.enddate', [$start, $end])
+            ->orWhere(function ($query) use ($start, $end) {
+              $query->where('timesheetreport.startdate', '<=', $start)
+                ->where('timesheetreport.enddate', '>=', $end);
+            });
+        });
+      }
+    }
+    // this is for team submitted timesheet on patner
+    elseif (auth()->user()->role_id == 13 && $path == '/timesheet/teamlist') {
+      // dd($request);
+      // dd('team');
+      $teamname = $request->input('teamname');
+      $start = $request->input('start');
+      $end = $request->input('end');
+      $totalhours = $request->input('totalhours');
+      $partnerId = $request->input('partnersearch');
+
+
+      $query = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.partnerid', auth()->user()->teammember_id)
+        // ->whereJsonContains('timesheetreport.partnerid', auth()->user()->teammember_id)
+        ->select('timesheetreport.*', 'teammembers.team_member', 'partners.team_member as partnername', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->orderBy('timesheetreport.startdate', 'desc');
+
+
+
+      // teamname with othser field to  filter
+      if ($teamname) {
+        $query->where('timesheetreport.teamid', $teamname);
+      }
+
+      if ($teamname && $totalhours) {
+        $query->where(function ($q) use ($teamname, $totalhours) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+      if ($teamname && $partnerId) {
+        $query->where(function ($q) use ($teamname, $partnerId) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.partnerid', $partnerId);
+        });
+      }
+
+      // patner or othse one data
+      if ($partnerId) {
+        $query->where('timesheetreport.partnerid', $partnerId);
+      }
+
+      if ($partnerId && $totalhours) {
+        $query->where(function ($q) use ($partnerId, $totalhours) {
+          $q->where('timesheetreport.partnerid', $partnerId)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+
+      // total hour wise  wise or othser data
+      if ($totalhours) {
+        $query->where('timesheetreport.totaltime', $totalhours);
+      }
+      //! end date 
+      if ($start && $end) {
+        $query->where(function ($query) use ($start, $end) {
+          $query->whereBetween('timesheetreport.startdate', [$start, $end])
+            ->orWhereBetween('timesheetreport.enddate', [$start, $end])
+            ->orWhere(function ($query) use ($start, $end) {
+              $query->where('timesheetreport.startdate', '<=', $start)
+                ->where('timesheetreport.enddate', '>=', $end);
+            });
+        });
+      }
+    }
+    // this is for submitted timesheet on staff and manager 
+    elseif (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+      // dd($request);
+      $teamname = $request->input('teamname');
+      $start = $request->input('start');
+      $end = $request->input('end');
+      $totalhours = $request->input('totalhours');
+      $partnerId = $request->input('partnersearch');
+
+
+      $query = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->select('timesheetreport.*', 'teammembers.team_member', 'partners.team_member as partnername', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->latest();
+
+      // teamname with othser field to  filter
+      if ($teamname) {
+        $query->where('timesheetreport.teamid', $teamname);
+      }
+
+      if ($teamname && $totalhours) {
+        $query->where(function ($q) use ($teamname, $totalhours) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+      if ($teamname && $partnerId) {
+        $query->where(function ($q) use ($teamname, $partnerId) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.partnerid', $partnerId);
+        });
+      }
+
+      // patner or othse one data
+      if ($partnerId) {
+        $query->where('timesheetreport.partnerid', $partnerId);
+      }
+
+      if ($partnerId && $totalhours) {
+        $query->where(function ($q) use ($partnerId, $totalhours) {
+          $q->where('timesheetreport.partnerid', $partnerId)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+
+      // total hour wise  wise or othser data
+      if ($totalhours) {
+        $query->where('timesheetreport.totaltime', $totalhours);
+      }
+      //! end date 
+      if ($start && $end) {
+        $query->where(function ($query) use ($start, $end) {
+          $query->whereBetween('timesheetreport.startdate', [$start, $end])
+            ->orWhereBetween('timesheetreport.enddate', [$start, $end])
+            ->orWhere(function ($query) use ($start, $end) {
+              $query->where('timesheetreport.startdate', '<=', $start)
+                ->where('timesheetreport.enddate', '>=', $end);
+            });
+        });
+      }
+    }
+    // this is for team submitted timesheet on Admin
+    else {
+      // dd(auth()->user()->role_id);
+      $teamname = $request->input('teamname');
+      $start = $request->input('start');
+      $end = $request->input('end');
+      $totalhours = $request->input('totalhours');
+      $partnerId = $request->input('partnersearch');
+
+      $query = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->select('timesheetreport.*', 'teammembers.team_member', 'partners.team_member as partnername', 'teammembers.staffcode', 'teamrolehistory.newstaff_code')
+        ->orderBy('timesheetreport.startdate', 'desc');
+
+      // teamname with othser field to  filter
+      if ($teamname) {
+        $query->where('timesheetreport.teamid', $teamname);
+      }
+
+      if ($teamname && $totalhours) {
+        $query->where(function ($q) use ($teamname, $totalhours) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+      if ($teamname && $partnerId) {
+        $query->where(function ($q) use ($teamname, $partnerId) {
+          $q->where('timesheetreport.teamid', $teamname)
+            ->where('timesheetreport.partnerid', $partnerId);
+        });
+      }
+
+      // patner or othse one data
+      if ($partnerId) {
+        $query->where('timesheetreport.partnerid', $partnerId);
+      }
+
+      if ($partnerId && $totalhours) {
+        $query->where(function ($q) use ($partnerId, $totalhours) {
+          $q->where('timesheetreport.partnerid', $partnerId)
+            ->where('timesheetreport.totaltime', $totalhours);
+        });
+      }
+
+      // total hour wise  wise or othser data
+      if ($totalhours) {
+        $query->where('timesheetreport.totaltime', $totalhours);
+      }
+      //! end date 
+      if ($start && $end) {
+        $query->where(function ($query) use ($start, $end) {
+          $query->whereBetween('timesheetreport.startdate', [$start, $end])
+            ->orWhereBetween('timesheetreport.enddate', [$start, $end])
+            ->orWhere(function ($query) use ($start, $end) {
+              $query->where('timesheetreport.startdate', '<=', $start)
+                ->where('timesheetreport.enddate', '>=', $end);
+            });
+        });
+      }
+
+      $filteredDataaa = $query->get();
+
+      // maping double date ************
+      $groupedData = $filteredDataaa->groupBy(function ($item) {
+        return $item->team_member . '|' . $item->week;
+      })->map(function ($group) {
+        $firstItem = $group->first();
+
+        return (object)[
+          'id' => $firstItem->id,
+          'teamid' => $firstItem->teamid,
+          'week' => $firstItem->week,
+          'totaldays' => $group->sum('totaldays'),
+          'totaltime' => $group->sum('totaltime'),
+          'dayscount' => $group->sum('dayscount'),
+          'startdate' => $firstItem->startdate,
+          'enddate' => $firstItem->enddate,
+          'partnername' => $firstItem->partnername,
+          'created_at' => $firstItem->created_at,
+          'team_member' => $firstItem->team_member,
+          'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+          'partnerid' => $firstItem->partnerid,
+        ];
+      });
+
+      $filteredData = collect($groupedData->values());
+      // dd($filteredData);
+      return response()->json($filteredData);
+    }
+
+    if (auth()->user()->role_id != 11) {
+      $filteredDataaa = $query->get();
+
+      // maping double date ************
+      $groupedData = $filteredDataaa->groupBy(function ($item) {
+        return $item->team_member . '|' . $item->week;
+      })->map(function ($group) {
+        $firstItem = $group->first();
+
+        return (object)[
+          'id' => $firstItem->id,
+          'teamid' => $firstItem->teamid,
+          'week' => $firstItem->week,
+          'totaldays' => $group->sum('totaldays'),
+          'totaltime' => $group->sum('totaltime'),
+          'startdate' => $firstItem->startdate,
+          'enddate' => $firstItem->enddate,
+          'partnername' => $firstItem->partnername,
+          'created_at' => $firstItem->created_at,
+          'team_member' => $firstItem->team_member,
+          'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+          'partnerid' => $firstItem->partnerid,
+        ];
+      });
+
+      $filteredData = collect($groupedData->values());
+      return response()->json($filteredData);
+    }
+  }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function weeklylist(Request $request)
+  {
+    // dd($request);
+    if (auth()->user()->role_id == 13) {
+
+      $date = DB::table('timesheetreport')->where('id', $request->id)->first();
+      // $timesheetData = DB::table('timesheetusers')
+      //   ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+      //   ->where('timesheetusers.createdby', $request->teamid)
+      //   ->whereIn('timesheetusers.status', [1, 2, 3])
+      //   ->where('timesheetusers.date', '>=', $date->startdate)
+      //   ->where('timesheetusers.date', '<=', $date->enddate)
+      //   ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+      //   ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+      //   ->leftjoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+      //   ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+      //   ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+      //   // ->select('timesheetusers.*', 'assignments.assignment_name', 'clients.client_name', 'teammembers.team_member', 'teammembers.staffcode', 'patnerid.team_member as patnername', 'assignmentbudgetings.assignmentname')
+      //   ->select('timesheetusers.*', 'assignments.assignment_name', 'clients.client_name', 'clients.client_code', 'teammembers.team_member', 'teammembers.staffcode', 'patnerid.team_member as patnername', 'patnerid.staffcode as patnerstaffcodee', 'assignmentbudgetings.assignmentname', 'teamrolehistory.newstaff_code', 'assignmentbudgetings.created_at as assignmentcreated')
+      //   ->orderBy('id', 'ASC')
+      //   //   ->orderBy('date', 'DESC')
+      //   ->get();
+
+      $timesheetData = DB::table('timesheetusers')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'teammembers.id')
+            ->whereRaw('teamrolehistoryteam.created_at < assignmentbudgetings.created_at');
+        })
+        ->where('timesheetusers.createdby', $request->teamid)
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->where('timesheetusers.date', '>=', $date->startdate)
+        ->where('timesheetusers.date', '<=', $date->enddate)
+        ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+        ->leftjoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'patnerid.id')
+            ->whereRaw('teamrolehistory.created_at < assignmentbudgetings.created_at');
+        })
+        ->select(
+          'timesheetusers.*',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'teammembers.team_member',
+          'teammembers.staffcode',
+          'patnerid.team_member as patnername',
+          'patnerid.staffcode as patnerstaffcodee',
+          'assignmentbudgetings.assignmentname',
+          'teamrolehistory.newstaff_code as ptnrstaffcode',
+          'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+          'assignmentbudgetings.created_at as assignmentcreated'
+        )
+        ->orderBy('timesheetusers.id', 'ASC')
+        ->get();
+    } else {
+      $date = DB::table('timesheetreport')->where('id', $request->id)->first();
+      // $timesheetData = DB::table('timesheetusers')
+      //   ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+      //   ->where('timesheetusers.createdby', $request->teamid)
+      //   ->whereIn('timesheetusers.status', [1, 2, 3])
+      //   ->where('timesheetusers.date', '>=', $date->startdate)
+      //   ->where('timesheetusers.date', '<=', $date->enddate)
+      //   ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+      //   ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+      //   ->leftjoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+      //   ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+      //   ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+      //   ->select('timesheetusers.*', 'assignments.assignment_name', 'clients.client_name', 'clients.client_code', 'teammembers.team_member', 'teammembers.staffcode', 'patnerid.team_member as patnername', 'patnerid.staffcode as patnerstaffcodee', 'assignmentbudgetings.assignmentname', 'teamrolehistory.newstaff_code', 'assignmentbudgetings.created_at as assignmentcreated')
+      //   ->orderBy('id', 'ASC')
+      //   ->get();
+      $timesheetData = DB::table('timesheetusers')
+        ->leftJoin('teammembers', 'teammembers.id', '=', 'timesheetusers.createdby')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'timesheetusers.assignmentgenerate_id') // Move this join up
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'teammembers.id')
+            ->whereRaw('teamrolehistoryteam.created_at < assignmentbudgetings.created_at');
+        })
+        ->where('timesheetusers.createdby', $request->teamid)
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->whereBetween('timesheetusers.date', [$date->startdate, $date->enddate])
+        ->leftJoin('clients', 'clients.id', '=', 'timesheetusers.client_id')
+        ->leftJoin('assignments', 'assignments.id', '=', 'timesheetusers.assignment_id')
+        ->leftJoin('teammembers as patnerid', 'patnerid.id', '=', 'timesheetusers.partner')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'patnerid.id')
+            ->whereRaw('teamrolehistory.created_at < assignmentbudgetings.created_at');
+        })
+        ->select(
+          'timesheetusers.*',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'teammembers.team_member',
+          'teammembers.staffcode',
+          'patnerid.team_member as patnername',
+          'patnerid.staffcode as patnerstaffcodee',
+          'assignmentbudgetings.assignmentname',
+          'teamrolehistory.newstaff_code as ptnrstaffcode',
+          'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+          'assignmentbudgetings.created_at as assignmentcreated'
+        )
+        ->orderBy('timesheetusers.id', 'ASC')
+        ->get();
+    }
+    return view('backEnd.timesheet.weeklylist', compact('timesheetData'));
+  }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\rejectedlistteam.blade.php
+@foreach ($timesheetData as $timesheetDatas)
+ $dates = date('l', strtotime($timesheetDatas->date));
+
+
+
+                                     $dates = date('l', strtotime($timesheetDatas->date));
+
+                                        $assignmentcheck = DB::table('assignmentbudgetings')
+                                            ->where('assignmentgenerate_id', $timesheetDatas->assignmentgenerate_id)
+                                            ->first();
+
+                                        $teamMembers = DB::table('teamrolehistory')
+                                            ->whereIn('teammember_id', [
+                                                $timesheetDatas->createdby,
+                                                $timesheetDatas->partner,
+                                            ])
+                                            ->get()
+                                            ->keyBy('teammember_id');
+
+                                        $datadate = $assignmentcheck
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $assignmentcheck->created_at,
+                                            )
+                                            : null;
+
+                                        // dd($teamMembers);
+
+                                        $permotioncheck = $teamMembers[$timesheetDatas->createdby] ?? null;
+                                        $approverdata = $teamMembers[$timesheetDatas->partner] ?? null;
+
+                                        $permotiondate = $permotioncheck
+                                            ? Carbon\Carbon::createFromFormat(
+                                                'Y-m-d H:i:s',
+                                                $permotioncheck->created_at,
+                                            )
+                                            : null;
+                                        $approverdate = $approverdata
+                                            ? Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $approverdata->created_at)
+                                            : null;
+                                    @endphp
+
+
+                                    <td>
+                                        @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                            {{ $permotioncheck->newstaff_code }}
+                                        @else
+                                            {{ $timesheetDatas->staffcode }}
+                                        @endif
+                                    </td>
+
+
+
+
+
+
+                                        <td>
+                                            @foreach ($client_id as $item)
+                                                @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                                    {{ $approverdata->newstaff_code }}
+                                                @else
+                                                    {{ $item->staffcode ?? '' }}
+                                                @endif
+                                                @if ($item->staffcode != null)
+                                                    ,
+                                                @endif
+                                            @endforeach
+                                        </td>
+										
+
+
+										
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\openindex.blade.php
+       @foreach ($teamapplyleaveDatas as $applyleaveDatas)
+	   
+	  after tr add this code
+
+                                     @php
+                                              $teamMembers = DB::table('teamrolehistory')
+                                                  ->whereIn('teammember_id', [
+                                                      $applyleaveDatas->createdby,
+                                                      $applyleaveDatas->approver,
+                                                  ])
+                                                  ->get()
+                                                  ->keyBy('teammember_id');
+
+                                              $datadate = $applyleaveDatas->created_at
+                                                  ? Carbon\Carbon::createFromFormat(
+                                                      'Y-m-d H:i:s',
+                                                      $applyleaveDatas->created_at,
+                                                  )
+                                                  : null;
+
+                                              $permotioncheck = $teamMembers[$applyleaveDatas->createdby] ?? null;
+                                              $approverdata = $teamMembers[$applyleaveDatas->approver] ?? null;
+
+                                              $permotiondate = $permotioncheck
+                                                  ? Carbon\Carbon::createFromFormat(
+                                                      'Y-m-d H:i:s',
+                                                      $permotioncheck->created_at,
+                                                  )
+                                                  : null;
+                                              $approverdate = $approverdata
+                                                  ? Carbon\Carbon::createFromFormat(
+                                                      'Y-m-d H:i:s',
+                                                      $approverdata->created_at,
+                                                  )
+                                                  : null;
+                                          @endphp
+
+
+
+
+
+ {{ $applyleaveDatas->staffcode ?? '' }}
+
+                                          <td>
+                                              @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                  {{ $permotioncheck->newstaff_code }}
+                                              @else
+                                                  {{ $applyleaveDatas->staffcode ?? '' }}
+                                              @endif
+                                          </td>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
+@foreach ($mytimesheetrequest as $timesheetrequestsData)
+                                   
+								   
+                                                @php
+                                                    $teamMembers = DB::table('teamrolehistory')
+                                                        ->whereIn('teammember_id', [
+                                                            $timesheetrequestsData->createdby,
+                                                            $timesheetrequestsData->partner,
+                                                        ])
+                                                        ->get()
+                                                        ->keyBy('teammember_id');
+
+                                                    $datadate = $timesheetrequestsData->created_at
+                                                        ? Carbon\Carbon::createFromFormat(
+                                                            'Y-m-d H:i:s',
+                                                            $timesheetrequestsData->created_at,
+                                                        )
+                                                        : null;
+
+                                                    $permotioncheck =
+                                                        $teamMembers[$timesheetrequestsData->createdby] ?? null;
+                                                    $approverdata =
+                                                        $teamMembers[$timesheetrequestsData->partner] ?? null;
+
+                                                    $permotiondate = $permotioncheck
+                                                        ? Carbon\Carbon::createFromFormat(
+                                                            'Y-m-d H:i:s',
+                                                            $permotioncheck->created_at,
+                                                        )
+                                                        : null;
+                                                    $approverdate = $approverdata
+                                                        ? Carbon\Carbon::createFromFormat(
+                                                            'Y-m-d H:i:s',
+                                                            $approverdata->created_at,
+                                                        )
+                                                        : null;
+                                                @endphp
+												
+											
+
+											
+												
+	  {{ $timesheetrequestsData->staffcodeid }}
+	  
+				                                 <td>
+                                                    @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                        {{ $permotioncheck->newstaff_code }}
+                                                    @else
+                                                        {{ $timesheetrequestsData->staffcodeid }}
+                                                    @endif
+                                                </td>								
+												
+
+ {{ $timesheetrequestsData->staffcode }}
+ 
+ 
+                                          <td>
+                                                    @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                                        {{ $approverdata->newstaff_code }}
+                                                    @else
+                                                        {{ $timesheetrequestsData->staffcode }}
+                                                    @endif
+                                                </td>
+	
+	
+	
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+  @foreach ($timesheetData as $timesheetDatas)
+                      
+                                        @php
+                                            $timeid = DB::table('timesheetusers')
+                                                ->where('timesheetusers.id', $timesheetDatas->id)
+                                                ->first();
+
+                                            // $client_id = DB::table('timesheetusers')
+                                            //     ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+                                            //     ->leftjoin(
+                                            //         'assignmentbudgetings',
+                                            //         'assignmentbudgetings.assignment_id',
+                                            //         'timesheetusers.assignment_id',
+                                            //     )
+                                            //     ->leftjoin(
+                                            //         'assignments',
+                                            //         'assignments.id',
+                                            //         'timesheetusers.assignment_id',
+                                            //     )
+                                            //     ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.partner')
+                                            //     ->leftJoin('teamrolehistory', function ($join) {
+                                            //         $join
+                                            //             ->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+                                            //             ->on(
+                                            //                 'teamrolehistory.created_at',
+                                            //                 '<',
+                                            //                 'timesheetusers.created_at',
+                                            //             );
+                                            //     })
+                                            //     ->where('timesheetusers.id', $timesheetDatas->id)
+                                            //     ->select(
+                                            //         'clients.client_name',
+                                            //         'clients.client_code',
+                                            //         'timesheetusers.hour',
+                                            //         'timesheetusers.location',
+                                            //         'timesheetusers.status',
+                                            //         'assignments.assignment_name',
+                                            //         'billable_status',
+                                            //         'workitem',
+                                            //         'teammembers.team_member',
+                                            //         'teammembers.staffcode',
+                                            //         'teamrolehistory.newstaff_code',
+                                            //         'assignmentbudgetings.assignmentname',
+                                            //         'assignmentbudgetings.assignmentgenerate_id',
+                                            //     )
+                                            //     ->first();
+
+                                            $client_id = DB::table('timesheetusers')
+                                                ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+                                                ->leftjoin(
+                                                    'assignmentbudgetings',
+                                                    'assignmentbudgetings.assignment_id',
+                                                    'timesheetusers.assignment_id',
+                                                )
+                                                ->leftjoin(
+                                                    'assignments',
+                                                    'assignments.id',
+                                                    'timesheetusers.assignment_id',
+                                                )
+                                                ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.partner')
+                                                ->where('timesheetusers.id', $timesheetDatas->id)
+                                                ->select(
+                                                    'clients.client_name',
+                                                    'clients.client_code',
+                                                    'timesheetusers.hour',
+                                                    'timesheetusers.location',
+                                                    'timesheetusers.status',
+                                                    'assignments.assignment_name',
+                                                    'billable_status',
+                                                    'workitem',
+                                                    'teammembers.team_member',
+                                                    'teammembers.staffcode',
+                                                    'assignmentbudgetings.assignmentname',
+                                                )
+                                                ->first();
+
+                                            $total = DB::table('timesheetusers')
+
+                                                ->where('timesheetusers.timesheetid', $timesheetDatas->timesheetid)
+                                                ->sum('hour');
+                                            //	dd($total);
+                                            $dates = date('l', strtotime($timesheetDatas->date));
+
+                                            $teamMembers = DB::table('teamrolehistory')
+                                                ->whereIn('teammember_id', [
+                                                    $timesheetDatas->createdby,
+                                                    $timesheetDatas->partner,
+                                                ])
+                                                ->get()
+                                                ->keyBy('teammember_id');
+
+                                            $datadate = $timesheetDatas->assignmentcreated
+                                                ? Carbon\Carbon::createFromFormat(
+                                                    'Y-m-d H:i:s',
+                                                    $timesheetDatas->assignmentcreated,
+                                                )
+                                                : null;
+
+                                            $permotioncheck = $teamMembers[$timesheetDatas->createdby] ?? null;
+                                            $approverdata = $teamMembers[$timesheetDatas->partner] ?? null;
+
+                                            $permotiondate = $permotioncheck
+                                                ? Carbon\Carbon::createFromFormat(
+                                                    'Y-m-d H:i:s',
+                                                    $permotioncheck->created_at,
+                                                )
+                                                : null;
+                                            $approverdate = $approverdata
+                                                ? Carbon\Carbon::createFromFormat(
+                                                    'Y-m-d H:i:s',
+                                                    $approverdata->created_at,
+                                                )
+                                                : null;
+
+                                        @endphp
+
+
+
+
+
+
+                                        <td>
+                                            @if ($approverdata && $datadate && $datadate->greaterThan($approverdate))
+                                                {{ $approverdata->newstaff_code }}
+                                            @else
+                                                {{ $client_id->staffcode ?? '' }}
+                                            @endif
+                                            @if (count((array) $client_id->team_member) > 1)
+                                                ,
+                                            @endif
+                                        </td>
+	
+
+
+
+
+	
+										
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function timesheet_teamlist()
+  {
+
+    if (auth()->user()->role_id == 13) {
+      $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+        ->orderBy('team_member', 'asc')->get();
+
+      // $get_datess = DB::table('timesheetreport')
+      //   ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+      //   ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+      //   ->where('timesheetreport.partnerid', auth()->user()->teammember_id)
+      //   // ->whereJsonContains('timesheetreport.partnerid', auth()->user()->teammember_id)
+      //   ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.staffcode', 'partners.team_member as partnername')
+      //   ->latest()->get();
+
+      $get_datess = DB::table('timesheetreport')
+        ->leftJoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftJoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.partnerid', auth()->user()->teammember_id)
+        ->whereColumn('timesheetreport.teamid', '!=', 'timesheetreport.partnerid')
+        ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.staffcode', 'partners.team_member as partnername', 'teammembers.emailid', 'teamrolehistory.newstaff_code')
+        ->latest()
+        ->get();
+
+      // For permission
+      $permissiontimesheet = DB::table('timesheetreport')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->first();
+      // dd($get_datess);
+    } else {
+
+      $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+        ->orderBy('team_member', 'asc')->get();
+      $get_datess = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+        })
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        // ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.staffcode', 'partners.team_member as partnername')
+        ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.staffcode', 'partners.team_member as partnername', 'teammembers.emailid', 'teamrolehistory.newstaff_code')
+        ->latest()->get();
+
+      // For permission working 
+      $permissiontimesheet = DB::table('timesheetreport')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->first();
+    }
+
+
+    $groupedData = $get_datess->groupBy(function ($item) {
+      return $item->team_member . '|' . $item->week;
+    })->map(function ($group) {
+      $firstItem = $group->first();
+
+      return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'emailid' => $firstItem->emailid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'partnerid' => $firstItem->partnerid,
+        'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+      ];
+    });
+
+    $get_date = collect($groupedData->values());
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'partner', 'permissiontimesheet'));
+  }
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+vsalocal, vsademo ```end
+Rejoining/Promotion features Deployed ```end
+
+
+Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time
+When admin and partner create assignment on that time form should be validate
+
+vsalocal, vsademo ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+public function store(Request $request)
+ 
+if (!empty($request->otherpartner)) {
+	
+
+
+1
+               
+                $additionalpartnerIds = $request->additionalpartner_id;
+                if (is_array($additionalpartnerIds) && count($additionalpartnerIds) > 0) {
+                    foreach ($additionalpartnerIds as $index => $additionalpartnerId) {
+                        if ($additionalpartnerId) {
+                            DB::table('assignmentteammappings')->insert([
+                                'assignmentmapping_id' => $id,
+                                'teammember_id' => $additionalpartnerId,
+                                'type' => 1,
+                                'status' => 1,
+                                'teamhour' => 0,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+
+                            $additionalpartneremail = DB::table('teammembers')
+                                ->where('id', $additionalpartnerId)
+                                ->first();
+
+                            $data = [
+                                'assignmentid'      => $assignmentgenerate,
+                                'clientname'        => $clientname->client_name,
+                                'clientcode'        => $clientname->client_code,
+                                'assignmentname'    => $request->assignmentname,
+                                'assignment_name'   => $assignment_name,
+                                'emailid'           => $additionalpartneremail->emailid,
+                                'otherpatner'       => $teamemailotherpartner,
+                                'assignmentpartner' => $teamemailpartner,
+                                'teamleader'        => $teamleader,
+                                'periodend' => $assignmentbudgetingDatas->periodend,
+                                'assignmentgenerate' => $assignmentgenerate,
+                            ];
+
+                            $this->sendAssignmentEmail($data);
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+2
+
+                $additionalpartnerIds = $request->additionalpartner_id;
+                if (is_array($additionalpartnerIds) && count($additionalpartnerIds) > 0) {
+                    foreach ($additionalpartnerIds as $index => $additionalpartnerId) {
+                        if ($additionalpartnerId) {
+                            DB::table('assignmentteammappings')->insert([
+                                'assignmentmapping_id' => $id,
+                                'teammember_id' => $additionalpartnerId,
+                                'type' => 1,
+                                'status' => 1,
+                                'teamhour' => 0,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+
+                            $additionalpartneremail = DB::table('teammembers')
+                                ->where('id', $additionalpartnerId)
+                                ->first();
+
+                            $data = [
+                                'assignmentid'      => $assignmentgenerate,
+                                'clientname'        => $clientname->client_name,
+                                'clientcode'        => $clientname->client_code,
+                                'assignmentname'    => $request->assignmentname,
+                                'assignment_name'   => $assignment_name,
+                                'emailid'           => $additionalpartneremail->emailid,
+                                'otherpatner'       => $teamemailotherpartner,
+                                'assignmentpartner' => $teamemailpartner,
+                                'periodend' => $assignmentbudgetingDatas->periodend,
+                                'assignmentgenerate' => $assignmentgenerate,
+                            ];
+
+                            $this->sendAssignmentEmail($data);
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\create.blade.php
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+          var maxField = 60; // Input fields increment limitation
+          var addButton = $('.add_buttonn'); // Add button selector
+          var wrapper = $('.field_wrapper'); // Input field wrapper
+          var x = 1; // Initial field counter
+
+          // Store team member names for easy lookup
+          var teamMembers = {};
+          @foreach ($teammember as $teammemberData)
+              teamMembers['{{ $teammemberData->id }}'] =
+                  '{{ $teammemberData->team_member }} ({{ $teammemberData->role->rolename }}) ({{ $teammemberData->staffcode }})';
+          @endforeach
+
+          // Function to update options based on selected team members
+          function updateDropdowns() {
+              var selectedValues = [];
+
+              // Get all selected team member IDs
+              $('.language').each(function() {
+                  var selectedValue = $(this).val();
+                  if (selectedValue) {
+                      selectedValues.push(selectedValue);
+                  }
+              });
+
+              // Update each dropdown's options
+              $('.language').each(function() {
+                  var dropdown = $(this);
+                  var currentValue = dropdown.val();
+
+                  dropdown.find('option').each(function() {
+                      var optionValue = $(this).val();
+
+                      // If optionValue is selected in another dropdown, remove it from this dropdown
+                      if (optionValue && selectedValues.includes(optionValue) && optionValue !==
+                          currentValue) {
+                          $(this).remove(); // Remove selected option
+                      }
+                  });
+              });
+          }
+
+          // Initialize Select2 for the first select box
+          $('.language').select2();
+
+          // Update dropdowns on page load
+          updateDropdowns();
+
+          // Trigger update when any dropdown changes
+          $(wrapper).on('change', '.language', function() {
+              updateDropdowns();
+          });
+
+          // Once add button is clicked
+          $(addButton).click(function() {
+              if (x < maxField) {
+                  x++; // Increment field counter
+
+                  var fieldHTML =
+                      '<div class="row row-sm hidedive"><div class="col-6"><div class="form-group">' +
+                      '<label class="font-weight-600">Name *</label>' +
+                      '<select required class="language form-control enablefalse" id="teammember_' + x +
+                      '" name="teammember_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($teammember as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->role->rolename }}) ({{ $teammemberData->staffcode }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<div class="col-5"><div class="form-group">' +
+                      '<label class="font-weight-600">Type *</label>' +
+                      '<select required class="form-control key enablefalse" name="type[]" id="type_' +
+                      x + '">' +
+                      '<option value="">Please Select One</option>' +
+                      '<option value="0">Team Leader</option>' +
+                      '<option value="2">Staff</option></select></div></div>' +
+                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_button">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
+
+                  $(wrapper).append(fieldHTML); // Add field html
+
+                  // Initialize Select2 for the newly added select box
+                  $('#teammember_' + x).select2();
+
+                  // Update dropdowns after adding a new one
+                  updateDropdowns();
+              }
+          });
+
+          // Once remove button is clicked
+          $(wrapper).on('click', '.remove_button', function(e) {
+              e.preventDefault();
+
+              // Get the selected value of the dropdown being removed
+              var removedValue = $(this).closest('.row').find('.language').val();
+
+              // Remove field html
+              $(this).closest('.row').remove();
+              x--; // Decrement field counter
+
+              // Re-add the removed value to all dropdowns if it was selected
+              if (removedValue) {
+                  $('.language').each(function() {
+                      var dropdown = $(this);
+                      // Check if option already exists
+                      if (!dropdown.find('option[value="' + removedValue + '"]').length) {
+                          dropdown.append('<option value="' + removedValue + '">' + teamMembers[
+                              removedValue] + '</option>');
+                      }
+                  });
+              }
+
+              // Update dropdowns after removing the field
+              updateDropdowns();
+          });
+      });
+  </script>
+  
+  
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+          var maxField = 5; // Input fields increment limitation
+          var addButtonpartner = $('.add_buttonnpartner'); // Add button selector
+          var wrapper = $('.field_wrapperpartner'); // Input field wrapper
+          var x = 1; // Initial field counter
+
+          // Initialize Select2 for the first select box
+          $('.language').select2();
+
+          // Once add button is clicked
+          $(addButtonpartner).click(function() {
+              if (x < maxField) {
+                  x++; // Increment field counter
+
+                  var fieldHTML =
+                      '<div class="row row-sm"><div class="col-11"><div class="form-group">' +
+                      '<label class="font-weight-600">Additional Partner</label>' +
+                      '<select class="language form-control" id="additionalpartner_' +
+                      x +
+                      '" name="additionalpartner_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($partner as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_buttonpartner">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
+
+
+                  $(wrapper).append(fieldHTML); // Add field html
+
+                  // Initialize Select2 for the newly added select box
+                  $('#additionalpartner_' + x).select2();
+
+
+              }
+          });
+
+          // Once remove button is clicked
+          $(wrapper).on('click', '.remove_buttonpartner', function(e) {
+              e.preventDefault();
+              // Get the selected value of the dropdown being removed
+              var removedValue = $(this).closest('.row').find('.language').val();
+              // Remove field html
+              $(this).closest('.row').remove();
+              x--; // Decrement field counter
+          });
+      });
+  </script>
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\form.blade.php
+<label class="font-weight-600">Lead Partner *</label>
+
+
+<div class="field_wrapperpartner">
+    <div class="row row-sm">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Lead Partner <span class="text-danger">*</span></label>
+                <select required class="language form-control" id="category" name="leadpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }} (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Other Partner </label>
+                <select class="language form-control" name="otherpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }}
+                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                        </option>
+
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\create.blade.php
+Add Assignment Mapping
+
+
+Add Assignment
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+find  @if (Request::is('teammember/*/edit') || Request::is('teammember/create')) 
+after this if condition add below script 
+
+ @if (Request::is('assignmentmapping/create'))
+     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+     <script>
+         $(document).ready(function() {
+             $('form').submit(function(event) {
+                 let fields = {
+                     stdcost: "Std Cost",
+                     estcost: "Est Cost",
+                     fees: "Fees of The Asignment",
+                 };
+                 for (let field in fields) {
+                     let value = $("[name='" + field + "']").val();
+                     if (value && !/^\d+$/.test(value)) {
+                         alert(`Enter ${fields[field]} using only digits`);
+                         $("[name='" + field + "']").focus();
+                         event.preventDefault();
+                         return false;
+                     }
+                 }
+
+                 // All partner value added in array
+                 var partners = [
+                     $("[name='leadpartner']").val() || "",
+                     $("[name='otherpartner']").val() || "",
+                     $('#additionalpartner_2').val() || "",
+                     $('#additionalpartner_3').val() || "",
+                     $('#additionalpartner_4').val() || "",
+                     $('#additionalpartner_5').val() || ""
+                 ];
+                 console.log("Original: " + partners);
+                 // Remove empty and undefined values
+                 var filteredPartners = partners.filter(p => p && p.trim() !== "");
+                 console.log("Filtered: " + filteredPartners);
+                 // Check for duplicates using Set
+                 var uniquePartners = new Set(filteredPartners);
+
+                 if (uniquePartners.size !== filteredPartners.length) {
+                     alert('The Lead Partner, Other Partner, and Additional Partner cannot be the same');
+                     event.preventDefault(); // Prevent form submission
+                     return false; // Exit the function
+                 }
+
+                 // Get the submit button
+                 const submitButton = document.getElementById('submitButton');
+                 // Disable the submit button to prevent multiple submissions
+                 if (submitButton) {
+                     submitButton.disabled = true;
+                     submitButton.textContent = "Submitting...";
+                 }
+
+             });
+         });
+     </script>
+ @endif
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\form.blade.php
+remove this script   submitButton.textContent = "Submitting...";
+
+{{-- <script>
+    document.getElementById('Myform').addEventListener('submit', function(event) {
+        // Get the submit button
+        const submitButton = document.getElementById('submitButton');
+        // Disable the submit button to prevent multiple submissions
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting..."; // Optional: change the button text
+
+    });
+</script> --}}
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\form.blade.php
+find {{-- validation for date --}}
+before findest text replace all code 
+
+
+{{-- Assignment budgetting start --}}
+<div class="row row-sm">
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Client <span class="text-danger">*</span></label>
+            <select required class="language form-control" id="exampleFormControlSelect1" name="client_id"
+                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
+                </option>
+                @foreach ($clientss as $clientData)
+                <option value="{{ $clientData->id }}"
+                    {{ $assignmentbudgeting->client->id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
+                    {{ $clientData->client_name }}</option>
+                @endforeach
+                @else
+                <option></option>
+                <option value="">Please Select One</option>
+                @foreach ($clientss as $clientData)
+                <option value="{{ $clientData->id }}">
+                    {{ $clientData->client_name }} </option>
+
+                @endforeach @endif
+                </select>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Assignment <span class="text-danger">*</span></label>
+            <select required class="form-control" id="exampleFormControlSelect1" name="assignment_id"
+                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
+                </option>
+
+                @foreach ($assignment as $assignmentData)
+                <option value="{{ $assignmentData->id }}"
+                    {{ $assignmentbudgeting->assignment->id == $assignmentData->id ?? '' ? 'selected="selected"' : '' }}>
+                    {{ $assignmentData->assignment_name }}</option>
+                @endforeach
+
+
+                @else
+                <option></option>
+                <option value="">Please Select One</option>
+                @foreach ($assignment as $assignmentData)
+                <option value="{{ $assignmentData->id }}">
+                    {{ $assignmentData->assignment_name }}</option>
+
+                @endforeach @endif
+                </select>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
+            <input required type="text" name="assignmentname"
+                value="{{ $assignmentbudgeting->assignmentname ?? '' }}" class=" form-control"
+                placeholder="Enter Assignment Name">
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Due Date <span class="text-danger">*</span></label>
+            <input type="date" required id="example-date-input" name="duedate"
+                value="{{ $assignmentbudgeting->date ?? '' }}" class=" form-control leaveDate" placeholder="Enter Date"
+                required>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    {{-- <button type="submit" class="btn btn-success" style="float:right"> Submit</button> --}}
+    {{-- <a class="btn btn-secondary" href="{{ url('assignmentbudgeting') }}">
+        Back</a> --}}
+
+</div>
+<div class="row row-sm">
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600"> Period Start <span class="text-danger">*</span></label>
+            <input type="date" required name="periodstart" id="startDate"
+                value="{{ $assignmentmapping->periodstart ?? '' }}" class=" form-control"
+                placeholder="Enter Period start">
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Period End <span class="text-danger">*</span></label>
+            <input type="date" required name="periodend" id="endDate"
+                value="{{ $assignmentmapping->periodend ?? '' }}" class=" form-control" placeholder="Enter Perio End">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Is Role Over Assignment</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="roleassignment">
+                <option value="1">No</option>
+                <option value="2">Yes</option>
+
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row row-sm">
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Est Hours <span class="text-danger">*</span></label>
+            <input type="text" required name="esthours" value="{{ $assignmentmapping->esthours ?? '' }}"
+                class=" form-control" placeholder="Enter Est Hours">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Std Cost <span class="text-danger">*</span></label>
+            <input type="text" required name="stdcost" value="{{ $assignmentmapping->stdcost ?? '' }}"
+                class=" form-control" placeholder="Enter Std Cost">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Est Cost <span class="text-danger">*</span></label>
+            <input type="text" required name="estcost" value="{{ $assignmentmapping->estcost ?? '' }}"
+                class=" form-control" placeholder="Enter Est Cost">
+        </div>
+    </div>
+
+</div>
+<div class="row row-sm">
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Fees of The Asignment <span class="text-danger">*</span></label>
+            <input type="text" required name="fees" value="{{ $assignmentmapping->fees ?? '' }}"
+                class=" form-control" placeholder="Enter Fees of The Asignment">
+        </div>
+    </div>
+</div>
+<div class="field_wrapperpartner">
+    <div class="row row-sm">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Lead Partner <span class="text-danger">*</span></label>
+                <select required class="language form-control" id="category" name="leadpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }} (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Other Partner </label>
+                <select class="language form-control" name="otherpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }}
+                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                        </option>
+
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="field_wrapper">
+    <div class="row row-sm">
+
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Name <span class="text-danger">*</span></label>
+                <input type="checkbox" data-toggle="tooltip" id="enablebox" style="margin-left: 10px;"
+                    title="You want to submit without teammember, please click on check box">
+                <select required class="language form-control enablefalse" id="key" name="teammember_id[]">
+                    <option value="">Please Select One</option>
+                    @foreach ($teammember as $teammemberData)
+                        <option value="{{ $teammemberData->id }}" @if (!empty($store->financial) && $store->financial == $teammemberData->id) selected @endif>
+                            {{ $teammemberData->team_member }} ( {{ $teammemberData->role->rolename }} ) (
+                            {{ $teammemberData->staffcode }} )</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Type <span class="text-danger">*</span></label>
+                <select required class="form-control key enablefalse" id="key" name="type[]">
+                    <option value="">Please Select One</option>
+                    <option value="0">Team Leader</option>
+                    <option value="2">Staff</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonn" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <button type="submit" id="submitButton" class="btn btn-success" style="float:right"> Submit</button>
+    <a class="btn btn-secondary" href="{{ url('assignmentmapping') }}">
+        Back</a>
+
+</div>
+
+
+
+
+
+
+Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time  end hare 
+vsalocal, vsademo ```end 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
 
 
 

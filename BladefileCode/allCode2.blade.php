@@ -48,11 +48,26 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<select class="language form-control" id="employee1" name="employee">
+    <option value="">Please Select One</option>
+    @foreach ($teamapplyleaveDatasfilter->unique('emailid') as $applyleaveDatas)
+        <option value="{{ $applyleaveDatas->createdby }}"
+            {{ old('employee') == $applyleaveDatas->createdby ? 'selected' : '' }}>
+            {{ $applyleaveDatas->team_member }}
+            ({{ $applyleaveDatas->newstaff_code ?? ($applyleaveDatas->staffcode ?? '') }})
+        </option>
+    @endforeach
+</select>
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding debug  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+@foreach ($get_date as $jobDatas)
+    @php
+        dd($jobDatas);
+    @endphp
+@endforeach
 {{-- ! End hare --}}
 {{-- * regarding select box  --}}
 @if (

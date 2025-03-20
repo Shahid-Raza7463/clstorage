@@ -508,6 +508,7 @@ Steps: 2
 
 
 Client wants to add multiple partner in lead partner and other partner column
+When admin and partner create assignment on that time form should be validate
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 For Admin and Partner IDs
 Steps:
@@ -550,6 +551,20 @@ MNA100030
 MAN100044
 
 
+For Admin and Partner IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Add Assignment.
+3.fill data and click submit button
+
+1.	All mandatory fields are required.
+2.	Std Cos, Est Cost and Fees of The Asignment should contain only digits, not text.
+3.	The Lead Partner, Other Partner, and Additional Partner cannot be the same
+
+
+
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
 For Admin IDs
@@ -569,13 +584,46 @@ Steps: 2
 
 Steps : 3
 If a user is rejoined and does not have a leaving date for rejoining, the admin can activate or deactivate the user. However, if the rejoined user has a leaving date after rejoining, the admin cannot activate or deactivate them.
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
+Rejoining/Promotion features Deployed
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+or Admin, partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Promotion/Rejoining'.
 
+After promoting or rejoining the user, we have to test below all points
+1.After rejoining or promotion, any newly created assignment should display the new staff code for all related data. However, if the assignment was created before rejoining or promotion, it should display the old staff code for all related data.
+2.For Apply Leave, Timesheet Request, and Leave Request, if they were created before the rejoining or promotion date, they should display the old staff code. If they were created after the rejoining date, they should display the new staff code.
 
+Below description was written by Shahid.
+Steps to Navigate:
+For Admin & Partner IDs to Promotion/Rejoining:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Promotion/Rejoining' section.
+
+After promoting or rejoining a user, we need to test all the points mentioned below
+
+For Admin, Partner, Manager, Promoted User and Rejoined User Ids
+
+1.Assignment, Assignment related All date like saved timesheet, submitted timesheet, rejected timesheet etc:
+•	If a new assignment is created after promotion/rejoining → Show new staff code.
+•	If an old assignment (created before promotion/rejoining) → Show old staff code.
+2.Apply Leave, Timesheet Request & Leave Request:
+•	Requests made before rejoining/promotion → Old staff code should be displayed.
+•	Requests made after rejoining/promotion → New staff code should be displayed.
+
+3.we have to test on report, client/assignment, team , Promotion/Rejoining and Human Resources tab,
+
+4.We need to test all dropdown fields where the staff code appears
+
+5.we have to test all section on dashboard,
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 

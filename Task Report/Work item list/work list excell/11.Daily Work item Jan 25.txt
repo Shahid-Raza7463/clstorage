@@ -262,6 +262,7 @@ holidays
 
 
 
+
 03-03-2025
 1. Client wants to add multiple partner in lead partner and other partner column (uploaded on vsademo and testing done)
 2. I have added descreptrion on jira.
@@ -278,19 +279,66 @@ holidays
 sick leave
 
 07-03-2025
-1.When any user applies the leave 2 times for the same time period, it gets approved after that it shows that the user is on the leave twice for the same date in the time sheet
-2.Date format to be consistent
-3.The person who is in 'To' is able to navigate the link & data is visible to him, issue is with person who is in 'cc'
-4.Spelling of Promotion bugs
+1.When any user applies the leave 2 times for the same time period, it gets approved after that it shows that the user is on the leave twice for the same date in the time sheet..
+2.Date format to be consistent..
+3.The person who is in 'To' is able to navigate the link & data is visible to him, issue is with person who is in 'cc'..
+4.Spelling of Promotion bugs...
 
 08-03-2025
 1.only upload on vsademo and test it on vsademo  User is able to fill the timesheet beyond 'Leaving Date
-1.I have deployed In process task on vsademo..
-2.fix multiple partner page expire bugs
+2.I have deployed In process task on vsademo..
+3.UI fix on tables..
+4,Worked for bitbucket
+
+09-03-2025
+sunady
+
+10-03-2025
+1.Deployed bugs on vsalive (redirect openleave on click hare )
+2.Apply leave data fixed from backend
+3.all code uploaded on bitbucket like vsalive and vsademo 
+
+/////////////////////////
+
+11-03-2025
+1.the exported leave report contains incorrect employee codes.(bugs)
+2.Attendance report is generating for a calendar year but not for a F.Y
+
+12-03-2025
+1.Rejoining/Promotion features Deployed pending
+2.When admin and partner create assignment on that time form should be validate
+3.uploaded bugs on vsalive and tested done 
 
 
-vsademo
-942 please leaving date remove
+13-03-2025
+1.When admin and partner create assignment on that time form should be validate
+2.documentation created and functional testing done 
+
+14-03-2025
+holi 
+
+15-03-2025
+1.code upload on vsademo 
+1.Rejoining/Promotion features Deployed pending
+
+16-03-2025
+sunday
+
+17-03-2025
+1.Rejoining/Promotion features Deployed admin completed
+2.After a user rejoins, when the admin filters the data, a warning message appears stating, 'User left on 31-07-2024'.
+
+
+``````````````````````````````````
+18-03-2025
+1.Rejoining/Promotion features Deployed (All role completed )
+2.code upload on vsademo 
+
+19-03-2025
+1.Kt for testing 
+2.jira descreption updated 
+3.Dashboard - signout and assignment box (UI-fixed) 
+
 
 WEL100799
 TAT100872
@@ -302,3 +350,7 @@ upload on vsademo
 functional testing 
 
 	 {{ date('d-M-Y', strtotime($timesheetDatas->date)) }}
+	 
+	 
+	 
+						

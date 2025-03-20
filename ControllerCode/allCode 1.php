@@ -20,6 +20,10 @@ class ZipController extends Controller
 //! End hare 
 //*
 //*
+if ($attendanceDatas->isEmpty()) {
+  dd($query->toSql(), $query->getBindings()); // Debugging ke liye
+}
+
 // Start Hare
 //! End hare 
 
@@ -13686,10 +13690,61 @@ dd('hi');
 // start hare
 // 22222222222222222222222222222222222222222222222222222222222222222222
 // 22222222222222222222222222222222222222222222222222222222222222222222
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+// 22222222222222222222222222222222222222222222222222222222222222222222
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+// 22222222222222222222222222222222222222222222222222222222222222222222
 
 
 // start hare
 // 22222222222222222222222222222222222222222222222222222222222222222222
+
+// exam leave delete karna ho to 
+
+/////////// attendance table me 
+// id = 940
+
+// April months
+// holidays = 1
+// exam_leave  = 29
+
+// May months
+// exam_leave  = 13
+
+
+/////////// applyleaves  table me 
+// 940
+// id = 1770  delete
+
+
+
+/////////// leaveapprove  table me 
+// id 1678  delete
+
+
+/////////// timesheets table me
+// id = 153644 se 153708 delete
+// id = 153640 se 153643 delete
+
+
+
+
+/////////// timesheetusers table me
+// id = 153644 se 153708 delete
+// id = 156458 se 156461 delete
+
+
+
+
+/////////// timesheetreport table me 
+// id = 940 and search using startdate 2025-03-03
+// you will get 2 result 
+
+// totaldayes 8 se 4 kare 
+
+
 // 22222222222222222222222222222222222222222222222222222222222222222222
 
 

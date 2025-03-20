@@ -1333,9 +1333,9 @@ sundaycount = 0
 
 Client wants to add multiple partner in lead partner and other partner column
 222222222222222222222222222222222222222222222222222222222222222222222222222222
-1.Changes will be applied on the Assignment Creation page. `````````````````
 
-2.Changes will be applied on the Add Timesheet page
+
+1.Changes will be applied on the Add Timesheet page
    2.1 Modification on client select box and assignment select box on add timesheet page 7`````` 11111111
    2.1 Total hour update on timesheet create 8``` 1111111111
    2.2 Total hour update on timesheet delete for only users  9```` 1111111
@@ -1353,7 +1353,7 @@ Client wants to add multiple partner in lead partner and other partner column
 5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified  6 ````````````////// 111111111111 
 http://127.0.0.1:8000/yearwise?year=2024&&clientid=140  vsademo
 
-
+26-02, 28-02, 03-03, 10-03, 11-03, 12-03 casual leave  = user id = 936 (pooja )
 838
 WEL100799
 TAT100872
@@ -1442,4 +1442,233 @@ atishay
 signout 
 
 
-222222222222222222222222222222222222222222
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+
+// exam leave delete karna ho to 
+
+/////////// attendance table me 
+// id = 940
+
+April months
+// holidays = 1
+// exam_leave  = 29
+
+May months
+// exam_leave  = 13
+
+
+
+
+
+/////////// applyleaves  table me 
+940
+// id = 1770  delete
+
+
+
+
+
+/////////// leaveapprove  table me 
+id 1678  delete
+
+
+
+
+
+/////////// timesheets table me
+// id = 153644 se 153708 delete
+// id = 153640 se 153643 delete
+
+
+
+
+
+
+
+/////////// timesheetusers table me
+// teamid = 153644 se 153708 delete
+// id = 156458 se 156461 delete
+
+
+
+
+/////////// timesheetreport table me 
+id = 940 and search using startdate 2025-03-03
+you will get 2 result 
+
+totaldayes 8 se 4 kare 
+
+
+
+
+Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time
+
+// 22222222222222222222222222222222222222222222222222222222222222222222
+
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+          var maxField = 60; // Input fields increment limitation
+          var addButtonpartner = $('.add_buttonnpartner'); // Add button selector
+          var wrapper = $('.field_wrapperpartner'); // Input field wrapper
+          var x = 1; // Initial field counter
+
+          // Function to update options based on selected team members
+          //   function updateDropdowns() {
+          //       var selectedValues = [];
+
+          //       // Get all selected team member IDs
+          //       $('.language').each(function() {
+          //           var selectedValue = $(this).val();
+          //           if (selectedValue) {
+          //               selectedValues.push(selectedValue);
+          //           }
+          //       });
+
+          //       // Update each dropdown's options
+          //       $('.language').each(function() {
+          //           var dropdown = $(this);
+          //           var currentValue = dropdown.val();
+
+          //           dropdown.find('option').each(function() {
+          //               var optionValue = $(this).val();
+
+          //               // If optionValue is selected in another dropdown, remove it from this dropdown
+          //               if (optionValue && selectedValues.includes(optionValue) && optionValue !==
+          //                   currentValue) {
+          //                   $(this).remove(); // Remove selected option
+          //               }
+          //           });
+          //       });
+          //   }
+
+          // Initialize Select2 for the first select box
+          $('.language').select2();
+
+          //   // Update dropdowns on page load
+          //   updateDropdowns();
+
+          // Trigger update when any dropdown changes
+          //   $(wrapper).on('change', '.language', function() {
+          //       updateDropdowns();
+          //   });
+
+          // Once add button is clicked
+          $(addButtonpartner).click(function() {
+              if (x < maxField) {
+                  x++; // Increment field counter
+
+                  var fieldHTML =
+                      '<div class="row row-sm hidedive"><div class="col-6"><div class="form-group">' +
+                      '<label class="font-weight-600">Additional Partner *</label>' +
+                      '<select required class="language form-control enablefalse" id="teammember_' + x +
+                      '" name="teammember_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($partner as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<a style="margin-top: 36px;" href="javascript:void(0);" class="remove_buttonpartner">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
+
+
+                  $(wrapper).append(fieldHTML); // Add field html
+
+                  // Initialize Select2 for the newly added select box
+                  $('#teammember_' + x).select2();
+
+
+              }
+          });
+
+          // Once remove button is clicked
+          $(wrapper).on('click', '.remove_buttonpartner', function(e) {
+              e.preventDefault();
+              // Get the selected value of the dropdown being removed
+              var removedValue = $(this).closest('.row').find('.language').val();
+              // Remove field html
+              $(this).closest('.row').remove();
+              x--; // Decrement field counter
+
+              // Re-add the removed value to all dropdowns if it was selected
+              if (removedValue) {
+                  $('.language').each(function() {
+                      var dropdown = $(this);
+                      // Check if option already exists
+                      if (!dropdown.find('option[value="' + removedValue + '"]').length) {
+                          dropdown.append('<option value="' + removedValue + '">' + teamMembers[
+                              removedValue] + '</option>');
+                      }
+                  });
+              }
+
+          });
+      });
+  </script>
+  
+  
+  
+  
+  
+  
+  <div class="field_wrapperpartner">
+    <div class="row row-sm">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Lead Partner *</label>
+                <select required class="language form-control" id="category" name="leadpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }} (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Other Partner </label>
+                <select class="language form-control" name="otherpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }}
+                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                        </option>
+
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
