@@ -869,7 +869,7 @@ Every wedenesday and sturdays mail sent on admin in which ek excell jata hai us 
 222222222222222222
 
 
-bhaskar
+bhaskar kumar data 
 1.if timesheet submitted on sturday then date will be enable next mondays `````` 1   ////   11111111111
 2.if timesheet submitted on sunday then date will be enable next mondays ``````  2   ////    111111111
 3.when user saved timesheet data then date will be show next days  ``````````````3   /////  1111111111
@@ -1672,3 +1672,68 @@ Client wants to add multiple partner in lead partner and other partner column  `
         </div>
     </div>
 </div>
+
+
+Need option to fill mutiple days timesheet at once
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+UI Handling   1 ```````````
+From date will be handled using the date picker  `````
+Client off holidays will be handled (Saturday)  1 `````````
+Auto-fill for 1st, 2nd, 3rd, 4th, and 5th Saturdays  1 ``````````
+Total hour calculation validation on the timesheet  1  ```````
+Total hour calculation on the assignment  1   ```````````
+
+If an assignment is closed before a specific date, it should not appear in the timesheet for that date  2
+Date enable functionality will be modified ````````````
+If a user selects 4 days while creating a timesheet but fills in data for only 2 days, this case will be handled 1
+If a user joins between Monday and Saturday, the date enable functionality will be modified accordingly  ///////
+default 1 week (7 days) timesheet will be show  ``````````````
+if user applied leave on date then what will be do 
+validation on all field 2 days
+
+1.total hour   `````` 
+2.offholidays   `````
+3.leave related ```````
+4.validation 
+5.Design 
+5.when closed assignment will be not come 
+6. exam leave applied and implement condition in store function ``````
+
+
+
+1.test one week timesheet filled   ```
+2.test on select 4 days and filled timesheet```
+3.leave apply on monday ... approved and reject kar ke test kare ```
+leave apply 4 and 6 means 2 days in a week ```
+exam leave same as casual leave ```` 
+exam leave 4 and 6 applyed````
+if assignment closed then not come  ignore this point  ``````
+when offholidays client select on sturday and holidays and you can not select this client on subchild filed `````````
+You can only add up to 4 fields per section. and subtract remove those filed `````
+user can not change to date only change from date `````
+if user select 2 days timsheet on that time user can saved only 2 days timsheet ````
+reject 2nd and 4rth starday timesheet and edit and select offholiday client  ````
+from date current date se jyada nahi hoga 
+
+validation point 
+
+when remove field then hour subtract 
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222

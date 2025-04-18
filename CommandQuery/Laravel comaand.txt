@@ -1,8 +1,46 @@
 {{-- * Capitall start --}}
 22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
 
 
+# regarding library installed / regarding third party installed ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
 
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding stechstudio/laravel-zipstream instalation
+
+
+"php": "^8.0 || ^8.1 || ^8.2",
+
+1.composer require stechstudio/laravel-zipstream
+2.composer require maennchen/zipstream-php
+  if any issue then run below comaand 
+
+1.php --ini
+2.composer update
+3.php -m | findstr gd
+4.composer remove fzaninotto/faker
+5.git config --global --add safe.directory C:/xampp/htdocs/vsademo/vendor/fzaninotto/faker
+6.composer require stechstudio/laravel-zipstream
+7.composer show stechstudio/laravel-zipstream
+8.composer require maennchen/zipstream-php
+9.stoap and start apache 
+
+
+# regarding library installed / regarding third party installed ```end hare 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222
 regarding enviroment varable
@@ -32,7 +70,9 @@ find extension=zip and uncomment it
 
 2222222222
 // jab laravel ke storage me image ho tab
-php artisan storage:link
+php artisan storage:linkzipstre
+
+
 
 
 <td>

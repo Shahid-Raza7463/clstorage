@@ -35,35 +35,1287 @@
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding event   --}}
 {{--  Start Hare  --}}
+Input Field Events Summary:
+
+Event Name Trigger Condition Use Case Example
+input Har character type karte hi Live value update
+change Value change ke baad field chhod diya Form submission conditions
+blur Field se focus hatt gaya (mouse ya tab se) Validation ya calculation
+focus Input field pe cursor aaya Highlight or note activity
+keyup Koi key chhoda gaya Detect specific keys like Enter
+keydown Koi key dabaya gaya Shortcut ya key combinations
+focusout Same as blur, but bubbles (useful in delegation) Rarely used over blur
+mouseleave Mouse element se bahar gaya (similar to mouseout) UI highlight effect
+mouseout Mouse element se bahar gaya Tooltip close, styling changes
+mouseenter Mouse element par aaya Tooltip show, hover info
+mouseover Mouse element par hover kiya Similar to mouseenter but bubbles
+click Mouse click hua Button action or input click handling
+dblclick Double click Special interactions
+paste Jab user paste karta hai input me Input sanitization
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+      //   $(document).ready(function() {
+      $("#timesheet-form").submit(function(e) {
+          // Check if the "Client Name" dropdown is selected
+          if ($("#client1").val() != "Select Client" && $("#client1").val() != "") {
+              // If a client is selected, make the following fields required
+              $("#assignment1").prop("required", true);
+              $("#partner1").prop("required", true);
+              $("#assignment2").prop("required", true);
+          }
+      });
+      //   });
+  </script> --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding validation   --}}
 {{--  Start Hare  --}}
+
+<script>
+    $(function() {
+        $('#timesheet-form').on('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission until validation passes
+            alert('try to submit');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Loop through each field wrapper
+            $('.field_wrapper').each(function() {
+                let index = $(this).data('index');
+                let dayField = $(`#day${index}`).val();
+                let clientField = $(`#client${index}`).val();
+                let assignmentField = $(`#assignment${index}`).val();
+                let partnerField = $(`#partner${index}`).val();
+                let workItemField = $(`.workitemnvalue${index}`).val();
+                let locationField = $(`.locationvalue${index}`).val();
+                let hourField = $(`#hour${index}`).val();
+
+                // Check if any required field is empty
+                if (!dayField) {
+                    isValid = false;
+                    errorMessage += `Day is missing for field set ${index}.\n`;
+                }
+                if (!clientField) {
+                    isValid = false;
+                    errorMessage += `Client Name is required for field set ${index}.\n`;
+                }
+                if (!assignmentField) {
+                    isValid = false;
+                    errorMessage += `Assignment Name is required for field set ${index}.\n`;
+                }
+                if (!partnerField) {
+                    isValid = false;
+                    errorMessage += `Partner is required for field set ${index}.\n`;
+                }
+                if (!workItemField) {
+                    isValid = false;
+                    errorMessage += `Work Item is required for field set ${index}.\n`;
+                }
+                if (!locationField) {
+                    isValid = false;
+                    errorMessage += `Location is required for field set ${index}.\n`;
+                }
+                if (!hourField || parseFloat(hourField) <= 0) {
+                    isValid = false;
+                    errorMessage += `Valid Hour is required for field set ${index}.\n`;
+                }
+            });
+
+            // Check if datepickers have values
+            let toDate = $('#datepickers1').val();
+            let fromDate = $('#datepickers2').val();
+            if (!toDate) {
+                isValid = false;
+                errorMessage += 'To Date is required.\n';
+            }
+            if (!fromDate) {
+                isValid = false;
+                errorMessage += 'From Date is required.\n';
+            }
+
+            // If validation fails, show alert with errors
+            if (!isValid) {
+                alert('Please fill in all required fields:\n\n' + errorMessage);
+                return false;
+            }
+
+            // If validation passes, allow form submission
+            alert('Form is valid, submitting...');
+            this.submit(); // Proceed with form submission
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#timesheet-form').on('submit', function(e) {
+            let isValid = true;
+            let errorMessage = '';
+
+            $('.field_wrapper').each(function() {
+                const index = $(this).data('index');
+
+                const client = $(`#client${index}`).val();
+                const assignment = $(`#assignment${index}`).val();
+                const partner = $(`#partner${index}`).val();
+                const workItem = $(`.workItem${index}`).val();
+                const location = $(`.location${index}`).val();
+                const hour = $(`#hour${index}`).val();
+
+                if (!client) {
+                    isValid = false;
+                    errorMessage = 'Please select a client.';
+                    $(`#client${index}`).focus();
+                    return false;
+                }
+                if (!assignment) {
+                    isValid = false;
+                    errorMessage = 'Please select an assignment.';
+                    $(`#assignment${index}`).focus();
+                    return false;
+                }
+                if (!partner) {
+                    isValid = false;
+                    errorMessage = 'Please select a partner.';
+                    $(`#partner${index}`).focus();
+                    return false;
+                }
+                if (!workItem) {
+                    isValid = false;
+                    errorMessage = 'Please enter a work item.';
+                    $(`.workItem${index}`).focus();
+                    return false;
+                }
+                if (!location) {
+                    isValid = false;
+                    errorMessage = 'Please enter a location.';
+                    $(`.location${index}`).focus();
+                    return false;
+                }
+                if (!hour || isNaN(hour) || hour < 0) {
+                    isValid = false;
+                    errorMessage = 'Please enter a valid hour.';
+                    $(`#hour${index}`).focus();
+                    return false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#timesheet-form').on('submit', function(e) {
+            let isValid = true;
+            let errorMessage = '';
+
+
+            $('.extra_field').each(function() {
+                const index = $(this).data('index');
+
+                const client = $(`#client${index}`).val();
+                const assignment = $(`#assignment${index}`).val();
+                const partner = $(`#partner${index}`).val();
+                const workItem = $(`.workItem${index}`).val();
+                const location = $(`.location${index}`).val();
+                const hour = $(`#hour${index}`).val();
+
+                if (!client) {
+                    isValid = false;
+                    errorMessage = 'Please select a client.';
+                    $(`#client${index}`).focus();
+                    return false;
+                }
+                if (!assignment) {
+                    isValid = false;
+                    errorMessage = 'Please select an assignment.';
+                    $(`#assignment${index}`).focus();
+                    return false;
+                }
+                if (!partner) {
+                    isValid = false;
+                    errorMessage = 'Please select a partner.';
+                    $(`#partner${index}`).focus();
+                    return false;
+                }
+                if (!workItem) {
+                    isValid = false;
+                    errorMessage = 'Please enter a work item.';
+                    $(`.workItem${index}`).focus();
+                    return false;
+                }
+                if (!location) {
+                    isValid = false;
+                    errorMessage = 'Please enter a location.';
+                    $(`.location${index}`).focus();
+                    return false;
+                }
+                if (!hour || isNaN(hour) || hour < 0) {
+                    isValid = false;
+                    errorMessage = 'Please enter a valid hour.';
+                    $(`#hour${index}`).focus();
+                    return false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#timesheet-form').on('submit', function(e) {
+            let isValid = true;
+            let errorMessage = '';
+
+            $('.field_wrapper, .extra_field').each(function() {
+
+                const index = $(this).data('index');
+                const client = $(`#client${index}`).val();
+                const assignment = $(`#assignment${index}`).val();
+                const partner = $(`#partner${index}`).val();
+                const workItem = $(`.workItem${index}`).val();
+                const location = $(`.location${index}`).val();
+                const hour = $(`#hour${index}`).val();
+
+                if (!client) {
+                    isValid = false;
+                    errorMessage = 'Please select a client.';
+                    $(`#client${index}`).focus();
+                    return false;
+                }
+                if (!assignment) {
+                    isValid = false;
+                    errorMessage = 'Please select an assignment.';
+                    $(`#assignment${index}`).focus();
+                    return false;
+                }
+                if (!partner) {
+                    isValid = false;
+                    errorMessage = 'Please select a partner.';
+                    $(`#partner${index}`).focus();
+                    return false;
+                }
+                if (!workItem) {
+                    isValid = false;
+                    errorMessage = 'Please enter a work item.';
+                    $(`.workItem${index}`).focus();
+                    return false;
+                }
+                if (!location) {
+                    isValid = false;
+                    errorMessage = 'Please enter a location.';
+                    $(`.location${index}`).focus();
+                    return false;
+                }
+                if (!hour || isNaN(hour) || hour < 0) {
+                    isValid = false;
+                    errorMessage = 'Please enter a valid hour.';
+                    $(`#hour${index}`).focus();
+                    return false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function() {
+        $('#timesheet-form').on('submit', function(e) {
+            let isValid = true;
+            let errorMessage = '';
+
+            // Function to validate each block (field_wrapper or extra_field)
+            function validateFields(selector) {
+                $(selector).each(function() {
+                    const index = $(this).data('index');
+
+                    const client = $(`#client${index}`).val();
+                    const assignment = $(`#assignment${index}`).val();
+                    const partner = $(`#partner${index}`).val();
+                    const workItem = $(`.workItem${index}`).val();
+                    const location = $(`.location${index}`).val();
+                    const hour = $(`#hour${index}`).val();
+
+                    if (!client) {
+                        isValid = false;
+                        errorMessage = 'Please select a client.';
+                        $(`#client${index}`).focus();
+                        return false;
+                    }
+                    if (!assignment) {
+                        isValid = false;
+                        errorMessage = 'Please select an assignment.';
+                        $(`#assignment${index}`).focus();
+                        return false;
+                    }
+                    if (!partner) {
+                        isValid = false;
+                        errorMessage = 'Please select a partner.';
+                        $(`#partner${index}`).focus();
+                        return false;
+                    }
+                    if (!workItem) {
+                        isValid = false;
+                        errorMessage = 'Please enter a work item.';
+                        $(`.workItem${index}`).focus();
+                        return false;
+                    }
+                    if (!location) {
+                        isValid = false;
+                        errorMessage = 'Please enter a location.';
+                        $(`.location${index}`).focus();
+                        return false;
+                    }
+                    if (!hour || isNaN(hour) || hour < 0) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid hour.';
+                        $(`#hour${index}`).focus();
+                        return false;
+                    }
+                });
+            }
+
+            // Validate both types of field blocks
+            validateFields('.field_wrapper');
+            if (isValid) {
+                validateFields('.extra_field');
+            }
+
+            // If any validation failed, stop form submission
+            if (!isValid) {
+                e.preventDefault();
+                alert(errorMessage);
+            }
+        });
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        function handleClientChange(clientId) {
+
+            var cid = $('#' + clientId).val();
+            var datepickers = $('#datepickers1').val();
+            var clientNumber = parseInt(clientId.replace('client', ''));
+
+            if (cid == 33) {
+                var datepickers = $('#day' + clientNumber).val();
+
+                // convert like  ["01", "01", "1999"]
+                var parts = datepickers.split('-');
+                // like "1999-01-01"
+                var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                var selectedDate = new Date(formattedDate);
+                // Get day of week hare  0 = Sunday and 6 = Saturday
+                var dayOfWeek = selectedDate.getDay();
+                if (dayOfWeek === 6) {
+                    $.ajax({
+                        type: "get",
+                        url: "{{ url('holidaysselect') }}",
+                        data: {
+                            cid: cid,
+                            datepickers: datepickers
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            console.log(datepickers);
+                            var workitem = (response.holidayName && response.holidayName !==
+                                    "null") ?
+                                response.holidayName :
+                                (response.saturday || 'N/A');
+
+                            var location = 'N/A';
+                            var time = 0;
+
+                            $('.assignmentvalue' + clientNumber).html(
+                                `<option value="${response.assignmentgenerate_id}">${response.assignment_name} (${response.assignmentname}/${response.assignmentgenerate_id})</option>`
+                            );
+                            $('.partnervalue' + clientNumber).html(
+                                `<option value="${response.team_memberid}">${response.team_member}</option>`
+                            );
+                            $('.workitemnvalue' + clientNumber).val(workitem).prop(
+                                'readonly', true);
+                            $('.locationvalue' + clientNumber).val(location).prop(
+                                'readonly', true);
+                            $('#totalhours' + clientNumber).val(time);
+                            //   $('#hour' + (clientNumber + 1)).prop('readonly', true);
+                            $('#hour' + clientNumber).val(time).prop('readonly', true);
+                            $('#plusbuttion' + clientNumber).addClass('d-none');
+                        }
+                    });
+                } else {
+                    alert('You can only select offholidays client on Saturdays');
+                    $('#client' + clientNumber).val('');
+                }
+            } else {
+                //   alert('ji');
+                //   $('.row.row-sm.showdiv1').removeClass('d-none').find('input,textarea').val('').prop(
+                //       'readonly', false);
+                //   $('#assignment1, #partner1').empty();
+
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        cid: cid,
+                        datepickers: datepickers
+                    },
+                    success: function(res) {
+                        $('.assignmentvalue' + clientNumber).empty().append(res);
+                        $('.partnervalue' + clientNumber).empty();
+                        $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+                            false);
+                        $('.locationvalue' + clientNumber).val('').prop('readonly',
+                            false);
+                        $('#hour' + clientNumber).prop('readonly', false);
+                        $('#plusbuttion' + clientNumber).removeClass('d-none');
+                        //   $('#totalhours' + clientNumber).val(0);
+                    }
+                });
+            }
+        }
+
+        function handleAssignmentChange(assignmentId) {
+            var assignment = $('#' + assignmentId).val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('timesheet/create') }}",
+                data: {
+                    assignment: assignment
+                },
+                success: function(res) {
+                    $('#' + assignmentId.replace('assignment', 'partner')).html(res);
+                }
+            });
+        }
+
+        function calculateTotal(hourId) {
+            var originalhournubmer = parseInt(hourId.replace('hour', ''));
+            var newnumber = originalhournubmer >= 10 ? Math.floor(originalhournubmer / 10) : originalhournubmer;
+
+
+            //   sum of total child filed like hour10, hour11, etc
+            var total = 0;
+            for (var i = 0; i < 5; i++) {
+                var input = $(`#hour${newnumber}${i}`);
+                if (input.length) {
+                    var val = parseFloat(input.val()) || 0;
+                    total += val;
+                }
+            }
+
+            // Also check the base hour like (hour1)
+            var baseHourInput = $(`#hour${newnumber}`);
+            var baseVal = parseFloat(baseHourInput.val()) || 0;
+            total += baseVal;
+
+            if (total > 12) {
+                alert("The total hours cannot be greater than 12.");
+                // reset current field
+                $(`#${hourId}`).val(0);
+                //   calculateTotal(hourId); 
+                return;
+            }
+
+            // Set value to totalhours
+            $(`#totalhours${newnumber}`).val(total);
+        }
+
+        //   var maxField = 4;
+        //   var x = 1;
+        //   $(document).on("click", ".add_button", function() {
+        //       let index = $(this).data("index");
+        //       let wrapper = $(`#additionalFields${index}`);
+
+        //       console.log('index', index)
+        //       console.log('wrapper', wrapper)
+        //       //   if (x < maxField) {
+        //       //       x++;
+        //       let newFieldHtml = `
+        //         <div class="row row-sm extra_field">
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Client Name</label>
+        //                     <select required class="language form-control refresh" name="client_id1[]" id="client2">
+        //                         <option value="">Select Client</option>
+        //                         @foreach ($client as $clientData)
+        //                             <option value="{{ $clientData->id }}">
+        //                                 {{ $clientData->client_name }} ({{ $clientData->client_code }})
+        //                             </option>
+        //                         @endforeach
+        //                     </select>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Assignment Name</label>
+        //                     <select class="form-control key refreshoption assignmentvalue2" name="assignment_id1[]" id="assignment2"></select>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Partner</label>
+        //                     <select class="language form-control refreshoption partnervalue2" id="partner2" name="partner1[]"></select>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600" style="width:100px;">Work Item</label>
+        //                     <textarea type="text" name="workitem1[]" class="form-control key workItem2 refresh workitemnvalue2"></textarea>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600" style="width:100px;">Location</label>
+        //                     <input type="text" name="location1[]" class="form-control key location2 refresh locationvalue2">
+        //                 </div>
+        //             </div>
+        //             <div class="col-1">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Hour</label>
+        //                     <input type="text" class="form-control hour2 refresh" name="hour1[]" oninput="calculateTotal(this)" value="0" step="1">
+        //                 </div>
+        //             </div>
+        //             <div class="col-1">
+        //                 <div class="form-group" style="margin-top: 36px;">
+        //                     <a href="javascript:void(0);" class="remove_button" title="Remove field">
+        //                         <img src="{{ url('backEnd/image/remove-icon.png') }}" />
+        //                     </a>
+        //                 </div>
+        //             </div>
+        //         </div>`;
+
+        //       wrapper.append(newFieldHtml);
+
+        //       //   }
+        //   });
+
+        $(document).on("click", ".add_button", function() {
+            let index = $(this).data("index"); // Get index of the clicked button
+            let wrapper = $(`#additionalFields${index}`); // Get the wrapper div
+            let fieldCount = wrapper.find('.extra_field').length; // Count existing fields
+
+            if (fieldCount < 4) { // Allow max 5 fields per wrapper
+                let idincreament = `${index}${fieldCount}`;
+                //   console.log('index', index);
+                //   console.log('fieldCount', fieldCount);
+                //   console.log('idincreament', idincreament);
+                let newFieldHtml = `
+        <div class="row row-sm extra_field">
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Client Name</label>
+                    <select required class="language form-control refresh" name="client_id${index}[]" id="client${idincreament}">
+                        <option value="">Select Client</option>
+                        @foreach ($client as $clientData)
+                            <option value="{{ $clientData->id }}">
+                                {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Assignment Name</label>
+                    <select class="form-control key refreshoption assignmentvalue${idincreament}" name="assignment_id${index}[]" id="assignment${idincreament}"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Partner</label>
+                    <select class="language form-control refreshoption partnervalue${idincreament}" name="partner${index}[]" id="partner${idincreament}"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="width:100px;">Work Item</label>
+                    <textarea type="text" name="workitem${index}[]" class="form-control key workItem${idincreament} refresh workitemnvalue${idincreament}"></textarea>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="width:100px;">Location</label>
+                    <input type="text" name="location${index}[]" class="form-control key location${idincreament} refresh locationvalue${idincreament}">
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group">
+                    <label class="font-weight-600">Hour</label>
+                    <input type="text" class="form-control hour${idincreament} refresh" id="hour${idincreament}" name="hour${index}[]" oninput="calculateTotal(this)" value="0" step="1">
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group" style="margin-top: 36px;">
+                    <a href="javascript:void(0);" class="remove_button" title="Remove field">
+                        <img src="{{ url('backEnd/image/remove-icon.png') }}" />
+                    </a>
+                </div>
+            </div>
+        </div>`;
+
+                wrapper.append(newFieldHtml); // Append only if limit is not reached
+            } else {
+                alert("You can only add up to 5 fields per section.");
+            }
+        });
+
+        $(document).on("click", ".remove_button", function() {
+            $(this).closest(".extra_field").remove();
+        });
+
+        //   $(document).on("change", "#client1", function() {
+        //       //   alert('hi 1');
+        //       handleClientChange($(this).attr("id"));
+        //   });
+        //   $(document).on("change", "#assignment1", function() {
+        //       //   alert('hi');
+        //       handleAssignmentChange($(this).attr("id"));
+        //   });
+
+        // Optimized event listener for all clients and assignments
+        $(document).on("change", "[id^='client']", function() {
+            //   alert('hi ');
+            handleClientChange($(this).attr("id"));
+        });
+
+        $(document).on("change", "[id^='assignment']", function() {
+            handleAssignmentChange($(this).attr("id"));
+        });
+
+        $(document).on("input", "[class*='hour']", function() {
+            calculateTotal($(this).attr("id"));
+        });
+
+    });
+</script>
+{{--  Start Hare  --}}
+
+
+<script>
+    $(document).ready(function() {
+        function handleClientChange(clientId) {
+
+            var cid = $('#' + clientId).val();
+            var datepickers = $('#datepickers1').val();
+            var clientNumber = parseInt(clientId.replace('client', ''));
+
+            if (cid == 33) {
+                //   var datepickers = $('#day' + clientNumber).val();
+                //   var datepickers = "08-03-2025";
+                var datepickers = "22-03-2025";
+
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('holidaysselect') }}",
+                    data: {
+                        cid: cid,
+                        datepickers: datepickers
+                    },
+
+                    success: function(response) {
+                        console.log(response);
+
+                        var parts = datepickers.split('-');
+                        var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                        var selectedDate = new Date(formattedDate);
+                        var dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 6 = Saturday
+
+                        var roleId = response.roleId;
+
+                        if (roleId == 13 || roleId == 14) {
+                            if (
+                                (response.holidayName && response.holidayName !== "null") ||
+                                (dayOfWeek === 6 && (response.saturday === '2nd Saturday' ||
+                                    response.saturday === '4th Saturday'))
+                            ) {
+                                applyOffHolidayUI(response, clientNumber);
+                            } else {
+                                alert(
+                                    'You can only select offholidays client on 2nd and 4th Saturdays for this role.'
+                                );
+                                $('#client' + clientNumber).val('');
+                            }
+
+                        } else {
+                            if (dayOfWeek === 6) {
+                                applyOffHolidayUI(response, clientNumber);
+                            } else {
+                                alert('You can only select offholidays client on Saturdays.');
+                                $('#client' + clientNumber).val('');
+                            }
+                        }
+                    }
+                });
+
+                function applyOffHolidayUI(response, clientNumber) {
+                    var workitem = (response.holidayName && response.holidayName !== "null") ?
+                        response.holidayName : (response.saturday || '');
+
+                    var location = 'N/A';
+                    var time = 0;
+
+                    $('.assignmentvalue' + clientNumber).html(
+                        `<option value="${response.assignmentgenerate_id}">${response.assignment_name} (${response.assignmentname}/${response.assignmentgenerate_id})</option>`
+                    );
+                    $('.partnervalue' + clientNumber).html(
+                        `<option value="${response.team_memberid}">${response.team_member}</option>`
+                    );
+                    $('.workitemnvalue' + clientNumber).val(workitem).prop('readonly', true);
+                    $('.locationvalue' + clientNumber).val(location).prop('readonly', true);
+                    $('#totalhours' + clientNumber).val(time);
+                    $('#hour' + clientNumber).val(time).prop('readonly', true);
+                    $('#plusbuttion' + clientNumber).addClass('d-none');
+                }
+            } else {
+
+                //   alert('ji');
+                //   $('.row.row-sm.showdiv1').removeClass('d-none').find('input,textarea').val('').prop(
+                //       'readonly', false);
+                //   $('#assignment1, #partner1').empty();
+
+                $.ajax({
+                    type: "get",
+                    url: "{{ url('timesheet/create') }}",
+                    data: {
+                        cid: cid,
+                        datepickers: datepickers
+                    },
+                    success: function(res) {
+                        $('.assignmentvalue' + clientNumber).empty().append(res);
+                        $('.partnervalue' + clientNumber).empty();
+                        $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+                            false);
+                        $('.locationvalue' + clientNumber).val('').prop('readonly',
+                            false);
+                        $('#hour' + clientNumber).prop('readonly', false);
+                        $('#plusbuttion' + clientNumber).removeClass('d-none');
+                        //   $('#totalhours' + clientNumber).val(0);
+                    }
+                });
+            }
+        }
+
+        function handleAssignmentChange(assignmentId) {
+            var assignment = $('#' + assignmentId).val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('timesheet/create') }}",
+                data: {
+                    assignment: assignment
+                },
+                success: function(res) {
+                    $('#' + assignmentId.replace('assignment', 'partner')).html(res);
+                }
+            });
+        }
+
+        function calculateTotal(hourId) {
+            var originalhournubmer = parseInt(hourId.replace('hour', ''));
+            var newnumber = originalhournubmer >= 10 ? Math.floor(originalhournubmer / 10) :
+                originalhournubmer;
+
+
+            //   sum of total child filed like hour10, hour11, etc
+            var total = 0;
+            for (var i = 0; i < 5; i++) {
+                var input = $(`#hour${newnumber}${i}`);
+                if (input.length) {
+                    var val = parseFloat(input.val()) || 0;
+                    total += val;
+                }
+            }
+
+            // Also check the base hour like (hour1)
+            var baseHourInput = $(`#hour${newnumber}`);
+            var baseVal = parseFloat(baseHourInput.val()) || 0;
+            total += baseVal;
+
+            if (total > 12) {
+                alert("The total hours cannot be greater than 12.");
+                // reset current field
+                $(`#${hourId}`).val(0);
+                //   calculateTotal(hourId); 
+                return;
+            }
+
+            // Set value to totalhours
+            $(`#totalhours${newnumber}`).val(total);
+        }
+
+        //   var maxField = 4;
+        //   var x = 1;
+        //   $(document).on("click", ".add_button", function() {
+        //       let index = $(this).data("index");
+        //       let wrapper = $(`#additionalFields${index}`);
+
+        //       console.log('index', index)
+        //       console.log('wrapper', wrapper)
+        //       //   if (x < maxField) {
+        //       //       x++;
+        //       let newFieldHtml = `
+        //         <div class="row row-sm extra_field">
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Client Name</label>
+        //                     <select required class="language form-control refresh" name="client_id1[]" id="client2">
+        //                         <option value="">Select Client</option>
+        //                         @foreach ($client as $clientData)
+        //                             <option value="{{ $clientData->id }}">
+        //                                 {{ $clientData->client_name }} ({{ $clientData->client_code }})
+        //                             </option>
+        //                         @endforeach
+        //                     </select>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Assignment Name</label>
+        //                     <select class="form-control key refreshoption assignmentvalue2" name="assignment_id1[]" id="assignment2"></select>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Partner</label>
+        //                     <select class="language form-control refreshoption partnervalue2" id="partner2" name="partner1[]"></select>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600" style="width:100px;">Work Item</label>
+        //                     <textarea type="text" name="workitem1[]" class="form-control key workItem2 refresh workitemnvalue2"></textarea>
+        //                 </div>
+        //             </div>
+        //             <div class="col-2">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600" style="width:100px;">Location</label>
+        //                     <input type="text" name="location1[]" class="form-control key location2 refresh locationvalue2">
+        //                 </div>
+        //             </div>
+        //             <div class="col-1">
+        //                 <div class="form-group">
+        //                     <label class="font-weight-600">Hour</label>
+        //                     <input type="text" class="form-control hour2 refresh" name="hour1[]" oninput="calculateTotal(this)" value="0" step="1">
+        //                 </div>
+        //             </div>
+        //             <div class="col-1">
+        //                 <div class="form-group" style="margin-top: 36px;">
+        //                     <a href="javascript:void(0);" class="remove_button" title="Remove field">
+        //                         <img src="{{ url('backEnd/image/remove-icon.png') }}" />
+        //                     </a>
+        //                 </div>
+        //             </div>
+        //         </div>`;
+
+        //       wrapper.append(newFieldHtml);
+
+        //       //   }
+        //   });
+
+        $(document).on("click", ".add_button", function() {
+            let index = $(this).data("index"); // Get index of the clicked button
+            let wrapper = $(`#additionalFields${index}`); // Get the wrapper div
+            let fieldCount = wrapper.find('.extra_field').length; // Count existing fields
+
+            if (fieldCount < 4) { // Allow max 5 fields per wrapper
+                let idincreament = `${index}${fieldCount}`;
+                //   console.log('index', index);
+                //   console.log('fieldCount', fieldCount);
+                //   console.log('idincreament', idincreament);
+                let newFieldHtml = `
+        <div class="row row-sm extra_field">
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Client Name</label>
+                    <select required class="language form-control refresh" name="client_id${index}[]" id="client${idincreament}">
+                        <option value="">Select Client</option>
+                        @foreach ($client as $clientData)
+                            <option value="{{ $clientData->id }}">
+                                {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Assignment Name</label>
+                    <select class="form-control key refreshoption assignmentvalue${idincreament}" name="assignment_id${index}[]" id="assignment${idincreament}"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Partner</label>
+                    <select class="language form-control refreshoption partnervalue${idincreament}" name="partner${index}[]" id="partner${idincreament}"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="width:100px;">Work Item</label>
+                    <textarea type="text" name="workitem${index}[]" class="form-control key workItem${idincreament} refresh workitemnvalue${idincreament}"></textarea>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="width:100px;">Location</label>
+                    <input type="text" name="location${index}[]" class="form-control key location${idincreament} refresh locationvalue${idincreament}">
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group">
+                    <label class="font-weight-600">Hour</label>
+                    <input type="text" class="form-control hour${idincreament} refresh" id="hour${idincreament}" name="hour${index}[]" oninput="calculateTotal(this)" value="0" step="1">
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group" style="margin-top: 36px;">
+                    <a href="javascript:void(0);" class="remove_button" title="Remove field">
+                        <img src="{{ url('backEnd/image/remove-icon.png') }}" />
+                    </a>
+                </div>
+            </div>
+        </div>`;
+
+                wrapper.append(newFieldHtml); // Append only if limit is not reached
+            } else {
+                alert("You can only add up to 5 fields per section.");
+            }
+        });
+
+        $(document).on("click", ".remove_button", function() {
+            $(this).closest(".extra_field").remove();
+        });
+
+        //   $(document).on("change", "#client1", function() {
+        //       //   alert('hi 1');
+        //       handleClientChange($(this).attr("id"));
+        //   });
+        //   $(document).on("change", "#assignment1", function() {
+        //       //   alert('hi');
+        //       handleAssignmentChange($(this).attr("id"));
+        //   });
+
+        // Optimized event listener for all clients and assignments
+        $(document).on("change", "[id^='client']", function() {
+            //   alert('hi ');
+            handleClientChange($(this).attr("id"));
+        });
+
+        $(document).on("change", "[id^='assignment']", function() {
+            handleAssignmentChange($(this).attr("id"));
+        });
+
+        $(document).on("input", "[class*='hour']", function() {
+            calculateTotal($(this).attr("id"));
+        });
+
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding multiple select  --}}
 {{--  Start Hare  --}}
+<div class="col-sm-12">
+    <div class="form-group">
+        <label class="font-weight-600">Partner Name : *</label>
+        <select required class="language form-control" multiple="" id="exampleFormControlSelect1" name="otherpatnerid[]">
+            <option value="">Please Select One</option>
+            @foreach ($addonpartner as $teammemberData)
+                <option value="{{ $teammemberData->id }}">
+                    {{ $teammemberData->team_member }} (
+                    {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                </option>
+            @endforeach
+        </select>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#sendOtpBtn').on('click', function(e) {
+            e.preventDefault(); // prevent default form submission (if any)
+
+            var assignmentId = "{{ $clientList->assignmentgenerate_id }}";
+            var status = $("#statusvalue").val();
+            var selectedpartner = $("#exampleFormControlSelect1").val();
+
+            // Debug log (or you can use alert for testing)
+            console.log("Assignment ID:", assignmentId);
+            console.log("Status:", status);
+            console.log("Selected Partner:", selectedpartner);
+
+            //   if (!selectedpartner || selectedpartner.length === 0) {
+            //       alert("Please select at least one partner.");
+            //       return;
+            //   }
+
+            $.ajax({
+                url: "{{ url('confirmationotpsend') }}",
+                method: "GET",
+                //   type: 'GET',
+                data: {
+                    assignmentid: assignmentId,
+                    selectedpartner: selectedpartner,
+                    status: status,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    //   if (response.status === 0) {
+                    //       $('#confirmationModal').modal('show');
+                    //       $('#otpmessage').text(response.otpsuccessmessage).addClass(
+                    //           'text-success');
+                    //   } else {
+                    //       alert(response.otpsuccessmessage);
+                    //   }
+                    console.log(response);
+                    if ($('#managervarificationmodal').hasClass('show')) {
+                        $('#managervarificationmodal').modal('hide');
+                    }
+                    $('#confirmationModal').modal('show');
+
+                    if (response.status == 0) {
+                        $("#otpmessage").text(response.otpsuccessmessage);
+                    } else {
+                        $("#errormessage").text(response.otpsuccessmessage);
+                        $("#verifyBtn").addClass('disable');
+                        $("#yesid").hide();
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while sending OTP.');
+                }
+            });
+        });
+
+        //   // Resend OTP logic
+        //   $('#resendOtp').on('click', function(e) {
+        //       e.preventDefault();
+        //       $('#sendOtpBtn').click();
+        //   });
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+$('#yourOtpSendButtonId').on('click', function (e) {
+e.preventDefault();
+
+var assignmentid = $(this).data('id');
+var selectedpartner = $('#selectedpartner').val(); // if applicable
+var status = 0;
+
+$.ajax({
+type: "POST",
+url: "{{ url('confirmationotpsend') }}",
+data: {
+_token: "{{ csrf_token() }}",
+assignmentid: assignmentid,
+selectedpartner: selectedpartner,
+status: status
+},
+success: function (response) {
+if (response.status == 0) {
+$('#otpmessage').text(response.otpsuccessmessage);
+$('#confirmationModal').modal('show'); // 💥 this opens the modal
+} else {
+$('#errormessage').text(response.otpsuccessmessage);
+}
+}
+});
+});
+
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding run once / already run --}}
 {{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+
+        // Check if the script has already run
+        if (!sessionStorage.getItem('zipScriptExecuted')) {
+            sessionStorage.setItem('zipScriptExecuted', true);
+
+            // Show waiting message
+            $('#loadingMessage').show();
+
+            // Redirect user to download the zip
+            window.location.href = '/createzipfolder?assignmentgenerateid=' + assignmentgenerateid1;
+
+            // Show afterzipcreated div after 3 seconds
+            setTimeout(function() {
+                $('#loadingMessage').hide();
+                $('#afterzipcreated').show();
+            }, 3000);
+        } else {
+            $('#allreadydownload').show();
+        }
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script>
+    $(document).ready(function() {
+        // Create Zip file button click then
+        $('#downloadButton').click(function(e) {
+            e.preventDefault();
+            var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+
+            // Show waiting message
+            $('#loadingMessage').show();
+            // Create Zip file button hide 
+            $('#downloadButton').hide();
+
+            $.ajax({
+                type: 'GET',
+                url: '/createzipfolder',
+                data: {
+                    assignmentgenerateid: assignmentgenerateid1,
+                },
+                success: function(data) {
+                    // Hide waiting message
+                    $('#loadingMessage').hide();
+                    // Display created zip file name
+                    // $('#createdzipfile').text('Created Zip File: ' + data).show();
+                    $('#createdzipfile').text('Created Zip File: ' + data.zipFile).show();
+                    $('#downloadzip').show();
+                    console.log("No any error occure");
+
+                },
+                // handle error
+                error: function(error) {
+                    console.log("start error message from hare");
+                    // Shows basic error message
+                    console.error("AJAX Error:", error);
+                    // Shows complete response object
+                    console.log("Full Response:", xhr);
+                    // Shows actual error details
+                    console.log("Response Text:", xhr.responseText);
+                    // Shows actual error details from backend
+                    console.log("Status:", status);
+                }
+            });
+        });
+    });
+</script> --}}
+
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#downloadButton').click(function(e) {
+            e.preventDefault();
+            var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+
+            // Show waiting message
+            $('#loadingMessage').show();
+            $('#downloadButton').hide();
+
+            // Redirect user to download the zip
+            window.location.href = '/createzipfolder?assignmentgenerateid=' + assignmentgenerateid1;
+            // Show afterzipcreated div after 10 seconds
+            setTimeout(function() {
+                $('#loadingMessage').hide();
+                $('#afterzipcreated').show();
+            }, 3000);
+
+            // setTimeout(function() {
+            //     window.location.href = '/assignmentfoldercreate/' + assignmentgenerateid1;
+            // }, 3000);
+        });
+    });
+</script> --}}
+
+
+<script>
+    $(document).ready(function() {
+        var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+
+        // Show waiting message
+        $('#loadingMessage').show();
+
+        // Redirect user to download the zip
+        window.location.href = '/createzipfolder?assignmentgenerateid=' + assignmentgenerateid1;
+
+        // Show afterzipcreated div after 3 seconds
+        setTimeout(function() {
+            $('#loadingMessage').hide();
+            $('#afterzipcreated').show();
+        }, 3000);
+
+        // setTimeout(function() {
+        //     window.location.href = '/assignmentfoldercreate/' + assignmentgenerateid1;
+        // }, 3000);
+    });
+</script>
+
+{{-- <script>
+    $(document).ready(function() {
+        var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+
+        // Check if the script has already run
+        if (!sessionStorage.getItem('zipScriptExecuted')) {
+            sessionStorage.setItem('zipScriptExecuted', true);
+
+            // Show waiting message
+            $('#loadingMessage').show();
+
+            // Redirect user to download the zip
+            window.location.href = '/createzipfolder?assignmentgenerateid=' + assignmentgenerateid1;
+
+            // Show afterzipcreated div after 3 seconds
+            setTimeout(function() {
+                $('#loadingMessage').hide();
+                $('#afterzipcreated').show();
+            }, 3000);
+        } else {
+            $('#allreadydownload').show();
+        }
+    });
+</script> --}}
+
+{{-- @if (!isset($message))
+                    <div>
+                        <button type="button" id="downloadButton" class="btn btn-outline-primary">Create Zip
+                            File</button>
+                    </div>
+                @endif --}}
+
+{{-- <div class="row">
+                    <div>
+                        <a href="{{ route('createdzipdownload', ['assignmentgenerateid' => $assignmentgenerateid]) }}"
+                            class="btn btn-success" style="color:white; display:none;" id="downloadzip">Download
+                            zip file</a>
+                    </div>
+                </div> --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
@@ -4136,6 +5388,17 @@ style="display:block">Please Select One</option>
         console.log(dayOfWeek, 1);
         console.log(days, 2);
         console.log(dayString, 3);
+    </script>
+
+    <script>
+        console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+        console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+        console.log("leavedataforcalander1:", leavedataforcalander1);
+        console.log("differenceInDays:", differenceInDays);
+        console.log("newteammember:", newteammember);
+        console.log("rejoiningdate:", rejoiningdate);
+        console.log("totalleaveCount:", totalleaveCount);
+        console.log("leavebreakdateassign:", leavebreakdateassign);
     </script>
     {{--  Start Hare  --}}
     {{-- * regarding alert  --}}

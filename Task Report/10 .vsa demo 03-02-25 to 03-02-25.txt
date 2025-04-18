@@ -1,4 +1,8 @@
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+important point 
+When the VSALocal update is completed in VSADemo, move all the data to Vvsalocal, vsademo ```start . Similarly, continue moving data from VSADemo to VSALive
+
+
 Comment all places on vsademo and uncomment on vsalive 
 
 #1
@@ -809,17 +813,12 @@ if (auth()->user()->role_id == 13) {
 
 
 
-vsalocal, vsademo, vsalive ```end hare 
 
-
-
-vsalocal, vsademo ```start
-
-2.Client wants to add multiple partner in lead partner and other partner column ```start 
+2.Client wants to add multiple partner in lead partner and other partner column ```start ~!~!
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ChecklistanswerController.php
 
-    public function otherpatnerUpdate(Request $request)
+      public function otherpatnerUpdate(Request $request)
     {
         try {
             // dd($request);
@@ -898,24 +897,24 @@ app\Http\Controllers\ChecklistanswerController.php
                 ->get();
 
             // Mail for otherpartner
-            if (!empty($assignmentMapping->otherpartner)) {
-                // dd($assignmentMapping->otherpartner);
-                $data = [
-                    'assignmentid'      => $assignmentId,
-                    'clientname'        => $clientname->client_name,
-                    'clientcode'        => $clientname->client_code,
-                    'assignmentname'    => $request->assignmentname,
-                    'assignment_name'   => $assignment_name,
-                    'emailid'           => $teamemailotherpartner->emailid,
-                    'otherpatner'       => $teamemailotherpartner,
-                    'assignmentpartner' => $teamemailpartner,
-                    'teamleader'        => $teamleader,
-                    'periodend' => $assignmentMapping->periodend,
-                    'assignmentgenerate' => $assignmentId,
-                ];
+            // if (!empty($assignmentMapping->otherpartner)) {
+            // dd($assignmentMapping->otherpartner);
+            $data = [
+                'assignmentid'      => $assignmentId,
+                'clientname'        => $clientname->client_name,
+                'clientcode'        => $clientname->client_code,
+                'assignmentname'    => $request->assignmentname,
+                'assignment_name'   => $assignment_name,
+                'emailid'           => $teamemailotherpartner->emailid,
+                'otherpatner'       => $teamemailotherpartner,
+                'assignmentpartner' => $teamemailpartner,
+                'teamleader'        => $teamleader,
+                'periodend' => $assignmentMapping->periodend,
+                'assignmentgenerate' => $assignmentId,
+            ];
 
-                $this->sendAssignmentEmail($data);
-            }
+            $this->sendAssignmentEmail($data);
+            // }
             // assignment assigned mail end hare
             $output = array('msg' => 'This partner has been added successfully.');
             return back()->with('success', $output);
@@ -927,6 +926,8 @@ app\Http\Controllers\ChecklistanswerController.php
             return back()->withErrors($output)->withInput();
         }
     }
+
+
 
 
 
@@ -952,13 +953,16 @@ after above function add it
 
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
 find   public function create(Request $request)
 find } elseif (auth()->user()->role_id == 13) {
 
-      $clientss = DB::table('clients')
+  $clientss = DB::table('clients')
         ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.client_id', '=', 'clients.id')
         ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
         ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
@@ -972,6 +976,10 @@ find } elseif (auth()->user()->role_id == 13) {
         ->distinct()
         ->orderBy('clients.client_name', 'ASC')
         ->get();
+
+
+
+
 
 
 
@@ -1027,6 +1035,8 @@ find  elseif (auth()->user()->role_id == 13) {{
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
@@ -1054,6 +1064,8 @@ find  } elseif (auth()->user()->role_id == 13) {
             ->select('clients.client_name', 'clients.id', 'clients.client_code')
             ->orderBy('client_name', 'ASC')
             ->distinct()->get();
+
+
 
 
 
@@ -1094,6 +1106,8 @@ public function store(Request $request)
 
 
 
+
+
 total hour for
 public function store(Request $request)
 if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
@@ -1117,6 +1131,8 @@ if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
               ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
               ->update(['teamhour' => $finalResult]);
           }
+
+
 
 
 
@@ -1147,6 +1163,10 @@ app\Http\Controllers\TimesheetController.php
             ->update(['teamhour' => $finalResult]);
         }
       }
+
+
+
+
 
 
 
@@ -1187,6 +1207,8 @@ public function destroy(Request $request, $id)
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
@@ -1198,7 +1220,7 @@ app\Http\Controllers\TimesheetController.php
 
 
 
-      $clientss = DB::table('assignmentmappings')
+       $clientss = DB::table('assignmentmappings')
         ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
         ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
         ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
@@ -1215,6 +1237,8 @@ app\Http\Controllers\TimesheetController.php
         ->select('clients.client_name', 'clients.id', 'clients.client_code')
         ->orderBy('client_name', 'ASC')
         ->distinct()->get();
+
+
 
 
 
@@ -1257,6 +1281,8 @@ if (auth()->user()->role_id == 13) {
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
@@ -1290,6 +1316,10 @@ function create(Request $request)
                 ->distinct() // Ensure unique rows
                 ->get() as $sub
             )
+
+
+
+
 
 
 
@@ -1353,6 +1383,9 @@ if (!is_numeric($request->assignment_id)) {
 
 
 
+
+
+
 find 
 if (!is_numeric($request->assignment_id)) {
   if (auth()->user()->role_id == 13) {
@@ -1402,6 +1435,8 @@ if (!is_numeric($request->assignment_id)) {
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 public function savedtimesheeteditstore(Request $request)
@@ -1427,6 +1462,8 @@ public function savedtimesheeteditstore(Request $request)
               ->update(['teamhour' => $finalresult]);
           }
         }
+
+
 
 
 
@@ -1465,6 +1502,9 @@ public function savedtimesheeteditstore(Request $request)
 
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\StepController.php
 
@@ -1472,9 +1512,13 @@ $teammemberDatas = DB::table('assignmentmappings')
 
 
 
-        $teammemberDatas = DB::table('assignmentteammappings')
+ $teammemberDatas = DB::table('assignmentteammappings')
             ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
             ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
             ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
             ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
             ->where('assignmentmappings.assignmentgenerate_id', $id)
@@ -1490,12 +1534,15 @@ $teammemberDatas = DB::table('assignmentmappings')
                 'assignmentteammappings.teamhour',
                 'assignmentteammappings.viewerteam',
                 'assignmentmappings.assignmentgenerate_id AS assignmentgenerateid',
-                'assignmentmappings.leadpartner'
+                'assignmentmappings.leadpartner',
+                'teamrolehistoryteam.newstaff_code'
             ])
             ->orderByDesc('assignmentteammappings.id')
             ->get();
 
         // dd($teammemberDatas);
+
+
 
 
 
@@ -1563,6 +1610,9 @@ find
 
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\viewassignment.blade.php
 
@@ -1570,6 +1620,8 @@ find and replace
 {{ $partnerData->leadpartnerhour ?? ($partnerData->otherpartnerhour ?? 0) }}
 
                    <td>{{ $partnerData->assignmenthour ?? 0 }}</td>
+
+
 
 
 
@@ -1634,10 +1686,14 @@ app\Http\Controllers\StepController.php
         // dd($partner);
 		
 	
+	
+	
 
 	
 		
 pass this addonpartner in view
+
+
 
 
 
@@ -1673,12 +1729,14 @@ replace it
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\viewassignment.blade.php
 
 
 
-                                    <div class="card-head">
+                                     <div class="card-head">
                                         <b>Partner List:</b>
 
                                         {{-- <b>
@@ -1692,7 +1750,10 @@ resources\views\backEnd\viewassignment.blade.php
                                                 class="btn btn-info-soft btn-sm ml-1"><i class="fa fa-plus"></i></a>
                                         </b>
                                     </div>
-									
+				
+
+
+				
 									
 
 
@@ -1772,6 +1833,8 @@ find text after this div add
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\assignmentmapping\yearwise.blade.php
    @if ($otherPartner && $otherPartner->team_member != null)
@@ -1791,7 +1854,9 @@ resources\views\backEnd\assignmentmapping\yearwise.blade.php
 			
 
 			
-									
+	
+
+	
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\BackEndController.php
@@ -1824,6 +1889,8 @@ app\Http\Controllers\BackEndController.php
         ->get();
 
       $assignmentcount = $assignmentcountall->count();
+
+
 
 
 
@@ -1874,12 +1941,7 @@ replace  assignmentmappingData,assignmentmappingOpenotherpartner and assignmentm
 	  
 
 
-
-
-
-2.Client wants to add multiple partner in lead partner and other partner column ```end 
-
-
+2.Client wants to add multiple partner in lead partner and other partner column ```end  ~!~!
 
 
 
@@ -1897,6 +1959,9 @@ resources\views\backEnd\teammember\edit.blade.php
 
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\form.blade.php
 replace all code 
@@ -1904,9 +1969,12 @@ replace all code
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\edit.blade.php
 replace all code 
+
 
 @extends('backEnd.layouts.layout') @section('backEnd_content')
     <!--Content Header (Page header)-->
@@ -1964,6 +2032,9 @@ replace all code
 
 
 
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\js.blade.php
 
@@ -1983,6 +2054,8 @@ resources\views\backEnd\layouts\includes\js.blade.php
          });
      });
  </script>
+ 
+ 
 
  @if (Request::is('teammember/*/edit') || Request::is('teammember/create'))
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -2063,6 +2136,9 @@ resources\views\backEnd\layouts\includes\js.blade.php
  @endif
  
  
+ 
+ 
+ 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\create.blade.php
@@ -2086,25 +2162,6 @@ remove this code
     });
 </script> --}}
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\teammember\form.blade.php
- <label class="font-weight-600">Email Id
-
-    <div class="col-3">
-        <div class="form-group">
-            @if (Request::is('teammember/*/edit'))
-                @php
-
-                    $timesheetdata = DB::table('timesheetusers')->where('createdby', $teammember->id)->first();
-                    // $disabled = $timesheetdata ? 'disabled' : '';
-                    $disabled = $timesheetdata ? 'readonly' : '';
-                @endphp
-            @endif
-            <label class="font-weight-600">Email Id <span class="text-danger"></span></label>
-            <input type="email" name="emailid" value="{{ $teammember->emailid ?? '' }}" class="form-control"
-                placeholder="Enter Email" @if (Request::is('teammember/*/edit')) {{ $disabled }} @endif>
-        </div>
-    </div>
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\stylesheet.blade.php
@@ -2125,6 +2182,8 @@ after this style add this style
 
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\layouts\includes\js.blade.php
 add this code end of file 
@@ -2139,25 +2198,45 @@ add this code end of file
  </script>
 
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\form.blade.php
 
 
-comment qualification file for vsademo and uncomment live wla 
+comment qualification file for vsademo and uncomment live wla
 
-I am working on profile validation ``` end
+                        @foreach ($teamqualification as $teamqualificationData)
+                            <tr>
 
-vsalocal, vsademo ```end 
+                                <td>{{ $teamqualificationData->qualification ?? '' }}</td>
+                                <td><a target="blank" target="blank" data-toggle="tooltip"
+                                        title="{{ $teamqualificationData->document_file }}"
+                                        href="{{ url('backEnd/image/teammember/document_file/' . $teamqualificationData->document_file ?? '') }}">
+                                        {{ $teamqualificationData->original_file ?? '' }}</a>
+                                </td>
+                                <!-- <td>
+                                <a href="{{ url('qualification/delete/' . $teamqualificationData->id) }}"
+                                onclick="return confirm('Are you sure you want to delete this item?');"
+                                class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a>
+                            </td> -->
+                            </tr>
+                        @endforeach 
+
+I am working on profile validation ``` end ~!~!
 
 
 
-vsalocal, vsademo ```start 2
+
 User is able to fill the timesheet beyond 'Leaving Date'.
+If user have leaveing date then not will be active by admin  ~!~!
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\teammember\index.blade.php
 find data-target="#requestModal">Inactive</button>
 
-                                      <td>
+
+                                    <td>
                                         @if ($teammemberData->status == 0)
                                             @php
                                                 $rejoiningUser = DB::table('teammembers')
@@ -2215,7 +2294,9 @@ find data-target="#requestModal">Inactive</button>
                                                     data-target="#requestModal">Active</button>
                                             </a>
                                         @endif
-                                    </td>
+                                    </td>                                     
+
+
 
 
 
@@ -2226,7 +2307,7 @@ resources\views\backEnd\teammember\form.blade.php
     <select name="status" id="exampleFormControlSelect1" class="form-control">
 
 
-               <select name="status" id="exampleFormControlSelect1" class="form-control">
+                <select name="status" id="exampleFormControlSelect1" class="form-control">
                     @if (Request::is('teammember/*/edit')) >
                         @if ($teammember->status == '0')
                             @php
@@ -2281,12 +2362,15 @@ resources\views\backEnd\teammember\form.blade.php
                 </select>
 				
 				
+				
+				
+				
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\promotion\index.blade.php
    @foreach ($rejoiningdatamerge as $rejoiningdata)
   
-                                     <tr>
+                                    <tr>
                                         <th>Employee Name</th>
                                         <th>Employee Code</th>
                                         <th>Rejoining Date</th>
@@ -2301,6 +2385,7 @@ resources\views\backEnd\promotion\index.blade.php
 									
 									
 									
+   
                                     @foreach ($rejoiningdatamerge as $rejoiningdata)
                                         <tr>
                                             <td>{{ $rejoiningdata->team_member }}</td>
@@ -2320,13 +2405,13 @@ resources\views\backEnd\promotion\index.blade.php
 
 
 
-1.User is able to fill the timesheet beyond 'Leaving Date'. ```end 
-vsalocal, vsademo ```end 2
+
+
+1.User is able to fill the timesheet beyond 'Leaving Date'. ```end  ~!~!
 
 
 
-vsalocal, vsademo, bugs ```start
-Date formate fixed
+Date Format update list ~!~!
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 1
 resources\views\backEnd\appointmentletter\index.blade.php
@@ -2339,11 +2424,15 @@ date('d-m-Y',
 
 
 
+
+
 2
 resources\views\backEnd\index.blade.php
 $holiday->startdate
 
 {{ date('d-m-Y', strtotime($holiday->startdate)) }}
+
+
 
 
 
@@ -2360,6 +2449,8 @@ resources\views\backEnd\timesheetrequest\view.blade.php
 
 
 
+
+
 4
 resources\views\backEnd\viewassignment.blade.php
 
@@ -2368,6 +2459,8 @@ resources\views\backEnd\viewassignment.blade.php
                                             {{ date('d-m-Y', strtotime($assignmentbudgetingDatas->periodend)) }}
                                         </td>
 										
+			
+			
 			
 
 			
@@ -2381,244 +2474,28 @@ resources\views\backEnd\article\view.blade.php
 
 
 
+
+
+Date Format update list end ~!~!
+
+
+
+Spelling of Promotion 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-find text permotion using sace for all portal 
+find text permotion using cace for all portal 
 find text Permotion  using case for all portal 
 
 replace Promotion
 
 
 
+Spelling of Promotion end 
 
 
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
- 
-replace this function on vsalocal vsalive both please  and vsademo done 
- 
-  public function open_leave($id)
-  {
-    $leaveId = request()->query('id');
-    if (!$leaveId) {
-      $permotioncheck = DB::table('teamrolehistory')
-        ->where('teammember_id', auth()->user()->teammember_id)->first();
- 
-      if (auth()->user()->role_id == 11) {
- 
-        $teamapplyleaveDatas  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.status', '0')
-          ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->get();
-        // dd($applyleaveDatas);
-        return view('backEnd.applyleave.adminopen', compact(
-          'teamapplyleaveDatas'
-        ));
-      } elseif ($permotioncheck && auth()->user()->role_id == 13) {
- 
-        // $myapplyleaveDatas  = DB::table('applyleaves')
-        //   ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-        //   ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-        //   ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-        //   ->where('applyleaves.createdby', auth()->user()->teammember_id)
-        //   ->where('applyleaves.status', 0)
-        //   ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')
-        //   ->latest()->get();
- 
-        $commonQuery  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.createdby', auth()->user()->teammember_id)
-          ->where('applyleaves.status', 0)
-          ->select('applyleaves.*', 'teammembers.team_member', 'roles.rolename', 'leavetypes.name');
- 
- 
-        $databeforepermotion = (clone $commonQuery)
-          ->whereDate('applyleaves.created_at', '<', $permotioncheck->created_at)
-          ->addSelect('teammembers.staffcode')
-          ->get();
- 
-        $dataafterpermotion = (clone $commonQuery)
-          ->leftJoin('teamrolehistory as createdby_history', 'createdby_history.teammember_id', '=', 'teammembers.id')
-          ->whereDate('applyleaves.created_at', '>', $permotioncheck->created_at)
-          ->addSelect('createdby_history.newstaff_code')
-          ->get();
- 
-        // dd($timesheetrequestspermotion);
- 
-        $myapplyleaveDatas = $databeforepermotion->merge($dataafterpermotion);
- 
- 
- 
- 
-        $teamapplyleaveDatas  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.approver', auth()->user()->teammember_id)
-          ->where('applyleaves.status', 0)
-          ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->get();
-        return view('backEnd.applyleave.openindex', compact(
-          'myapplyleaveDatas',
-          'teamapplyleaveDatas'
-        ));
-      } else {
-        $myapplyleaveDatas  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.createdby', auth()->user()->teammember_id)
-          ->where('applyleaves.status', 0)
-          ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->latest()->get();
-        $teamapplyleaveDatas  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.approver', auth()->user()->teammember_id)
-          ->where('applyleaves.status', 0)
-          ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->get();
-        return view('backEnd.applyleave.openindex', compact(
-          'myapplyleaveDatas',
-          'teamapplyleaveDatas'
-        ));
-      }
-    } else {
-      // this is comming from leave request mail when click on hare hyperlink to approve and rejecte
-      if (auth()->user()->role_id == 11) {
-        $teamapplyleaveDatas  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.id',  $leaveId)
-          ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->get();
-        return view('backEnd.applyleave.adminopen', compact(
-          'teamapplyleaveDatas'
-        ));
-      } else {
-        // this is comming from leave request mail when click on hare hyperlink to approve and rejecte
-        $teamapplyleaveDatas  = DB::table('applyleaves')
-          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
-          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
-          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
-          ->where('applyleaves.approver', auth()->user()->teammember_id)
-          // ->where('applyleaves.status', 0)
-          ->where('applyleaves.id',  $leaveId)
-          ->select('applyleaves.*', 'teammembers.team_member', 'teammembers.staffcode', 'roles.rolename', 'leavetypes.name')->get();
- 
-        return view('backEnd.applyleave.openindex', compact(
-          'teamapplyleaveDatas'
-        ));
-      }
-    }
-  }
-  
-  
-
-vsalocal, vsademo, bugs ```end
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\client\clientlist.blade.php
-
-replace it
-{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
-<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
-
-
-
-add on tables
- <table id="examplee" class="table table-bordered table-striped table-hover">
-  
-check </tbody> 
-   
-   
-   
-
-add this style 
-resources\views\backEnd\layouts\includes\stylesheet.blade.php
-
-@if (Request::is('client-list') || Request::is('client-list'))
-    <style>
-        #examplee {
-            width: 100%;
-            table-layout: auto;
-            /* Columns adjust based on content */
-            white-space: nowrap;
-            /* Prevent text wrapping */
-        }
-
-        #examplee th,
-        #examplee td {
-            padding: 8px;
-            /* Add spacing for better readability */
-            text-align: left;
-        }
-
-        #examplee th {
-            white-space: nowrap;
-            /* Prevent column headers from wrapping */
-        }
-    </style>
-@endif
- 
-
-
-Dashboard - Client Box (UI-Text)
-Dashboard - signout and assignment box (UI-fixed)  
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\index.blade.php
-
-1.Active Clients
-
-2.Active Member
-
-
-
-
-resources\views\backEnd\index.blade.php
-  @if (Auth::user()->role_id == 13)
-<a href="{{ url('assignment_report') }}">
- 
- 
-                         <a href="{{ url('assignment_report') }}">
-                            <div style="color:white;"
-                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment
-                            </div>
-                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
-                            <small style="color:white;">Open Assignment</small>
-                        </a>
-						
-						
-						
-  @if (Auth::user()->role_id == 14)			
-						
-                        <a href="{{ url('assignment_report') }}">
-                            <div style="color:white;"
-                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment
-                            </div>
-                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
-                            <small style="color:white;">Open Assignment</small>
-                        </a>				
-						
-						
-resources\views\backEnd\layouts\includes\header.blade.php
-<div class="dropdown-menu dropdown-menu-left"
-
-	 <div class="dropdown-menu dropdown-menu-left" style="margin-left: -110px;">
-
-	 
-
-Dashboard - signout and assignment box (UI-fixed) 
-Dashboard - Client Box (UI-Text)  end
 
 
 
 the exported leave report contains incorrect employee codes.
-vsalocal,vsademo
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
@@ -2768,8 +2645,755 @@ the exported leave report contains incorrect employee codes. end
 
 
 
-Rejoining/Promotion features Deployed ```start
+Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time
+When admin and partner create assignment on that time form should be validate  ~!~!
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+  public function create(Request $request)
+   $teammember = Teammember::where('status', '1')->whereIn('role_id', [14, 15])->with('title', 'role')
+  
+  
+         // $teammember = Teammember::where('status', '1')->whereIn('role_id', [14, 15])->with('title', 'role')
+        //     ->orderBy('team_member', 'asc')->get();
+        $teammember = DB::table('teammembers')
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->whereIn('teammembers.role_id', [15, 14])
+            ->where('teammembers.status', 1)
+            ->select('teammembers.*', 'titles.title', 'roles.rolename', 'teamrolehistory.newstaff_code')
+            ->orderBy('team_member', 'ASC')
+            // ->take(7)
+            ->get(); 
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+public function store(Request $request)
+ 
+if (!empty($request->otherpartner)) {
+	
+
+
+1
+     
+              $additionalpartnerIds = $request->additionalpartner_id;
+                if (is_array($additionalpartnerIds) && count($additionalpartnerIds) > 0) {
+                    foreach ($additionalpartnerIds as $index => $additionalpartnerId) {
+                        if ($additionalpartnerId) {
+                            DB::table('assignmentteammappings')->insert([
+                                'assignmentmapping_id' => $id,
+                                'teammember_id' => $additionalpartnerId,
+                                'type' => 1,
+                                'status' => 1,
+                                'teamhour' => 0,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+
+                            $additionalpartneremail = DB::table('teammembers')
+                                ->where('id', $additionalpartnerId)
+                                ->first();
+
+                            $data = [
+                                'assignmentid'      => $assignmentgenerate,
+                                'clientname'        => $clientname->client_name,
+                                'clientcode'        => $clientname->client_code,
+                                'assignmentname'    => $request->assignmentname,
+                                'assignment_name'   => $assignment_name,
+                                'emailid'           => $additionalpartneremail->emailid,
+                                'otherpatner'       => $teamemailotherpartner,
+                                'assignmentpartner' => $teamemailpartner,
+                                'teamleader'        => $teamleader,
+                                'periodend' => $assignmentbudgetingDatas->periodend,
+                                'assignmentgenerate' => $assignmentgenerate,
+                            ];
+
+                            $this->sendAssignmentEmail($data);
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+2
+
+               $additionalpartnerIds = $request->additionalpartner_id;
+                if (is_array($additionalpartnerIds) && count($additionalpartnerIds) > 0) {
+                    foreach ($additionalpartnerIds as $index => $additionalpartnerId) {
+                        if ($additionalpartnerId) {
+                            DB::table('assignmentteammappings')->insert([
+                                'assignmentmapping_id' => $id,
+                                'teammember_id' => $additionalpartnerId,
+                                'type' => 1,
+                                'status' => 1,
+                                'teamhour' => 0,
+                                'created_at' => now(),
+                                'updated_at' => now()
+                            ]);
+
+                            $additionalpartneremail = DB::table('teammembers')
+                                ->where('id', $additionalpartnerId)
+                                ->first();
+
+                            $data = [
+                                'assignmentid'      => $assignmentgenerate,
+                                'clientname'        => $clientname->client_name,
+                                'clientcode'        => $clientname->client_code,
+                                'assignmentname'    => $request->assignmentname,
+                                'assignment_name'   => $assignment_name,
+                                'emailid'           => $additionalpartneremail->emailid,
+                                'otherpatner'       => $teamemailotherpartner,
+                                'assignmentpartner' => $teamemailpartner,
+                                'periodend' => $assignmentbudgetingDatas->periodend,
+                                'assignmentgenerate' => $assignmentgenerate,
+                            ];
+
+                            $this->sendAssignmentEmail($data);
+                        }
+                    }
+                }
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\create.blade.php
+
+
+<script type="text/javascript">
+      $(document).ready(function() {
+          var maxField = 60; // Input fields increment limitation
+          var addButton = $('.add_buttonn'); // Add button selector
+          var wrapper = $('.field_wrapper'); // Input field wrapper
+          var x = 1; // Initial field counter
+
+          // Store team member names for easy lookup
+          var teamMembers = {};
+          @foreach ($teammember as $teammemberData)
+              teamMembers['{{ $teammemberData->id }}'] =
+                  '{{ $teammemberData->team_member }} ({{ $teammemberData->rolename }}) ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})';
+          @endforeach
+
+          // Function to update options based on selected team members
+          function updateDropdowns() {
+              var selectedValues = [];
+
+              // Get all selected team member IDs
+              $('.language').each(function() {
+                  var selectedValue = $(this).val();
+                  if (selectedValue) {
+                      selectedValues.push(selectedValue);
+                  }
+              });
+
+              // Update each dropdown's options
+              $('.language').each(function() {
+                  var dropdown = $(this);
+                  var currentValue = dropdown.val();
+
+                  dropdown.find('option').each(function() {
+                      var optionValue = $(this).val();
+
+                      // If optionValue is selected in another dropdown, remove it from this dropdown
+                      if (optionValue && selectedValues.includes(optionValue) && optionValue !==
+                          currentValue) {
+                          $(this).remove(); // Remove selected option
+                      }
+                  });
+              });
+          }
+
+          // Initialize Select2 for the first select box
+          $('.language').select2();
+
+          // Update dropdowns on page load
+          updateDropdowns();
+
+          // Trigger update when any dropdown changes
+          $(wrapper).on('change', '.language', function() {
+              updateDropdowns();
+          });
+
+          // Once add button is clicked
+          $(addButton).click(function() {
+              if (x < maxField) {
+                  x++; // Increment field counter
+
+                  var fieldHTML =
+                      '<div class="row row-sm hidedive"><div class="col-6"><div class="form-group">' +
+                      '<label class="font-weight-600">Name *</label>' +
+                      '<select required class="language form-control enablefalse" id="teammember_' + x +
+                      '" name="teammember_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($teammember as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->rolename }}) ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<div class="col-5"><div class="form-group">' +
+                      '<label class="font-weight-600">Type *</label>' +
+                      '<select required class="form-control key enablefalse" name="type[]" id="type_' +
+                      x + '">' +
+                      '<option value="">Please Select One</option>' +
+                      '<option value="0">Team Leader</option>' +
+                      '<option value="2">Staff</option></select></div></div>' +
+                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_button">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
+
+
+                  $(wrapper).append(fieldHTML); // Add field html
+
+                  // Initialize Select2 for the newly added select box
+                  $('#teammember_' + x).select2();
+
+                  // Update dropdowns after adding a new one
+                  updateDropdowns();
+              }
+          });
+
+          // Once remove button is clicked
+          $(wrapper).on('click', '.remove_button', function(e) {
+              e.preventDefault();
+
+              // Get the selected value of the dropdown being removed
+              var removedValue = $(this).closest('.row').find('.language').val();
+
+              // Remove field html
+              $(this).closest('.row').remove();
+              x--; // Decrement field counter
+
+              // Re-add the removed value to all dropdowns if it was selected
+              if (removedValue) {
+                  $('.language').each(function() {
+                      var dropdown = $(this);
+                      // Check if option already exists
+                      if (!dropdown.find('option[value="' + removedValue + '"]').length) {
+                          dropdown.append('<option value="' + removedValue + '">' + teamMembers[
+                              removedValue] + '</option>');
+                      }
+                  });
+              }
+
+              // Update dropdowns after removing the field
+              updateDropdowns();
+          });
+      });
+  </script>
+  
+  
+  
+  
+
+ 
+  <script type="text/javascript">
+      $(document).ready(function() {
+          var maxField = 5; // Input fields increment limitation
+          var addButtonpartner = $('.add_buttonnpartner'); // Add button selector
+          var wrapper = $('.field_wrapperpartner'); // Input field wrapper
+          var x = 1; // Initial field counter
+
+          // Initialize Select2 for the first select box
+          $('.language').select2();
+
+          // Once add button is clicked
+          $(addButtonpartner).click(function() {
+              if (x < maxField) {
+                  x++; // Increment field counter
+
+                  var fieldHTML =
+                      '<div class="row row-sm"><div class="col-11"><div class="form-group">' +
+                      '<label class="font-weight-600">Additional Partner</label>' +
+                      '<select class="language form-control" id="additionalpartner_' +
+                      x +
+                      '" name="additionalpartner_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($partner as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_buttonpartner">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
+
+
+                  $(wrapper).append(fieldHTML); // Add field html
+
+                  // Initialize Select2 for the newly added select box
+                  $('#additionalpartner_' + x).select2();
+
+
+              }
+          });
+
+          // Once remove button is clicked
+          $(wrapper).on('click', '.remove_buttonpartner', function(e) {
+              e.preventDefault();
+              // Get the selected value of the dropdown being removed
+              var removedValue = $(this).closest('.row').find('.language').val();
+              // Remove field html
+              $(this).closest('.row').remove();
+              x--; // Decrement field counter
+          });
+      });
+  </script>
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\form.blade.php
+<label class="font-weight-600">Lead Partner *</label>
+
+
+
+<div class="field_wrapperpartner">
+    <div class="row row-sm">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Lead Partner <span class="text-danger">*</span></label>
+                <select required class="language form-control" id="category" name="leadpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }} (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Other Partner </label>
+                <select class="language form-control" name="otherpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }}
+                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                        </option>
+
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\create.blade.php
+Add Assignment Mapping
+
+
+Add Assignment
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+find  @if (Request::is('teammember/*/edit') || Request::is('teammember/create')) 
+after this if condition add below script 
+
+
+ @if (Request::is('assignmentmapping/create'))
+     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+     <script>
+         $(document).ready(function() {
+             $('form').submit(function(event) {
+                 let fields = {
+                     stdcost: "Std Cost",
+                     estcost: "Est Cost",
+                     fees: "Fees of The Asignment",
+                 };
+                 for (let field in fields) {
+                     let value = $("[name='" + field + "']").val();
+                     if (value && !/^\d+$/.test(value)) {
+                         alert(`Enter ${fields[field]} using only digits`);
+                         $("[name='" + field + "']").focus();
+                         event.preventDefault();
+                         return false;
+                     }
+                 }
+
+                 // All partner value added in array
+                 var partners = [
+                     $("[name='leadpartner']").val() || "",
+                     $("[name='otherpartner']").val() || "",
+                     $('#additionalpartner_2').val() || "",
+                     $('#additionalpartner_3').val() || "",
+                     $('#additionalpartner_4').val() || "",
+                     $('#additionalpartner_5').val() || ""
+                 ];
+                 console.log("Original: " + partners);
+                 // Remove empty and undefined values
+                 var filteredPartners = partners.filter(p => p && p.trim() !== "");
+                 console.log("Filtered: " + filteredPartners);
+                 // Check for duplicates using Set
+                 var uniquePartners = new Set(filteredPartners);
+
+                 if (uniquePartners.size !== filteredPartners.length) {
+                     alert('The Lead Partner, Other Partner, and Additional Partner cannot be the same');
+                     event.preventDefault(); // Prevent form submission
+                     return false; // Exit the function
+                 }
+
+                 // Get the submit button
+                 const submitButton = document.getElementById('submitButton');
+                 // Disable the submit button to prevent multiple submissions
+                 if (submitButton) {
+                     submitButton.disabled = true;
+                     submitButton.textContent = "Submitting...";
+                 }
+
+             });
+         });
+     </script>
+ @endif
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\form.blade.php
+remove this script   submitButton.textContent = "Submitting...";
+
+{{-- <script>
+    document.getElementById('Myform').addEventListener('submit', function(event) {
+        // Get the submit button
+        const submitButton = document.getElementById('submitButton');
+        // Disable the submit button to prevent multiple submissions
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting..."; // Optional: change the button text
+
+    });
+</script> --}}
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentmapping\form.blade.php
+find {{-- validation for date --}}
+before findest text replace all code 
+
+{{-- Assignment budgetting start --}}
+<div class="row row-sm">
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Client <span class="text-danger">*</span></label>
+            <select required class="language form-control" id="exampleFormControlSelect1" name="client_id"
+                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
+                </option>
+                @foreach ($clientss as $clientData)
+                <option value="{{ $clientData->id }}"
+                    {{ $assignmentbudgeting->client->id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
+                    {{ $clientData->client_name }}</option>
+                @endforeach
+                @else
+                <option></option>
+                <option value="">Please Select One</option>
+                @foreach ($clientss as $clientData)
+                <option value="{{ $clientData->id }}">
+                    {{ $clientData->client_name }} </option>
+
+                @endforeach @endif
+                </select>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Assignment <span class="text-danger">*</span></label>
+            <select required class="form-control" id="exampleFormControlSelect1" name="assignment_id"
+                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
+                </option>
+
+                @foreach ($assignment as $assignmentData)
+                <option value="{{ $assignmentData->id }}"
+                    {{ $assignmentbudgeting->assignment->id == $assignmentData->id ?? '' ? 'selected="selected"' : '' }}>
+                    {{ $assignmentData->assignment_name }}</option>
+                @endforeach
+
+
+                @else
+                <option></option>
+                <option value="">Please Select One</option>
+                @foreach ($assignment as $assignmentData)
+                <option value="{{ $assignmentData->id }}">
+                    {{ $assignmentData->assignment_name }}</option>
+
+                @endforeach @endif
+                </select>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
+            <input required type="text" name="assignmentname"
+                value="{{ $assignmentbudgeting->assignmentname ?? '' }}" class=" form-control"
+                placeholder="Enter Assignment Name">
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Due Date <span class="text-danger">*</span></label>
+            <input type="date" required id="example-date-input" name="duedate"
+                value="{{ $assignmentbudgeting->date ?? '' }}" class=" form-control leaveDate" placeholder="Enter Date"
+                required>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    {{-- <button type="submit" class="btn btn-success" style="float:right"> Submit</button> --}}
+    {{-- <a class="btn btn-secondary" href="{{ url('assignmentbudgeting') }}">
+        Back</a> --}}
+
+</div>
+<div class="row row-sm">
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600"> Period Start <span class="text-danger">*</span></label>
+            <input type="date" required name="periodstart" id="startDate"
+                value="{{ $assignmentmapping->periodstart ?? '' }}" class=" form-control"
+                placeholder="Enter Period start">
+        </div>
+    </div>
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Period End <span class="text-danger">*</span></label>
+            <input type="date" required name="periodend" id="endDate"
+                value="{{ $assignmentmapping->periodend ?? '' }}" class=" form-control" placeholder="Enter Perio End">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Is Role Over Assignment</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="roleassignment">
+                <option value="1">No</option>
+                <option value="2">Yes</option>
+
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row row-sm">
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Est Hours <span class="text-danger">*</span></label>
+            <input type="number" required name="esthours" value="{{ $assignmentmapping->esthours ?? '' }}"
+                class=" form-control" placeholder="Enter Est Hours">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Std Cost <span class="text-danger">*</span></label>
+            <input type="number" required name="stdcost" value="{{ $assignmentmapping->stdcost ?? '' }}"
+                class=" form-control" placeholder="Enter Std Cost">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Est Cost <span class="text-danger">*</span></label>
+            <input type="number" required name="estcost" value="{{ $assignmentmapping->estcost ?? '' }}"
+                class=" form-control" placeholder="Enter Est Cost">
+        </div>
+    </div>
+
+</div>
+<div class="row row-sm">
+
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">Fees of The Asignment <span class="text-danger">*</span></label>
+            <input type="number" required name="fees" value="{{ $assignmentmapping->fees ?? '' }}"
+                class=" form-control" placeholder="Enter Fees of The Asignment">
+        </div>
+    </div>
+</div>
+
+<div class="field_wrapperpartner">
+    <div class="row row-sm">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Lead Partner <span class="text-danger">*</span></label>
+                <select required class="language form-control" id="category" name="leadpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }} (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Other Partner </label>
+                <select class="language form-control" name="otherpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }}
+                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                        </option>
+
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="field_wrapper">
+    <div class="row row-sm">
+
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Name <span class="text-danger">*</span></label>
+                <input type="checkbox" data-toggle="tooltip" id="enablebox" style="margin-left: 10px;"
+                    title="You want to submit without teammember, please click on check box">
+                <select required class="language form-control enablefalse" id="key" name="teammember_id[]">
+                    <option value="">Please Select One</option>
+                    @foreach ($teammember as $teammemberData)
+                        <option value="{{ $teammemberData->id }}" @if (!empty($store->financial) && $store->financial == $teammemberData->id) selected @endif>
+                            {{ $teammemberData->team_member }} ( {{ $teammemberData->rolename }} ) (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Type <span class="text-danger">*</span></label>
+                <select required class="form-control key enablefalse" id="key" name="type[]">
+                    <option value="">Please Select One</option>
+                    <option value="0">Team Leader</option>
+                    <option value="2">Staff</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonn" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <button type="submit" id="submitButton" class="btn btn-success" style="float:right"> Submit</button>
+    <a class="btn btn-secondary" href="{{ url('assignmentmapping') }}">
+        Back</a>
+
+</div>
+
+
+
+
+
+
+
+
+
+Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time  end hare 
+
+vsalocal, vsademo, vsalive ```end hare 
+
+
 vsalocal, vsademo ```start 
+Rejoining/Promotion features Deployed ```start
+Client want to implement Rejoining process to users.
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
  public function allteamsubmitted()
@@ -5750,721 +6374,134 @@ app\Http\Controllers\TimesheetController.php
 
 
 
-
-
-
-
-
-
-
-
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\index.blade.php
-vsalocal, vsademo ```end
+resources\views\backEnd\timesheet\weeklylist.blade.php
+find text <td>{{ $timesheetDatas->staffcode }}</td>
+and remove @if statment hare and add this below code 
+
+                                    <td>{{ $timesheetDatas->teamnewstaffcode ?? ($timesheetDatas->staffcode ?? '') }}
+                                    </td>
+
+
+
+find text {{ $timesheetDatas->patnerstaffcodee ?? '' }}
+and remove @if statment hare and add this below code 
+
+
+   {{ $timesheetDatas->ptnrstaffcode ?? ($timesheetDatas->patnerstaffcodee ?? '') }}
+   
+   
+   
+
 Rejoining/Promotion features Deployed ```end
+Client want to implement Rejoining process to users.
 
-
-Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time
-When admin and partner create assignment on that time form should be validate
-
-vsalocal, vsademo ```start
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\AssignmentmappingController.php
-public function store(Request $request)
- 
-if (!empty($request->otherpartner)) {
-	
-
-
-1
-               
-                $additionalpartnerIds = $request->additionalpartner_id;
-                if (is_array($additionalpartnerIds) && count($additionalpartnerIds) > 0) {
-                    foreach ($additionalpartnerIds as $index => $additionalpartnerId) {
-                        if ($additionalpartnerId) {
-                            DB::table('assignmentteammappings')->insert([
-                                'assignmentmapping_id' => $id,
-                                'teammember_id' => $additionalpartnerId,
-                                'type' => 1,
-                                'status' => 1,
-                                'teamhour' => 0,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
-
-                            $additionalpartneremail = DB::table('teammembers')
-                                ->where('id', $additionalpartnerId)
-                                ->first();
-
-                            $data = [
-                                'assignmentid'      => $assignmentgenerate,
-                                'clientname'        => $clientname->client_name,
-                                'clientcode'        => $clientname->client_code,
-                                'assignmentname'    => $request->assignmentname,
-                                'assignment_name'   => $assignment_name,
-                                'emailid'           => $additionalpartneremail->emailid,
-                                'otherpatner'       => $teamemailotherpartner,
-                                'assignmentpartner' => $teamemailpartner,
-                                'teamleader'        => $teamleader,
-                                'periodend' => $assignmentbudgetingDatas->periodend,
-                                'assignmentgenerate' => $assignmentgenerate,
-                            ];
-
-                            $this->sendAssignmentEmail($data);
-                        }
-                    }
-                }
-
-
-
-
-
-
-
-
-
-2
-
-                $additionalpartnerIds = $request->additionalpartner_id;
-                if (is_array($additionalpartnerIds) && count($additionalpartnerIds) > 0) {
-                    foreach ($additionalpartnerIds as $index => $additionalpartnerId) {
-                        if ($additionalpartnerId) {
-                            DB::table('assignmentteammappings')->insert([
-                                'assignmentmapping_id' => $id,
-                                'teammember_id' => $additionalpartnerId,
-                                'type' => 1,
-                                'status' => 1,
-                                'teamhour' => 0,
-                                'created_at' => now(),
-                                'updated_at' => now()
-                            ]);
-
-                            $additionalpartneremail = DB::table('teammembers')
-                                ->where('id', $additionalpartnerId)
-                                ->first();
-
-                            $data = [
-                                'assignmentid'      => $assignmentgenerate,
-                                'clientname'        => $clientname->client_name,
-                                'clientcode'        => $clientname->client_code,
-                                'assignmentname'    => $request->assignmentname,
-                                'assignment_name'   => $assignment_name,
-                                'emailid'           => $additionalpartneremail->emailid,
-                                'otherpatner'       => $teamemailotherpartner,
-                                'assignmentpartner' => $teamemailpartner,
-                                'periodend' => $assignmentbudgetingDatas->periodend,
-                                'assignmentgenerate' => $assignmentgenerate,
-                            ];
-
-                            $this->sendAssignmentEmail($data);
-                        }
-                    }
-                }
-
-
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\assignmentmapping\create.blade.php
-
-    <script type="text/javascript">
-      $(document).ready(function() {
-          var maxField = 60; // Input fields increment limitation
-          var addButton = $('.add_buttonn'); // Add button selector
-          var wrapper = $('.field_wrapper'); // Input field wrapper
-          var x = 1; // Initial field counter
-
-          // Store team member names for easy lookup
-          var teamMembers = {};
-          @foreach ($teammember as $teammemberData)
-              teamMembers['{{ $teammemberData->id }}'] =
-                  '{{ $teammemberData->team_member }} ({{ $teammemberData->role->rolename }}) ({{ $teammemberData->staffcode }})';
-          @endforeach
-
-          // Function to update options based on selected team members
-          function updateDropdowns() {
-              var selectedValues = [];
-
-              // Get all selected team member IDs
-              $('.language').each(function() {
-                  var selectedValue = $(this).val();
-                  if (selectedValue) {
-                      selectedValues.push(selectedValue);
-                  }
-              });
-
-              // Update each dropdown's options
-              $('.language').each(function() {
-                  var dropdown = $(this);
-                  var currentValue = dropdown.val();
-
-                  dropdown.find('option').each(function() {
-                      var optionValue = $(this).val();
-
-                      // If optionValue is selected in another dropdown, remove it from this dropdown
-                      if (optionValue && selectedValues.includes(optionValue) && optionValue !==
-                          currentValue) {
-                          $(this).remove(); // Remove selected option
-                      }
-                  });
-              });
-          }
-
-          // Initialize Select2 for the first select box
-          $('.language').select2();
-
-          // Update dropdowns on page load
-          updateDropdowns();
-
-          // Trigger update when any dropdown changes
-          $(wrapper).on('change', '.language', function() {
-              updateDropdowns();
-          });
-
-          // Once add button is clicked
-          $(addButton).click(function() {
-              if (x < maxField) {
-                  x++; // Increment field counter
-
-                  var fieldHTML =
-                      '<div class="row row-sm hidedive"><div class="col-6"><div class="form-group">' +
-                      '<label class="font-weight-600">Name *</label>' +
-                      '<select required class="language form-control enablefalse" id="teammember_' + x +
-                      '" name="teammember_id[]">' +
-                      '<option value="">Please Select One</option>' +
-                      '@foreach ($teammember as $teammemberData)' +
-                      '<option value="{{ $teammemberData->id }}">' +
-                      '{{ $teammemberData->team_member }} ({{ $teammemberData->role->rolename }}) ({{ $teammemberData->staffcode }})</option>' +
-                      '@endforeach</select></div></div>' +
-                      '<div class="col-5"><div class="form-group">' +
-                      '<label class="font-weight-600">Type *</label>' +
-                      '<select required class="form-control key enablefalse" name="type[]" id="type_' +
-                      x + '">' +
-                      '<option value="">Please Select One</option>' +
-                      '<option value="0">Team Leader</option>' +
-                      '<option value="2">Staff</option></select></div></div>' +
-                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_button">' +
-                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
-
-                  $(wrapper).append(fieldHTML); // Add field html
-
-                  // Initialize Select2 for the newly added select box
-                  $('#teammember_' + x).select2();
-
-                  // Update dropdowns after adding a new one
-                  updateDropdowns();
-              }
-          });
-
-          // Once remove button is clicked
-          $(wrapper).on('click', '.remove_button', function(e) {
-              e.preventDefault();
-
-              // Get the selected value of the dropdown being removed
-              var removedValue = $(this).closest('.row').find('.language').val();
-
-              // Remove field html
-              $(this).closest('.row').remove();
-              x--; // Decrement field counter
-
-              // Re-add the removed value to all dropdowns if it was selected
-              if (removedValue) {
-                  $('.language').each(function() {
-                      var dropdown = $(this);
-                      // Check if option already exists
-                      if (!dropdown.find('option[value="' + removedValue + '"]').length) {
-                          dropdown.append('<option value="' + removedValue + '">' + teamMembers[
-                              removedValue] + '</option>');
-                      }
-                  });
-              }
-
-              // Update dropdowns after removing the field
-              updateDropdowns();
-          });
-      });
-  </script>
-  
-  
-
-  <script type="text/javascript">
-      $(document).ready(function() {
-          var maxField = 5; // Input fields increment limitation
-          var addButtonpartner = $('.add_buttonnpartner'); // Add button selector
-          var wrapper = $('.field_wrapperpartner'); // Input field wrapper
-          var x = 1; // Initial field counter
-
-          // Initialize Select2 for the first select box
-          $('.language').select2();
-
-          // Once add button is clicked
-          $(addButtonpartner).click(function() {
-              if (x < maxField) {
-                  x++; // Increment field counter
-
-                  var fieldHTML =
-                      '<div class="row row-sm"><div class="col-11"><div class="form-group">' +
-                      '<label class="font-weight-600">Additional Partner</label>' +
-                      '<select class="language form-control" id="additionalpartner_' +
-                      x +
-                      '" name="additionalpartner_id[]">' +
-                      '<option value="">Please Select One</option>' +
-                      '@foreach ($partner as $teammemberData)' +
-                      '<option value="{{ $teammemberData->id }}">' +
-                      '{{ $teammemberData->team_member }} ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
-                      '@endforeach</select></div></div>' +
-                      '<a style="margin-top: 36px; margin-left:12px" href="javascript:void(0);" class="remove_buttonpartner">' +
-                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
-
-
-                  $(wrapper).append(fieldHTML); // Add field html
-
-                  // Initialize Select2 for the newly added select box
-                  $('#additionalpartner_' + x).select2();
-
-
-              }
-          });
-
-          // Once remove button is clicked
-          $(wrapper).on('click', '.remove_buttonpartner', function(e) {
-              e.preventDefault();
-              // Get the selected value of the dropdown being removed
-              var removedValue = $(this).closest('.row').find('.language').val();
-              // Remove field html
-              $(this).closest('.row').remove();
-              x--; // Decrement field counter
-          });
-      });
-  </script>
-
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\assignmentmapping\form.blade.php
-<label class="font-weight-600">Lead Partner *</label>
-
-
-<div class="field_wrapperpartner">
-    <div class="row row-sm">
-        <div class="col-6">
-            <div class="form-group">
-                <label class="font-weight-600">Lead Partner <span class="text-danger">*</span></label>
-                <select required class="language form-control" id="category" name="leadpartner"
-                    @if (Request::is('client/*/edit')) > <option disabled
-            style="display:block">Please Select One</option>
-
-            @foreach ($partner as $teammemberData)
-            <option value="{{ $teammemberData->id }}"
-            @if ($client->leadpartner == $teammemberData->id) selected @endif>
-                    {{ $teammemberData->team_member }}</option>
-                    @endforeach
-                @else
-                    <option></option>
-                    <option value="">Please Select One</option>
-                    @foreach ($partner as $teammemberData)
-                        <option value="{{ $teammemberData->id }}">
-                            {{ $teammemberData->team_member }} (
-                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
-                    @endforeach
-                    @endif
-                </select>
-            </div>
-        </div>
-        <div class="col-5">
-            <div class="form-group">
-                <label class="font-weight-600">Other Partner </label>
-                <select class="language form-control" name="otherpartner"
-                    @if (Request::is('client/*/edit')) > <option disabled
-            style="display:block">Please Select One</option>
-
-            @foreach ($partner as $teammemberData)
-            <option value="{{ $teammemberData->id }}"
-            @if ($client->leadpartner == $teammemberData->id) selected @endif>
-                    {{ $teammemberData->team_member }}</option>
-                    @endforeach
-                @else
-                    <option></option>
-                    <option value="">Please Select One</option>
-                    @foreach ($partner as $teammemberData)
-                        <option value="{{ $teammemberData->id }}">
-                            {{ $teammemberData->team_member }}
-                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
-                        </option>
-
-                    @endforeach
-                    @endif
-                </select>
-            </div>
-        </div>
-        <div class="col-1">
-            <div class="form-group" style="margin-top: 36px;">
-                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
-                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\assignmentmapping\create.blade.php
-Add Assignment Mapping
-
-
-Add Assignment
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\layouts\includes\js.blade.php
-find  @if (Request::is('teammember/*/edit') || Request::is('teammember/create')) 
-after this if condition add below script 
-
- @if (Request::is('assignmentmapping/create'))
-     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-     <script>
-         $(document).ready(function() {
-             $('form').submit(function(event) {
-                 let fields = {
-                     stdcost: "Std Cost",
-                     estcost: "Est Cost",
-                     fees: "Fees of The Asignment",
-                 };
-                 for (let field in fields) {
-                     let value = $("[name='" + field + "']").val();
-                     if (value && !/^\d+$/.test(value)) {
-                         alert(`Enter ${fields[field]} using only digits`);
-                         $("[name='" + field + "']").focus();
-                         event.preventDefault();
-                         return false;
-                     }
-                 }
-
-                 // All partner value added in array
-                 var partners = [
-                     $("[name='leadpartner']").val() || "",
-                     $("[name='otherpartner']").val() || "",
-                     $('#additionalpartner_2').val() || "",
-                     $('#additionalpartner_3').val() || "",
-                     $('#additionalpartner_4').val() || "",
-                     $('#additionalpartner_5').val() || ""
-                 ];
-                 console.log("Original: " + partners);
-                 // Remove empty and undefined values
-                 var filteredPartners = partners.filter(p => p && p.trim() !== "");
-                 console.log("Filtered: " + filteredPartners);
-                 // Check for duplicates using Set
-                 var uniquePartners = new Set(filteredPartners);
-
-                 if (uniquePartners.size !== filteredPartners.length) {
-                     alert('The Lead Partner, Other Partner, and Additional Partner cannot be the same');
-                     event.preventDefault(); // Prevent form submission
-                     return false; // Exit the function
-                 }
-
-                 // Get the submit button
-                 const submitButton = document.getElementById('submitButton');
-                 // Disable the submit button to prevent multiple submissions
-                 if (submitButton) {
-                     submitButton.disabled = true;
-                     submitButton.textContent = "Submitting...";
-                 }
-
-             });
-         });
-     </script>
- @endif
-
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\assignmentmapping\form.blade.php
-remove this script   submitButton.textContent = "Submitting...";
-
-{{-- <script>
-    document.getElementById('Myform').addEventListener('submit', function(event) {
-        // Get the submit button
-        const submitButton = document.getElementById('submitButton');
-        // Disable the submit button to prevent multiple submissions
-        submitButton.disabled = true;
-        submitButton.textContent = "Submitting..."; // Optional: change the button text
-
-    });
-</script> --}}
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\assignmentmapping\form.blade.php
-find {{-- validation for date --}}
-before findest text replace all code 
-
-
-{{-- Assignment budgetting start --}}
-<div class="row row-sm">
-    <div class="col-3">
-        <div class="form-group">
-            <label class="font-weight-600">Client <span class="text-danger">*</span></label>
-            <select required class="language form-control" id="exampleFormControlSelect1" name="client_id"
-                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
-                </option>
-                @foreach ($clientss as $clientData)
-                <option value="{{ $clientData->id }}"
-                    {{ $assignmentbudgeting->client->id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
-                    {{ $clientData->client_name }}</option>
-                @endforeach
-                @else
-                <option></option>
-                <option value="">Please Select One</option>
-                @foreach ($clientss as $clientData)
-                <option value="{{ $clientData->id }}">
-                    {{ $clientData->client_name }} </option>
-
-                @endforeach @endif
-                </select>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="form-group">
-            <label class="font-weight-600">Assignment <span class="text-danger">*</span></label>
-            <select required class="form-control" id="exampleFormControlSelect1" name="assignment_id"
-                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
-                </option>
-
-                @foreach ($assignment as $assignmentData)
-                <option value="{{ $assignmentData->id }}"
-                    {{ $assignmentbudgeting->assignment->id == $assignmentData->id ?? '' ? 'selected="selected"' : '' }}>
-                    {{ $assignmentData->assignment_name }}</option>
-                @endforeach
-
-
-                @else
-                <option></option>
-                <option value="">Please Select One</option>
-                @foreach ($assignment as $assignmentData)
-                <option value="{{ $assignmentData->id }}">
-                    {{ $assignmentData->assignment_name }}</option>
-
-                @endforeach @endif
-                </select>
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="form-group">
-            <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
-            <input required type="text" name="assignmentname"
-                value="{{ $assignmentbudgeting->assignmentname ?? '' }}" class=" form-control"
-                placeholder="Enter Assignment Name">
-        </div>
-    </div>
-    <div class="col-3">
-        <div class="form-group">
-            <label class="font-weight-600">Due Date <span class="text-danger">*</span></label>
-            <input type="date" required id="example-date-input" name="duedate"
-                value="{{ $assignmentbudgeting->date ?? '' }}" class=" form-control leaveDate" placeholder="Enter Date"
-                required>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    {{-- <button type="submit" class="btn btn-success" style="float:right"> Submit</button> --}}
-    {{-- <a class="btn btn-secondary" href="{{ url('assignmentbudgeting') }}">
-        Back</a> --}}
-
-</div>
-<div class="row row-sm">
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600"> Period Start <span class="text-danger">*</span></label>
-            <input type="date" required name="periodstart" id="startDate"
-                value="{{ $assignmentmapping->periodstart ?? '' }}" class=" form-control"
-                placeholder="Enter Period start">
-        </div>
-    </div>
-
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600">Period End <span class="text-danger">*</span></label>
-            <input type="date" required name="periodend" id="endDate"
-                value="{{ $assignmentmapping->periodend ?? '' }}" class=" form-control" placeholder="Enter Perio End">
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600">Is Role Over Assignment</label>
-            <select class="form-control" id="exampleFormControlSelect1" name="roleassignment">
-                <option value="1">No</option>
-                <option value="2">Yes</option>
-
-            </select>
-        </div>
-    </div>
-</div>
-<div class="row row-sm">
-
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600">Est Hours <span class="text-danger">*</span></label>
-            <input type="text" required name="esthours" value="{{ $assignmentmapping->esthours ?? '' }}"
-                class=" form-control" placeholder="Enter Est Hours">
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600">Std Cost <span class="text-danger">*</span></label>
-            <input type="text" required name="stdcost" value="{{ $assignmentmapping->stdcost ?? '' }}"
-                class=" form-control" placeholder="Enter Std Cost">
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600">Est Cost <span class="text-danger">*</span></label>
-            <input type="text" required name="estcost" value="{{ $assignmentmapping->estcost ?? '' }}"
-                class=" form-control" placeholder="Enter Est Cost">
-        </div>
-    </div>
-
-</div>
-<div class="row row-sm">
-
-    <div class="col-4">
-        <div class="form-group">
-            <label class="font-weight-600">Fees of The Asignment <span class="text-danger">*</span></label>
-            <input type="text" required name="fees" value="{{ $assignmentmapping->fees ?? '' }}"
-                class=" form-control" placeholder="Enter Fees of The Asignment">
-        </div>
-    </div>
-</div>
-<div class="field_wrapperpartner">
-    <div class="row row-sm">
-        <div class="col-6">
-            <div class="form-group">
-                <label class="font-weight-600">Lead Partner <span class="text-danger">*</span></label>
-                <select required class="language form-control" id="category" name="leadpartner"
-                    @if (Request::is('client/*/edit')) > <option disabled
-            style="display:block">Please Select One</option>
-
-            @foreach ($partner as $teammemberData)
-            <option value="{{ $teammemberData->id }}"
-            @if ($client->leadpartner == $teammemberData->id) selected @endif>
-                    {{ $teammemberData->team_member }}</option>
-                    @endforeach
-                @else
-                    <option></option>
-                    <option value="">Please Select One</option>
-                    @foreach ($partner as $teammemberData)
-                        <option value="{{ $teammemberData->id }}">
-                            {{ $teammemberData->team_member }} (
-                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
-                    @endforeach
-                    @endif
-                </select>
-            </div>
-        </div>
-        <div class="col-5">
-            <div class="form-group">
-                <label class="font-weight-600">Other Partner </label>
-                <select class="language form-control" name="otherpartner"
-                    @if (Request::is('client/*/edit')) > <option disabled
-            style="display:block">Please Select One</option>
-
-            @foreach ($partner as $teammemberData)
-            <option value="{{ $teammemberData->id }}"
-            @if ($client->leadpartner == $teammemberData->id) selected @endif>
-                    {{ $teammemberData->team_member }}</option>
-                    @endforeach
-                @else
-                    <option></option>
-                    <option value="">Please Select One</option>
-                    @foreach ($partner as $teammemberData)
-                        <option value="{{ $teammemberData->id }}">
-                            {{ $teammemberData->team_member }}
-                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
-                        </option>
-
-                    @endforeach
-                    @endif
-                </select>
-            </div>
-        </div>
-        <div class="col-1">
-            <div class="form-group" style="margin-top: 36px;">
-                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
-                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="field_wrapper">
-    <div class="row row-sm">
-
-        <div class="col-6">
-            <div class="form-group">
-                <label class="font-weight-600">Name <span class="text-danger">*</span></label>
-                <input type="checkbox" data-toggle="tooltip" id="enablebox" style="margin-left: 10px;"
-                    title="You want to submit without teammember, please click on check box">
-                <select required class="language form-control enablefalse" id="key" name="teammember_id[]">
-                    <option value="">Please Select One</option>
-                    @foreach ($teammember as $teammemberData)
-                        <option value="{{ $teammemberData->id }}" @if (!empty($store->financial) && $store->financial == $teammemberData->id) selected @endif>
-                            {{ $teammemberData->team_member }} ( {{ $teammemberData->role->rolename }} ) (
-                            {{ $teammemberData->staffcode }} )</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-
-
-        <div class="col-5">
-            <div class="form-group">
-                <label class="font-weight-600">Type <span class="text-danger">*</span></label>
-                <select required class="form-control key enablefalse" id="key" name="type[]">
-                    <option value="">Please Select One</option>
-                    <option value="0">Team Leader</option>
-                    <option value="2">Staff</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="col-1">
-            <div class="form-group" style="margin-top: 36px;">
-                <a href="javascript:void(0);" class="add_buttonn" title="Add field"><img
-                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="form-group">
-    <button type="submit" id="submitButton" class="btn btn-success" style="float:right"> Submit</button>
-    <a class="btn btn-secondary" href="{{ url('assignmentmapping') }}">
-        Back</a>
-
-</div>
-
-
-
-
-
-
-Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time  end hare 
 vsalocal, vsademo ```end 
+
+
+
+vsalocal, ```start
+
+this task related to acending and decending icon on tables
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\client\clientlist.blade.php
+
+replace it
+{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+
+
+add on tables
+ <table id="examplee" class="table table-bordered table-striped table-hover">
+  
+check </tbody> 
+   
+   
+   
+
+add this style 
+resources\views\backEnd\layouts\includes\stylesheet.blade.php
+
+@if (Request::is('client-list') || Request::is('client-list'))
+    <style>
+        #examplee {
+            width: 100%;
+            table-layout: auto;
+            /* Columns adjust based on content */
+            white-space: nowrap;
+            /* Prevent text wrapping */
+        }
+
+        #examplee th,
+        #examplee td {
+            padding: 8px;
+            /* Add spacing for better readability */
+            text-align: left;
+        }
+
+        #examplee th {
+            white-space: nowrap;
+            /* Prevent column headers from wrapping */
+        }
+    </style>
+@endif
+ 
+this task related to acending and decending icon on tables end 
+
+
+
+Dashboard - Client Box (UI-Text)
+Dashboard - signout and assignment box (UI-fixed)  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\index.blade.php
+
+1.Active Clients
+
+2.Active Member
+
+
+
+
+resources\views\backEnd\index.blade.php
+  @if (Auth::user()->role_id == 13)
+<a href="{{ url('assignment_report') }}">
+ 
+ 
+                         <a href="{{ url('assignment_report') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
+                            <small style="color:white;">Open Assignment</small>
+                        </a>
+						
+						
+						
+  @if (Auth::user()->role_id == 14)			
+						
+                        <a href="{{ url('assignment_report') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
+                            <small style="color:white;">Open Assignment</small>
+                        </a>				
+						
+						
+resources\views\backEnd\layouts\includes\header.blade.php
+<div class="dropdown-menu dropdown-menu-left"
+
+	 <div class="dropdown-menu dropdown-menu-left" style="margin-left: -110px;">
+
+	 
+
+Dashboard - signout and assignment box (UI-fixed) 
+Dashboard - Client Box (UI-Text)  end
+
+vsalocal, ```end
+
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php

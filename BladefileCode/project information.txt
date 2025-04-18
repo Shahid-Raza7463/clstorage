@@ -239,6 +239,29 @@ Role : Partner
 i ma working with atishay sir to UAT
 
 222222222222222222222222222222222222222222222222222222222
+regarding data clean 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+7.applyleaves  
+8.attendances
+
+9.teamrolehistory
+10.rejoiningsamepost
+
+11.Users table me role id = 14
+12.teammembers table me leaving date = null and role id = 14
+
+
+
+
+
 regarding table 
 i need this table to update 
 
@@ -266,22 +289,9 @@ i need this table to update
 17.rejoiningsamepost
 
 
-update for testing only on vsademo
-
-1.timesheetreport,
-2.timesheetrequests,
-3.timesheets,
-4.timesheetusers
-
-5.leaveapprove   
-6.leaverequest 
-
-07.applyleaves  
-08.attendances
 
 
 
-i am am working on it yah kal tak ho jayega aur isme multiple scenreion hai jise mujhe retest karna par raha hai 
 
 
 if any problem on timesheet page to vsalive then ye table maange
@@ -294,35 +304,21 @@ if any problem on timesheet page to vsalive then ye table maange
 5.leaveapprove   
 6.leaverequest 
 
-07.applyleaves  
-08.attendances
-
-
-222222222222222222222222222222222222222222222222222222222
-after update on vsalive plase ye table maange 
-
-1.timesheetreport,
-2.timesheetrequests,
-3.timesheets,
-4.timesheetusers
- 
-5.leaveapprove   
-6.leaverequest
- 
 7.assignmentbudgetings
 8.assignmentmappings
 9.assignmentteammappings
 10.assignments
- 
+
 11.applyleaves  
 12.attendances
+13.Clients
 
-
-ye 12 table chahiye vsalive se 
 
 222222222222222222222222222222222222222222222222222222222
 
-  // $tables = [
+
+
+   // $tables = [
     //   //* timesheets
     //   'timesheetreport',
     //   'timesheetrequests',
@@ -338,17 +334,17 @@ ye 12 table chahiye vsalive se
     //   'attendances',
 
     //   //* assignments
-    //   // 'assignmentbudgetings',
-    //   // 'assignmentmappings',
-    //   // 'assignmentteammappings',
-    //   // 'assignments',
+    //   'assignmentbudgetings',
+    //   'assignmentmappings',
+    //   'assignmentteammappings',
+    //   'assignments',
 
     //   //* another tables
     //   // 'Users',
     //   // 'teammembers',
     //   // 'teamrolehistory',
     //   // 'rejoiningsamepost',
-    //   // 'Clients',
+    //   'Clients',
     // ];
 
 
@@ -363,6 +359,45 @@ ye 12 table chahiye vsalive se
 
     // return response('Tables deleted successfully!', 200);
 
+
+
+    // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
+    // $authteamid = 844;
+    // $startdate = '2025-03-17';
+    // $enddate = '2025-03-29';
+
+    // $nextweektimesheet1 = DB::table('timesheetusers')
+    //   ->where('createdby', $authteamid)
+    //   ->whereBetween('date', [$startdate,  $enddate])
+    //   ->update(['status' => 0]);
+    // // ->get();
+    // // ->update(['createdby' => 8471]);
+    // // ->delete();
+
+    // $nextweektimesheet2 = DB::table('timesheets')
+    //   ->where('created_by', $authteamid)
+    //   ->whereBetween('date', [$startdate,  $enddate])
+    //   ->update(['status' => 0]);
+    // // ->get();
+    // // ->update(['created_by' => 8471]);
+    // // ->delete();
+
+    // $nextweektimesheet3 = DB::table('timesheetreport')
+    //   ->where('teamid', $authteamid)
+    //   ->whereBetween('startdate', [$startdate, $enddate])
+    //   ->delete();
+    // // ->get();
+    // // ->update(['teamid' => 8471]);
+
+    // // $attendanceexist = DB::table('attendances')
+    // //   ->where('employee_name', $authteamid)
+    // //   ->where('month', 'December')
+    // //   ->delete();
+    // // ->update(['teamid' => 8471]);
+
+    // dd('successfully done');
+
+    // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
 
 222222222222222222222222222222222222222222222222222222222222
 

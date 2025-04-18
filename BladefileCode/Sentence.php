@@ -142,7 +142,7 @@ class Sentence extends Command
 
         // All 7 tasks have been QA passed. Atishay Jain, please let me know when these can be deployed.
 
-        // Send the code for both vsalocal and vsalive, and send the database only for vsademo
+        // Send the code for both vsademo and vsalive, and send the database only for vsademo
 
         // Send the code for both vsademo and vsalive, and send the below all tables only from vsalive
 
@@ -297,7 +297,6 @@ class Sentence extends Command
 
         // Due to network issue I can't hear your voice properly
         // i have left comments for simmi and Atishay Jain, please check once.
-
         // i have already moved this task in Code review and manaly maine jo 4 ya 5 place per hi work kiya hai jo unhe chahiye tha iske alawa rest of palce maine koi test nahi kiya aur nahi koi implementation  
         // All UAT-passed tasks have been deployed on VSA
         // I am working on it, and it will be deployed by the end of the day.
@@ -312,10 +311,35 @@ class Sentence extends Command
         //  I have received the KT from Shahid for 3 High priority task, Do let me know When can I proceed with the testing. To test these 3 points it will take complete 1 day.
         // yes but if in cas we needed Pooja Kumari for any working in DFCC then ETA might change, no issues in that
         // This was not a database issue but a filter issue specifically for rejoining and promotion users
+        // We can meet at 01:10.
+
+        // currently working on the VSA download issue task and verifying it on the demo server. Please refrain from testing or making modifications. Pooja Kumari cc simmi
+        // Before starting testing on this task, please connect with me
+
+        // We can test only these assignments: BIR100318, BIR100405
+        // please confirm whether VSA has foreign clients or not.
+        // Please confirm whether VSA has foreign clients or not so that we can handle mobile number validation accordingly
+        // I have to deploye 3 UAT Passed task on vsalive
+        // I have to deploye 4 In process task on vsademo
+        // We are ready for VSA deployment. Can we deploy it today ? .
+        // Atishay Jain, task numbers VS-124, VS-501, and VS-290 are basically related to staff code (Promotion and Re-joining Module). I have already discussed these tasks in detail when I was developing. But currently simmi ma'am wants to do some changes for that so please send me the updated requirement.
+        // Atishay Jain, task numbers VS-124, VS-501, and VS-290 are basically related to staff code. I have already discussed these tasks in detail when I was developing. But currently Simmi mam wants to do some changes for that we need to discuss this point with client. Please confirm if it is needed, if yes then please connect with client & send me the updated requirement
+
+        //## VSA Portal Glitch
+        // The issue might be because of network connectivity and as discussed it is working now.
+        // Vsa portal login problem for more details pls open the attachment file.
+        // The same has been implemented. Please check and confirm.
+        // Do let me know in case of any issue.
+        // The same will be implemented by EOD
+        // This is a gentle reminder to you.
+        // I am writing to bring to your attention an issue regarding the submitted timesheet. The value entered in the "Filled Day column is exceeding the upper limit,  Kindly look into this matter ASAP.
+        // Attached relevant screenshot for your reference.
+
+
+
 
         // 222222222222222222222222222222222222222222222222222222222222222222222
-
-
+        // As per the client's discussion, In case there is a change in designation, but the individual is mapped to a particular assignment then his right related to that assignment should not change staff code till the assignment is over.
 
 
 

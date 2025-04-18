@@ -340,6 +340,129 @@ sunday
 3.Dashboard - signout and assignment box (UI-fixed) 
 
 
+20-03-2025
+1.remove s3 connection and added local connection for files
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+21-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+
+22-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+
+23-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+23-03-2025
+sunday
+
+25-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+````````````````````
+26-03-2025
+1.upload uat pass task on vsalive and functional testing done 
+2.Need option to fill mutiple days timesheet at once
+
+
+27.03-25
+1.All UAT passed task uploaded on vsalive and functional testing done.
+
+28.03-25
+Casual laeve 
+
+29.03-25
+Casual laeve 
+
+30.03-25
+sunday
+
+31.03-25
+holidays (eid)
+
+01.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+02.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+03.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+
+04.04-25
+1.Need option to fill mutiple days timesheet at once
+2.the implementation of a feature to send a One-Time Password (OTP) to the other partner when the other partner initiates the closure of an assignment.
+
+
+05.04-25
+1.Partner role will be display on assignment view page 
+2.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+
+
+06.04-25
+Sunday
+
+07.04-25
+1.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+
+08.04-25
+1.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+
+09.04-25
+1.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+2.Error in "Time Sheet Report". Time sheet days and hours are calculated wrongly in the report.
+3.All In process task upload on vsademo and functional testing completed 
+4.I have to deploye 4 In process task on vsademo
+
+10.04-25
+1.Descreption of All In process task updated on jira 
+2.Need option to fill mutiple days timesheet at once
+
+
+11.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+12.04-25
+casual leave 
+
+13.04-25
+Sunday
+
+
+14.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+15.04-25
+1.UAT done with atishay sir 
+2.I have to deploye 3 UAT Passed task on vsalive 
+3.Need option to fill mutiple days timesheet at once
+
+16.04-25
+4 days taken from 15 (Need option to fill mutiple days timesheet at once)
+1.Need option to fill mutiple days timesheet at once
+2.old data issue on timesheet report 
+
+
+17.04-25
+1.Need option to fill mutiple days timesheet at once
+2.staffcode problem checked 
+
+18.04-25
+1.testing all scenrrio of multiple timesheet task 
+
+19.04-25
+1.testing all scenrrio of multiple timesheet task 
+
+notification goes multiple time 
+Large Data Download issue
 WEL100799
 TAT100872
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -353,4 +476,10 @@ functional testing
 	 
 	 
 	 
+						public function confirmationotpsend(Request $request)
 						
+						 public function timesheet_teamlist()
+						 
+						 public function allteamsubmitted()
+						 
+						   'dayscount' => $group->sum('dayscount'),

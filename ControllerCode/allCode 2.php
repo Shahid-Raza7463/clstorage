@@ -26,17 +26,26 @@ class Allcode extends Controller
 
 
 
-        //* regarding 
+        //* regarding filter from data 
         // Start Hare
+        $get_date = collect($groupedData->values());
+
+        $filteredData = $get_date->filter(function ($item) {
+          return $item->totaltime > 84;
+        });
+    
+        // Check output
+        dd($filteredData);
         //! End hare 
 
         //* regarding 
         // Start Hare
-        //! End hare 
-
-
-        //* regarding 
-        // Start Hare
+        $addonpartner = DB::table('teammembers')
+        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+        ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+        ->where([['teammembers.role_id', '=', 13], ['teammembers.status', '=', 1]])
+        ->orderBy('teammembers.team_member', 'asc')
+        ->get();
         //! End hare 
 
 

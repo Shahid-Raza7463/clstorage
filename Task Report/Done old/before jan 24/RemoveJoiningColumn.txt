@@ -1,2 +1,0 @@
-resources\views\backEnd\teammember\allindex.blade.php
-remove joining date column

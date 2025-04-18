@@ -2469,6 +2469,43 @@ dd($request);
 // Start Hare
 //! End hare 
 //* regarding storage folder / regarding upload image / regarding upload file 
+// Start Hare
+
+// Start Hare regarding assignment
+  // +request: Symfony\Component\HttpFoundation\InputBag {#52
+    //   #parameters: array:2 [
+    //     "cid" => "191"
+    //     "datepickers" => "07-03-2025"
+    //   ]
+    // }
+    $datepickers = "07-04-2025";
+    $cid = 191;
+
+    $selectedDate = \DateTime::createFromFormat('d-m-Y', $datepickers);
+    $hishahid = DB::table('assignmentbudgetings')
+      ->select(
+        'assignmentbudgetings.assignmentgenerate_id',
+        'assignments.assignment_name',
+        'assignmentbudgetings.assignmentname'
+      )
+      ->where('assignmentbudgetings.client_id',  $cid)
+      ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+      ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+      ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+      ->where(function ($query) {
+        $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+          ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+          ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+      })
+      ->where(function ($query) use ($selectedDate) {
+        $query->whereNull('otpverifydate')
+          ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+      })
+      ->orderBy('assignment_name')
+      ->distinct() // Ensure unique rows
+      ->get();
+
+    dd($hishahid);
 // all file using from hare  storage\app\public\image\task\bank1.xlsx 
 
 // Start Hare

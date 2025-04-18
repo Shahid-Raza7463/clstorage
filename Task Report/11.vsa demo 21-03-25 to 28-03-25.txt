@@ -1,0 +1,1268 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+important point 
+When the VSALocal update is completed in VSADemo, move all the data to Vvsalocal, vsademo ```start . Similarly, continue moving data from VSADemo to VSALive
+
+Comment all places on vsademo and uncomment on vsalive 
+
+#1
+   app\Http\Controllers\ApplyleaveController.php
+   app\Http\Controllers\TimesheetController.php
+
+   itsupport_delhi@vsa.co.in  ise comment kar de and add own mail on vsademo sukhbahadur1993@gmail.com
+
+#2
+     agar is per koi bhi update ho to profile me 10th and 12th ka documnet check karle ek baar ye baar baar problem aata hai 
+     independence ke ander create and view file insert karna hai 
+     IndependenceController.php
+     TeammemberController (1).php
+
+Please check once vsalive bugs hare file
+
+
+composer require maennchen/zipstream-php
+;extension=gd
+SHA100054
+BIR100318
+BIR100405
+
+assignmentbudgetings
+assignmentmappings
+assignmentteammappings
+assignmentfolderfiles
+assignmentfolders
+
+this file inside vsademo temp/ download issue 
+
+vsalocal, vsademo, vsalive ```start 
+Data Download issue - Ajit Ranjan ```start hare
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+
+
+use App\Models\Assignmentfolderfile;
+use ZipArchive;
+// use File;
+use App\Jobs\CreateAllzip;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use ZipStream\Option\Archive;
+use ZipStream\Option\File;
+use STS\ZipStream\ZipStreamFacade as ZipStreamcreate;
+use ZipStream\ZipStream;
+use ZipStream\Option\Archive as ZipOptions;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+
+	       //! s3 connection on live 
+    public function createzipfolder(Request $request)
+    {
+        // Fetch assignment folder data
+        $assignmentfoldername = DB::table('assignmentfolders')
+            ->leftJoin('assignmentfolderfiles', 'assignmentfolderfiles.assignmentfolder_id', 'assignmentfolders.id')
+            ->where('assignmentfolders.assignmentgenerateid', $request->assignmentgenerateid)
+            ->select('assignmentfolders.*', 'assignmentfolderfiles.filesname', 'assignmentfolderfiles.realname')
+            ->get();
+
+        // Set ZIP file name
+        $zipFileName = $request->assignmentgenerateid . '.zip';
+
+        // Streamed response for downloading the zip file
+        return new StreamedResponse(function () use ($assignmentfoldername, $zipFileName) {
+            // Configure ZipStream options
+            $options = new ZipOptions();
+            $options->setSendHttpHeaders(true); // Send headers automatically
+            $options->setZeroHeader(true); // Optimize for streaming large files
+            $options->setLargeFileSize(1024 * 1024 * 100); // Define "large" as 100 MB for special handling
+
+            // Initialize ZipStream
+            $zip = new ZipStream($zipFileName, $options);
+
+            foreach ($assignmentfoldername as $folder) {
+                if (!empty($folder->filesname)) {
+                    // Generate S3 file path
+                    $s3Path = $folder->assignmentgenerateid . '/' . $folder->filesname;
+
+                    // Check if file exists on S3
+                    if (Storage::disk('s3')->exists($s3Path)) {
+                        // Get a stream directly from S3 instead of using temporaryUrl
+                        $fileStream = Storage::disk('s3')->readStream($s3Path);
+
+                        if ($fileStream) {
+                            // Add file to zip directly from stream (no need to buffer entire file in memory)
+                            $zip->addFileFromStream(
+                                $folder->assignmentfoldersname . '/' . $folder->realname,
+                                $fileStream
+                            );
+                            fclose($fileStream); // Close the stream after adding
+                        }
+                    }
+                } else {
+                    // Add an empty directory (ZipStream supports this directly)
+                    //$zip->addEmptyDir($folder->assignmentfoldersname);
+
+                    $zip->addFile($folder->assignmentfoldersname . '/', '');
+                }
+            }
+
+            // Finalize the zip stream
+            $zip->finish();
+        }, 200, [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $zipFileName . '"',
+        ]);
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolder\zipcreatedwaiting.blade.php
+
+
+
+<script>
+    $(document).ready(function() {
+        var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+ 
+        // Show waiting message
+        $('#loadingMessage').show();
+ 
+        // Redirect user to download the zip
+        window.location.href = '/createzipfolder?assignmentgenerateid=' + assignmentgenerateid1;
+ 
+        // Show afterzipcreated div after 3 seconds
+        setTimeout(function() {
+            $('#loadingMessage').hide();
+            $('#afterzipcreated').show();
+        }, 3000);
+    });
+</script>
+
+
+ 
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolder\zipcreatedwaiting.blade.php
+
+
+
+            <div class="card-body">
+                @if (isset($message))
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                @endif
+                <div class="row">
+                    {{-- waiting message  --}}
+                    <div id="loadingMessage" style="display:none; margin-bottom: 10px;" class="text-success">
+                        Creating your zip file. Please wait...
+                    </div>
+                    <div id="afterzipcreated" style="display:none; margin-bottom: 10px;" class="text-success">
+                        ZIP file created successfully. Your download will start automatically.
+                    </div>
+                    {{-- display file name that was created --}}
+                    <div id="createdzipfile" style="display:none; margin-bottom: 10px;">
+                    </div>
+                </div>
+            </div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolderfile\index.blade.php
+
+ <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right"
+                style="width: {{ isset($assignmentfolderfile[0]->assignmentfolder_id) && $assignmentbudgeting->status == 1 ? '400px' : '277px' }};">
+
+
+
+ <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolder\index.blade.php
+
+
+
+            <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right"
+                style="width: {{ $assignmentfolderpermission->status == 1 && $assignmentfolder->isNotEmpty() ? '369px' : '202px' }};">
+
+
+  <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+
+     //! s3 connection on live 
+    public function store(Request $request)
+    {
+        //dd($request);
+        $request->validate([
+            'particular' => 'required',
+            'file' => 'required',
+        ]);
+
+        try {
+            $data = $request->except(['_token']);
+            $files = [];
+
+            // vsalocal s3 remove
+            // if ($request->hasFile('file')) {
+            //     foreach ($request->file('file') as $file) {
+            //         $realname = $file->getClientOriginalName();
+            //         $name = time() . $realname;
+            //         $destinationPath = storage_path('app/public/image/task');
+            //         $sizeKB = round($file->getSize() / 1024, 2);
+            //         $file->move($destinationPath, $name);
+            //         $files[] = [
+            //             'realname' => $realname,
+            //             'name' => $name,
+            //             'size' => $sizeKB,
+            //         ];
+            //     }
+            // }
+
+            // vsademo s3 added
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $realname = $file->getClientOriginalName();
+                    $name = time() . $realname;
+                    $path = $file->storeAs($request->assignmentgenerateid, $name, 's3');
+                    $files[] = [
+                        'name' => $name,
+                        'realname' => $realname,
+                        'size' => round($file->getSize() / 1024, 2),
+
+                    ];
+                }
+            }
+
+            // dd($files);
+            foreach ($files as $filess) {
+                // dd($files); die;
+                $s = DB::table('assignmentfolderfiles')->insert([
+                    'particular' => $request->particular,
+                    'assignmentgenerateid' => $request->assignmentgenerateid,
+                    'assignmentfolder_id' =>  $request->assignmentfolder_id,
+                    'createdby' =>  auth()->user()->teammember_id,
+                    'filesname' =>  $filess['name'],
+                    'realname' =>  $filess['realname'],
+                    'filesize' => $filess['size'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+            //dd($data);
+            $output = array('msg' => 'Submit Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+
+        $assignmentbudgeting = DB::table('assignmentbudgetings')
+            ->where('assignmentgenerate_id', $foldername->assignmentgenerateid)->first();
+
+        $teamleader = DB::table('assignmentmappings')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $foldername->assignmentgenerateid)
+            ->where('type', 0)->pluck('teammember_id')->first();
+
+        return view('backEnd.assignmentfolderfile.index', compact('teamleader', 'assignmentbudgeting', 'assignmentfolderfile', 'id', 'foldername', 'financial'));
+			
+			
+			
+			
+			
+			
+			
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolderfile\index.blade.php	
+			
+			
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "order": [],
+            columnDefs: [{
+                targets: [
+                    0, 1, 2, 3
+                    @if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14 || $teamleader == Auth::user()->teammember_id)
+                        @if ($assignmentbudgeting->status == 1)
+                            , 5
+                        @endif
+                    @endif
+                ],
+                orderable: false
+            }],
+            buttons: []
+        });
+    });
+</script>		
+			
+			
+			
+			
+
+Data Download issue - Ajit Ranjan ```end hare
+vsalocal, vsademo, vsalive ```end 
+
+
+
+
+
+Partner role will be display on assignment view page ```start
+vsalocal, vsademo, vsalive ```start  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\StepController.php	
+find   $partner = $leadpartner->merge($otherpartner)->merge($teammpartner)
+replace  $partner varable related 3 varables
+
+
+
+          $leadpartner = DB::table('assignmentmappings')
+            ->join('teammembers as team', 'team.id', 'assignmentmappings.leadpartner')
+            ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('team.id', 'team.team_member', 'team.staffcode',  'team.mobile_no', 'team.role_id', 'assignmentmappings.leadpartnerhour as assignmenthour', 'titles.title', 'assignmentmappings.created_at as createdat', 'assignmentmappings.leadpartner as leadpartner')
+            ->get();
+
+
+
+        $otherpartner = DB::table('assignmentmappings')
+            ->join('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->leftJoin('titles', 'titles.id', '=', 'team.title_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->select('team.id', 'team.team_member', 'team.staffcode', 'team.mobile_no', 'team.role_id', 'assignmentmappings.otherpartnerhour as assignmenthour', 'titles.title', 'assignmentmappings.created_at as createdat', 'assignmentmappings.otherpartner as otherpartner')
+            ->get();
+
+
+        $teammpartner = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->leftJoin('titles', 'titles.id', '=', 'teammembers.title_id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $id)
+            ->whereNotNull('assignmentteammappings.id')
+            ->where('assignmentteammappings.type', '=', 1)
+            ->select([
+                'teammembers.id',
+                'teammembers.team_member',
+                'teammembers.staffcode',
+                'teammembers.mobile_no',
+                'teammembers.role_id',
+                'assignmentteammappings.teamhour as assignmenthour',
+                'assignmentteammappings.created_at as createdat',
+                'titles.title',
+                'assignmentteammappings.type as additionalpartner',
+            ])
+            ->orderByDesc('assignmentteammappings.id')
+            ->get();
+
+
+        $partner = $leadpartner->merge($otherpartner)->merge($teammpartner)
+            ->sortByDesc('createdat')
+            // ->sortBy('createdat')
+            ->values();
+			
+			
+			
+			
+			
+
+
+
+
+
+			
+			
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+ @if ($partnerData->role_id == 13)
+ replace td 
+
+
+
+                                                        <td class="textfixed">
+                                                            @if ($partnerData->role_id == 13)
+                                                                @if (!empty($partnerData->additionalpartner))
+                                                                    <span>Additional Partner</span>
+                                                                @elseif(!empty($partnerData->otherpartner))
+                                                                    <span>Other Partner</span>
+                                                                @elseif(!empty($partnerData->leadpartner))
+                                                                    <span>Lead Partner</span>
+                                                                @endif
+                                                            @else
+                                                                <span>NA</span>
+                                                            @endif
+                                                        </td>
+									
+										
+		
+		
+		
+
+		
+										
+Partner role will be display on assignment view page ```end 
+
+									
+
+
+
+Error in "Time Sheet Report". Time sheet days and hours are calculated wrongly in the report. ``` start
+vsalocal, vsademo, vsalive ```start 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetrequestController.php
+ foreach ($get_six_Data as $getsixdata) {  and 
+ 
+ add this code before foreach ($get_six_Data as $getsixdata) { and after  } else {
+ 
+ 
+ 1
+ 
+ 
+
+                        // Step 1: Filter only Monday dates and make them unique and ensures the code only runs once per Monday
+                        $mondays = collect($get_six_Data)
+                            ->filter(function ($item) {
+                                return Carbon::parse($item->date)->format('l') === 'Monday';
+                            })
+                            ->unique('date');
+
+                        foreach ($mondays as $timesheetreportupdate) {
+                            // Convert the requested date to a Carbon instance
+                            $requestedDate = Carbon::createFromFormat('Y-m-d', $timesheetreportupdate->date);
+                            $previousMonday = $requestedDate->copy()->previous(Carbon::MONDAY);
+
+                            // Find the nearest next Saturday to the requested date
+                            $nextSaturday = $requestedDate->copy()->next(Carbon::SATURDAY);
+
+                            // Format the dates in 'Y-m-d' format
+                            $previousMondayFormatted = $timesheetreportupdate->date;
+                            $nextSaturdayFormatted = $nextSaturday->format('Y-m-d');
+                            $nextSaturdayFormatted = $lastdate;
+
+
+                            $week =  date('d-m-Y', strtotime($previousMondayFormatted))  . ' to ' . date('d-m-Y', strtotime($nextSaturdayFormatted));
+                            $co = DB::table('timesheetusers')
+                                ->where('createdby', auth()->user()->teammember_id)
+                                ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                                ->groupBy('partner')
+                                ->get();
+
+                            foreach ($co as $codata) {
+                                DB::table('timesheetreport')->insert([
+                                    'teamid'       =>     auth()->user()->teammember_id,
+                                    'week'       =>     $week,
+                                    'totaldays'       =>     $codata->row_count,
+                                    'totaltime' =>  $codata->total_hours,
+                                    'partnerid'  => $codata->partner,
+                                    'startdate'  => $previousMondayFormatted,
+                                    'enddate'  => $nextSaturdayFormatted,
+                                    // 'created_at'                =>       date('y-m-d'),
+                                    'created_at'                =>      date('y-m-d H:i:s'),
+                                ]);
+                            }
+
+                            $totaldays = DB::table('timesheetusers')
+                                ->where('createdby', auth()->user()->teammember_id)
+                                ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                                ->select('date')
+                                ->groupBy('date')
+                                ->get();
+
+                            $totaldaysCount = $totaldays->count();
+                            $latesttimesheetreport = DB::table('timesheetreport')
+                                ->where('teamid', auth()->user()->teammember_id)
+                                ->where('startdate', $previousMondayFormatted)
+                                ->first();
+
+                            if ($latesttimesheetreport) {
+                                DB::table('timesheetreport')
+                                    ->where('id', $latesttimesheetreport->id)
+                                    ->update(['dayscount' => $totaldaysCount]);
+                            }
+                        }                        
+
+
+
+
+
+
+
+
+
+and  remove all code between 
+
+
+                        foreach ($get_six_Data as $getsixdata) {
+
+                            DB::table('timesheetusers')->where('timesheetid', $getsixdata->timesheetid)->update([
+                                'status'         =>     1,
+                                'updated_at'              =>   date('y-m-d H:i:s'),
+                            ]);
+                            DB::table('timesheets')->where('id', $getsixdata->timesheetid)->update([
+                                'status'         =>     1,
+                                'updated_at'              =>   date('y-m-d H:i:s'),
+                            ]);
+
+                            // Attendance code start hare 
+
+
+
+
+
+
+
+
+
+
+
+2
+
+
+add this code before foreach ($get_six_Data as $getsixdata) { and after  } else {
+ 
+ 
+ 1
+ 
+ 
+
+                    // Step 1: Filter only Monday dates and make them unique and ensures the code only runs once per Monday
+                    $mondays = collect($get_six_Data)
+                        ->filter(function ($item) {
+                            return Carbon::parse($item->date)->format('l') === 'Monday';
+                        })
+                        ->unique('date');
+
+                    foreach ($mondays as $timesheetreportupdate) {
+                        // Convert the requested date to a Carbon instance
+                        $requestedDate = Carbon::createFromFormat('Y-m-d', $timesheetreportupdate->date);
+                        $previousMonday = $requestedDate->copy()->previous(Carbon::MONDAY);
+
+                        // Find the nearest next Saturday to the requested date
+                        $nextSaturday = $requestedDate->copy()->next(Carbon::SATURDAY);
+
+                        // Format the dates in 'Y-m-d' format
+                        $previousMondayFormatted = $timesheetreportupdate->date;
+                        $nextSaturdayFormatted = $nextSaturday->format('Y-m-d');
+                        $nextSaturdayFormatted = $lastdate;
+
+
+                        $week =  date('d-m-Y', strtotime($previousMondayFormatted))  . ' to ' . date('d-m-Y', strtotime($nextSaturdayFormatted));
+                        $co = DB::table('timesheetusers')
+                            ->where('createdby', auth()->user()->teammember_id)
+                            ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                            ->select('partner', DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+                            ->groupBy('partner')
+                            ->get();
+
+                        foreach ($co as $codata) {
+                            DB::table('timesheetreport')->insert([
+                                'teamid'       =>     auth()->user()->teammember_id,
+                                'week'       =>     $week,
+                                'totaldays'       =>     $codata->row_count,
+                                'totaltime' =>  $codata->total_hours,
+                                'partnerid'  => $codata->partner,
+                                'startdate'  => $previousMondayFormatted,
+                                'enddate'  => $nextSaturdayFormatted,
+                                // 'created_at'                =>       date('y-m-d'),
+                                'created_at'                =>      date('y-m-d H:i:s'),
+                            ]);
+                        }
+
+                        $totaldays = DB::table('timesheetusers')
+                            ->where('createdby', auth()->user()->teammember_id)
+                            ->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+                            ->select('date')
+                            ->groupBy('date')
+                            ->get();
+
+                        $totaldaysCount = $totaldays->count();
+                        $latesttimesheetreport = DB::table('timesheetreport')
+                            ->where('teamid', auth()->user()->teammember_id)
+                            ->where('startdate', $previousMondayFormatted)
+                            ->first();
+
+                        if ($latesttimesheetreport) {
+                            DB::table('timesheetreport')
+                                ->where('id', $latesttimesheetreport->id)
+                                ->update(['dayscount' => $totaldaysCount]);
+                        }
+                    }
+
+
+
+
+
+
+
+
+
+
+and  remove all code between 
+
+
+
+                    foreach ($get_six_Data as $getsixdata) {
+                        DB::table('timesheetusers')->where('timesheetid', $getsixdata->timesheetid)->update([
+                            'status'         =>     1,
+                            'updated_at'              =>   date('y-m-d H:i:s'),
+                        ]);
+                        DB::table('timesheets')->where('id', $getsixdata->timesheetid)->update([
+                            'status'         =>     1,
+                            'updated_at'              =>    date('y-m-d H:i:s'),
+                        ]);
+
+                        // Attendance code start hare 
+							
+				
+
+				
+Error in "Time Sheet Report". Time sheet days and hours are calculated wrongly in the report.  ```end 
+
+
+
+
+
+
+
+
+
+1
+
+
+
+
+
+Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"  ```start 
+vsademo ```start 			  
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+final otp done hare 
+resources\views\backEnd\assignmentconfirmation\index.blade.php
+
+					  
+1			1```
+
+data-onstyle="info" data-offstyle="danger" onchange="updateConfirmationStatus(this)">
+					  
+
+                      @if (auth()->user()->role_id == 13)
+                          <div>
+                              <span style="color:white;" class="fs-17 font-weight-600 mb-0">Confirmation:</span>
+                              <input type="checkbox" id="toggle-status-{{ $clientList->id }}"
+                                  {{ $clientList->balanceconfirmationstatus ? 'checked' : '' }} data-toggle="toggle"
+                                  data-style="ios" data-id="{{ $clientList->id }}" data-on="Open" data-off="Close"
+                                  data-onstyle="info" data-offstyle="danger" onchange="updateConfirmationStatus(this)">
+                          </div>
+                      @else
+                          <div>
+                              <span style="color:white;" class="fs-17 font-weight-600 mb-0">Confirmation:</span>
+                              <input type="checkbox" id="toggle-status-{{ $clientList->id }}"
+                                  {{ $clientList->balanceconfirmationstatus ? 'checked' : '' }} data-toggle="toggle"
+                                  data-style="ios" data-id="{{ $clientList->id }}" data-on="Open" data-off="Close"
+                                  data-onstyle="info" data-offstyle="danger" onchange="managervarification(this)">
+                          </div>
+                      @endif
+	
+
+
+
+	
+					  
+					  
+					  
+2   2```
+				  
+
+
+
+    <script>
+      function managervarification(checkbox) {
+          const assignmentId = "{{ $clientList->assignmentgenerate_id }}";
+          const balanceconfirmationcheck = parseInt("{{ $clientList->balanceconfirmationstatus }}");
+          const status = checkbox.checked ? 1 : 0;
+
+          console.log("Balance Status:", balanceconfirmationcheck, "Checkbox Status:", status);
+
+          if (balanceconfirmationcheck === 1 && status === 1) {
+              alert('Your balance confirmation is already open.');
+              return; // prevent modal
+          }
+
+          if (balanceconfirmationcheck === 0 && status === 0) {
+              alert('Your balance confirmation is already closed.');
+              return; // prevent modal
+          }
+
+          // Show modal only if no alerts triggered
+          $('#managervarificationmodal').modal('show');
+      }
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+3    3```
+
+ <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog"
+ afret this modal add below code 
+ 
+                      <!-- Modal -->
+                      <div class="modal fade" id="managervarificationmodal" tabindex="-1" role="dialog"
+                          aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="confirmationModalLabel">Verification Form</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                      </button>
+                                  </div>
+                                  <div class="modal-body">
+
+                                      <div
+                                          style="width: 100%; border-radius: 10px; height: 100%; padding: 16px; background: white; box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);  flex-direction: column; justify-content: flex-start; align-items: center; gap: 24px; display: inline-flex ">
+                                          <div
+                                              style="flex-direction: column; justify-content: flex-start; align-items: center; gap: 16px; display: flex">
+                                              <div
+                                                  style="flex-direction: column; justify-content: flex-start; align-items: center; gap: 8px; display: flex">
+
+                                                  <div
+                                                      style="color: #292D32; font-size: 24px; font-family: Inter; font-weight: 500; word-wrap: break-word">
+                                                      OTP Request Form</div>
+
+                                              </div>
+                                              <div class="details-form-field  row">
+
+                                                  <div class="col-sm-12">
+
+                                                      <input type="hidden" id="assignmentgenerate_id"
+                                                          name="assignmentgenerate_id" class="form-control"
+                                                          value="{{ $clientList->assignmentgenerate_id }}">
+                                                      {{-- <input type="hidden" id="statusvalue" name="status"
+                                                          class="form-control" value="1"> --}}
+
+                                                      <input type="hidden" id="statusvalue" name="status"
+                                                          class="form-control"
+                                                          value="{{ $clientList->balanceconfirmationstatus == 0 ? '1' : '0' }}">
+                                                  </div>
+                                              </div>
+
+                                              <div
+                                                  style="width: 332px; text-align: center; color: rgb(196 35 33 / 65%); font-size: 18px; font-family: Inter; font-weight: 400; word-wrap: break-word">
+                                                  Please choose a partner from the list to proceed with the verification
+                                                  process. An OTP will be sent to the selected partner.
+                                              </div>
+                                          </div>
+
+                                          @if ($errors->any())
+                                              <div>
+                                                  <ul>
+                                                      @foreach ($errors->all() as $e)
+                                                          <li style="color:red;">{{ $e }}
+                                                          </li>
+                                                      @endforeach
+                                                  </ul>
+                                              </div>
+                                          @else
+                                          @endif
+                                          <div class="col-sm-12">
+                                              <div class="form-group">
+                                                  <label class="font-weight-600">Partner Name <span
+                                                          class="text-danger">*</span></label>
+                                                  <select required class="language form-control"
+                                                      id="exampleFormControlSelect1" name="otherpatnerid">
+                                                      <option value="">Please Select One</option>
+                                                      {{-- @foreach ($partners as $teammemberData)
+                                                          @php
+                                                              $pormotionrejoincheck = DB::table('teamrolehistory')
+                                                                  ->where('teammember_id', $teammemberData->teamid)
+                                                                  ->first();
+                                                          @endphp
+                                                          <option value="{{ $teammemberData->teamid }}">
+                                                              {{ $teammemberData->team_member }} (
+                                                              {{ $permotioncheck->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                                                          </option>
+                                                      @endforeach --}}
+                                                      @foreach ($partners as $teammemberData)
+                                                          @php
+                                                              $role =
+                                                                  $teamRoleHistories[$teammemberData->teamid] ?? null;
+                                                          @endphp
+                                                          <option value="{{ $teammemberData->teamid }}">
+                                                              {{ $teammemberData->team_member }}
+                                                              ({{ $role->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                                                          </option>
+                                                      @endforeach
+                                                  </select>
+                                              </div>
+                                          </div>
+
+                                          <button type="submit" id="sendOtpBtn" class="btn btn-success">Send
+                                              OTP</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+				
+
+
+
+
+
+				
+
+
+4    4```
+app\Http\Controllers\AssignmentconfirmationController.php
+
+ public function indexview($assignmentgenerate_id)
+ after this line     })->collapse();  add below code 
+ 
+ 
+
+        $assignmentId = $clientList->assignmentgenerate_id;
+
+        // Lead and Other Partners
+        $leadAndOtherPartners = DB::table('assignmentmappings')
+            ->join('teammembers', function ($join) {
+                $join->on('teammembers.id', '=', 'assignmentmappings.leadpartner')
+                    ->orOn('teammembers.id', '=', 'assignmentmappings.otherpartner');
+            })
+            ->where('assignmentgenerate_id', $assignmentId)
+            ->select('teammembers.id as teamid', 'teammembers.team_member', 'teammembers.staffcode');
+
+        // Additional Partners
+        $additionalPartners = DB::table('assignmentteammappings')
+            ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->where('assignmentmappings.assignmentgenerate_id', $assignmentId)
+            ->where('assignmentteammappings.type', 1)
+            ->select('teammembers.id as teamid', 'teammembers.team_member', 'teammembers.staffcode');
+
+        $partners = $leadAndOtherPartners->union($additionalPartners)->get();
+
+        // check promotion and rejoin record
+        $teamIds = $partners->pluck('teamid')->toArray();
+        $teamRoleHistories = DB::table('teamrolehistory')
+            ->whereIn('teammember_id', $teamIds)
+            ->get()
+            ->keyBy('teammember_id');
+
+
+
+
+		
+
+pass in view  'partners', 'teamRoleHistories'
+
+
+
+
+
+
+
+
+
+
+
+
+resources\views\backEnd\assignmentconfirmation\index.blade.php
+
+
+5    5```
+
+function managervarification(checkbox) {
+
+  <script>
+      $(document).ready(function() {
+          $('#sendOtpBtn').on('click', function(e) {
+              e.preventDefault();
+
+              var assignmentId = "{{ $clientList->assignmentgenerate_id }}";
+              var status = $("#statusvalue").val();
+              var selectedpartner = $("#exampleFormControlSelect1").val();
+
+              console.log("Assignment ID:", assignmentId);
+              console.log("Status:", status);
+              console.log("Selected Partner:", selectedpartner);
+
+              if (selectedpartner === "") {
+                  alert("Please select a partner.");
+                  return;
+              }
+
+              $.ajax({
+                  url: "{{ url('confirmationotpsend') }}",
+                  method: "GET",
+                  data: {
+                      assignmentid: assignmentId,
+                      selectedpartner: selectedpartner,
+                      status: status,
+                      _token: '{{ csrf_token() }}'
+                  },
+                  success: function(response) {
+                      if ($('#managervarificationmodal').hasClass('show')) {
+                          $('#managervarificationmodal').modal('hide');
+                      }
+                      //   $('#confirmationModal').modal('show');
+
+                      if (status === "0") {
+                          $('#confirmationModal').modal('show');
+                          if (response.status == 0) {
+                              $("#otpmessage").text(response.otpsuccessmessage);
+                          } else {
+                              $("#errormessage").text(response.otpsuccessmessage);
+                              $("#verifyBtn").addClass('disable');
+                              $("#yesid").hide();
+                          }
+                      } else {
+                          $('#confirmationModal3').modal('show');
+                          if (response.status == 1) {
+                              $("#otpmessage1").text(response.otpsuccessmessage);
+                          } else {
+                              $("#errormessage1").text(response.otpsuccessmessage);
+                              $("#verifyBtn1").addClass('disable');
+                              $("#noid").hide();
+                          }
+                      }
+                  },
+                  error: function() {
+                      alert('An error occurred while sending OTP.');
+                  }
+              });
+          });
+      });
+  </script>
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+6  ```6
+
+app\Http\Controllers\AssignmentconfirmationController.php
+    public function confirmationotpsend(Request $request)
+	$teammembers = DB::table('teammembers')   find and replace it 
+	
+        if (auth()->user()->role_id == 13) {
+            $teammembers = DB::table('teammembers')
+                ->where('id', auth()->user()->teammember_id)
+                ->select('team_member', 'emailid',)
+                ->first();
+        } else {
+            $teammembers = DB::table('teammembers')
+                ->where('id', $request->selectedpartner)
+                ->select('team_member', 'emailid',)
+                ->first();
+        }
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+7   7```				  
+
+resources\views\backEnd\assignmentconfirmation\index.blade.php
+					  
+find <div style="width: 332px; text-align: center" class="resends">
+ and only add if statment on div 
+	
+
+1
+                                                  @if (auth()->user()->role_id == 13)
+                                                      <div style="width: 332px; text-align: center" class="resends"><span
+                                                              style="color: rgba(41, 45, 50, 0.85); font-size: 16px; font-family: Inter; font-weight: 300; word-wrap: break-word">Didn’t
+                                                              receive the OTP?</span><span
+                                                              style="color: rgba(41, 45, 50, 0.85); font-size: 16px; font-family: Inter; font-weight: 500; word-wrap: break-word">
+                                                              <a id="yesid"
+                                                                  data-id="{{ $clientList->assignmentgenerate_id }}"
+                                                                  data-status="0" data-resend="true"
+                                                                  class="font-weight-500" style="color:#37a000;">
+                                                                  Resend</a>
+                                                          </span>
+                                                      </div>
+                                                  @endif
+
+
+
+
+
+2
+	
+
+
+                                                  @if (auth()->user()->role_id == 13)
+                                                      <div style="width: 332px; text-align: center" class="resends"><span
+                                                              style="color: rgba(41, 45, 50, 0.85); font-size: 16px; font-family: Inter; font-weight: 300; word-wrap: break-word">Didn’t
+                                                              receive the OTP?</span><span
+                                                              style="color: rgba(41, 45, 50, 0.85); font-size: 16px; font-family: Inter; font-weight: 500; word-wrap: break-word">
+                                                              <a id="noid"
+                                                                  data-id="{{ $clientList->assignmentgenerate_id }}"
+                                                                  data-status="1" data-resend="true"
+                                                                  class="font-weight-500" style="color:#37a000;">
+                                                                  Resend</a>
+                                                          </span>
+                                                      </div>
+                                                  @endif	
+												  
+				
+
+				
+												  
+												  
+8    8```
+
+resources\views\backEnd\assignmentconfirmation\index.blade.php
+$('#sendOtpBtn').on('click', function(e) {
+		
+		
+  <script>
+      $(document).ready(function() {
+          $('#managervarificationmodal').on('hidden.bs.modal', function() {
+              var formElement = $(this).find('form')[0];
+              if (formElement) {
+                  formElement.reset();
+              }
+              // Reset Select2 dropdowns
+              $(this).find('select').val(null).trigger('change');
+              //   $(this).find('input[type="hidden"]').val('');
+
+          });
+      });
+  </script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+					  
+Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module" ```end 
+
+
+bugs timesheet hour wla 
+vsalocal, vsademo, vsalive done
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+public function timesheet_teamlist()
+ 'totaltime' => $group->sum('totaltime'), after this line add below line 
+ 
+ 
+ 
+        'dayscount' => $group->sum('dayscount'),
+
+
+
+
+resources\views\backEnd\timesheet\myteamindex.blade.php
+ @if (isset($jobDatas->dayscount) && $jobDatas->dayscount != 0)
+
+
+                                      @if (Auth::user()->role_id == 11)
+                                          @if (isset($jobDatas->dayscount) && $jobDatas->dayscount != 0)
+                                              <td>{{ $jobDatas->dayscount }}</td>
+                                          @else
+                                              <td>{{ $jobDatas->totaldays }}</td>
+                                          @endif
+                                      @else
+                                          @if (isset($jobDatas->dayscount) && $jobDatas->dayscount != 0)
+                                              <td>{{ $jobDatas->dayscount }}</td>
+                                          @else
+                                              <td>{{ $jobDatas->totaldays }}</td>
+                                          @endif
+                                      @endif
+
+timesheetreport  table se delet this id 
+15149
+15274
+15275
+15403
+
+bugs timesheet hour wla  end hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+bugs staff code wla on vsademo 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\weeklylist.blade.php
+find text <td>{{ $timesheetDatas->staffcode }}</td>
+and remove @if statment hare and add this below code 
+
+                                    <td>{{ $timesheetDatas->teamnewstaffcode ?? ($timesheetDatas->staffcode ?? '') }}
+                                    </td>
+
+
+
+find text {{ $timesheetDatas->patnerstaffcodee ?? '' }}
+and remove @if statment hare and add this below code 
+
+
+   {{ $timesheetDatas->ptnrstaffcode ?? ($timesheetDatas->patnerstaffcodee ?? '') }}
+
+bugs staff code wla on vsademo  end hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

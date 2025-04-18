@@ -588,10 +588,13 @@ If a user is rejoined and does not have a leaving date for rejoining, the admin 
 Rejoining/Promotion features Deployed
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 or Admin, partner IDs
+
+
 Steps:
 1.	Navigate to the application.
 2.	Click on the 'Dashboard'.
 3.	Click on the 'Promotion/Rejoining'.
+
 
 After promoting or rejoining the user, we have to test below all points
 1.After rejoining or promotion, any newly created assignment should display the new staff code for all related data. However, if the assignment was created before rejoining or promotion, it should display the old staff code for all related data.
@@ -622,8 +625,50 @@ For Admin, Partner, Manager, Promoted User and Rejoined User Ids
 5.we have to test all section on dashboard,
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Final Summary
+1️⃣ Database se folders aur unke files ka data fetch hota hai.
+2️⃣ ZIP file ka naam generate hota hai.
+3️⃣ StreamedResponse ka use karke ZIP ko directly user ko stream kiya jata hai.
+4️⃣ Loop me folders aur unki files ko ZIP me add kiya jata hai.
+5️⃣ Agar folder empty hai to sirf empty directory ZIP me add hoti hai.
+6️⃣ ZIP stream complete hota hai aur user ko download ke liye diya jata hai.
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+5.	Click on the 'All files and folders'.
+6.	Click on the 'Download all folder'.
+7.	Click on the 'Create zip file'.
+
+
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+5.	Go to the Partner List section.
+6.  Locate the Role column.
+
+
+
+
+
+
+For Partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet' tab.
+4.Click on 'Submitted timesheet'.
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
