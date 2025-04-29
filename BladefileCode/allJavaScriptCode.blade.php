@@ -22,17 +22,320 @@
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
-{{-- * regarding  --}}
+{{-- * regarding date sorting / date sorting / regarding sorting   --}}
 {{--  Start Hare  --}}
+<td data-order="{{ $independenceItem ? $independenceItem->created_at : '' }}">
+    @if ($independenceItem)
+        {{ date('d-m-Y', strtotime($independenceItem->created_at)) }}
+        {{ date('h:i A', strtotime($independenceItem->created_at)) }}
+    @endif
+</td>
+
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            // 'l' for the length menu
+            dom: 'lBfrtip',
+            columnDefs: [{
+                targets: [1, 2, 3, 4],
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Independence Confirmation',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        //   remove extra spaces
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+{{--  Start Hare  --}}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            // 'l' for the length menu
+            dom: 'lBfrtip',
+            columnDefs: [{
+                targets: [1, 2, 3, 4],
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Independence Confirmation',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        //   remove extra spaces
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script> --}}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            dom: 'lBfrtip',
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 4], // Only make these columns non-orderable (0-indexed)
+                    orderable: false
+                },
+                {
+                    targets: 5, // Submitted Date column (0-indexed as 5)
+                    type: 'date', // Tell DataTables this is a date column
+                    render: function(data, type, row) {
+                        // For proper sorting, return raw date value when sorting/filtering
+                        if (type === 'sort' || type === 'type') {
+                            return data ? moment(data, 'DD-MM-YYYY hh:mm A').format(
+                                'YYYY-MM-DD HH:mm') : '';
+                        }
+                        return data; // Display original formatted value
+                    }
+                }
+            ],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Independence Confirmation',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            dom: 'lBfrtip',
+            columnDefs: [{
+                    targets: [0, 1, 2, 3], // Only disable sorting for these columns
+                    orderable: false
+                },
+                {
+                    targets: 5, // Submitted Date column
+                    type: 'date-eu', // Use European date format (DD-MM-YYYY)
+                    render: function(data, type, row) {
+                        if (type === 'sort') {
+                            // Convert to sortable format (YYYYMMDD)
+                            if (data) {
+                                var parts = data.split(' ');
+                                var dateParts = parts[0].split('-');
+                                return dateParts[2] + dateParts[1] + dateParts[0] + (parts[1] ||
+                                    '');
+                            }
+                            return '';
+                        }
+                        return data;
+                    }
+                }
+            ],
+            // ... rest of your buttons configuration
+        });
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+{{-- Akshay has worked --}}
+<script>
+    document.getElementById('Myform').addEventListener('submit', function(event) {
+        // Get the submit button
+        const submitButton = document.getElementById('submitButton');
+
+        // Disable the submit button to prevent multiple submissions
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting..."; // Optional: change the button text
+
+        // Allow the form to submit
+        // The form will automatically be submitted due to the 'action' attribute in the form tag
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            dom: 'Bfrtip',
+            "order": [
+                [2, "desc"]
+            ],
+
+            columnDefs: [{
+                @if (Auth::user()->role_id == 11)
+                    targets: [0, 1, 3, 4],
+                @else
+                    targets: [0, 1, 3],
+                @endif
+                orderable: false
+            }],
+
+            buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    filename: 'Notification',
+                    exportOptions: {
+                        columns: ':visible',
+                        format: {
+                            body: function(data, row, column, node) {
+                                // it should be column number 2
+                                if (column === 1) {
+                                    // If the data is a date, extract the date without HTML tags
+                                    var cleanedText = $(data).text().trim();
+                                    var dateParts = cleanedText.split(
+                                        '-');
+                                    // Assuming the date format is yyyy-mm-dd
+                                    if (dateParts.length === 3) {
+                                        return dateParts[2] + '-' + dateParts[1] + '-' +
+                                            dateParts[0];
+                                    }
+                                }
+                                if (column === 0) {
+                                    var cleanedText = $(data).text().trim();
+                                    return cleanedText;
+                                }
+                                if (column === 2) {
+                                    var cleanedText = $(data).text().trim();
+                                    return cleanedText;
+                                }
+                                if (column === 3) {
+                                    var cleanedText = $(data).text().trim();
+                                    return cleanedText;
+                                }
+                                return data;
+                            }
+                        }
+                    },
+                },
+                {
+                    extend: 'pdfHtml5',
+                    filename: 'Notification',
+                    exportOptions: {
+                        @if (Auth::user()->role_id == 11)
+                            columns: [1, 2, 3, 4]
+                        @else
+                            columns: [1, 2, 3]
+                        @endif
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script> --}}
+
+<script>
+    $(document).ready(function() {
+        const isRole11 = {{ Auth::user()->role_id == 11 ? 'true' : 'false' }};
+
+        const nonOrderableColumns = isRole11 ? [0, 1, 3, 4] : [0, 1, 3];
+        const exportColumns = isRole11 ? [1, 2, 3, 4] : [1, 2, 3];
+
+        $('#examplee').DataTable({
+            dom: 'Bfrtip',
+            order: [
+                [2, 'desc']
+            ],
+            columnDefs: [{
+                targets: nonOrderableColumns,
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    filename: 'Notification',
+                    exportOptions: {
+                        columns: ':visible',
+                        format: {
+                            body: function(data, row, column) {
+                                const cleanedText = $(data).text().trim();
+
+                                // Format date in column 1 (assuming yyyy-mm-dd)
+                                if (column === 1) {
+                                    const parts = cleanedText.split('-');
+                                    return parts.length === 3 ?
+                                        `${parts[2]}-${parts[1]}-${parts[0]}` :
+                                        cleanedText;
+                                }
+
+                                return cleanedText;
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    filename: 'Notification',
+                    exportOptions: {
+                        columns: exportColumns
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 {{-- * regarding event   --}}
@@ -1342,6 +1645,54 @@ $('#errormessage').text(response.otpsuccessmessage);
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 {{-- * regarding form submit / on submit / onsubmit / regarding validation  --}}
+{{--  Start Hare  --}}
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            var teammemberId = $("[name='teammemberId']").val();
+            var assignmentId = $("[name='assignmentId']").val();
+            var statusId = $("[name='statusId']").val();
+
+            if (!teammemberId && !assignmentId && !statusId) {
+                alert("At least choose one field");
+                
+                // Sirf pehle field pe focus karwana (optional logic)
+                $("[name='teammemberId']").focus();
+                
+                event.preventDefault(); // Form submit ko rokna
+                return false;
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            var teammemberId = $("[name='teammemberId']").val();
+            var assignmentId = $("[name='assignmentId']").val();
+            var statusId = $("[name='statusId']").val();
+
+            if (!teammemberId && !assignmentId && !statusId) {
+                alert("At least choose one field");
+                
+                // Focus first empty field
+                if (!$("[name='teammemberId']").val()) {
+                    $("[name='teammemberId']").focus();
+                } else if (!$("[name='assignmentId']").val()) {
+                    $("[name='assignmentId']").focus();
+                } else if (!$("[name='statusId']").val()) {
+                    $("[name='statusId']").focus();
+                }
+
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+
+
 {{--  Start Hare  --}}
 @if (Request::is('teammember/*/edit') || Request::is('teammember/create'))
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -6733,8 +7084,8 @@ https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}
             <div class="col-2">
                 <div class="form-group">
                     <label class="font-weight-600" style="width:100px;">Location *</label>
-                    <input type="text" name="location[]" id="key" value="{{ $timesheet->location ?? '' }}"
-                        class="form-control key location1 refresh">
+                    <input type="text" name="location[]" id="key"
+                        value="{{ $timesheet->location ?? '' }}" class="form-control key location1 refresh">
                 </div>
             </div>
 

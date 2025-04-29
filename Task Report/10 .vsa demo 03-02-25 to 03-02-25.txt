@@ -6376,22 +6376,67 @@ app\Http\Controllers\TimesheetController.php
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\weeklylist.blade.php
-find text <td>{{ $timesheetDatas->staffcode }}</td>
-and remove @if statment hare and add this below code 
-
-                                    <td>{{ $timesheetDatas->teamnewstaffcode ?? ($timesheetDatas->staffcode ?? '') }}
+                            @foreach ($timesheetData as $timesheetDatas)
+                                <tr>
+                                    <td style="display: none;">{{ $timesheetDatas->id }}</td>
+                                    <td class="textfixed"> {{ $timesheetDatas->team_member ?? '' }} </td>
+                                    <td>{{ $timesheetDatas->teamnewstaffcode ?? ($timesheetDatas->staffcode ?? '') }}</td>
+                                    <td class="textfixed"> <span style="display: none;">
+                                            {{ date('Y-m-d', strtotime($timesheetDatas->date)) }}</span>{{ date('d-m-Y', strtotime($timesheetDatas->date)) }}
                                     </td>
+                                    <td class="textfixed">
+                                        @if ($timesheetDatas->date != null)
+                                            {{ date('l', strtotime($timesheetDatas->date)) }}
+                                        @endif
+                                    </td>
+                                    <td class="textfixed">{{ $timesheetDatas->client_name ?? '' }}
+                                    </td>
+                                    <td> {{ $timesheetDatas->client_code ?? '' }}
+                                    </td>
+                                    <td class="textfixed">
+                                        {{ $timesheetDatas->assignment_name ?? '' }}
+                                        @if ($timesheetDatas->assignmentname != null)
+                                            ({{ $timesheetDatas->assignmentname ?? '' }})
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $timesheetDatas->assignmentgenerate_id ?? '' }}
+                                    </td>
+                                    <td class="textfixed"> {{ $timesheetDatas->workitem ?? '' }}</td>
+                                    <td class="textfixed">{{ $timesheetDatas->location ?? '' }} </td>
+                                    <td class="textfixed"> {{ $timesheetDatas->patnername ?? '' }}
+                                    </td>
+                                    <td>{{ $timesheetDatas->ptnrstaffcode ?? ($timesheetDatas->patnerstaffcodee ?? '') }}
+                                    </td>
+                                    <td>{{ $timesheetDatas->hour ?? '' }}</td>
+                                    <td>
+                                        @if ($timesheetDatas->status == 0)
+                                            <span class="badge badge-pill badge-warning">Saved</span>
+                                        @elseif ($timesheetDatas->status == 1 || $timesheetDatas->status == 3)
+                                            <span class="badge badge-pill badge-danger">Submit</span>
+                                        @else
+                                            <span class="badge badge-pill badge-secondary">Rejected</span>
+                                        @endif
+                                    </td>
+                                    @if (Auth::user()->role_id == 11 || Auth::user()->teammember_id != $timesheetDatas->createdby)
+                                        <td>
 
-
-
-find text {{ $timesheetDatas->patnerstaffcodee ?? '' }}
-and remove @if statment hare and add this below code 
-
-
-   {{ $timesheetDatas->ptnrstaffcode ?? ($timesheetDatas->patnerstaffcodee ?? '') }}
-   
-   
-   
+                                            @if ($timesheetDatas->assignmentgenerate_id != null)
+                                                <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
+                                                    onclick="return confirm('Are you sure you want to Reject this timesheet?');">
+                                                    <button class="btn btn-danger"
+                                                        style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px;"
+                                                        {{ $timesheetDatas->status == 2 ? 'disabled' : '' }}>
+                                                        Reject
+                                                    </button>
+                                                </a>
+                                            @else
+                                                <span>NA</span>
+                                            @endif
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach   
 
 Rejoining/Promotion features Deployed ```end
 Client want to implement Rejoining process to users.
@@ -6451,8 +6496,12 @@ this task related to acending and decending icon on tables end
 
 
 
+
+
+
 Dashboard - Client Box (UI-Text)
-Dashboard - signout and assignment box (UI-fixed)  
+Dashboard - signout and assignment box (UI-fixed)
+vsalocal, vsademo   
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\index.blade.php
 
@@ -6488,7 +6537,9 @@ resources\views\backEnd\index.blade.php
                             <small style="color:white;">Open Assignment</small>
                         </a>				
 						
-						
+	
+
+	
 resources\views\backEnd\layouts\includes\header.blade.php
 <div class="dropdown-menu dropdown-menu-left"
 

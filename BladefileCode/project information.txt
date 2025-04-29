@@ -211,6 +211,12 @@ Role : Admin
 447
 
 Link : https://vsademo.capitall.io
+Email : shahidraza@capitall.io
+Password : Azaz~123
+Role : Partner
+951
+
+Link : https://vsademo.capitall.io
 Email : Harish@capitall.io
 Password : Sukh@2024
 Role : Partner
@@ -404,26 +410,26 @@ if any problem on timesheet page to vsalive then ye table maange
 
 
 
-    // DB::table('timesheetreport')
-    //   ->delete();
-    // DB::table('timesheetrequests')
-    //   ->delete();
-    // DB::table('timesheets')
-    //   ->delete();
-    // DB::table('timesheetusers')
-    //   ->delete();
+    DB::table('timesheetreport')
+      ->delete();
+    DB::table('timesheetrequests')
+      ->delete();
+    DB::table('timesheets')
+      ->delete();
+    DB::table('timesheetusers')
+      ->delete();
 
 
-    // DB::table('applyleaves')
-    //   ->delete();
-    // DB::table('leaveapprove')
-    //   ->delete();
-    // DB::table('leaverequest')
-    //   ->delete();
+    DB::table('applyleaves')
+      ->delete();
+    DB::table('leaveapprove')
+      ->delete();
+    DB::table('leaverequest')
+      ->delete();
 
 
-    // DB::table('attendances')
-    //   ->delete();
+    DB::table('attendances')
+      ->delete();
 
 
     DB::table('teamrolehistory')
@@ -442,5 +448,23 @@ if any problem on timesheet page to vsalive then ye table maange
 
 
 222222222222222222222222222222
+assignment issue on vsademo off/holidays
+
+assignmentbudget 
+OFF100004
+1.id 65  client id 33 se 3311 ya ise row ko delete kar de
+2.
+
+assignmentmappings
+OFF100004
+1.id = 26  leadpartner = 887 kare 
+2.
+
+assignmentteammappings
+OFF100003
+assignmentmapping_id = 24 and delete all data hare 
+
+UNA100004
+assignmentmapping_id = 25 and delete all data hare 
 
 

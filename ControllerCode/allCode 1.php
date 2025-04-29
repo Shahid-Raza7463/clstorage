@@ -5195,7 +5195,38 @@ try {
       ]);
 }
 // Start Hare 
-//* regarding file upload
+//* regarding file upload / regarding img upload / regarding image upload / regarding storage_path / regarding public_path
+// Start Hare 
+// <td>
+// @if ($notificationData && $notificationData->realname)
+//     <a href="{{ url('backEnd/image/test/' . $notificationData->attachment) }}"
+//         target="blank">
+//         {{ $notificationData->realname ?? 'NA' }}
+//     </a>
+// @else
+//     {{ 'NA' }}
+// @endif
+// </td>
+
+$attachmentPath = '';
+$name = '';
+if ($request->hasFile('attachment')) {
+    $file = $request->file('attachment');
+    $realname = $file->getClientOriginalName();
+    $name = time() . $realname;
+    $attachmentPath = storage_path('app/public/image/' . $name);
+    $file->storeAs('public/image', $name);
+}
+// Start Hare 
+$attachmentPath = '';
+$name = '';
+if ($request->hasFile('attachment')) {
+    $file = $request->file('attachment');
+    $realname = $file->getClientOriginalName();
+    $name = time() . $realname;
+    $attachmentPath = public_path('backEnd/image/test/' . $name);
+    $file->move('backEnd/image/test', $name);
+}
 // Start Hare 
     $fileName = '';
     if ($request->hasFile('file')) {

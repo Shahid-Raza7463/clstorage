@@ -1155,95 +1155,3376 @@ timesheetreport  table se delet this id
 15275
 15403
 
-bugs timesheet hour wla  end hare 
+bugs timesheet hour wla end hare 
+
+Need option to fill mutiple days timesheet at once ```start
+vsalocal, vsademo 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
 
 
-bugs staff code wla on vsademo 
+  public function create(Request $request)
+  {
+    $permotioncheck = DB::table('teamrolehistory')
+      ->where('teammember_id', auth()->user()->teammember_id)->first();
+    $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')->get();
+    $teammember = Teammember::where('role_id', '!=', 11)->with('title', 'role')->get();
+    if (auth()->user()->role_id == 11) {
+      $client = Client::where('status', 1)->select('id', 'client_name', 'client_code')->orderBy('client_name', 'ASC')->get();
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+    } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+      $clientssbefore = DB::table('assignmentteammappings')
+        ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      $clientssafter = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+        })
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      // $clients = DB::table('clients')
+      //   ->whereIn('id', [29, 32, 33, 34])
+      //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      //   ->orderBy('client_name', 'ASC')
+      //   ->distinct()->get();
+      // $client = $clientss->merge($clients);
+
+      $selectedDate1 = new \DateTime();
+      $formattedDate = $selectedDate1->format('Y-m-d');
+      $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+      // if ($holidaydatecheck) {
+      //   $clientIds = [29, 32, 33, 34];
+      // } else {
+      //   // if not holidays then go hare
+      //   $dayOfWeek = $selectedDate1->format('w');
+      //   if ($selectedDate1->format('l') == 'Saturday') {
+      //     $dayOfMonth = $selectedDate1->format('j');
+      //     // Calculate which Saturday of the month it is
+      //     $saturdayNumber = ceil($dayOfMonth / 7);
+      //     // offholiday client name will be show on 2nd and 4rth sturday
+      //     if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+      //       $clientIds = [29, 32, 33, 34];
+      //     } else {
+      //       $clientIds = [29, 32, 34];
+      //     }
+      //   } else {
+      //     $clientIds = [29, 32, 34];
+      //   }
+      // }
+
+      $clientIds = [29, 32, 33, 34];
+
+      $clients = DB::table('clients')
+        ->whereIn('id', $clientIds)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()
+        ->get();
+
+      $client = $clientssafter->merge($clientssbefore)->merge($clients);
+    } elseif (auth()->user()->role_id == 13) {
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+      $clientss = DB::table('clients')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.client_id', '=', 'clients.id')
+        ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+        ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+        ->where('assignmentbudgetings.status', 1)
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+        })
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->distinct()
+        ->orderBy('clients.client_name', 'ASC')
+        ->get();
+
+      $selectedDate1 = new \DateTime();
+      $formattedDate = $selectedDate1->format('Y-m-d');
+      $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+      // if ($holidaydatecheck) {
+      //   $clientIds = [29, 32, 33, 34];
+      // } else {
+      //   // if not holidays then go hare
+      //   $dayOfWeek = $selectedDate1->format('w');
+      //   if ($selectedDate1->format('l') == 'Saturday') {
+      //     $dayOfMonth = $selectedDate1->format('j');
+      //     // Calculate which Saturday of the month it is
+      //     $saturdayNumber = ceil($dayOfMonth / 7);
+      //     // offholiday client name will be show on 2nd and 4rth sturday
+      //     if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+      //       $clientIds = [29, 32, 33, 34];
+      //     } else {
+      //       $clientIds = [29, 32, 34];
+      //     }
+      //   } else {
+      //     $clientIds = [29, 32, 34];
+      //   }
+      // }
+      $clientIds = [29, 32, 33, 34];
+
+      $clients = DB::table('clients')
+        ->whereIn('id', $clientIds)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()
+        ->get();
+
+      $client = $clientss->merge($clients);
+    } else {
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+      $clientss = DB::table('assignmentteammappings')
+        ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      // $clients = DB::table('clients')
+      //   ->whereIn('id', [29, 32, 33, 34])
+      //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      //   ->orderBy('client_name', 'ASC')
+      //   ->distinct()->get();
+
+      // $client = $clientss->merge($clients);
+
+      $selectedDate1 = new \DateTime();
+      $formattedDate = $selectedDate1->format('Y-m-d');
+      $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+      // if ($holidaydatecheck) {
+      //   $clientIds = [29, 32, 33, 34];
+      // } else {
+      //   // if not holidays then go hare
+      //   $dayOfWeek = $selectedDate1->format('w');
+      //   if ($selectedDate1->format('l') == 'Saturday') {
+      //     $dayOfMonth = $selectedDate1->format('j');
+      //     // Calculate which Saturday of the month it is
+      //     $saturdayNumber = ceil($dayOfMonth / 7);
+      //     // offholiday client name will be show on 2nd and 4rth sturday
+      //     if (auth()->user()->role_id == 14) {
+      //       if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+      //         $clientIds = [29, 32, 33, 34];
+      //       } else {
+      //         $clientIds = [29, 32, 34];
+      //       }
+      //     } else {
+      //       if ($saturdayNumber == 1.0 || $saturdayNumber == 2.0 || $saturdayNumber == 3.0 || $saturdayNumber == 4.0 || $saturdayNumber == 5.0) {
+      //         $clientIds = [29, 32, 33, 34];
+      //       }
+      //     }
+      //   } else {
+      //     $clientIds = [29, 32, 34];
+      //   }
+      // }
+      $clientIds = [29, 32, 33, 34];
+
+      $clients = DB::table('clients')
+        ->whereIn('id', $clientIds)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()
+        ->get();
+
+      $client = $clientss->merge($clients);
+    }
+    $assignment = Assignment::select('id', 'assignment_name')->get();
+    if ($request->ajax()) {
+
+      if (isset($request->timesheetdate)) {
+        if ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Client</option>";
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+
+
+          $clientssbefore = DB::table('assignmentteammappings')
+            ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          $clientssafter = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            // ->whereNotNull('clients.client_name')
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+          // $clients = DB::table('clients')
+          //   ->whereIn('id', [29, 32, 33, 34])
+          //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          //   ->orderBy('client_name', 'ASC')
+          //   ->distinct()->get();
+
+          // if you selected sturday date then offholydays client will be show otherwise not
+
+          $formattedDate = $selectedDate1->format('Y-m-d');
+          $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+          // if ($holidaydatecheck) {
+          //   $clientIds = [29, 32, 33, 34];
+          // } else {
+          //   // if not holidays then go hare
+          //   $dayOfWeek = $selectedDate1->format('w');
+          //   if ($selectedDate1->format('l') == 'Saturday') {
+          //     $dayOfMonth = $selectedDate1->format('j');
+          //     // Calculate which Saturday of the month it is
+          //     $saturdayNumber = ceil($dayOfMonth / 7);
+          //     // offholiday client name will be show on 2nd and 4rth sturday
+          //     if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+          //       $clientIds = [29, 32, 33, 34];
+          //     } else {
+          //       $clientIds = [29, 32, 34];
+          //     }
+          //   } else {
+          //     $clientIds = [29, 32, 34];
+          //   }
+          // }
+
+          $clientIds = [29, 32, 33, 34];
+          $clients = DB::table('clients')
+            ->whereIn('id', $clientIds)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()
+            ->get();
+
+          // $client = $clientss->merge($clients);
+          $client = $clientssafter->merge($clientssbefore)->merge($clients);
+          foreach ($client as $clients) {
+            echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Client</option>";
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+
+          $clientss = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            // ->whereNotNull('clients.client_name')
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+          // $clients = DB::table('clients')
+          //   ->whereIn('id', [29, 32, 33, 34])
+          //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          //   ->orderBy('client_name', 'ASC')
+          //   ->distinct()->get();
+
+          // if you selected sturday date then offholydays client will be show otherwise not
+
+          $formattedDate = $selectedDate1->format('Y-m-d');
+          $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+          // if ($holidaydatecheck) {
+          //   $clientIds = [29, 32, 33, 34];
+          // } else {
+          //   // if not holidays then go hare
+          //   $dayOfWeek = $selectedDate1->format('w');
+          //   if ($selectedDate1->format('l') == 'Saturday') {
+          //     $dayOfMonth = $selectedDate1->format('j');
+          //     // Calculate which Saturday of the month it is
+          //     $saturdayNumber = ceil($dayOfMonth / 7);
+          //     // offholiday client name will be show on 2nd and 4rth sturday
+          //     if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+          //       $clientIds = [29, 32, 33, 34];
+          //     } else {
+          //       $clientIds = [29, 32, 34];
+          //     }
+          //   } else {
+          //     $clientIds = [29, 32, 34];
+          //   }
+          // }
+
+          $clientIds = [29, 32, 33, 34];
+
+          $clients = DB::table('clients')
+            ->whereIn('id', $clientIds)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()
+            ->get();
+
+          $client = $clientss->merge($clients);
+
+          // foreach ($client as $clients) {
+          //   if ($clients->client_name !== 'Official Travel') {
+          //     echo "<option value='" . $clients->id . "'>" . $clients->client_name . ' ( ' . $clients->client_code . ' )' . "</option>";
+          //   }
+          // }
+
+          foreach ($client as $clients) {
+            echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+          }
+        } else {
+
+          echo "<option value=''>Select Client</option>";
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $clientss = DB::table('assignmentteammappings')
+            ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+          // ->get();
+
+          // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+          // $clients = DB::table('clients')
+          //   ->whereIn('id', [29, 32, 33, 34])
+          //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          //   ->orderBy('client_name', 'ASC')
+          //   ->distinct()->get();
+
+          // $client = $clientss->merge($clients);
+
+
+
+          $formattedDate = $selectedDate1->format('Y-m-d');
+          $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+          // if ($holidaydatecheck) {
+          //   $clientIds = [29, 32, 33, 34];
+          // } else {
+          //   // if not holidays then go hare
+          //   $dayOfWeek = $selectedDate1->format('w');
+          //   if ($selectedDate1->format('l') == 'Saturday') {
+          //     $dayOfMonth = $selectedDate1->format('j');
+          //     // Calculate which Saturday of the month it is
+          //     $saturdayNumber = ceil($dayOfMonth / 7);
+          //     // offholiday client name will be show on 2nd and 4rth sturday
+          //     if (auth()->user()->role_id == 14) {
+          //       if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+          //         $clientIds = [29, 32, 33, 34];
+          //       } else {
+          //         $clientIds = [29, 32, 34];
+          //       }
+          //     } else {
+          //       if ($saturdayNumber == 1.0 || $saturdayNumber == 2.0 || $saturdayNumber == 3.0 || $saturdayNumber == 4.0 || $saturdayNumber == 5.0) {
+          //         $clientIds = [29, 32, 33, 34];
+          //       }
+          //     }
+          //   } else {
+          //     $clientIds = [29, 32, 34];
+          //   }
+          // }
+
+          $clientIds = [29, 32, 33, 34];
+          $clients = DB::table('clients')
+            ->whereIn('id', $clientIds)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()
+            ->get();
+
+          $client = $clientss->merge($clients);
+
+          foreach ($client as $clients) {
+            echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+          }
+        }
+      }
+
+      if (isset($request->cid)) {
+        if ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Assignment</option>";
+
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id', 'clients.client_code')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+
+            $id = $clients[0]->id;
+            $assignments = DB::table('assignmentbudgetings')->where('client_id', $id)
+              ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignments.assignmentname')
+              ->orderBy('assignment_name');
+          } else {
+            $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+            $assignments = DB::table('assignmentbudgetings')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->where(function ($query) {
+                $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                  ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+              })
+              ->where(function ($query) use ($selectedDate) {
+                $query->whereNull('otpverifydate')
+                  ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+              })
+              ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname');
+
+            $additionalAssignments = DB::table('assignmentbudgetings')
+              ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->leftJoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+              ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->where(function ($query) {
+                $query->whereNull('assignmentteammappings.status')
+                  ->orWhere('assignmentteammappings.status', '=', 1);
+              })
+              ->where(function ($query) use ($selectedDate) {
+                $query->whereNull('otpverifydate')
+                  ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+              })
+              ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname');
+
+            $assignments = $assignments->union($additionalAssignments)->orderBy('assignment_name')->get();
+            // dd($assignments);
+          }
+
+          foreach ($assignments as $sub) {
+            echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+
+          echo "<option value=''>Select Assignment</option>";
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              // ->whereIn('id', [29, 32, 33, 34])
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id', 'clients.client_code')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+            // dd($clients);
+            $id = $clients[0]->id;
+            foreach (
+              DB::table('assignmentbudgetings')->where('client_id', $id)
+                ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          } else {
+            // dd('hi 3');
+
+            $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+            // dd($selectedDate);
+            foreach (
+              DB::table('assignmentbudgetings')
+                ->select(
+                  'assignmentbudgetings.assignmentgenerate_id',
+                  'assignments.assignment_name',
+                  'assignmentbudgetings.assignmentname'
+                )
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where(function ($query) {
+                  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')
+                ->distinct() // Ensure unique rows
+                ->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          }
+        } else {
+
+          echo "<option value=''>Select Assignment</option>";
+
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              // ->whereIn('id', [29, 32, 33, 34])
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id', 'clients.client_code')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+            // dd($clients);
+            $id = $clients[0]->id;
+            foreach (
+              DB::table('assignmentbudgetings')->where('client_id', $id)
+                ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          } else {
+            //  i have add this code after kartic bindal problem 
+            $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+            foreach (
+              DB::table('assignmentbudgetings')
+                ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                //  ->where('assignmentteammappings.status', '!=', 0)
+                // ->whereNull('assignmentteammappings.status')
+                ->where(function ($query) {
+                  $query->whereNull('assignmentteammappings.status')
+                    ->orWhere('assignmentteammappings.status', '=', 1);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    //   ->orWhere('otpverifydate', '>=', $selectedDate);
+                    // // ->orWhere('otpverifydate', '>=', $selectedDate);
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          }
+        }
+      }
+
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('assignmentmappings')
+
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          // dd($request->assignment);
+          $partnerbefore = DB::table('assignmentmappings')
+            ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->select('teammembers.id', 'teammembers.team_member');
+
+          // $partnerafter = DB::table('assignmentmappings')
+          //   ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+          //   ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+          //   ->select('teammembers.id', 'teammembers.team_member');
+
+          $partnerafter = DB::table('assignmentmappings')
+            ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->select(DB::raw("
+            CASE
+                WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.id
+                WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.id
+            END as id,
+            CASE
+                WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.team_member
+                WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.team_member
+            END as team_member
+        "));
+
+          $partnerresult = $partnerafter->union($partnerbefore)->get();
+          foreach ($partnerresult as $subs) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('teammembers')
+              ->where('id', auth()->user()->teammember_id)
+              ->select('teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } else {
+
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('assignmentmappings')
+
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        }
+      }
+    } else {
+
+      $authUserId = auth()->user()->teammember_id;
+
+      // Fetch common data
+      $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+        ->where('teamid', $authUserId)
+        ->latest()
+        ->first();
+
+      $datanotexistaftermonday = null;
+      if ($lasttimesheetsubmiteddata) {
+        $carbondate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+        $nextMonday = $carbondate->copy()->next(Carbon::MONDAY);
+        $timesheetRecordcheck = DB::table('timesheetusers')
+          ->where('status', '0')
+          ->where('createdby', $authUserId)
+          ->where('date', $nextMonday->format('Y-m-d'))
+          ->exists();
+
+        if (!$timesheetRecordcheck) {
+          $datanotexistaftermonday = $nextMonday->format('Y-m-d');
+        }
+      }
+
+      $timesheetmaxDateRecord = DB::table('timesheetusers')
+        ->where('status', '0')
+        ->where('createdby', $authUserId)
+        ->orderBy('date', 'desc')
+        ->get();
+
+
+
+      // Available dates extract hare
+      $availableDates = $timesheetmaxDateRecord->pluck('date')->toArray();
+
+      $dateSelectionresult = null;
+      if (!empty($availableDates)) {
+        // Min aur Max Date get
+        $minDate = Carbon::parse(min($availableDates));
+        $maxDate = Carbon::parse(max($availableDates));
+
+        // Continuous date range generate
+        $allDates = [];
+        while ($minDate->lte($maxDate)) {
+          $allDates[] = $minDate->toDateString();
+          $minDate->addDay();
+        }
+
+        // dd($availableDates);
+        // Missing dates find
+        $missingDates = array_diff($allDates, $availableDates);
+        // First missing date get hare
+        $dateSelectionresult = reset($missingDates);
+
+        if (!$dateSelectionresult) {
+          $decrementonedays = $maxDate->copy()->addDay()->toDateString();
+          $dateSelectionresult = $decrementonedays;
+        }
+      }
+
+      // Fetch rejoining data
+      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
+
+
+      $newteammember = null;
+      if (!$lasttimesheetsubmiteddata) {
+        // Fetch new team member joining date
+        $newteammember = DB::table('teammembers')
+          ->where('id', $authUserId)
+          ->value('joining_date');
+      }
+
+      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord', 'newteammember', 'rejoiningdate', 'dateSelectionresult', 'datanotexistaftermonday'));
+    }
+  }
+
+
+
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-resources\views\backEnd\timesheet\weeklylist.blade.php
-find text <td>{{ $timesheetDatas->staffcode }}</td>
-and remove @if statment hare and add this below code 
+resources\views\backEnd\timesheet\create.blade.php
 
-                                    <td>{{ $timesheetDatas->teamnewstaffcode ?? ($timesheetDatas->staffcode ?? '') }}
+replace all code hare 
+
+  <!--Third party Styles(used by this page)-->
+  <link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+  <link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+  <link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+
+  <style>
+      tr td:first-child a.ui-state-default {
+          /* background-color: rgb(234, 0, 0) !important; */
+          background-image: linear-gradient(to right, #34b4e5, rgba(255, 0, 0, 1));
+          color: white !important;
+      }
+
+      tr th:first-child span {
+          color: rgb(249, 5, 5) !important;
+      }
+  </style>
+
+  @extends('backEnd.layouts.layout') @section('backEnd_content')
+      <div class="body-content">
+          <div class="row">
+              <div class="col-md-12 col-lg-12">
+                  <div class="card mb-4">
+                      <form method="post" action="{{ route('timesheet.store') }}" enctype="multipart/form-data"
+                          id="timesheet-form">
+                          @csrf
+                          <div class="card-header" style="background:#37A000">
+                              <div class="d-flex justify-content-between align-items-center">
+                                  <div class="col-md-6">
+                                      <h6 style="color: white" class="fs-17 font-weight-600 mb-0">Add Timesheet</h6>
+                                  </div>
+
+                                  <div class="col-md-5 d-flex align-items-center gap-3">
+                                      <p style="color: white; margin-right: 15px;">
+                                          <b>To Date:</b>
+                                          <input type="text" id="datepickers1" name="todate" readonly>
+                                      </p>
+
+                                      <p style="color: white;">
+                                          <b>From Date:</b>
+                                          <input type="text" id="datepickers2" name="fromdate" readonly>
+                                      </p>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="card-body">
+                              @if ($timesheetrejectData && $timesheetrejectData->status == 2)
+                                  <div class="text-center">
+                                      <a href="{{ url('rejectedlist') }}" class="text-danger font-weight-bold">Please submit
+                                          your rejected timesheet</a>
+                                  </div>
+                              @endif
+                              @component('backEnd.components.alert')
+                              @endcomponent
+                              @include('backEnd.timesheet.form')
+                              <hr class="my-4">
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  @endsection
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <script>
+      $(document).ready(function() {
+          function handleClientChange(clientId) {
+
+              var cid = $('#' + clientId).val();
+              var datepickers = $('#datepickers1').val();
+              var clientNumber = parseInt(clientId.replace('client', ''));
+
+              if (cid == 33) {
+                  var datepickers = $('#day' + clientNumber).val();
+                  //   var datepickers = "08-03-2025";
+                  //   var datepickers = "14-03-2025";
+
+                  if (!datepickers) {
+                      alert("You cannot select this client from the child dropdown.");
+                      $('#client' + clientNumber).val('');
+                      return;
+                  }
+
+
+                  $.ajax({
+                      type: "get",
+                      url: "{{ url('holidaysselect') }}",
+                      data: {
+                          cid: cid,
+                          datepickers: datepickers
+                      },
+
+                      success: function(response) {
+                          //   console.log(response);
+                          var parts = datepickers.split('-');
+                          var formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                          var selectedDate = new Date(formattedDate);
+                          var dayOfWeek = selectedDate.getDay();
+                          var roleId = response.roleId;
+
+                          if (roleId == 13 || roleId == 14) {
+                              if (
+                                  (response.holidayName && response.holidayName !== "null") ||
+                                  (dayOfWeek === 6 && (response.saturday === '2nd Saturday' ||
+                                      response.saturday === '4th Saturday'))
+                              ) {
+                                  applyOffHolidayUI(response, clientNumber);
+                              } else {
+                                  alert(
+                                      'Selection of Off/Holiday client is only allowed on holidays or on 2nd and 4th Saturdays.'
+                                  );
+                                  $('#client' + clientNumber).val('');
+                              }
+
+                          } else {
+                              if (dayOfWeek === 6) {
+                                  applyOffHolidayUI(response, clientNumber);
+                              } else {
+                                  alert(
+                                      'Selection of Off/Holiday client is only allowed on holidays or Saturdays.'
+                                  );
+                                  $('#client' + clientNumber).val('');
+                              }
+                          }
+                      }
+                  });
+
+                  function applyOffHolidayUI(response, clientNumber) {
+                      var workitem = (response.holidayName && response.holidayName !== "null") ?
+                          response.holidayName : (response.saturday || '');
+                      var location = 'N/A';
+                      var time = 0;
+
+                      $('.assignmentvalue' + clientNumber).html(
+                          `<option value="${response.assignmentgenerate_id}">${response.assignment_name} (${response.assignmentname}/${response.assignmentgenerate_id})</option>`
+                      );
+                      $('.partnervalue' + clientNumber).html(
+                          `<option value="${response.team_memberid}">${response.team_member}</option>`
+                      );
+                      $('.workitemnvalue' + clientNumber).val(workitem).prop('readonly', true);
+                      $('.locationvalue' + clientNumber).val(location).prop('readonly', true);
+                      $('#totalhours' + clientNumber).val(time);
+                      $('#hour' + clientNumber).val(time).prop('readonly', true);
+                      $('#plusbuttion' + clientNumber).addClass('d-none');
+                      // Remove ALL extra fields inside the same container when select offholidays client
+                      $('#client' + clientNumber).closest('.field_wrapper').find('.extra_field').remove();
+                  }
+              } else {
+                  $.ajax({
+                      type: "get",
+                      url: "{{ url('timesheet/create') }}",
+                      data: {
+                          cid: cid,
+                          datepickers: datepickers
+                      },
+                      success: function(res) {
+                          $('.assignmentvalue' + clientNumber).empty().append(res);
+                          $('.partnervalue' + clientNumber).empty();
+                          $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+                              false);
+                          $('.locationvalue' + clientNumber).val('').prop('readonly',
+                              false);
+                          $('#hour' + clientNumber).prop('readonly', false);
+                          $('#plusbuttion' + clientNumber).removeClass('d-none');
+                          //   $('#totalhours' + clientNumber).val(0);
+                      }
+                  });
+              }
+          }
+
+          function handleAssignmentChange(assignmentId) {
+              var assignment = $('#' + assignmentId).val();
+              $.ajax({
+                  type: "get",
+                  url: "{{ url('timesheet/create') }}",
+                  data: {
+                      assignment: assignment
+                  },
+                  success: function(res) {
+                      $('#' + assignmentId.replace('assignment', 'partner')).html(res);
+                  }
+              });
+          }
+
+          function calculateTotal(hourId) {
+              //   alert(hourId);
+              var originalhournubmer = parseInt(hourId.replace('hour', ''));
+              var newnumber = originalhournubmer >= 10 ? Math.floor(originalhournubmer / 10) :
+                  originalhournubmer;
+
+
+              //   sum of total child filed like hour10, hour11, etc
+              var total = 0;
+              for (var i = 0; i < 5; i++) {
+                  var input = $(`#hour${newnumber}${i}`);
+                  if (input.length) {
+                      var val = parseFloat(input.val()) || 0;
+                      total += val;
+                  }
+              }
+
+              // Also check the base hour like (hour1)
+              var baseHourInput = $(`#hour${newnumber}`);
+              var baseVal = parseFloat(baseHourInput.val()) || 0;
+              total += baseVal;
+
+              if (total > 12) {
+                  alert("The total hours cannot be greater than 12.");
+                  // reset current field
+                  $(`#${hourId}`).val(0);
+                  //   calculateTotal(hourId); 
+                  return;
+              }
+
+              // Set value to totalhours
+              $(`#totalhours${newnumber}`).val(total);
+          }
+
+          $(document).on("click", ".add_button", function() {
+              // Get index of the clicked button
+              let index = $(this).data("index");
+              // Get the wrapper div
+              let wrapper = $(`#additionalFields${index}`);
+              // Count existing fields
+              let fieldCount = wrapper.find('.extra_field').length;
+
+              if (fieldCount < 4) {
+                  let idincreament = `${index}${fieldCount}`;
+                  //   console.log('index', index);
+                  //   console.log('fieldCount', idincreament);
+                  let newFieldHtml = `
+        <div class="row row-sm extra_field" data-index="${idincreament}" style="padding: 15px;">
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Client Name <span class="text-danger">*</span></label>
+                    <select class="language form-control refresh" name="client_id${index}[]" id="client${idincreament}">
+                        <option value="">Select Client</option>
+                        @foreach ($client as $clientData)
+                            <option value="{{ $clientData->id }}">
+                                {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="min-width: max-content;">Assignment Name <span class="text-danger">*</span></label>
+                    <select class="form-control key refreshoption assignmentvalue${idincreament}" name="assignment_id${index}[]" id="assignment${idincreament}"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600">Partner <span class="text-danger">*</span></label>
+                    <select class="language form-control refreshoption partnervalue${idincreament}" name="partner${index}[]" id="partner${idincreament}"></select>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="width:100px;">Work Item <span class="text-danger">*</span></label>
+                    <textarea type="text" name="workitem${index}[]" class="form-control key workItem${idincreament} refresh workitemnvalue${idincreament}" style="height: 40px;"></textarea>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="font-weight-600" style="width:100px;">Location <span class="text-danger">*</span></label>
+                    <input type="text" name="location${index}[]" class="form-control key location${idincreament} refresh locationvalue${idincreament}">
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group">
+                    <label class="font-weight-600">Hour <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control hour${idincreament} refresh" id="hour${idincreament}" name="hour${index}[]" oninput="calculateTotal(this)" value="0" step="1">
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-group" style="margin-top: 36px; margin-left: 5px;">
+                    <a href="javascript:void(0);" class="remove_button" title="Remove field">
+                        <img src="{{ url('backEnd/image/remove-icon.png') }}" />
+                    </a>
+                </div>
+            </div>
+        </div>`;
+
+                  wrapper.append(newFieldHtml);
+              } else {
+                  alert("You can only add up to 4 fields per section.");
+              }
+          });
+
+          //   $(document).on("click", ".remove_button", function() {
+          //       let subtract = $(this).closest(".extra_field").find("[id^='hour']").val();
+          //       let total = $(this).closest(".extra_field").find(".field_wrapper").find(".totalhours")
+          //           .val();
+
+          //       let result = total - subtract;
+          //       $(this).closest(".extra_field").find(".field_wrapper").find(".totalhours")
+          //           .val(result);
+
+          //       $(this).closest(".extra_field").remove();
+          //   });
+
+          $(document).on("click", ".remove_button", function() {
+              // Get the hour value of the field being removed
+              var hourInput = $(this).closest(".extra_field").find("[id^='hour']");
+              var hoursToSubtract = parseFloat(hourInput.val()) || 0;
+
+              // Get the field wrapper and the total hours input
+              var fieldWrapper = $(this).closest(".field_wrapper");
+              var totalHoursInput = fieldWrapper.find("[id^='totalhours']");
+
+              // Calculate new total
+              var currentTotal = parseFloat(totalHoursInput.val()) || 0;
+              var newTotal = currentTotal - hoursToSubtract;
+
+              // Update the total (ensure it doesn't go below 0)
+              totalHoursInput.val(Math.max(0, newTotal));
+
+              //   console.log("hourInput:", hourInput);
+              //   console.log("hoursToSubtract:", hoursToSubtract);
+              //   console.log("fieldWrapper:", fieldWrapper);
+              //   console.log("totalHoursInput:", totalHoursInput);
+              //   console.log("currentTotal:", currentTotal);
+              //   console.log("newTotal:", newTotal);
+              //   console.log("totalHoursInput:", totalHoursInput);
+
+              // Remove the field
+              $(this).closest(".extra_field").remove();
+          });
+
+
+          $(document).on("change", "[id^='client']", function() {
+              //   alert('hi ');
+              handleClientChange($(this).attr("id"));
+          });
+
+          $(document).on("change", "[id^='assignment']", function() {
+              handleAssignmentChange($(this).attr("id"));
+          });
+
+          //   $(document).on("input", "[class*='hour']", function() {
+          //       calculateTotal($(this).attr("id"));
+          //   });
+          $(document).on("change", "[class*='hour']", function() {
+              calculateTotal($(this).attr("id"));
+          });
+
+      });
+  </script>
+
+  <script>
+      $(function() {
+          $('#timesheet-form').on('submit', function(e) {
+              let isValid = true;
+              let errorMessage = '';
+
+              $('.field_wrapper, .extra_field').each(function() {
+                  const index = $(this).data('index');
+                  const client = $(`#client${index}`).val();
+                  const assignment = $(`#assignment${index}`).val();
+                  const partner = $(`#partner${index}`).val();
+                  const workItem = $(`.workItem${index}`).val();
+                  const location = $(`.location${index}`).val();
+                  const hour = $(`#hour${index}`).val();
+
+                  if (!client) {
+                      isValid = false;
+                      errorMessage = 'Please select a client.';
+                      $(`#client${index}`).focus();
+                      return false;
+                  }
+                  if (!assignment) {
+                      isValid = false;
+                      errorMessage = 'Please select an assignment.';
+                      $(`#assignment${index}`).focus();
+                      return false;
+                  }
+                  if (!partner) {
+                      isValid = false;
+                      errorMessage = 'Please select a partner.';
+                      $(`#partner${index}`).focus();
+                      return false;
+                  }
+                  if (!workItem) {
+                      isValid = false;
+                      errorMessage = 'Please enter a work item.';
+                      $(`.workItem${index}`).focus();
+                      return false;
+                  }
+                  if (!location) {
+                      isValid = false;
+                      errorMessage = 'Please enter a location.';
+                      $(`.location${index}`).focus();
+                      return false;
+                  }
+                  if (!hour || isNaN(hour) || hour < 0) {
+                      isValid = false;
+                      errorMessage = 'Please enter a valid hour.';
+                      $(`#hour${index}`).focus();
+                      return false;
+                  }
+              });
+
+              if (!isValid) {
+                  e.preventDefault();
+                  alert(errorMessage);
+              }
+          });
+      });
+  </script>
+
+
+  <script>
+      $(function() {
+          $('input[name="daterange"]').daterangepicker({
+              opens: 'left'
+          }, function(start, end, label) {
+              console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
+                  .format('YYYY-MM-DD'));
+          });
+      });
+  </script>
+
+  {{-- Refresh page --}}
+  <script>
+      $(function() {
+          $('#datepickers').on('change', function() {
+              var timesheetdate = $(this).val();
+              //   var datepickers = $('#datepickers').val();
+
+              var refreshpage = $('.refresh');
+              refreshpage.val('').prop("readonly", false);
+              $('.refreshoption option').remove();
+              //   $("#hour1,#hour2,#hour3,#hour4,#hour5").prop("readonly", false);
+              $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+
+              //   alert(datepickers);
+              $.ajax({
+                  type: "get",
+                  url: "{{ url('timesheet/create') }}",
+                  data: {
+                      timesheetdate: timesheetdate
+                  },
+                  success: function(res) {
+                      $('#client').html(res);
+                      $('#client1').html(res);
+                      $('#client2').html(res);
+                      $('#client3').html(res);
+                      $('#client4').html(res);
+                  },
+                  error: function() {},
+              });
+          });
+      });
+  </script>
+  <script>
+      $(function() {
+          var startDate = new Date();
+          $("#datepickers").datepicker({
+              maxDate: startDate,
+              dateFormat: 'dd-mm-yy'
+          });
+      });
+  </script>
+
+  <script>
+      // Pass the PHP data to JavaScript
+      var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+      var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
+      var dateSelectionresult = @json($dateSelectionresult);
+      var newteammember = @json($newteammember);
+      var rejoiningdate = @json($rejoiningdate);
+      var datanotexistaftermonday = @json($datanotexistaftermonday);
+  </script>
+
+  <!--Page Active Scripts(used by this page)-->
+  <script src="{{ url('backEnd/dist/js/pages/forms-basic.active.js') }}"></script>
+  <!--Page Scripts(used by all page)-->
+  <script src="{{ url('backEnd/dist/js/sidebar.js') }}"></script>
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\form.blade.php
+replace all code hare 
+
+<div id="fieldContainer">
+
+</div>
+<hr>
+
+
+
+<div class="form-group">
+    <button type="submit" class="btn btn-success" style="float:right"> Save</button>
+    <a class="btn btn-secondary" href="{{ url('timesheet') }}">Back</a>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        function generateFields(date1Str, date2Str, existingDates = []) {
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            let fieldContainer = $("#fieldContainer");
+            fieldContainer.empty();
+
+            for (let i = 0; i <= differenceDays; i++) {
+                let currentDate = new Date(formattedDate1);
+                currentDate.setDate(currentDate.getDate() + i);
+
+                let formattedDate = ('0' + currentDate.getDate()).slice(-2) + '-' +
+                    ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+                    currentDate.getFullYear();
+
+                if (existingDates.includes(formattedDate)) {
+                    continue;
+                }
+
+                let fieldHtml = `
+                <div class="field_wrapper p-3 mb-4" data-index="${i+1}" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+                    <div class="row row-sm mb-2">
+                        <div class="col-2">
+                            <input type="text" id="day${i+1}" name="day${i+1}" class="form-control" value="${formattedDate}" readonly>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" class="time form-control" id="totalhours${i+1}" name="totalhour${i+1}" value="{{ $timesheet->hour ?? '0' }}" autocomplete="off" readonly>
+                        </div>
+                    </div>
+                    <div class="row row-sm showdiv${i+1}" id="additionalFields${i+1}">
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Client Name <span class="text-danger">*</span></label>
+                                <select class="language form-control refresh" name="client_id${i+1}[]" id="client${i+1}">
+                                    <option value="">Select Client</option>
+                                    @foreach ($client as $clientData)
+                                        <option value="{{ $clientData->id }}">{{ $clientData->client_name }} ({{ $clientData->client_code }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
+                                <select class="form-control key refreshoption assignmentvalue${i+1}" name="assignment_id${i+1}[]" id="assignment${i+1}"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Partner <span class="text-danger">*</span></label>
+                                <select class="language form-control refreshoption partnervalue${i+1}" id="partner${i+1}" name="partner${i+1}[]"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Work Item <span class="text-danger">*</span></label>
+                                <textarea name="workitem${i+1}[]" class="form-control key workItem${i+1} refresh workitemnvalue${i+1}" style="height: 40px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Location <span class="text-danger">*</span></label>
+                                <input type="text" name="location${i+1}[]" class="form-control key location${i+1} refresh locationvalue${i+1}">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group">
+                                <label class="font-weight-600">Hour <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control hour${i+1} refresh" id="hour${i+1}" name="hour${i+1}[]" oninput="calculateTotal(this)" value="0" step="1">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group" style="margin-top: 36px;">
+                                <a href="javascript:void(0);" class="add_button" id="plusbuttion${i+1}" data-index="${i+1}" title="Add field">
+                                    <img src="{{ url('backEnd/image/add-icon.png') }}" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                fieldContainer.append(fieldHtml);
+            }
+        }
+
+        function fetchAndRender() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $("#datepickers2").val();
+
+            if (!date1Str || !date2Str) return;
+
+            $.ajax({
+                url: "{{ url('filterleavedata') }}",
+                type: "GET",
+                data: {
+                    start_date: date1Str,
+                    end_date: date2Str
+                },
+                success: function(existingDates) {
+                    generateFields(date1Str, date2Str, existingDates);
+                },
+                error: function() {
+                    alert("Something went wrong while fetching leave data.");
+                }
+            });
+        }
+
+        // Trigger on page load (if both dates are already filled)
+        fetchAndRender();
+
+        // Trigger on end date change
+        $('#datepickers2').on('change', fetchAndRender);
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+ if (datanotexistaftermonday && !rejoiningdate) {
+ 
+ 
+
+     <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             // Declare endDate outside of the conditions
+             let endDate = null;
+
+             // Function to parse and validate dates
+             function parseDate(date) {
+                 let parsedDate = new Date(date);
+                 if (isNaN(parsedDate)) {
+                     console.error("Invalid date format:", date);
+                     return null;
+                 }
+                 return parsedDate;
+             }
+
+             // Helper function to adjust endDate
+             function adjustEndDateForWeekend(date) {
+                 if (date.getDay() === 6) {
+                     console.log("Incremented date is Sunday, adding another day.");
+                     date.setDate(date.getDate() + 1); // Increment by one more day
+                 }
+             }
+
+             // Check the conditions for calculating the endDate
+             if (datanotexistaftermonday && !rejoiningdate) {
+                 endDate = parseDate(datanotexistaftermonday);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (rejoiningdate && timesheetmaxDateRecord.length === 0) {
+                 console.log("Using rejoiningdate data:", rejoiningdate);
+                 endDate = parseDate(rejoiningdate);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+             } else if (newteammember && !lasttimesheetsubmiteddata) {
+                 if (!lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0) {
+                     endDate = parseDate(newteammember);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 } else {
+                     endDate = parseDate(dateSelectionresult);
+                     if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 }
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length > 0 && dateSelectionresult) {
+                 endDate = parseDate(dateSelectionresult);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+                 //  if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord.length === 0 && !dateSelectionresult) {
+                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                 if (endDate) adjustEndDateForWeekend(endDate);
+             }
+
+             // Set date in the datepicker if endDate is valid
+             if (endDate) {
+                 let today = new Date();
+                 today.setHours(0, 0, 0, 0); // Normalize today's date
+                 endDate.setHours(0, 0, 0, 0); // Normalize endDate
+
+                 // If endDate is before today, shift it to tomorrow
+                 if (endDate.getTime() < today.getTime()) {
+                     endDate.setDate(endDate.getDate() + 1);
+                 }
+
+                 let originalDate = new Date(endDate); // Store the original date
+
+                 // **Find Next Sunday**  
+                 while (endDate.getDay() !== 0) {
+                     endDate.setDate(endDate.getDate() + 1);
+                 }
+
+                 //  prevent date after current date 
+                 if (endDate.getTime() > today.getTime()) {
+                     endDate.setDate(today.getDate());
+                     //  endDate = new Date(today);
+                 }
+
+                 console.log('Original Date:', originalDate);
+                 console.log('Next Sunday:', endDate);
+
+                 // **Format Dates**
+                 let toDateFormatted = ('0' + originalDate.getDate()).slice(-2) + '-' +
+                     ('0' + (originalDate.getMonth() + 1)).slice(-2) + '-' +
+                     originalDate.getFullYear();
+
+                 let fromDateFormatted = ('0' + endDate.getDate()).slice(-2) + '-' +
+                     ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                     endDate.getFullYear();
+
+                 // **Set values in inputs**
+                 document.getElementById('datepickers1').value = toDateFormatted; // To Date
+                 document.getElementById('datepickers2').value = fromDateFormatted; // From Date (Next Sunday)
+
+                 // **Initialize Datepickers**
+                 $("#datepickers1").datepicker({
+                     maxDate: originalDate, // Original Date
+                     minDate: originalDate, // Original Date
+                     dateFormat: 'dd-mm-yy'
+                 });
+
+                 $("#datepickers2").datepicker({
+                     maxDate: endDate, // Next Sunday
+                     minDate: originalDate, // Original Date
+                     dateFormat: 'dd-mm-yy'
+                 });
+
+                 //  //  this code will be refresh data according end date
+                 //  if (endDate.getTime() !== today.getTime()) {
+                 //      let timesheetdate = toDateFormatted;
+                 //      var refreshpage = $('.refresh');
+                 //      refreshpage.val('').prop("readonly", false);
+                 //      $('.refreshoption option').remove();
+                 //      $("#hour1,#hour2,#hour3,#hour4,#hour5").val(0);
+                 //      $.ajax({
+                 //          type: "get",
+                 //          url: "{{ url('timesheet/create') }}",
+                 //          data: {
+                 //              timesheetdate: timesheetdate
+                 //          },
+                 //          success: function(res) {
+                 //              $('#client').html(res);
+                 //              $('#client1').html(res);
+                 //              $('#client2').html(res);
+                 //              $('#client3').html(res);
+                 //              $('#client4').html(res);
+                 //          },
+                 //          error: function() {},
+                 //      });
+                 //  }
+                 //  //  this code will be refresh data according end date end hare 
+
+                 console.log("Adjusted date set in datepicker:", endDate);
+             } else {
+                 console.log("No valid timesheet or submitted date data found to set datepicker.");
+             }
+         });
+     </script>
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+routes\web.php
+find   Route::get('/totaltimeshow/filter', [TimesheetController::class, 'assignmentHourShowfilter']);
+add this route 
+
+Route::get('/filterleavedata', [TimesheetController::class, 'filterleavedata']);
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+ public function filterleavedata(Request $request)
+  {
+    $start = Carbon::createFromFormat('d-m-Y', $request->start_date)->format('Y-m-d');
+    $end = Carbon::createFromFormat('d-m-Y', $request->end_date)->format('Y-m-d');
+    // dd('djd');
+
+    $dates = DB::table('timesheetusers')
+      ->where('status', '0')
+      ->where('client_id', 134)
+      ->where('createdby', auth()->user()->teammember_id)
+      ->whereBetween('date', [$start, $end])
+      ->pluck('date')
+      ->map(function ($date) {
+        return Carbon::parse($date)->format('d-m-Y');
+      });
+    // dd($dates);
+
+    return response()->json($dates);
+  }
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+  public function holidaysselect(Request $request)
+  {
+    if ($request->ajax()) {
+
+      $selectedDate = date('Y-m-d', strtotime($request->datepickers));
+
+      // Get the day of the week (0 for Sunday, 6 for Saturday)
+      $dayOfWeek = date('w', strtotime($selectedDate));
+      if ($dayOfWeek == 6) {
+        // Get the day of the month
+        $dayOfMonth = date('j', strtotime($selectedDate));
+        // Calculate which Saturday of the month it is
+        $saturdayNumber = ceil($dayOfMonth / 7);
+        if ($saturdayNumber == 1.0) {
+          $saturday = '1st Saturday';
+        } elseif ($saturdayNumber == 2.0) {
+          $saturday = '2nd Saturday';
+        } elseif ($saturdayNumber == 3.0) {
+          $saturday = '3rd Saturday';
+        } elseif ($saturdayNumber == 4.0) {
+          $saturday = '4th Saturday';
+        } elseif ($saturdayNumber == 5.0) {
+          $saturday = '5th Saturday';
+        }
+      }
+      $holidayname = DB::table('holidays')->where('startdate', $selectedDate)->select('holidayname')->first();
+      $selectassignment = DB::table('assignmentbudgetings')->where('client_id', $request->cid)
+        ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+        ->orderBy('assignment_name')->first();
+      $selectpartner = DB::table('assignmentmappings')
+        ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+        ->where('assignmentmappings.assignmentgenerate_id', $selectassignment->assignmentgenerate_id)
+        ->select('teammembers.team_member', 'teammembers.id')
+        ->first();
+
+      $roleId = auth()->user()->role_id;
+
+      return response()->json([
+        'holidayName' => $holidayname->holidayname ?? 'null',
+        'saturday' => $saturday ?? 'null',
+        'assignmentid' => $selectassignment->id,
+        'assignmentgenerate_id' => $selectassignment->assignmentgenerate_id,
+        'assignmentname' => $selectassignment->assignmentname,
+        'assignment_name' => $selectassignment->assignment_name,
+        'team_member' => $selectpartner->team_member,
+        'team_memberid' => $selectpartner->id,
+        'roleId' =>   $roleId,
+      ]);
+    }
+  }
+  
+  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php  
+ alert("The total hours cannot be greater than 12.");
+replace it  if (total > 12) {
+
+             if (total > 12) {
+                 alert("The total hours cannot be greater than 12.");
+                 // Reset current field to 0
+                 $(`#${hourId}`).val(0);
+
+                 total = 0;
+                 // Sum base hour (e.g., hour1)
+                 var baseVal = parseFloat($(`#hour${newnumber}`).val()) || 0;
+                 total += baseVal;
+
+                 // Sum child hours (e.g., hour10, hour11, etc.)
+                 for (var i = 0; i < 5; i++) {
+                     var input = $(`#hour${newnumber}${i}`);
+                     if (input.length) {
+                         // Skip the field we just reset if it's a child field
+                         if (input.attr('id') !== hourId) {
+                             total += parseFloat(input.val()) || 0;
+                         }
+                     }
+                 }
+             }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+  public function store(Request $request)
+  {
+    try {
+      $Newteammeber = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->first();
+
+      // check promotion data
+      $pormotionandrejoiningdata = DB::table('teammembers')
+        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+        ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+        ->where('teammembers.id', auth()->user()->teammember_id)
+        ->select(
+          'teammembers.team_member',
+          'teammembers.staffcode',
+          'teammembers.joining_date',
+          'teamrolehistory.newstaff_code',
+          'teamrolehistory.rejoiningdate',
+          'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+        )
+        ->first();
+
+      $joiningDate = $pormotionandrejoiningdata->joining_date ? Carbon::parse($pormotionandrejoiningdata->joining_date) : null;
+      $rejoiningDateRaw = $pormotionandrejoiningdata->rejoiningdate ?? $pormotionandrejoiningdata->samepostrejoiningdate;
+      $rejoiningDate = $rejoiningDateRaw ? Carbon::parse($rejoiningDateRaw) : null;
+      $requestDate = Carbon::parse($request->day1);
+
+      // hare only created timesheet before joinig date like NA
+      if (!$Newteammeber || $rejoiningDate) {
+        if ($rejoiningDate && $requestDate < $rejoiningDate) {
+          return redirect('timesheet/mylist')->with('statuss', ['msg' => 'You can not fill timesheet before Rejoining date : ' . $rejoiningDate->format('d-m-Y')]);
+        }
+
+        if ($joiningDate && $requestDate < $joiningDate) {
+          return redirect('timesheet/mylist')->with('statuss', ['msg' => 'You can not fill timesheet before Joining date : ' . $joiningDate->format('d-m-Y')]);
+        }
+
+        // Determine base date
+        $baseDate = $rejoiningDate ?? $joiningDate;
+        $previousSunday = $baseDate->copy()->startOfWeek(Carbon::SUNDAY);
+        $period = CarbonPeriod::create($previousSunday, $baseDate);
+
+        $datesToInsert = collect($period)->slice(1, -1); // skip first and last day
+
+        foreach ($datesToInsert as $date) {
+          $dateString = $date->toDateString();
+
+          $alreadyExists = DB::table('timesheets')
+            ->where('date', $dateString)
+            ->where('created_by', auth()->user()->teammember_id)
+            ->exists();
+
+          if (!$alreadyExists) {
+            $timesheetId = DB::table('timesheets')->insertGetId([
+              'created_by' => auth()->user()->teammember_id,
+              'month' => $date->format('F'),
+              'date' => $dateString,
+              'created_at' => now(),
+            ]);
+
+            DB::table('timesheetusers')->insert([
+              'date' => $dateString,
+              'client_id' => 29,
+              'workitem' => 'NA',
+              'location' => 'NA',
+              'timesheetid' => $timesheetId,
+              'hour' => 0,
+              'totalhour' => 0,
+              'assignment_id' => 213,
+              'partner' => 887,
+              'createdby' => auth()->user()->teammember_id,
+              'created_at' => now(),
+              'updated_at' => now(),
+            ]);
+          }
+        }
+      }
+
+
+      if ($requestDate >= $joiningDate) {
+        if ($rejoiningDate && $requestDate < $rejoiningDate) {
+          return redirect('timesheet')->with('success', ['msg' => 'You can not fill timesheet before Rejoining date : ' . $rejoiningDate->format('d-m-Y')]);
+        }
+
+        $data = $request->except(['_token', 'teammember_id', 'amount']);
+
+        // insert data in timesheet and timesheetusers table 
+        for ($j = 1; $j <= 7; $j++) {
+          $dayKey = 'day' . $j;
+          if (!isset($request->$dayKey)) {
+            continue;
+          }
+          // dd($request->$dayKey);
+          // check allready submited
+          if (date('w', strtotime($request->$dayKey)) == 0) {
+            $previousSaturday = date('Y-m-d', strtotime('-1 day', strtotime($request->$dayKey)));
+            $previousSaturdayFilled = DB::table('timesheetusers')
+              ->where('createdby', auth()->user()->teammember_id)
+              ->where('date', $previousSaturday)
+              ->where('status', 1)
+              ->first();
+
+            if ($previousSaturdayFilled != null) {
+              $output = array('msg' => 'You already submitted for this week');
+              return back()->with('success', $output);
+            }
+          }
+
+          $previouschck = DB::table('timesheetusers')
+            ->where('createdby', auth()->user()->teammember_id)
+            ->where('date', date('Y-m-d', strtotime($request->$dayKey)))
+            ->where('status', 1)
+            ->first();
+
+          if ($previouschck != null) {
+            $output = array('msg' => 'You already submitted for this week');
+            return back()->with('success', $output);
+          }
+
+          $previoussavechck = DB::table('timesheetusers')
+            ->where('createdby', auth()->user()->teammember_id)
+            ->where('date', date('Y-m-d', strtotime($request->$dayKey)))
+            ->where('status', 0)
+            ->first();
+
+          if ($previoussavechck != null) {
+            $output = array('msg' => 'You already submitted for this date');
+            return back()->with('success', $output);
+          }
+
+          // today timesheet validation 
+          $timesheetAccess = DB::table('teammembers')
+            ->where('id', auth()->user()->teammember_id)
+            ->value('timesheet_access');
+
+          $currentDate = Carbon::now()->format('d-m-Y');
+          // $currentDate = "07-03-2025";
+
+          if ($timesheetAccess == 0  && $currentDate == $request->$dayKey && Carbon::now()->hour < 18) {
+            $output = array('msg' => 'You can only fill today timesheet after 6:00 pm');
+            return back()->with('success', $output);
+          }
+
+          // Exam leave validation  optimized code 
+          $leaves = DB::table('applyleaves')
+            ->where('createdby', auth()->user()->teammember_id)
+            ->where('status', '!=', 2)
+            ->select('from', 'to')
+            ->get();
+
+          $currentday = Carbon::parse($request->$dayKey)->format('Y-m-d');
+
+          // Proceed only if leaves exist
+          if (!$leaves->isEmpty()) {
+            foreach ($leaves as $leave) {
+              $start = Carbon::parse($leave->from);
+              $end = Carbon::parse($leave->to);
+
+              if ($currentday >= $start->format('Y-m-d') && $currentday <= $end->format('Y-m-d')) {
+                $output = array('msg' => 'You Have Leave for the Day (' . Carbon::parse($currentday)->format('d-m-Y') . '). Please Approved/Reject leave');
+                return redirect('timesheet')->with('statuss', $output);
+              }
+            }
+          }
+          // Exam leave validation ends here
+
+          $id = DB::table('timesheets')->insertGetId([
+            'created_by' => auth()->user()->teammember_id,
+            'month' => date('F', strtotime($request->$dayKey)),
+            'date' => date('Y-m-d', strtotime($request->$dayKey)),
+            'created_at' => now(),
+            'updated_at' => now(),
+          ]);
+
+          $count = count($request->{'assignment_id' . $j});
+          for ($k = 0; $k < $count; $k++) {
+            $assignment = DB::table('assignmentmappings')->where('assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])->first();
+
+            DB::table('timesheetusers')->insert([
+              'date' => date('Y-m-d', strtotime($request->$dayKey)),
+              'client_id' => $request->{'client_id' . $j}[$k],
+              'assignmentgenerate_id' => $request->{'assignment_id' . $j}[$k],
+              'workitem' => $request->{'workitem' . $j}[$k],
+              'location' => $request->{'location' . $j}[$k],
+              'timesheetid' => $id,
+              'hour' => $request->{'hour' . $j}[$k],
+              'totalhour' => $request->{'totalhour' . $j},
+              'assignment_id' => $assignment->assignment_id ?? null,
+              'partner' => $request->{'partner' . $j}[$k],
+              'createdby' => auth()->user()->teammember_id,
+              'created_at' => now(),
+              'updated_at' => now(),
+            ]);
+
+            // total hour update
+            if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+              $getTotalTeamHour = DB::table('assignmentteammappings')
+                ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where('assignmentmappings.assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->value('teamhour') ?? 0;
+
+              $finalResult = $getTotalTeamHour + $request->{'hour' . $j}[$k];
+
+              DB::table('assignmentteammappings')
+                ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->where('assignmentmappings.assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->update(['teamhour' => $finalResult]);
+            }
+
+            if (auth()->user()->role_id == 13) {
+
+              $assignmentdata = DB::table('assignmentmappings')
+                ->where('assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                ->first();
+
+              $finalresultleadpatner =  $assignmentdata->leadpartnerhour + $request->{'hour' . $j}[$k];
+              $finalresultotherpatner =  $assignmentdata->otherpartnerhour + $request->{'hour' . $j}[$k];
+
+              if ($assignmentdata->leadpartner == auth()->user()->teammember_id) {
+                $update = DB::table('assignmentmappings')
+                  ->where('assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                  ->where('leadpartner', auth()->user()->teammember_id)
+                  ->update(['leadpartnerhour' => $finalresultleadpatner]);
+              }
+              if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+                $update = DB::table('assignmentmappings')
+                  ->where('assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                  ->where('otherpartner', auth()->user()->teammember_id)
+                  ->update(['otherpartnerhour' => $finalresultotherpatner]);
+              }
+
+              if ($assignmentdata->otherpartner != auth()->user()->teammember_id && $assignmentdata->leadpartner != auth()->user()->teammember_id) {
+                $getTotalTeamHour = DB::table('assignmentteammappings')
+                  ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                  ->where('assignmentmappings.assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                  ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                  ->value('teamhour') ?? 0;
+
+                $finalResult = $getTotalTeamHour + $request->{'hour' . $j}[$k];
+
+                DB::table('assignmentteammappings')
+                  ->join('assignmentmappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                  ->where('assignmentmappings.assignmentgenerate_id', $request->{'assignment_id' . $j}[$k])
+                  ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                  ->update(['teamhour' => $finalResult]);
+              }
+            }
+          }
+        }
+        // dd('COMPLETED');
+      } else {
+        return redirect('timesheet')->with('success', ['msg' => 'You can not fill timesheet before Rejoining date : ' . $rejoiningDate->format('d-m-Y')]);
+      }
+
+      $output = array('msg' => 'Create Successfully');
+      if (auth()->user()->role_id == 14 || auth()->user()->role_id == 13 || auth()->user()->role_id == 15) {
+        return redirect('timesheet/mylist')->with('success', $output);
+      } else {
+        return redirect('timesheet')->with('success', $output);
+      }
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      $output = array('msg' => $e->getMessage());
+      return back()->withErrors($output)->withInput();
+    }
+  }
+
+
+
+C:\xampp\htdocs\vsademo
+vsademo fixed offholidays client isme sirf ye below tables hai 
+
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+
+after that all below tables clean karwaye 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+11.applyleaves  
+12.attendances
+
+13.Users table me role id = 14
+14.teammembers table me leaving date = null and role id = 14
+
+16.teamrolehistory
+17.rejoiningsamepost
+
+Need option to fill mutiple days timesheet at once ```end hare 
+
+
+Required attachment to be visible in notification module in OMS. ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\notification\index.blade.php
+
+{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+
+
+<table id="examplee" class="display nowrap">
+replace table tag
+
+                    <table id="examplee" class="table display table-bordered table-striped table-hover">
+
+
+
+
+<th>Target</th>
+
+                                @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                                    <th>Target</th>
+                                @endif
+                                <th>Attachment</th>
+								
+								
+			
+			
+								
+ $targetTypes = $allTargets[$notificationData->duplicate_notifications]   after this td add below code 								
+								
+                                    <td>
+                                        @if ($notificationData && $notificationData->realname)
+                                            <a href="{{ url('backEnd/image/test/' . $notificationData->attachment) }}"
+                                                target="blank">
+                                                {{ $notificationData->realname ?? 'NA' }}
+                                            </a>
+                                        @else
+                                            {{ 'NA' }}
+                                        @endif
+                                    </td>	
+
+
+
+
+
+$(document).ready(function() {
+
+
+<script>
+    $(document).ready(function() {
+        const isRole11 = {{ Auth::user()->role_id == 11 ? 'true' : 'false' }};
+
+        const nonOrderableColumns = isRole11 ? [0, 1, 3, 4] : [0, 1, 3];
+        const exportColumns = isRole11 ? [1, 2, 3, 4] : [1, 2, 3];
+
+        $('#examplee').DataTable({
+            dom: 'Bfrtip',
+            order: [
+                [2, 'desc']
+            ],
+            columnDefs: [{
+                targets: nonOrderableColumns,
+                orderable: false
+            }],
+            buttons: [{
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    filename: 'Notification',
+                    exportOptions: {
+                        columns: ':visible',
+                        format: {
+                            body: function(data, row, column) {
+                                const cleanedText = $(data).text().trim();
+
+                                if (column === 1) {
+                                    const parts = cleanedText.split('-');
+                                    return parts.length === 3 ?
+                                        `${parts[2]}-${parts[1]}-${parts[0]}` :
+                                        cleanedText;
+                                }
+                                return cleanedText;
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    filename: 'Notification',
+                    exportOptions: {
+                        columns: exportColumns
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>									
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\NotificationController.php
+$notification_id = DB::table('notifications')->insertGetId([
+
+                    'attachment'    => $name,
+                    'realname'    => $realname,
+
+
+
+
+
+
+ if ($request->hasFile('attachment')) {
+
+
+
+            $attachmentPath = '';
+            $name = '';
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $realname = $file->getClientOriginalName();
+                $name = time() . $realname;
+                $attachmentPath = public_path('backEnd/image/test/' . $name);
+                $file->move('backEnd/image/test', $name);
+            }
+			
+			
+	
+resources\views\backEnd\notification\index.blade.php
+$targetTypes =
+
+	 <td class="textfixed">
+
+
+
+resources\views\backEnd\notification\view.blade.php
+<div class="card-body"
+
+
+             <div class="card-body" style="font-family: 'Segoe UI', sans-serif;">
+                 <div>
+                     {!! $notificationData->mail_content !!}
+                 </div>
+                 @if ($notificationData && $notificationData->realname)
+                     <div
+                         style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px; display: flex; align-items: center;">
+                         <span style="font-size: 15px; margin-right: 10px;"> <strong>Attachment:</strong></span>
+                         <a href="{{ url('backEnd/image/test/' . $notificationData->attachment) }}" target="_blank"
+                             style="text-decoration: underline;">
+                             {{ $notificationData->realname }}
+                         </a>
+                     </div>
+                 @endif
+             </div>
+			 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222		 
+resources\views\backEnd\notification\create.blade.php
+@endsection after this add all below code 
+
+
+<script src="{{ url('backEnd/ckeditor/ckeditor.js') }}"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            // toolbar: [ 'heading', '|', 'bold', 'italic', 'link' ]
+        })
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(err => {
+            console.error(err.stack);
+        });
+</script>
+<script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Add required validation
+        $('form').on('submit', function(e) {
+            // Check if Summernote content is empty
+            var summernoteContent = $('#summernote').summernote('isEmpty');
+            if (summernoteContent) {
+                alert('Announcement Content is required.');
+                e.preventDefault(); // Prevent form submission
+                return false;
+            }
+
+            // Get the submit button
+            const sendButton = document.getElementById('sendButton');
+            // Disable the submit button to prevent multiple submissions
+            if (sendButton) {
+                sendButton.disabled = true;
+                sendButton.textContent = "Sending...";
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#exampleFormControlSelect111').on('change', function() {
+            if (this.value == '1') {
+                $("#designation").show();
+                document.getElementById("designationinput").required = true;
+            } else {
+                $("#designation").hide();
+                document.getElementById("designationinput").required = false;
+            }
+        });
+    });
+</script>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\notification\form.blade.php
+Send</button>
+
+    <button type="submit" id="sendButton" class="btn btn-success" style="float:right">Send</button>
+			 
+		
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\NotificationController.php
+
+       public function store(Request $request)
+    {
+        $request->validate([
+            'attachment' => 'nullable|mimes:png,pdf,jpeg,jpg,xls,xlsx|max:4120',
+        ], [
+            'attachment.max' => 'The file may not be greater than 5 MB.',
+        ]);
+
+        try {
+            $authid = auth()->user()->teammember_id;
+            $data = $request->except(['_token']);
+
+            // Initialize the attachment path
+            $attachmentPath = null;
+            $name = null;
+            $realname = null;
+            $mimeType = null;
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                // dd($file);
+                $realname = $file->getClientOriginalName();
+                $name = time() . $realname;
+                $attachmentPath = public_path('backEnd/image/test/' . $name);
+                $file->move('backEnd/image/test', $name);
+                $mimeType = $file->getClientMimeType();
+            }
+
+
+            $duplicatecodemax = DB::table('notifications')->max('duplicate_notifications');
+            $maxincreament = $duplicatecodemax ? $duplicatecodemax + 1 : 2001;
+
+            foreach ($request->targettype as $targetType) {
+                $notification_id = DB::table('notifications')->insertGetId([
+                    'title'         => $request->title,
+                    'created_by'    => $authid,
+                    'targettype'    => $targetType,
+                    'mail_content'  => $request->mail_content,
+                    'attachment'    => $name,
+                    'realname'      => $realname,
+                    'duplicate_notifications'    => $maxincreament,
+                    'created_at'    => date('Y-m-d H:i:s'),
+                    'updated_at'    => date('Y-m-d H:i:s'),
+                ]);
+
+                // Check if the targettype is 1 and insert team member IDs
+                if ($targetType == 1 && isset($request->teammember_id)) {
+                    foreach ($request->teammember_id as $teammember_id) {
+                        DB::table('notificationtargets')->insert([
+                            'notification_id' => $notification_id,
+                            'teammember_id'   => $teammember_id,
+                            'created_at'      => date('Y-m-d'),
+                            'updated_at'      => date('Y-m-d'),
+                        ]);
+                    }
+                }
+            }
+
+            // 1 exist or not in array of $request->targettype
+            if (in_array(1, $request->targettype)) {
+                $teammembers = Teammember::wherein('id', $request->teammember_id)->pluck('emailid')->toArray();
+
+                // dd($teammembers);
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'attachment' =>  $request->attachment,
+                        'emailid' =>  $teammember,
+                    );
+
+
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+            if (in_array(2, $request->targettype)) {
+
+                $teammembers = Teammember::where('status', 1)->pluck('emailid')->toArray();
+                //    dd($teammembers);
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+
+                    //  $data['mail']=$teammembers;
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+            if (in_array(3, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 13)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+            if (in_array(4, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 14)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+            if (in_array(5, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 15)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+            if (in_array(6, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 16)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+                    );
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+            if (in_array(7, $request->targettype)) {
+                $teammembers = Teammember::where('role_id', 17)->where('status', 1)->pluck('emailid')->toArray();
+                foreach ($teammembers as $teammember) {
+                    $data = array(
+                        'title' =>  $request->title,
+                        'mail_content' =>  $request->mail_content,
+                        'emailid' =>  $teammember,
+
+                    );
+
+                    try {
+                        Mail::send('emails.notificationmail', $data, function ($msg) use ($data, $attachmentPath, $name, $mimeType) {
+                            $msg->to($data['emailid']);
+                            $msg->subject($data['title']);
+
+                            // Attach the file to the email
+                            if ($attachmentPath != null) {
+                                $msg->attach($attachmentPath, [
+                                    'as' => $name,
+                                    'mime' => $mimeType,
+                                ]);
+                            }
+                        });
+                        Log::info("Email sent successfully to: " . $data['emailid']);
+                    } catch (\Exception $e) {
+                        Log::error("Failed to send email to: " . $data['emailid'] . ". Error: " . $e->getMessage());
+                    }
+                }
+            }
+
+            $output = array('msg' => 'Sent Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+		
+			
+add column realname in notification tables 
+
+C:\xampp\htdocs\vsademo\public\backEnd\image hare create test folder 
+
+Required attachment to be visible in notification module in OMS ```end 
+
+
+Required a new report for "Pending Independence Confirmation" under the Report tab. ```start hare
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+<li><a href="{{ url('attendance') }}">Attendance</a></li>
+
+
+                                  @if (Auth::user()->role_id == 14 || Auth::user()->role_id == 15)
+                                      <li><a href="{{ url('attendance') }}">Attendance</a></li>
+                                  @endif
+
+                                  @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 13)
+                                      <li><a href="{{ url('independencereport') }}">Independence</a>
+                                      </li>
+                                  @endif
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+find   Route::any('/independencepending/mail/{id}', [IndependenceController::class, 'pendingmail']);
+
+  Route::get('/independencereport', [IndependenceController::class, 'independencereport']);
+
+  Route::any('/filterindependencereport',  [IndependenceController::class, 'filterindependencereport']);
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\IndependenceController.php
+public function store(Request $request)
+add below code after this 
+
+    public function independencereport()
+    {
+        // remove old input data hare 
+        session()->forget('_old_input');
+        // All assignment data 
+        $assignmentRecords = DB::table('assignmentmappings')
+            ->where('independenceform', 2)
+            ->get();
+
+        $assignmentgenerateid = $assignmentRecords->pluck('assignmentgenerate_id')->unique()->toArray();
+
+        // All teammember data 
+        $mainQuery = DB::table('assignmentmappings')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'roles.rolename',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+            );
+
+        // Lead partner data  
+        $leadPartnerQuery = DB::table('assignmentmappings')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+            ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.leadpartner')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'roles.rolename',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+            );
+
+        // other partner data 
+        $otherPartnerQuery = DB::table('assignmentmappings')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.otherpartner')
+            ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.otherpartner')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'roles.rolename',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+            );
+
+        // Merging hare all data 
+        $independence = $mainQuery
+            ->union($leadPartnerQuery)
+            ->union($otherPartnerQuery)
+            ->get();
+
+        $searchedfiled = $independence;
+
+        // independences submitted or not 
+        $independencespendingornot = DB::table('independences')
+            ->whereIn('assignmentgenerate_id', $assignmentgenerateid)
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->assignmentgenerate_id . '-' . $item->createdby;
+            });
+
+        // dd($independencespendingornot);
+        return view('backEnd.independence.independencereport', compact('independence', 'independencespendingornot', 'searchedfiled'));
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\independence\independencereport.blade.php
+
+
+{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+
+@extends('backEnd.layouts.layout') @section('backEnd_content')
+    <div class="content-header row align-items-center m-0">
+        <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+            @if (Auth::user()->role_id == 11 || Auth::user()->role_id == 13)
+                @if (Request::is('filterindependencereport'))
+                    <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+                        <li>
+                            <a href="{{ url('independencereport') }}" style="float: right"
+                                class="btn btn-success ml-2">Back</a>
+                        </li>
+                    </ol>
+                @endif
+            @endif
+        </nav>
+        <div class="col-sm-8 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-puzzle-outline"></i></div>
+                <div class="media-body">
+                    <h1 class="font-weight-bold" style="color:black;">Independence Confirmation</h1>
+                    <small>Independence</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="body-content">
+        <div class="card mb-4">
+            @component('backEnd.components.alert')
+            @endcomponent
+            <div class="card-body">
+                <div class="table-responsive">
+
+                    <form method="post" action="{{ url('filterindependencereport') }}" enctype="multipart/form-data"
+                        style="margin-bottom: -11px;">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="teammemberId">Team Member</label></strong>
+                                    <select class="language form-control" name="teammemberId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($searchedfiled->unique('teammember_id') as $independenceData)
+                                            <option value="{{ $independenceData->teammember_id }}"
+                                                {{ old('teammemberId') == $independenceData->teammember_id ? 'selected' : '' }}>
+                                                {{ $independenceData->team_member }}
+                                                ({{ $independenceData->teamnewstaffcode ?? ($independenceData->staffcode ?? '') }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="assignmentId">Assignment Id</label></strong>
+                                    <select class="language form-control" name="assignmentId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($searchedfiled->unique('assignmentgenerate_id') as $independenceData)
+                                            <option value="{{ $independenceData->assignmentgenerate_id }}"
+                                                {{ old('assignmentId') == $independenceData->assignmentgenerate_id ? 'selected' : '' }}>
+                                                {{ $independenceData->assignmentgenerate_id }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="statusId">Status</label></strong>
+                                    <select class="language form-control" name="statusId">
+                                        <option value="">Please Select One</option>
+                                        <option value="Pending"{{ old('statusId') == 'Pending' ? 'selected' : '' }}>Pending
+                                        </option>
+                                        <option value="Submitted" {{ old('statusId') == 'Submitted' ? 'selected' : '' }}>
+                                            Submitted</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <label for="search">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success btn-block">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table id="examplee" class="table display table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">id</th>
+                                <th>Team Member</th>
+                                <th>Staff Code</th>
+                                <th>Assignment Id</th>
+                                <th>Status</th>
+                                <th>Submitted Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($independence as $independenceData)
+                                @php
+                                    // data like  "MAN100025-936"
+                                    $key =
+                                        $independenceData->assignmentgenerate_id .
+                                        '-' .
+                                        $independenceData->teammember_id;
+                                    // if data exist then find data otherwise assign null value hare
+                                    $independenceItem = $independencespendingornot[$key][0] ?? null;
+                                    // dd($independenceData);
+                                @endphp
+                                <tr>
+                                    <td style="display: none;">{{ $independenceData->teammember_id }}</td>
+                                    <td>
+                                        @if ($independenceItem)
+                                            <a href="{{ route('independence.show', $independenceItem->id) }}">
+                                                {{ $independenceData->team_member }}
+                                            </a>
+                                        @else
+                                            {{ $independenceData->team_member }}
+                                        @endif
                                     </td>
+                                    <td> {{ $independenceData->teamnewstaffcode ?? ($independenceData->staffcode ?? '') }}
+                                    </td>
+                                    <td>{{ $independenceData->assignmentgenerate_id }}</td>
+                                    <td>
+                                        @if ($independenceItem == null)
+                                            <span class="badge badge-pill badge-warning">Pending</span>
+                                        @else
+                                            <span class="badge badge-pill badge-success">Submitted</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($independenceItem)
+                                            {{ date('d-m-Y', strtotime($independenceItem->created_at)) }}
+                                            {{ date('h:i A', strtotime($independenceItem->created_at)) }}
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+{{-- date sorting  --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            dom: 'lBfrtip',
+            columnDefs: [{
+                    targets: [0, 1, 2, 3],
+                    orderable: false
+                },
+                {
+                    targets: 5, // Submitted Date column
+                    type: 'date', // assign date column 
+                    render: function(data, type, row) {
+                        // date value when sorting/filtering
+                        if (type === 'sort' || type === 'type') {
+                            return data ? moment(data, 'DD-MM-YYYY hh:mm A').format(
+                                'YYYY-MM-DD HH:mm') : '';
+                        }
+                        return data;
+                    }
+                }
+            ],
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Independence Confirmation',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('form').submit(function(event) {
+            var teammemberId = $("[name='teammemberId']").val();
+            var assignmentId = $("[name='assignmentId']").val();
+            var statusId = $("[name='statusId']").val();
+
+            if (!teammemberId && !assignmentId && !statusId) {
+                alert("Please select at least one filter option before searching.");
+                $("[name='teammemberId']").focus();
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
 
 
 
-find text {{ $timesheetDatas->patnerstaffcodee ?? '' }}
-and remove @if statment hare and add this below code 
 
-
-   {{ $timesheetDatas->ptnrstaffcode ?? ($timesheetDatas->patnerstaffcodee ?? '') }}
-
-bugs staff code wla on vsademo  end hare 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\IndependenceController.php
+after this  public function independencereport()
+
+   public function filterindependencereport(Request $request)
+    {
+        // All assignment data 
+        $assignmentRecords = DB::table('assignmentmappings')
+            ->where('independenceform', 2)
+            ->get();
+
+        $assignmentgenerateid = $assignmentRecords->pluck('assignmentgenerate_id')->unique()->toArray();
+
+        // Base query for team members
+        $mainQuery = DB::table('assignmentmappings')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'roles.rolename',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+            );
+
+        $leadPartnerQuery = DB::table('assignmentmappings')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+            ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.leadpartner')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'roles.rolename',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+            );
+
+        $otherPartnerQuery = DB::table('assignmentmappings')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.otherpartner')
+            ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.otherpartner')
+                    ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+            })
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'roles.rolename',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+            );
+
+        // Merge all records
+        $independence = $mainQuery
+            ->union($leadPartnerQuery)
+            ->union($otherPartnerQuery)
+            ->get();
+
+        $searchedfiled = $independence;
+
+        // Filter logic start from hare 
+        $teammemberId = $request->input('teammemberId');
+        $assignmentId = $request->input('assignmentId');
+        $statusId = $request->input('statusId');
+
+
+        $filtered = $independence->filter(function ($item) use ($teammemberId, $assignmentId, $statusId) {
+
+            $key = $item->assignmentgenerate_id . '-' . $item->teammember_id;
+
+            $isSubmitted = DB::table('independences')
+                ->where('assignmentgenerate_id', $item->assignmentgenerate_id)
+                ->where('createdby', $item->teammember_id)
+                ->exists();
+
+            $statusCheck = true;
+            if ($statusId === 'Pending' && $isSubmitted) {
+                $statusCheck = false;
+            } elseif ($statusId === 'Submitted' && !$isSubmitted) {
+                $statusCheck = false;
+            }
+
+            // hare this is return true and false 
+            return (!$teammemberId || $item->teammember_id == $teammemberId)
+                && (!$assignmentId || $item->assignmentgenerate_id == $assignmentId)
+                && $statusCheck;
+        });
+
+        // Create grouping array hare like $filteredKeys = ['MAN001-779', 'MAN001-778']
+        $filteredKeys = $filtered->map(function ($item) {
+            return $item->assignmentgenerate_id . '-' . $item->teammember_id;
+        });
+        // Filter logic end hare 
+
+        $independencespendingornot = DB::table('independences')
+            ->whereIn(DB::raw("CONCAT(assignmentgenerate_id, '-', createdby)"), $filteredKeys->toArray())
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->assignmentgenerate_id . '-' . $item->createdby;
+            });;
+
+        $request->flash();
+
+        return view('backEnd.independence.independencereport', [
+            // i have reste vold data hare 
+            'independence' => $filtered->values(),
+            'independencespendingornot' => $independencespendingornot,
+            'searchedfiled' => $searchedfiled,
+        ]);
+    }
+
+
+
+
+Required a new report for "Pending Independence Confirmation" under the Report tab. ```end hare 
+
+
+Arrange all the sub-tabs inside the Report tab in ascending order ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+
+                              @php
+                                  $roleId = Auth::user()->role_id;
+
+                                  // create menu using alphabatically hare
+                                  $menuItems = [
+                                      [
+                                          'label' => 'Active Team Report',
+                                          'url' => url('adminteammember'),
+                                          'roles' => [11],
+                                      ],
+                                      [
+                                          'label' => 'Assignment Report',
+                                          'url' => url('assignment_report'),
+                                          'roles' => [11, 13, 14, 15],
+                                      ],
+                                      [
+                                          'label' => 'Assignment Time Report',
+                                          'url' => url('totaltimeshow'),
+                                          'roles' => [11],
+                                      ],
+                                      [
+                                          'label' => 'Assignment Viewer Report',
+                                          'url' => url('assignmentviewer'),
+                                          'roles' => [11],
+                                      ],
+                                      [
+                                          'label' => 'Attendance',
+                                          'url' => url('attendance'),
+                                          'roles' => [11, 13, 14, 15],
+                                      ],
+                                      [
+                                          'label' => 'Client List Report',
+                                          'url' => url('client-list'),
+                                          'roles' => [11, 13],
+                                      ],
+                                      [
+                                          'label' => 'Promotion/Rejoining Report',
+                                          'url' => url('permotionrejoiningreport'),
+                                          'roles' => [11],
+                                      ],
+                                      [
+                                          'label' => 'Independence',
+                                          'url' => url('independencereport'),
+                                          'roles' => [11, 13],
+                                      ],
+                                      [
+                                          'label' => 'Team Timesheet Report',
+                                          'url' => url('admintimesheetlist'),
+                                          'roles' => [11, 13],
+                                      ],
+                                  ];
+
+                                  //Timesheet Report if teamid available
+                                  if (in_array($roleId, [13, 14, 15]) && !empty($permissiontimesheet->teamid)) {
+                                      $menuItems[] = [
+                                          'label' => 'Timesheet Report',
+                                          'url' => url('mytimesheetlist', $permissiontimesheet->teamid),
+                                          'roles' => [13, 14, 15],
+                                      ];
+                                  }
+
+                                  // hare filter all menu using roleId
+                                  $filteredMenu = array_filter($menuItems, function ($item) use ($roleId) {
+                                      return in_array($roleId, $item['roles']);
+                                  });
+
+                                  // Sort the menu alphabetically by label name hare like A, B, C compare first later to another first latter
+                                  usort($filteredMenu, function ($a, $b) {
+                                      return strcmp($a['label'], $b['label']);
+                                  });
+
+                              @endphp
+
+                              <ul class="nav-second-level">
+                                  @foreach ($filteredMenu as $item)
+                                      <li><a href="{{ $item['url'] }}">{{ $item['label'] }}</a></li>
+                                  @endforeach
+                              </ul>
+
+Arrange all the sub-tabs inside the Report tab in ascending order ```end hare 
+
+
+
+Required a Delete action for "Qualification documents". ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+routes\web.php
+remove it
+ 
+  Route::get('qualification/delete/{id}', [BackEndController::class, 'deletequalification']);
+
+
+app\Http\Controllers\BackEndController.php
+remove it 
+
+  public function deletequalification(Request $request, $id)
+  {
+
+    try {
+
+      $filedetaails = DB::table('teammember_document_files')->where(['id' => $id])->first();
+      if ($filedetaails->document_file) {
+        // public\backEnd\image\teammember
+        $destinationPath = public_path('backEnd/image/teammember/document_file');
+        // Delete the existing file if it exists
+        $existingFilePath = $destinationPath . '/' . $filedetaails->document_file;
+        if (file_exists($existingFilePath)) {
+          unlink($existingFilePath);
+        } else {
+          $output = ['msg' => "File name {$filedetaails->document_file} does not exist"];
+          return back()->with('statuss', $output);
+        }
+      }
+      DB::table('teammember_document_files')->where(['id' => $id])->delete();
+
+      $actionName = class_basename($request->route()->getActionname());
+      $pagename = substr($actionName, 0, strpos($actionName, "Controller"));
+      $userId = auth()->user()->teammember_id;
+      DB::table('activitylogs')->insert([
+        'user_id' => $userId,
+        'ip_address' => $request->ip(),
+        'activitytitle' => $pagename,
+        'description' => 'Qualification Deleted: Details ( teammember id = ' . $filedetaails->teamember_id . ', qualification name = ' . $filedetaails->qualification . ', document file name = ' . $filedetaails->document_file . ', Delated By = ' . $userId . ' )',
+        'created_at' => now(),
+        'updated_at' => now(),
+      ]);
+
+      $output = array('msg' => 'Deleted Successfully');
+      return back()->with('success', $output);
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      $output = array('msg' => $e->getMessage());
+      return back()->withErrors($output)->withInput();
+    }
+  }
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+resources\views\backEnd\teammember\form.blade.php
+
+ <table class="table display table-bordered table-striped table-hover">
+ 
+
+                <table class="table display table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Qualification</th>
+                            <th>Document File</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($teamqualification as $teamqualificationData)
+                            <tr>
+                                <td>{{ $teamqualificationData->qualification ?? '' }}</td>
+
+                                {{-- ! this is for vsalive --}}
+                                {{-- <td><a target="blank" target="blank" data-toggle="tooltip"
+                                        title="{{ $teamqualificationData->document_file }}"
+                                        href="{{ url('backEnd/image/teammember/document_file/' . $teamqualificationData->document_file ?? '') }}">
+                                        {{ $teamqualificationData->original_file ?? '' }}</a>
+                                </td> --}}
+
+                                {{-- this is for vsalocal --}}
+                                <td><a target="blank" target="blank" data-toggle="tooltip"
+                                        title="{{ $teamqualificationData->document_file }}"
+                                        href="{{ url('backEnd/image/teammember/document_file/' . $teamqualificationData->document_file ?? '') }}">
+                                        {{ $teamqualificationData->document_file ?? '' }}</a>
+                                </td>
+                                <td>
+                                    <a href="{{ url('teamqualification/delete/' . $teamqualificationData->id) }}"
+                                        onclick="return confirm('Are you sure you want to delete this item?');"
+                                        class="btn btn-danger-soft btn-sm"><i class="far fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+ 
+ 
+
 
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
 
 
+find   Route::get('/adminteammember', [TeammemberController::class, 'adminteammembers']);
 
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+add 
+  Route::get('teamqualification/delete/{id}', [TeammemberController::class, 'deletequalification']);
 
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
+after it public function adminteammembers()
+add 
+
+    public function deletequalification(Request $request, $id)
+    {
+        try {
+            $filedetaails = DB::table('teammember_document_files')->where(['id' => $id])->first();
+            if ($filedetaails->document_file) {
+                // public\backEnd\image\teammember
+                $destinationPath = public_path('backEnd/image/teammember/document_file');
+                // Delete the existing file if it exists
+                $existingFilePath = $destinationPath . '/' . $filedetaails->document_file;
+                if (file_exists($existingFilePath)) {
+                    unlink($existingFilePath);
+                } else {
+                    $output = ['msg' => "File name {$filedetaails->document_file} does not exist"];
+                    return back()->with('statuss', $output);
+                }
+            }
+            DB::table('teammember_document_files')->where(['id' => $id])->delete();
+
+            $actionName = class_basename($request->route()->getActionname());
+            $pagename = substr($actionName, 0, strpos($actionName, "Controller"));
+            $userId = auth()->user()->teammember_id;
+            DB::table('activitylogs')->insert([
+                'user_id' => $userId,
+                'ip_address' => $request->ip(),
+                'activitytitle' => $pagename,
+                'description' => 'Qualification Deleted: Details ( teammember id = ' . $filedetaails->teamember_id . ', qualification name = ' . $filedetaails->qualification . ', document file name = ' . $filedetaails->document_file . ', Delated By = ' . $userId . ' )',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $output = array('msg' => 'Deleted Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+
+teammember_document_files replace in local only 
+
+Required a Delete action for "Qualification documents". ```end hare 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
-
-
-
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
 
 
 

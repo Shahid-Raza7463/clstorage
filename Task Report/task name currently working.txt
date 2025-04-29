@@ -1699,27 +1699,123 @@ validation on all field 2 days
 4.validation 
 5.Design 
 5.when closed assignment will be not come 
-6. exam leave applied and implement condition in store function ``````
+6.exam leave applied and implement condition in store function ``````
 
 
 
-1.test one week timesheet filled   ```
-2.test on select 4 days and filled timesheet```
-3.leave apply on monday ... approved and reject kar ke test kare ```
-leave apply 4 and 6 means 2 days in a week ```
-exam leave same as casual leave ```` 
-exam leave 4 and 6 applyed````
-if assignment closed then not come  ignore this point  ``````
-when offholidays client select on sturday and holidays and you can not select this client on subchild filed `````````
-You can only add up to 4 fields per section. and subtract remove those filed `````
-user can not change to date only change from date `````
-if user select 2 days timsheet on that time user can saved only 2 days timsheet ````
-reject 2nd and 4rth starday timesheet and edit and select offholiday client  ````
-from date current date se jyada nahi hoga 
 
-validation point 
+1.bulk me ek hafte ka timesheet fill kare and save kare  ..`
+2.bulk me more than one timesheet filled kare..`
+3.casual leave apply on monday then please check kare to date and from date sahi aa raha hai ya nahi.. `
+4.casual leave apply seprate 2 days in a week then please check kare to date and from date sahi aa raha hai ya nahi .. `
 
-when remove field then hour subtract 
+5.exam leave apply on monday (Approved/Reject) then please check kare to date and from date sahi aa raha hai ya nahi..`
+
+6.exam leave apply seprate 2 days in a week  (Approved/Reject) then please check kare to date and from date sahi aa raha hai ya nahi..`
+
+7.If an assignment is closed before a specific date, it should not appear in the timesheet for that date..
+
+8.partner and manager can select off/holiday client only 2nd and 4rth sturday and on holidays..`
+9.staff can select off/holiday client all sturday and on holidays..`
+10.You can only add up to 4 fields per section. and remove those filed..`
+11.user can not change 'to date' only change 'from date'..`
+12.if user select 2 days timsheet on that time user can saved only 2 days timsheet..`
+
+13.reject 2nd and 4rth starday timesheet (off/holidays timsheet nahi hona chahiye ) of any manager and partner and edit and select offholiday client..`
+
+16.when user create subfiled on that case all field of subfiled are mandatry.. `
+17.please check date sequence like date 1, 2, 3 etc..`
+18.user can not select off/holidays client from any subchiled field..`
+19.All mandatory fields are required..`
+20.hour field should contain only digits, not text..`
+21.user can not be fill timesheet in the future..`
+22.The total hours cannot be greater than 12 this is for all section..`
+23.when remove any subfield and hour is exist on that time total hour will be reduce..`
+24.If a user selects 4 days while creating a timesheet but fills in data for only 2 days then user can not submit becouse all days mandatry..`
+
+25.default 1 week (7 days) timesheet will be show..`
+26.if user applied casual leave on any date then apllied leave date will be not show when filling timesheet..
+
+26.if user applied exam leave on any date and this leave approved then apllied leave date will be not show when filling timesheet..
+27.Auto-fill for 1st, 2nd, 3rd, 4th, and 5th Saturdays only for staff..`
+27.Auto-fill for 2nd, and 4th, Saturdays only for manager and staff..`
+28.Total hour calculation on the assignment when timesheet saving ..`
+29.If a user joins between Monday and Saturday..`
+30.Auto-fill for holidays date ..`
+
+
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+1.Fill timesheet in bulk for one full week and save the data successfully.
+
+2.Fill multiple timesheets after change 'to date' and ensure all are saved properly.
+
+3.Apply casual leave on a Monday – check if both the "From Date" and "To Date" are showing correctly.
+
+4.Apply casual leave for two separate days within a week – ensure both "From Date" and "To Date" are accurate.
+
+5.Apply exam leave on a Monday (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+6.Apply exam leave for two separate days in a week (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+7.Partners and Managers can select Off/Holiday client only on 2nd & 4th Saturdays and official holidays.
+
+8.Staff can select Off/Holiday client on all Saturdays and official holidays.
+
+9.A maximum of 4 fields can be added per section. User should also be able to remove fields.
+
+10.User cannot change the ‘To Date’; only the ‘From Date’ will be change.
+
+11.If user selects 2 days while filling timesheet, then only 2 days' data can be saved.
+
+12.Reject 2nd and 4th Saturday timesheets for Partner/Manager in which rejected timesheet should not be off/holidays client .
+
+13.When creating a child field, all fields inside the child field must be mandatory.
+
+14.Check date sequence to ensure days are ordered like 1, 2, 3, etc.
+
+15.User cannot select Off/Holiday client from child fields.
+
+16.All mandatory fields must be filled before submission.
+
+17.The Hour field should accept only digits (no text).
+
+18.User cannot fill timesheets for future dates.
+
+19.Total hours cannot exceed 12 in any section.
+
+20.When a child field is removed, the total hours should automatically decrease based on the removed entry.
+
+21.If a user selects 4 days but fills data for only 2 days, submission should be restricted (all selected days are mandatory).
+
+22.By default, timesheet for 7 days (1 week) should be displayed if user not saved 1 week timesheet on that case.
+
+23.If a user has applied for casual leave on a particular date, that date should not appear while filling the timesheet.
+
+24.If a user has applied for exam leave and it is approved, the leave date should not appear during timesheet filling.
+
+25.Auto-fill timesheet for 1st to 5th Saturdays for staff only.
+
+26.Auto-fill timesheet for 2nd and 4th Saturdays for managers and partners only.
+
+27.Total hours should be updated on assignment as the timesheet is saved.
+
+28.If a user joins between Monday and Saturday, system should allow accurate date handling.
+
+29.Auto-fill for official holiday dates should be available.
+
+30. If a user selects an Off/Holiday client in any main field, then:
+
+   All child fields under that main field should be automatically removed and 
+
+   The total hour should be recalculated accordingly
+
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
@@ -1735,5 +1831,158 @@ when remove field then hour subtract
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
-
+{#3303 ▼
+  +"teammember_id": 936
+  +"staffcode": "M1070"
+  +"rolename": "Manager"
+  +"team_member": "Pooja kumari"
+  +"assignmentgenerate_id": "MAN100025"
+}
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+      <form method="post" action="{{ url('filterindependencereport') }}" enctype="multipart/form-data" style="margin-bottom: -11px;">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="teammemberId">Team Member</label></strong>
+                                    <select class="language form-control" name="teammemberId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('teammember_id') as $independenceData)
+                                            <option value="{{ $independenceData->teammember_id }}" 
+                                                @if(isset($independence->teammember_filter) 
+                                                    {{ $independence->teammember_filter == $independenceData->teammember_id ? 'selected' : '' }}
+                                                @endif>
+                                                {{ $independenceData->team_member }} ({{ $independenceData->staffcode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="assignmentId">Assignment Id</label></strong>
+                                    <select class="language form-control" name="assignmentId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('assignmentgenerate_id') as $independenceData)
+                                            <option value="{{ $independenceData->assignmentgenerate_id }}"
+                                                @if(isset($independence->assignment_filter))
+                                                    {{ $independence->assignment_filter == $independenceData->assignmentgenerate_id ? 'selected' : '' }}
+                                                @endif>
+                                                {{ $independenceData->assignmentgenerate_id }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="statusId">Status</label></strong>
+                                    <select class="language form-control" name="statusId">
+                                        <option value="">Please Select One</option>
+                                        <option value="Pending" 
+                                            @if(isset($independence->status_filter) 
+                                                {{ $independence->status_filter == 'Pending' ? 'selected' : '' }}
+                                            @endif>Pending</option>
+                                        <option value="Submitted"
+                                            @if(isset($independence->status_filter)) 
+                                                {{ $independence->status_filter == 'Submitted' ? 'selected' : '' }}
+                                            @endif>Submitted</option>
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-2 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <label for="search">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success btn-block">Search</button>
+                                    @if(isset($independence->teammember_filter) || isset($independence->assignment_filter) || isset($independence->status_filter))
+                                        <a href="{{ route('independencereport') }}" class="btn btn-danger btn-block mt-2">Reset</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+					
+					
+					
+           <form method="post" action="{{ url('filterindependencereport') }}" enctype="multipart/form-data" style="margin-bottom: -11px;">
+                        @csrf
+                        <div class="row">
+                            <!-- Team Member -->
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="teammemberId">Team Member</label></strong>
+                                    <select class="language form-control" name="teammemberId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('teammember_id') as $independenceData)
+                                            <option value="{{ $independenceData->teammember_id }}"
+                                                @if(isset($independence->teammember_filter) && $independence->teammember_filter == $independenceData->teammember_id) selected @endif>
+                                                {{ $independenceData->team_member }} ({{ $independenceData->staffcode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- Assignment ID -->
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="assignmentId">Assignment Id</label></strong>
+                                    <select class="language form-control" name="assignmentId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('assignmentgenerate_id') as $independenceData)
+                                            <option value="{{ $independenceData->assignmentgenerate_id }}"
+                                                @if(isset($independence->assignment_filter) && $independence->assignment_filter == $independenceData->assignmentgenerate_id) selected @endif>
+                                                {{ $independenceData->assignmentgenerate_id }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- Status -->
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="statusId">Status</label></strong>
+                                    <select class="language form-control" name="statusId">
+                                        <option value="">Please Select One</option>
+                                        <option value="Pending"
+                                            @if(isset($independence->status_filter) && $independence->status_filter == 'Pending') selected @endif>
+                                            Pending
+                                        </option>
+                                        <option value="Submitted"
+                                            @if(isset($independence->status_filter) && $independence->status_filter == 'Submitted') selected @endif>
+                                            Submitted
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- Search & Reset -->
+                            <div class="col-md-2 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <label for="search">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success btn-block">Search</button>
+                                    @if(isset($independence->teammember_filter) || isset($independence->assignment_filter) || isset($independence->status_filter))
+                                        <a href="{{ route('independencereport') }}" class="btn btn-danger btn-block mt-2">Reset</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+					
+					
+  +request: Symfony\Component\HttpFoundation\InputBag {#45 ▼
+    #parameters: array:4 [▼
+      "_token" => "FTjC5ePYdB4JtGx0NBv05hsHvnsekNMpcWx8rnqK"
+      "teammemberId" => "933"
+      "assignmentId" => "MNA100030"
+      "statusId" => "Submitted"
+    ]
+  }					
+  
+  
+  

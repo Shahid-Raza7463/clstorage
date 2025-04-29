@@ -670,5 +670,113 @@ Steps:-
 4.Click on 'Submitted timesheet'.
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Need option to fill mutiple days timesheet at once
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+1.Fill timesheet in bulk for one full week and save the data successfully.
+
+2.Fill multiple timesheets after change 'to date' and ensure all are saved properly.
+
+3.Apply casual leave on a Monday – check if both the "From Date" and "To Date" are showing correctly.
+
+4.Apply casual leave for two separate days within a week – ensure both "From Date" and "To Date" are accurate.
+
+5.Apply exam leave on a Monday (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+6.Apply exam leave for two separate days in a week (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+7.Partners and Managers can select Off/Holiday client only on 2nd & 4th Saturdays and official holidays.
+
+8.Staff can select Off/Holiday client on all Saturdays and official holidays.
+
+9.A maximum of 4 fields can be added per section. User should also be able to remove fields.
+
+10.User cannot change the ‘To Date’; only the ‘From Date’ will be change.
+
+11.If user selects 2 days while filling timesheet, then only 2 days' data can be saved.
+
+12.Reject 2nd and 4th Saturday timesheets for Partner/Manager in which rejected timesheet should not be off/holidays client .
+
+13.When creating a child field, all fields inside the child field must be mandatory.
+
+14.Check date sequence to ensure days are ordered like 1, 2, 3, etc.
+
+15.User cannot select Off/Holiday client from child fields.
+
+16.All mandatory fields must be filled before submission.
+
+17.The Hour field should accept only digits (no text).
+
+18.User cannot fill timesheets for future dates.
+
+19.Total hours cannot exceed 12 in any section.
+
+20.When a child field is removed, the total hours should automatically decrease based on the removed entry.
+
+21.If a user selects 4 days but fills data for only 2 days, submission should be restricted (all selected days are mandatory).
+
+22.By default, timesheet for 7 days (1 week) should be displayed if user not saved 1 week timesheet on that case.
+
+23.If a user has applied for casual leave on a particular date, that date should not appear while filling the timesheet.
+
+24.If a user has applied for exam leave and it is approved, the leave date should not appear during timesheet filling.
+
+25.Auto-fill timesheet for 1st to 5th Saturdays for staff only.
+
+26.Auto-fill timesheet for 2nd and 4th Saturdays for managers and partners only.
+
+27.Total hours should be updated on assignment as the timesheet is saved.
+
+28.If a user joins between Monday and Saturday, system should allow accurate date handling.
+
+29.Auto-fill for official holiday dates should be available.
+
+30. If a user selects an Off/Holiday client in any main field, then:
+
+   All child fields under that main field should be automatically removed and 
+
+   The total hour should be recalculated accordingly
+
+
+Required attachment to be visible in notification module in OMS
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin Only
+Steps:-
+1.Navigate to the application
+2.Click on the 'Notification List' dropdown
+3.Click on 'Add Announcement'
+4.Fill the form and click the Send button
+
+
+For Admin, partner, manager and staff
+1.An Attachment column has been added. Now, the user should be able to view the attachment here.
+2.After clicking the Title hyperlink, the Attachment should also be visible.
+3.Download the Notification Report in Excel and ensure the data appears correctly in the Excel file.
+4.Ascending and descending icons should be shown only on the Date column.
+5.ensure the Attachment in the mail
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Independence'.
+
+1.All Pending and Submitted Independence Confirmations should be listed.
+2.Admin and Partner users should be able to access the Independence tab inside the Report section.
+3.Admin and Partner users should be able to filter the listed data.
+4.Status and Submitted Date columns should have ascending and descending sort icons only.
+5.Download the report in Excel and ensure that all data is correct.
+6.Apply and verify validation on filter fields.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 

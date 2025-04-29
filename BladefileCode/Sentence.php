@@ -291,6 +291,7 @@ class Sentence extends Command
         // 12.	Joining Date should not be in the future.
         // 13.	Leaving Date should not be in the future.
         // I have moved the status from In Process to Code Review. Please check once
+        // I have moved the task VS-500 to Code Review.
         // I have moved this task to In UAT. Please check once
         // Hi, Shahid here.
         // I am available on March 6. Let me know if that works for you.
@@ -325,7 +326,7 @@ class Sentence extends Command
         // Atishay Jain, task numbers VS-124, VS-501, and VS-290 are basically related to staff code (Promotion and Re-joining Module). I have already discussed these tasks in detail when I was developing. But currently simmi ma'am wants to do some changes for that so please send me the updated requirement.
         // Atishay Jain, task numbers VS-124, VS-501, and VS-290 are basically related to staff code. I have already discussed these tasks in detail when I was developing. But currently Simmi mam wants to do some changes for that we need to discuss this point with client. Please confirm if it is needed, if yes then please connect with client & send me the updated requirement
 
-        //## VSA Portal Glitch
+        //## VSA Portal Glitch  ```/
         // The issue might be because of network connectivity and as discussed it is working now.
         // Vsa portal login problem for more details pls open the attachment file.
         // The same has been implemented. Please check and confirm.
@@ -334,15 +335,44 @@ class Sentence extends Command
         // This is a gentle reminder to you.
         // I am writing to bring to your attention an issue regarding the submitted timesheet. The value entered in the "Filled Day column is exceeding the upper limit,  Kindly look into this matter ASAP.
         // Attached relevant screenshot for your reference.
-
-
-
-
-        // 222222222222222222222222222222222222222222222222222222222222222222222
+        // I had already sent it to Atishay
+        // I had sent it to Atishay
         // As per the client's discussion, In case there is a change in designation, but the individual is mapped to a particular assignment then his right related to that assignment should not change staff code till the assignment is over.
 
+        // I need to update the task on VSAdemo. Please confirm if I can proceed with cleaning your data
+        // Are you available right now? If yes, let’s complete the handover process
+        // Please let me know if you're available so that we can complete the handover process
+        // Please send me the URL if this project is live
+        // Is there any meeting now ?
+        // I hve to book meeting wth ashish
+        // In case of any other details needed for these projects please feel free to ping me.
+        // Simmi, there are two tasks.
+        // Simmi, these are the two tasks
+        // Simmi, these are the two tasks
+        // Ma'am, I had to stop this task because I needed to clear this one
+        // I had to stop this task because the VS-254 task was urgent
+        // As discussed, the issue has been resolved.
+        // I have not received my increment letter yet. I kindly request you to please share it with me
+        // Sukh working in email space issue,
+        // replace "debtors" with "Entries / Rows"
+        //  I am working in GRC, some data need to be correcte as asked by Atishay Jain. Need to complete it till 11
+        // Please connect with me whenever you are free
+        // Alright, I’ll keep that in mind next time
+        // I had a discussion with Atishay today, and I will be starting this task now
+        // 222222222222222222222222222222222222222222222222222222222222222222222
 
-
+        // I discussed with Atishay today, and I’m picking up this task now
+        // Pooja Kumari is this done?
+        // in one of the role it is pending
+        // Yes, Its done yesterday
+        // before starting the testing, please connect with me once, as KT will be required for this task Pooja Kumari and simmi
+        // mam but it has 30 points & I have to test it in 3 different roles also I need to test for few different scenarios
+        // Pooja Kumari reached out to you Shahid Raza
+        // Pooja KumariNeeds KT for a few points. Pls take out time
+        // Pooja Kumari, could we please connect now if you are available 
+        // I have explained task 511, so please leave a comment on it
+        // I have explained task 511. Could you please leave a comment on it
+        // Alright, I’ll keep that in mind next time
 
 
         // 222222222222222222222222222222222222222222222222222222222222222222222

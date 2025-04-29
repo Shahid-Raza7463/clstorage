@@ -13,15 +13,271 @@ class Allcode extends Controller
         //* regarding 
         // Start Hare
         //! End hare 
-
-
         //* regarding 
         // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        public function filterindependencereport(Request $request)
+        {
+            // All assignment data 
+            $assignmentRecords = DB::table('assignmentmappings')
+                ->where('independenceform', 2)
+                ->get();
+    
+            $assignmentgenerateid = $assignmentRecords->pluck('assignmentgenerate_id')->unique()->toArray();
+    
+            // Base query for team members
+            $mainQuery = DB::table('assignmentmappings')
+                ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+                ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+                ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                    $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                        ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+                })
+                ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+                ->select(
+                    'teammembers.id as teammember_id',
+                    'teammembers.staffcode',
+                    'roles.rolename',
+                    'teammembers.team_member',
+                    'assignmentmappings.assignmentgenerate_id',
+                    'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+                );
+    
+            $leadPartnerQuery = DB::table('assignmentmappings')
+                ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+                ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+                ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                    $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.leadpartner')
+                        ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+                })
+                ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+                ->select(
+                    'teammembers.id as teammember_id',
+                    'teammembers.staffcode',
+                    'roles.rolename',
+                    'teammembers.team_member',
+                    'assignmentmappings.assignmentgenerate_id',
+                    'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+                );
+    
+            $otherPartnerQuery = DB::table('assignmentmappings')
+                ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.otherpartner')
+                ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+                ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                    $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.otherpartner')
+                        ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+                })
+                ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+                ->select(
+                    'teammembers.id as teammember_id',
+                    'teammembers.staffcode',
+                    'roles.rolename',
+                    'teammembers.team_member',
+                    'assignmentmappings.assignmentgenerate_id',
+                    'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+                );
+    
+            // Merge all records
+            $independence = $mainQuery
+                ->union($leadPartnerQuery)
+                ->union($otherPartnerQuery)
+                ->get();
+    
+            $searchedfiled = $independence;
+    
+            // Filter logic start from hare 
+            $teammemberId = $request->input('teammemberId');
+            $assignmentId = $request->input('assignmentId');
+            $statusId = $request->input('statusId');
+    
+    
+            $filtered = $independence->filter(function ($item) use ($teammemberId, $assignmentId, $statusId) {
+    
+                $key = $item->assignmentgenerate_id . '-' . $item->teammember_id;
+    
+                $isSubmitted = DB::table('independences')
+                    ->where('assignmentgenerate_id', $item->assignmentgenerate_id)
+                    ->where('createdby', $item->teammember_id)
+                    ->exists();
+    
+                $statusCheck = true;
+                if ($statusId === 'Pending' && $isSubmitted) {
+                    $statusCheck = false;
+                } elseif ($statusId === 'Submitted' && !$isSubmitted) {
+                    $statusCheck = false;
+                }
+    
+                return (!$teammemberId || $item->teammember_id == $teammemberId)
+                    && (!$assignmentId || $item->assignmentgenerate_id == $assignmentId)
+                    && $statusCheck;
+            });
+    
+            // Create grouping array hare like $filteredKeys = ['MAN001-779', 'MAN001-778']
+            $filteredKeys = $filtered->map(function ($item) {
+                return $item->assignmentgenerate_id . '-' . $item->teammember_id;
+            });
+            // Filter logic end hare 
+    
+            $independencespendingornot = DB::table('independences')
+                ->whereIn(DB::raw("CONCAT(assignmentgenerate_id, '-', createdby)"), $filteredKeys->toArray())
+                ->get()
+                ->groupBy(function ($item) {
+                    return $item->assignmentgenerate_id . '-' . $item->createdby;
+                });
+    
+            $request->flash();
+    
+            return view('backEnd.independence.independencereport', [
+                // i have reste vold data hare 
+                'independence' => $filtered->values(),
+                'independencespendingornot' => $independencespendingornot,
+                'searchedfiled' => $searchedfiled,
+            ]);
+        }
+        public function independencereport()
+        {
+            // remove old data hare 
+            session()->forget('_old_input');
+            // All assignment data 
+            $assignmentRecords = DB::table('assignmentmappings')
+                ->where('independenceform', 2)
+                ->get();
+    
+            $assignmentgenerateid = $assignmentRecords->pluck('assignmentgenerate_id')->unique()->toArray();
+    
+            // All teammember data 
+            $mainQuery = DB::table('assignmentmappings')
+                ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+                ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+                ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+                ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                    $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentteammappings.teammember_id')
+                        ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+                })
+                ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+                ->select(
+                    'teammembers.id as teammember_id',
+                    'teammembers.staffcode',
+                    'roles.rolename',
+                    'teammembers.team_member',
+                    'assignmentmappings.assignmentgenerate_id',
+                    'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+                );
+    
+            // Lead partner data  
+            $leadPartnerQuery = DB::table('assignmentmappings')
+                ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+                ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+                ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                    $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.leadpartner')
+                        ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+                })
+                ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+                ->select(
+                    'teammembers.id as teammember_id',
+                    'teammembers.staffcode',
+                    'roles.rolename',
+                    'teammembers.team_member',
+                    'assignmentmappings.assignmentgenerate_id',
+                    'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+                );
+    
+            // other partner data 
+            $otherPartnerQuery = DB::table('assignmentmappings')
+                ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.otherpartner')
+                ->join('roles', 'roles.id', '=', 'teammembers.role_id')
+                ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+                    $join->on('teamrolehistoryteam.teammember_id', '=', 'assignmentmappings.otherpartner')
+                        ->whereRaw('teamrolehistoryteam.created_at < assignmentmappings.created_at');
+                })
+                ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+                ->select(
+                    'teammembers.id as teammember_id',
+                    'teammembers.staffcode',
+                    'roles.rolename',
+                    'teammembers.team_member',
+                    'assignmentmappings.assignmentgenerate_id',
+                    'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+                );
+    
+            // Merging hare all data 
+            $independence = $mainQuery
+                ->union($leadPartnerQuery)
+                ->union($otherPartnerQuery)
+                ->get();
+    
+            $searchedfiled = $independence;
+            // 1018
+            // $searchedfiled = $independence->unique('teammember_id');
+            // 125
+            // $searchedfiled = $independence->unique('assignmentgenerate_id');
+            // 214
+            // dd($searchedfiled);
+    
+            // independences submitted or not 
+            $independencespendingornot = DB::table('independences')
+                ->whereIn('assignmentgenerate_id', $assignmentgenerateid)
+                ->get()
+                ->groupBy(function ($item) {
+                    return $item->assignmentgenerate_id . '-' . $item->createdby;
+                });
+    
+            // dd($independencespendingornot);
+            return view('backEnd.independence.independencereport', compact('independence', 'independencespendingornot', 'searchedfiled'));
+        }
+        // Start Hare
+        //! End hare 
+
+
+        //* regarding value check / get all value 
+        // Start Hare
+        $independence = DB::table('assignmentmappings')
+        ->select('independenceform')
+        ->distinct()
+        ->get();
+    dd($independence);
         //! End hare 
 
 
         //* regarding 
         // Start Hare
+        $values = DB::table('assignmentmappings')
+    ->whereNotNull('independenceform')
+    ->pluck('independenceform');
+dd($values);
+        // Start Hare
+        $columns = Schema::getColumnListing('assignmentmappings');
+dd($columns);
+        // Start Hare
+        DB::enableQueryLog();
+
+$independence = DB::table('assignmentmappings')
+    ->select('independenceform')
+    ->distinct()
+    ->get();
+
+dd(DB::getQueryLog(), $independence);
         //! End hare 
 
 

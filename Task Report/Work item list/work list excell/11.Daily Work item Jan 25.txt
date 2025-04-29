@@ -459,12 +459,78 @@ Sunday
 1.testing all scenrrio of multiple timesheet task 
 
 19.04-25
-1.testing all scenrrio of multiple timesheet task 
+1.testing all scenrrio of Need option to fill mutiple days timesheet at once
 
-notification goes multiple time 
-Large Data Download issue
-WEL100799
-TAT100872
+20.04-25
+Sunday
+
+
+21.04-25
+Jira Descreption uploaded on jira 
+Dashboard - signout and assignment box (UI-fixed) 
+Dashboard - Client Box (UI-Text) 
+
+
+22.04-25
+Required attachment to be visible in notification module in OMS
+
+
+23.04-25
+Required attachment to be visible in notification module in OMS
+
+
+24.04-25
+1.Required attachment to be visible in notification module in OMS
+2.Required a new report for "Pending Independence Confirmation" under the Report tab.
+
+
+
+25.04-25
+1.Required a new report for "Pending Independence Confirmation" under the Report tab.
+
+
+26.04-25
+1.KT, for VSA-456 task
+1.Required a new report for "Pending Independence Confirmation" under the Report tab.
+
+27.04-25
+Sunday
+
+28.04-25
+1.Required a new report for "Pending Independence Confirmation" under the Report tab.
+2.Arrange all the sub-tabs inside the Report tab in ascending order 
+
+
+
+29.04-25
+1.code uploaded on vsademo 
+2.Arrange all the sub-tabs inside the Report tab in ascending order 
+3.Required a Delete action for "Qualification documents".
+4.log created for file deleted
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 coding 
 functional testing
@@ -472,14 +538,8 @@ documentation
 upload on vsademo
 functional testing 
 
-	 {{ date('d-M-Y', strtotime($timesheetDatas->date)) }}
-	 
-	 
-	 
-						public function confirmationotpsend(Request $request)
-						
-						 public function timesheet_teamlist()
-						 
-						 public function allteamsubmitted()
-						 
-						   'dayscount' => $group->sum('dayscount'),
+						   
+						   
+						   
+						   
+						    
