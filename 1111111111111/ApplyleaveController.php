@@ -3559,7 +3559,7 @@ class ApplyleaveController extends Controller
   // public function store(Request $request)
   // {
   //   $request->validate([
-  //     'leavetype' => "required",
+  //     'file' => "required",
   //     'to' => "required",
   //     'from' => "required",
   //   ]);

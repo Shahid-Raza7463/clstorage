@@ -1,4 +1,24 @@
+password Azaz~123 copy from database 
+
+$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
+
 bugs occure in testing 
+
+Poojakumari+14@capitall.io
+Test@123
+
+vsalocal, vsademo, vsalive//
+http://13.200.130.146/
+admin@atr.com
+Admin@123
+
+harish+3@capitall.io
+941
+Guneet@capitall.io
+937
+
+employeepayrolls
+
 
 222222222222222222222222222222222222
 itsupport_delhi@vsa.co.in mail comment kar do
@@ -47,12 +67,13 @@ teamrolehistory
   1.1   Azaz~12345    vsalive
 
 ##############################################################
-credential
-1.itsupport
+vsa credentials 
+1.itsupport  878
 2.sunny    844
 3.bhasker     847 
 4.nidhia@vsa.co.in  Staff 787
-itsupport_delhi@vsa.co.in   
+itsupport_delhi@vsa.co.in  
+	Dhruva@vsa.co.in staff  
 
 
 http://127.0.0.1:8000/assignmentconfirmation/ABD100411
@@ -200,7 +221,76 @@ OFF100003 official travel
 
 
 #############################################################
-1.live vsademo credential
+kgs credentials
+https://cronapi.capitall.io/designation
+
+https://cronapi.capitall.io/
+Vinita@54321
+
+Email : sukhbahadur19931@gmail.com
+Password : Azaz~123
+Password : Vinita@54321
+Designation : Super admin
+Role : Super admin
+447
+
+Email : poojakumari+13@capitall.io
+Password : Azaz~123
+Designation : manager
+Role : Accountant 
+818
+
+Email : hr1@kgsomani.com
+Password : Vinita@54321
+Designation : manager
+Role : Accountant 
+818
+
+Email : sukhbahadur1@capitall.io
+Password : Vinita@54321
+Designation : 13
+Role : super admin 
+169
+
+Email : sukhbahadur19931@gmail.com
+Password : Vinita@54321
+Designation : Super admin
+Role : Super admin
+447
+
+
+Email : saurabhjain1@kgsomani.com
+Password : Vinita@54321
+Designation : Partner
+Role :  
+818
+
+
+Email : tripti1@kgsomani.com
+Password : Vinita@54321
+Designation : manager
+Role : Accountant 
+818
+
+Email : hr1@kgsomani.com
+Password : Vinita@54321
+Designation : hr
+Role : 18
+203
+
+Email : shahidraza@capitall.io
+Password : Vinita@54321
+Designation : manager
+Role : 14
+203
+
+
+
+ 
+
+
+#############################################################
+vsademo credentials
 http://127.0.0.1:8000/teamstatus?status=1
 
 
@@ -247,6 +337,8 @@ i ma working with atishay sir to UAT
 222222222222222222222222222222222222222222222222222222222
 regarding data clean 
 
+Guneet@capitall.io
+
 1.timesheetreport,
 2.timesheetrequests,
 3.timesheets,
@@ -261,8 +353,13 @@ regarding data clean
 9.teamrolehistory
 10.rejoiningsamepost
 
-11.Users table me role id = 14
-12.teammembers table me leaving date = null and role id = 14
+11.Users table me role id = 15
+12.teammembers table me leaving date = null and role id = 15
+
+if assignment want to clean then 
+13.assignmentmappings
+14.assignmentteammappings
+
 
 
 
@@ -293,7 +390,7 @@ i need this table to update
 
 16.teamrolehistory
 17.rejoiningsamepost
-
+18.independences
 
 
 
@@ -324,46 +421,48 @@ if any problem on timesheet page to vsalive then ye table maange
 
 
 
-   // $tables = [
-    //   //* timesheets
-    //   'timesheetreport',
-    //   'timesheetrequests',
-    //   'timesheets',
-    //   'timesheetusers',
+   $tables = [
+      //* timesheets
+      'timesheetreport',
+      'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
 
-    //   //* applyleaves
-    //   'applyleaves',
-    //   'leaveapprove',
-    //   'leaverequest',
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
 
-    //   //* attendances
-    //   'attendances',
+      //* attendances
+      'attendances',
 
-    //   //* assignments
-    //   'assignmentbudgetings',
-    //   'assignmentmappings',
-    //   'assignmentteammappings',
-    //   'assignments',
+      //* assignments
+      'assignmentbudgetings',
+      'assignmentmappings',
+      'assignmentteammappings',
+      'assignments',
 
-    //   //* another tables
-    //   // 'Users',
-    //   // 'teammembers',
-    //   // 'teamrolehistory',
-    //   // 'rejoiningsamepost',
-    //   'Clients',
-    // ];
+      //* another tables
+      'Users',
+      'teammembers',
+      'teamrolehistory',
+      'rejoiningsamepost',
+      'Clients',
+      'independences',
+    ];
 
 
-    // foreach ($tables as $table) {
-    //   if (Schema::hasTable($table)) {
-    //     Schema::drop($table);
-    //     echo "'{$table}'.<br>";
-    //   } else {
-    //     echo "'{$table}'.<br>";
-    //   }
-    // }
+    foreach ($tables as $table) {
+      if (Schema::hasTable($table)) {
+        Schema::drop($table);
+        echo "'{$table}'.<br>";
+      } else {
+        echo "'{$table}'.<br>";
+      }
+    }
 
-    // return response('Tables deleted successfully!', 200);
+    return response('Tables deleted successfully!', 200);
+
 
 
 
@@ -445,8 +544,6 @@ if any problem on timesheet page to vsalive then ye table maange
 
 
 
-
-
 222222222222222222222222222222
 assignment issue on vsademo off/holidays
 
@@ -468,3 +565,53 @@ UNA100004
 assignmentmapping_id = 25 and delete all data hare 
 
 
+C:\xampp\htdocs\vsademo
+vsademo fixed offholidays client isme sirf ye below tables hai 
+
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+
+after that all below tables clean karwaye 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+11.applyleaves  
+12.attendances
+
+13.Users table me role id = 14
+14.teammembers table me leaving date = null and role id = 14
+
+16.teamrolehistory
+17.rejoiningsamepost
+
+
+2222222222222222222222222222222222222222
+for kt 
+1.view 
+  1. what is  ....
+  
+2.code 
+2.database or tables 
+
+
+Client want to implement Rejoining process to users.
+this all code in this file 10 .vsa demo 03-02-25 to 03-02-25
+
+https://capitallio.atlassian.net/browse/KCOMS-70 
+https://capitallio.atlassian.net/browse/KCOMS-162
+
+
+12.When the KRA of any user under a designation is modified, an email will be sent to that user and to all partners.
+13.When the KRA of a designation partner is edited, a notification will be sent to Tripti Ma'am and Maheshwari Sir.
+14.The implementation for editing the KRA template is still pending.
+15.When the KRA of any designation is edited, a notification will be sent to all users under that designation and to all partners.
+
+2025-06-20 

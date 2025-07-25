@@ -3,22 +3,1224 @@
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare  --}}
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+  <script>
+      $(document).ready(function() {
+          $('#examplee').DataTable({
+              dom: 'frtip',
+              // searching: true, // optional, default true hota hai
+              columnDefs: [{
+                  targets: [0, 1, 2, 4, 5],
+                  orderable: false
+              }],
+              buttons: []
+          });
+      });
+  </script>
+{{--  Start Hare  --}}
+<script>
+    $('#' + tableId).DataTable({
+    "pageLength": 50,
+    "lengthMenu": [ [10, 25, 50, 100, 500], [10, 25, 50, 100, 500] ],
+    dom: 'lfrtip',
+    "order": [[1, "asc"]],
+    columnDefs: [{
+        targets: [0],
+        orderable: false
+    }]
+});
+
+
+$('#' + tableId).DataTable({
+    "pageLength": 50,
+    "lengthMenu": [ [10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"] ],
+    dom: 'lfrtip',
+    "order": [[1, "asc"]],
+    columnDefs: [{
+        targets: [0],
+        orderable: false
+    }]
+});
+</script>
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
+
+{{-- * regarding tr create dynamic --}}
+      <script>
+          $(document).ready(function() {
+              $('.editCompanyyyy').click(function(e) {
+                  // Prevent default anchor behavior
+                  e.preventDefault();
+                  // Get the data-id attribute value
+                  var id = $(this).data('id');
+                  //   alert(id);
+                  $.ajax({
+                      type: 'GET',
+
+                      url: "{{ url('balanceconfirmationreminderlist') }}",
+                      data: {
+                          id: id,
+                      },
+                      success: function(response) {
+
+                          var balanceconfirmationreminderlist = response
+                              .balanceconfirmationreminderlist;
+
+                          $('#reminderTable tbody').empty();
+                          $.each(balanceconfirmationreminderlist, function(index, reminder) {
+                              // Append a new row to the table
+                              $('#reminderTable tbody').append('<tr>' +
+                                  '<td>' + reminder.remindercount + '</td>' +
+                                  '<td>' + reminder.reminderdatecount + '</td>' +
+                                  '</tr>');
+                          });
+                      },
+                      error: function(error) {
+                          console.error('Error fetching data:', error);
+                      }
+                  });
+              });
+          });
+      </script>
+{{--  Start Hare  --}}
+          //   $('#kratemplatesdata').on('change', function() {
+          //       var kratemplatesdataId = $(this).val();
+          //       var templates = JSON.parse($('#krasupload input[name="templatejson"]').val());
+
+          //       alert(kratemplatesdataId);
+          //       if (kratemplatesdataId == '106') {
+          //           $('#input-excel').prop('disabled', true).removeAttr('required');
+          //           $('#table-header').empty();
+          //       } else {
+          //           $('#input-excel').prop('disabled', false).attr('required', true);
+          //       }
+          //   });
+          //   if (kraexist) {
+          //       //   $('#mapped-section').show();
+          //       $('#template-section').hide();
+          //       $('#kratemplate').removeAttr('required');
+          //   } else {
+          //       //   $('#template-section').show();
+          //       $('#mapped-section').hide();
+          //       $('#mappedId').removeAttr('required');
+          //   }
+{{--  Start Hare  --}}
+<!-- JavaScript for Modal Data -->
+{{-- <script>
+          document.querySelectorAll('[data-target=".exampleModalDelete-modal-lg"]').forEach(button => {
+              button.addEventListener('click', function() {
+                  const designationId = this.getAttribute('data-designation-id');
+                  document.getElementById('delete-designation-id').value = designationId;
+              });
+          });
+      </script> --}}
+
+{{-- <script>
+          document.getElementById("refreshButtonexcels").addEventListener("click", function() {
+              location.reload();
+          });
+
+          document.getElementById("refreshButtonexcel").addEventListener("click", function() {
+              location.reload();
+          });
+      </script> --}}
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+
+<script>
+    $(document).ready(function() {
+        $("table[id^='example']").each(function() {
+            let tableId = $(this).attr('id');
+            let tableNumber = tableId.replace('example', '');
+            let filename = 'KRAs Report' + tableNumber;
+            //   console.log(filename);
+
+            $('#' + tableId).DataTable({
+                "pageLength": 50,
+                //   dom: 'Bfrtip',
+                dom: 'rtip',
+                //   columnDefs: [{
+                //       targets: [1, 2, 3, 4, 5],
+                //       orderable: false
+                //   }],
+
+                buttons: [{
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [0, ':visible']
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        filename: filename,
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        customize: function(xlsx) {
+                            var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                            //   remove extra spaces
+                            $('c', sheet).each(function() {
+                                var originalText = $(this).find('is t').text();
+                                var cleanedText = originalText.replace(/\s+/g,
+                                    ' ').trim();
+                                $(this).find('is t').text(cleanedText);
+                            });
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [2, 3]
+                        }
+                    },
+                    {
+                        extend: 'colvis',
+                        text: 'Column Visibility',
+                        columns: ':not(:nth-child(2)):not(:nth-child(6))'
+                    }
+                ]
+            });
+        });
+
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#deletemodel').on('hidden.bs.modal', function() {
+            $('#deleteForm')[0].reset();
+        });
+        $('#modalColumnId3').on('hidden.bs.modal', function() {
+            $('#modalColumnForm3')[0].reset();
+        });
+        $('#krasupload').on('hidden.bs.modal', function() {
+            $('#detailsForm')[0].reset();
+            $('#table-header').empty();
+            $('#table-body').empty();
+            $('#pagination').empty();
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.alert-success, .alert-danger').delay(5000).fadeOut(400);
+    });
+</script>
+
+<script>
+    $(document).on('click', '.modificationColumn1', function() {
+        let columnName = $(this).data('column');
+        let id = $(this).data('id');
+        $('#modalColumnId1 input[name="newcolumnName"]').val(columnName);
+        $('#oldcolumnName').val(columnName);
+        $('#kraId1').val(id);
+    });
+</script>
+
+<script>
+    $(document).on('click', '.modificationColumn2', function() {
+        let columnName = $(this).data('column');
+        let id = $(this).data('id');
+        $('#modalColumnId2 input[name="columnnameDelete"]').val(columnName);
+        $('#kraId2').val(id);
+    });
+</script>
+
+<script>
+    $(document).on('click', '.modificationColumn3', function() {
+        let id = $(this).data('id');
+        $('#kraId3').val(id);
+    });
+</script>
+{{--  Start Hare  --}}
+<script>
+    $(document).on('click', '.deleteColumn', function() {
+        const column = $(this).data('column');
+        const id = $(this).data('id');
+
+        if (confirm('Are you sure you want to delete this column?')) {
+            $.ajax({
+                url: '{{ route('delete.column') }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    column: column,
+                    id: id
+                },
+                success: function(response) {
+                    alert(response.message);
+                    location.reload(); // reload table to reflect changes
+                },
+                error: function() {
+                    alert('Something went wrong!');
+                }
+            });
+        }
+    });
+</script>
+{{--  Start Hare  --}}
+{{-- ! End hare --}}
 
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
 {{--  Start Hare  --}}
-{{-- ! End hare --}}
-{{-- * regarding  --}}
-{{--  Start Hare  --}}
-{{--  Start Hare  --}}
-{{-- ! End hare --}}
+<script>
+    function validateFileType(input) {
+        const allowedExtensions = [".csv", ".xlsx", ".xls"];
+        const fileName = input.value.toLowerCase();
+        const extension = fileName.substring(fileName.lastIndexOf("."));
 
-{{-- * regarding  --}}
-{{--  Start Hare  --}}
+        if (!allowedExtensions.includes(extension)) {
+            alert("Please select an Excel (.csv, .xlsx, or .xls) file.");
+            input.value = ""; // Clear the file selection
+            return false; // Prevent form submission if file type is invalid
+        }
+        //   const tableHeader = document.getElementById('excelpreview');
+        //   tableHeader.classList.remove('d-none');
+        return true; // Allow form submission if file type is valid
+    }
+</script>
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding dynamic field   --}}
 {{--  Start Hare  --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        let date1Str = document.getElementById("datepickers1").value;
+        let date2Str = document.getElementById("datepickers2").value;
+
+        let date1Parts = date1Str.split("-");
+        let date2Parts = date2Str.split("-");
+
+        let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+        let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+        let timeDifference = formattedDate2 - formattedDate1;
+        // let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+        let differenceDays = 0;
+
+        console.log("originalDate captured:", formattedDate1);
+        console.log("endDate captured:", formattedDate2);
+        console.log("differenceDays:", differenceDays);
+
+        let fieldContainer = $("#fieldContainer");
+        fieldContainer.empty();
+
+        for (let i = 0; i <= differenceDays; i++) {
+            let currentDate = new Date(formattedDate1);
+            currentDate.setDate(currentDate.getDate() + i);
+
+            let formattedDate =
+                ('0' + currentDate.getDate()).slice(-2) + '-' +
+                ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+                currentDate.getFullYear();
+
+
+            // ${i+1}
+            // value="${formattedDate}" readonly>
+
+            let fieldHtml = `
+                <div class="field_wrapper${i+1}">
+                    <div class="row row-sm mb-2">
+                        <div class="col-2">
+                            <input required type="text" name="date${i+1}" class="form-control"
+                                value="${formattedDate}" readonly>
+                        </div>
+                    </div>
+                    <div class="row row-sm showdiv${i+1}" id="additionalFields${i+1}">
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Client Name</label>
+                                <select required class="language form-control refresh" name="client_id[]" id="client${i+1}">
+                                    <option value="">Select Client</option>
+                                    @foreach ($client as $clientData)
+                                        <option value="{{ $clientData->id }}">
+                                            {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Assignment Name</label>
+                                <select class="form-control key refreshoption assignmentvalue${i+1}" name="assignment_id[]" id="assignment${i+1}">
+                                    @if (!empty($timesheet->assignment_id))
+                                        <option value="{{ $timesheet->assignment_id }}">
+                                            {{ App / Models / Assignment::where('id', $timesheet->assignment_id)->first()->assignment_name ?? '' }}
+                                        </option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Partner</label>
+                                <select class="language form-control refreshoption partnervalue${i+1}" id="partner${i+1}" name="partner[]"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600" style="width:100px;">Work Item</label>
+                                <textarea type="text" name="workitem[]" class="form-control key workItem${i+1} refresh workitemnvalue${i+1}"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600" style="width:100px;">Location</label>
+                                <input type="text" name="location[]" class="form-control key location${i+1} refresh locationvalue${i+1}">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group">
+                                <label class="font-weight-600">Hour</label>
+                                <input type="text" class="form-control hour${i+1} refresh" name="hour[]" oninput="calculateTotal(this)" value="0" step="1">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group" style="margin-top: 36px;">
+                                <a href="javascript:void(0);" id="add_button${i+1}" title="Add field">
+                                    <img src="{{ url('backEnd/image/add-icon.png') }}" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            fieldContainer.append(fieldHtml);
+        }
+    });
+</script> --}}
+
+{{-- default created field will be show --}}
+{{-- <script>
+    $(document).ready(function() {
+        let date1Str = $("#datepickers1").val();
+        let date2Str = $("#datepickers2").val();
+
+
+        let date1Parts = date1Str.split("-");
+        let date2Parts = date2Str.split("-");
+
+        let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+        let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+        let timeDifference = formattedDate2 - formattedDate1;
+        let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+        let fieldContainer = $("#fieldContainer");
+        fieldContainer.empty();
+
+        for (let i = 0; i <= differenceDays; i++) {
+            let currentDate = new Date(formattedDate1);
+            currentDate.setDate(currentDate.getDate() + i);
+
+            let formattedDate =
+                ('0' + currentDate.getDate()).slice(-2) + '-' +
+                ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+                currentDate.getFullYear();
+
+            let fieldHtml = `
+            <div class="field_wrapper" data-index="${i+1}">
+                <div class="row row-sm mb-2">
+                    <div class="col-2">
+                        <input required type="text" id="day${i+1}" name="day${i+1}" class="form-control"
+                            value="${formattedDate}" readonly>
+                    </div>
+                    <div class="col-2">
+                         <input type="text" class="time form-control" id="totalhours${i+1}" name="totalhour${i+1}"
+                            value="{{ $timesheet->hour ?? '0' }}" autocomplete="off" readonly>
+                    </div>
+                </div>
+                <div class="row row-sm showdiv${i+1}" id="additionalFields${i+1}">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600">Client Name</label>
+                            <select required class="language form-control refresh" name="client_id${i+1}[]" id="client${i+1}">
+                                <option value="">Select Client</option>
+                                @foreach ($client as $clientData)
+                                    <option value="{{ $clientData->id }}">
+                                        {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600">Assignment Name</label>
+                            <select class="form-control key refreshoption assignmentvalue${i+1}" name="assignment_id${i+1}[]" id="assignment${i+1}"></select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600">Partner</label>
+                            <select class="language form-control refreshoption partnervalue${i+1}" id="partner${i+1}" name="partner${i+1}[]"></select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600" style="width:100px;">Work Item</label>
+                            <textarea type="text" name="workitem${i+1}[]" class="form-control key workItem${i+1} refresh workitemnvalue${i+1}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600" style="width:100px;">Location</label>
+                            <input type="text" name="location${i+1}[]" class="form-control key location${i+1} refresh locationvalue${i+1}">
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="form-group">
+                            <label class="font-weight-600">Hour</label>
+                            <input type="text" class="form-control hour${i+1} refresh" id="hour${i+1}" name="hour${i+1}[]" oninput="calculateTotal(this)" value="0" step="1">
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="form-group" style="margin-top: 36px;">
+                            <a href="javascript:void(0);" class="add_button" id="plusbuttion${i+1}" data-index="${i+1}" title="Add field">
+                                <img src="{{ url('backEnd/image/add-icon.png') }}" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+            fieldContainer.append(fieldHtml);
+        }
+    });
+</script> --}}
+
+{{-- leave features implement hare --}}
+
+<script>
+    $(document).ready(function() {
+        let date1Str = $("#datepickers1").val();
+        let date2Str = $("#datepickers2").val();
+
+
+        let date1Parts = date1Str.split("-");
+        let date2Parts = date2Str.split("-");
+
+        let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+        let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+        let timeDifference = formattedDate2 - formattedDate1;
+        let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+        $.ajax({
+            url: "{{ url('filterleavedata') }}",
+            type: "GET",
+            data: {
+                start_date: date1Str,
+                end_date: date2Str
+            },
+            success: function(existingDates) {
+                let fieldContainer = $("#fieldContainer");
+                fieldContainer.empty();
+
+                for (let i = 0; i <= differenceDays; i++) {
+                    let currentDate = new Date(formattedDate1);
+                    currentDate.setDate(currentDate.getDate() + i);
+
+                    let formattedDate =
+                        ('0' + currentDate.getDate()).slice(-2) + '-' +
+                        ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+                        currentDate.getFullYear();
+
+                    if (existingDates.includes(formattedDate)) {
+                        continue;
+                    }
+
+
+                    let fieldHtml = `
+            <div class="field_wrapper p-3 mb-4" data-index="${i+1}" id="mainfields${i+1}" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+                <div class="row row-sm mb-2">
+                    <div class="col-2">
+                        <input type="text" id="day${i+1}" name="day${i+1}" class="form-control"
+                            value="${formattedDate}" readonly>
+                    </div>
+                    <div class="col-2">
+                         <input type="text" class="time form-control" id="totalhours${i+1}" name="totalhour${i+1}"
+                            value="{{ $timesheet->hour ?? '0' }}" autocomplete="off" readonly>
+                    </div>
+                </div>
+                <div class="row row-sm showdiv${i+1}" id="additionalFields${i+1}">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600">Client Name <span class="text-danger">*</span></label>
+                            <select class="language form-control refresh" name="client_id${i+1}[]" id="client${i+1}">
+                                <option value="">Select Client</option>
+                                @foreach ($client as $clientData)
+                                    <option value="{{ $clientData->id }}">
+                                        {{ $clientData->client_name }} ({{ $clientData->client_code }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
+                            <select class="form-control key refreshoption assignmentvalue${i+1}" name="assignment_id${i+1}[]" id="assignment${i+1}"></select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600">Partner <span class="text-danger">*</span></label>
+                            <select class="language form-control refreshoption partnervalue${i+1}" id="partner${i+1}" name="partner${i+1}[]"></select>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600" style="width:100px;">Work Item <span class="text-danger">*</span></label>
+                            <textarea type="text" name="workitem${i+1}[]" class="form-control key workItem${i+1} refresh workitemnvalue${i+1}" style="height: 40px;"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label class="font-weight-600" style="width:100px;">Location <span class="text-danger">*</span></label>
+                            <input type="text" name="location${i+1}[]" class="form-control key location${i+1} refresh locationvalue${i+1}">
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="form-group">
+                            <label class="font-weight-600">Hour <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control hour${i+1} refresh" id="hour${i+1}" name="hour${i+1}[]" oninput="calculateTotal(this)" value="0" step="1">
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <div class="form-group" style="margin-top: 36px;">
+                            <a href="javascript:void(0);" class="add_button" id="plusbuttion${i+1}" data-index="${i+1}" title="Add field">
+                                <img src="{{ url('backEnd/image/add-icon.png') }}" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        `;
+                    fieldContainer.append(fieldHtml);
+                }
+            }
+        });
+    });
+</script>
+
+{{-- after date change,  field will be show --}}
+{{-- <script>
+    $(document).ready(function() {
+        $('#datepickers2').on('change', function() {
+            let date1Str = $("#datepickers1").val();
+            var date2Str = $(this).val();
+
+
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            let fieldCount = $('.field_wrapper').length;
+
+            let removablesection = fieldCount - differenceDays;
+
+            console.log("date1Str", date1Str);
+            console.log("date2Str", date2Str);
+            console.log("date1Parts", date1Parts);
+            console.log("date2Parts", date2Parts);
+            console.log("formattedDate1", formattedDate1);
+            console.log("formattedDate2", formattedDate2);
+            console.log("timeDifference", timeDifference);
+            console.log("differenceDays", differenceDays);
+            // console.log("index", index);
+            // console.log("wrapper", wrapper);
+            console.log("fieldCount", fieldCount);
+            console.log("removablesection", removablesection);
+
+ 
+
+
+        });
+
+    });
+</script> --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#datepickers2').on('change', function() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $(this).val();
+
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            let fieldCount = $('.field_wrapper').length;
+            let removablesection = fieldCount - differenceDays;
+
+            console.log("removablesection", removablesection);
+
+            if (removablesection > 0) {
+                // Aakhri ke n elements hatao
+                $('.field_wrapper').slice(-removablesection).remove();
+            }
+        });
+    });
+</script> --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#datepickers2').on('change', function() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $(this).val();
+
+            // Calculate days difference
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            // Get all field wrappers
+            let fieldWrappers = $('.field_wrapper');
+            let fieldCount = fieldWrappers.length;
+
+            // Calculate how many to remove from the end
+            let removeCount = fieldCount - (differenceDays + 1); // +1 because differenceDays is 0-based
+
+            // Remove the excess fields from the end
+            if (removeCount > 0) {
+                fieldWrappers.slice(-removeCount).remove();
+            }
+
+            // Debug logs
+            console.log("Days difference:", differenceDays);
+            console.log("Current fields:", fieldCount);
+            console.log("Removing last", removeCount, "fields");
+        });
+    });
+</script> --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        // Store removed fields
+        let removedFields = [];
+
+        $('#datepickers2').on('change', function() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $(this).val();
+
+            // Calculate days difference
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            // Get all field wrappers
+            let fieldWrappers = $('.field_wrapper');
+            let fieldCount = fieldWrappers.length;
+
+            // Calculate how many fields should exist
+            let requiredFields = differenceDays + 1;
+
+            if (fieldCount > requiredFields) {
+                // Need to remove fields
+                let removeCount = fieldCount - requiredFields;
+                removedFields = fieldWrappers.slice(-removeCount).detach(); // Store removed fields
+            } else if (fieldCount < requiredFields) {
+                // Need to add fields back
+                let addCount = requiredFields - fieldCount;
+                if (removedFields.length >= addCount) {
+                    // Restore from stored fields
+                    $('#fieldContainer').append(removedFields.slice(0, addCount));
+                    removedFields = removedFields.slice(addCount);
+                }
+            }
+        });
+    });
+</script> --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        // Store removed fields
+        let removedFields = [];
+
+        $('#datepickers2').on('change', function() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $(this).val();
+
+            // Calculate days difference
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            // Get all field wrappers
+            let fieldWrappers = $('.field_wrapper');
+            let fieldCount = fieldWrappers.length;
+
+            // Calculate how many fields should exist
+            let requiredFields = differenceDays + 1;
+
+            if (fieldCount > requiredFields) {
+                // Need to remove fields
+                let removeCount = fieldCount - requiredFields;
+                // alert(removeCount);
+                removedFields = fieldWrappers.slice(-removeCount).detach(); // Store removed fields
+            } else if (fieldCount < requiredFields) {
+                // Need to add fields back
+                let addCount = requiredFields - fieldCount;
+                if (removedFields.length >= addCount) {
+                    // Restore from stored fields
+                    $('#fieldContainer').append(removedFields.slice(0, addCount));
+                    // removedFields = removedFields.slice(addCount);
+                }
+            }
+
+            console.log("date1Str", date1Str);
+            console.log("date2Str", date2Str);
+            console.log("date1Parts", date1Parts);
+            console.log("date2Parts", date2Parts);
+            console.log("formattedDate1", formattedDate1);
+            console.log("formattedDate2", formattedDate2);
+            console.log("timeDifference", timeDifference);
+            console.log("differenceDays", differenceDays);
+            console.log("fieldWrappers", fieldWrappers);
+            console.log("fieldCount", fieldCount);
+            console.log("requiredFields", requiredFields);
+            console.log("removeCount", removeCount);
+            console.log("removedFields", removedFields);
+            // console.log("addCount", addCount);
+            // console.log("removedFields.length", removedFields.length);
+            // console.log("removedFields", removedFields);
+        });
+    });
+</script> --}}
+
+{{-- final done hare  --}}
+{{-- <script>
+    $(document).ready(function() {
+        // Store removed fields
+        let removedFields = [];
+
+        $('#datepickers2').on('change', function() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $(this).val();
+
+            // Calculate days difference
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            // Get all field wrappers
+            let fieldWrappers = $('.field_wrapper');
+            let fieldCount = fieldWrappers.length;
+
+            // Calculate how many fields should exist
+            let requiredFields = differenceDays + 1;
+
+            if (fieldCount > requiredFields) {
+                // Need to remove fields - add to removedFields array instead of replacing
+                let removeCount = fieldCount - requiredFields;
+                removedFields = removedFields.concat(fieldWrappers.slice(-removeCount).detach().get());
+            } else if (fieldCount < requiredFields) {
+                // Need to add fields back
+                let addCount = requiredFields - fieldCount;
+
+                // Filter only fields that fit in the current date range
+                let fieldsToAdd = removedFields.filter(field => {
+                    let fieldDate = new Date($(field).find('input[name^="day"]').val().split(
+                        '-').reverse().join('-'));
+                    return fieldDate <= formattedDate2;
+                }).slice(0, addCount);
+
+                $('#fieldContainer').append(fieldsToAdd);
+
+                // Update removedFields array
+                removedFields = removedFields.filter(field => !fieldsToAdd.includes(field));
+            }
+
+            console.log("Stored fields:", removedFields.length);
+        });
+    });
+</script> --}}
+
+<script>
+    $(document).ready(function() {
+        let storedFields = {}; // Object to store fields by date
+
+        $('#datepickers2').on('change', function() {
+            const startDate = new Date($("#datepickers1").val().split('-').reverse().join('-'));
+            const endDate = new Date($(this).val().split('-').reverse().join('-'));
+
+            // Calculate all dates in the range
+            const allDates = [];
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                allDates.push(new Date(d));
+            }
+
+            // Process existing fields
+            $('.field_wrapper').each(function() {
+                const fieldDate = new Date($(this).find('input[name^="day"]').val().split('-')
+                    .reverse().join('-'));
+
+                if (fieldDate > endDate) {
+                    // Store field if it's beyond the new end date
+                    const dateKey = $(this).find('input[name^="day"]').val();
+                    storedFields[dateKey] = $(this).detach();
+                }
+            });
+
+            // Add back fields that are now within range
+            allDates.forEach(date => {
+                const dateStr = formatDate(date);
+                if (storedFields[dateStr]) {
+                    $('#fieldContainer').append(storedFields[dateStr]);
+                    delete storedFields[dateStr];
+                }
+            });
+        });
+
+        // Helper function to format date as dd-mm-yyyy
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            return `${day}-${month}-${date.getFullYear()}`;
+        }
+    });
+</script>
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#datepickers2').on('change', function() {
+            let date1Str = $('#datepickers1').val();
+            let date2Str = $(this).val();
+
+            if (!date1Str || !date2Str) {
+                return; // Do nothing if either date is empty
+            }
+
+            // Convert "dd-mm-yyyy" to Date objects
+            let [d1, m1, y1] = date1Str.split("-");
+            let [d2, m2, y2] = date2Str.split("-");
+
+            let start = new Date(`${y1}-${m1}-${d1}`);
+            let end = new Date(`${y2}-${m2}-${d2}`);
+
+            if (start > end) {
+                alert("End date must be after start date.");
+                return;
+            }
+
+            let container = $('#fieldContainer');
+            container.empty(); // Remove all current fields
+
+            while (start <= end) {
+                let day = String(start.getDate()).padStart(2, '0');
+                let month = String(start.getMonth() + 1).padStart(2, '0');
+                let year = start.getFullYear();
+                let dateStr = `${day}-${month}-${year}`;
+
+                let fieldHTML = `<div class="field_wrapper">
+                    <input type="text" name="day[]" value="${dateStr}" />
+                </div>`;
+
+                container.append(fieldHTML);
+
+                // Move to next day
+                start.setDate(start.getDate() + 1);
+            }
+        });
+    });
+</script> --}}
+
+{{-- <script>
+    $(document).ready(function() {
+        $('#datepickers2').on('change', function() {
+            let date1Str = $('#datepickers1').val();
+            let date2Str = $(this).val();
+
+            if (!date1Str || !date2Str) return;
+
+            let [d1, m1, y1] = date1Str.split("-");
+            let [d2, m2, y2] = date2Str.split("-");
+
+            let start = new Date(`${y1}-${m1}-${d1}`);
+            let end = new Date(`${y2}-${m2}-${d2}`);
+
+            if (start > end) {
+                alert("End date must be after start date.");
+                return;
+            }
+
+            let container = $('#fieldContainer');
+            container.empty();
+
+            let i = 0;
+
+            while (start <= end) {
+                i++;
+
+                let day = String(start.getDate()).padStart(2, '0');
+                let month = String(start.getMonth() + 1).padStart(2, '0');
+                let year = start.getFullYear();
+                let formattedDate = `${day}-${month}-${year}`;
+
+                let fieldHTML = `
+                <div class="field_wrapper p-3 mb-4" data-index="${i}" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+                    <div class="row row-sm mb-2">
+                        <div class="col-2">
+                            <input type="text" id="day${i}" name="day${i}" class="form-control" value="${formattedDate}" readonly>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" class="time form-control" id="totalhours${i}" name="totalhour${i}" value="0" autocomplete="off" readonly>
+                        </div>
+                    </div>
+                    <div class="row row-sm showdiv${i}" id="additionalFields${i}">
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Client Name <span class="text-danger">*</span></label>
+                                <select class="language form-control refresh" name="client_id${i}[]" id="client${i}">
+                                    <option value="">Select Client</option>
+                                    <!-- You can render options via AJAX or Blade injection -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
+                                <select class="form-control key refreshoption assignmentvalue${i}" name="assignment_id${i}[]" id="assignment${i}"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Partner <span class="text-danger">*</span></label>
+                                <select class="language form-control refreshoption partnervalue${i}" id="partner${i}" name="partner${i}[]"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Work Item <span class="text-danger">*</span></label>
+                                <textarea name="workitem${i}[]" class="form-control key workItem${i} refresh workitemnvalue${i}" style="height: 40px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Location <span class="text-danger">*</span></label>
+                                <input type="text" name="location${i}[]" class="form-control key location${i} refresh locationvalue${i}">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group">
+                                <label class="font-weight-600">Hour <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control hour${i} refresh" id="hour${i}" name="hour${i}[]" oninput="calculateTotal(this)" value="0" step="1">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group" style="margin-top: 36px;">
+                                <a href="javascript:void(0);" class="add_button" id="plusbuttion${i}" data-index="${i}" title="Add field">
+                                    <img src="/backEnd/image/add-icon.png" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                container.append(fieldHTML);
+
+                start.setDate(start.getDate() + 1);
+            }
+        });
+    });
+</script> --}}
+
+
+
+
+{{-- <script>
+    $(document).ready(function() {
+        function generateFields(date1Str, date2Str, existingDates = []) {
+            let date1Parts = date1Str.split("-");
+            let date2Parts = date2Str.split("-");
+
+            let formattedDate1 = new Date(`${date1Parts[2]}-${date1Parts[1]}-${date1Parts[0]}`);
+            let formattedDate2 = new Date(`${date2Parts[2]}-${date2Parts[1]}-${date2Parts[0]}`);
+
+            let timeDifference = formattedDate2 - formattedDate1;
+            let differenceDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            let fieldContainer = $("#fieldContainer");
+            fieldContainer.empty();
+
+            for (let i = 0; i <= differenceDays; i++) {
+                let currentDate = new Date(formattedDate1);
+                currentDate.setDate(currentDate.getDate() + i);
+
+                let formattedDate = ('0' + currentDate.getDate()).slice(-2) + '-' +
+                    ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' +
+                    currentDate.getFullYear();
+
+                if (existingDates.includes(formattedDate)) {
+                    continue;
+                }
+
+                let fieldHtml = `
+                <div class="field_wrapper p-3 mb-4" data-index="${i+1}" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+                    <div class="row row-sm mb-2">
+                        <div class="col-2">
+                            <input type="text" id="day${i+1}" name="day${i+1}" class="form-control" value="${formattedDate}" readonly>
+                        </div>
+                        <div class="col-2">
+                            <input type="text" class="time form-control" id="totalhours${i+1}" name="totalhour${i+1}" value="{{ $timesheet->hour ?? '0' }}" autocomplete="off" readonly>
+                        </div>
+                    </div>
+                    <div class="row row-sm showdiv${i+1}" id="additionalFields${i+1}">
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Client Name <span class="text-danger">*</span></label>
+                                <select class="language form-control refresh" name="client_id${i+1}[]" id="client${i+1}">
+                                    <option value="">Select Client</option>
+                                    @foreach ($client as $clientData)
+                                        <option value="{{ $clientData->id }}">{{ $clientData->client_name }} ({{ $clientData->client_code }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Assignment Name <span class="text-danger">*</span></label>
+                                <select class="form-control key refreshoption assignmentvalue${i+1}" name="assignment_id${i+1}[]" id="assignment${i+1}"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Partner <span class="text-danger">*</span></label>
+                                <select class="language form-control refreshoption partnervalue${i+1}" id="partner${i+1}" name="partner${i+1}[]"></select>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Work Item <span class="text-danger">*</span></label>
+                                <textarea name="workitem${i+1}[]" class="form-control key workItem${i+1} refresh workitemnvalue${i+1}" style="height: 40px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label class="font-weight-600">Location <span class="text-danger">*</span></label>
+                                <input type="text" name="location${i+1}[]" class="form-control key location${i+1} refresh locationvalue${i+1}">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group">
+                                <label class="font-weight-600">Hour <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control hour${i+1} refresh" id="hour${i+1}" name="hour${i+1}[]" oninput="calculateTotal(this)" value="0" step="1">
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="form-group" style="margin-top: 36px;">
+                                <a href="javascript:void(0);" class="add_button" id="plusbuttion${i+1}" data-index="${i+1}" title="Add field">
+                                    <img src="{{ url('backEnd/image/add-icon.png') }}" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                fieldContainer.append(fieldHtml);
+            }
+        }
+
+        function fetchAndRender() {
+            let date1Str = $("#datepickers1").val();
+            let date2Str = $("#datepickers2").val();
+
+            if (!date1Str || !date2Str) return;
+
+            $.ajax({
+                url: "{{ url('filterleavedata') }}",
+                type: "GET",
+                data: {
+                    start_date: date1Str,
+                    end_date: date2Str
+                },
+                success: function(existingDates) {
+                    generateFields(date1Str, date2Str, existingDates);
+                },
+                error: function() {
+                    alert("Something went wrong while fetching leave data.");
+                }
+            });
+        }
+
+        // Trigger on page load (if both dates are already filled)
+        fetchAndRender();
+
+        // Trigger on end date change
+        $('#datepickers2').on('change', fetchAndRender);
+    });
+</script> --}}
 {{--  Start Hare  --}}
 {{-- ! End hare --}}
 
@@ -184,8 +1386,10 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare  --}}
+
 {{-- Akshay has worked --}}
 <script>
+    $('.sunday-field').toggleClass('d-none');
     document.getElementById('Myform').addEventListener('submit', function(event) {
         // Get the submit button
         const submitButton = document.getElementById('submitButton');
@@ -1655,10 +2859,10 @@ $('#errormessage').text(response.otpsuccessmessage);
 
             if (!teammemberId && !assignmentId && !statusId) {
                 alert("At least choose one field");
-                
+
                 // Sirf pehle field pe focus karwana (optional logic)
                 $("[name='teammemberId']").focus();
-                
+
                 event.preventDefault(); // Form submit ko rokna
                 return false;
             }
@@ -1675,7 +2879,7 @@ $('#errormessage').text(response.otpsuccessmessage);
 
             if (!teammemberId && !assignmentId && !statusId) {
                 alert("At least choose one field");
-                
+
                 // Focus first empty field
                 if (!$("[name='teammemberId']").val()) {
                     $("[name='teammemberId']").focus();
@@ -4953,6 +6157,142 @@ split('-')[1] gives you "44".
 {{--  Start Hare  --}}
 {{-- * regarding data table / regarding datatable / regarding excell  --}}
 {{--  Start Hare --}}
+<!-- validation on excel file  -->
+<script>
+    function validateFileType(input) {
+        const allowedExtensions = [".csv", ".xlsx", ".xls"];
+        const fileName = input.value.toLowerCase();
+        const extension = fileName.substring(fileName.lastIndexOf("."));
+
+        if (!allowedExtensions.includes(extension)) {
+            alert("Please select an Excel (.csv, .xlsx, or .xls) file.");
+            input.value = ""; // Clear the file selection
+            return false; // Prevent form submission if file type is invalid
+        }
+        return true; // Allow form submission if file type is valid
+    }
+</script>
+
+{{-- for preview of an Excel fil  --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+    //   Global Variables:
+    let excelData = [];
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    //   Excel Serial Date Conversion Function
+    function excelSerialToDate(serial) {
+        const utc_days = Math.floor(serial - 25569);
+        const utc_value = utc_days * 86400;
+        return new Date(utc_value * 1000);
+    }
+
+    //   File Selection Handler
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        console.log("file:", file);
+        console.log("reader:", reader);
+
+
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {
+                type: 'array'
+            });
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            excelData = XLSX.utils.sheet_to_json(sheet, {
+                header: 1,
+                raw: false,
+                dateNF: 'yyyy-mm-dd'
+            });
+            displayHeaderRow(excelData[0]);
+            displayData(currentPage);
+        };
+
+        reader.readAsArrayBuffer(file);
+    }
+
+    //   Header Capitalize Function
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
+    //   Display Header Row in Table
+    function displayHeaderRow(headerRow) {
+        const tableHeader = document.getElementById('table-header');
+        tableHeader.innerHTML = '';
+        const tr = document.createElement('tr');
+        headerRow.forEach(header => {
+            const th = document.createElement('th');
+            // Capitalize the first letter of each header
+            th.textContent = capitalizeFirstLetter(header);
+            tr.appendChild(th);
+        });
+        tableHeader.appendChild(tr);
+    }
+
+    //   Display Paginated Data
+    function displayData(page) {
+        const startIndex = (page - 1) * rowsPerPage;
+        const endIndex = startIndex + rowsPerPage;
+        const totalPages = Math.ceil((excelData.length - 1) / rowsPerPage);
+
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '';
+
+        for (let i = startIndex + 1; i < endIndex + 1 && i < excelData.length; i++) {
+            const row = excelData[i];
+            const tr = document.createElement('tr');
+            for (let j = 0; j < excelData[0].length; j++) {
+                const td = document.createElement('td');
+                if (j < row.length) {
+                    let cellValue = row[j];
+                    //   date 
+                    if (j === 3 && !isNaN(cellValue)) {
+                        const date = excelSerialToDate(cellValue);
+                        cellValue = date.toLocaleDateString();
+                    }
+                    td.textContent = cellValue;
+                } else {
+                    td.textContent = ""; // For blank cells
+                }
+                tr.appendChild(td);
+            }
+            tableBody.appendChild(tr);
+        }
+
+        displayPagination(totalPages);
+    }
+
+    //   Pagination Display Function
+    function displayPagination(totalPages) {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = 'page-item';
+            const a = document.createElement('a');
+            a.className = 'page-link';
+            a.href = '#';
+            a.textContent = i;
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentPage = i;
+                displayData(currentPage);
+            });
+            li.appendChild(a);
+            pagination.appendChild(li);
+        }
+    }
+
+    document.getElementById('input-excel').addEventListener('change', handleFileSelect);
+</script>
+{{--  Start Hare --}}
 
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -6841,6 +8181,16 @@ style="display:block">Please Select One</option>
         }
     </script>
     {{-- * selecteor / regarding selector/ regarding selecter / regarding jquery selector / regarding jquery selecter / regarding target --}}
+    {{--  Start Hare  --}}
+    const test1 = $("#datepickers1").val();
+    const test2 = $("#datepickers1").val().split('-');
+    const test3 = $("#datepickers1").val().split('-').reverse();
+    const test4 = $("#datepickers1").val().split('-').reverse().join('-');
+
+    // test1 10-04-2025
+    // create:1111 test2 (3) ['10', '04', '2025']0: "10"1: "04"2: "2025"length: 3[[Prototype]]: Array(0)
+    // create:1112 test3 (3) ['2025', '04', '10']
+    // create:1113 test4 2025-04-10
     {{--  Start Hare  --}}
     {{-- for testing 
 https://www.w3schools.com/jquery/trysel.asp?password=password&rr=on --}}

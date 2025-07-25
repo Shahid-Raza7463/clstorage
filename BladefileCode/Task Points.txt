@@ -1,0 +1,53 @@
+KRAs task points
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+1
+Meeting notes: KRA
+Super-admin role adds employee and uploads KRA (inc del KRA) - format is configurable
+KRA columns are editable
+Row-wise edits can be done
+Overwrite old KRA with new one 
+Designation-specific Notifications 
+Immediate Supervisor (mentor) to be informed when employee KRA is modified
+Ask - Review mail content from Disha
+
+ Query - 
+ which partner will receive mail for KRA edit updates - Notify all partners will get a mail when edit is done for articles and manager
+Partner - Tripti and Sharad
+2. Rest of the designations?
+
+ISSUE - KRA can be modified at the user level
+ Global KRA
+User-level KRA (multi-select)
+
+
+KRA changes when the Designation changes 
+ 
+
+
+2
+
+MOMs_ KRA
+HR role view - HR KRA management view
+Add New designation > will come here automatically
+Click on any one designation - say article trainee
+Bulk select for global update 
+Excel preview > submit & save 
+KRA is updated for all article trainees
+Single Edit KRA > Can make edits at user-level, row-wise
+ Column edit only name or del entire column
+Add column - at global level- Column name is mandatory but value is not mandatory 
+indexing page - during upload the old template will be assigned , first upload then excel can be used as the template 
+to upload the KRA > i have to delete > then upload
+icon to show that single user KRA has been updated 
+TASK: add created and updated date
+
+
+
+ 
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222

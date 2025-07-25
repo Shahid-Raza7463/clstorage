@@ -1,8 +1,16 @@
 {{-- *   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- *   --}}
+{{-- * table icon   --}}
 {{--  Start Hare --}}
+<style>
+    #iconremove[class^="sorting"]::after,
+    #iconremove[class^="sorting"]::before {
+        content: none !important;
+        display: none !important;
+
+    }
+</style>
 {{--  Start Hare --}}
 <style>
     .borderstyle {
@@ -228,7 +236,31 @@
     }
 </style>
 {{--  Start Hare --}}
-{{-- * regarding selector  --}}
+{{-- * regarding selector / regarding css selector  --}}
+{{--  Start Hare --}}
+
+<script>
+    $('#end-date-col').removeClass('col-4').addClass('col-3');
+
+    if ($('#reload-button-template .form-group').hasClass('d-none')) {
+        $('#reload-button-template .form-group').removeClass('d-none');
+    }
+</script>
+<div class="col-4" id="end-date-col">
+    <div class="form-group">
+        <label class="font-weight-600">End Date</label>
+        <input type="date" class="form-control" name="end" id="end">
+    </div>
+</div>
+
+<div class="col-1 d-flex justify-content-center align-items-center" id="reload-button-template">
+    <div class="form-group m-0 d-none">
+        <a href="{{ url('/applyleave') }}">
+            <img src="{{ url('backEnd/image/reload.png') }}" style="width: 30px; height: 30px; margin-top: 12px;"
+                alt="Reload">
+        </a>
+    </div>
+</div>
 {{--  Start Hare --}}
 <pre>
     ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -716,7 +748,41 @@ var()                 Inserts the value of a custom property
 {{--  Start Hare --}}
 {{-- * regarding date   --}}
 {{--  Start Hare --}}
+{{-- <style>
+             tr td:first-child a.ui-state-default {
+                 /* background-color: rgb(234, 0, 0) !important; */
+                 background-image: linear-gradient(to right, #34b4e5, rgba(255, 0, 0, 1));
+                 color: white !important;
+             }
 
+             tr th:first-child span {
+                 color: rgb(249, 5, 5) !important;
+             }
+
+             tr td:last-child a.ui-state-default {
+                 background-color: #007fff !important;
+                 color: white !important;
+             }
+         </style> --}}
+{{--  Start Hare --}}
+<style>
+    tr td:first-child a.ui-state-default {
+        /* background-color: rgb(234, 0, 0) !important; */
+        background-image: linear-gradient(to right, #34b4e5, rgba(255, 0, 0, 1));
+        color: white !important;
+    }
+
+    /* week text colcor like sun, mon */
+    tr th:first-child span {
+        color: rgb(249, 5, 5) !important;
+    }
+
+    /* select last td for starday */
+    tr td:last-child a.ui-state-default {
+        background-color: #a08500 !important;
+        color: white !important;
+    }
+</style>
 {{-- Get background color red only sunday --}}
 <style>
     /* select both td */
@@ -725,13 +791,13 @@ var()                 Inserts the value of a custom property
         color: white !important;
     }
 
-    /* select first td */
+    /* select first td for sunday */
     tr td:first-child a.ui-state-default {
         background-color: #37A000 !important;
         color: white !important;
     }
 
-    /* select last td */
+    /* select last td for starday */
     tr td:last-child a.ui-state-default {
         background-color: #37A000 !important;
         color: white !important;
@@ -760,8 +826,8 @@ var()                 Inserts the value of a custom property
             class="ui-state-default" href="#">11</a></td>
     <td class=" " data-handler="selectDay" data-event="click" data-month="3" data-year="2024"><a
             class="ui-state-default" href="#">12</a></td>
-    <td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="3" data-year="2024"><a
-            class="ui-state-default" href="#">13</a></td>
+    <td class=" ui-datepicker-week-end " data-handler="selectDay" data-event="click" data-month="3"
+        data-year="2024"><a class="ui-state-default" href="#">13</a></td>
 </tr>
 {{--  Start Hare --}}
 

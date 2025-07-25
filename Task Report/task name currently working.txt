@@ -1280,36 +1280,6 @@ client
 
 1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-leaving date 31-01-2025 and i need to delete 01-02-2025 leave data
-
-Casual leave delete karna ho to 
-
-applyleaves  table me 
-951
-id = 1623  delete
-
-
-timesheets table me
-id = 150673 delete
-
-
-timesheetusers table me
-id = 153401 delete 
-
-
-
-timesheetreport table me 
-
-id = 13798 totaldays = 4 ko replace kare 3
-id = 13797 dayscount 5 
-
-attendance table me 
-id = 1355
-27	28	29 ko null kare 
-
-exam_leave  = 25
-Offholidays = 0 
-sundaycount = 0 
 
 
 
@@ -1984,5 +1954,694 @@ Steps:
     ]
   }					
   
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+fianl from hare 
+
+1
+Md Shahid Raza
+
+2
+Laravel Developer
+
+3
+Atishay Jain
+
+4
+VSA
+
+5
+Develop and maintain backend functionality using Laravel, Write optimized SQL queries for large datasets, Optimize queries and controllers for performance, Debug and resolve application issues, Maintain code versioning using Git, Participate in daily stand-ups. Handle bug fixing and production support issues, update task descreption on Jira for testing, Implementation of a new task
+
+6
+Yes, Fully
+
+7
+My daily tasks are fully aligned with my defined KRAs.
+
+8
+1.Backend Development using Laravel, 2. Database Design and Query Optimization, 3.Code Maintenance, Deployment, and Support, 4. Performance Optimization, 5. The description has been updated on Jira for all In process tasks
+
+9
+1.Backend Development using Laravel. A. Develop and maintain Laravel-based applications and modules. B. Implement controllers, models, and business logic. 2. Database Design and Query Optimization. A. Design normalized tables and relationships in MySQL. B. Write optimized queries, joins, and indexes for large datasets. 3. Code Maintenance, Deployment, and Support. A. Fix bugs and issues in the codebase. B. Push updates to staging/live environments using Bitbucket. 4. Performance Optimization. A. Use pagination, eager loading, and indexing for speed improvements. 5. Task Documentation and Updates on Jira. A. Regularly update task status and progress on Jira. B. Document important steps, blockers under each task ticket
+
+10
+implementing new tasks and resolving bugs on VSA
+
+11
+I want to contribute more to Performance Optimization because it directly improves the application’s speed and efficiency, and helps in building scalable systems. I also enjoy analyzing slow queries and finding ways to optimize backend processes.
+
+12
+I face challenges such as unexpected data being removed from the backend, and I currently do not have direct access to upload or deploy code on the live server, which limits my ability to resolve issues quickly.
+
+13
+Gaining access to the live deployment environment would significantly improve efficiency, as it would reduce dependency delays
+
+14
+Backend: PHP (Laravel), Database: MySQL, Frontend : HTML, CSS, JavaScript, Bootstrap, Libraries, Tools: Git, Postman, XAMPP, phpMyAdmin, Jira, Bitbucket. Others: jQuery, DataTables, AJAX, Json.
+
+15
+Advanced JavaScript concepts
+
+16
+training sessions or webinars to upskill the tech team.
+
+
+https://forms.office.com/Pages/ResponseDetailPage.aspx?id=tRLJslORgk2tC-qCsgEPd8lzwwFkxVNFmI_MGKqJ6uRUQjNTQVc5M1pLTUs2UkRLUExSMFBZM0QwTC4u&rid=9&GetResponseToken=lIGCGXEJT94VCieWWSN3rEyhsqBn615F1JpWOdqskx0&origin=rc&prevsubpage=rcfre&d1obforrc=1&rcsidebar=0 
+
+KRA tasks 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.upload excel and listing data according degination 
+2.degination incraement and decreament 
+
+
+3.
+
+
+Employee account - KRA visible to all employees (non-editable)
+
+HR Account 
+
+HR/Admin can edit Employee KRAs
+
+HR can edit column names 
+
+HR can add/del column and row 
+
+HR can create New Designation and upload/add KRAs
+
+Notifications 
+
+Notify employee when KRAs is modified
+
+Notify reporting manager/partner about employee’s KRA edit
+
+Mail Content - Pending from Shivam/HR
+
+
+
+
+
+1.ui bnana hai 
+2.jab excell upload karenge to priev ho jayega and niche instruction likhunga ki is excell me 2nd row ko as a column heading pick karunga
+3.column null nahi hoga 
+4.after that i can submit it 
+
+# tables
+
+1.column1, column 2, coulumn 3 
+2. and column 1, and column 2 me jo bhi value dalenge vo dusre table me store hoga 
+
+#edit / permission 
+1. agar kisi ko permission dena hai extra column ko to ek new record create ho jayega and user ka id jayega us column me and jab fetch karunga tab jis column me user ka id hai vo latest pick karenge 
+2.
+
+
+
+
+
+Kras Meeting 
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+partnar me notification  tri sharadh
+
+manager and article me
+all manager and all article 
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2024-07-08 12:52:04
+
+2025-06-14 12:52:04
+
+
+array:6 [▼
+  0 => 11782
+  1 => 11783
+  2 => 12038
+  3 => 12039
+  4 => 13126
+  5 => 13127
+]
+
+
+$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
+
+
+967
+864
+844
+
+
+array:56 [▼
+  0 => array:2 [▼
+    "teamid" => 864
+    "delete_ids" => array:9 [▼
+      0 => 10947
+      1 => 10948
+      2 => 11501
+      3 => 11502
+      4 => 12146
+      5 => 12147
+      6 => 12148
+      7 => 12529
+      8 => 12530
+    ]
+  ]
+  1 => array:2 [▼
+    "teamid" => 889
+    "delete_ids" => array:2 [▼
+      0 => 8474
+      1 => 16249
+    ]
+  ]
+  2 => array:2 [▼
+    "teamid" => 844
+    "delete_ids" => array:6 [▼
+      0 => 11782
+      1 => 11783
+      2 => 12038
+      3 => 12039
+      4 => 13126
+      5 => 13127
+    ]
+  ]
+  3 => array:2 [▼
+    "teamid" => 819
+    "delete_ids" => array:7 [▼
+      0 => 13692
+      1 => 13693
+      2 => 13694
+      3 => 14714
+      4 => 14715
+      5 => 14716
+      6 => 14717
+    ]
+  ]
+  4 => array:2 [▼
+    "teamid" => 777
+    "delete_ids" => array:2 [▼
+      0 => 13120
+      1 => 13379
+    ]
+  ]
+  5 => array:2 [▶]
+  6 => array:2 [▶]
+  7 => array:2 [▶]
+  8 => array:2 [▶]
+  9 => array:2 [▶]
+  10 => array:2 [▶]
+  11 => array:2 [▶]
+  12 => array:2 [▶]
+  13 => array:2 [▶]
+  14 => array:2 [▶]
+  15 => array:2 [▶]
+  16 => array:2 [▶]
+  17 => array:2 [▶]
+  18 => array:2 [▶]
+  19 => array:2 [▶]
+  20 => array:2 [▶]
+  21 => array:2 [▶]
+  22 => array:2 [▶]
+  23 => array:2 [▶]
+  24 => array:2 [▶]
+  25 => array:2 [▶]
+  26 => array:2 [▶]
+  27 => array:2 [▶]
+  28 => array:2 [▶]
+  29 => array:2 [▶]
+  30 => array:2 [▶]
+  31 => array:2 [▶]
+  32 => array:2 [▶]
+  33 => array:2 [▶]
+  34 => array:2 [▶]
+  35 => array:2 [▶]
+  36 => array:2 [▶]
+  37 => array:2 [▶]
+  38 => array:2 [▶]
+  39 => array:2 [▶]
+  40 => array:2 [▶]
+  41 => array:2 [▶]
+  42 => array:2 [▶]
+  43 => array:2 [▶]
+  44 => array:2 [▶]
+  45 => array:2 [▶]
+  46 => array:2 [▼
+    "teamid" => 959
+    "delete_ids" => array:9 [▼
+      0 => 11407
+      1 => 11408
+      2 => 11497
+      3 => 11498
+      4 => 11979
+      5 => 11980
+      6 => 14093
+      7 => 14805
+      8 => 14806
+    ]
+  ]
+  47 => array:2 [▶]
+  48 => array:2 [▶]
+  49 => array:2 [▶]
+  50 => array:2 [▼
+    "teamid" => 967
+    "delete_ids" => array:4 [▼
+      0 => 12156
+      1 => 12157
+      2 => 14291
+      3 => 14292
+    ]
+  ]
+  51 => array:2 [▶]
+  52 => array:2 [▶]
+  53 => array:2 [▶]
+  54 => array:2 [▶]
+  55 => array:2 [▶]
+]
+]
+
+
+Rahul Singhal  864  2023-10-30
+sunny gupta 
+
+
+Sachin Kumar	S1052	02-06-2025 to 08-06-2025	13-06-2025 05:53 PM	14	112   888
+
+Sachin Kumar	S1052	26-05-2025 to 31-05-2025	04-06-2025 05:28 PM	12	68
+
+Sachin Kumar	S1052	27-01-2025 to 01-02-2025	10-02-2025 03:09 PM	12	79
+
+Sachin Kumar	M1103	19-05-2025 to 24-05-2025	31-05-2025 10:54 AM	12	32
+
+Vishal Singh	M1065	14-04-2025 to 20-04-2025	23-04-2025 10:33 AM	14	116
+
+Vishal Singh	M1065	07-04-2025 to 13-04-2025	17-04-2025 10:33 AM	14	118
+
+Vishal Singh	M1065	31-03-2025 to 05-04-2025	16-04-2025 01:41 PM	12	102
+
+Vishal Singh	M1065	24-03-2025 to 29-03-2025	16-04-2025 01:37 PM	12	94
+
+Vishal Singh	M1065	17-03-2025 to 22-03-2025	24-03-2025 04:21 PM	12	93
+
+Vishal Singh	M1065	10-03-2025 to 15-03-2025	18-03-2025 01:13 PM	12	66
+
+Vishal Singh	M1065	03-03-2025 to 08-03-2025	18-03-2025 12:59 PM	12	87     928
+
+Vishal Singh	M1001	25-11-2024 to 30-11-2024	02-12-2024 06:52 PM	12	99    835
+
+
+ // $teammembers = DB::table('timesheetreport')
+    //   // ->where('teamid', 847)
+    //   ->distinct()
+    //   ->pluck('teamid')
+    //   ->toArray();
+
+    // $updatedteamlist = [];
+    // foreach ($teammembers as $teamId) {
+    //   $allData = DB::table('timesheetreport')
+    //     ->where('teamid', $teamId)
+    //     ->get();
+
+    //   $grouped = $allData->groupBy(function ($item) {
+    //     return $item->teamid . '|' . $item->startdate . '|' . $item->partnerid;
+    //   });
+
+    //   $deleteIds = [];
+
+    //   $grouped->each(function ($group) use (&$deleteIds) {
+    //     if ($group->count() > 1) {
+    //       $sorted = $group->sortBy('id')->values();
+    //       $duplicates = $sorted->slice(1)->pluck('id')->toArray();
+    //       $deleteIds = array_merge($deleteIds, $duplicates);
+    //     }
+    //   });
+
+
+    //   if (!empty($deleteIds)) {
+    //     // $updatedteamlist[] = $teamId;
+    //     $updatedteamlist[] = [
+    //       'teamid' => $teamId,
+    //       'delete_ids' => $deleteIds
+    //     ];
+
+    //     DB::table('timesheetreport')
+    //       ->where('teamid', $teamId)
+    //       ->whereIn('id', $deleteIds)
+    //       ->delete();
+    //   }
+    // }
+    // dd($updatedteamlist);
+	
+	
+	
+	  public function allteamsubmitted()
+	  
+	  
+	   public function allteamsubmitted()
+  {
+    // Fetch all necessary data in a single query
+    $get_datess = DB::table('timesheetreport')
+      ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+      ->leftJoin('teamrolehistory', function ($join) {
+        $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+          ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+      })
+      ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+      // ->where('timesheetreport.teamid', 868)
+      ->select(
+        'timesheetreport.*',
+        'teamrolehistory.newstaff_code',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'partners.team_member as partnername',
+        'teammembers.emailid'
+      )
+      ->latest()
+      ->get();
+
+    $permissiontimesheet = DB::table('timesheetreport')->first();
+
+    // Map and group data
+    $groupedData = $get_datess->groupBy(function ($item) {
+      return $item->team_member . '|' . $item->week;
+    })->map(function ($group) {
+      $firstItem = $group->first();
+
+      return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'dayscount' => $group->sum('dayscount'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'emailid' => $firstItem->emailid,
+        // Use newstaff_code if available, otherwise staffcode
+        'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+        'partnerid' => $firstItem->partnerid,
+      ];
+    });
+
+    $get_date = collect($groupedData->values());
+
+
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'permissiontimesheet'));
+  }
   
   
+  
+  
+  @if (Auth::user()->role_id == 11)
+        <div class="body-content">
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 bg-info text-white rounded mb-3 p-3 shadow-sm text-center">
+                        <a href="{{ url('assignmentmapping') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
+                            <small style="color:white;">Latest Assignment</small>
+                            <a></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 bg-primary text-white rounded mb-3 p-3 shadow-sm text-center">
+                        <a href="{{ url('client') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Client</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $client }}</div>
+                            <small style="color:white;">active clients</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 bg-success text-white rounded mb-3 p-3 shadow-sm text-center">
+                        <a href="{{ url('teammember') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Team Member</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $teammember }}</div>
+                            <small style="color:white;">active Member</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 text-white rounded mb-3 p-3 shadow-sm text-center"
+                        style="background-color: darkcyan;">
+                        <a href="{{ url('notification') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Notification</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $notification }}</div>
+                            <small style="color:white;">Latest Notification</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif  ye mera design hai but mai is design ko change karna chahta hu like image ke tarah mai image attach kar deta hu aur is image me jo content hai vahi content rakhna static
+	
+	
+	.card-header h2
+Specificity: (0,1,1)
+ {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-left: -16px;
+	
+	
+	Illuminate\Support\Collection {#3026 ▼
+  #items: array:11 [▼
+    0 => {#2980 ▼
+      +"id": 830
+      +"staffcode": "M1019"
+      +"team_member": "Sohan Jha"
+    }
+    1 => {#2990 ▼
+      +"id": 844
+      +"staffcode": "P1009"
+      +"team_member": "Sunny Gupta"
+    }
+    2 => {#3025 ▼
+      +"id": 849
+      +"staffcode": "M1029"
+      +"team_member": "Dinesh Maurya"
+    }
+    3 => {#3023 ▼
+      +"id": 858
+      +"staffcode": "M1038"
+      +"team_member": "Pratibha Sharma"
+    }
+    4 => {#3022 ▼
+      +"id": 869
+      +"staffcode": "M1049"
+      +"team_member": "Vishvdev Arya"
+    }
+    5 => {#3021 ▼
+      +"id": 918
+      +"staffcode": "M1059"
+      +"team_member": "Kartic Bindal"
+    }
+    6 => {#3020 ▼
+      +"id": 932
+      +"staffcode": "M1066"
+      +"team_member": "Sakshi Sharma"
+    }
+    7 => {#3019 ▼
+      +"id": 934
+      +"staffcode": "M1068"
+      +"team_member": "Prateek Kumar"
+    }
+    8 => {#3018 ▼
+      +"id": 965
+      +"staffcode": "M1089"
+      +"team_member": "Aditya Gahlot"
+    }
+	
+	
+    9 => {#3017 ▼
+      +"id": 972
+      +"staffcode": "M1096"
+      +"team_member": "Akshi Jain"
+    }
+    10 => {#3016 ▼
+      +"id": 982
+      +"staffcode": "M1098"
+      +"team_member": "Madhurima das"
+    }
+  ]
+  #escapeWhenCastingToString: false
+}
+
+31-05-2025
+858
+2025-05-31
+
+
+
+33
+OFF100004
+887
+0
+213
+4th Saturday
+N/A
+0
+
+
+
+thirtyone OH  remove P
+offholidays increase 1 days 
+no_of_days_present  decrease 1 days 
+
+
+Illuminate\Support\Collection {#3026 ▼
+  #items: array:11 [▼
+    0 => 830
+    1 => 844
+    2 => 849
+    3 => 858
+    4 => 869
+    5 => 918
+    6 => 932
+    7 => 934
+    8 => 965
+    9 => 972
+    10 => 982
+  ]
+  #escapeWhenCastingToString: false
+}
+
+
+  $teammemberId = DB::table('teammembers')
+      ->whereIn('staffcode', ['M1038', 'M1096', 'M1029', 'M1019', 'M1098', 'M1068', 'M1066', 'M1089', 'M1049', 'P1009', 'M1059'])
+      ->pluck('id');
+
+    // $timesheetdata = DB::table('timesheetusers')
+    //   ->whereIn('createdby', $teammemberId)
+    //   ->where('date', '2025-05-31')
+    //   ->update([
+    //     'client_id' => 33,
+    //     'assignmentgenerate_id' => 'OFF100004',
+    //     'partner' => 887,
+    //     'totalhour' => 0,
+    //     'assignment_id' => 213,
+    //     'workitem' => '14th Saturday',
+    //     'location' => 'N/A',
+    //     'hour' => 0,
+    //   ]);
+
+    $attendancesdata = DB::table('attendances')
+      ->whereIn('employee_name', $teammemberId)
+      ->where('month', 'May')
+      ->where('year', '2025')
+      ->get();
+
+    foreach ($attendancesdata as $attendances) {
+      // DB::beginTransaction();
+
+      $updateddata = DB::table('attendances')
+        ->where('id', $attendances->id)
+        ->update([
+          'thirtyone' => 'OH',
+          'offholidays' => $attendances->offholidays + 1,
+          'no_of_days_present' => $attendances->no_of_days_present - 1,
+
+        ]);
+      // ->get();
+
+
+      $updateddatacheck = DB::table('attendances')
+        ->where('id', $attendances->id)
+        ->get();
+
+      dd($updateddatacheck);
+
+      // DB::commit();
+    }
+
+
+   
+   950   ayush
+   timesheet not 
+   timesheetreport not
+   
+  
+   timesheetusers yes one days 31 
+   
+   
+   
+   applyleave 2038 id delete 
+   
+   
+   
+   attendances yes  sasual leave kam karna hai and offholidays badhana hai 
+   
+     leaveapprove 
+ 1945  id delete 
+   
+   ayushi go
+   
+      timesheet not 
+   timesheetreport not
+   
+   
+      timesheetusers yes one days 31 
+	  
+	     applyleave 2039 id delete 
+		 
+		    attendances yes  sasual leave kam karna hai and offholidays badhana hai 
+   
+   
+   
+  leaveapprove 
+ 1949  id delete 
+
+
+

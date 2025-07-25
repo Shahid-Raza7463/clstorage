@@ -260,6 +260,7 @@ ________________________________________
 Inactive Assignments for Users
 Ensure assignments do not appear for users after being marked inactive for that assignment.
 For Admin ID
+
 Steps:
 1.	Navigate to the application.
 2.	Click on 'View All Assignments' in the Assignment Section.
@@ -774,9 +775,250 @@ Steps:
 4.Status and Submitted Date columns should have ascending and descending sort icons only.
 5.Download the report in Excel and ensure that all data is correct.
 6.Apply and verify validation on filter fields.
+7.verify staff code after promotion and rejoined.
+
+
+Arrange all the sub-tabs inside the Report tab in ascending order
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin, partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+
+1.Please ensure that all sub-tabs under the 'Report' tab are arranged in ascending alphabetical order.
 
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin, partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Attendance'
+4.fill data and click send search button 
+
+1.If both the start date and end date are selected before the user's joining date, a warning message should be displayed to the user.
+2.If both the start date and end date are selected after the user's leaving date, a warning message should be displayed to the user.
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin, partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Attendance'
+
+1.If an Attendance is created after promotion/rejoining → Show new staff code, new role, new joining date.
+2.If an Attendance is created (before promotion/rejoining) → Show old staff code, old role, old joining date.
+
+            mai   let fieldCount = find('.field_wrapper').length; iska leanth count karna hai ki total kitna field_wrapper div bna hai page per 
+
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Partner, Manager, and Staff IDs
+Steps:
+Navigate to the application
+Click on the 'Dashboard'
+Locate the following boxes:
+  Total Working Days
+  Total Travel Days
+   Approved Leaves
+
+1.counting on this three box should be correct
+2.Ensure the data is displayed correctly after clicking the checkbox.
+
+
+
+
+
+
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+For Partner IDs
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+
+# Check Both Open and Closed tabs 
+
+Steps:-
+1. Navigate to the application
+2. Click on 'Client/Assignment' dropdown.
+3. click on 'Assignment List'
+4. click on 'client name hyperlink'
+5. click on 'year hyperlink'
+6. click other partner tab 
+
+Client name should be displayed properly.
+
+Year column must be visible.
+
+Assignments where the user is an additional partner should be listed in the Other Partner tab.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Client List Report'
+4.click on 'company name hyperlink'
+4.click on 'Assignment tab'
+
+The Assignment ID hyperlink should be enabled for assignments where the user is a Lead Partner, Other Partner, or Additional Partner.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Independence'.
+
+
+Independence confirmation should be listed for that assignments
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'Rejected Submitted timesheet.
+
+
+Reject a timesheet for an assignment where the user is an Additional Partner.
+
+Submit the rejected timesheet and verify Total hours are calculated correctly:
+
+The assignment with 'Additional Partner' should be visible in the Assignment field
+
+
+
+For Admin IDs
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Assignment Time Report'
+
+Team members associated with the assignment, including those linked via the Additional Partner, must be visible.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Independence'.
+
+Independence confirmation should be listed for that assignments
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Click on the 'Team Application' section.
+
+Ascending and descending icons should be present on the Date and Status columns, and they should work properly.
+
+The filter functionality should work correctly.
+
+Validation on the filters field should be implemented.
+
+We have to test on promotion user
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+The design of the navigation button should be fixed.
+
+For Admin,Partner, manager and staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+3.	Click on the 'Independence, confirmation, back and Add filea and folders button'.
+
+
+
+
+The filter reset functionality should clear all applied filters
+Wherever a filter is available, there should be a 'Reset Filter' button displayed after applying the filter
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Promotion/Rejoining' tab.
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+1. Tabs will be displayed based on the designation.
+2. Listings will be shown according to the designation.
+3. Admin/HR can view, upload, and delete KRAs teamwise.
+4. Admin/HR can bulk upload KRAs based on designation.
+5. When uploading an Excel file, Admin/HR should be able to preview the data before final submission.
+6. Proper validation should be applied to the KRA upload form.
+7. When the modal is closed and reopened, previously entered data should be cleared.
+8. Selecting the checkbox in the table header should select all checkboxes in the table.
+9. If all individual checkboxes are selected, the header checkbox should also reflect the selected state; if not all are selected, the header checkbox should remain unselected.
+10. agar KRAs nahi hai aur admin excell upload karega to use puchhega ki aap ise as a template save karna chahte ho 
+
+
+
+
+12.When the KRA of any user under a designation is modified, an email will be sent to that user and to all partners.
+13.When the KRA of a designation partner is edited, a notification will be sent to Tripti Ma'am and Maheshwari Sir.
+14.The implementation for editing the KRA template is still pending.
+15.When the KRA of any designation is edited, a notification will be sent to all users under that designation and to all partners.
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin ID
+
+Steps 1:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'timesheet, Submitted timesheet, Rejected Submitted timesheet'.
+
+
+Steps 2:
+1.Navigate to the application.
+2.Click on the 'Report' dropdown.
+3.Click on 'Team Timesheet Report'.
+
+
+For Partner ids 
+Steps 1:
+1.Navigate to the application.
+2.Click on the 'Dashboard'.
+3.Locate the following boxes:
+   3.1. Total Working Days
+   3.1. Total Travel Days
+
+Steps 2:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet, Submitted timesheet, Rejected Submitted timesheet, team timesheet, rejected team timesheet'.
+
+
+Steps 2:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet, Submitted timesheet, Rejected Submitted timesheet, team timesheet, rejected team timesheet'.
+
+
+Steps 3:
+1.Navigate to the application.
+2.Click on the 'Report' dropdown.
+3.Click on 'Team Timesheet Report and timesheet report tab'.
+
+
+For Manager and Staff IDs
+Steps 1:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet, Submitted timesheet, Rejected Submitted timesheet'.
+
+
+Steps 2:
+1.Navigate to the application.
+2.Click on the 'Report' dropdown.
+3.Click on 'Timesheet Report'.
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
 

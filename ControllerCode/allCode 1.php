@@ -2273,6 +2273,12 @@ public function totalworkingdays(Request $request, $teamid)
     $endDate = Carbon::create($currentDate->year, 3, 31);
   }
 
+  // Calendar Year: January to December of the current year
+  $currentDate = Carbon::now();
+  $currentMonth = $currentDate->format('F');
+  $startDate = Carbon::create($currentDate->year, 1, 1);
+  $endDate = Carbon::create($currentDate->year, 12, 31);
+
   // $startDate = Carbon::create('01-04-2024');
   // $endDate = Carbon::create('30-09-2024');
 
@@ -7873,6 +7879,23 @@ $from = $fromformate->subDays(6)->toDateString();
 // start hare
 // start hare
 // start hare
+dd([
+  'exitDate' => $exitDate,
+  'exitMonth' => $exitMonth,
+  'exitYear' => $exitYear,
+  'dayOfExit' => $dayOfExit,
+  'totalDaysInExitMonth' => $totalDaysInExitMonth,
+]);
+      dd(
+        'currentDate:',
+        $currentDate,
+        'currentMonth:',
+        $currentMonth,
+        'startDate:',
+        $startDate,
+        'endDate:',
+        $endDate,
+      );
 // start hare
 dd([
   'lasttimesheetsubmiteddata' => $lasttimesheetsubmiteddata,
@@ -7885,6 +7908,7 @@ dd([
   'leavebreakdateassign' => $leavebreakdateassign,
 ]);
 // start hare
+    dd('Duplicate deleted successfully', $deleteIds);
 // start hare
 
 dd('hi2', $request);
@@ -8299,6 +8323,41 @@ public function filterDataAdmin(Request $request)
 // Start hare
 use Illuminate\Support\Facades\URL;
 echo URL::current();
+// Start hare
+
+        $currentPath = parse_url(url()->current(), PHP_URL_PATH);
+        $previousPath = parse_url(url()->previous(), PHP_URL_PATH);
+        // during upload teamwise  krasExceluploadteamwise
+        // "/kras/excelupload/teamwise"
+        // "/kras"
+
+
+
+        // during final update teamwise  finaldraftsubmit
+        // "/kras/finaldraftsubmit/606/11"
+        // "/kras"
+
+        // during delete  teamwise  deleteteamwiseKra
+        //  "/kras/delete/606/11"
+        // "/kras"
+
+        // dd($currentPath, $previousPath);
+
+
+        if (Str::startsWith($currentPath, '/kras/excelupload/teamwise')) {
+            $notificationfile = 'krasteamnotification';
+        } elseif (Str::startsWith($currentPath, '/kras/finaldraftsubmit')) {
+            $notificationfile = 'krasteamnotification1';
+        } elseif (Str::startsWith($currentPath, '/kras/delete')) {
+            $notificationfile = 'krasteamnotification2';
+        } else {
+            $notificationfile = 'krasdefault';
+        }
+// Start hare
+$currentPath = parse_url(url()->current(), PHP_URL_PATH);   // /kras/excelupload/teamwise
+$previousPath = parse_url(url()->previous(), PHP_URL_PATH); // /kras
+
+dd($currentPath, $previousPath);
 // Start hare
 $previous = url()->previous();
 $fulluri = parse_url($previous, PHP_URL_PATH);
@@ -11315,43 +11374,6 @@ return redirect()->to('rejectedlist')->with('statuss', $output);
 $output = array('msg' => 'Download has been initiated please wait some time ');
 return back()->with('success', $output);
 
-//* update one column in table for all // update table / regarding update / regarding table 
-use Illuminate\Support\Facades\DB;
-
-//? sum total hour / regarding row / row count 
-$co = DB::table('timesheetusers')
-->where('createdby', auth()->user()->teammember_id)
-->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
-->select(DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
-->get();
-
-
-$nextweektimesheet = DB::table('timesheetusers')
-->where('createdby', auth()->user()->teammember_id)
-->whereBetween('date', ['2023-12-25', '2024-01-13'])
-// ->get();
-->update(['status' => 0]);
-
-$nextweektimesheet = DB::table('timesheets')
-->where('created_by', auth()->user()->teammember_id)
-->whereBetween('date', ['2023-12-25', '2024-01-13'])
-// ->get();
-->update(['status' => 0]);
-// // dd($nextweektimesheet);
-
-$nextweektimesheet = DB::table('timesheetusers')
-->where('createdby', auth()->user()->teammember_id)
-->whereBetween('date', ['2023-12-25', '2023-12-31'])
-->delete();
-
-DB::table('assignmentteammappings')
-->update(['status' => 0]);
-
-dd('hi');
-
-
-
-
 //* Ternary operator vs Null coalescing operator in PHP
 // Ternary Operator
 
@@ -12466,10 +12488,435 @@ if ($savetimesheet) {
     }
     //* Download image on click
     
-    //* regarding update in table / insert data in timesheet table  / all update 
+    //* regarding update in table 1 / insert data in timesheet table  / all update 
+    // Start hare
+    // Start Hare 
+    // Start hare
+    // Start Hare 
+    // Start hare
+    // Start Hare 
+    // Start hare
+    // Start Hare 
+     // // Unloacted timesheet to offholidays timesheet
+    $staffCodes = ['M1038', 'M1096', 'M1029', 'M1019', 'M1098', 'M1068', 'M1066', 'M1089', 'M1049', 'P1009', 'M1059'];
+
+    $teammemberIds = DB::table('teammembers')
+      ->whereIn('staffcode', $staffCodes)
+      ->pluck('id')
+      ->toArray();
+
+    if (!empty($teammemberIds)) {
+      DB::table('timesheetusers')
+        ->whereIn('createdby', $teammemberIds)
+        ->where('date', '2025-05-31')
+        ->update([
+          'client_id' => 33,
+          'assignmentgenerate_id' => 'OFF100004',
+          'partner' => 887,
+          'totalhour' => 0,
+          'assignment_id' => 213,
+          'workitem' => 'Office Maintenance',
+          'location' => 'N/A',
+          'hour' => 0,
+        ]);
+
+      $timesheetreportIdandhour = [
+        16799 => 8,
+        16914 => 32,
+        16725 => 0,
+        16830 => 6,
+        16962 => 8,
+        16806 => 0,
+        16801 => 36,
+        16808 => 0,
+        16746 => 0,
+        16800 => 31,
+      ];
+
+      foreach ($timesheetreportIdandhour as $id => $totaltime) {
+        $data = DB::table('timesheetreport')
+          ->where('id', $id)
+          ->update([
+            'totaltime' => $totaltime,
+          ]);
+      }
+
+      $attendances = DB::table('attendances')
+        ->whereIn('employee_name', $teammemberIds)
+        ->where('month', 'May')
+        ->where('year', '2025')
+        ->get();
+
+      foreach ($attendances as $record) {
+        $newDaysPresent = max(0, $record->no_of_days_present - 1);
+
+        DB::table('attendances')
+          ->where('id', $record->id)
+          ->update([
+            'thirtyone' => 'OH',
+            'offholidays' => $record->offholidays + 1,
+            'no_of_days_present' => $newDaysPresent,
+          ]);
+      }
+    } else {
+      dd('No record find');
+    }
+
+    dd('Updated data in bulk successfully');
+
+
+    // applyleave timesheet to offholidays timesheet
+    $staffCodes = ['M1083', 'M1093'];
+
+    $teammemberIds = DB::table('teammembers')
+      ->whereIn('staffcode', $staffCodes)
+      ->pluck('id')
+      ->toArray();
+
+    if (!empty($teammemberIds)) {
+      $timesheetreportIdandhour = DB::table('timesheetusers')
+        ->whereIn('createdby', $teammemberIds)
+        ->where('date', '2025-05-31')
+        ->update([
+          'client_id' => 33,
+          'assignmentgenerate_id' => 'OFF100004',
+          'partner' => 887,
+          'totalhour' => 0,
+          'assignment_id' => 213,
+          'workitem' => 'Office Maintenance',
+          'location' => 'N/A',
+          'hour' => 0,
+        ]);
+
+      $applyleavesdata = DB::table('applyleaves')
+        ->whereIn('createdby', $teammemberIds)
+        ->where('to', '2025-05-31')
+        ->delete();
+
+
+
+      $attendances = DB::table('attendances')
+        ->whereIn('employee_name', $teammemberIds)
+        ->where('month', 'May')
+        ->where('year', '2025')
+        ->get();
+
+      foreach ($attendances as $record) {
+        $newcasualleave = max(0, $record->casual_leave - 1);
+        DB::table('attendances')
+          ->where('id', $record->id)
+          ->update([
+            'thirtyone' => 'OH',
+            'offholidays' => $record->offholidays + 1,
+            'casual_leave' => $newcasualleave,
+          ]);
+      }
+    } else {
+      dd('No record find');
+    }
+
+    dd('Updated data in bulk successfully');
+
+    // Start Hare 
+    
+//* update one column in table for all // update table  / regarding table 
+use Illuminate\Support\Facades\DB;
+
+//? sum total hour / regarding row / row count 
+$co = DB::table('timesheetusers')
+->where('createdby', auth()->user()->teammember_id)
+->whereBetween('date', [$previousMondayFormatted, $nextSaturdayFormatted])
+->select(DB::raw('SUM(hour) as total_hours'), DB::raw('COUNT(DISTINCT timesheetid) as row_count'))
+->get();
+
+
+$nextweektimesheet = DB::table('timesheetusers')
+->where('createdby', auth()->user()->teammember_id)
+->whereBetween('date', ['2023-12-25', '2024-01-13'])
+// ->get();
+->update(['status' => 0]);
+
+$nextweektimesheet = DB::table('timesheets')
+->where('created_by', auth()->user()->teammember_id)
+->whereBetween('date', ['2023-12-25', '2024-01-13'])
+// ->get();
+->update(['status' => 0]);
+// // dd($nextweektimesheet);
+
+$nextweektimesheet = DB::table('timesheetusers')
+->where('createdby', auth()->user()->teammember_id)
+->whereBetween('date', ['2023-12-25', '2023-12-31'])
+->delete();
+
+DB::table('assignmentteammappings')
+->update(['status' => 0]);
+
+dd('hi');
+
+
+
+
+// Start Hare 
+               $roleanddesignation = [
+            13 => 7,
+            14 => 4,
+            15 => 11,
+        ];
+
+
+
+        foreach ($roleanddesignation as $role => $designation) {
+            dd();
+            DB::table('teammembers')
+                ->where('role_id', $role)
+                ->update(['designation' => $designation]);
+        }
+// Start Hare 
+    $update = DB::table('assignmentmappings')
+    ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+    ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
+    ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+    ->first();
+
+  if ($update) {
+    $result = $update->teamhour + $request->hour[$i];
+    DB::table('assignmentmappings')
+      ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+      ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
+      ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+      ->update(['teamhour' => DB::raw($result)]);
+  }
+
+  dd($result);
+  // Start Hare 
+// Start hare regarding timesheet check
+
+$nextweektimesheet = DB::table('timesheetusers')
+->where('createdby', 912)
+->whereBetween('date', ['2024-01-08', '2024-01-13'])
+->get();
+
+dd($nextweektimesheet);
+// Start hare
+$team = DB::table('teammembers')
+->where('status', 1)
+->whereNotNull('leavingdate')
+// ->get();
+->update(['leavingdate' => NULL]);
+dd($team);
+
+
+
+// Start hare regarding client code update 
+$filename = DB::table('clients')
+->whereBetween(DB::raw('CAST(client_code AS UNSIGNED)'), [100001, 100046])
+->select('id', 'client_code')
+->get();
+
+$assignmentnumb = "10375";
+foreach ($filename as $filenames) {
+$assignmentnumbers = $assignmentnumb + 1;
+$updateddata = DB::table('clients')
+  ->where('id', $filenames->id)
+  ->update(['client_code' => $assignmentnumbers]);
+}
+dd('hi');
+
+$filename = DB::table('clients')
+->whereBetween(DB::raw('CAST(client_code AS UNSIGNED)'), [100001, 100047])
+->select('id', 'client_code')
+->get();
+$assignmentnumb = 10375;
+foreach ($filename as $filenames) {
+$assignmentnumb += 1;
+DB::table('clients')
+  ->where('id', $filenames->id)
+  ->update(['client_code' => $assignmentnumb]);
+}
+dd('hi');
+
+// Start hare
+$result = [930, 797, 779, 777, 917, 910];
+foreach ($result as $userId) {
+  $sumhour = DB::table('timesheetusers')
+    ->where('assignmentgenerate_id', 'WAV100526')
+    ->where('createdby', $userId)
+    ->sum('totalhour');
+
+  DB::table('assignmentteammappings')
+    ->where('assignmentmapping_id', 541)
+    ->where('teammember_id', $userId)
+    ->update(['teamhour' => $sumhour]);
+}
+
+
+$leadpartnersum = DB::table('timesheetusers')
+  ->where('assignmentgenerate_id', 'WAV100526')
+  ->where('createdby', 836)
+  ->sum('totalhour');
+
+
+DB::table('assignmentmappings')
+  ->where('assignmentgenerate_id', 'WAV100526')
+  ->where('leadpartner', 836)
+  ->update(['leadpartnerhour' => $leadpartnersum]);
+
+$otherpartnersum = DB::table('timesheetusers')
+  ->where('assignmentgenerate_id', 'WAV100526')
+  ->where('createdby', 838)
+  ->sum('totalhour');
+
+DB::table('assignmentmappings')
+  ->where('assignmentgenerate_id', 'WAV100526')
+  ->where('otherpartner', 838)
+  ->update(['otherpartnerhour' => $otherpartnersum]);
+
+dd('hi');
+// Start hare
+    // $filename = DB::table('clients')
+    //   ->whereBetween(DB::raw('CAST(client_code AS UNSIGNED)'), [100001, 100047])
+    //   ->select('id', 'client_code')
+    //   ->get();
+    // $assignmentnumb = 10375;
+    // foreach ($filename as $filenames) {
+    //   $assignmentnumb += 1;
+    //   DB::table('clients')
+    //     ->where('id', $filenames->id)
+    //     ->update(['client_code' => $assignmentnumb]);
+    // }
+    // dd('hi');
+    // Start hare
+// 22222222222222222222222222222222  regarding table update / regarding database update 
+// Start hare
+$attendance_existing = DB::table('attendances')
+->whereNotIn('employee_name', [847, 918])
+->delete();
+dd($attendance_existing);
+dd('hi');
+// Start hare
     // Start Hare 
     // Start Hare 
     // Start Hare 
+     $teammembers = DB::table('timesheetreport')
+      // ->where('teamid', 847)
+      ->distinct()
+      ->pluck('teamid')
+      ->toArray();
+
+    $updatedteamlist = [];
+    foreach ($teammembers as $teamId) {
+      $allData = DB::table('timesheetreport')
+        ->where('teamid', $teamId)
+        ->get();
+
+      $grouped = $allData->groupBy(function ($item) {
+        return $item->teamid . '|' . $item->startdate . '|' . $item->partnerid;
+      });
+
+      $deleteIds = [];
+
+      $grouped->each(function ($group) use (&$deleteIds) {
+        if ($group->count() > 1) {
+          $sorted = $group->sortBy('id')->values();
+          $duplicates = $sorted->slice(1)->pluck('id')->toArray();
+          $deleteIds = array_merge($deleteIds, $duplicates);
+        }
+      });
+
+
+      if (!empty($deleteIds)) {
+        // $updatedteamlist[] = $teamId;
+        $updatedteamlist[] = [
+          'teamid' => $teamId,
+          'delete_ids' => $deleteIds
+        ];
+
+        DB::table('timesheetreport')
+          ->where('teamid', $teamId)
+          ->whereIn('id', $deleteIds)
+          ->delete();
+      }
+    }
+    dd($updatedteamlist);
+    // Start Hare 
+     $teammembers = DB::table('timesheetreport')
+      // ->where('teamid', 847)
+      ->distinct()
+      ->pluck('teamid')
+      ->toArray();
+
+    $updatedteamlist = [];
+    foreach ($teammembers as $teamId) {
+      $allData = DB::table('timesheetreport')
+        ->where('teamid', $teamId)
+        ->get();
+
+      $grouped = $allData->groupBy(function ($item) {
+        return $item->teamid . '|' . $item->startdate . '|' . $item->partnerid;
+      });
+
+      $deleteIds = [];
+
+      $grouped->each(function ($group) use (&$deleteIds) {
+        if ($group->count() > 1) {
+          $sorted = $group->sortBy('id')->values();
+          $duplicates = $sorted->slice(1)->pluck('id')->toArray();
+          $deleteIds = array_merge($deleteIds, $duplicates);
+        }
+      });
+
+
+      if (!empty($deleteIds)) {
+        // $updatedteamlist[] = $teamId;
+        $updatedteamlist[] = [
+          'teamid' => $teamId,
+          'delete_ids' => $deleteIds
+        ];
+
+        // DB::table('timesheetreport')
+        //   ->where('teamid', $teamId)
+        //   ->whereIn('id', $deleteIds)
+        //   ->delete();
+      }
+    }
+    dd($updatedteamlist);
+    // Start Hare 
+       $teammembers = DB::table('timesheetreport')
+      // ->where('teamid', 847)
+      ->distinct()
+      ->pluck('teamid')
+      ->toArray();
+
+    $updatedteamlist = [];
+    foreach ($teammembers as $teamId) {
+      $allData = DB::table('timesheetreport')
+        ->where('teamid', $teamId)
+        ->get();
+
+      $grouped = $allData->groupBy(function ($item) {
+        return $item->teamid . '|' . $item->startdate . '|' . $item->partnerid;
+      });
+
+      $deleteIds = [];
+
+      $grouped->each(function ($group) use (&$deleteIds) {
+        if ($group->count() > 1) {
+          $sorted = $group->sortBy('id')->values();
+          $duplicates = $sorted->slice(1)->pluck('id')->toArray();
+          $deleteIds = array_merge($deleteIds, $duplicates);
+        }
+      });
+
+
+      if (!empty($deleteIds)) {
+        $updatedteamlist[] = $teamId;
+        DB::table('timesheetreport')
+          ->where('teamid', $teamId)
+          ->whereIn('id', $deleteIds)
+          ->delete();
+      }
+    }
+    dd($updatedteamlist);
     // Start Hare 
 
     $authteamid = 931;
@@ -13629,130 +14076,6 @@ $nextweektimesheet = DB::table('timesheetreport')
       // // dd($updateddata);
     }
       //  22222222222222222222222222222222
-//* regarding update 
-// Start Hare 
-    $update = DB::table('assignmentmappings')
-    ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
-    ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
-    ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-    ->first();
-
-  if ($update) {
-    $result = $update->teamhour + $request->hour[$i];
-    DB::table('assignmentmappings')
-      ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
-      ->where('assignmentmappings.assignmentgenerate_id', $request->assignment_id[$i])
-      ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
-      ->update(['teamhour' => DB::raw($result)]);
-  }
-
-  dd($result);
-  // Start Hare 
-// Start hare regarding timesheet check
-
-$nextweektimesheet = DB::table('timesheetusers')
-->where('createdby', 912)
-->whereBetween('date', ['2024-01-08', '2024-01-13'])
-->get();
-
-dd($nextweektimesheet);
-// Start hare
-$team = DB::table('teammembers')
-->where('status', 1)
-->whereNotNull('leavingdate')
-// ->get();
-->update(['leavingdate' => NULL]);
-dd($team);
-
-
-
-// Start hare regarding client code update 
-$filename = DB::table('clients')
-->whereBetween(DB::raw('CAST(client_code AS UNSIGNED)'), [100001, 100046])
-->select('id', 'client_code')
-->get();
-
-$assignmentnumb = "10375";
-foreach ($filename as $filenames) {
-$assignmentnumbers = $assignmentnumb + 1;
-$updateddata = DB::table('clients')
-  ->where('id', $filenames->id)
-  ->update(['client_code' => $assignmentnumbers]);
-}
-dd('hi');
-
-$filename = DB::table('clients')
-->whereBetween(DB::raw('CAST(client_code AS UNSIGNED)'), [100001, 100047])
-->select('id', 'client_code')
-->get();
-$assignmentnumb = 10375;
-foreach ($filename as $filenames) {
-$assignmentnumb += 1;
-DB::table('clients')
-  ->where('id', $filenames->id)
-  ->update(['client_code' => $assignmentnumb]);
-}
-dd('hi');
-
-// Start hare
-$result = [930, 797, 779, 777, 917, 910];
-foreach ($result as $userId) {
-  $sumhour = DB::table('timesheetusers')
-    ->where('assignmentgenerate_id', 'WAV100526')
-    ->where('createdby', $userId)
-    ->sum('totalhour');
-
-  DB::table('assignmentteammappings')
-    ->where('assignmentmapping_id', 541)
-    ->where('teammember_id', $userId)
-    ->update(['teamhour' => $sumhour]);
-}
-
-
-$leadpartnersum = DB::table('timesheetusers')
-  ->where('assignmentgenerate_id', 'WAV100526')
-  ->where('createdby', 836)
-  ->sum('totalhour');
-
-
-DB::table('assignmentmappings')
-  ->where('assignmentgenerate_id', 'WAV100526')
-  ->where('leadpartner', 836)
-  ->update(['leadpartnerhour' => $leadpartnersum]);
-
-$otherpartnersum = DB::table('timesheetusers')
-  ->where('assignmentgenerate_id', 'WAV100526')
-  ->where('createdby', 838)
-  ->sum('totalhour');
-
-DB::table('assignmentmappings')
-  ->where('assignmentgenerate_id', 'WAV100526')
-  ->where('otherpartner', 838)
-  ->update(['otherpartnerhour' => $otherpartnersum]);
-
-dd('hi');
-// Start hare
-    // $filename = DB::table('clients')
-    //   ->whereBetween(DB::raw('CAST(client_code AS UNSIGNED)'), [100001, 100047])
-    //   ->select('id', 'client_code')
-    //   ->get();
-    // $assignmentnumb = 10375;
-    // foreach ($filename as $filenames) {
-    //   $assignmentnumb += 1;
-    //   DB::table('clients')
-    //     ->where('id', $filenames->id)
-    //     ->update(['client_code' => $assignmentnumb]);
-    // }
-    // dd('hi');
-    // Start hare
-// 22222222222222222222222222222222  regarding table update / regarding database update 
-// Start hare
-$attendance_existing = DB::table('attendances')
-->whereNotIn('employee_name', [847, 918])
-->delete();
-dd($attendance_existing);
-dd('hi');
-// Start hare
 
 //* regarding leave / regarding applyleave update / leave update
 // start hare
@@ -13851,6 +14174,80 @@ dd('hi');
 // exam_leave  = 25
 // Offholidays = 0 
 // sundaycount = 0 
+
+
+// start hare
+
+// leaving date 31-01-2025 and i need to delete 01-02-2025 leave data
+
+// Casual leave delete karna ho to 
+// applyleaves
+// timesheets
+// timesheetusers
+// timesheetreport
+// attendance
+
+// applyleaves  table me 
+// 951
+// id = 1623  delete
+
+
+// timesheets table me
+// id = 150673 delete
+
+
+// timesheetusers table me
+// id = 153401 delete 
+
+
+
+// timesheetreport table me 
+
+// id = 13798 totaldays = 4 ko replace kare 3
+// id = 13797 dayscount 5 
+
+// attendance table me 
+// id = 1355
+// 27	28	29 ko null kare 
+
+// exam_leave  = 25
+// Offholidays = 0 
+// sundaycount = 0 
+
+
+
+
+// Casual leave delete karna ho to only sunday 
+// applyleaves
+// timesheets
+// timesheetusers
+// timesheetreport
+// attendance
+
+// applyleaves  table me 
+// 928
+// 2025-05-11 to 2025-05-12
+
+
+// timesheets table me
+// id = 160957 delete date should be 11-05
+
+
+// timesheetusers table me
+// id = 164261 delete  date should be 11-05
+
+
+
+// timesheetreport table me  nothing 
+
+// id = 16545 totaldays = 1 
+// id = 16544 dayscount 6 
+
+// attendance table me 
+// id = 2258
+// elevn = w
+// casual_leave 3
+// sundaycount 1
 // 22222222222222222222222222222222222222222222222222222222222222222222
 
 

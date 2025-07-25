@@ -1,0 +1,867 @@
+
+
+KRA Flow ```start 1
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+ <li><a href="{{ url('travel') }}"> Advance Claim Form</a></li>
+ 
+ 
+   <li><a href="{{ url('kras') }}">KRAs</a></li>
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+routes\web.php
+
+
+
+  // KRAs Route
+  Route::resource('/kras',  KrasController::class);
+  Route::get('/kras/show/{id}/{designation}', [KrasController::class, 'show'])->name('kras.show');
+  Route::get('/kras/delete/{id}/{designation}', [KrasController::class, 'deleteteamwiseKra'])->name('kras.delete');
+  Route::post('/kras/excelupload/teamwise', [KrasController::class, 'krasExceluploadteamwise']);
+  Route::post('krabulkUpload', [KrasController::class, 'exceluploadBulk'])->name('krabulkUpload');
+  Route::get('/kras/edit/{dataId}/{datarow}/{teamId}', [KrasController::class, 'edit'])->name('kras.edit');
+  Route::get('/kras/destroy/{dataId}/{datarow}/{teamId}', [KrasController::class, 'destroy'])->name('kras.destroy');
+  Route::post('/krastype/modifycolumn', [KrasController::class, 'modifyColumn']);
+  Route::post('/krastype/deletecolumn', [KrasController::class, 'deleteColumn']);
+  Route::post('/krastype/addcolumn', [KrasController::class, 'addColumn']);
+  Route::post('/notification/config', [KrasController::class, 'notificationConfig']);
+  Route::get('/notificationlist',  [KrasController::class, 'notificationlist']);
+  Route::get('/notificationlist/delete/{id}',  [KrasController::class, 'notificationlistdelete']);
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\imports\Krasimport.php
+
+<?php
+
+namespace App\Imports;
+
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Collection;
+
+class Krasimport implements ToCollection, WithHeadingRow
+{
+    public $rows;
+
+    public function collection(Collection $rows)
+    {
+        // filtered empty row from excell hare 
+        $this->rows = $rows->filter(function ($row) {
+            return !empty(array_filter($row->toArray()));
+        });
+    }
+
+    // debuging hare
+    // public function collection(Collection $rows)
+    // {
+
+    //     // Filter and debug each row
+    //     $this->rows = $rows->filter(function ($row) {
+    //         $array = $row->toArray();
+    //         $result = !empty(array_filter($array));
+    //         // Debug output
+    //         dump($array, $result);
+    //         return $result;
+    //     });
+
+    //     dd($this->rows);
+    // }
+
+}
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras
+add file 
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\stylesheet.blade.php
+
+<style>
+    .textfixed {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\krapartnernotification.blade.php
+resources\views\emails\krasteamnotification.blade.php
+
+add this file 
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+replace all table 
+
+
+			
+KRA Flow ```end hare 1
+
+
+
+KRA Flow ```start 2
+kgslocal
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+fix for hr 
+
+resources\views\backEnd\kras\show.blade.php
+
+designation, [13
+
+replace [13, 14
+				
+				
+				
+	
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+  public function show($id, $designation)
+  
+            $record = DB::table('krasteam')
+                ->leftJoin('krasdata', 'krasdata.id', '=', 'krasteam.krasdata_id')
+                ->where('krasteam.teamid', $id)
+                ->select('krasdata.*')
+                ->first();
+
+
+
+23-06-2025
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+
+
+    public function index()
+    {
+
+        $teammembers = DB::table('teammembers')
+            ->where('id', auth()->user()->teammember_id)
+            ->select('id', 'team_member', 'designation')
+            ->first();
+
+        $teammemberlists = DB::table('teammembers')
+            ->where('status', 1)
+            ->select('id', 'team_member', 'emailid')
+            ->get();
+
+        if (is_null($teammembers?->designation)) {
+            abort(403, 'Access denied. Designation is missing.');
+        }
+
+        // super admin , hr and  admin
+        if ($teammembers->designation == 13 || $teammembers->designation == 14) {
+            $designations = Designation::ordered()
+                ->whereNotIn('name', ['Super Admin', 'HR'])
+                ->get();
+
+            $designationData = [];
+            foreach ($designations as $designation) {
+                $record = DB::table('krasdata')
+                    ->where('designation_id', $designation->id)
+                    ->whereNull('krasdata.teamid')
+                    ->first();
+
+                $key = ucwords(str_replace(' ', '_', $designation->name));
+
+                $teammemberall = DB::table('teammembers')
+                    ->leftJoin('designations', 'designations.id', '=', 'teammembers.designation')
+                    ->whereNotNull('teammembers.designation')
+                    ->where('teammembers.designation', $designation->id)
+                    ->select('teammembers.*', 'designations.name as designation_name')
+                    ->get();
+
+
+                foreach ($teammemberall as $member) {
+                    // $hasKra = DB::table('krasteam')
+                    //     ->where('teamid', $member->id)
+                    //     ->where('krasdata_id', $member->designation)
+                    //     ->exists();
+
+                    // $hasKra = DB::table('krasteam')
+                    //     ->leftJoin('krasdata', 'krasdata.id', '=', 'krasteam.krasdata_id')
+                    //     ->where('krasteam.teamid', $member->id)
+                    //     ->exists();
+                    // $member->kra_status = $hasKra ? '1' : '0';
+
+                    $hasKra = DB::table('krasteam')
+                        ->leftJoin('krasdata', 'krasdata.id', '=', 'krasteam.krasdata_id')
+                        ->where('krasteam.teamid', $member->id)
+                        ->select('krasdata.created_at', 'krasdata.updated_at')
+                        ->first();
+
+                    $member->kra_status = $hasKra ? '1' : '0';
+                    $member->kra_created = $hasKra->created_at ?? null;
+                    $member->kra_updated = $hasKra->updated_at ?? null;
+                }
+
+                $hasKras = $teammemberall->contains('kra_status', 0);
+
+                $kratemplates = DB::table('krasdata')
+                    ->where('designation_id', $designation->id)
+                    ->whereNull('krasdata.teamid')
+                    ->get();
+
+                // dd($kratemplates);
+
+                $designationData[$key] = [
+                    'teammemberall' => $teammemberall,
+                    'hasKras' => $hasKras,
+                    'krasid' => $record?->id ?? null,
+                    'designationId' => $designation->id ?? null,
+                    'kratemplates' => $kratemplates ?? null,
+                ];
+            }
+            return view('backEnd.kras.index', compact('designations', 'designationData', 'teammembers', 'teammemberlists'));
+        } else {
+            $designations = Designation::where('id', $teammembers->designation)->ordered()->get();
+            $id = auth()->user()->teammember_id;
+
+            $designationData = [];
+            foreach ($designations as $designation) {
+
+                // $record = DB::table('krasdata')
+                //     ->where('designation_id', $designation->id)
+                //     ->where('teamid', $id)
+                //     ->first();
+
+                // if (!$record) {
+                //     $record = DB::table('krasdata')
+                //         ->join('krasteam', function ($join) use ($designation, $id) {
+                //             $join->on('krasdata.designation_id', '=', 'krasteam.krasdata_id')
+                //                 ->whereNull('krasdata.teamid');
+                //         })
+                //         ->where('krasteam.krasdata_id', $designation->id)
+                //         ->where('krasteam.teamid', $id)
+                //         ->select('krasdata.*')
+                //         ->first();
+                // }
+
+                $record = DB::table('krasteam')
+                    ->leftJoin('krasdata', 'krasdata.id', '=', 'krasteam.krasdata_id')
+                    ->where('krasteam.teamid', $id)
+                    ->first();
+
+                $decoded = $record && $record->data ? json_decode($record->data, true) : [];
+                $headings = (!empty($decoded) && is_array($decoded)) ? array_keys($decoded[0]) : [];
+                $key = ucwords(str_replace(' ', '_', $designation->name));
+
+                $designationData[$key] = [
+                    'data' => $decoded,
+                    'headings' => $headings,
+                    'teamId' => $id,
+                    'id' => $record?->id ?? null,
+                ];
+            }
+            return view('backEnd.kras.show', compact('designations', 'designationData', 'teammembers'));
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras\index.blade.php
+
+
+                                              <div style="margin-left: 10px">
+                                                  <a data-toggle="modal" data-target=".notificationmodeltarget"
+                                                      data-id="{{ $designationData[$roleKey]['designationId'] }}"
+                                                      class="btn btn-sm btn-update text-black notificationmodelclass">
+                                                      <i class="fas fa-bell" style="margin-right: 4px;"></i>
+                                                      Notification
+                                                  </a>
+                                              </div>
+                                              <div style="margin-left: 10px">
+                                                  <a href="{{ url('kratemplatelist/' . $designationData[$roleKey]['designationId']) }}"
+                                                      class="btn btn-sm btn-update text-black">
+                                                      <i class="typcn typcn-document-text" style="margin-right: 4px;"></i>
+                                                      KRAs Templates
+                                                  </a>
+                                              </div>
+											  
+											  
+											
+
+											
+											  
+											  
+											  
+                                              <th>Employee Name</th>
+                                              <th>KRAs Status</th>
+                                              <th>Created Date</th>
+                                              <th>Updated Date</th>											  
+											  
+											  
+	
+
+                                                  <td>
+                                                      @if ($row->kra_status == 1)
+                                                          <span class="badge"
+                                                              style="background-color: rgba(24, 255, 91, 0.33); color: #000;">
+                                                              KRA
+                                                          </span>
+                                                      @else
+                                                          <span class="badge"
+                                                              style="background-color: rgb(246 154 154 / 33%);color: #000;">No
+                                                              KRA</span>
+                                                      @endif
+                                                  </td>
+                                                  <td>
+                                                      {{ $row->kra_created ? date('d-m-Y', strtotime($row->kra_created)) : 'NA' }}
+                                                  </td>
+                                                  <td>
+                                                      {{ $row->kra_updated ? date('d-m-Y', strtotime($row->kra_updated)) : 'NA' }}
+                                                  </td>	
+											  
+											  
+											  
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+ find  Route::get('/notificationlist/delete/{id}',  [KrasController::class, 'notificationlistdelete']);
+
+
+  Route::get('/kratemplatelist/{designation}',  [KrasController::class, 'kratemplatelist']);
+  Route::get('/kratemplatelist/delete/{id}',  [KrasController::class, 'kratemplatelistdelete']);
+  Route::post('/kratemplatelist/edit',  [KrasController::class, 'kratemplatelistedit']);
+  
+  
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+
+  public function notificationlistdelete($id)
+  
+  
+   public function kratemplatelist($designation)
+    {
+        try {
+
+            $kratemplates = DB::table('krasdata')
+                ->leftJoin('designations', 'designations.id', '=', 'krasdata.designation_id')
+                ->leftJoin('teammembers', 'teammembers.id', '=', 'krasdata.createdby')
+                ->where('krasdata.designation_id', $designation)
+                ->whereNull('krasdata.teamid')
+                ->select('krasdata.*', 'designations.name as designation_name', 'teammembers.team_member')
+                ->get();
+
+            return view('backEnd.kras.templatelist', compact('kratemplates'));
+        } catch (\Exception $e) {
+            Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
+            report($e);
+            return back()->withErrors(['msg' => 'Error: ' . $e->getMessage()])->withInput();
+        }
+    }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras\templatelist.blade.php
+
+
+{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+<link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+
+@extends('backEnd.layouts.layout') @section('backEnd_content')
+    <style>
+        .dataTables_length {
+            /* background-color: pink; */
+            width: 300px;
+            position: absolute;
+        }
+    </style>
+    <div class="content-header row align-items-center m-0">
+        <div class="col-sm-8 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-user-add-outline"></i></div>
+                <div class="media-body">
+                    <a href="#">
+                        <h1 class="font-weight-bold" style="color:black;">KRA Template Management Dashboard</h1>
+                    </a>
+                    <small>Manage Key Responsibility Areas</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="body-content">
+        <div class="card mb-4">
+            @component('backEnd.components.alert')
+            @endcomponent
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="examplee" class="table display table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">id</th>
+                                <th>Designation Name</th>
+                                <th>Created By</th>
+                                <th>Template Name</th>
+                                <th>Created Date</th>
+                                <th>Updated Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($kratemplates as $kratemplate)
+                                <tr>
+                                    <td style="display: none;">{{ $kratemplate->id }}</td>
+                                    <td>{{ $kratemplate->designation_name }}</td>
+                                    <td>{{ $kratemplate->team_member }}</td>
+                                    <td>{{ $kratemplate->template_name }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($kratemplate->created_at)) }}</td>
+                                    <td>{{ date('d-m-Y', strtotime($kratemplate->updated_at)) }}</td>
+                                    <td>
+                                        <a data-toggle="modal" data-id="{{ $kratemplate->id }}"
+                                            data-template="{{ $kratemplate->template_name }}" data-target=".modalColumn"
+                                            class="btn btn-info-soft btn-sm modificationColumn">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+
+                                        <a href="{{ url('kratemplatelist/delete/' . $kratemplate->id) }}"
+                                            onclick="return confirm('Are you sure you want to delete this item?');"
+                                            class="btn btn-danger-soft btn-sm">
+                                            <i class="far fa-trash-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Upload Modal -->
+    <div class="modal modal-danger fade modalColumn" id="modalColumnId" tabindex="-1" role="dialog"
+        aria-labelledby="modificationColumn" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="modalColumnForm" method="post" action="{{ url('kratemplatelist/edit') }}">
+                    @csrf
+                    <div class="modal-header" style="background: #37A000">
+                        <h5 style="color:white;" class="modal-title font-weight-600" id="modalLabel1">
+                            KRAs Template Name Edit
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label><b>Template Name: *</b></label>
+                            <input type="text" required name="templatename" class="form-control"
+                                placeholder="Enter new template name">
+                            <input type="hidden" class="form-control" name="templateid" id="templateid">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success"
+                            onclick="return confirm('Are you sure you want to update this column name?');">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+{{-- date sorting  --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            dom: 'lfrtip',
+            columnDefs: [{
+                targets: [0],
+                orderable: false
+            }],
+
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Kras',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ').trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('.alert-success, .alert-danger, .statusss').delay(4000).fadeOut(400);
+    });
+
+    $(document).on('click', '.modificationColumn', function() {
+        let id = $(this).data('id');
+        let templatename = $(this).data('template');
+        $('#modalColumnId input[name="templateid"]').val(id);
+        $('#modalColumnId input[name="templatename"]').val(templatename);
+    });
+</script>
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+  public function kratemplatelistdelete($id)
+    {
+        try {
+            $kraMappedorNot = DB::table('krasteam')
+                ->where('krasdata_id', $id)
+                ->exists();
+
+            if (!$kraMappedorNot) {
+                DB::table('krasdata')->where('id', $id)->delete();
+                return back()->with('statusss', ['msg' => 'KRAs template deleted successfully!']);
+            }
+
+            return back()->with('statusss', ['msg' => 'KRAs template not deleted because it is mapped with a team.']);
+        } catch (\Exception $e) {
+            Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
+            report($e);
+            return back()->withErrors(['msg' => 'Error: ' . $e->getMessage()])->withInput();
+        }
+    }
+	
+	
+	
+	    public function kratemplatelistedit(Request $request)
+    {
+        try {
+            DB::table('krasdata')->where('id', $request->templateid)
+                ->update([
+                    'template_name' => $request->templatename,
+                    'updated_at' => now()
+                ]);
+            return back()->with('statusss', ['msg' => 'KRAs template name updated successfully!']);
+        } catch (\Exception $e) {
+            Log::emergency("File:" . $e->getFile() . " Line:" . $e->getLine() . " Message:" . $e->getMessage());
+            report($e);
+            return back()->withErrors(['msg' => 'Error: ' . $e->getMessage()])->withInput();
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+->update([
+
+total 11 place 
+
+ 'updated_at' => now()
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ find total 9
+ DB::table('krasdata')->insertGetId([
+
+
+1,2,3,8,9
+ 'created_at' => $record->created_at,
+
+
+
+
+KRA Flow ```end hare 
+
+
+notification on template editing and deleteing agar bolega tabhi other wise not update ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+
+            if (!$kraMappedorNot) {
+                $templateData = DB::table('krasdata')->where('id', $id)->first();
+                $this->sendNotificationontemplate($templateData);
+
+
+
+
+
+
+
+
+    public function kratemplatelistedit(Request $request)
+    {
+        try {
+            $templateData = DB::table('krasdata')->where('id', $request->templateid)->first();
+            $this->sendNotificationontemplate($templateData);
+			
+			
+			
+			
+find function sendNotificationteamwise($teamid) after this function add this function 			
+			
+    function sendNotificationontemplate($template)
+    {
+        // user notifications start hare 
+        $templateteamId = DB::table('krasteam')
+            ->leftJoin('krasdata', 'krasdata.id', '=', 'krasteam.krasdata_id')
+            ->where('krasdata.designation_id', $template->designation_id)
+            ->pluck('krasteam.teamid');
+
+        $teammembers = DB::table('teammembers')
+            ->whereIn('id', $templateteamId)
+            ->get();
+
+        if ($teammembers->isNotEmpty()) {
+            foreach ($teammembers as $member) {
+                if (!empty($member->emailid)) {
+                    $mailData = [
+                        'teammember' => $member,
+                        'created_at' => now()->format('d-m-Y H:i:s'),
+                    ];
+
+                    Mail::send('emails.krasteamnotification', $mailData, function ($msg) use ($member) {
+                        $msg->to($member->emailid)->subject('KRAs template Updated');
+                    });
+                }
+            }
+        }
+        // user notifications end  hare 
+
+        // partner or target teammember notifications start hare 
+        $partnerIds = DB::table('krasnotifications')
+            ->where('designation_id', $template->designation_id)
+            ->whereNotNull('typetarget')
+            ->pluck('typetarget');
+
+
+
+        $individualNotificationIds = DB::table('krasnotifications')
+            ->where('designation_id', $template->designation_id)
+            ->whereNull('typetarget')
+            ->pluck('id');
+
+        $individualIds = [];
+
+        if ($individualNotificationIds->isNotEmpty()) {
+            $individualIds = DB::table('krastargetnotification')
+                ->whereIn('krasnotifications_id', $individualNotificationIds)
+                ->pluck('teammember_id');
+        }
+
+        $partners = collect();
+        if ($partnerIds->isNotEmpty() || !empty($individualIds)) {
+            $partners = DB::table('teammembers')
+                ->where(function ($query) use ($partnerIds, $individualIds) {
+                    if ($partnerIds->isNotEmpty()) {
+                        $query->orWhereIn('designation', $partnerIds);
+                    }
+                    if (!empty($individualIds)) {
+                        $query->orWhereIn('id', $individualIds);
+                    }
+                })
+                ->where('status', 1)
+                ->get();
+        }
+        foreach ($partners as $partner) {
+            if (!empty($partner->emailid)) {
+                $partnerMailData = [
+                    'partner' => $partner,
+                    'created_at' => now()->format('d-m-Y H:i:s'),
+                ];
+
+                Mail::send('emails.krapartnernotification', $partnerMailData, function ($msg) use ($partner) {
+                    $msg->to($partner->emailid)->subject('KRAs template Updated');
+                });
+            }
+        }
+        // partner or target teammember notifications end hare 
+    }			
+			
+			
+			
+notification on template editing and deleteing agar bolega tabhi other wise not update 			
+			
+
+KRA Flow ```start hare 10-07-2025
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+web.php
+
+
+  // KRAs Route
+  Route::resource('/kras',  KrasController::class);
+  Route::get('/kras/show/{id}/{designation}', [KrasController::class, 'show'])->name('kras.show');
+  Route::get('/kras/delete/{id}/{designation}', [KrasController::class, 'deleteteamwiseKra'])->name('kras.delete');
+  Route::post('/kras/excelupload/teamwise', [KrasController::class, 'krasExceluploadteamwise']);
+  Route::post('krabulkUpload', [KrasController::class, 'exceluploadBulk'])->name('krabulkUpload');
+  Route::get('/kras/edit/{dataId}/{datarow}/{teamId}', [KrasController::class, 'edit'])->name('kras.edit');
+  Route::get('/kras/destroy/{dataId}/{datarow}/{teamId}', [KrasController::class, 'destroy'])->name('kras.destroy');
+  Route::post('/krastype/modifycolumn', [KrasController::class, 'modifyColumn']);
+  Route::post('/krastype/deletecolumn', [KrasController::class, 'deleteColumn']);
+  Route::post('/krastype/addcolumn', [KrasController::class, 'addColumn']);
+  Route::post('/notification/config', [KrasController::class, 'notificationConfig']);
+  Route::get('/notificationlist',  [KrasController::class, 'notificationlist']);
+  Route::get('/notificationlist/delete/{id}',  [KrasController::class, 'notificationlistdelete']);
+  Route::get('/kratemplatelist/{designation}',  [KrasController::class, 'kratemplatelist']);
+  Route::get('/kratemplatelist/delete/{id}',  [KrasController::class, 'kratemplatelistdelete']);
+  Route::post('/kratemplatelist/edit',  [KrasController::class, 'kratemplatelistedit']);
+
+
+  Route::get('/teams/kra/{id}',  [KrasController::class, 'teamskras']);
+  Route::get('/kras/finaldraftsubmit/{teamId}/{designationId}', [KrasController::class, 'finaldraftsubmit'])->name('kras.finaldraftsubmit');
+  Route::get('/krasteam/show/{id}', [KrasController::class, 'krateamshow'])->name('kras.krasteam');
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+
+replace all code hare 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras
+
+replace all file hare 
+
+
+and 
+
+replace kras table 
+
+KRA Flow ```end hare 10-07-2025
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SHA100008   Assi viewer
+
+SHA100076  file 
+
+report
+  client list report 
+
+
+
+Link : https://vsademo.capitall.io
+Email : shahidraza@capitall.io
+Password : Azaz~123
+Role : Partner
+951
+
+
+
+Link : https://vsademo.capitall.io
+Email : Guneet@capitall.io
+Password : R9QhzV2vyt@2023
+Role : Staff
+937
+
+
+
+
+
+
+
+
+
+
+
+
+

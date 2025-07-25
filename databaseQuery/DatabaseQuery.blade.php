@@ -23,18 +23,131 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- * regarding  --}}
+{{-- * regarding phpmyadmin   You probably tried to upload a file that is too large. Please refer to documentation for a workaround for this limit.  --}}
+{{-- i am uploading 284mb file after that ye error message aa raha hai mujhe ise fix karna hai phpmyadmin --}}
+Locate and edit your php.ini file (check your XAMPP/WAMP/LAMP or server PHP folder).
+
+upload_max_filesize = 512M
+post_max_size = 512M
+max_execution_time = 300
+max_input_time = 300
+memory_limit = 512M
+
+
+Your MySQL version does not support the collation
+Find and replace all:
+utf8mb4_0900_ai_ci
+with
+utf8mb4_general_ci
+
+
+
+Fatal error: Maximum execution time of 300 seconds exceeded in C:\xampp\phpMyAdmin\libraries\classes\Dbal\DbiMysqli.php
+on line 209
+
+max_execution_time = 1800 ; (30 minutes)
+max_input_time = 1800
+memory_limit = 1024M
+
+Option 1: Import via Command Line (Best for Big Files)
+Open Command Prompt (CMD).
+Use this command:
+
+Option 2: Import Remaining Tables Using Command Line with --skip-create-options or Edit Manually
+This is useful if:
+
+The import is failing midway
+You don’t want to manually delete lines
+{{-- mysql -u root -p database_name < path_to_remaining_file.sql --}}
+
+✅ Option 3: Use a SQL Splitter Tool (For Very Large Files)
+Use an online tool like:
+
+🔗 https://sqlsplitter.net/
+https://sqlsplitter.com/
+https://sqldump.splitter.online/
+
+It splits the large .sql file into multiple small ones per table. Then:
+
+Delete the already imported ones.
+
+Import the remaining smaller SQL files one-by-one or combine them.
+
+{{-- mysqldump --insert-ignore -u root -p database_name > backup.sql --}}
+{{-- 1.mysql -u root vdrlive < "C:\xampp\htdocs\vdrlive.sql"  --}}
+
+✅ OPTION 3: ⚙️ Use INSERT IGNORE and IF NOT EXISTS in SQL
+If the file is auto-generated, you can:
+
+And replace:
+CREATE TABLE `table_name`
+with
+CREATE TABLE IF NOT EXISTS `table_name`
+
+{{--  Start Hare --}}
+{{-- * regarding databse import using Cmd  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- * regarding  --}}
+1.Database import using command
+cd C:\xampp\mysql\bin folder me cmd open kare using adminstrate
+{{-- 1.mysql -u root vdrlive < "C:\xampp\htdocs\vdrlive.sql"  --}}
+ERROR 1153 (08S01) at line 1233884: Got a packet bigger than 'max_allowed_packet' bytes
+C:\xampp\mysql\bin\my.ini
+
+If not found, add it under [mysqld] section: ya serach sort_buffer_size=512K above this line you can see
+max_allowed_packet
+[mysqld]
+max_allowed_packet=512M
+
+
+2.Database ka backup le using command
+{{-- 2.mysqldump -u root myapp > "D:\xampp_backups\myapp_backup.sql" --}}
+{{-- * regarding xampp error / regarding xampp /  --}}
 {{--  Start Hare --}}
+{{--  when you get error during start mysql in xampp on that case follow these steps --}}
+Note: jab aap C:\xampp\mysql folder me backup folder se data ko data folder me paste karte ho to aapka mysql run ho
+jayega
+NOte : aapka agar database and database ka tables and tables ka data agar loss ho jata hai to bhi aap fully data recover
+kar sakte ho
+Note : jab bhi C:\xampp\mysql folder me copy paste ya kuchh bhi configure karte ho to xampp ke sabhi service ko stop
+karde like apache and mysql ko
+
+
+Steps 1 :
+1.C:\xampp\mysql yaha mysql folder ko copy karke backup ke taur par rakhle
+1.C:\xampp\mysql is folder me jaye
+2.data folder ka backup rakhle like data foder ko data_old name se rename kar de
+3.ab data name se folder create kare
+4.mysql folders ko copy kare C:\xampp\mysql\backup folder se uske baad C:\xampp\mysql\data folder me paste karde
+5.In the XAMPP Control Panel, ab mysql start kare yaha start ho jayega ok the issue is resolved but sabhi database
+delete rahega to ab databse ko backup lene ki baari hai
+
+#AB DATABASE BACKUP LENA HAI
+6.performance_schema, phpmyadmin, test folders ko copy kare C:\xampp\mysql\backup folder se uske baad
+C:\xampp\mysql\data folder me paste karde
+7.expertaff, vsalive, vsademo etc folders ko copy kare C:\xampp\mysql\data_old folder se uske baad
+C:\xampp\mysql\data folder me paste karde sirf us database ko paste na kare jis ke karan se error aaya tha ok ab yaha
+hamara sabhi database ka database and tables aa jayega but abhi bhi tables me data nahi aaya hoga use fix karne ke liye
+next step 8
+8.ibdata1, ib_logfile1, ib_logfile0, ib_buffer_pool, aria_log_control, aria_log.00000001 folders ko copy kare
+C:\xampp\mysql\data_old folder se uske baad
+C:\xampp\mysql\data folder me paste karde yaha aapka sabhi table me bhi data aa jayega ok yaha pahle ibdata1 file ko
+copy karke paste kare pahle agar data aa gya to thik hai otherwise ye sabhi folder co copy karke paste kar de data aa
+jayega tables me ibdata1, ib_logfile1, ib_logfile0, ib_buffer_pool, aria_log_control, aria_log.00000001
+
+
+{{-- * regarding database configure / regarding phpmyadmin panel configure /  regarding phpmyadmin configure   --}}
 {{--  Start Hare --}}
-{{-- * regarding  --}}
-{{--  Start Hare --}}
-{{--  Start Hare --}}
-{{-- * regarding  --}}
-{{--  Start Hare --}}
-{{--  Start Hare --}}
+{{--  show all tables in databse without page number --}}
+C:\xampp\phpMyAdmin\libraries\config.default.php
+find $cfg['MaxTableList'] and replace 250 to 500
+$cfg['MaxTableList'] = 500;
+
+
+C:\xampp\phpMyAdmin\config.inc.php
+add this below line end of the in this file
+$cfg['MaxTableList'] = 500;
+
 {{-- * regarding join / regarding left join  --}}
 {{--  Start Hare --}}
 

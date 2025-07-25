@@ -1996,6 +1996,29 @@ date('d-M-Y', strtotime($udinData->udindate))
 {{--  Start Hare --}}
 {{-- * regarding td tag / regarding column --}}
 {{--  Start Hare --}}
+      <style>
+          table {
+              table-layout: fixed;
+              width: 100%;
+          }
+          
+      </style>
+      <style>
+    .textfixed {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+ <table id="example{{ $loop->iteration }}"
+     class="table display table-bordered table-striped table-hover">
+
+     @foreach ($designationData[$roleKey]['headings'] as $heading)
+         <th class="textfixed" style="width: 361.094px;">
+             {{ ucwords(str_replace('_', ' ', $heading)) }}</th>
+     @endforeach
+
+{{--  Start Hare --}}
 <td style="width: 900px; word-wrap: break-word; white-space: normal;">
     {{ $timesheetrequestsData->reason }}</td>
 {{--  Start Hare --}}

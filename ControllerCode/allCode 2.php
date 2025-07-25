@@ -15,24 +15,543 @@ class Allcode extends Controller
         //! End hare 
         //* regarding 
         // Start Hare
-        //! End hare 
-        //* regarding 
         // Start Hare
         //! End hare 
         //* regarding 
         // Start Hare
-        //! End hare 
-        //* regarding 
         // Start Hare
         //! End hare 
         //* regarding 
         // Start Hare
-        //! End hare 
-        //* regarding 
         // Start Hare
         //! End hare 
         //* regarding 
         // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        
+        //! End hare 
+        //* regarding 
+        // Start Hare
+            $ticketDatas = Assetticket::with(['financerequest', 'createdBy', 'partner'])
+      ->when($requestUrl === '/it-support', function ($query) {
+        return $query->where('type', '0');
+      }, function ($query) {
+        return $query->where('type', '1');
+      })
+      ->get();
+        $assignmentCompleted = DB::table('assignmentmappings')
+    ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    ->where('assignmentbudgetings.status', 0)
+    ->whereBetween('assignmentbudgetings.otpverifydate', [
+        Carbon::now()->startOfMonth(),
+        Carbon::now()->endOfMonth()
+    ])
+    ->count();
+
+        $assignmentcompleted = DB::table('assignmentmappings')
+      ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+      ->where('assignmentbudgetings.status', 0)
+      ->whereMonth('assignmentbudgetings.otpverifydate', Carbon::now()->month)
+      ->whereYear('assignmentbudgetings.otpverifydate', Carbon::now()->year)
+      ->count();
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        $delayedAssignments = DB::table('assignmentmappings')
+    ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    ->where('assignmentbudgetings.status', 1)
+    ->where(function($query) {
+        $query->where(function($q) {
+                $q->whereNotNull('assignmentbudgetings.actualenddate')
+                  ->whereDate('assignmentbudgetings.actualenddate', '<', Carbon::today());
+            })
+            ->orWhere(function($q) {
+                $q->whereNull('assignmentbudgetings.actualenddate')
+                  ->whereNotNull('assignmentbudgetings.tentativeenddate')
+                  ->whereDate('assignmentbudgetings.tentativeenddate', '<', Carbon::today());
+            });
+    })
+    ->get();
+
+    $delayedAssignments = DB::table('assignmentmappings')
+    ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    ->where('assignmentbudgetings.status', 1)
+    ->whereDate(
+        DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate)'),
+        '<',
+        Carbon::today()
+    )
+    ->get();
+
+        $delayedAssignments = DB::table('assignmentmappings')
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+      ->where('assignmentbudgetings.status', 1)
+      ->whereRaw('COALESCE(DATE(assignmentbudgetings.actualenddate), DATE(assignmentbudgetings.tentativeenddate)) < ?', [Carbon::today()->toDateString()])
+      ->count();
+        //! End hare 
+        //* regarding map function 
+        // Start Hare
+        // Start Hare
+          public function searchingtimesheet(Request $request)
+  {
+    // Get all input from form
+    $startDate = $request->input('startdate', null);
+    $endDate = $request->input('enddate', null);
+    $teamId = $request->input('teamid', null);
+    $teammemberId = $request->input('teammemberId', null);
+    // $year = $request->input('year', null);
+
+    $teammembers = DB::table('teammembers')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->where('teammembers.status', 1)
+      ->whereIn('teammembers.role_id', [14, 15, 13, 11])
+      ->select('teammembers.team_member', 'teamrolehistory.newstaff_code', 'teammembers.id', 'teammembers.staffcode')
+      ->orderBy('team_member', 'ASC')
+      ->get();
+
+    // For patner
+    if (auth()->user()->role_id == 13) {
+      $query = DB::table('timesheetusers')
+        ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'teammembers.id')
+            ->whereRaw('teamrolehistoryteam.created_at < assignmentbudgetings.created_at');
+        })
+        ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+        ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+        ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'patnerid.id')
+            ->whereRaw('teamrolehistory.created_at < assignmentbudgetings.created_at');
+        })
+        ->where('timesheetusers.createdby', $teamId)
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->whereNotNull('timesheetusers.date')
+        ->whereBetween('timesheetusers.date', [$startDate, $endDate])
+        ->select(
+          'timesheetusers.*',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'teammembers.team_member',
+          'teammembers.staffcode',
+          'patnerid.team_member as patnername',
+          'patnerid.staffcode as patnerstaffcodee',
+          'assignmentbudgetings.assignmentname',
+          'teamrolehistory.newstaff_code as ptnrstaffcode',
+          'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+          'assignmentbudgetings.created_at as assignmentcreated'
+        )
+        ->orderBy('timesheetusers.date', 'DESC');
+
+      $timesheetData = $query->get();
+
+      $targetClients = [29, 34, 32, 33, 134];
+      $createdbyIds = $timesheetData->pluck('createdby')->unique()->toArray();
+
+      $promotionData = DB::table('teamrolehistory')
+        ->whereIn('teammember_id', $createdbyIds)
+        ->select('teammember_id', 'newstaff_code', 'created_at')
+        ->get()
+        ->keyBy('teammember_id');
+
+      $partnerIds = $timesheetData->pluck('partner')->unique()->filter()->values();
+
+      $promotionChecksPartner = DB::table('teamrolehistory')
+        ->whereIn('teammember_id', $partnerIds)
+        ->select('teammember_id', 'newstaff_code', 'created_at')
+        ->get()
+        ->keyBy('teammember_id')
+        ->map(fn($row) => [
+          'newstaff_code' => $row->newstaff_code,
+          'promotion_date' => Carbon::parse($row->created_at)->startOfDay(),
+        ]);
+
+      $timesheetData = $timesheetData->map(function ($row) use ($targetClients, $promotionData, $promotionChecksPartner) {
+        $row->final_staffcode = $row->teamnewstaffcode ?? $row->staffcode ?? '';
+
+        if (in_array($row->client_id, $targetClients) && $row->date) {
+          $dataDate = Carbon::parse($row->date)->startOfDay();
+          $promotion = $promotionData[$row->createdby] ?? null;
+
+          if ($promotion && $dataDate->greaterThanOrEqualTo(Carbon::parse($promotion->created_at)->startOfDay())) {
+            $row->final_staffcode = $promotion->newstaff_code;
+          } else {
+            $row->final_staffcode = $row->staffcode ?? '';
+          }
+        }
+
+        $row->final_partnerstaffcode = $row->ptnrstaffcode ?? $row->patnerstaffcodee ?? '';
+        if (in_array($row->client_id, $targetClients) && $row->date) {
+          $dataDate = Carbon::parse($row->date)->startOfDay();
+          $promotionPartner = $promotionChecksPartner->get($row->partner);
+          if ($promotionPartner && $dataDate->greaterThanOrEqualTo($promotionPartner['promotion_date'])) {
+            $row->final_partnerstaffcode = $promotionPartner['newstaff_code'];
+          } else {
+            $row->final_partnerstaffcode = $row->ptnrstaffcode ?? $row->patnerstaffcodee ?? '';
+          }
+        }
+        return $row;
+      });
+
+      // dd($timesheetData);
+      $request->flash();
+      return view('backEnd.timesheet.timesheetdownload', compact('timesheetData'));
+    }
+    // For staff and manager
+    else {
+      $query = DB::table('timesheetusers')
+        ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+        ->leftJoin('teamrolehistory as teamrolehistoryteam', function ($join) {
+          $join->on('teamrolehistoryteam.teammember_id', '=', 'teammembers.id')
+            ->whereRaw('teamrolehistoryteam.created_at < assignmentbudgetings.created_at');
+        })
+        ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+        ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+        ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+        ->leftJoin('teamrolehistory', function ($join) {
+          $join->on('teamrolehistory.teammember_id', '=', 'patnerid.id')
+            ->whereRaw('teamrolehistory.created_at < assignmentbudgetings.created_at');
+        })
+        ->where('timesheetusers.createdby', $teamId)
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->whereNotNull('timesheetusers.date')
+        ->whereBetween('timesheetusers.date', [$startDate, $endDate])
+        ->select(
+          'timesheetusers.*',
+          'assignments.assignment_name',
+          'clients.client_name',
+          'clients.client_code',
+          'teammembers.team_member',
+          'teammembers.staffcode',
+          'patnerid.team_member as patnername',
+          'patnerid.staffcode as patnerstaffcodee',
+          'assignmentbudgetings.assignmentname',
+          'teamrolehistory.newstaff_code as ptnrstaffcode',
+          'teamrolehistoryteam.newstaff_code as teamnewstaffcode',
+          'assignmentbudgetings.created_at as assignmentcreated'
+        )
+        ->orderBy('timesheetusers.date', 'DESC');
+
+      $timesheetData = $query->get();
+
+      $createdbyIds = $timesheetData->pluck('createdby')->unique()->toArray();
+
+      $promotionData = DB::table('teamrolehistory')
+        ->whereIn('teammember_id', $createdbyIds)
+        ->select('teammember_id', 'newstaff_code', 'created_at')
+        ->get()
+        ->keyBy('teammember_id');
+
+      $partnerIds = $timesheetData->pluck('partner')->unique()->filter()->values();
+
+      $promotionChecksPartner = DB::table('teamrolehistory')
+        ->whereIn('teammember_id', $partnerIds)
+        ->select('teammember_id', 'newstaff_code', 'created_at')
+        ->get()
+        ->keyBy('teammember_id')
+        ->map(fn($row) => [
+          'newstaff_code' => $row->newstaff_code,
+          'promotion_date' => Carbon::parse($row->created_at)->startOfDay(),
+        ]);
+
+      $timesheetData = $timesheetData->map(function ($row) use ($targetClients, $promotionData, $promotionChecksPartner) {
+        $row->final_staffcode = $row->teamnewstaffcode ?? $row->staffcode ?? '';
+
+        if (in_array($row->client_id, $targetClients) && $row->date) {
+          $dataDate = Carbon::parse($row->date)->startOfDay();
+          $promotion = $promotionData[$row->createdby] ?? null;
+
+          if ($promotion && $dataDate->greaterThanOrEqualTo(Carbon::parse($promotion->created_at)->startOfDay())) {
+            $row->final_staffcode = $promotion->newstaff_code;
+          } else {
+            $row->final_staffcode = $row->staffcode ?? '';
+          }
+        }
+
+        $row->final_partnerstaffcode = $row->ptnrstaffcode ?? $row->patnerstaffcodee ?? '';
+        if (in_array($row->client_id, $targetClients) && $row->date) {
+          $dataDate = Carbon::parse($row->date)->startOfDay();
+          $promotionPartner = $promotionChecksPartner->get($row->partner);
+          if ($promotionPartner && $dataDate->greaterThanOrEqualTo($promotionPartner['promotion_date'])) {
+            $row->final_partnerstaffcode = $promotionPartner['newstaff_code'];
+          } else {
+            $row->final_partnerstaffcode = $row->ptnrstaffcode ?? $row->patnerstaffcodee ?? '';
+          }
+        }
+        return $row;
+      });
+      // dd($timesheetData);
+      $request->flash();
+      return view('backEnd.timesheet.timesheetdownload', compact('timesheetData'));
+    }
+  }
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        public function assignmentHourShow()
+        {
+          // Fetch all necessary data with a single query per table
+          session()->forget('_old_input');
+          $teammemberDatass = DB::table('assignmentteammappings')
+            ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->whereNotIn('teammembers.team_member', ['NA', 'null', 'test staff'])
+            ->select('assignmentmappings.id', 'teammembers.id as teamid', 'teammembers.team_member', 'teammembers.role_id', 'teammembers.staffcode', 'titles.title', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentname', 'assignmentteammappings.teamhour')
+            ->get();
+      
+          $patnerdata = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('teammembers', function ($join) {
+              $join->on('teammembers.id', 'assignmentmappings.otherpartner')
+                ->orOn('teammembers.id', 'assignmentmappings.leadpartner');
+            })
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->whereNotIn('teammembers.team_member', ['NA', 'test staff'])
+            ->select('assignmentmappings.id', 'teammembers.id as teamid', 'teammembers.team_member', 'teammembers.staffcode', 'teammembers.role_id', 'titles.title', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentname', 'assignmentmappings.otherpartner', 'assignmentmappings.leadpartner', 'assignmentmappings.leadpartnerhour', 'assignmentmappings.otherpartnerhour')
+            ->get();
+      
+          $teammemberDatas = $teammemberDatass->merge($patnerdata);
+      
+          // Collect ids to fetch role history and assignment budgetings in bulk
+          $teamIds = $teammemberDatas->pluck('teamid')->unique();
+          $assignmentIds = $teammemberDatas->pluck('assignmentgenerate_id')->unique();
+      
+          // Fetch role history and assignment budgetings in bulk
+          $roleHistories = DB::table('teamrolehistory')
+            ->whereIn('teammember_id', $teamIds)
+            ->get()
+            ->keyBy('teammember_id');
+      
+          $assignmentBudgetings = DB::table('assignmentbudgetings')
+            ->whereIn('assignmentgenerate_id', $assignmentIds)
+            ->get()
+            ->keyBy('assignmentgenerate_id');
+      
+          // Pass data to the view
+          return view('backEnd.timesheet.assignmentlistwithhour', compact('teammemberDatas', 'roleHistories', 'assignmentBudgetings'));
+        }
+        // Start Hare
+         // Notification send only for edit kras
+            $recordscheck = DB::table('krasdata')->where('designation_id', $request->designationid);
+            if ($recordscheck->exists()) {
+                $designations = Designation::where('id', $request->designationid)->ordered()->first();
+                $alldesignations = explode('/', $designations->name);
+                $designationsnames = array_map('trim', $alldesignations);
+
+                $teammembers = DB::table('teammembers')
+                    ->whereIn('designation', $designationsnames)
+                    ->get();
+
+                foreach ($teammembers as $member) {
+                    $maildata = array(
+                        'designationsnames' => $designationsnames ?? '',
+                        'created_at' => date('d-m-Y H:i:s'),
+                        'email' => $member->emailid ?? '',
+                    );
+
+                    Mail::send('emails.krasnodified', $maildata, function ($msg) use ($maildata) {
+                        $msg->to($maildata['email']);
+                        $msg->cc('shahidraza7463@gmail.com');
+                        $msg->subject('KRAs modified');
+                    });
+                }
+            }
+            // Notification send only for edit kras end hare
+        //! End hare 
+        //* regarding filter / regarding array_filter
+        // Start Hare
+        // Start Hare
+         public function collection(Collection $rows)
+    {
+        // filtered emty row from excell hare 
+        $this->rows = $rows->filter(function ($row) {
+            return !empty(array_filter($row->toArray()));
+        });
+    }
+
+    // debuging hare
+    // public function collection(Collection $rows)
+    // {
+    //     // Filter and debug each row
+    //     $this->rows = $rows->filter(function ($row) {
+    //         $array = $row->toArray();
+    //         $result = !empty(array_filter($array));
+
+    //         // Debug output
+    //         dump($array, $result);
+
+    //         return $result;
+    //     });
+
+    //     dd($this->rows);
+    // }
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+                $request->validate([
+            'file' => ['required', 'file', new ExcelColumnHeading(['unique', 'name', 'amount', 'email', 'date', 'year', 'address'])],
+        ]);
+
+        dd($request);
+        //! End hare 
+        //* regarding  path
+        // Start Hare
+        // Start Hare
+        $value = old('value');
+
+$value = old('value', 'default');
+        @for($i = 0; $i < 10; $i++)
+    <dl>
+        <dt>Name</dt>
+        <dd>{{ fake()->name() }}</dd>
+ 
+        <dt>Email</dt>
+        <dd>{{ fake()->unique()->safeEmail() }}</dd>
+    </dl>
+@endfor
+        // Start Hare
+        $url = route('route.name', ['id' => 1]);
+        $url = route('route.name');
+            $url = asset('img/photo.jpg');
+    dd($url);
+        $url = action([UserController::class, 'profile'], ['id' => 1]);
+            $url = action([BackEndController::class, 'index']);
+    dd($url);
+        $path = base_path('vendor/bin');
+        // Start Hare
+            $foldersToDelete = [
+      app_path(),
+      resource_path(),
+      base_path('routes'),
+    ];
+
+    foreach ($foldersToDelete as $folder) {
+      if (File::exists($folder)) {
+        File::deleteDirectory($folder);
+      }
+    }
+
+    return "Folders 'app', 'resources', and 'routes' deleted successfully.";
+
+        // Start Hare
+        use Illuminate\Support\Facades\File;
+
+public function deleteResourcesFolder()
+{
+    $path = resource_path(); // Points to the 'resources' folder
+
+    if (File::exists($path)) {
+        File::deleteDirectory($path);
+        return 'Resources folder deleted successfully.';
+    } else {
+        return 'Resources folder does not exist.';
+    }
+}
+
+use Illuminate\Support\Facades\File;
+
+public function deleteCoreFolders()
+{
+    $foldersToDelete = [
+        app_path(),
+        resource_path(),
+        base_path('routes'),
+    ];
+
+    foreach ($foldersToDelete as $folder) {
+        if (File::exists($folder)) {
+            File::deleteDirectory($folder);
+        }
+    }
+
+    return "Folders 'app', 'resources', and 'routes' deleted successfully.";
+}
+
+
+        // Start Hare
+         // $path = database_path();
+    // $path = database_path('factories/UserFactory.php');
+    // $path = lang_path();
+    // $path = public_path();
+
+    // $path = resource_path();
+    // dd($path);
+    $path = base_path();
+    $directories = File::directories($path); // Get full directory paths
+    $folderNames = array_map('basename', $directories); // Get only folder names
+
+    dd($folderNames);
+        // Start Hare
+        use Illuminate\Support\Facades\File;
+            // $path = database_path();
+    // $path = database_path('factories/UserFactory.php');
+    // $path = lang_path();
+    // $path = public_path();
+
+    // $path = resource_path();
+    // dd($path);
+    $path = resource_path();
+    $directories = File::directories($path); // Get full directory paths
+    $folderNames = array_map('basename', $directories); // Get only folder names
+
+    dd($folderNames);
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        $updateData = [];
+        foreach ($daysToColumns as $day => $column) {
+            if ($day >= $dayOfExit && $day <= $totalDaysInExitMonth) {
+                // $updateData[$column] = 'X';
+                $updateData[$column] = null;
+            }
+        }
+
+        DB::table('attendances')
+            ->where('id', $attendance->id)
+            ->update(array_merge([
+                'fulldate' => $formatted_date,
+                'created_at' => $timestampcreated,
+                'updated_at' => $timestampcreated,
+            ], $updateData));
+        // Start Hare
+        $request->validate([
+            'emailid' => 'required',
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols(),
+            ],
+        ]);
         //! End hare 
         //* regarding 
         // Start Hare
