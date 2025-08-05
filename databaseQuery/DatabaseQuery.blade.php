@@ -23,7 +23,7 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- * regarding phpmyadmin   You probably tried to upload a file that is too large. Please refer to documentation for a workaround for this limit.  --}}
+{{-- * regarding phpmyadmin You probably tried to upload a file that is too large. Please refer to documentation for a workaround for this limit.  --}}
 {{-- i am uploading 284mb file after that ye error message aa raha hai mujhe ise fix karna hai phpmyadmin --}}
 Locate and edit your php.ini file (check your XAMPP/WAMP/LAMP or server PHP folder).
 
@@ -44,6 +44,7 @@ utf8mb4_general_ci
 
 Fatal error: Maximum execution time of 300 seconds exceeded in C:\xampp\phpMyAdmin\libraries\classes\Dbal\DbiMysqli.php
 on line 209
+C:\xampp\php\php.ini
 
 max_execution_time = 1800 ; (30 minutes)
 max_input_time = 1800
@@ -88,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `table_name`
 {{-- * regarding databse import using Cmd  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-1.Database import using command
+1.Database import using command / regarding import database
 cd C:\xampp\mysql\bin folder me cmd open kare using adminstrate
 {{-- 1.mysql -u root vdrlive < "C:\xampp\htdocs\vdrlive.sql"  --}}
 ERROR 1153 (08S01) at line 1233884: Got a packet bigger than 'max_allowed_packet' bytes
@@ -98,6 +99,7 @@ If not found, add it under [mysqld] section: ya serach sort_buffer_size=512K abo
 max_allowed_packet
 [mysqld]
 max_allowed_packet=512M
+
 
 
 2.Database ka backup le using command

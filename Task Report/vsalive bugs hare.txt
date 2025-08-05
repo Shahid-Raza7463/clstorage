@@ -32,6 +32,108 @@ resources\views\backEnd\timesheet\create.blade.php
 resources\views\backEnd\timesheet\create.blade.php
 
 
+ // $currentDate = Carbon::now();
+      $todayDate = Carbon::parse('2024-07-01');
+      $financialStartdate = $todayDate->month >= 4 ? Carbon::create($todayDate->year, 4, 1) : Carbon::create($todayDate->year - 1, 4, 1);
+      $financialEnddate = $financialStartdate->copy()->addYear()->subDay();
+
+      $assignmentGenerateIds = DB::table('assignmentbudgetings')
+        ->whereBetween('periodstartdate', [$financialStartdate, $financialEnddate])
+        ->whereBetween('periodenddate', [$financialStartdate, $financialEnddate])
+        ->pluck('assignmentgenerate_id');
+
+      $invoices = DB::table('invoices')
+        ->select(
+          'invoices.assignmentgenerate_id',
+          'teammembers.team_member',
+          DB::raw('SUM(invoices.total) as total')
+        )
+        ->join('teammembers', 'teammembers.id', '=', 'invoices.partner')
+        ->whereIn('invoices.assignmentgenerate_id', $assignmentGenerateIds)
+        ->groupBy('invoices.assignmentgenerate_id', 'teammembers.team_member')
+        ->get();
+
+      $timesheetData = DB::table('timesheetusers')
+        ->select('assignmentgenerate_id', 'createdby', DB::raw('SUM(totalhour) as total_hour'))
+        ->whereIn('assignmentgenerate_id', $assignmentGenerateIds)
+        ->groupBy('assignmentgenerate_id', 'createdby')
+        ->get();
+
+      $teamMemberCosts = DB::table('teammembers')
+        ->whereIn('id', $timesheetData->pluck('createdby')->unique())
+        ->pluck('cost_hour', 'id');
+
+
+
+      $groupedCosts = $timesheetData->groupBy('assignmentgenerate_id')->map(function ($rows) use ($teamMemberCosts) {
+        return $rows->sum(function ($row) use ($teamMemberCosts) {
+          return $row->total_hour * ($teamMemberCosts[$row->createdby] ?? 0);
+        });
+      });
+
+
+
+      $finalData = $invoices->map(function ($row) use ($groupedCosts) {
+        $row->cost = $groupedCosts[$row->assignmentgenerate_id] ?? 0;
+        $row->profit_loss = $row->total - $row->cost;
+        return $row;
+      });
+
+      $partnerWiseProfit = $finalData
+        ->groupBy('team_member')
+        ->map(function ($items, $teamMember) {
+          return (object)[
+            'team_member' => $teamMember,
+            'total' => $items->sum(fn($item) => (float) $item->total),
+            'cost' => $items->sum('cost'),
+            'profit_loss' => $items->sum('profit_loss'),
+          ];
+        })
+        // Reset index if needed
+        ->values();
+
+     return view('backEnd.kgsdashboardreport', compact('partnerWiseProfit'));
+	 
+	 
+	 
+	 
+	                 <div class="card">
+                    <div class="card-header">
+                        <h2>Partner-wise P&L Statement</h2>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 17px;">Partner</th>
+                                    {{-- <th style="padding: 17px;">assignment id</th> --}}
+                                    <th style="padding: 17px;">Revenue</th>
+                                    <th style="padding: 17px;">Expenses</th>
+                                    <th style="padding: 17px;">Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($partnerWiseProfit as $data)
+                                    <tr>
+                                        <td style="padding: 17px;">{{ $data->team_member }}</td>
+                                        <td style="padding: 17px;">₹{{ number_format($data->total, 2) }}</td>
+                                        <td style="padding: 17px;">₹{{ number_format($data->cost, 2) }}</td>
+                                        <td style="padding: 17px;"
+                                            class="{{ $data->profit_loss < 0 ? 'text-danger' : 'text-success' }}">
+                                            ₹{{ number_format($data->profit_loss, 2) }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No data available.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
 

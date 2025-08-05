@@ -31,19 +31,674 @@ class Allcode extends Controller
         //! End hare 
         //* regarding 
         // Start Hare
+            $startDate = Carbon::createFromFormat('d-m-Y', '01-04-2025')->format('Y-m-d');
+    $endDate = Carbon::createFromFormat('d-m-Y', '01-06-2025')->format('Y-m-d');
+
+    $timesheetUserRecord = DB::table('timesheetusers')
+      ->where('createdby', 815)
+      ->whereBetween(DB::raw("STR_TO_DATE(date, '%d-%m-%Y')"), [$startDate, $endDate])
+      ->get();
+
+    dd($timesheetUserRecord);
         // Start Hare
         //! End hare 
         //* regarding 
         // Start Hare
         // Start Hare
+            $teamHours = DB::table('assignmentteammappings')
+      ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+      ->select(
+        // 'assignmentteammappings.teammember_id',
+        'teammembers.team_member',
+        DB::raw('SUM(assignmentteammappings.teamesthour) as total_est_hours')
+      )
+      ->groupBy('teammembers.team_member')
+      ->get();
+
+    dd($teamHours);
+
+        $teamHours = DB::table('assignmentteammappings')
+      ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+      ->select(
+        'assignmentteammappings.teammember_id',
+        'teammembers.team_member',
+        DB::raw('SUM(assignmentteammappings.teamesthour) as total_est_hours')
+      )
+      ->groupBy('assignmentteammappings.teammember_id', 'teammembers.team_member')
+      ->get();
+
+    dd($teamHours);
+        //! End hare 
+        //* regarding optimization / time compexity /
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+        // Start Hare
+          // Lap Days Analysis (Assignment to Invoice)
+
+    // $assignmentsWithInvoicesData = DB::table('assignmentmappings')
+    //   ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+    //   // get only those assignments for which an invoice has been created
+    //   ->join('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //   ->selectRaw('MONTH(assignmentbudgetings.otpverifydate) as month, YEAR(assignmentbudgetings.otpverifydate) as year, assignmentbudgetings.otpverifydate, invoices.id as invoice_id, invoices.created_at as invoice_created_at')
+    //   ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+    //     // Jan to Mar from next year
+    //     $query->where(function ($q) use ($financialEndYear) {
+    //       $q->whereYear('assignmentbudgetings.otpverifydate', $financialEndYear)
+    //         ->whereIn(DB::raw('MONTH(assignmentbudgetings.otpverifydate)'), [1, 2, 3]);
+    //     })
+    //       // Apr to Jun from current year
+    //       ->orWhere(function ($q) use ($financialStartYear) {
+    //         $q->whereYear('assignmentbudgetings.otpverifydate', $financialStartYear)
+    //           ->whereIn(DB::raw('MONTH(assignmentbudgetings.otpverifydate)'), [4, 5, 6]);
+    //       });
+    //   })
+    //   ->orderByRaw('FIELD(MONTH(otpverifydate), 1, 2, 3, 4, 5, 6)')
+    //   ->get()
+    //   ->map(function ($item) {
+    //     $invoiceDate = Carbon::parse($item->invoice_created_at);
+    //     $otpDate = Carbon::parse($item->otpverifydate);
+    //     $item->differenceDays = $otpDate->diffInDays($invoiceDate);
+    //     $item->targetDays = 7;
+    //     $monthNames = [
+    //       1 => 'January',
+    //       2 => 'February',
+    //       3 => 'March',
+    //       4 => 'April',
+    //       5 => 'May',
+    //       6 => 'June',
+    //     ];
+
+    //     $item->month = $monthNames[$item->month] ?? $item->month;
+
+    //     return $item;
+    //   });
+
+    // $assignmentsWithInvoices = $assignmentsWithInvoicesData->groupBy(function ($item) {
+    //   return $item->month . '-' . $item->year;
+    // })->map(function ($group) {
+    //   // Average Difference Days = (sum of all differenceDays) / number of records
+    //   $average = $group->avg('differenceDays');
+    //   $numberofrecords = $group->count('differenceDays');
+    //   return (object) [
+    //     'month' => $group->first()->month,
+    //     'year' => $group->first()->year,
+    //     'otpverifydate' => $group->first()->otpverifydate,
+    //     'invoice_id' => $group->first()->invoice_id,
+    //     'invoice_created_at' => $group->first()->invoice_created_at,
+    //     'targetDays' => $group->first()->targetDays,
+    //     'differenceDays' => $group->sum('differenceDays'),
+    //     'countitem' => $numberofrecords,
+    //     'averageDifferenceDays' => round($average, 1),
+    //   ];
+    // })->sortBy(function ($item) {
+    //   $order = ['January', 'February', 'March', 'April', 'May', 'June'];
+    //   return array_search($item->month, $order);
+    // })->values();
+
+    // $assignmentsWithInvoices = DB::table('assignmentmappings')
+    //   ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //   ->join('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //   ->select(
+    //     DB::raw('MONTHNAME(assignmentbudgetings.otpverifydate) as month'),
+    //     DB::raw('YEAR(assignmentbudgetings.otpverifydate) as year'),
+    //     DB::raw('COUNT(*) as countitem'),
+    //     DB::raw('AVG(DATEDIFF(invoices.created_at, assignmentbudgetings.otpverifydate)) as averageDifferenceDays'),
+    //     DB::raw('SUM(DATEDIFF(invoices.created_at, assignmentbudgetings.otpverifydate)) as differenceDays'),
+    //     DB::raw('7 as targetDays'),
+    //     DB::raw('MIN(assignmentbudgetings.otpverifydate) as otpverifydate'),
+    //     DB::raw('MIN(invoices.id) as invoice_id'),
+    //     DB::raw('MIN(invoices.created_at) as invoice_created_at')
+    //   )
+    //   ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+    //     $query->where(function ($q) use ($financialEndYear) {
+    //       $q->whereYear('assignmentbudgetings.otpverifydate', $financialEndYear)
+    //         ->whereMonth('assignmentbudgetings.otpverifydate', '<=', 3);
+    //     })->orWhere(function ($q) use ($financialStartYear) {
+    //       $q->whereYear('assignmentbudgetings.otpverifydate', $financialStartYear)
+    //         ->whereMonth('assignmentbudgetings.otpverifydate', '>=', 4)
+    //         ->whereMonth('assignmentbudgetings.otpverifydate', '<=', 6);
+    //     });
+    //   })
+    //   ->groupBy(
+    //     DB::raw('YEAR(assignmentbudgetings.otpverifydate)'),
+    //     DB::raw('MONTH(assignmentbudgetings.otpverifydate)'),
+    //     DB::raw('MONTHNAME(assignmentbudgetings.otpverifydate)')
+    //   )
+    //   ->orderByRaw('FIELD(MONTH(assignmentbudgetings.otpverifydate), 1, 2, 3, 4, 5, 6)')
+    //   ->get()
+    //   ->map(function ($item) {
+    //     $item->averageDifferenceDays = round($item->averageDifferenceDays, 1);
+    //     return $item;
+    //   });
+
+
+    $monthNames = [1 => 'January', 2 => 'February', 3 => 'March', 4 => 'April', 5 => 'May', 6 => 'June'];
+
+    $assignmentsWithInvoices = DB::table('assignmentmappings')
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+      ->join('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+      ->selectRaw('MONTH(assignmentbudgetings.otpverifydate) as month, YEAR(assignmentbudgetings.otpverifydate) as year, assignmentbudgetings.otpverifydate, invoices.created_at as invoice_created_at, invoices.id as invoice_id')
+      ->where(function ($query) use ($financialStartYear, $financialEndYear) {
+        $query->where(function ($q) use ($financialEndYear) {
+          $q->whereYear('assignmentbudgetings.otpverifydate', $financialEndYear)
+            ->whereIn(DB::raw('MONTH(assignmentbudgetings.otpverifydate)'), [1, 2, 3]);
+        })->orWhere(function ($q) use ($financialStartYear) {
+          $q->whereYear('assignmentbudgetings.otpverifydate', $financialStartYear)
+            ->whereIn(DB::raw('MONTH(assignmentbudgetings.otpverifydate)'), [4, 5, 6]);
+        });
+      })
+      ->orderByRaw('FIELD(MONTH(assignmentbudgetings.otpverifydate), 1,2,3,4,5,6)')
+      ->get()
+      ->map(function ($item) use ($monthNames) {
+        $otp = Carbon::parse($item->otpverifydate);
+        $invoice = Carbon::parse($item->invoice_created_at);
+        $item->differenceDays = $otp->diffInDays($invoice);
+        $item->targetDays = 7;
+        $item->month = $monthNames[$item->month] ?? $item->month;
+        return $item;
+      })
+      ->groupBy(fn($item) => $item->month . '-' . $item->year)
+      ->map(function ($group) {
+        $first = $group->first();
+        return (object) [
+          'month' => $first->month,
+          'year' => $first->year,
+          'otpverifydate' => $first->otpverifydate,
+          'invoice_id' => $first->invoice_id,
+          'invoice_created_at' => $first->invoice_created_at,
+          'targetDays' => $first->targetDays,
+          'differenceDays' => $group->sum('differenceDays'),
+          'countitem' => $group->count(),
+          'averageDifferenceDays' => round($group->avg('differenceDays'), 1),
+        ];
+      })
+      ->sortBy(fn($item) => array_search($item->month, array_values($monthNames)))
+      ->values();
+
+    dd($assignmentsWithInvoices);
+        // Start Hare
+         // Invoice Due vs Assignment Billing vs Cash Recovery
+    // $assignmentBilling = DB::table('invoices')
+    //   ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(total) as invoices_amount')
+    //   ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+    //     // Jan to Mar from next year
+    //     $query->where(function ($q) use ($financialEndYear) {
+    //       $q->whereYear('created_at', $financialEndYear)
+    //         ->whereIn(DB::raw('MONTH(created_at)'), [1, 2, 3]);
+    //     })
+    //       // Apr to Jun from current year
+    //       ->orWhere(function ($q) use ($financialStartYear) {
+    //         $q->whereYear('created_at', $financialStartYear)
+    //           ->whereIn(DB::raw('MONTH(created_at)'), [4, 5, 6]);
+    //       });
+    //   })
+    //   ->groupByRaw('MONTH(created_at), YEAR(created_at)')
+    //   ->orderByRaw('FIELD(MONTH(created_at), 1, 2, 3, 4, 5, 6)')
+    //   ->get()
+    //   ->map(function ($item) {
+    //     $monthNames = [
+    //       1 => 'January',
+    //       2 => 'February',
+    //       3 => 'March',
+    //       4 => 'April',
+    //       5 => 'May',
+    //       6 => 'June',
+    //     ];
+
+    //     $item->month = $monthNames[$item->month] ?? $item->month;
+    //     return $item;
+    //   });
+
+    // $assignmentOutstanding = DB::table('outstandings')
+    //   ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(AMT) as outstanding_amount')
+    //   ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+    //     // Jan to Mar from next year
+    //     $query->where(function ($q) use ($financialEndYear) {
+    //       $q->whereYear('created_at', $financialEndYear)
+    //         ->whereIn(DB::raw('MONTH(created_at)'), [1, 2, 3]);
+    //     })
+    //       // Apr to Jun from current year
+    //       ->orWhere(function ($q) use ($financialStartYear) {
+    //         $q->whereYear('created_at', $financialStartYear)
+    //           ->whereIn(DB::raw('MONTH(created_at)'), [4, 5, 6]);
+    //       });
+    //   })
+    //   ->groupByRaw('MONTH(created_at), YEAR(created_at)')
+    //   ->orderByRaw('FIELD(MONTH(created_at), 1, 2, 3, 4, 5, 6)')
+    //   ->get()
+    //   ->map(function ($item) {
+    //     $monthNames = [
+    //       1 => 'January',
+    //       2 => 'February',
+    //       3 => 'March',
+    //       4 => 'April',
+    //       5 => 'May',
+    //       6 => 'June',
+    //     ];
+
+    //     $item->month = $monthNames[$item->month] ?? $item->month;
+    //     return $item;
+    //   });
+
+    // $cashRecovery = DB::table('payments')
+    //   ->selectRaw('MONTH(paymentdate) as month, YEAR(paymentdate) as year, SUM(amountreceived) as amountreceived')
+    //   ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+    //     // Jan to Mar from next year
+    //     $query->where(function ($q) use ($financialEndYear) {
+    //       $q->whereYear('paymentdate', $financialEndYear)
+    //         ->whereIn(DB::raw('MONTH(paymentdate)'), [1, 2, 3]);
+    //     })
+    //       // Apr to Jun from current year
+    //       ->orWhere(function ($q) use ($financialStartYear) {
+    //         $q->whereYear('paymentdate', $financialStartYear)
+    //           ->whereIn(DB::raw('MONTH(paymentdate)'), [4, 5, 6]);
+    //       });
+    //   })
+    //   ->groupByRaw('MONTH(paymentdate), YEAR(paymentdate)')
+    //   ->orderByRaw('FIELD(MONTH(paymentdate), 1, 2, 3, 4, 5, 6)')
+    //   ->get()
+    //   ->map(function ($item) {
+    //     $monthNames = [
+    //       1 => 'January',
+    //       2 => 'February',
+    //       3 => 'March',
+    //       4 => 'April',
+    //       5 => 'May',
+    //       6 => 'June',
+    //     ];
+
+    //     $item->month = $monthNames[$item->month] ?? $item->month;
+    //     return $item;
+    //   });
+
+    function getMonthlyGroupedData($table, $dateColumn, $sumColumn, $alias, $financialStartYear, $financialEndYear)
+    {
+      $data = DB::table($table)
+        ->selectRaw("MONTH($dateColumn) as month, YEAR($dateColumn) as year, SUM($sumColumn) as $alias")
+        ->where(function ($query) use ($financialStartYear, $financialEndYear, $dateColumn) {
+          $query->where(function ($q) use ($financialEndYear, $dateColumn) {
+            $q->whereYear($dateColumn, $financialEndYear)
+              ->whereIn(DB::raw("MONTH($dateColumn)"), [1, 2, 3]);
+          })->orWhere(function ($q) use ($financialStartYear, $dateColumn) {
+            $q->whereYear($dateColumn, $financialStartYear)
+              ->whereIn(DB::raw("MONTH($dateColumn)"), [4, 5, 6]);
+          });
+        })
+        ->groupByRaw("MONTH($dateColumn), YEAR($dateColumn)")
+        ->orderByRaw("FIELD(MONTH($dateColumn), 1, 2, 3, 4, 5, 6)")
+        ->get()
+        ->map(function ($item) {
+          $monthNames = [
+            1 => 'January',
+            2 => 'February',
+            3 => 'March',
+            4 => 'April',
+            5 => 'May',
+            6 => 'June',
+          ];
+          $item->month = $monthNames[$item->month] ?? $item->month;
+          return $item;
+        });
+
+      return $data;
+    }
+
+    $assignmentBilling = getMonthlyGroupedData('invoices', 'created_at', 'total', 'invoices_amount', $financialStartYear, $financialEndYear);
+    $assignmentOutstanding = getMonthlyGroupedData('outstandings', 'created_at', 'AMT', 'outstanding_amount', $financialStartYear, $financialEndYear);
+    $cashRecovery = getMonthlyGroupedData('payments', 'paymentdate', 'amountreceived', 'amountreceived', $financialStartYear, $financialEndYear);
+
+        // Start Hare
+        function getMonthlyGroupedData($table, $dateColumn, $sumColumn, $alias, $financialStartYear, $financialEndYear)
+{
+    $data = DB::table($table)
+        ->selectRaw("MONTH($dateColumn) as month, YEAR($dateColumn) as year, SUM($sumColumn) as $alias")
+        ->where(function ($query) use ($financialStartYear, $financialEndYear, $dateColumn) {
+            $query->where(function ($q) use ($financialEndYear, $dateColumn) {
+                $q->whereYear($dateColumn, $financialEndYear)
+                    ->whereIn(DB::raw("MONTH($dateColumn)"), [1, 2, 3]);
+            })->orWhere(function ($q) use ($financialStartYear, $dateColumn) {
+                $q->whereYear($dateColumn, $financialStartYear)
+                    ->whereIn(DB::raw("MONTH($dateColumn)"), [4, 5, 6]);
+            });
+        })
+        ->groupByRaw("MONTH($dateColumn), YEAR($dateColumn)")
+        ->orderByRaw("FIELD(MONTH($dateColumn), 1, 2, 3, 4, 5, 6)")
+        ->get()
+        ->map(function ($item) {
+            $monthNames = [
+                1 => 'January',
+                2 => 'February',
+                3 => 'March',
+                4 => 'April',
+                5 => 'May',
+                6 => 'June',
+            ];
+            $item->month = $monthNames[$item->month] ?? $item->month;
+            return $item;
+        });
+
+    return $data;
+}
+
+$assignmentBilling = getMonthlyGroupedData('invoices', 'created_at', 'total', 'invoices_amount', $financialStartYear, $financialEndYear);
+
+$assignmentOutstanding = getMonthlyGroupedData('outstandings', 'created_at', 'AMT', 'outstanding_amount', $financialStartYear, $financialEndYear);
+
+$cashRecovery = getMonthlyGroupedData('payments', 'paymentdate', 'amountreceived', 'amountreceived', $financialStartYear, $financialEndYear);
+
+        // Start Hare
+    // Monthly Expense Analysis
+    // $currentDate = now();
+    // $currentYear = $currentDate->year;
+
+    // $teamsSalaries = DB::table('employeepayrolls')
+    //   ->select(
+    //     'month',
+    //     DB::raw('SUM(total_amount_to_paid) as total_amount')
+    //   )
+    //   ->where('year', $currentYear)
+    //   ->whereIn('month', ['January', 'February', 'March', 'April', 'May', 'June'])
+    //   ->where('send_to_bank', 0)
+    //   ->groupBy('month')
+    //   ->orderByRaw("FIELD(month, 'January', 'February', 'March', 'April', 'May', 'June')")
+    //   ->get();
+
+    // // total amount of convence, how many amount approved for convence in month wise or Exceptional Expenses 
+    // $teamexceptionalExpenses = DB::table('outstationconveyances')
+    //   ->selectRaw('MONTH(approveddate) as month, SUM(finalamount) as total_amount')
+    //   ->where('status', 1)
+    //   ->whereYear('approveddate', $currentYear)
+    //   ->whereIn(DB::raw('MONTH(approveddate)'), [1, 2, 3, 4, 5, 6])
+    //   ->groupBy(DB::raw('MONTH(approveddate)'))
+    //   ->orderByRaw('FIELD(MONTH(approveddate), 1, 2, 3, 4, 5, 6)')
+    //   ->get()
+    //   ->map(function ($item) {
+    //     $monthNames = [
+    //       1 => 'January',
+    //       2 => 'February',
+    //       3 => 'March',
+    //       4 => 'April',
+    //       5 => 'May',
+    //       6 => 'June',
+    //     ];
+
+    //     $item->month = $monthNames[$item->month] ?? $item->month;
+    //     return $item;
+    //   });
+
+    //!
+
+    $fyStartYear = now()->month >= 4 ? now()->year : now()->year - 1;
+    $janToMarYear = $fyStartYear + 1;
+
+    $teamsSalaries = DB::table('employeepayrolls')
+      ->select(
+        'month',
+        'year',
+        DB::raw('SUM(total_amount_to_paid) as total_amount')
+      )
+      ->where(function ($query) use ($janToMarYear, $fyStartYear) {
+        // Jan-Mar from next year
+        $query->where(function ($q) use ($janToMarYear) {
+          $q->where('year', $janToMarYear)
+            ->whereIn('month', ['January', 'February', 'March']);
+        })
+          // Apr-Jun from current FY year
+          ->orWhere(function ($q) use ($fyStartYear) {
+            $q->where('year', $fyStartYear)
+              ->whereIn('month', ['April', 'May', 'June']);
+          });
+      })
+      ->where('send_to_bank', 0)
+      ->groupBy('year', 'month') // group by both year and month
+      ->orderByRaw("FIELD(month, 'January', 'February', 'March', 'April', 'May', 'June')")
+      ->get();
+
+
+    $teamexceptionalExpenses = DB::table('outstationconveyances')
+      ->selectRaw('MONTH(approveddate) as month, YEAR(approveddate) as year, SUM(finalamount) as total_amount')
+      ->where('status', 1)
+      ->where(function ($query) use ($janToMarYear, $fyStartYear) {
+        // Jan-Mar from next year
+        $query->where(function ($q) use ($janToMarYear) {
+          $q->whereYear('approveddate', $janToMarYear)
+            ->whereIn(DB::raw('MONTH(approveddate)'), [1, 2, 3]);
+        })
+          // Apr-Jun from current FY year
+          ->orWhere(function ($q) use ($fyStartYear) {
+            $q->whereYear('approveddate', $fyStartYear)
+              ->whereIn(DB::raw('MONTH(approveddate)'), [4, 5, 6]);
+          });
+      })
+      ->groupByRaw('MONTH(approveddate), YEAR(approveddate)')
+      ->orderByRaw('FIELD(MONTH(approveddate), 1, 2, 3, 4, 5, 6)')
+      ->get()
+      ->map(function ($item) {
+        $monthNames = [
+          1 => 'January',
+          2 => 'February',
+          3 => 'March',
+          4 => 'April',
+          5 => 'May',
+          6 => 'June',
+        ];
+        $item->month = $monthNames[$item->month] ?? $item->month;
+        return $item;
+      });
+
+
+
+    // dd($teamexceptionalExpenses);
+
+
+
+        // Start Hare
+        // how many users not accepted independance mail till now
+
+    // $assignments = DB::table('assignmentmappings')
+    //   ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+    //   ->leftJoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+    //   ->select('assignmentmappings.assignmentgenerate_id', 'teammembers.id as teammember_id', 'teammembers.team_member')
+    //   ->get();
+
+    // $groupedAssignments = $assignments->groupBy('assignmentgenerate_id');
+    // $notFilledCounts = [];
+
+    // foreach ($groupedAssignments as $assignmentId => $teamMembers) {
+    //   $notFilled = 0;
+    //   foreach ($teamMembers as $member) {
+    //     $independence = DB::table('annual_independence_declarations')
+    //       ->where('assignmentgenerateid', $assignmentId)
+    //       ->where('createdby', $member->teammember_id)
+    //       ->where('type', 2)
+    //       ->first();
+
+    //     if (!$independence) {
+    //       $notFilled++;
+    //     }
+    //   }
+    //   $notFilledCounts[$assignmentId] = $notFilled;
+    // }
+
+    // $totalNotFilled = array_sum($notFilledCounts);
+
+    // dd( $totalNotFilled);
+
+    $totalNotFilled = DB::table('assignmentmappings')
+    ->select(DB::raw('COUNT(*) as total_not_filled'))
+    ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+    ->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+    ->leftJoin('annual_independence_declarations', function ($join) {
+      $join->on('annual_independence_declarations.assignmentgenerateid', '=', 'assignmentmappings.assignmentgenerate_id')
+        ->on('annual_independence_declarations.createdby', '=', 'teammembers.id')
+        ->where('annual_independence_declarations.type', 2);
+    })
+    ->whereNull('annual_independence_declarations.id') // Members without declarations
+    ->groupBy('assignmentmappings.assignmentgenerate_id')
+    ->get()
+    ->sum('total_not_filled');
+
+
+
+  // Otimized query for unfilled independence declarations
+  $totalNotFilled = DB::table('assignmentmappings')
+    ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+    ->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+    ->leftJoin('annual_independence_declarations as aid', function ($join) {
+      $join->on('aid.assignmentgenerateid', '=', 'assignmentmappings.assignmentgenerate_id')
+        ->on('aid.createdby', '=', 'teammembers.id')
+        ->where('aid.type', '=', 2);
+    })
+    ->whereNull('aid.id') // Only count where no declaration exists
+    ->count();
+
+  dd($totalNotFilled);
+
+  dd($totalNotFilled, 1111);
+        // Start Hare
+        // Step 1: Fetch main assignment data
+$assignmentOverviews = DB::table('assignmentmappings')
+    ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+    ->orderByDesc('assignmentbudgetings.id')
+    ->select(
+        'assignmentmappings.*',
+        'assignmentbudgetings.assignmentname',
+        'assignmentbudgetings.status',
+        'assignmentbudgetings.esthours',
+        'assignmentbudgetings.assignmentgenerate_id',
+        DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate) as finalassignmentenddate'),
+        'clients.client_name'
+    )
+    ->limit(3)
+    ->get()
+    ->keyBy('assignmentgenerate_id'); // for quick matching later
+
+$assignmentIds = $assignmentOverviews->keys(); // Get assignmentgenerate_ids
+
+// Step 2: Fetch total worked hours for all those assignments at once
+$workedHoursData = DB::table('timesheetusers')
+    ->select('assignmentgenerate_id', DB::raw('SUM(totalhour) as total_worked'))
+    ->whereIn('assignmentgenerate_id', $assignmentIds)
+    ->groupBy('assignmentgenerate_id')
+    ->get()
+    ->keyBy('assignmentgenerate_id'); // match by ID
+
+// Step 3: Attach percentage to each assignment
+foreach ($assignmentOverviews as $id => $assignment) {
+    $worked = $workedHoursData[$id]->total_worked ?? 0;
+    $total = $assignment->esthours ?? 0;
+    $assignment->completionPercentage = $total > 0 ? round(($worked / $total) * 100, 2) : 0;
+}
+
+// Convert back to regular collection if needed
+$assignmentOverviews = $assignmentOverviews->values();
+
+        // Start Hare
+          // Assignment Status Overview
+    // $assignmentOverviews = DB::table('assignmentmappings')
+    //   ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //   ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+    //   // ->where('assignmentbudgetings.status', 1)
+    //   ->orderByDesc('assignmentbudgetings.id')
+    //   ->select(
+    //     'assignmentmappings.*',
+    //     'assignmentbudgetings.assignmentname',
+    //     'assignmentbudgetings.status',
+    //     DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate) as finalassignmentenddate'),
+    //     'clients.client_name'
+    //   )
+    //   ->limit(3)
+    //   ->get();
+
+    // foreach ($assignmentOverviews as $assignmentOverview) {
+    //   $workedHours = DB::table('timesheetusers')
+    //     ->where('assignmentgenerate_id', $assignmentOverview->assignmentgenerate_id)
+    //     ->sum('totalhour');
+
+    //   $totalHours = $assignmentOverview->esthours;
+    //   $completionPercentage =  round(($workedHours / $totalHours) * 100, 2);
+    //   $assignmentOverview->completionPercentage = $completionPercentage;
+    // }
+
+    $assignmentOverviews = DB::table('assignmentmappings')
+      ->select(
+        'assignmentmappings.*',
+        'assignmentbudgetings.assignmentname',
+        'assignmentbudgetings.status',
+        DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate) as finalassignmentenddate'),
+        'clients.client_name',
+        DB::raw('(SELECT SUM(totalhour) FROM timesheetusers WHERE timesheetusers.assignmentgenerate_id = assignmentmappings.assignmentgenerate_id) as workedHours')
+      )
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+      ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+      ->orderByDesc('assignmentbudgetings.id')
+      ->limit(3)
+      ->get()
+      ->map(function ($assignmentOverview) {
+        $totalHours = $assignmentOverview->esthours ?? 0; // Handle null esthours
+        $workedHours = $assignmentOverview->workedHours ?? 0; // Handle null workedHours
+        $completionPercentage = $totalHours > 0 ? round(($workedHours / $totalHours) * 100, 2) : 0;
+        $assignmentOverview->completionPercentage = $completionPercentage;
+        return $assignmentOverview;
+      });
+
+    dd($assignmentOverviews);
+        // Start Hare
+
+           // Upcoming Assignments
+    $assignmentgenerateId = DB::table('assignmentmappings')->pluck('assignmentgenerate_id');
+    $upcomingAssignments = DB::table('assignmentbudgetings')
+      ->whereNotIn('assignmentgenerate_id', $assignmentgenerateId)
+      ->count();
+        // Start Hare
+          // Timesheet Filled On Closed Assignment
+    // Timesheet Filled On Closed Assignment
+    // $timesheetOnClosedAssignment = DB::table('assignmentmappings')
+    //   ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //   ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+    //   ->leftJoin('timesheetusers', 'timesheetusers.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //   // ->where('assignmentbudgetings.status', 1)
+    //   ->whereRaw("DATE(timesheetusers.created_at) > DATE(COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate))")
+    //   ->orderByDesc('assignmentbudgetings.id')
+    //   ->select(
+    //     'assignmentmappings.assignmentgenerate_id',
+    //     'assignmentbudgetings.assignmentname',
+    //     'assignmentbudgetings.status',
+    //     DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate) as finalassignmentenddate'),
+    //     'timesheetusers.created_at as timesheet_created',
+    //     'clients.client_name'
+    //   )
+    //   ->get()
+    //   ->unique('assignmentgenerate_id')
+    //   ->count();
+
+    $timesheetOnClosedAssignment = DB::table('assignmentmappings')
+      ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+      ->join('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+      ->whereExists(function ($query) {
+        $query->select(DB::raw(1))
+          ->from('timesheetusers')
+          ->whereRaw('timesheetusers.assignmentgenerate_id = assignmentmappings.assignmentgenerate_id')
+          ->whereRaw("DATE(timesheetusers.created_at) > DATE(COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate))");
+      })
+      ->select('assignmentmappings.assignmentgenerate_id')
+      ->distinct()
+      ->count();
         //! End hare 
         //* regarding 
         // Start Hare
         // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
-        // Start Hare
+            $columns = Schema::getColumnListing('assignmentmappings');
+    dd($columns);
         
         //! End hare 
         //* regarding 

@@ -7,29 +7,83 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script></script>
 {{--  Start Hare --}}
+<script></script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script></script>
 {{--  Start Hare --}}
+<script></script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script></script>
 {{--  Start Hare --}}
+<script></script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script></script>
 {{--  Start Hare --}}
+<script></script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script></script>
 {{--  Start Hare --}}
+<script></script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script></script>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script></script>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script></script>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script></script>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script></script>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script></script>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<script></script>
+{{--  Start Hare --}}
+<script>
+    cashInflowData.forEach((inflow, index) => {
+        const outflow = cashOutflowData[index];
+        const net = inflow - outflow;
+        console.log(`Month ${index + 1}: Inflow = ${inflow}, Outflow = ${outflow}, Net = ${net}`);
+    });
+</script>
 {{--  Start Hare --}}
 {{-- for preview of an Excel fil  --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>

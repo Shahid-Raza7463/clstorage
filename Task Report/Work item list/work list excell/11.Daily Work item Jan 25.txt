@@ -985,11 +985,53 @@ Unresolved Tickets - HR, IT & Admin
 5.Timesheet Filled On Closed Assignment
 
 
+26.07
+Sataurdays
+
+
+27.07
+Sundays
+
+28.07
+1.Assignment-wise P&L Analysis
+2.Loss Making Assignments
+3.Partner-wise P&L Statement
+
+
+29.07
+0.Discussion with Shivam regarding tasks
+1.Upcoming Assignments
+2.Document Completion Progress
+3.Timesheet Filled On Closed Assignment
+
+30.07
+1.Assignment Status Overview progress bar 
+2.Staff Allocation vs Actual Timesheet Analysis 
+3.vsa tasks, Sudhir rawat timesheet modificaton for sunday
+4.Monthly Expense Analysis
+
+
+31.07
+1.Monthly Expense Analysis
+2.Cash Flow Analysis
+
+01.08
+1..Cash Flow Analysis
+2.Invoice Due vs Assignment Billing vs Cash Recovery
+3.Lap Days Analysis (Assignment to Invoice)
+
+
+
+04-08
+1.code review 
+2.some changes 3 place, exceptional expence  , bill pending for collection
+3.Budget vs Actual P&L
+
+https://cronapi.capitall.io/convertoassignment/59
 
 1. Assignment budgeting status fix karna hai all code me task ke according 
 
-	mysql -u root vdrlive < "C:\xampp\htdocs\vdrlive.sql"
-	
+      
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 2025-07-12
@@ -1099,3 +1141,102 @@ http://localhost/phpmyadmin/index.php?route=/database/structure&db=kgsdashboard
 	Independence Confirmation report
 	Team Timesheet Report
 
+            var teamAllocatedHours = @json($teamAllocatedHours);
+            // Extract data from teamAllocatedHours array
+            const allocatedHours = teamAllocatedHours.map(item => parseInt(item.teamallocatedhours));
+            const actualHours = teamAllocatedHours.map(item => item.actualhours);
+            const discrepancy = teamAllocatedHours.map(item => item.discrepancy);
+            // const teamMembers = teamAllocatedHours.map(item => item.team_member);
+            // const teamMembers = teamAllocatedHours.map(item => item.team_member);
+
+            console.log("Allocated Hours:", allocatedHours);
+            console.log("Actual Hours:", actualHours);
+            console.log("Discrepancy:", discrepancy);
+            console.log("Team Members:", teamMembers);
+			
+			I am currently working on the VSA task and pausing KGS dashboard report task for now
+			
+			
+
+
+891
+2023-12-10
+
+
+891
+2023-12-04
+
+
+
+    // Budget vs Actual P&L
+    $budgetRevenueandbudgetExpences = DB::table('assignmentmappings')
+      ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(engagementfee) as engagementfee, SUM(teamestcost) as total_teamestcost')
+      ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+        // Jan to Mar from next year
+        $query->where(function ($q) use ($financialEndYear) {
+          $q->whereYear('created_at', $financialEndYear)
+            ->whereIn(DB::raw('MONTH(created_at)'), [1, 2, 3]);
+        })
+          // Apr to Jun from current year
+          ->orWhere(function ($q) use ($financialStartYear) {
+            $q->whereYear('created_at', $financialStartYear)
+              ->whereIn(DB::raw('MONTH(created_at)'), [4, 5, 6]);
+          });
+      })
+      ->groupByRaw('MONTH(created_at), YEAR(created_at)')
+      ->orderByRaw('FIELD(MONTH(created_at), 1, 2, 3, 4, 5, 6)')
+      ->get()
+      ->map(function ($item) use ($monthNames) {
+        $item->month = $monthNames[$item->month] ?? $item->month;
+        return $item;
+      });
+
+    $budgetActualRevenue = DB::table('invoices')
+      ->selectRaw('MONTH(created_at) as month, YEAR(created_at) as year, SUM(total) as invoices_amount')
+      ->where(function ($query) use ($financialEndYear, $financialStartYear) {
+        // Jan to Mar from next year
+        $query->where(function ($q) use ($financialEndYear) {
+          $q->whereYear('created_at', $financialEndYear)
+            ->whereIn(DB::raw('MONTH(created_at)'), [1, 2, 3]);
+        })
+          // Apr to Jun from current year
+          ->orWhere(function ($q) use ($financialStartYear) {
+            $q->whereYear('created_at', $financialStartYear)
+              ->whereIn(DB::raw('MONTH(created_at)'), [4, 5, 6]);
+          });
+      })
+      ->groupByRaw('MONTH(created_at), YEAR(created_at)')
+      ->orderByRaw('FIELD(MONTH(created_at), 1, 2, 3, 4, 5, 6)')
+      ->get()
+      ->map(function ($item) use ($monthNames) {
+        $item->month = $monthNames[$item->month] ?? $item->month;
+        return $item;
+      });
+
+
+
+    $timesheetUserRecord = DB::table('timesheets')
+      ->leftJoin('timesheetusers', 'timesheetusers.timesheetid', '=', 'timesheets.id')
+      ->leftJoin('teammembers', 'teammembers.id', '=', 'timesheetusers.createdby')
+      ->where('timesheets.created_by', 815)
+      ->selectRaw('MONTH(timesheets.date) as month, YEAR(timesheets.date) as year, SUM(timesheetusers.totalhour * teammembers.cost_hour) as total_cost')
+      ->where(function ($query) use ($financialStartYear, $financialEndYear) {
+        $query->where(function ($q) use ($financialEndYear) {
+          $q->whereYear('timesheets.date', $financialEndYear)
+            ->whereIn(DB::raw('MONTH(timesheets.date)'), [1, 2, 3]); // Jan-Mar
+        })->orWhere(function ($q) use ($financialStartYear) {
+          $q->whereYear('timesheets.date', $financialStartYear)
+            ->whereIn(DB::raw('MONTH(timesheets.date)'), [4, 5, 6]); // Apr-Jun
+        });
+      })
+      ->groupByRaw('MONTH(timesheets.date), YEAR(timesheets.date)')
+      ->get()
+      ->map(function ($item) use ($monthNames) {
+        $item->month = $monthNames[$item->month] ?? $item->month;
+        return $item;
+      });
+
+    // check 2 days timesheet one days 
+
+
+    dd($timesheetUserRecord);
