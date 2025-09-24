@@ -51,7 +51,9 @@ if ($request->is('userprofile/*')) {
     // Matches same as Blade
 }
 
-
+if ($request->is('userprofile/*')) {
+    // Matches same as Blade
+}
 
 
 $urlPath = $request->path();
