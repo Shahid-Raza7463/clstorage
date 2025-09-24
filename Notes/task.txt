@@ -1,0 +1,39 @@
+222222222
+
+
+app\Http\Controllers\AssignmentfolderfileController.php
+22222222222
+task name rename folder
+http://127.0.0.1:8000/assignmentfolderfiles/254
+
+222222222222
+UDIN
+
+app\Http\Controllers\StepController.php
+resources\views\backEnd\viewassignment.blade.php
+
+resources\views\backEnd\applyleave\index.blade.php
+
+2222222222
+
+
+http://127.0.0.1:8000/assignmentbudgeting/219/edit
+222222222
+validation on select box
+http://127.0.0.1:8000/timesheet/create
+
+
+date comapre
+http://127.0.0.1:8000/assignmentmapping/create
+
+one date
+http://127.0.0.1:8000/assignmentbudgeting/create
+
+file
+http://127.0.0.1:8000/assignmentfolderfiles/69
+http://127.0.0.1:8000/viewassignment/AKU100104
+
+notification 
+http://127.0.0.1:8000/notification/create
+http://127.0.0.1:8000/task/create
+

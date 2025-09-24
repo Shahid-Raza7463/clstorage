@@ -1,0 +1,555 @@
+
+
+kgslive upload start from hare 
+ready for kgs live kra module ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+routes\web.php
+  //AssignmentConfirmationController routes
+
+use App\Http\Controllers\KrasController;
+
+
+  // KRAs Route
+  Route::resource('/kras',  KrasController::class);
+  Route::get('/kras/show/{id}/{designation}', [KrasController::class, 'show'])->name('kras.show');
+  Route::get('/kras/delete/{id}/{designation}', [KrasController::class, 'deleteteamwiseKra'])->name('kras.delete');
+  Route::post('/kras/excelupload/teamwise', [KrasController::class, 'krasExceluploadteamwise']);
+  Route::post('krabulkUpload', [KrasController::class, 'exceluploadBulk'])->name('krabulkUpload');
+  Route::get('/kras/edit/{dataId}/{datarow}/{teamId}', [KrasController::class, 'edit'])->name('kras.edit');
+  Route::get('/kras/destroy/{dataId}/{datarow}/{teamId}', [KrasController::class, 'destroy'])->name('kras.destroy');
+  Route::post('/krastype/modifycolumn', [KrasController::class, 'modifyColumn']);
+  Route::post('/krastype/deletecolumn', [KrasController::class, 'deleteColumn']);
+  Route::post('/krastype/addcolumn', [KrasController::class, 'addColumn']);
+  Route::post('/notification/config', [KrasController::class, 'notificationConfig']);
+  Route::get('/notificationlist',  [KrasController::class, 'notificationlist']);
+  Route::get('/notificationlist/delete/{id}',  [KrasController::class, 'notificationlistdelete']);
+  Route::get('/kratemplatelist/{designation}',  [KrasController::class, 'kratemplatelist']);
+  Route::get('/kratemplatelist/delete/{id}',  [KrasController::class, 'kratemplatelistdelete']);
+  Route::post('/kratemplatelist/edit',  [KrasController::class, 'kratemplatelistedit']);
+  Route::get('/teams/kra/{id}',  [KrasController::class, 'teamskras']);
+  Route::get('/kras/finaldraftsubmit/{teamId}/{designationId}', [KrasController::class, 'finaldraftsubmit'])->name('kras.finaldraftsubmit');
+  Route::get('/krasteam/show/{id}', [KrasController::class, 'krateamshow'])->name('kras.krasteam');
+
+
+22222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+                                  <li><a href="{{ url('travel') }}"> Advance Claim Form</a></li>
+                                  @if (Auth::user()->role_id == 18 || Auth::user()->role_id == 11)
+                                      <li><a href="{{ url('kras') }}">KRAs</a></li>
+                                  @else
+                                      <li><a href="{{ url('kras') }}">KRA</a></li>
+                                  @endif
+
+
+
+
+
+resources\views\backEnd\layouts\includes\stylesheet.blade.php
+<style>
+    .textfixed {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras
+
+add folder hare 
+
+
+
+app\imports\Krasimport.php
+add file hare 
+
+app\Http\Controllers\KrasController.php
+add file hare 
+
+
+
+
+resources\views\emails\krasteamnotification.blade.php
+add emails file 
+
+
+
+
+
+database
+
+ 
+krasdata
+krasnotifications
+krastargetnotification
+krasteam	
+
+designations
+
+
+
+teammeber table me 
+disignation column me id insert kare and reportenghead column me reporting manager id insert karna hoga agar hai to otherwise ignore it 
+
+
+
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php   kra```
+
+          <div class="avatar online">
+              <img 
+				   	@if(Auth::user()->role_id == 15)
+				   src=" {{ Storage::disk('s3')->temporaryUrl('articleonboarding/' . $getuser->profilepic, now()->addMinutes(30)) }}"
+			 
+			  @else
+			    src=" {{ Storage::disk('s3')->temporaryUrl('candidateonboarding/' . $getuser->profilepic, now()->addMinutes(30)) }}"
+			  @endif
+				   class="img-fluid rounded-circle" alt="">
+          </div>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+routes\web.php
+find   Route::post('/kratemplatelist/edit',  [KrasController::class, 'kratemplatelistedit']);
+
+
+    Route::post('/validate/templatename', [KrasController::class, 'validatetemplatename'])->name('validatetemplatename');
+    Route::post('/validate/templatenamecreate', [KrasController::class, 'validatetemplatenameoncreate'])->name('validatetemplatenameoncreate');
+
+  
+  
+
+
+
+
+app\Http\Controllers\KrasController.php
+   public function kratemplatelistedit(Request $request)
+   
+   
+   
+  public function validatetemplatename(Request $request)
+    {
+
+        $exists = DB::table('krasdata')
+            ->where('template_name', $request->templatename)
+            ->where('id', '!=', $request->templateid)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
+    public function validatetemplatenameoncreate(Request $request)
+    {
+        $templatename = $request->templatename1 ?? $request->templatename;
+        $exists = DB::table('krasdata')
+            ->where('template_name', $templatename)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
+
+
+
+resources\views\backEnd\kras\templatelist.blade.php
+find  $('.alert-success, .alert-danger, .statusss').delay(4000).fadeOut(400);
+
+<script>
+    $(document).ready(function() {
+        $('.alert-success, .alert-danger, .statusss').delay(4000).fadeOut(400);
+    });
+
+    $(document).on('click', '.modificationColumn', function() {
+        let id = $(this).data('id');
+        let templatename = $(this).data('template');
+        $('#modalColumnId input[name="templateid"]').val(id);
+        $('#modalColumnId input[name="templatename"]').val(templatename);
+        $('#template-error').html("");
+    });
+
+    // $('#modalColumnForm').on('hidden.bs.modal', function() {
+    //     $('#template-error').html("");
+    // });
+</script>
+
+
+
+
+
+
+find  $('.alert-success, .alert-danger, .statusss').delay(4000).fadeOut(400);
+after this line add this below code 
+
+
+
+<script>
+    $(document).ready(function() {
+        const $form = $('#modalColumnForm');
+        const $templateInput = $form.find('input[name="templatename"]');
+        const $errorSpan = $('#template-error');
+
+        $form.on('submit', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('validatetemplatename') }}",
+                data: $form.serialize(),
+                success: function(response) {
+                    if (response.exists) {
+                        $errorSpan.text("Template name already exists.");
+                    } else {
+                        $errorSpan.text("");
+                        // normal form submit
+                        // if (confirm(
+                        //         'Are you sure you want to update this template name?')) {
+                        $form.off('submit').submit();
+                        // }
+                    }
+                },
+                error: function() {
+                    alert("Validation request failed!");
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+find   <input type="text" required name="templatename" class="form-control"
+                                placeholder="Enter new template name">
+								
+after this line add it 
+
+
+
+     <span id="template-error" class="text-danger"></span>
+	 
+	 
+	 
+	 
+	 
+message se related bhui karna hai live 
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras\index.blade.php
+
+
+  <script>
+      $(document).ready(function() {
+          $('.templatevalidation').on('submit', function(e) {
+              e.preventDefault();
+
+              const $form = $(this);
+              const $inputfocus = $form.find(
+                  'input[name^="templatename"]');
+
+              if ($inputfocus.length > 0) {
+                  const $errorSpan = $form.find('.template-error');
+
+                  $.ajax({
+                      type: "POST",
+                      url: "{{ route('validatetemplatenameoncreate') }}",
+                      data: $form.serialize(),
+                      success: function(response) {
+                          if (response.exists) {
+                              $errorSpan.text("Template name should be unique.");
+                              $inputfocus.focus();
+                          } else {
+                              $errorSpan.text("");
+                              // normal submit
+                              $form.off('submit').submit();
+                          }
+                      },
+                      error: function() {
+                          alert("Validation request failed!");
+                      }
+                  });
+              } else {
+                  // normal submit
+                  $form.off('submit').submit();
+              }
+          });
+      });
+  </script>
+
+
+
+
+find  if ($(this).is(':checked')) {  this is 2 places
+
+  <span class="template-error text-danger"></span>
+
+
+
+
+<form id="detailsForm500" class="templatevalidation"
+
+
+
+ <form id="detailsForm" class="templatevalidation"
+
+
+
+
+
+app\Http\Controllers\KrasController.php
+
+
+ public function validatetemplatename(Request $request)
+    {
+
+        $exists = DB::table('krasdata')
+            ->where('template_name', $request->templatename)
+            ->where('id', '!=', $request->templateid)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
+    public function validatetemplatenameoncreate(Request $request)
+    {
+        $templatename = $request->templatename1 ?? $request->templatename;
+        $exists = DB::table('krasdata')
+            ->where('template_name', $templatename)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+
+
+
+
+
+
+  Route::post('/validate/templatename', [KrasController::class, 'validatetemplatename'])->name('validatetemplatename');
+  Route::post('/validate/templatenamecreate', [KrasController::class, 'validatetemplatenameoncreate'])->name('validatetemplatenameoncreate');
+
+
+
+
+
+```end hare 
+
+
+KRA 20-08-2025 new change 
+notification se related 
+active and inactive user handling 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+add folder 
+
+
+
+
+
+resources\views\emails\krasteamnotification.blade.php
+add folder 
+
+
+
+
+resources\views\backEnd\kras\show.blade.php
+add 
+
+
+resources\views\backEnd\kras\index.blade.php
+add
+
+
+
+
+bugs on kra 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\KrasController.php
+->where('teammembers.reportinghead', $reportingheadId)
+
+                ->where('teammembers.reportinghead', $reportingheadId)
+                ->where('teammembers.status', 1)
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\kras\templatelist.blade.php
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+					
+					
+					
+
+                success: function(response) {
+                    if (response.exists) {
+                        $errorSpan.text("Template name should be unique.");
+                    } else {
+                        $errorSpan.text("");
+                        // normal form submit
+                        if (confirm(
+                                'Are you sure you want to update this template name?')) {
+                            $form.off('submit').submit();
+                        }
+                    }
+                },
+
+
+
+
+
+end hare 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

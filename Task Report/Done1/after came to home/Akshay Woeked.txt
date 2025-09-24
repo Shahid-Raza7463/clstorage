@@ -1,0 +1,38 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.System is displaying error while submitting the older date timesheet in Partner, Manager account but system is submitting the timesheet.
+
+2.Attendance page:-= User can sort the data without entering the end date
+
+3.VS-163
+4.VS-189
+5.VS-195 
+
+5.login middleware after inactive users 
+6.attendance filter  page  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

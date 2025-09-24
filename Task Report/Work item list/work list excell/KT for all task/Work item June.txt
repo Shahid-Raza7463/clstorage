@@ -1,0 +1,85 @@
+10-06-24
+1. Balance confirmation new 5 task completed
+
+
+11-04-24
+1.all done task tested by me
+2.Uplaod all code on server to balance confirmation
+
+
+12-04-24
+1. vsademo error fixed by me becouse old vsademo create enough error
+1. Latest vsademo code created by me and upload on server
+
+
+13-04-24
+1. While reverting to a leave request option to Approve or Reject should be there in the List only.
+2. after vsademo upload on server then all new task tested again like balance conf and vsa 4 new point that is done 
+
+
+14-06-24
+1. While reverting to a leave request option to Approve or Reject should be there in the List only.
+2. helped to tester pooja nad manoj
+3. While reverting to a leave request option to Approve or Reject upload on server and tested by me 
+
+
+15-06-24
+1.Balance confirmation bugs fixed total bugs was 6 
+2.employee code,client code and  assignment code show on applyleave page 
+
+
+16-06-24 and 17-06-24 leave 
+
+18-06-24
+1.Balance conformation all code updated on live server by me and testing done 
+2.Under the Knowledge Base, you can access the files by clicking the "Subject" not by "File" column.
+
+19-06-24
+
+1.Assignment folder download problem
+2.employee code display 
+3.knwoledge base modificaton created documntation and uplaod on vsademo
+4.vsademo bugs fixed 
+   4.1  Getting 'OOPs' error when clicking on 'My Timesheet' button.
+   4.2  Not able to fill the timesheet as Partner drop-down is showing blank.
+
+
+20-06-24
+1.assignment id 526 all totalhour fixed 
+2.oops error on assignment folder download 
+3.employee code after team login tab 
+
+21-06-24
+1.employee code completed and starting partner ciode on portel
+
+22-06-24 and 23-06-24 leave 
+
+24-06-2024
+1.partner ciode on portel completed
+
+
+25-06-2024
+1.employee code completed everywhre like admin ,partner,manager and staff and tested on all role id 
+2.completed document
+
+26-06-24
+1.employee code everywhre like admin ,partner,manager and staff (all code updated on vsademo )
+2.client want to hide offholidays client name from dropdown box it will be only show on sturday
+
+27-06-24
+1.client want to hide offholidays ( client name )from dropdown box it will be only show on sturday and holidays completed 
+2.Documentation
+
+
+
+28-06-24
+1.client want to display warning message on timesheet create page when user timesheet rejected
+2.task no 27.1 , task no 18.2, approved count display on portal  all this task upload on vsa live 
+
+29-06-24
+1.vsademo database problem solved 
+2.client want to implement assignment view for user who is not work on that assignmnet
+3.Employee code ,staff code and assignment code display on portal ready to uplaod on vsa live 
+
+
+30-06-24 weekend

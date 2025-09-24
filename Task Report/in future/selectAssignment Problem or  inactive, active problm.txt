@@ -1,0 +1,169 @@
+######################################################################################################################
+app\Http\Controllers\TimesheetController.php
+replace create() function 
+
+
+
+  public function create(Request $request)
+  {
+    // dd(auth()->user()->teammember_id);
+    $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')->get();
+    $teammember = Teammember::where('role_id', '!=', 11)->with('title', 'role')->get();
+    if (auth()->user()->role_id == 11) {
+      $client = Client::where('status', 1)->select('id', 'client_name')->orderBy('client_name', 'ASC')->get();
+    } elseif (auth()->user()->role_id == 13) {
+      $clientss = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+        ->orwhere('assignmentmappings.otherpartner', auth()->user()->teammember_id)
+        ->select('clients.client_name', 'clients.id')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+      // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      $clients = DB::table('clients')
+        ->whereIn('id', [29, 32, 33, 34])
+        ->select('clients.client_name', 'clients.id')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      $client = $clientss->merge($clients);
+    } else {
+      // dd(auth()->user()->teammember_id);
+      $clientss = DB::table('assignmentteammappings')
+        ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->select('clients.client_name', 'clients.id')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      $clients = DB::table('clients')
+        ->whereIn('id', [29, 32, 33, 34])
+        ->select('clients.client_name', 'clients.id')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      $client = $clientss->merge($clients);
+    }
+    $assignment = Assignment::select('id', 'assignment_name')->get();
+    // dd($assignment);
+    if ($request->ajax()) {
+      // dd(auth()->user()->teammember_id);
+      if (isset($request->cid)) {
+        if (auth()->user()->role_id == 13) {
+          echo "<option>Select Assignment</option>";
+
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              // ->whereIn('id', [29, 32, 33, 34])
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+            // dd($clients);
+            $id = $clients[0]->id;
+            foreach (DB::table('assignmentbudgetings')->where('client_id', $id)
+              ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->orderBy('assignment_name')->get() as $sub) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          } else {
+            foreach (DB::table('assignmentbudgetings')->where('client_id', $request->cid)
+              ->where('created_by', auth()->user()->id)
+              ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->orderBy('assignment_name')->get() as $sub) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          }
+        }
+        // assreject
+        else {
+          echo "<option>Select Assignment</option>";
+
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+            // dd($clients);
+            $id = $clients[0]->id;
+            foreach (DB::table('assignmentbudgetings')->where('client_id', $id)
+              ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->orderBy('assignment_name')->get() as $sub) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          } else {
+      
+            //  i have add this code after kartic bindal problem 
+            foreach (DB::table('assignmentbudgetings')
+              ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+              ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+
+              ->where(function ($query) {
+                $query->whereNull('assignmentteammappings.status')
+                  ->orWhere('assignmentteammappings.status', '=', 0);
+              })
+              ->orderBy('assignment_name')->get() as $sub) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          }
+        }
+      }
+
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (DB::table('assignmentmappings')
+
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+            ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+            ->get() as $subs) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (DB::table('teammembers')
+            ->where('id', auth()->user()->teammember_id)
+            ->select('teammembers.id', 'teammembers.team_member')
+            ->get() as $subs) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } else {
+          //die;
+          echo "<option value=''>Select Partner</option>";
+          foreach (DB::table('assignmentmappings')
+
+            ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+            ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+            ->get() as $subs) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        }
+      }
+    } else {
+      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner'));
+    }
+  }
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+insert 0 value in status column in assignmentteammappings table 
+
+
+DB::table('assignmentteammappings')
+->update(['status' => 0]);
+

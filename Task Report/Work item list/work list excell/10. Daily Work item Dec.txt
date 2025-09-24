@@ -1,0 +1,179 @@
+01-12-24
+02-12-24
+1.bugs fixed from jira, task name(# Admin and partner can create an assignment without selecting staff and team leader.)
+2.All 11 QA passed tasks uploaded on vsalive and tested by me 
+
+
+03-12-24
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed on vsalive
+Total hour count bugs fixed, bugs no is vs-224.
+
+
+
+04-12-24
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed on vsalive
+Total hour count bugs fixed, bugs no is vs-224.
+
+
+05-12-24
+1.all 8 task upload on vsademo and done functional testing 
+2.I spoke to the client regarding assignments being displayed on one page. However, when I checked, the functionality to show all assignments already exists, and I have informed the client about it
+3.All my tasks list report created in excell
+4.jira updated 
+5.meeting with mohit and atishay sir.
+
+
+
+06-12-24
+1.when admin delete save timesheet in that time total hour not reduce (fixed) (P,M,S)
+2.meeting with client task related 
+3.When reject submitted timesheet in that time total hour not reduce (fixed) implemented but this task will be not live on vsa
+4.Display the joining date in the attendance module.
+
+
+07-12-24
+1.Fixed attendance data for users who applied for leave before October.
+3.In the attendance module, insert "H" for 5 users who applied for leave before October.
+bugs fixed related submit timesheet button not comming on Shubham Bansal users 
+In attendance module total no of days 0 for october months fixed on vsalive
+
+
+08-12-24
+09-12-24
+1.Fixed attendance data for users who applied for leave before October.
+3.In the attendance module, insert "H" for 5 users who applied for leave before October.
+
+10-12-24
+1.uploaded all fixed data on vsalive date (09-12-24)
+2.after upload all data tested by me on vsalive 
+3. explain all condition to tester
+
+11-12-24
+1.Notification bugs checked this is running correct 
+2.All applyleave resterected condition implemented on submitted timesheet rejected page when user apply leave for submitted timesheet rejected date like user can not apply leave on sunday,holidays etc 
+3.Birthdays bug on admin dashboard
+4.Fixed attendance data for users who applied for leave before October bugs (fixed) raised by pooja after testing
+
+
+
+
+
+12-12-24
+1.Bugs updated on vsalive for attendance data 
+2.Updated on vsademo (when admin delete save timesheet in that time total hour not reduce (fixed) (P,M,S))
+3.All old task checked on jira and changes status like QA passed to Done 
+4.Display the joining date in the attendance module.
+
+
+13-12-24
+2.When a user exits, allow them to fill out their timesheet on the same day before 6 PM. 
+3.assivment viewver implemented for only admin
+
+
+14-12-24
+15-12-24
+16-12-24
+1.The client wants to get the notification section tested
+2.discussion with client for bugs and working task informed
+3.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+
+
+17-12-24
+The client wants to get the notification section tested
+All applyleave resterected condition implemented on submitted timesheet rejected page when user apply leave for submitted timesheet rejected date like user can not apply leave on sunday,holidays etc 
+
+
+18-12-24
+1.updated on vsademo and functional testing done (The client wants to get the notification section tested)
+2.client said birthday reminder not goes to user but i chaked reminder goes to users 
+3.some previous task testing done on vsademo
+
+
+
+19-12-24
+1.Ensure assignments do not appear for users after being marked inactive on that assignment(manager,staff and partner).
+2.documentation and functional testing done 
+
+
+20-12-24
+1.Descreption updated on jira for The client wants to get the notification section tested
+2.QA passed Task updated on vsalive (8 tasks QA passed)
+3.my laptop is not worked on this days
+
+21-12-24
+1.QA passed Task updated on vsalive (8 tasks QA passed)
+2.functional testing on vsalive done 
+3.All code connected with bitbucket like vsalocal,vsalive and vsademo
+4.assivment viewver report want to remove from partner,
+
+
+
+
+22-12-24
+23-12-24
+1.I have uploaded 4 in process task on vsademo 23-12-24
+2.functional testing done
+2.Test Cases uploaded on jira 23-12-24
+4.Attendance excell problem checked and inform to client 
+5.Notification problem on server not on local fixed 
+
+
+
+
+24-12-24
+1.Fix the issue with the Last Submission Report on mail.
+2.Fix the issue with the Timesheet not Submission Report on mail.
+
+timesheet done 
+
+25-12-24
+26-12-24
+1.Fix the issue with the Last Submission Report on mail.
+2.Fix the issue with the Timesheet not Submission Report on mail.
+2.I have uploaded 2 QA Passed task on vsalive 
+   2.1 The client wants to get the notification section tested
+   2.2 Ensure assignments do not appear for users after being marked inactive on that assignment(manager,staff and partner).
+
+27-12-24
+1.Functional testing done above tasks
+2.Documentation created by me below tasks 
+  1.Fix the issue with the Last Submission Report on mail.
+  2.Fix the issue with the Timesheet not Submission Report on mail.
+
+28-12-24
+29-12-24
+
+30-12-24
+01.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+Listed 3 Bugs
+1.The total timesheet count on the dashboard is showing incorrectly for Bhaskar Kumar.
+2.The total approved leave count on the dashboard is showing incorrectly for Rahul Singhal
+3.The total timesheet count on the dashboard is showing incorrectly for Supreet Singh.
+
+
+31-12-24
+19.Add a travel box on the dashboard as requested by the client.
+2.I have uploaded 1 QA Passed task on vsalive (VS-342) and tested done 
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+coding 
+functional testing
+documentation 
+upload on vsademo
+functional testing 
+
+ 

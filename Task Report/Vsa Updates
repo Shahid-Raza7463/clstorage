@@ -1,0 +1,185 @@
+http://127.0.0.1:8000/viewassignment/ZUA101165
+
+While adding a team member in the assignment, the team should be searchable  ```start 
+vsademo vsalive  done 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+find <option value="2">Staff</option>
+
+
+
+
+<select class="language form-control key"
+
+
+
+
+
+
+({{ $teammemberData->staffcode }})  find it 
+
+   <select class="language form-control" id="exampleFormControlSelect" name="teammember_id">
+
+
+
+
+
+
+resources\views\backEnd\viewassignment.blade.php
+find   $('#exampleModal120').on('hidden.bs.modal', function() {
+
+
+        $('#exampleModal14').on('hidden.bs.modal', function() {
+            $(this).find('select').val(null).trigger('change');
+        });
+		
+		
+
+
+	
+
+	
+```end  deployed vademo, vsalive
+
+
+15-09-2025 bugs 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Console\Commands\TimesheetnotfillReminder.php
+timesheetnotfillreminder
+
+
+$rejoiningData = DB::table('teammembers')
+
+
+                    $rejoiningData = DB::table('teammembers')
+                        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                        ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+                        ->where('teammembers.id', $user->teammember_id)
+                        ->select('teamrolehistory.rejoiningdate', 'rejoiningsamepost.rejoiningdate as samepostrejoiningdate')
+                        ->first();
+
+                    // check promotion user
+                    if ($rejoiningData && $rejoiningData->rejoiningdate == null && $rejoiningData->samepostrejoiningdate == null) {
+                        $rejoiningData = DB::table('teamrolehistory')
+                            ->where('teamrolehistory.teammember_id', $user->teammember_id)
+                            ->select('promotion_date as rejoiningdate')
+                            ->first();
+                    }
+
+
+end hare 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php

@@ -1,0 +1,140 @@
+01-08-24
+1.Client want to implement promotion process to users.staff to manager
+
+02-08-24
+1.Client want to implement promotion process to users.staff to manager
+2.All bugs fixed and client want to seprate employee code and client code,
+
+03-08-24
+1.All bugs fixed by me and uploaded on vsademo and tested by me 
+2.All promotion process and rejoining process code uploaded on vsalive and tested by me 
+
+04-08-24
+05-08-24
+1.client want to seprate employee code and client code,
+2.support tester to testing and vsalive user problem fixed 
+3.after update all code on vsalive i have tested 
+
+06-08-24
+1.Folder problem fixed (sunny sir)
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+
+
+07-08-24
+1.Folder problem fixed (sunny sir)
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+7.And filter functionality fixed
+
+
+08-08-24
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+
+09-08-24
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+
+10-08-24
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+
+11-08-24
+12-08-24
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+
+13-08-24
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+
+14-08-24
+1.i have created documentation All Above work item
+2.All code uploaded on vsademo and tested by me (staff,manager,partner,admin)
+
+15-08-24
+16-08-24
+1.tester raise 2 bugs so i have fixed.
+2.All code uploaded on vsalive and tested by me
+3.On apply leave page, Client want to implement alart box on click approved and reject button 
+
+17-08-24
+18-08-24
+19-08-24
+20-08-24
+6.On apply leave page, Client want to implement alart box on click approved and reject button 
+7.Client want to implement checkbox on assignment create page so that user submit form without select teammemebr currently user can not create assignment without teammember selection
+
+
+21-08-24
+6.On apply leave page, Client want to implement alart box on click approved and reject button completed and documentation done
+4.client want to inactive user in timesheet report filter input field
+2.Client want to fixed revert leave date problem (update today on vsalive and tested by me)
+
+22-08-24
+1.all previous code updated on vsalive and tested by me 
+2.Attendance module  ( half days work on it )
+
+23-08-24
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users
+3.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+
+24-08-24
+25-08-24
+26-08-24
+27-08-24
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users
+3.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+
+28-08-24
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users
+3.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+
+29-08-24
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users
+3.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+
+30-08-24
+1.Admin can export excel report all users
+2.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+3.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+31-08-24
+1.Admin can export excel report all users
+2.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+3.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+

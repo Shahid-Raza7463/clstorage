@@ -1,0 +1,1182 @@
+2222222222222222222222222222222222222222222222222222222222222222222222222
+before working on tasks remember this point 
+1.create task on jira 
+2.add this task in date wise list.
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+before giving ETA
+coding 
+functional testing 
+documentation 
+upload on vsademo
+functional testing 
+
+
+2222222222222222222222222222222222222222222222222222
+before giving ETA
+1.notification 3 days 
+2.user active and inactive from assignment 2 days
+3.fixed attendance record 2 days
+
+
+
+
+task name 
+
+10 jan 2024
+
+1.apply leave filter excell download 
+2.Holyday 2024 wla 
+3.sahil ka report wla reminder 
+4.date validation on apply leave filter 
+5.open and close asssignment ka box bnana hai dashboard per
+6.Add filesize on assinmnet folder  
+7.mail wla jo tha ankesh chandra problem request done  and dev khurana timesheet gaping problem  
+
+8.assignment all folder download button add and download all folder 
+9.vandana ka timesheet submitted warning message problem solved
+10.timesheet 9 days problem i have explain it to ajit ji 
+
+11.model box on reject button in leave section 
+12.after timesheet submission user want to date that which week user submitted 
+13. client want to confirm button with total file size on download 
+14.some modification on download button in section assinment like if no any data in folder then that folder also want to download
+
+15 user should be export own timesheet and also fliter 
+16 problem solved 23-01-24 this is in my notebook 
+
+
+end hare jan 2024
+
+22222222222222222222222222222222222222222222222222222 Done 22222222222222222222222222
+7. redirection fix on apply leave to patner ok
+1. page top margin decrease everywhere   ok
+2.click on client then extra page comming so remove it   ok
+3. Teammember List on assignment closed page    ok
+4. timesheet save module only 10 data show ho raha hai   ok
+5. after search data in excell only serch data will be show  ok
+6. during assignment create when patner addon any row then without filled will not sumbitted   ok
+5.knowledge base tab seprated
+5.holyday,notification seprated 
+download all folder 
+
+test staff why comming 
+patner acess assignment time report
+staff code on team member 
+seprated timesheet on weeklist
+4.old details on casual leave revert 
+2.when select offholiday then work item get automatic from holidays 
+1. client want to add patner as a secondary in assignment 
+dev khurana delete problem 
+assignment report tab delay to load
+
+2.submitted timesheet staffid in filter box
+3 open assignment report excell fixed
+4 closed assignment report excell fixed
+1.Dashboard then timesheet request box then style want to fix
+5.knowlege base modification (old file name want )
+6.assignment craete time leadpatner will be mandatery
+7.new teammember me staff code
+
+
+seprately timesheet then count mis match 
+reject reasion will be show on email allready done 
+reject reason will be display inside rejected information  already done 
+
+open assignment total show 198 and in excell 199 check it 
+
+
+
+1. apply leave page :- after filter data should be date wise pen
+
+
+applileave me staff code
+timesheet updated current time tak reminder button 
+content should be not cut on timesheet request page
+filter should be aprover wize in applyleave on admin  not needed 
+
+1.Content should be not cut on timesheet request page
+2.client wants to stop leave apply on sunday
+3.everywhere client want to export file name after download
+4.remove accending icon frm all places
+
+edit button in first column on assignmnt report page 
+
+Done
+1.Assignment duplicate problem fixed 
+2.Add leadpartner problem fixed 
+3.add teammember button on assignmentview page 
+downloaded successfully text change and claient want to descending order / latest wise in excell
+526 dublicate
+476 dublicate 
+
+22222222222222222222222222222222222222222222222222222 to do new 22222222222222222222222222222222
+6.sireal number missing
+100009
+100011  done 
+100012  done 
+100013  done 
+100091  done 
+100324  done
+
+Assignmentmaping table
+array:17 [▼
+  8 => 100009
+  13 => 100014
+  29 => 100030
+  41 => 100042
+  43 => 100044
+  101 => 100102
+  120 => 100121
+  133 => 100134
+  145 => 100146
+  163 => 100164
+  172 => 100173
+  183 => 100184
+  250 => 100251
+  260 => 100261   exist
+  320 => 100321
+  351 => 100352
+  459 => 100460
+]
+
+
+Assignmentbudegeting table
+array:17 [▼
+  8 => 100009
+  459 => 100460
+]
+
+
+
+
+
+
+
+
+leave status wants mohit sir   
+in profile, somethings update
+applyleave
+
+
+ANK100366
+app\Http\Controllers\AssignmentfolderfileController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+unique id validation
+
+optional email id requared in excell 
+positive and nagative requared when negative then amount not requared 
+posetive and nagetive in excell 
+financial year change on mail formate 
+
+
+user wise access defined to show 
+
+
+client want to link share to user show that user can see particular page 
+
+
+
+name of entyty in excel cloumn add 
+
+
+auto remander every three days 
+
+
+one column want to add for responce type like nagetive and posetive 
+
+
+clent want to show and hide functionality in excell
+
+link want to highlight on mail like click hare link 
+
+
+
+change text power by capitall to vsa 
+
+otp remove on accept and refuse button 
+
+otp on shared link 
+
+client want to after submit will be send mail 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.Optional email I'd column in Excel
+2.Clients want to add a response column in Excel for positive and negative responses. When negative is selected, the corresponding amount should not be included
+3.The financial year will be in excel like 2023-2024
+4.User wise access to show balance confirmation page 
+5.client wants to share a link with users so they can view a specific page 
+6.Add another column for the name of the entity in Excel
+7.Clients want to send auto reminders on every 5 days till 25 days 
+8.Clients want to implement show and hide functionality within Excel, not on the portal
+9.In emails, clients want to highlight the 'click here' link and
+10.Clients want to change text powerd by capitall to powerd by vsa
+11.Remove OTP from the accept and refuse buttons
+12.Admin wants to display which users have sent emails for balance confirmation on the admin panel
+13 If balance confirmation is closed, then the assignment will be closed; otherwise, it will remain open
+
+
+
+
+
+
+
+Close confirmation assignment wise on portal
+
+
+Click hare link want to show before signatures
+Delete and edit before send mail
+
+
+On refuse buttons client want to repeat content
+
+Attachment will be excell and word doc wtc
+
+Vertical 5 field will be on refuse
+
+On Every 5 days one reminder will send till 15 days
+
+Confirmation closed then all functionality remove
+
+Total leaves taken cl el eyc user wise
+bank amount not displayed , template freez, single send button, client sharing confirmation screen.
+
+
+
+
+1.Optional email I'd column in Excel
+2.Clients want to add a response column in Excel for positive and negative responses. When negative is selected, the corresponding amount should not be included
+3.The financial year will be in excel like 2023-2024
+4.User wise access to show balance confirmation page 
+5.client wants to share a link with users so they can view confirmation screen.
+6.Add another column for the name of the entity in Excel
+7.Clients want to send auto reminders on every 5 days till 25 days 
+8.Clients want to implement show and hide functionality within Excel, not on the portal
+9.In emails, clients want to highlight the 'click here' link and show before signatures
+10.Clients want to change text powerd by capitall to powerd by vsa
+11.Remove OTP from the accept and refuse buttons
+12.Admin wants to display which users have sent emails for balance confirmation on the admin panel
+13 If balance confirmation is closed, then the assignment will be closed; otherwise, it will remain open
+14.Clients want to have delete and edit functionality in case of wrong data uploaded via Excel
+15.Upon clicking the refuse button, clients want the ability to repeat content, with all fields being displayed vertically (discussion with Atishay Jain)
+16.Attachments should be in Excel, Word, or any other compatible format
+17 When balance confirmation is closed, all functionalities will be disabled
+
+
+
+
+
+
+
+Balance confirmation
+2222222222222222222222222222222222222222222222222222222222222222222222
+
+1 Users want the mail content to be displayed on the confirmation page, and while accepting and refusing further options (for amount, remarks and attachment) to be displayed on the same page.  (done)
+
+2.While closing the assignment, user will get error / notified if in case balance confirmation module is not closed.  (done)
+
+3.Option for closing the confirmation module should be there, assignment wise. Closing module will make all the functionality under that module disabled.  (done)
+
+4.Edit and Delete option should be available for the entries, before sending confirmation mail.                         (done)
+
+5.OTP functionality during confirmation to be removed. (make it configurable)  (discuss)
+
+6.Confirmation link to be more highlighted in the mail body.  (done)
+
+7.A column for “Entity Name” to be added in Excel Template.  (done)  set key                (done)
+
+8.The year column in the excel template should take input as 2023-24 or 2022-23 etc. not as single year 2023 or 2024.  (done)
+
+9.Amount show & hide option to be included in the excel template. “Show” will work as show amount in the mail, and “Hide” will work as hide amount in the mail      (done)
+
+10.A column to be added in excel template for a secondary email I’d, i.e., optional and not compulsory.   (done)
+
+11.secondary mail also recieved mail and approve and reject 
+
+
+current requirment
+222222222222222222222222222222222222222222222222222222222222222222222
+
+# on mail 
+1.vishal agerwal all access acording partner
+2.rejoining     (in process)
+
+
+# discuss with me 
+3.all places where report generate client want to staff code
+4.Missing assignment 553 want to fixed 
+
+
+2222222222222222222222222
+validation on edit fun
+success message remove after 10 sec
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.While closing confirmation module OTP is required from Partner as a validation.
+3.Option for file uploading should be there while Accepting the Confirmation (optional).
+4.We can filter the report based on the “Confirmation Status” and have the option to export the same in Excel.
+2.Once the confirmation module is closed, the responder (Debtor, Creditor, or Bank) cannot respond to the confirmation mail; i.e., the link should expire.  (updated on server)
+5.No toggle for Hide and Show of amount in the module it should be only in the Excel File (updated on server)
+ 
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+bugs 
+
+When the user uploads an Excel file, the preview isn't displaying properly.
+The user is able to upload the same email ID as both 'Primary Email' and 'Secondary Email'.  (skip kardo )
+We can filter the report based on the “Confirmation Status” and have the option to export the same in Excel  (discuss atisay )
+Option for file uploading should be there while Accepting the Confirmation (optional).
+
+
+
+in meating to balance confirmn
+###########################################################################
+1.auto remainder 3 days 
+2.on edit, 4 condition on edit like date ,amount
+3.after click reject button client want to pop up on same page 
+4.mail want to sent  by no reply id
+5.Attachment latter add for client request latter
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222
+attendance requarment
+
+1.Client want to attendance report on admin dashboard 
+5.Admin can export excel report all users
+6.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+7.After implementation attendance client want to display total working days, total casual leave, total exam leave ,total travel and total days of month,
+8.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+2.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+3.on staff,manager and partner dashboard,all working days should be display after click on total working days
+4.staff,manager and partner can export excel
+
+
+Affected page 
+1.leave   ............
+2.revert leave ............
+3.rejected team timesheet   ...............
+4.rejected partner timesheet   ...............
+5.submitted timesheet page, where admin and partner can reject particular timesheet  ..............
+7.rejected timesheet during leave apply that is automatic approved  ......................
+6.When Admin fill leave date in profile section in that time will be afect attandance ................
+7. submit timesheet then calculation left   ......................... 
+8.if user fill 2 timesheet in one days 
+
+approved by ajit 
+1.casula leave apply and approved then attendance table not affected only affexted on submit casula leave
+
+
+
+Exam leave = EL     ................................
+casual leave = CL    ...........................
+timesheet filled  = P  ......................
+
+holidays  = H   .............................
+Travel = T full days .............
+Off/holidays (sturday and sunday) =   W (sunday) ............   oh for sturdays   .............   
+
+
+
+unlocated 
+travel
+seminar conference 
+off/ holidays 
+
+
+
+done task
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+4.offholidays want to hide instead of suterday
+5.client want to display warning message on timesheet create page when user timesheet rejected
+19.timesheet request remark should be mandatory currently it gets submitted after entering a space.
+20.Add timesheet request button will be show according current timesheet request 
+2.client want to attachment file on timesheet request create form
+19.client want to change name Global Fairs & Media P. Ltd
+20.leave can not apply before submitted timesheet date, 11 septamber 2023 and joining date , but timesheet rejected then it will be apply only that days
+23.when submitted timesheet rejected then user can aplly leave on that days and submitted timesheet overwrite according leave  
+12 Assignment viewer list on assignmentview  page to view user only
+28.Submitted timesheet rejected edit functionality modification 
+29 on UDIN List page  udin documentation date implementation.Currently created date coming
+30.When reverting the leave, in the partner login it is not showing the correct data.
+31.client want to delete assignment id WAV100525 and continue with WAV100526 assignment id
+32. vsalive per testvsa ek assignment hai use hatana hai aur ye assignment kisi aur ko allocate karna hai
+1.The client wants the date format to be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+2.The client wants a consistent design applied throughout the entire table.
+3.The client wants employee code, assignment code, client code, and partner code to be displayed in separate columns.
+4.the sorting icon should be remove from All table and only exist one column in table 
+5.The client wants to display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+6.the client wants to enable sorting by the Date column in the table. if date column exist then oyherwise not 
+1.Client want to remove employee name and staff code / employee code from timesheet report section  .........
+2.Client want to fixed revert leave date problem
+3.Permotion/rejoining list report want to implement 
+4.All bugs fixed raised by manoj and harish
+5.All code uploaded on vsalive and tested by me 
+
+
+
+6.The client wants to implement a warning message and validation when the approve and reject buttons are clicked for timesheet requests and leave approvals  ...............
+
+7.Client want to implement checkbox on assignment create page so that user submit form without select teammemebr currently user can not create assignment without teammember selection 
+
+4.client want to inactive user in timesheet report filter input field....................
+11 assignment code should be seprated from assignment name column 
+15 apr to march working days count 
+35. leave revert date fix using timesheet
+15 remove rejoining column from team edit
+if user inactive then user name should be exist in employee name input box on team timesheet report
+3.on timesheet report page ,when download then missing data is comming
+bugs (i did not got any bugs)
+6.wednesday ,tuesday, reminder
+10.timesheet rejected date  (done)
+13 timesheet blocked before valid date on mail.
+30.clent want to approved and reject laeve request and timesheet requset 
+
+
+1.client want to remove type in teammember adding form when assignment has closed and it will display on assignmnet open done 
+
+
+2.timesheet block days want to decrease now days is 14 days 
+3.some modification in timesheet not fill reminder (mail)
+
+
+
+to do tasks
+Client want to
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+15.new teammember cearete time will be problem to assign staffcode (i have to test after rejoinig module)
+
+1.on my timesheet tab, client want to filter according employyee name (discuss)
+2.Leave count on dashboard, client dont want to count sunday leave
+5.Client want to stop duble clicking on submite button during assignment creating time
+7.vsademo bugs ,on my timesheet page after searching 
+8.Client want to count leave after submitted casual leave timesheet
+11.Client want to implement filter using status column on timesheet rejected list page 
+14.Client want to implement profile update logs 
+16.clent want to enable timesheet submitted functionality forcefully before 6 pm to going users
+
+
+
+17.open assignment accending order after export open assignmet
+18.dublicate teammember add creating assignment and when partne creating assignment on that time lead partner mandatry that partner
+19.if user have leaveing date then not will be active by admin 
+20.when admin inactive user from assignment then other user can see that user but client want to not show inactive user to another user
+
+21 Raj kumar ( ) timesheet reject then want to fill 2 client timesheet after rejected timesheet
+22.User should not login after inactive currently user can login after inactive 
+http://127.0.0.1:8000/assignmentlist/OFF100004
+25.limited review bank of broda assignmnet name problem 
+26. client want to timesheet last week report latest date wise in excell 
+27. when add user as a assignment viewr then mail want to change according viewer and want to viewer tab to viewer list 
+28 when file attachment during upload time then any error occure (discuss )
+
+
+to do tasks after comming to home 
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+08-10-24
+
+Done 
+2.User can apply leave on timesheet rejected date conteunisly more than 1 days
+7.During assignment create time user can not select dublicate teammember name inside dropdown box
+
+1.The client wants to know the active and inactive users in the attendance report.
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+
+1. after create teammeber attendance will be create 
+2.client want to change filter formate on applyleave page currently working using ajax but client want to serach button
+2.Table Design fixed on applyleave page 
+3.Validation on filter like validation on date 
+4.show approved and reject button on applyleave page 
+5.fixed accending order and descending order after filter data 
+6.Fixed data width inside excell after export data in excell 
+3.You can not select attendance date  in future 
+2.i have done 4 bugs created by pooja kumari 
+
+6.combination of offholidays and travel cliet and combination of offholidays and any cliet name (not urgent according client
+
+1.When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+ 3.The client wants attendance report data from April to September. Currently, the data is only available from October because the attendance module has been running since then.
+      3.1 i will take time almost 3 se 4 days and 2 days testing 
+
+2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+1.Attendance revert exam leave problem fixed (user name gurvesh)
+2.Attendance inserting leaving date after deleting attendance problem fixed (user name gurvesh)
+3.After inserting the leave date, all saved timesheets are submitted forcefully. Therefore, it is necessary to check if the exam leave and other saved timesheets are submitted, and then verify the total count column in the attendance
+1.Exam leave count problem tested and fixed 
+2.All attendance get using year column on everywhere on attendance module
+1.Guruvesh Vishwakarma leaving date  
+2.prerna leaving date
+4.Data fixed exit users
+5.clent want to Assignment viewer list tab on admin and partner.
+5.clent want to Attendance inside report tab.
+6 attence tab goes to report section 
+client want to submit timesheet button if 6 days timesheet continuesly exist then show button otherwise not edit functionality on timesheet save
+
+# Admin and partner can create an assignment without selecting staff and team leader.
+1.1. When the admin or partner checks the "Name" checkbox, the "Name" and "Type" fields will be disabled.
+1.2. The plus icon will be hidden.
+1.3. If the admin or partner has already clicked the plus icon and then clicks the "Name" checkbox, all "Name" and "Type" fields will be disabled, and both the plus and minus icons will be hidden.
+
+The 'Submit Timesheet for Week' button will be displayed if one week of data exists on the Timesheet Save Listing page.
+Users can edit saved timesheets.
+Users cannot delete or edit saved timesheets dated before their joining date.
+Users cannot delete or edit exam leave and casual leave saved timesheets on the Timesheet Save Listing page.
+When an assignment is created, an email will be sent to the partner. The date format in the email will be: dd-mm-yyyy (like 01-01-1999).
+Rejected timesheet data is not showing for the user's ID.
+Attendance records have been fixed for all exit users from 01-09-2024 to 25-11-2024. Please verify the attendance records for these users (September to November).
+
+The 'Submit Timesheet for Week' button will be displayed if one week of data exists on the Timesheet Save Listing page.
+
+
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed on vsalive
+Total hour count bugs fixed, bugs no is vs-224.
+
+I spoke to the client regarding assignments being displayed on one page. However, when I checked, the functionality to show all assignments already exists, and I have informed the client about it
+
+
+Start hare ```
+222222222222222222222222222222222222222222222222222222222222222222222
+To do 
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+below task approved by manager and hr
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Approved tasks list
+
+1.Stop sending timesheet reminder emails to a specific partner as requested by the client. ( 1 days )
+2.Assignment viewer implementation on open assignment.  ( 3 days )
+3.Data handover form implementation. (discuss)
+4.Add a Partner add button on the assignment view page as requested by the client. ( 2 days )
+5.Client list edit functionality on the assignment view page.  ( 2 days )
+
+old bugs
+(VS-279) User’s joining date is 26th July & has not filled any timesheet, now he created the leave from 25th nov to 30th nov and submitted the timesheet so timesheet got submitted also Leave was not yet approved but still shows in total count of ‘Approved Leaves’ in user’s account.[Harish Vinod Tale M1067]
+
+
+
+
+New tasks taken by me and approval is pending.
+
+27.only one udin for one assignment if user create another udin in that case udin will be not create (implementation)
+31.Implement functionality to display inactive user's date from assignment. (implementation)
+
+32.when user leave apply after that partner recieved mail and partner click on click hare text then redirect on another page.
+33.timesheet page , delete icon will be hide and if more than one timesheet saved on same date then delete icon will be show on only one timesheet
+34.keshav chaudhary after rejoin and upload qualification then warning message sho ho raha hai plaese delete timesheet data after rejoin
+35. Apurva Yadav
+   1 feb leave so i have delet 1 feb data and 
+   31 tak hi khatam hai exit 
+   
+   
+
+
+this task will be not implement (after approval)
+18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+20.Implement ascending and descending order sorting for open and closed assignments.
+21.Add a Resend OTP button during the closed assignment process.
+22.Ensure OTP for closing an assignment is not generated if there are any pending independencies.
+36.The client wants the functionality to approve or reject timesheet and leave requests directly from the email.
+
+
+2222222222222222222222222222
+working on it
+
+4.Add a CreatedBy column to display on the assignment folder file listing page. ( 0.5 days )
+36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+33.Move the Edit button to the first position on the Timesheet Saved Listing page. ( 1 days )
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.  ( 0.5 days )
+`3.timesheet delete logs
+
+
+18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+30.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(bugs)
+
+37.Client wants to add multiple partner in lead partner and other partner column
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+
+
+
+
+2222222222222222222222222222
+Working done 
+3.In the attendance module, insert "H" for 5 users who applied for leave before October.
+8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
+10.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+11.Display the joining date in the attendance module.
+12.Fixed attendance data for users who applied for leave before October.
+2.All applyleave resterected condition implemented on submitted timesheet rejected page when user apply leave for submitted timesheet rejected date like user can not apply leave on sunday,holidays etc 
+7.Udin date format needs to be fixed.
+24.assivment viewver for partner wnats to remove
+30.Fix the issue with the Last Submission Report on mail.
+31.Fix the issue with the Timesheet not Submission Report on mail.
+17.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+5.Restrict users from entering time in the format 08:00.
+33.Move the Edit button to the first position on the Timesheet Saved Listing page.
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+15.Client list edit functionality on the assignment view page.  ( 2 days )
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.  ( 0.5 days )
+
+
+
+New task taken by me worked
+
+23 the client wants to get the notification section tested
+25.client said birthday reminder not goes to user but i chaked reminder goes to users 
+26.Display the joining date in the attendance module modification.
+35.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+1.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+2.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+35.Apply leave year problem when year change then applyleave page error ocured
+29.Implement a calendar feature on the Add Timesheet page.
+36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+30.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(bugs)
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+1.client want to button for latest attendance data on attendance report page...
+2.I received a bug today from the client side. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied...
+3.client want to attedance count command run on every daye of every months
+1.I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date
+2.The client mentioned that after rejoining, the user's joining date and leaving date were not displaying correctly. I have checked and implemented the necessary fix
+
+
+
+
+Not implement
+19.Add a travel box on the dashboard as requested by the client.
+18.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+37.Client wants to add multiple partner in lead partner and other partner column
+
+2222222222222222222222222222
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+end hare ```
+
+
+aman shingh 
+
+
+
+222222222222222222222222222222222
+                                     
+Link : https://vsademo.capitall.io
+Email : Guneet@capitall.io
+Password : R9QhzV2vyt@2023
+
+
+Link : https://vsademo.capitall.io
+Email : Poojakumari@capitall.io
+Password : NDYoMSbVgL@2023
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+#Assignment Management: 
+1.Assignment viewre features.!!
+
+#Leave Management:  
+1.Rules for approval: CLs are auto-approved, while ELs need approval from Partners or Admin 
+2.ELs revert needs approvals, and CLs are automated 
+3,User must fill Timesheet for all workdays (except days when Leave Applied/Holiday) 
+4.User can not reject leave submitted timesheet !! 
+
+#Team management
+1.Admin genrate password after creating new teammember using team tab 
+
+
+
+
+reminder 
+2222222222222222222222222222222222
+total 5 reminder sending on vsa.
+1.Birthday reminder
+2.Holidays reminder
+3.timesheetnotfilllastweekreminder
+4.timesheetnotfillreminder
+5.timesheetnotfillstaffreminder
+
+
+
+
+1.Birthday reminder
+2.Holidays reminder
+3.timesheetnotfilllastweekreminder
+    blade file timesheetnotfilledlastweekreminder
+	These are the users which have not submitted their timesheet last week
+	
+4.timesheetnotfillreminder
+   blade file timesheetnotfilledremidner
+    These are the users which have not submitted till date
+	team members who have never filled a timesheet
+	
+5.timesheetnotfillstaffreminder
+   blade file timesheetnotfilledstaffremidner
+     Your timesheet submission is pending till date
+	 
+   blade file timesheetnotfilledstafflastweekremidner
+     Your timesheet is pending for the submission for last week
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+
+  public function appointmentletter()
+  {
+    $teammember = DB::table('staffappointmentletters')
+      ->leftjoin('teammembers', 'teammembers.id', 'staffappointmentletters.teammember_id')
+      ->where('teammember_id', auth()->user()->teammember_id)
+      ->select('staffappointmentletters.*', 'teammembers.team_member', 'teammembers.permanentaddress', 'teammembers.communicationaddress', 'teammembers.pancardno', 'teammembers.fathername', 'teammembers.joining_date')->first();
+
+    // dd($teammember);
+    return view('backEnd.appointmentletter', compact('teammember'));
+  }
+  
+  
+    <a style="color: white" id="editCompany" data-id="{{ $authid }}"
+                                        data-toggle="modal" class="btn btn-success"
+                                        data-target="#exampleModal1">Acknowledge</a>
+										
+										
+										
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $('body').on('click', '#editCompany', function(event) {
+                    //        debugger;
+                    var id = $(this).data('id');
+                    debugger;
+                    $.ajax({
+                        type: "GET",
+
+                        url: "{{ url('authotp') }}",
+                        data: "id=" + id,
+                        success: function(response) {
+                            // alert(res);
+                            debugger;
+                            $("#id").val(response.id);
+
+
+                        },
+                        error: function() {
+
+                        },
+                    });
+                });
+            });
+        </script>
+		
+		
+		
+  public function authotp(Request $request)
+  {
+
+    if ($request->ajax()) {
+      if (isset($request->id)) {
+        $authotp = DB::table('teammembers')
+          ->select('teammembers.mobile_no')->where('id', auth()->user()->teammember_id)->first();
+        //	dd($authotp->mobile_no);
+        $curl = curl_init();
+        $authnumber = $authotp->mobile_no;
+        $cdate = urlencode(date('F d,Y', strtotime(date('Y-m-d'))));
+        $otpap = sprintf("%06d", mt_rand(1, 999999));
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => "https://bhashsms.com/api/sendmsg.php?user=KGSomani&pass=123456&sender=CPTLIT&phone=" . $authnumber . "&text=" . $otpap . "%20is%20the%20Onetime%20password%20(OTP)%20for%20authentication%20of%20transaction%20at%20KGS%20" . $cdate . "%20CPTLIT&priority=ndnd&stype=normal", // your preferred url
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => "",
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30000,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => "POST",
+          //    CURLOPT_POSTFIELDS => json_encode($data2),
+          CURLOPT_HTTPHEADER => array(
+            // Set here requred headers
+            "accept: /",
+            "accept-language: en-US,en;q=0.8",
+            "content-type: application/json",
+          ),
+
+        ));  //  dd($se);
+        $response = curl_exec($curl);
+        $urlPath = $request->path();
+
+        if ($urlPath === 'incrementauthotp') {
+          // If the URL matches '/incrementauthotp', update the 'incrementletters' table
+          $dbRes = DB::table('incrementletters')->where('id', $request->id)->where('final_status', 1)->update([
+            'otp' => $otpap,
+          ]);
+        } elseif ($urlPath === 'authotp') {
+          // If the URL matches '/authotp', update the 'staffappointmentletters' table
+          $dbRes = DB::table('staffappointmentletters')->where('teammember_id', auth()->user()->teammember_id)->update([
+            'otp' => $otpap,
+          ]);
+        }
+
+        return response()->json($dbRes);
+      }
+    }
+  }
+  
+  
+  http://127.0.0.1:8000/staffappointmentletter
+
+
+
+app\Http\Controllers\StaffappointmentletterController.php
+
+
+public function index()
+  {
+    // Store the authenticated user
+    $user = auth()->user();
+
+    // Array of allowed teammember IDs
+    $allowedTeamMemberIds = [160, 812, 156, 155, 447, 556, 708, 336];
+
+    if (in_array($user->teammember_id, $allowedTeamMemberIds)) {
+      $staffappointmentData = DB::table('staffappointmentletters')
+        ->leftjoin('teammembers', 'teammembers.id', 'staffappointmentletters.teammember_id')
+        ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        ->leftjoin('companydetails', 'companydetails.id', 'staffappointmentletters.organization')
+        ->select(
+          'staffappointmentletters.*',
+          'teammembers.team_member',
+          'teammembers.emailid',
+          'roles.rolename',
+          'companydetails.company_name'
+        )->get();
+
+
+      $activitylogDatas = DB::table('activitylogs')
+        ->leftJoin('teammembers', 'teammembers.id', '=', 'activitylogs.user_id')
+        ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+        ->whereIn('activitylogs.activitytitle', ['Appointment Letter Create', 'Appointment Letter Updated', 'E-Verify Appointment Letter'])
+        ->select('activitylogs.*', 'teammembers.team_member', 'roles.rolename')
+        ->latest()
+        ->get();
+
+      return view('backEnd.staffappointmentletter.index', compact('staffappointmentData', 'activitylogDatas'));
+    }
+
+    abort(403, ' you have no permission to access this page ');
+  }
+  
+  
+  
+resources\views\backEnd\staffappointmentletter\index.blade.php
+
+
+                                    <td>
+                                        @if (auth()->user()->teammember_id == 156)
+                                            @if ($staffappointmentDatas->otp == null)
+                                                @if ($staffappointmentDatas->e_verify == 0)
+                                                    @if ($staffappointmentDatas->reject_reason)
+                                                        <span class="badge badge-danger">Rejected</span>
+                                                    @else
+                                                        <a href="{{ url('staffappointmentletter/mailverify', $staffappointmentDatas->id) }}"
+                                                            class="btn btn-success">Approve</a>
+                                                        <a href="#" data-toggle="modal" data-target="#rejectModal"
+                                                            data-id="{{ $staffappointmentDatas->id }}"
+                                                            class="btn btn-danger">Reject</a>
+                                                    @endif
+                                                @else
+                                                    <span class="badge badge-primary">Sent</span>
+                                                @endif
+                                            @else
+                                                <span class="badge badge-success">Acknowledged</span>
+                                            @endif
+                                        @else
+                                            @if ($staffappointmentDatas->otp == null)
+                                                @if ($staffappointmentDatas->e_verify == 0)
+                                                    @if ($staffappointmentDatas->reject_reason)
+                                                        <span class="badge badge-danger">Rejected</span>
+                                                    @else
+                                                        <span class="badge badge-warning">Pending for aprroval</span>
+                                                    @endif
+                                                @else
+                                                    <span class="badge badge-primary">Sent</span>
+                                                @endif
+                                            @else
+                                                <span class="badge badge-success">Acknowledged</span>
+                                            @endif
+                                        @endif
+                                    </td>
+
+
+app\Http\Controllers\StaffappointmentletterController.php
+
+ public function mailVerify(Request $request)
+  {
+    //if ($request->ajax()) {
+    // dd($request);
+    $staffappointment = DB::table('staffappointmentletters')
+      ->leftjoin('teammembers', 'teammembers.id', 'staffappointmentletters.teammember_id')
+      ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+      ->leftjoin('companydetails', 'companydetails.id', 'staffappointmentletters.organization')
+      ->where('staffappointmentletters.id', $request->id)
+      ->select('staffappointmentletters.*', 'teammembers.team_member', 'teammembers.emailid', 'roles.rolename', 'companydetails.company_name')->first();
+
+    // dd($staffappointmentData);
+    $data = array(
+      'teammember' => $staffappointment->emailid ?? '',
+      'name'        => $staffappointment->team_member ?? '',
+      'id' => $staffappointment->teammember_id ?? ''
+    );
+
+
+    Mail::send('emails.StaffappointmentletterMail', $data, function ($msg) use ($data) {
+      $msg->to($data['teammember']);
+      $msg->cc(['hr@kgsomani.com']);
+      $msg->subject('E-Verify | Appointment Letter');
+    });
+
+    DB::table('staffappointmentletters')->where('id', $request->id)->update(['e_verify' => 1]);
+
+
+    DB::table('teammembers')->where('id', $staffappointment->teammember_id)->update([
+      'monthly_gross_salary' => $staffappointment->salary
+    ]);
+
+
+    $user = DB::table('users')->where('teammember_id', $staffappointment->teammember_id)->first();
+    //dd( $user);
+    if ($user == Null) {
+
+
+      $memberid = Teammember::where('id', $staffappointment->teammember_id)->first();
+      //dd( $memberid);
+      $pass = Str::random(10) . '@2025';
+
+
+
+      $pass = Str::random(10) . '@2025';
+
+      DB::table('users')->insert([
+        'password'         =>     Hash::make($pass),
+        'email' => $memberid->emailid,
+        'teammember_id'     => $memberid->id,
+        'role_id' => $memberid->role_id,
+        'status' => 1,
+      ]);
+
+      DB::table('teammembers')->where('id', $memberid->id)->update([
+        'status'         =>     '1',
+        'updated_at' => date('y-m-d')
+      ]);
+
+      $teammember = Teammember::where('id', $staffappointment->teammember_id)->first();
+      $data = array(
+        'email' => $teammember->emailid ?? '',
+        'name' => $teammember->team_member ?? '',
+        'password' => $pass ?? '',
+      );
+      // dd($request->teammember_id);
+      Mail::send('emails.teamlogin', $data, function ($msg) use ($data) {
+        $msg->to($data['email']);
+        $msg->subject('CAPITALL LOGIN CREDENTIALS');
+        // $msg->cc($data['teammembermail']);
+      });
+    }
+
+    $output = array('msg' => 'Mail Send Successfully');
+    return Redirect::back()->with('success', $output);
+
+
+
+    // }
+
+  }
+  
+  
+  app\Http\Controllers\BackEndController.php
+  
+    public function otpapstore(Request $request)
+  {
+    $request->validate([
+      'otp' => 'required'
+    ]);
+
+    try {
+      $data = $request->except(['_token']);
+
+      $otp = $request->otp;
+
+      $otpm = DB::table('staffappointmentletters')->where('teammember_id', auth()->user()->teammember_id)->first();
+      if ($otp == $otpm->otp) {
+
+        DB::table('staffappointmentletters')->where('teammember_id', auth()->user()->teammember_id)->update([
+          'status' => '1',
+          'otpdate' => date('Y-m-d H:i:s')
+        ]);
+        $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+
+        $data = array(
+          'teammember' => $teammember->team_member ?? '',
+          //    'id' => $id ??''   
+        );
+
+        $a = Mail::send('emails.notificationappointmentletterMail', $data, function ($msg) use ($data) {
+          $msg->to(['priyankasharma@kgsomani.com']);
+          //  $msg->cc(['priyankasharma@kgsomani.com']);
+          $msg->subject('Appointment Letter Verified || ' . $data['teammember']);
+        });
+        $output = array('msg' => 'otp match successfully and verified');
+        return redirect('/appointmentletters')->with('success', $output);
+
+        // return back()->with('success', $output);
+
+      } else {
+        $output = array('msg' => 'otp did not match! Please enter valid otp');
+        return back()->with('success', $output);
+      }
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      $output = array('msg' => $e->getMessage());
+      return back()->withErrors($output)->withInput();
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+

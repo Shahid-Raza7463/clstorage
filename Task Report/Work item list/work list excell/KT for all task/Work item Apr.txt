@@ -1,0 +1,96 @@
+
+24-04-24
+1.client want to highlight Sunday date on timesheet create calender updated on server
+2.client want to add secondary patner inside assignment 
+3.filter implementation on Assignment time report 
+
+
+25-04-24
+1.Assignment time report filter implementation 
+2. Bugs fixed 
+
+
+26-04-24
+1.Client want to partner list and theire total hour on assignment view page 
+2.Assignment report page loading problem fixed
+
+
+
+29-04-24
+1. Client want to staff code in submitted time sheet filter 
+2. Client want to remove extra space from downloaded excel on open and close assignment page 
+3. Client want to fix design on time sheet request approval page
+4. Lead partner should be mandatory during assignment create 
+5. Staff code should be inside pop up box during new team member add on 
+
+
+30-04-24
+1. Client want to remove year  on team timesheet report and timesheet report tab
+2, remove validation on time sheet report page 
+3, client want to assignment name according client selected
+
+
+01-05-24
+1. Total field days should be according date wise it will not be according time sheet create wise 
+2. Total field is should be according date after filtering data Excel .
+
+
+02-05-24
+1. Clients want to lastweeksubmitted r report on mail in excell formate till current date 
+2. Client want to staff code inside applyleave page 
+3..client wants the format of content on apply leave request page
+
+
+
+
+03-05-24
+
+1.Content should be not cut on timesheet request page
+2.client wants to stop leave apply on sunday
+3.everywhere client want to export file name after download
+4.remove accending icon frm all places
+
+
+
+
+04-05-24
+
+1.everywhere client want to export file name after download
+2.remove accending icon frm all places
+
+
+
+
+06-05-24
+1.everywhere client want to export file name after download completed
+2.remove accending icon frm all places  completed
+3. both task completed,Documentation and upload on server completed 
+
+
+07-05-24
+1.Assignment duplicate problem fixed 
+2.Add leadpartner problem fixed 
+3.add teammember button on assignmentview page 
+4.Download suceesfully text want to change and client want to sent excel only admin 
+
+
+08-05-24
+1.Client want to auto select sunday in workitem when user select offholidays,
+2,Missing assignmentnumber fill using code when client create assignment 
+
+
+09-05-24
+1.Client want to team member list according latest on assignment view page
+2.Client want to email freez when timesheet created otherwise not on teammember list
+3.Client want to close account when admin filled leaving date
+
+
+ok in jira
+
+10-05-24
+10.A column to be added in excel template for a secondary email I’d, i.e., optional and not compulsory.   (done)
+6.Confirmation link to be more highlighted in the mail body.  (done)
+8.The year column in the excel template should take input as 2023-24 or 2022-23 etc. not as single year 2023 or 2024.  (done)
+4.Edit and Delete option should be available for the entries, before sending confirmation mail.                         (done)
+
+

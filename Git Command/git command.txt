@@ -1,0 +1,252 @@
+GIT AND GITHUB
+#################################################################################
+i am using this 
+1.Go to git hub and create repositery 
+2.open command line using administrate
+
+git init
+git add README.md ye run n kare skip it 
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Shahid-Raza7463/Vendor_folder_All.git
+git push -u origin main
+git push -u origin vsalive
+git push -u origin main --force
+
+
+if any error occured like / regarding error then ye command run kare git push -u origin main --force
+           C:\xampp\htdocs\expertaff>git push -u origin main
+           To https://github.com/Shahid-Raza7463/Trakafffinal.git
+            ! [rejected]        main -> main (fetch first)
+           error: failed to push some refs to 'https://github.com/Shahid-Raza7463/Trakafffinal.git'
+           hint: Updates were rejected because the remote contains work that you do not
+           hint: have locally. This is usually caused by another repository pushing to
+           hint: the same ref. If you want to integrate the remote changes, use
+           hint: 'git pull' before pushing again.
+           hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+
+
+check kaun sa repositery connected hai 
+git remote -v
+output
+        origin  https://github.com/Shahid-Raza7463/Demo.git (fetch)
+        origin  https://github.com/Shahid-Raza7463/Demo.git (push)
+
+
+if allready set repositry then run below command
+git remote set-url origin https://github.com/Shahid-Raza7463/Vendor_folder_All.git
+
+######################################################################################
+
+
+#################################################################################
+i am using this
+1 existing repositery ko push karna ho to run below command
+
+git remote add origin https://github.com/Shahid-Raza7463/reactnative-app.git
+git branch -M main
+git push -u origin main
+
+######################################################################################
+it is first way in this way , your code pushed master instead main branch
+git init
+git add .
+$ git commit -m "first commit" or $ git commit -a -m "add git command"
+$ git remote add origin https://github.com/Shahid-Raza7463/e-dashboardreact.git
+$ git push origin master
+$ git branch  // all branch name
+$ git branch -d main
+ git remote set-url origin https://github.com/Shahid-Raza7463/ReactexpertaffDashboardApp-.git
+
+check kaun sa repositery connected hai 
+2 C:\Shahid Raza\Demo>git remote -v
+output
+        origin  https://github.com/Shahid-Raza7463/Demo.git (fetch)
+        origin  https://github.com/Shahid-Raza7463/Demo.git (push)
+
+ git remote set-url origin https://github.com/Shahid-Raza7463/ReactCrudeAppBackend
+Basic command end hare 
+######################################################################################
+
+
+######################################################################################
+it is second way in this way , your code pushed main instead master branch 
+create a new repository on the command line
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Shahid-Raza7463/Capitalldemo.git
+git push -u origin main
+
+
+push an existing repository from the command line
+git remote add origin https://github.com/Shahid-Raza7463/Capitalldemo.git
+git branch -M main
+git push -u origin main
+######################################################################################
+
+######################################################################################
+Basic command start
+
+go to folder and open hare command prompt
+git configration gloably
+
+$ git config --global user.name "Shahid Raza"
+$ git config --global user.email shahidraza7463@gmail.com
+$ git config --list
+
+
+
+
+######################################################################################
+
+Important point for any project clone from github then 
+1.Clone project from git
+2.add .env file from your project ok becouse git does not have .env file 
+    this two step is very important if after that any error then follow below point 
+3.composer install
+4.composer dump-autoload
+
+######################################################################################
+
+######################################################################################
+Project clone from git Account 
+there are some steps
+1. go to your github account and copy project url
+     https://github.com/Shahid-Raza7463/Login-system.git
+2.Open your terminal or command prompt on your local system.
+    go to directery using cd where do you want like cd path/to/desired/directory
+
+3. for HTTPS url
+  git clone https://github.com/Shahid-Raza7463/Trakafffinal.git
+4.for SSH url
+   git clone git@github.com:Shahid-Raza7463/Login-system.git
+
+5.git clone -b master https://github.com/Shahid-Raza7463/Trakafffinal.git
+
+######################################################################################
+
+
+######################################################################################
+advance command 
+1.git checkout -b main
+2 C:\Shahid Raza\Demo>git remote -v
+output
+        origin  https://github.com/Shahid-Raza7463/Demo.git (fetch)
+        origin  https://github.com/Shahid-Raza7463/Demo.git (push)
+
+ git remote set-url origin https://github.com/Shahid-Raza7463/ReactCrudeAppBackend
+
+git branch main
+git branch vsa
+git branch -d vsa (Delete)
+git checkout main
+git checkout -b main
+git pull origin main
+git fetch origin main
+git merge origin/main
+
+######################################################################################
+Bitbucket
+1.git clone https://capitall-india-admin@bitbucket.org/capitall-india/vsa.git
+3.cd vsa
+2.git checkout vsa-shahid
+4.git add .
+5.git commit -m "first commit"
+6.git push origin vsashahid
+end hare 
+
+
+2.git fetch -a   not used 
+## reverse from git commited
+git rm -r --cached public/
+git add .gitignore
+git commit -m "Update .gitignore to ignore the public folder"
+
+
+regarding gitignore
+######################################################################################
+backEnd/
+/backEnd  git ignore file me is dono ka matlab btaye 
+
+
+1. backEnd/
+This pattern ignores all directories named backEnd, no matter where they appear in the repository.
+For example:
+   Ignores backEnd/ in the root directory.
+   Ignores subdir/backEnd/, src/backEnd/, etc.
+
+
+2. /backEnd
+This pattern ignores the backEnd directory only in the root of the repository.
+For example:
+    Ignores backEnd/ at the root.
+    Does not ignore subdir/backEnd/ or src/backEnd/.
+
+Example Use Case:
+Use backEnd/ if you want to ignore all occurrences of backEnd directories throughout the project.
+Use /backEnd if you want to specifically target the backEnd directory located at the root of your repository.
+
+Practical Example:
+
+# Ignore backEnd directory globally
+backEnd/
+
+# Ignore backEnd directory only at the root
+/backEnd
+
+222222222222222222222222222222222
+
+Pehle remote branches ko fetch karein:
+git fetch --all
+
+Agar aapko remote repository ki sab branches dekhni hain, to yeh command run karein:
+git branch -r
+
+Agar aap local aur remote dono branches dekhna chahte hain, to:
+git branch -a
+
+Agar aap remote ki baaki branches ko local repository me lana chahte hain, to pehle fetch karein:
+git fetch origin
+
+Agar kisi particular branch ko local me lana hai, to:
+git checkout -b vsa origin/vsa
+
+
+Agar aapko saari remote branches ko local me laana hai, to:
+git pull --all
+
+
+Agar aapko saari remote branches ko dekhna hai to , to:
+C:\xampp\htdocs\Github Transfer>git remote show origin
+* remote origin
+  Fetch URL: https://github.com/Shahid-Raza7463/Vendor_folder_All.git
+  Push  URL: https://github.com/Shahid-Raza7463/Vendor_folder_All.git
+  HEAD branch: main
+  Remote branches:
+    main    new (next fetch will store in remotes/origin)
+    vsa     new (next fetch will store in remotes/origin)
+    vsalive new (next fetch will store in remotes/origin)
+  Local ref configured for 'git push':
+    main pushes to main (local out of date)
+
+C:\xampp\htdocs\Github Transfer>
+
+
+ Remote Se vsa Branch Delete Karein
+ git push origin --delete vsa
+
+ Local Se vsa Branch Delete Karein
+ git branch -d vsa
+
+
+
+
+
+
+
+
+

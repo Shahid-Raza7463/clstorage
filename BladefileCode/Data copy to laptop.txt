@@ -1,0 +1,38 @@
+robocopy "This PC\Redmi 9 Prime\SD card\All song" "E:\Redmi 9 prime" /E  agar yaha "This PC\Redmi 9 Prime\SD card\All song"  is tarh ka path hoga to data transfer nahi hoga ye command tabhi chalega jab drivr assign ho like C,D, E etc 
+
+memry to laptop transfer
+#folder and file transfer from memry to laptop 
+robocopy "D:\Aa bijli bill all" "E:\app\Aa bijli bill all" /E
+
+robocopy "D:\All song" "E:\app\All song" /E
+
+robocopy "D:\Md Shahid Raza" "E:\app\Md Shahid Raza" /E
+
+robocopy "D:\Movies All\Movies Series" "E:\app\Movies All\Movies Series" /E
+
+robocopy "D:\Movies All\\Watched" "E:\app\Movies All\\Watched" /E
+
+laptop to memry transfer
+robocopy "E:\Redmi 9 prime\All song\Pen drive\All songs\Hindi Song 2022" "D:\All songs\Hindi Song 2022" /E
+
+
+# below 2 commnad are for memry formate hare 1 is quick formate and second is full formate and full formate will be take more time 
+1.format D: /fs:ntfs /q
+2.format D: /fs:ntfs
+
+chkdsk D: /f /r /x
+
+
+
+🔍 Quick Format vs Full Format
+
+| Feature                  | Quick Format (/q)                                                                 | Full Format (default, without /q)                                                                 |
+|--------------------------|------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| **Time Lagta Hai**       | Bahut kam — kuch seconds ya minutes lagega, drive size aur speed par depend karta hai. | Kaafi zyada — drive ki size aur speed ke hisaab se kaafi der lagegi.                            |
+| **Kya Data Hataata Hai** | Sirf file system metadata (file table, indices) delete karta hai. Files physically drive me rehti hain lekin Windows unhe “invisible / unallocated” manta hai. | Metadata + drive ka har sector check karta hai. Agar drive par bad sectors hain ya corruption hai, unhe identify karta hai. Kuch cases me sector-by-sector zero write bhi hota hai (Windows versions par depend karta hai). |
+| **Bad Sectors Check**    | Nahin karta (ya minimal check)                                                        | Haan, full format drive surface ke bad sectors check karta hai. Agar koi problematic sector hai, usko mark karta hai taki future me problems na ho. |
+| **Data Recovery**        | Zyada chance hai — kyunki data physically wipe nahin hua; sirf pointers delete hue hain, recovery software se recover ho sakta hai. | Data recovery mushkil ya near impossible ho sakta hai (especially normal user tools se). |
+| **Disk Health / Reliability** | Agar drive purani hai ya use ho chuki hai, quick format bad sectors ya disk errors detect nahin karegi → aage problems aa sakte hain. | Full format se drive ki overall health ka idea milta hai, bad sectors pata chal jaate hain, reliability badhti hai. |
+
+
+

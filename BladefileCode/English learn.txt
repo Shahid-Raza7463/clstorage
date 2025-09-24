@@ -1,0 +1,291 @@
+Call me when you have some free time
+Call me when you have free time
+send me all point from whatsap
+
+I am writing to inform you that I missed checking in on 26-07-2024 and filling out the timesheet for 24-07-2024 and 25-07-2024. I kindly request your assistance in rectifying these entries to ensure that my records are accurate and up to date.
+
+"The employee code will be shown according to the new assignment and previous assignment. The new employee code will be displayed everywhere except for the new and previous assignments, if the designation has changed."
+
+
+
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222
+regarding mail 
+
+Dear Sir,
+
+I hope this email finds you well. I want to inform you that I have done tasks and I am sharing all tasks in Excel so please see it 
+
+Best regards, Shahid Raza 
+
+
+
+222222222222222222222222
+
+Dear Sir,
+
+I hope this email finds you well.
+
+I would like to inform you that I have completed the tasks for the period from 01-07-2024 to 31-07-2024. I am attaching an Excel file detailing all the tasks I have worked on during this period.
+
+Please review the attached document at your convenience. If you have any questions or need further details, feel free to let me know.
+
+Best regards,
+Shahid Raza
+2222222222222222222222222222222222222222222222222222222222222
+
+subject: Regarding Today's Work Item
+
+Dear Sir,
+
+I hope this email finds you well.
+
+I would like to inform you that I have completed the tasks for the period from 01-07-2024 to 31-07-2024. I am attaching an Excel file detailing all the tasks I have worked on during this period.
+
+Please review the attached document at your convenience. If you have any questions or need further details, feel free to let me know.
+
+Best regards,
+Shahid Raza
+
+PWRXLP2sKho 
+222222222222222222222222222222222222222222222222222222
+vsa
+Regarding the VSA attendance module, are you sure the tasks are in QA, we need to start testing them from tomorrow.
+I have placed the VSA tasks in QA, and we need to start testing them tomorrow
+
+Ok I will remember
+I will let you know when I upload the latest code . I need to merge the balance code as well.
+ok i have changed status 
+i have replied on jira ok
+Testing complete please check updated status
+I have mentioned the description. now we can test 
+vsa 6 tasks are in QA so we need to test them after lunch time
+VSA updates are also pending, is there any update on eta or 26th Aug is the final day from dev
+prashant
+
+QA is writing the TC so we can do unit testing too
+
+I have resolved the problem raised by manoj at night but vsademo per upload karna baki hai jo mai bahadur sir ko de Diya hai jaise hi vo upload karta hai to mai inform karta hu
+manoj sangwan
+you can test now.i have deleted your timesheet and leave from backend.
+simmi ma'am i am currently working on a new 'Rejoining' module &  i have retested the previous bug and updated the status 
+ 
+Shahid Raza
+ also please make sure the point raise by client during testing of Promotion is well communicated to the team and the same is not repeated in future
+
+ simmi can we start testing it today, even if we can start it in second half?
+
+ we will connect at 2 and take it forward
+
+ point number 5,and 9 in vs-154 ,Who tested the filter functionality in the attendance tab ? 
+
+ I have fixed this issue and have sent the code for upload to bahadur sir
+
+ on attandence tab, filter functionality does not work properly when select end date in 2025
+
+ but i have manually enter end date so client can choose end date in future  by mistake
+ 
+
+ As per the client's discussion, this task is working correctly and does not need any changes.
+As per the client's discussion, this task is working correctly and does not need to clear leaving date after submitting data .  
+
+If a timesheet is rejected for more than one consecutive day, the user can apply for leave on those days, and the attendance table will be updated accordingly
+
+I have deployed all previously QA-passed tasks on VSAlive, and some tasks are in QA, so we need to test them.
+
+
+Pooja Kumari and I will sync up
+ mujhe vsalive se ye table send karo 
+
+  Testing and deployment: VS 80, 82, 87, 89, 90, 91, 94
+
+  My list of all completed tasks from February to October
+
+
+  22222222222222222222222222222222222222222222222222222222222222222222222222222
+  Phase 01: OMS- Balance Confirmation Release Notes 1.1
+VS-93: VSA New Requirements 12 Points
+Done
+ 
+
+EXCEPT: Point 12: User may be able to share a link with the Client to have a view of Balance confirmation screen to know the status of confirmations received and pending. Client should be able to access the link with the ID and Password shared to them.
+
+VS-22: Balance Confirmation
+Done
+ 
+
+BC-96: VSA Requirements
+Done
+ - Balance Confirmation assignment  (duplicated by VS 93)
+
+Status - Balance Confirmation & Independence Flow - Done; No new enhancements from client 
+
+Phase 02: Promotion/ Rejoining flow
+REQUIREMENT: 
+
+Use case 01: Rejoining Flow for user joining at same position 
+
+Use case 02: Rejoining Flow for user with different position
+
+Precondition: 
+
+User is an existing Inactive employee
+
+User has a Leaving date documented
+
+Use case 01
+
+For rejoining, from admin login go to HR tab_promotion & rejoining
+
+Rejoining can be done at staff, manager & partner role only if user is rejoining. 
+
+Once rejoining form is submitted, user becomes active & timesheet gets activated & user is able to submit timesheet  
+
+While submitting the timesheet filling for gap weeks or missing weeks error validation will not show 
+
+Use case 02: Rejoining Flow for user with different position
+
+Select the checkbox to update the Designation when User Rejoins
+
+VS-55:  Testing and deployment: VS 80, 82, 87, 89, 90, 91, 94
+Done
+ 
+
+Status: Rejoining flow is working
+
+Phase 03: HRMS: Attendance/ Timesheet/Apply & Revert Leave
+VS-154: Attendance module
+In QA
+ 
+
+VS-151: 6. On apply leave page, Client want to implement alert box on click approved and reject button 
+In QA
+ 
+
+Feature: Timesheet (TS): 
+TS can be filled day-wise but submission is weekly.
+
+Single day submission is not available because when creating timesheets it gets saved in ‘My Timesheet’ page
+
+Timesheet Submission (for all role-types)
+
+Monday to Saturday 
+
+Monday to Sunday
+
+TS should will filled for all days before weekly submission- any gap will throw errors
+
+User joins mid-week: If user has joined on Wednesday, user will have to fill the 1st TS for Wednesday.  Monday & Tuesday ‘N/A’ will be filled automatically
+
+Created timesheet can be deleted by user if filled incorrectly & can be re-filled
+
+Admin action to submitted TS
+
+Submitted TS can be rejected by Admin; IF rejected use has the option to re-fill TS or apply for Leave
+
+Blocked TS: TS Request to be sent; After approval the window to fill TS is 2 days then its blocked again
+
+Notifications: Partner & Users
+
+Partner gets notified (via email) when TS request is sent
+
+User gets notified (via email) when TS request is approved
+
+(Notification of TS Rejection is not sent as no action is required by users) 
+
+Timesheet fill options for users
+
+User can fill work & travel and if Saturday is weekend, then user must fill Off holiday (OH)for that day
+
+Present (P), Travel (T), Casual leave (CL),Exam leave (EL), Holidays(H), Sunday (W), Saturdays (OH) and Rejected timesheet (R)
+
+Timesheet Filling Window
+
+Timesheet will get blocked after 16th/17th day of last timesheet submitted. 
+
+If TS is submitted on Saturday, then in the next 17 days on Monday the timesheet will get blocked
+
+If TS is submitted on Sunday, then in the next 16 days (on Monday)
+
+Feature: Apply Leave
+Applied CL leaves will be shown in ‘Submitted Timesheet’ section as well
+
+CL gets reflected in Attendance data by EL needs to be approved before it displays in Attendance data 
+
+While approving or rejecting the leave alert message will be shown for confirmation.
+
+While applying for continuous leave, weekends or holidays will not be included. It will be skipped.
+
+Attendance Tab: Role Admin & Partner 
+
+Attendance tab will be shown in Admin & Partner login. HR>Attendance
+
+Admin & Partner can view attendance for all Active employees
+
+Filter data based on ‘Name’, ‘Start Date’, & ‘End Date’; ‘Start Date’ & ‘End date’ are mandatory fields
+
+Validation on start date & end date column as end date cannot be smaller than start date
+
+Attendance report can be extracted in excel. 
+
+Attendance table gets updated when TS is submitted for timesheet filled & CL applied.
+
+Attendance table gets updated for EL applied only after approval
+
+Attendance data is shown as below
+
+Present (P) 
+
+Travel (T) 
+
+Casual leave (CL) 
+
+Exam leave (EL) 
+
+Holidays(H) 
+
+Sunday (W) 
+
+Saturdays (OH) 
+
+Rejected timesheet (R) 
+
+Attendance table Columns: 
+
+Employee name; Staff Code; Role; Month; Year; Date from 01 to 31 
+
+'Total working days’ are shown on dashboard as well, user can click to navigate to this page directly.
+
+Feature: Rejoining/Promotion: Teams 
+Rejoining option is visible Only for Inactive Users (who were employees) 
+
+If User leaves, admin adds Leaving date of the user & submit it to make user Inactive 
+
+Inactive user can not login to portal
+
+When admin inputs leaving date; all pending TS get submitted automatically.
+
+To Do: 
+
+186: Client want to attendance report on admin dashboard
+
+187: Admin can export month -wise report all users attendance
+
+VS-173: Testing & Deployment of 151 + 154
+In Progress
+
+let’s connect at 2 pm today
+ No, I uploaded it on Friday
+
+ Until now, the final flow has not been received from the client; it is still pending on the client’s side.
+
+
+ I spoke to the client; they called to report an error. However, when I checked, there was no error, and I have informed the client about it
+
+
+I spoke to the client regarding assignments being displayed on one page. However, when I checked, the functionality to show all assignments already exists, and I have informed the client about it

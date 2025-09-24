@@ -1,0 +1,97 @@
+Regarding Command prompt
+#################################################################################
+copy any file and folder from one drive to another 
+robocopy "E:\shahid" "D:\Backup\shahid" /E /Z /DCOPY:T /R:3 /W:5
+
+
+Delete any folder using command
+1.cd C:\Users\KGS-429\Desktop
+2.rmdir /s /q secondapp
+
+explaination 
+rmdir: Stands for "remove directory."
+/s: Deletes all files and subfolders within the directory.
+/q: Runs the command in quiet mode to avoid confirmation prompts.
+
+
+#################################################################################
+### File and Directory Operations
+| **Command**                 | **Description**                                                |
+|-----------------------------|--------------------------------------------------------------|
+| `cd [folder]`               | Change directory to the specified folder.                    |
+| `cd ..`                     | Move to the parent directory.                                |
+| `dir`                       | List files and folders in the current directory.             |
+| `mkdir [folder]`            | Create a new folder.                                         |
+| `rmdir [folder] /s /q`      | Delete a folder and its contents (`/s` = recursive, `/q` = quiet). |
+| `del [filename]`            | Delete a specific file.                                      |
+| `rename [oldname] [newname]`| Rename a file or folder.                                     |
+| `copy [source] [destination]` | Copy files to another location.                           |
+| `move [source] [destination]` | Move files to another location.                           |
+| `attrib`                    | Change file attributes (e.g., read-only, hidden).           |
+
+### System Information and Diagnostics
+| **Command**               | **Description**                                              |
+|---------------------------|------------------------------------------------------------|
+| `ipconfig`                | Display network configuration details.                     |
+| `ping [address]`          | Test network connectivity to a server or website.          |
+| `netstat`                 | Display active network connections and ports.              |
+| `tasklist`                | List all running processes on the system.                  |
+| `taskkill /pid [pid] /f`  | Forcefully terminate a process using its process ID.        |
+| `systeminfo`              | Display detailed system information.                       |
+| `chkdsk`                  | Check disk for errors.                                     |
+| `sfc /scannow`            | Scan and repair system files.                              |
+
+### Development and Scripting
+| **Command**                   | **Description**                                              |
+|-------------------------------|------------------------------------------------------------|
+| `node -v`                     | Check Node.js version (if installed).                     |
+| `npm -v`                      | Check NPM version.                                         |
+| `python --version`            | Check Python version (if installed).                      |
+| `git --version`               | Check Git version.                                         |
+| `git clone [repo_url]`        | Clone a Git repository.                                    |
+| `java -version`               | Check Java version.                                        |
+| `javac [filename.java]`       | Compile a Java file.                                       |
+| `dotnet --info`               | Display .NET Core SDK details.                            |
+
+### File Viewing and Editing
+| **Command**                   | **Description**                                              |
+|-------------------------------|------------------------------------------------------------|
+| `type [filename]`             | Display the contents of a file.                           |
+| `notepad [filename]`          | Open a file in Notepad for editing.                       |
+| `findstr [text] [filename]`   | Search for specific text in a file.                       |
+
+### Package and Dependency Management
+| **Command**                   | **Description**                                              |
+|-------------------------------|------------------------------------------------------------|
+| `npm install [package]`       | Install an NPM package.                                   |
+| `composer install`            | Install dependencies for a PHP project.                  |
+| `pip install [package]`       | Install a Python package.                                 |
+| `gem install [package]`       | Install a Ruby gem.                                       |
+
+### Disk and System Management
+| **Command**               | **Description**                                              |
+|---------------------------|------------------------------------------------------------|
+| `diskpart`                | Open disk partition management.                            |
+| `format [drive:]`         | Format a drive.                                            |
+| `shutdown /s`             | Shut down the computer.                                    |
+| `shutdown /r`             | Restart the computer.                                      |
+
+### Other Useful Commands
+| **Command**                   | **Description**                                              |
+|-------------------------------|------------------------------------------------------------|
+| `cls`                         | Clear the Command Prompt screen.                          |
+| `exit`                        | Exit the Command Prompt.                                  |
+| `echo [text]`                 | Print text in the console.                                |
+| `set [variable=value]`        | Set environment variables.                                |
+| `path`                        | Display or set the system path.                          |
+| `help`                        | List available commands and their descriptions.          |
+
+### Shortcuts and Navigation Tips
+| **Shortcut**                | **Description**                                              |
+|-----------------------------|------------------------------------------------------------|
+| `Ctrl + C`                 | Cancel the current running command.                        |
+| `Tab`                      | Auto-complete file or folder names.                        |
+| `Arrow Up`                 | Navigate through the command history.                      |
+
+
+#################################################################################

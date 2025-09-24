@@ -1,0 +1,37 @@
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+applyleave table
+leaverequest table 
+
+1.sunny  leave 
+ 844  delete 
+leave  id 428  delete
+
+revert  id 2 delete
+
+
+
+2.mohit yaday 
+852  delete 
+
+412  leave  id  delete
+
+412  revert  id    delete 
+
+
+3.vijay kumar
+833  update 
+
+554  leave  id    update 2024-03-20    2024-05-15
+
+5  revert   to date update with 2024-05-16
+
+
+
+3.Antima Jhajhra
+782  update 
+
+applyleave ok hai 531 id hai 
+
+3 revert   to date update with 2024-03-27
+
+

@@ -1,0 +1,35 @@
+222222222222222
+UDIN
+
+app\Http\Controllers\StepController.php
+resources\views\backEnd\viewassignment.blade.php
+
+resources\views\backEnd\applyleave\index.blade.php
+
+
+2222222222222
+birthday email set image 
+
+resources\views\emails\happybirthday.blade.php
+app\Console\Commands\BirthdayReminder.php
+
+
+222222222222
+
+not submitted timesheet  mail
+
+app\Console\Commands\TimesheetnotfillReminder.php
+resources\views\emails\timesheetnotfilledremidner.blade.php
+
+222222222222222
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1159 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+When admin reject users timesheet after that users edit and submit rejected timesheet
+
+Stepsw:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'Rejected Submitted timesheet.
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+While clicking on save button directly then system is first displaying confirmation message for submission and then system is displaying validation message to add description.
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+5.Click on ‘Confirmation’ button.
+6.Click on ‘Send’ button and Enter subject and click on Send button.
+Expected Result:- System should first display validation message to select ‘Confirmation Type’.
+Actual Result:- System is firstly displaying confirmation message then system is displaying validation message.
+Open Screenshot 2024-04-15 at 3.52.28 PM.png
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+When manager,partner and admin add teammember in assignment then teammeber will be show in teammember list if assignment closed then it will show in assignment viewer list 
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.click on Teammember List plus icon: 
+5.Add teammember hare UDIN List
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+on UDIN List section, after click plus button you can add udin documentation date from hare and this date will be show in udin list section 
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.click on UDIN List: 
+5.click on plus button 
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+client want to attachment file on timesheet request create form
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet.
+4.click on 'Add Timesheet'
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignment' dropdown.
+3.click on 'Assignment List'
+4.click on 'hyperlink client name'
+5.click on 'year hyperlink '
+6.Go to Other partner column
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+4.click on 'Attendance'
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+if timesheet rejected of users then user can apply leave on that days and all data will be come according leave 
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'Rejected Submitted timesheet.
+
+
+
+
+222222222222222222222222222222222222222222222222
+
+I have mentioned the description. now we can test 
+
+4
+the unwanted sorting icon should be remove from All table only it will be on date and subbmited date  i have attaced image 
+
+
+
+3.the client code ,assignment code ,staffcode/ employee, partner code , assign partner code and approver code should be sepreted in all table  
+Check using Admin.partner,manager and staff id 
+
+
+
+2
+in table , the data should be in one line currently table design not good  ( i have attached image)
+Check using Admin.partner,manager and staff id 
+
+
+
+1
+Date formate should be 01-01-2024 on portal and in excell currently date formate are like january ,9 2024
+in excell, we need to check downloaded data also becouse after modification data can goes in excell with code (i have Attached image)
+
+
+Attendance module 
+22222222222222222222222222222222222222222222222222
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users attendance
+3.On admin dashboard, client want to display attendance according date wise and all date contain wording like persent (P), travel (T), Casual leave (cl),exam laeve (EL), holidays(H), sundauy (W), sturdays (OH)
+here T will be assign only full days travel 
+4.Attendance table contain below column 
+  Employee name,role months, date from 01 to 31, Total Number of days,Total Working days,Total Casual Leave,Total Exam Leave,	Total Travel,Total Offholidays,Total Weekend,Total Holidays
+5.client want to filter functionality on attendance click (Attendance tab)
+6.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+7.on staff,manager and partner dashboard,all working days should be display after click on total working days box
+8.staff,manager and partner can export total working days excell
+9.on attendance page,Validation should be on date after click attendance tab where admin can filter attendance
+10.Attendance tab should be aceess only partner and admin
+
+
+Now You have to test attendance table hare 
+
+1.attendance table will be update only when user submitted theire timesheet not on create timesheet 
+2.when user apply exam leave and admin approved it then attendance table will be update 
+3.when user apply Casual leave and user submited theire timesheet then attendance table will be update
+4.WHen user submitted leave revert request after approved it. attandence table will be update 
+5.When admin and partner reject user timesheet and user submit rejected timesheet in both case attandance table will be update
+6.If a timesheet is rejected on a specific date, the user can apply for leave on those days, and the attendance table will be updated accordingly
+7. when admin fill laeving date in profile section in that time all save timesheet currently submitted automatic in this case attendance table will be update
+8. if user fill two timesheet in one days and both timesheet has a P then no of persent column will be count 1 and if user fill two timesheet in one days and one timesheet contain T and one timesheet contain P then it will be count no of persent 1 and assign P
+
+
+Now You have to test are you sure message on click approved and reject button in (admin and partner)
+1.Apply leave section 
+2.revert leave section
+3.open leave section
+4.timesheet request list section 
+5.timesheet request box on dashboard 
+6.leave box on dashboard section
+
+
+
+You need to apply for exam leave for at least 20 days in a month that includes holidays. After approving the exam leave, check the attendance report to ensure that all holiday dates display 'H' in the attendance
+
+
+
+Currently, holidays (H) are not appearing in the attendance record.
+
+regarding notification on jira this is in word file 
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+All Notification will be show on admin portal 
+only partner notifications will be show on partner portal 
+only manager notifications will be show on manager portal 
+only staff notifications will be show on staff portal 
+when we target individual after that you will be get teammember selection box hare aap jise target karoge usi ke portal per notification dikhega and admin ke portal per 
+Hare you have to check read and unread functionality like readed notification will be show in black color and not readed notification will be show in red color 
+
+
+1st notification 
+Steps:-
+1.Navigate to the application
+2.On dashboard, here you can see notification section.
+
+
+
+2nd notification 
+Steps:-
+1.Navigate to the application
+2.Click on 'Notification list' dropdown.
+
+3rd notification 
+Steps:-
+1.Navigate to the application
+2.On dashboard , here you can see on top header section.
+
+it is for admin only
+Steps:-
+1.Navigate to the application
+2.Click on 'Notification list' dropdown.
+2.Click on 'Add Announcement'.
+3. fill form and click send button 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222
+Notifications Behavior Across Portals:
+•	Admin Portal: All notifications will be displayed.
+•	Partner Portal: Only partner-specific notifications will be displayed.
+•	Manager Portal: Only manager-specific notifications will be displayed.
+•	Staff Portal: Only staff-specific notifications will be displayed.
+Targeted Notifications:
+•	When sending notifications to specific individuals, a Teammember Selection Box will appear. Notifications will only be displayed on the targeted individual's portal and the Admin portal.
+Read/Unread Functionality:
+•	Unread notifications will appear in red color.
+•	Read notifications will appear in black color.
+1st Notification
+Steps:
+1.	Navigate to the application.
+2.	On the dashboard, locate the notification section.
+2nd Notification
+Steps:
+1.	Navigate to the application.
+2.	Click on the "Notification List" dropdown.
+3rd Notification
+Steps:
+1.	Navigate to the application.
+2.	On the dashboard, locate the notification icon in the top header area.
+Admin-Only Feature: Add Announcement
+Steps:
+1.	Navigate to the application.
+2.	Click on the "Notification List" dropdown.
+3.	Click on "Add Announcement."
+4.	Fill out the form and click the "Send" button.
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222
+Promotion and Rejoining on Other Posts
+1.	If a user worked on attendance as a manager, the staff code will display as a manager.
+2.	If a user worked on attendance as a partner, the staff code will display as a partner.
+3.	In the joining date column, the newest joining date will be displayed.
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Attendance'.
+4.	Locate the Joining Date column.
+________________________________________
+Timesheet Access on Exit Day
+When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+On Admin ID
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+o	Here, you can see the Timesheet Access field.
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+________________________________________
+Inactive Assignments for Users
+Ensure assignments do not appear for users after being marked inactive for that assignment.
+For Admin ID
+
+Steps:
+1.	Navigate to the application.
+2.	Click on 'View All Assignments' in the Assignment Section.
+3.	Click on the Assignment ID hyperlink.
+4.	Go to the Teammember List section.
+o	Here, you can see the Active/Inactive button.
+For Manager and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+o	Inactive assignments will be hidden.
+
+Additional Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard.
+Inactive assignments will be hidden in Assignment Section 
+
+Alternative Steps:
+1.	Navigate to the application.
+2.	Click on the 'Client' dropdown.
+3.	Navigate to the 'Assignment List' page.
+4.	Click on the Client Name hyperlink and click on year.
+Inactive assignments will be hidden.
+
+________________________________________
+Manager-Specific Tab
+This tab is available only for managers and not for staff.
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Client' dropdown.
+3.	Navigate to the 'Client List' page.
+4.	Click on the Client Name hyperlink and select Assignment.
+       Inactive assignments will be hidden.
+
+this is my updated code isme mai chahta hu ki 01 se 31 tak jo firs 0 hai jise hide kiya hai vo excell me nahi jaye 
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+•	The box will display the Total Travel Days based on attendance records.
+•	The total travel days in attendance will be reflected in the Total Travel Days Box on the dashboard.
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Locate and click on the 'Total Travel Days Box'.
+________________________________________
+•	Before applying the filter, data will be displayed created first ,approved and in the last rejected.
+•	After applying the filter, the data should be displayed in ascending order by Request date (latest first).
+For Admin IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Use the filter to sort and display data.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Holidays' tab.
+
+
+
+________________________________________
+•	Every Wednesday and Saturday, an email is sent to the Admin containing an Excel report.
+•	The report includes:
+1.	User's name.
+2.	User's email ID.
+3.	Last timesheet submission date.
+________________________________________
+•	Every Wednesday and Saturday, an email is sent to the Admin containing an Excel report.
+•	The report includes:
+1.	Users who saved the timesheet but did not submit it.
+2.	Users who never filled out the timesheet.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2.Udin date format needs to be fixed.``````````
+The date format in the Udin List section will be: dd-mm-yyyy (like 01-01-1999).
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.you can see hare UDIN List
+
+
+
+3.Restrict users from entering time in the format 08:00.````````
+You cannot edit the Total Hour field here.
+The hour field should not be in the format 00:00; it should only accept whole numbers like 0, 1, 2, 3, etc
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+4.Add a CreatedBy column to display on the assignment folder file listing page. ( 0.5 days )
+36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+33.Move the Edit button to the first position on the Timesheet Saved Listing page. ( 1 days )
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.  ( 0.5 days )
+`3.timesheet delete logs
+
+
+4.Add a CreatedBy column to display on the assignment folder file listing page. ( 0.5 days )
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+5.Click on ‘All Files And Folders’ button.
+6.Click on ‘Folder box’ you can see hare created by column.
+
+
+
+
+
+36.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Click on the 'Apply Leave' button.
+4.  fill form and click on send button 
+
+33.Move the Edit button to the first position on the Timesheet Saved Listing page. ( 1 days )
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet.
+
+
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days )
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet' tab.
+4.Click on 'Submitted timesheet'.
+4.Click on 'Team Name hyperlink'.
+5.hare you can see action column
+
+
+
+
+9.Restrict admin from rejecting casual leave timesheets if submitted.    ( 1 days )
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet' tab.
+4.Click on 'Submitted timesheet'.
+4.Click on 'Team Name hyperlink'.
+5.hare you can see action column
+
+
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+5.Click on ‘All Files And Folders’ button.
+6.Click on ‘Folder box’ you can see hare date column.
+
+
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation))
+
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Assignment Viewer List'.
+4.	Locate the name column.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Assignment time report'.
+4.	Locate the 	Title column.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+o	Locate the 	Title field.
+
+
+
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet Request List' tab.
+4. Locate the Action column.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+5.  fill data and click submit button
+
+Steps: 2
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Add Teammember.
+5.  fill data and click submit button
+
+
+
+1.	All mandatory fields are required.
+2.	Profile picture should be in .jpg, .jpeg, or .png format.
+3.	Personal Email ID should be valid.
+4.	Mobile Number should contain only digits, not text.
+5.	Emergency Mobile Number should contain only digits, not text.
+6.	Date of Birth should not be in the future.
+7.	Aadhaar Number should contain only digits, not text.
+8.	PAN Card Number should be valid.
+9.	Mother's Mobile Number should contain only digits, not text.
+10.	Father's Mobile Number should contain only digits, not text.
+11.	Bank Account Number should contain only digits, not text.
+12.	Joining Date should not be in the future.
+13.	Leaving Date should not be in the future.
+
+
+Client wants to add multiple partner in lead partner and other partner column
+When admin and partner create assignment on that time form should be validate
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+5.	Go to the Partner List section.
+6.	Click on the 'Plus Icon' to add a partner.
+
+For Admin IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Client' dropdown.
+3.	Click on 'Assignment List'.
+4.	Click on the Client Name hyperlink, then click on the Year hyperlink.
+5.	In the Other Partner column, the Plus Icon should not be displayed.
+
+
+Notifications & Assignment Updates
+1.	When a partner is added, they will receive a notification.
+2.	After receiving the notification, the partner should be able to access the Independence Confirmation page.
+3.	The count in the Open Assignment Box should increase after adding a partner to the assignment.
+4.	After clicking on the Open Assignment Box, the newly assigned assignment should be visible.
+
+
+
+Timesheet Functionality for Partners
+On the Add Timesheet Page:
+1.	The Partner should be able to create a timesheet for that assignment.
+2.	The Total Hours should be updated after a timesheet is created.
+3.	The Total Hours should be updated after a timesheet is deleted.
+4.	The Total Hours should be updated after a timesheet is edited.
+
+
+vsademo data will be clean 
+1.one assignment me will be not leadpartner, otherpartner , assignmentteammaping 
+2.only will be exit leadpartner
+MNA100030
+MAN100044
+
+
+For Admin and Partner IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Add Assignment.
+3.fill data and click submit button
+
+1.	All mandatory fields are required.
+2.	Std Cos, Est Cost and Fees of The Asignment should contain only digits, not text.
+3.	The Lead Partner, Other Partner, and Additional Partner cannot be the same
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+For Admin IDs
+
+Steps: 1
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.  Go to the status column
+
+Steps: 2
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+5.  Go to the status field
+
+Steps : 3
+If a user is rejoined and does not have a leaving date for rejoining, the admin can activate or deactivate the user. However, if the rejoined user has a leaving date after rejoining, the admin cannot activate or deactivate them.
+
+Rejoining/Promotion features Deployed
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+or Admin, partner IDs
+
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Promotion/Rejoining'.
+
+
+After promoting or rejoining the user, we have to test below all points
+1.After rejoining or promotion, any newly created assignment should display the new staff code for all related data. However, if the assignment was created before rejoining or promotion, it should display the old staff code for all related data.
+2.For Apply Leave, Timesheet Request, and Leave Request, if they were created before the rejoining or promotion date, they should display the old staff code. If they were created after the rejoining date, they should display the new staff code.
+
+Below description was written by Shahid.
+Steps to Navigate:
+For Admin & Partner IDs to Promotion/Rejoining:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Promotion/Rejoining' section.
+
+After promoting or rejoining a user, we need to test all the points mentioned below
+
+For Admin, Partner, Manager, Promoted User and Rejoined User Ids
+
+1.Assignment, Assignment related All date like saved timesheet, submitted timesheet, rejected timesheet etc:
+•	If a new assignment is created after promotion/rejoining → Show new staff code.
+•	If an old assignment (created before promotion/rejoining) → Show old staff code.
+2.Apply Leave, Timesheet Request & Leave Request:
+•	Requests made before rejoining/promotion → Old staff code should be displayed.
+•	Requests made after rejoining/promotion → New staff code should be displayed.
+
+3.we have to test on report, client/assignment, team , Promotion/Rejoining and Human Resources tab,
+
+4.We need to test all dropdown fields where the staff code appears
+
+5.we have to test all section on dashboard,
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Final Summary
+1️⃣ Database se folders aur unke files ka data fetch hota hai.
+2️⃣ ZIP file ka naam generate hota hai.
+3️⃣ StreamedResponse ka use karke ZIP ko directly user ko stream kiya jata hai.
+4️⃣ Loop me folders aur unki files ko ZIP me add kiya jata hai.
+5️⃣ Agar folder empty hai to sirf empty directory ZIP me add hoti hai.
+6️⃣ ZIP stream complete hota hai aur user ko download ke liye diya jata hai.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+5.	Click on the 'All files and folders'.
+6.	Click on the 'Download all folder'.
+7.	Click on the 'Create zip file'.
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+5.	Go to the Partner List section.
+6.  Locate the Role column.
+
+
+
+
+
+
+For Partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet' tab.
+4.Click on 'Submitted timesheet'.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Need option to fill mutiple days timesheet at once
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+1.Fill timesheet in bulk for one full week and save the data successfully.
+
+2.Fill multiple timesheets after change 'to date' and ensure all are saved properly.
+
+3.Apply casual leave on a Monday – check if both the "From Date" and "To Date" are showing correctly.
+
+4.Apply casual leave for two separate days within a week – ensure both "From Date" and "To Date" are accurate.
+
+5.Apply exam leave on a Monday (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+6.Apply exam leave for two separate days in a week (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+7.Partners and Managers can select Off/Holiday client only on 2nd & 4th Saturdays and official holidays.
+
+8.Staff can select Off/Holiday client on all Saturdays and official holidays.
+
+9.A maximum of 4 fields can be added per section. User should also be able to remove fields.
+
+10.User cannot change the ‘To Date’; only the ‘From Date’ will be change.
+
+11.If user selects 2 days while filling timesheet, then only 2 days' data can be saved.
+
+12.Reject 2nd and 4th Saturday timesheets for Partner/Manager in which rejected timesheet should not be off/holidays client .
+
+13.When creating a child field, all fields inside the child field must be mandatory.
+
+14.Check date sequence to ensure days are ordered like 1, 2, 3, etc.
+
+15.User cannot select Off/Holiday client from child fields.
+
+16.All mandatory fields must be filled before submission.
+
+17.The Hour field should accept only digits (no text).
+
+18.User cannot fill timesheets for future dates.
+
+19.Total hours cannot exceed 12 in any section.
+
+20.When a child field is removed, the total hours should automatically decrease based on the removed entry.
+
+21.If a user selects 4 days but fills data for only 2 days, submission should be restricted (all selected days are mandatory).
+
+22.By default, timesheet for 7 days (1 week) should be displayed if user not saved 1 week timesheet on that case.
+
+23.If a user has applied for casual leave on a particular date, that date should not appear while filling the timesheet.
+
+24.If a user has applied for exam leave and it is approved, the leave date should not appear during timesheet filling.
+
+25.Auto-fill timesheet for 1st to 5th Saturdays for staff only.
+
+26.Auto-fill timesheet for 2nd and 4th Saturdays for managers and partners only.
+
+27.Total hours should be updated on assignment as the timesheet is saved.
+
+28.If a user joins between Monday and Saturday, system should allow accurate date handling.
+
+29.Auto-fill for official holiday dates should be available.
+
+30. If a user selects an Off/Holiday client in any main field, then:
+
+   All child fields under that main field should be automatically removed and 
+
+   The total hour should be recalculated accordingly
+
+
+Required attachment to be visible in notification module in OMS
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin Only
+Steps:-
+1.Navigate to the application
+2.Click on the 'Notification List' dropdown
+3.Click on 'Add Announcement'
+4.Fill the form and click the Send button
+
+
+For Admin, partner, manager and staff
+1.An Attachment column has been added. Now, the user should be able to view the attachment here.
+2.After clicking the Title hyperlink, the Attachment should also be visible.
+3.Download the Notification Report in Excel and ensure the data appears correctly in the Excel file.
+4.Ascending and descending icons should be shown only on the Date column.
+5.ensure the Attachment in the mail
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin and Partner IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Independence'.
+
+1.All Pending and Submitted Independence Confirmations should be listed.
+2.Admin and Partner users should be able to access the Independence tab inside the Report section.
+3.Admin and Partner users should be able to filter the listed data.
+4.Status and Submitted Date columns should have ascending and descending sort icons only.
+5.Download the report in Excel and ensure that all data is correct.
+6.Apply and verify validation on filter fields.
+7.verify staff code after promotion and rejoined.
+
+
+Arrange all the sub-tabs inside the Report tab in ascending order
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin, partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+
+1.Please ensure that all sub-tabs under the 'Report' tab are arranged in ascending alphabetical order.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin, partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Attendance'
+4.fill data and click send search button 
+
+1.If both the start date and end date are selected before the user's joining date, a warning message should be displayed to the user.
+2.If both the start date and end date are selected after the user's leaving date, a warning message should be displayed to the user.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin, partner, manager and staff IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Attendance'
+
+1.If an Attendance is created after promotion/rejoining → Show new staff code, new role, new joining date.
+2.If an Attendance is created (before promotion/rejoining) → Show old staff code, old role, old joining date.
+
+            mai   let fieldCount = find('.field_wrapper').length; iska leanth count karna hai ki total kitna field_wrapper div bna hai page per 
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Partner, Manager, and Staff IDs
+Steps:
+Navigate to the application
+Click on the 'Dashboard'
+Locate the following boxes:
+  Total Working Days
+  Total Travel Days
+   Approved Leaves
+
+1.counting on this three box should be correct
+2.Ensure the data is displayed correctly after clicking the checkbox.
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+For Partner IDs
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+
+# Check Both Open and Closed tabs 
+
+Steps:-
+1. Navigate to the application
+2. Click on 'Client/Assignment' dropdown.
+3. click on 'Assignment List'
+4. click on 'client name hyperlink'
+5. click on 'year hyperlink'
+6. click other partner tab 
+
+Client name should be displayed properly.
+
+Year column must be visible.
+
+Assignments where the user is an additional partner should be listed in the Other Partner tab.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Client List Report'
+4.click on 'company name hyperlink'
+4.click on 'Assignment tab'
+
+The Assignment ID hyperlink should be enabled for assignments where the user is a Lead Partner, Other Partner, or Additional Partner.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Independence'.
+
+
+Independence confirmation should be listed for that assignments
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'Rejected Submitted timesheet.
+
+
+Reject a timesheet for an assignment where the user is an Additional Partner.
+
+Submit the rejected timesheet and verify Total hours are calculated correctly:
+
+The assignment with 'Additional Partner' should be visible in the Assignment field
+
+
+
+For Admin IDs
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+3.click on 'Assignment Time Report'
+
+Team members associated with the assignment, including those linked via the Additional Partner, must be visible.
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Report' dropdown.
+3.	Click on 'Independence'.
+
+Independence confirmation should be listed for that assignments
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Click on the 'Team Application' section.
+
+Ascending and descending icons should be present on the Date and Status columns, and they should work properly.
+
+The filter functionality should work correctly.
+
+Validation on the filters field should be implemented.
+
+We have to test on promotion user
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+The design of the navigation button should be fixed.
+
+For Admin,Partner, manager and staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Open Assignment Box'.
+4.	Click on the 'Assignment ID' hyperlink.
+3.	Click on the 'Independence, confirmation, back and Add filea and folders button'.
+
+
+
+
+The filter reset functionality should clear all applied filters
+Wherever a filter is available, there should be a 'Reset Filter' button displayed after applying the filter
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Promotion/Rejoining' tab.
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+1. Tabs will be displayed based on the designation.
+2. Listings will be shown according to the designation.
+3. Admin/HR can view, upload, and delete KRAs teamwise.
+4. Admin/HR can bulk upload KRAs based on designation.
+5. When uploading an Excel file, Admin/HR should be able to preview the data before final submission.
+6. Proper validation should be applied to the KRA upload form.
+7. When the modal is closed and reopened, previously entered data should be cleared.
+8. Selecting the checkbox in the table header should select all checkboxes in the table.
+9. If all individual checkboxes are selected, the header checkbox should also reflect the selected state; if not all are selected, the header checkbox should remain unselected.
+10. agar KRAs nahi hai aur admin excell upload karega to use puchhega ki aap ise as a template save karna chahte ho 
+
+
+
+
+12.When the KRA of any user under a designation is modified, an email will be sent to that user and to all partners.
+13.When the KRA of a designation partner is edited, a notification will be sent to Tripti Ma'am and Maheshwari Sir.
+14.The implementation for editing the KRA template is still pending.
+15.When the KRA of any designation is edited, a notification will be sent to all users under that designation and to all partners.
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+For Admin ID
+
+Steps 1:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'timesheet, Submitted timesheet, Rejected Submitted timesheet'.
+
+
+Steps 2:
+1.Navigate to the application.
+2.Click on the 'Report' dropdown.
+3.Click on 'Team Timesheet Report'.
+
+
+For Partner ids 
+Steps 1:
+1.Navigate to the application.
+2.Click on the 'Dashboard'.
+3.Locate the following boxes:
+   3.1. Total Working Days
+   3.1. Total Travel Days
+
+Steps 2:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet, Submitted timesheet, Rejected Submitted timesheet, team timesheet, rejected team timesheet'.
+
+
+Steps 2:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet, Submitted timesheet, Rejected Submitted timesheet, team timesheet, rejected team timesheet'.
+
+
+Steps 3:
+1.Navigate to the application.
+2.Click on the 'Report' dropdown.
+3.Click on 'Team Timesheet Report and timesheet report tab'.
+
+
+For Manager and Staff IDs
+Steps 1:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet, Submitted timesheet, Rejected Submitted timesheet'.
+
+
+Steps 2:
+1.Navigate to the application.
+2.Click on the 'Report' dropdown.
+3.Click on 'Timesheet Report'.
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+Steps:-
+1.Navigate to the application
+2.Click on 'Client' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.click on Teammember List plus icon: 
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+regarding KT / Offer latter / KT process
+
+
+KT from Santosh
+offer latters 
+
+controller```````````````````````` 
+
+offlerlatercontroller 
+homecontroller
+candidateccontroller
+
+tables ```````````````````````````
+draftemail table 
+candidateonboard table 
+offerlater table
+offerlateer file table
+aapointmentmentlater table
+activitylog tables  
+compnydetaisl table se logo and signature 
+afetr click on 'convert' data goes to teammembers table 
+
+
+cron job`````````````````````````````` 
+offerlaterreminder crone contain these threee 
+for reminder
+for auto reminder goes to hr priyanka (7 days per )
+for link expire on mail (48 hour )  
+
+
+
+Others``````````````````````````````
+prd in KT for project group 
+code deployement procee completed 
+
+offer later KT end hare
+
+1111111111111111111111111111111111
+
+KT for Vinita maam 
+check in 
+timesheet 
+timesheet request 
+comp off 
+
+
+
+#check in
+1.check in, location not goes from web only goes from app
+
+
+#timesheet
+1.timesheet filling 
+2.if user not fill continuesly 10 days on that case, add timesheet request button will be show 
+3.documnet recieved on group for timesheet 
+
+#timesheet request 
+1.when user click on timesheet request button user can select date wise request 
+2.after that partner approve and after that HR approved 
+3.user can submitt timesheet request for current month and previous month 
+4.all date selected for timesheet request button, coming from teamrequest tables 
+
+tables 
+teamrequest tables 
+
+#comp off 
+1.compoff means you worked on sundays and publick holidays 
+2.when you worked on sunday and publick holiadys on that case you can avail comp off
+  partner ke id per us user ka timesheet jata hai and partner approved karta hai fir hr approved karta hai uske baad user ko applyleave page per compoff section me unka balance dikh jata hai jab vaha dikh jata hia to ab user compoff leave apply kar sakta hai 
+   applyleave---> select compooff leave ---> select compoff date ----> and select your leave date on to and from date and submit ut 
+
+3.after applyleave partner approved after that hr approved 
+4.compoff expire within 3 months and financial year ke according bhi refresh ho jayega
+5.compoff prd recieved on mail,
+
+cl/c
+sl/c
+co/c   co/a approved 
+
+tables 
+comp_off tables 
+
+
+#applyleave
+1.
+
+
+cron job``````````````````````````````
+sendautoapprovedleavebeforeapprovaljob
+sendautoapprovedleavesjob 
+
+Others`````````````````````````````` 
+26 ke noight ko auto approved all leave
+24 ko reminder fr partner 
+
+11111111111111111111111111111111
+documnt hai vinita ke paas for applyleave 
+
+
+sick leave get date of joining 
+
+`````````````````````````````````````
+
+
+end hare
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+excel contain teammember name and email id 
+1.jo Team members timesheet fill kiya ho but 1 bhi week ka timesheet submit nahi kiya ho and Team members active hona chahiye
+2.Team members who have never filled a timesheet and teammember active ho 
+3.agar koi teammember rejoin kiya ho same post per ya another post per aur rejoin karne ke baad ek bhi timesheet nahi bhara ho 
+4.agar koi teammember prometed kiya gya ho aur promotion ke baad ek bhi timesheet nahi bhara ho 
+
+
+The Excel file contains team member names and email IDs. The report should include the following:
+
+1.Team members who have filled timesheet but have not submitted any week’s timesheet yet, and are currently active.
+2.Team members who have never filled a timesheet and are currently active.
+3.Team members who have rejoined, either in the same position or a different one, and after rejoining have not filled a single timesheet.
+4.Team members who have been promoted and, after promotion, have not filled a single timesheet.
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+The quick brown fox jumps over the lazy dog.

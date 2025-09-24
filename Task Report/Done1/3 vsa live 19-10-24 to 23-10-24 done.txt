@@ -1,0 +1,2403 @@
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+uploaded on vsademo and ready to vsalive
+
+20-10-24
+21-10-24
+1.all uploded task,Functional testing done on vsalive 
+1.combination of offholidays and travel cliet and combination of offholidays and any cliet name (not urgent according client
+
+
+22-10-24
+1.combination of offholidays and travel cliet and combination of offholidays and any cliet name (not urgent according client
+
+done timesheet 
+
+23-10-24
+1.When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+  public function create(Request $request)
+  {
+
+    $permotioncheck = DB::table('teamrolehistory')
+      ->where('teammember_id', auth()->user()->teammember_id)->first();
+    $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')->get();
+    $teammember = Teammember::where('role_id', '!=', 11)->with('title', 'role')->get();
+    if (auth()->user()->role_id == 11) {
+      $client = Client::where('status', 1)->select('id', 'client_name', 'client_code')->orderBy('client_name', 'ASC')->get();
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+    } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+      $clientssbefore = DB::table('assignmentteammappings')
+        ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      $clientssafter = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+        })
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      // $clients = DB::table('clients')
+      //   ->whereIn('id', [29, 32, 33, 34])
+      //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      //   ->orderBy('client_name', 'ASC')
+      //   ->distinct()->get();
+      // $client = $clientss->merge($clients);
+
+      $selectedDate1 = new \DateTime();
+      $formattedDate = $selectedDate1->format('Y-m-d');
+      $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+      if ($holidaydatecheck) {
+        $clientIds = [29, 32, 33, 34];
+      } else {
+        // if not holidays then go hare
+        $dayOfWeek = $selectedDate1->format('w');
+        if ($selectedDate1->format('l') == 'Saturday') {
+          $dayOfMonth = $selectedDate1->format('j');
+          // Calculate which Saturday of the month it is
+          $saturdayNumber = ceil($dayOfMonth / 7);
+          // offholiday client name will be show on 2nd and 4rth sturday
+          if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+            $clientIds = [29, 32, 33, 34];
+          } else {
+            $clientIds = [29, 32, 34];
+          }
+        } else {
+          $clientIds = [29, 32, 34];
+        }
+      }
+
+      $clients = DB::table('clients')
+        ->whereIn('id', $clientIds)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()
+        ->get();
+
+      $client = $clientssafter->merge($clientssbefore)->merge($clients);
+    } elseif (auth()->user()->role_id == 13) {
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+      $clientss = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->where(function ($query) {
+          $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+            ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+        })
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      // $clients = DB::table('clients')
+      //   ->whereIn('id', [29, 32, 33, 34])
+      //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      //   ->orderBy('client_name', 'ASC')
+      //   ->distinct()->get();
+      // $client = $clientss->merge($clients);
+
+      $selectedDate1 = new \DateTime();
+      $formattedDate = $selectedDate1->format('Y-m-d');
+      $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+      if ($holidaydatecheck) {
+        $clientIds = [29, 32, 33, 34];
+      } else {
+        // if not holidays then go hare
+        $dayOfWeek = $selectedDate1->format('w');
+        if ($selectedDate1->format('l') == 'Saturday') {
+          $dayOfMonth = $selectedDate1->format('j');
+          // Calculate which Saturday of the month it is
+          $saturdayNumber = ceil($dayOfMonth / 7);
+          // offholiday client name will be show on 2nd and 4rth sturday
+          if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+            $clientIds = [29, 32, 33, 34];
+          } else {
+            $clientIds = [29, 32, 34];
+          }
+        } else {
+          $clientIds = [29, 32, 34];
+        }
+      }
+
+
+      $clients = DB::table('clients')
+        ->whereIn('id', $clientIds)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()
+        ->get();
+
+      $client = $clientss->merge($clients);
+    } else {
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+      $clientss = DB::table('assignmentteammappings')
+        ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+        ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+        // i have add this line becouse manager contain it but staff not contain it so basically after add this code no contain staff and manager 
+        ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+        ->where('assignmentbudgetings.status', 1)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()->get();
+
+      // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+      // $clients = DB::table('clients')
+      //   ->whereIn('id', [29, 32, 33, 34])
+      //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+      //   ->orderBy('client_name', 'ASC')
+      //   ->distinct()->get();
+
+      // $client = $clientss->merge($clients);
+
+      $selectedDate1 = new \DateTime();
+      $formattedDate = $selectedDate1->format('Y-m-d');
+      $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+      if ($holidaydatecheck) {
+        $clientIds = [29, 32, 33, 34];
+      } else {
+        // if not holidays then go hare
+        $dayOfWeek = $selectedDate1->format('w');
+        if ($selectedDate1->format('l') == 'Saturday') {
+          $dayOfMonth = $selectedDate1->format('j');
+          // Calculate which Saturday of the month it is
+          $saturdayNumber = ceil($dayOfMonth / 7);
+          // offholiday client name will be show on 2nd and 4rth sturday
+          if (auth()->user()->role_id == 14) {
+            if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+              $clientIds = [29, 32, 33, 34];
+            } else {
+              $clientIds = [29, 32, 34];
+            }
+          } else {
+            if ($saturdayNumber == 1.0 || $saturdayNumber == 2.0 || $saturdayNumber == 3.0 || $saturdayNumber == 4.0 || $saturdayNumber == 5.0) {
+              $clientIds = [29, 32, 33, 34];
+            }
+          }
+        } else {
+          $clientIds = [29, 32, 34];
+        }
+      }
+      $clients = DB::table('clients')
+        ->whereIn('id', $clientIds)
+        ->select('clients.client_name', 'clients.id', 'clients.client_code')
+        ->orderBy('client_name', 'ASC')
+        ->distinct()
+        ->get();
+
+      $client = $clientss->merge($clients);
+    }
+    $assignment = Assignment::select('id', 'assignment_name')->get();
+    if ($request->ajax()) {
+      // dd($request);
+      if (isset($request->timesheetdate)) {
+        if ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option>Select Client</option>";
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+
+
+          $clientssbefore = DB::table('assignmentteammappings')
+            ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          $clientssafter = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            // ->whereNotNull('clients.client_name')
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+          // $clients = DB::table('clients')
+          //   ->whereIn('id', [29, 32, 33, 34])
+          //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          //   ->orderBy('client_name', 'ASC')
+          //   ->distinct()->get();
+
+          // if you selected sturday date then offholydays client will be show otherwise not
+
+          $formattedDate = $selectedDate1->format('Y-m-d');
+          $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+          if ($holidaydatecheck) {
+            $clientIds = [29, 32, 33, 34];
+          } else {
+            // if not holidays then go hare
+            $dayOfWeek = $selectedDate1->format('w');
+            if ($selectedDate1->format('l') == 'Saturday') {
+              $dayOfMonth = $selectedDate1->format('j');
+              // Calculate which Saturday of the month it is
+              $saturdayNumber = ceil($dayOfMonth / 7);
+              // offholiday client name will be show on 2nd and 4rth sturday
+              if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+                $clientIds = [29, 32, 33, 34];
+              } else {
+                $clientIds = [29, 32, 34];
+              }
+            } else {
+              $clientIds = [29, 32, 34];
+            }
+          }
+          $clients = DB::table('clients')
+            ->whereIn('id', $clientIds)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()
+            ->get();
+
+          // $client = $clientss->merge($clients);
+          $client = $clientssafter->merge($clientssbefore)->merge($clients);
+          foreach ($client as $clients) {
+            echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option>Select Client</option>";
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+
+          $clientss = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            // ->whereNotNull('clients.client_name')
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+
+          // // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+          // $clients = DB::table('clients')
+          //   ->whereIn('id', [29, 32, 33, 34])
+          //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          //   ->orderBy('client_name', 'ASC')
+          //   ->distinct()->get();
+
+          // if you selected sturday date then offholydays client will be show otherwise not
+
+          $formattedDate = $selectedDate1->format('Y-m-d');
+          $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+          if ($holidaydatecheck) {
+            $clientIds = [29, 32, 33, 34];
+          } else {
+            // if not holidays then go hare
+            $dayOfWeek = $selectedDate1->format('w');
+            if ($selectedDate1->format('l') == 'Saturday') {
+              $dayOfMonth = $selectedDate1->format('j');
+              // Calculate which Saturday of the month it is
+              $saturdayNumber = ceil($dayOfMonth / 7);
+              // offholiday client name will be show on 2nd and 4rth sturday
+              if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+                $clientIds = [29, 32, 33, 34];
+              } else {
+                $clientIds = [29, 32, 34];
+              }
+            } else {
+              $clientIds = [29, 32, 34];
+            }
+          }
+          $clients = DB::table('clients')
+            ->whereIn('id', $clientIds)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()
+            ->get();
+
+          $client = $clientss->merge($clients);
+
+          // foreach ($client as $clients) {
+          //   if ($clients->client_name !== 'Official Travel') {
+          //     echo "<option value='" . $clients->id . "'>" . $clients->client_name . ' ( ' . $clients->client_code . ' )' . "</option>";
+          //   }
+          // }
+
+          foreach ($client as $clients) {
+            echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+          }
+        } else {
+
+          echo "<option>Select Client</option>";
+
+          $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $selectedDate1 = \DateTime::createFromFormat('d-m-Y', $request->timesheetdate);
+          $clientss = DB::table('assignmentteammappings')
+            ->leftjoin('assignmentmappings', 'assignmentmappings.id', 'assignmentteammappings.assignmentmapping_id')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->orwhere('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->whereNotIn('assignmentbudgetings.assignmentname', ['Unallocated', 'Official Travel', 'Off/Holiday', 'Seminar/Conference/Post Qualification Course'])
+            ->where(function ($query) use ($selectedDate) {
+              $query->whereNull('otpverifydate')
+                ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+            })
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()->get();
+          // ->get();
+
+          // done default $clients in ajax if need then $clientss add in ajax target $request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34
+          // $clients = DB::table('clients')
+          //   ->whereIn('id', [29, 32, 33, 34])
+          //   ->select('clients.client_name', 'clients.id', 'clients.client_code')
+          //   ->orderBy('client_name', 'ASC')
+          //   ->distinct()->get();
+
+          // $client = $clientss->merge($clients);
+
+
+
+          $formattedDate = $selectedDate1->format('Y-m-d');
+          $holidaydatecheck = DB::table('holidays')->where('startdate', $formattedDate)->select('holidayname')->first();
+
+          if ($holidaydatecheck) {
+            $clientIds = [29, 32, 33, 34];
+          } else {
+            // if not holidays then go hare
+            $dayOfWeek = $selectedDate1->format('w');
+            if ($selectedDate1->format('l') == 'Saturday') {
+              $dayOfMonth = $selectedDate1->format('j');
+              // Calculate which Saturday of the month it is
+              $saturdayNumber = ceil($dayOfMonth / 7);
+              // offholiday client name will be show on 2nd and 4rth sturday
+              if (auth()->user()->role_id == 14) {
+                if ($saturdayNumber == 2.0 || $saturdayNumber == 4.0) {
+                  $clientIds = [29, 32, 33, 34];
+                } else {
+                  $clientIds = [29, 32, 34];
+                }
+              } else {
+                if ($saturdayNumber == 1.0 || $saturdayNumber == 2.0 || $saturdayNumber == 3.0 || $saturdayNumber == 4.0 || $saturdayNumber == 5.0) {
+                  $clientIds = [29, 32, 33, 34];
+                }
+              }
+            } else {
+              $clientIds = [29, 32, 34];
+            }
+          }
+          $clients = DB::table('clients')
+            ->whereIn('id', $clientIds)
+            ->select('clients.client_name', 'clients.id', 'clients.client_code')
+            ->orderBy('client_name', 'ASC')
+            ->distinct()
+            ->get();
+
+          $client = $clientss->merge($clients);
+
+          foreach ($client as $clients) {
+            echo "<option value='" . $clients->id . "'>" . $clients->client_name . '( ' . $clients->client_code . ' )' . "</option>";
+          }
+        }
+      }
+
+      if (isset($request->cid)) {
+        if ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option>Select Assignment</option>";
+
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id', 'clients.client_code')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+
+            $id = $clients[0]->id;
+            $assignments = DB::table('assignmentbudgetings')->where('client_id', $id)
+              ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignments.assignmentname')
+              ->orderBy('assignment_name');
+          } else {
+            $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+            $assignments = DB::table('assignmentbudgetings')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+              ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->where(function ($query) {
+                $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                  ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+              })
+              ->where(function ($query) use ($selectedDate) {
+                $query->whereNull('otpverifydate')
+                  ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+              })
+              ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname');
+
+            $additionalAssignments = DB::table('assignmentbudgetings')
+              ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+              ->leftJoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+              ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+              ->where('assignmentbudgetings.client_id', $request->cid)
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              ->where(function ($query) {
+                $query->whereNull('assignmentteammappings.status')
+                  ->orWhere('assignmentteammappings.status', '=', 1);
+              })
+              ->where(function ($query) use ($selectedDate) {
+                $query->whereNull('otpverifydate')
+                  ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+              })
+              ->select('assignmentbudgetings.assignmentgenerate_id', 'assignments.assignment_name', 'assignmentbudgetings.assignmentname');
+
+            $assignments = $assignments->union($additionalAssignments)->orderBy('assignment_name')->get();
+            // dd($assignments);
+          }
+
+          foreach ($assignments as $sub) {
+            echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+          }
+        }
+
+        // 22222222
+        elseif (auth()->user()->role_id == 13) {
+
+          echo "<option>Select Assignment</option>";
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              // ->whereIn('id', [29, 32, 33, 34])
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id', 'clients.client_code')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+            // dd($clients);
+            $id = $clients[0]->id;
+            foreach (
+              DB::table('assignmentbudgetings')->where('client_id', $id)
+                ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          } else {
+            // dd('hi 3');
+
+            $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+            foreach (
+              DB::table('assignmentbudgetings')
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->leftJoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->where(function ($query) {
+                  $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                    ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          }
+        } else {
+
+          echo "<option>Select Assignment</option>";
+
+          if ($request->cid == 29 || $request->cid == 32 || $request->cid == 33 || $request->cid == 34) {
+            $clients = DB::table('clients')
+              // ->whereIn('id', [29, 32, 33, 34])
+              ->where('id', $request->cid)
+              ->select('clients.client_name', 'clients.id', 'clients.client_code')
+              ->orderBy('client_name', 'ASC')
+              ->distinct()->get();
+            // dd($clients);
+            $id = $clients[0]->id;
+            foreach (
+              DB::table('assignmentbudgetings')->where('client_id', $id)
+                ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          } else {
+            //  i have add this code after kartic bindal problem 
+            $selectedDate = \DateTime::createFromFormat('d-m-Y', $request->datepickers);
+
+            foreach (
+              DB::table('assignmentbudgetings')
+                ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', 'assignmentbudgetings.assignmentgenerate_id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->where('assignmentbudgetings.client_id', $request->cid)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                //  ->where('assignmentteammappings.status', '!=', 0)
+                // ->whereNull('assignmentteammappings.status')
+                ->where(function ($query) {
+                  $query->whereNull('assignmentteammappings.status')
+                    ->orWhere('assignmentteammappings.status', '=', 1);
+                })
+                ->where(function ($query) use ($selectedDate) {
+                  $query->whereNull('otpverifydate')
+                    //   ->orWhere('otpverifydate', '>=', $selectedDate);
+                    // // ->orWhere('otpverifydate', '>=', $selectedDate);
+                    ->orWhere('otpverifydate', '>=', $selectedDate->modify('-1 day'));
+                })
+                ->orderBy('assignment_name')->get() as $sub
+            ) {
+              echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name . '( ' . $sub->assignmentname . '/' . $sub->assignmentgenerate_id . ' )' . "</option>";
+            }
+          }
+        }
+      }
+
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('assignmentmappings')
+
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          // dd($request->assignment);
+          $partnerbefore = DB::table('assignmentmappings')
+            ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->select('teammembers.id', 'teammembers.team_member');
+
+          // $partnerafter = DB::table('assignmentmappings')
+          //   ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+          //   ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+          //   ->select('teammembers.id', 'teammembers.team_member');
+
+          $partnerafter = DB::table('assignmentmappings')
+            ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->select(DB::raw("
+          CASE
+              WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.id
+              WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.id
+          END as id,
+          CASE
+              WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.team_member
+              WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.team_member
+          END as team_member
+      "));
+
+          $partnerresult = $partnerafter->union($partnerbefore)->get();
+          foreach ($partnerresult as $subs) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('teammembers')
+              ->where('id', auth()->user()->teammember_id)
+              ->select('teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } else {
+
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('assignmentmappings')
+
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        }
+      }
+    } else {
+      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData'));
+    }
+  }
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+
+          // Function to handle change event for client select
+          function handleClientChange(clientId) {
+              $('#' + clientId).on('change', function() {
+                  var cid = $(this).val();
+                  var datepickers = $('#datepickers').val();
+                  var valueofIdattribute = $(this).attr('id');
+                  var clientNumber = parseInt(clientId.replace('client', ''));
+
+                  if (cid == 33) {
+
+                      if (valueofIdattribute == 'client' || valueofIdattribute == 'client1') {
+                          $('.row.row-sm.showdiv').addClass('d-none').find(
+                              'input,textarea').val('').prop(
+                              'readonly', false);
+                          $('#assignment1, #partner1').empty();
+                          //   $('#client1').val('');
+                          //   $('#client1').val('Select Client');
+                          // Select the "Select Client" option by text
+                          $('#client1 option').filter(function() {
+                              return $(this).text() ===
+                                  'Select Client'; // Find the option with the text 'Select Client'
+                          }).prop('selected', true); // Set it as selected
+
+                          $('.workItem1').prop('required', false);
+                          $('.location1').prop('required', false);
+                          $('.hour1').prop('required', false);
+                      }
+                      $.ajax({
+                          type: "get",
+                          url: "{{ url('holidaysselect') }}",
+                          data: {
+                              cid: cid,
+                              datepickers: datepickers
+                          },
+                          success: function(response) {
+                              var location = 'N/A';
+                              var time = 0;
+                              var holidayName = response.holidayName;
+                              var saturday = response.saturday;
+                              if (holidayName == 'null') {
+                                  var workitem = saturday;
+                              } else if (saturday == 'null') {
+                                  var workitem = holidayName;
+                              } else {
+                                  var workitem = holidayName;
+                              }
+
+                              if (!isNaN(clientNumber)) {
+                                  var assignmentSelect = $('.assignmentvalue' + clientNumber);
+                                  assignmentSelect.empty();
+                                  assignmentSelect.append($('<option>', {
+                                      value: response.assignmentgenerate_id,
+                                      text: response.assignment_name + ' (' +
+                                          response
+                                          .assignmentname + '/' + response
+                                          .assignmentgenerate_id + ')'
+                                  }));
+
+                                  var assignmentSelect = $('.partnervalue' + clientNumber);
+                                  assignmentSelect.empty();
+                                  assignmentSelect.append($('<option>', {
+                                      value: response.team_memberid,
+                                      text: response.team_member
+                                  }));
+
+                                  $('.workitemnvalue' + clientNumber).val(workitem).prop(
+                                      'readonly', true);
+                                  $('.locationvalue' + clientNumber).val(location).prop(
+                                      'readonly', true);
+                                  $('#totalhours').val(time);
+                                  $('#hour' + (clientNumber + 1)).prop('readonly', true);
+                              } else {
+
+                                  var assignmentSelect = $('.assignmentvalue');
+                                  assignmentSelect.empty();
+                                  assignmentSelect.append($('<option>', {
+                                      value: response.assignmentgenerate_id,
+                                      text: response.assignment_name + ' (' +
+                                          response
+                                          .assignmentname + '/' + response
+                                          .assignmentgenerate_id + ')'
+                                  }));
+
+                                  var assignmentSelect = $('.partnervalue');
+                                  assignmentSelect.empty();
+                                  assignmentSelect.append($('<option>', {
+                                      value: response.team_memberid,
+                                      text: response.team_member
+                                  }));
+
+
+                                  $('.workitemnvalue').val(workitem).prop('readonly', true);
+                                  $('.locationvalue').val(location).prop('readonly', true);
+                                  $('#totalhours').val(time);
+                                  $("#hour1").prop("readonly", true);
+                              }
+
+                          },
+                          error: function() {
+                              // Handle error if AJAX request fails
+                          }
+                      });
+                  } else {
+                      if (valueofIdattribute == 'client' || valueofIdattribute == 'client1') {
+                          //   $('.row.row-sm.d-none').removeClass('d-none');
+                          $('.row.row-sm.showdiv').removeClass('d-none').find(
+                              'input,textarea').val('').prop(
+                              'readonly', false);
+                          $('#assignment1, #partner1').empty();
+                          //   $('#client1').val('');
+
+                          $('.workItem1').prop('required', false);
+                          $('.location1').prop('required', false);
+                          $('.hour1').prop('required', false);
+                      }
+                      $.ajax({
+                          type: "get",
+                          url: "{{ url('timesheet/create') }}",
+                          data: {
+                              cid: cid,
+                              datepickers: datepickers
+                          },
+                          success: function(res) {
+                              // clear previous data 
+                              if (!isNaN(clientNumber)) {
+                                  $('.assignmentvalue' + clientNumber).empty();
+                                  $('.partnervalue' + clientNumber).empty();
+                                  $('.workitemnvalue' + clientNumber).val('').prop('readonly',
+                                      false);
+                                  $('.locationvalue' + clientNumber).val('').prop('readonly',
+                                      false);
+                                  $("#hour" + (clientNumber + 1)).prop("readonly", false);
+
+                              } else {
+                                  $('.assignmentvalue').empty();
+                                  $('.partnervalue').empty();
+                                  $('.workitemnvalue').val('').prop('readonly', false);
+                                  $('.locationvalue').val('').prop('readonly', false);
+                                  $("#hour1").prop("readonly", false);
+                              }
+
+                              $('#' + clientId.replace('client', 'assignment')).html(res);
+
+                          },
+                          error: function() {
+                              // Handle error if AJAX request fails
+                          },
+                      });
+                  }
+              });
+          }
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+    public function holidaysselect(Request $request)
+  {
+    if ($request->ajax()) {
+
+      $selectedDate = date('Y-m-d', strtotime($request->datepickers));
+      // Get the day of the week (0 for Sunday, 6 for Saturday)
+      $dayOfWeek = date('w', strtotime($selectedDate));
+      if ($dayOfWeek == 6) {
+        // Get the day of the month
+        $dayOfMonth = date('j', strtotime($selectedDate));
+        // Calculate which Saturday of the month it is
+        $saturdayNumber = ceil($dayOfMonth / 7);
+        if ($saturdayNumber == 1.0) {
+          $saturday = '1st Saturday';
+        } elseif ($saturdayNumber == 2.0) {
+          $saturday = '2nd Saturday';
+        } elseif ($saturdayNumber == 3.0) {
+          $saturday = '3rd Saturday';
+        } elseif ($saturdayNumber == 4.0) {
+          $saturday = '4th Saturday';
+        } elseif ($saturdayNumber == 5.0) {
+          $saturday = '5th Saturday';
+        }
+      }
+
+      $holidayname = DB::table('holidays')->where('startdate', $selectedDate)->select('holidayname')->first();
+      $selectassignment = DB::table('assignmentbudgetings')->where('client_id', $request->cid)
+        ->leftjoin('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+        ->orderBy('assignment_name')->first();
+      $selectpartner = DB::table('assignmentmappings')
+        ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+        ->where('assignmentmappings.assignmentgenerate_id', $selectassignment->assignmentgenerate_id)
+        ->select('teammembers.team_member', 'teammembers.id')
+        ->first();
+
+      return response()->json([
+        'holidayName' => $holidayname->holidayname ?? 'null',
+        'saturday' => $saturday ?? 'null',
+        'assignmentid' => $selectassignment->id,
+        'assignmentgenerate_id' => $selectassignment->assignmentgenerate_id,
+        'assignmentname' => $selectassignment->assignmentname,
+        'assignment_name' => $selectassignment->assignment_name,
+        'team_member' => $selectpartner->team_member,
+        'team_memberid' => $selectpartner->id,
+      ]);
+    }
+  }
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\form.blade.php
+
+
+<div class="field_wrapper">
+    <style>
+        .refreshoption {
+            /* height: 4rem; */
+            height: 56px;
+        }
+
+        .refresh {
+            /* height: 4rem; !important  */
+            height: 56px;
+        }
+    </style>
+
+    <div class="row row-sm">
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600">Client Name *</label>
+                <select required class="language form-control refresh" name="client_id[]" id="client"
+                    @if (Request::is('timesheet/*/edit')) > <option disabled style="display:block">Select
+            Client
+            </option>
+
+            @foreach ($client as $clientData)
+            <option value="{{ $clientData->id }}"
+                {{ $timesheet->client_id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
+                {{ $clientData->client_name }}</option>
+            @endforeach
+            
+
+            @else
+            <option></option>
+            <option value="">Select Client</option>
+            @foreach ($client as $clientData)
+            <option value="{{ $clientData->id }}">
+                {{ $clientData->client_name }} ({{ $clientData->client_code }})</option>
+            @endforeach @endif
+                    </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600">Assignment Name *</label>
+                <select class="form-control key refreshoption assignmentvalue" name="assignment_id[]" id="assignment">
+                    @if (!empty($timesheet->assignment_id))
+                        <option value="{{ $timesheet->assignment_id }}">
+                            {{ App / Models / Assignment::where('id', $timesheet->assignment_id)->first()->assignment_name ?? '' }}
+                        </option>
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600">Partner *</label>
+                <select required class="language form-control refreshoption partnervalue" id="partner"
+                    name="partner[]">
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600" style="width:100px;">Work Item *</label>
+                <textarea required type="text" name="workitem[]" id="key" value="{{ $timesheet->workitem ?? '' }}"
+                    class="form-control key refresh workitemnvalue" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600" style="width:100px;">Location *</label>
+                <input required type="text" name="location[]" id="key" value="{{ $timesheet->location ?? '' }}"
+                    class="form-control key refresh locationvalue ">
+            </div>
+        </div>
+
+        <div class="col-1">
+            <div class="form-group">
+                <label class="font-weight-600">Hour *</label>
+                {{-- <input required type="text" class="form-control refresh readkey" id="hour1" name="hour[]"
+                    min="0" oninput="calculateTotal(this)"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="0" step="1"> --}}
+
+                <input required type="text" class="form-control refresh readkey" id="hour1" name="hour[]"
+                    min="0" oninput="calculateTotal(this)"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="0" step="1"
+                    autocomplete="off">
+
+                <span style="font-size: 10px;margin-left: 10px;"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-sm showdiv" id="additionalFields">
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600">Client Name</label>
+                <select class="language form-control refresh" name="client_id[]" id="client1"
+                    @if (Request::is('timesheet/*/edit')) > <option disabled style="display:block">Select
+                    Client
+                    </option>
+
+                    @foreach ($client as $clientData)
+                    <option value="{{ $clientData->id }}"
+                        {{ $timesheet->client_id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
+                        {{ $clientData->client_name }}</option>
+                    @endforeach
+
+
+                    @else
+                    <option></option>
+                    <option value="">Select Client</option>
+                    @foreach ($client as $clientData)
+                    <option value="{{ $clientData->id }}">
+                        {{ $clientData->client_name }} ({{ $clientData->client_code }})</option>
+
+                    @endforeach @endif
+                    </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600">Assignment Name</label>
+                <select class="form-control key refreshoption assignmentvalue1" name="assignment_id[]" id="assignment1">
+                    @if (!empty($timesheet->assignment_id))
+                        <option value="{{ $timesheet->assignment_id }}">
+                            {{ App / Models / Assignment::where('id', $timesheet->assignment_id)->first()->assignment_name ?? '' }}
+                        </option>
+                    @endif
+                </select>
+                <!-- <select class="form-control key refreshoption" name="assignment_id[]" id="assignment">
+             <option disabled style="display:block">Select
+                Assignment
+                </option>
+                
+            </select> -->
+
+
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600">Partner</label>
+                <select class="language form-control refreshoption partnervalue1" id="partner1" name="partner[]">
+                </select>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600" style="width:100px;">Work Item</label>
+                <textarea type="text" name="workitem[]" id="key" value="{{ $timesheet->workitem ?? '' }}"
+                    class="form-control key workItem1 refresh workitemnvalue1" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="font-weight-600" style="width:100px;">Location</label>
+                <input type="text" name="location[]" id="key" value="{{ $timesheet->location ?? '' }}"
+                    class="form-control key location1 refresh locationvalue1">
+            </div>
+        </div>
+
+        <div class="col-1">
+            <div class="form-group">
+                <label class="font-weight-600">Hour</label>
+                {{-- <input type="text" class="form-control hour1 refresh" id="hour2" min="0"
+                    name="hour[]" oninput="calculateTotal(this)"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="0" step="1"> --}}
+                <input type="text" class="form-control hour1 refresh" id="hour2" min="0"
+                    name="hour[]" oninput="calculateTotal(this)" onpaste="validatePaste(event)"
+                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="0" step="1"
+                    autocomplete="off">
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_button" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="form-group">
+    <div class="col-10">
+    </div>
+    <div class="col-2" style="margin-left: 759px;">
+        <div class="form-group">
+            <label class="font-weight-600">Total Hour</label>
+            <input type="text" class="time form-control" id="totalhours" name="totalhour"
+                value="{{ $timesheet->hour ?? '' }}">
+        </div>
+    </div>
+
+</div>
+<div class="form-group">
+
+    <button type="submit" class="btn btn-success" style="float:right"> Save</button>
+    <a class="btn btn-secondary" href="{{ url('timesheet') }}">
+        Back</a>
+
+</div>
+
+{{-- <script type="text/javascript">
+   $(function () {
+    $('#timepicker').datetimepicker({
+        use24hours: true,
+        format: 'HH:mm'
+    });
+});
+ </script> --}}
+
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+public function store(Request $request)
+
+before this varable  ad below code     $Newteammeber = DB::table('timesheetusers')
+
+
+        // dd($request);
+      // if (count($request->assignment_id) >= 2 && in_array('OFF100004', $request->assignment_id)) {
+      //   $data = $request->all();
+      //   // Check if assignment_id contains "OFF100004" and modify $request directly
+      //   if (in_array('OFF100004', $request->assignment_id)) {
+      //     // Get the index of 'OFF100004'
+      //     $key = array_search('OFF100004', $request->assignment_id);
+
+      //     // Modify the original $request data directly
+      //     $request->merge([
+      //       'client_id' => array_replace($request->client_id, [$key => null]),
+      //       'assignment_id' => array_replace($request->assignment_id, [$key => null]),
+      //       'partner' => array_replace($request->partner, [$key => null]),
+      //       'workitem' => array_replace($request->workitem, [$key => null]),
+      //       'location' => array_replace($request->location, [$key => null]),
+      //       'hour' => array_replace($request->hour, [$key => null])
+      //     ]);
+      //   }
+      // }
+
+      if (count($request->assignment_id) >= 2 && in_array('OFF100004', $request->assignment_id)) {
+        $data = $request->all();
+
+        // Check if assignment_id contains "OFF100004" and modify $request directly
+        if (in_array('OFF100004', $request->assignment_id)) {
+          // Get the index of 'OFF100004'
+          $key = array_search('OFF100004', $request->assignment_id);
+
+          // Modify the original $request data directly
+          $request->merge([
+            'client_id' => array_replace($request->client_id, [$key => null]),
+            'assignment_id' => array_replace($request->assignment_id, [$key => null]),
+            'partner' => array_replace($request->partner, [$key => null]),
+            'workitem' => array_replace($request->workitem, [$key => null]),
+            'location' => array_replace($request->location, [$key => null]),
+            'hour' => array_replace($request->hour, [$key => null])
+          ]);
+        }
+
+        // Filter out null values for each field
+        $request->merge([
+          'client_id' => array_filter($request->client_id),
+          'assignment_id' => array_filter($request->assignment_id),
+          'partner' => array_filter($request->partner),
+          'workitem' => array_filter($request->workitem),
+          'location' => array_filter($request->location),
+          'hour' => array_filter($request->hour)
+        ]);
+      }
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+    //! after attendance vsademo code Mail::send('emails.applyleaveteam', $data, function ($msg) use ($data) {  comment it 
+  public function update(Request $request, $id)
+  {
+    try {
+      if ($request->status == 1) {
+        $team = DB::table('applyleaves')
+          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+          ->where('applyleaves.id', $id)
+          ->select('applyleaves.*', 'teammembers.emailid', 'teammembers.team_member', 'roles.rolename', 'leavetypes.name', 'leavetypes.holiday')->first();
+
+        if ($team->leavetype == '8' && $team->type == '1') {
+          $to = Carbon::createFromFormat('Y-m-d', $team->to ?? '');
+          $from = Carbon::createFromFormat('Y-m-d', $team->from);
+
+          $period = date('Y-m-d', strtotime($team->to));
+          $bl_leave_day = date('d', strtotime($period));
+          $bl_leave_month = date('F', strtotime($period));
+
+          if ($bl_leave_day >= 26 && $bl_leave_day <= 31) {
+            $bl_leave_month = date('F', strtotime($period . ' +1 month'));
+          }
+
+          $requestdays = $to->diffInDays($from) + 1;
+
+          $holidaycount = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)
+            ->count();
+
+          $totalrqstday = $requestdays - $holidaycount;
+
+          DB::table('leaveapprove')->insert([
+            'teammemberid'     =>     $team->createdby,
+            'leavetype'     =>     $team->leavetype,
+            'totaldays'     =>     $totalrqstday,
+            'year'     =>     '2023',
+            'created_at'          =>     date('y-m-d'),
+            'updated_at'              =>    date('y-m-d'),
+          ]);
+
+
+          $lstatus = "BL/A";
+
+          $attendances = DB::table('attendances')
+            ->where('employee_name', $team->createdby)
+            ->where('month', $bl_leave_month)->first();
+
+
+          if ($attendances->birthday_religious == null) {
+            $birthday = 0;
+          } else {
+            $birthday = $attendances->birthday_religious;
+          }
+
+          $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+            ->where('month', $bl_leave_month)->first();
+
+          $column = '';
+          switch ($bl_leave_day) {
+            case '26':
+              $column = 'twentysix';
+              break;
+            case '27':
+              $column = 'twentyseven';
+              break;
+            case '28':
+              $column = 'twentyeight';
+              break;
+            case '29':
+              $column = 'twentynine';
+              break;
+            case '30':
+              $column = 'thirty';
+              break;
+            case '31':
+              $column = 'thirtyone';
+              break;
+            case '01':
+              $column = 'one';
+              break;
+            case '02':
+              $column = 'two';
+              break;
+            case '03':
+              $column = 'three';
+              break;
+            case '04':
+              $column = 'four';
+              break;
+            case '05':
+              $column = 'five';
+              break;
+            case '06':
+              $column = 'six';
+              break;
+            case '07':
+              $column = 'seven';
+              break;
+            case '08':
+              $column = 'eight';
+              break;
+            case '09':
+              $column = 'nine';
+              break;
+            case '10':
+              $column = 'ten';
+              break;
+            case '11':
+              $column = 'eleven';
+              break;
+            case '12':
+              $column = 'twelve';
+              break;
+            case '13':
+              $column = 'thirteen';
+              break;
+            case '14':
+              $column = 'fourteen';
+              break;
+            case '15':
+              $column = 'fifteen';
+              break;
+            case '16':
+              $column = 'sixteen';
+              break;
+            case '17':
+              $column = 'seventeen';
+              break;
+            case '18':
+              $column = 'eighteen';
+              break;
+            case '19':
+              $column = 'ninghteen';
+              break;
+            case '20':
+              $column = 'twenty';
+              break;
+            case '21':
+              $column = 'twentyone';
+              break;
+            case '22':
+              $column = 'twentytwo';
+              break;
+            case '23':
+              $column = 'twentythree';
+              break;
+            case '24':
+              $column = 'twentyfour';
+              break;
+            case '25':
+              $column = 'twentyfive';
+              break;
+          }
+
+          if (!empty($column)) {
+
+            DB::table('attendances')
+              ->where('employee_name', $team->createdby)
+              ->where('month', $bl_leave_month)
+              ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+              ->update([
+                $column => $lstatus,
+              ]);
+          }
+        } elseif ($team->leavetype == '8' && $team->type == '0') {
+          $to = Carbon::createFromFormat('Y-m-d', $team->to ?? '');
+          $from = Carbon::createFromFormat('Y-m-d', $team->from);
+
+          $period = date('Y-m-d', strtotime($team->to));
+          $bl_leave_day = date('d', strtotime($period));
+          $bl_leave_month = date('F', strtotime($period));
+
+          $requestdays = $to->diffInDays($from) + 1;
+
+          $holidaycount = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)
+            ->count();
+
+          $totalrqstday = $requestdays - $holidaycount;
+
+          DB::table('leaveapprove')->insert([
+            'teammemberid'     =>     $team->createdby,
+            'leavetype'     =>     $team->leavetype,
+            'type'     =>     $team->type,
+            'totaldays'     =>     $totalrqstday,
+            'year'     =>     '2023',
+            'created_at'          =>     date('y-m-d'),
+            'updated_at'              =>    date('y-m-d'),
+          ]);
+
+
+
+          // dd($period);
+          $lstatus = "BL/A";
+
+
+
+
+          $attendances = DB::table('attendances')
+            ->where('employee_name', $team->createdby)
+            ->where('month', $bl_leave_month)->first();
+
+          // dd($attendances);
+          if ($attendances->birthday_religious == null) {
+            $birthday = 0;
+          } else {
+            $birthday = $attendances->birthday_religious;
+          }
+
+
+
+
+          $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+            ->where('month', $bl_leave_month)->first();
+
+          $column = '';
+          switch ($bl_leave_day) {
+            case '26':
+              $column = 'twentysix';
+              break;
+            case '27':
+              $column = 'twentyseven';
+              break;
+            case '28':
+              $column = 'twentyeight';
+              break;
+            case '29':
+              $column = 'twentynine';
+              break;
+            case '30':
+              $column = 'thirty';
+              break;
+            case '31':
+              $column = 'thirtyone';
+              break;
+            case '01':
+              $column = 'one';
+              break;
+            case '02':
+              $column = 'two';
+              break;
+            case '03':
+              $column = 'three';
+              break;
+            case '04':
+              $column = 'four';
+              break;
+            case '05':
+              $column = 'five';
+              break;
+            case '06':
+              $column = 'six';
+              break;
+            case '07':
+              $column = 'seven';
+              break;
+            case '08':
+              $column = 'eight';
+              break;
+            case '09':
+              $column = 'nine';
+              break;
+            case '10':
+              $column = 'ten';
+              break;
+            case '11':
+              $column = 'eleven';
+              break;
+            case '12':
+              $column = 'twelve';
+              break;
+            case '13':
+              $column = 'thirteen';
+              break;
+            case '14':
+              $column = 'fourteen';
+              break;
+            case '15':
+              $column = 'fifteen';
+              break;
+            case '16':
+              $column = 'sixteen';
+              break;
+            case '17':
+              $column = 'seventeen';
+              break;
+            case '18':
+              $column = 'eighteen';
+              break;
+            case '19':
+              $column = 'ninghteen';
+              break;
+            case '20':
+              $column = 'twenty';
+              break;
+            case '21':
+              $column = 'twentyone';
+              break;
+            case '22':
+              $column = 'twentytwo';
+              break;
+            case '23':
+              $column = 'twentythree';
+              break;
+            case '24':
+              $column = 'twentyfour';
+              break;
+            case '25':
+              $column = 'twentyfive';
+              break;
+          }
+
+          if (!empty($column)) {
+
+            DB::table('attendances')
+              ->where('employee_name', $team->createdby)
+              ->where('month', $bl_leave_month)
+              ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+              ->update([
+                $column => $lstatus,
+              ]);
+          }
+        }
+        if ($team->name == 'Casual Leave') {
+          $to = Carbon::createFromFormat('Y-m-d', $team->to ?? '');
+          $from = Carbon::createFromFormat('Y-m-d', $team->from);
+          $requestdays = $to->diffInDays($from) + 1;
+
+          $holidaycount = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)
+            ->count();
+
+          $totalrqstday = $requestdays - $holidaycount;
+          DB::table('leaveapprove')->insert([
+            'teammemberid'     =>     $team->createdby,
+            'leavetype'     =>     $team->leavetype,
+            'totaldays'     =>     $totalrqstday,
+            'year'     =>     '2023',
+            'created_at'          =>     date('y-m-d'),
+            'updated_at'              =>    date('y-m-d'),
+          ]);
+
+          $period = CarbonPeriod::create($team->from, $team->to);
+          $datess = [];
+          foreach ($period as $date) {
+            $datess[] = $date->format('Y-m-d');
+          }
+
+          $getholidays = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)->select('startdate')->get();
+
+          if (count($getholidays) != 0) {
+            foreach ($getholidays as $date) {
+              $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+            }
+          } else {
+            $hdatess[] = 0;
+          }
+
+          $cl_leave = array_diff($datess, $hdatess);
+          $lstatus = "CL/A";
+          foreach ($cl_leave as $cl_leave) {
+            $cl_leave_day = date('d', strtotime($cl_leave));
+            $cl_leave_month = date('F', strtotime($cl_leave));
+
+            if ($cl_leave_day >= 26 && $cl_leave_day <= 31) {
+              $cl_leave_month = date('F', strtotime($cl_leave . ' +1 month'));
+            }
+
+            $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+              ->where('month', $cl_leave_month)->first();
+
+            $column = '';
+            switch ($cl_leave_day) {
+              case '26':
+                $column = 'twentysix';
+                break;
+              case '27':
+                $column = 'twentyseven';
+                break;
+              case '28':
+                $column = 'twentyeight';
+                break;
+              case '29':
+                $column = 'twentynine';
+                break;
+              case '30':
+                $column = 'thirty';
+                break;
+              case '31':
+                $column = 'thirtyone';
+                break;
+              case '01':
+                $column = 'one';
+                break;
+              case '02':
+                $column = 'two';
+                break;
+              case '03':
+                $column = 'three';
+                break;
+              case '04':
+                $column = 'four';
+                break;
+              case '05':
+                $column = 'five';
+                break;
+              case '06':
+                $column = 'six';
+                break;
+              case '07':
+                $column = 'seven';
+                break;
+              case '08':
+                $column = 'eight';
+                break;
+              case '09':
+                $column = 'nine';
+                break;
+              case '10':
+                $column = 'ten';
+                break;
+              case '11':
+                $column = 'eleven';
+                break;
+              case '12':
+                $column = 'twelve';
+                break;
+              case '13':
+                $column = 'thirteen';
+                break;
+              case '14':
+                $column = 'fourteen';
+                break;
+              case '15':
+                $column = 'fifteen';
+                break;
+              case '16':
+                $column = 'sixteen';
+                break;
+              case '17':
+                $column = 'seventeen';
+                break;
+              case '18':
+                $column = 'eighteen';
+                break;
+              case '19':
+                $column = 'ninghteen';
+                break;
+              case '20':
+                $column = 'twenty';
+                break;
+              case '21':
+                $column = 'twentyone';
+                break;
+              case '22':
+                $column = 'twentytwo';
+                break;
+              case '23':
+                $column = 'twentythree';
+                break;
+              case '24':
+                $column = 'twentyfour';
+                break;
+              case '25':
+                $column = 'twentyfive';
+                break;
+            }
+
+            if (!empty($column)) {
+              // DB::table('attendances')
+              //   ->where('employee_name', $team->createdby)
+              //   ->where('month', $cl_leave_month)
+              //   ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+              //   ->whereRaw("{$column} != 'LWP'")
+              //   ->update([
+              //     $column => $lstatus,
+              //   ]);
+            }
+          }
+        }
+        // Casual Leave end
+        if ($team->name == 'Exam Leave') {
+          $to = Carbon::createFromFormat('Y-m-d', $team->to ?? '');
+          $from = Carbon::createFromFormat('Y-m-d', $team->from);
+          $requestdays = $to->diffInDays($from) + 1;
+
+          $holidaycount = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)
+            ->count();
+
+          $totalrqstday = $requestdays - $holidaycount;
+          DB::table('leaveapprove')->insert([
+            'teammemberid'     =>     $team->createdby,
+            'leavetype'     =>     $team->leavetype,
+            'totaldays'     =>     $totalrqstday,
+            'year'     =>     '2023',
+            'created_at'          =>     date('Y-m-d H:i:s'),
+            'updated_at'              =>    date('Y-m-d H:i:s'),
+          ]);
+          $period = CarbonPeriod::create($team->from, $team->to);
+
+          $datess = [];
+          foreach ($period as $date) {
+            $datess[] = $date->format('Y-m-d');
+            //dd($id);
+            $ids = DB::table('timesheets')->insertGetId(
+              [
+                'created_by' => $team->createdby,
+                'month'     =>     date('F', strtotime($date->format('Y-m-d'))),
+                'date'     =>    $date->format('Y-m-d'),
+                'created_at'          =>     date('Y-m-d H:i:s'),
+              ]
+            );
+
+            $a = DB::table('timesheetusers')->insert([
+              'date'     =>    $date->format('Y-m-d'),
+              'client_id'     =>    134,
+              'workitem'     =>     $team->reasonleave,
+              'location'     =>     '',
+              //   'billable_status'     =>     $request->billable_status[$i],
+              'timesheetid'     =>     $ids,
+              'date'     =>    $date->format('Y-m-d'),
+              'hour'     =>     0,
+              'totalhour' =>      0,
+              'assignment_id'     =>     214,
+              'partner'     =>     887,
+              // adding approver in patner section 
+              // 'partner'     =>  $team->approver,
+              'createdby' => $team->createdby,
+              'created_at'          =>     date('Y-m-d H:i:s'),
+              'updated_at'              =>    date('Y-m-d H:i:s'),
+            ]);
+          }
+
+          $getholidays = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)->select('startdate')->get();
+
+          if (count($getholidays) != 0) {
+            foreach ($getholidays as $date) {
+              $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+            }
+          } else {
+            $hdatess[] = 0;
+          }
+
+
+          // $el_leave = array_diff($datess, $hdatess);
+          $el_leave = $datess;
+          $exam_leave_total = count(array_diff($datess, $hdatess));
+          $lstatus = "EL";
+          foreach ($el_leave as $cl_leave) {
+            $cl_leave_day = date('d', strtotime($cl_leave));
+            $cl_leave_month = date('F', strtotime($cl_leave));
+            $cl_leave_year = date('Y', strtotime($cl_leave));
+
+            // if ($cl_leave_day >= 26 && $cl_leave_day <= 31) {
+            //   $cl_leave_month = date('F', strtotime($cl_leave . ' +1 month'));
+            // }
+
+            $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+              ->where('month', $cl_leave_month)->first();
+
+            if ($attendances == null) {
+              DB::table('attendances')->insert([
+                'employee_name' => $team->createdby,
+                'month' => $cl_leave_month,
+                'year' => $cl_leave_year,
+                // 'dateofjoining' => $teammember->joining_date,
+                'fulldate' => $cl_leave,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+              ]);
+            }
+
+            $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+              ->where('month', $cl_leave_month)->first();
+            $examleavecount = $attendances->exam_leave;
+            $examleavecountupdate = $attendances->exam_leave += 1;
+
+            $column = '';
+            switch ($cl_leave_day) {
+              case '26':
+                $column = 'twentysix';
+                break;
+              case '27':
+                $column = 'twentyseven';
+                break;
+              case '28':
+                $column = 'twentyeight';
+                break;
+              case '29':
+                $column = 'twentynine';
+                break;
+              case '30':
+                $column = 'thirty';
+                break;
+              case '31':
+                $column = 'thirtyone';
+                break;
+              case '01':
+                $column = 'one';
+                break;
+              case '02':
+                $column = 'two';
+                break;
+              case '03':
+                $column = 'three';
+                break;
+              case '04':
+                $column = 'four';
+                break;
+              case '05':
+                $column = 'five';
+                break;
+              case '06':
+                $column = 'six';
+                break;
+              case '07':
+                $column = 'seven';
+                break;
+              case '08':
+                $column = 'eight';
+                break;
+              case '09':
+                $column = 'nine';
+                break;
+              case '10':
+                $column = 'ten';
+                break;
+              case '11':
+                $column = 'eleven';
+                break;
+              case '12':
+                $column = 'twelve';
+                break;
+              case '13':
+                $column = 'thirteen';
+                break;
+              case '14':
+                $column = 'fourteen';
+                break;
+              case '15':
+                $column = 'fifteen';
+                break;
+              case '16':
+                $column = 'sixteen';
+                break;
+              case '17':
+                $column = 'seventeen';
+                break;
+              case '18':
+                $column = 'eighteen';
+                break;
+              case '19':
+                $column = 'ninghteen';
+                break;
+              case '20':
+                $column = 'twenty';
+                break;
+              case '21':
+                $column = 'twentyone';
+                break;
+              case '22':
+                $column = 'twentytwo';
+                break;
+              case '23':
+                $column = 'twentythree';
+                break;
+              case '24':
+                $column = 'twentyfour';
+                break;
+              case '25':
+                $column = 'twentyfive';
+                break;
+            }
+
+            // Update holidays (H) wording 
+            if (!empty($column)) {
+              $getholidaysss = DB::table('holidays')
+                ->where('startdate', '=', $cl_leave)
+                ->orWhere('enddate', '=', $cl_leave)
+                ->first();
+
+              if ($getholidaysss != null) {
+                $updateddata = 'H';
+                $holidaysColumn = 'holidays';
+                // $examleavecountupdate = $attendances->exam_leave += 1;
+                $totalcountupdate = $attendances->$holidaysColumn + 1;
+                DB::table('attendances')
+                  ->where('employee_name', $team->createdby)
+                  ->where('month', $cl_leave_month)
+                  ->update([
+                    $column => $updateddata,
+                    'holidays'  => $totalcountupdate,
+                  ]);
+              } else {
+                // Update exam leave (El) wording 
+                DB::table('attendances')
+                  ->where('employee_name', $team->createdby)
+                  ->where('month', $cl_leave_month)
+                  // ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+                  // ->whereRaw("{$column} != 'LWP'")
+                  // ->get();
+                  ->update([
+                    $column => $lstatus,
+                    'exam_leave' => $examleavecountupdate,
+                  ]);
+              }
+            }
+          }
+          // dd('hi');
+        }
+        // exam Leave end
+        if ($team->name == 'Sick Leave') {
+          $to = Carbon::createFromFormat('Y-m-d', $team->to ?? '');
+          $from = Carbon::createFromFormat('Y-m-d', $team->from);
+
+          $requestdays = $to->diffInDays($from) + 1;
+          // dd($requestdays);
+          $holidaycount = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)
+            ->count();
+          // dd($holidaycount);
+          $totalrqstday = $requestdays - $holidaycount;
+          // dd($totalrqstday); die;
+
+          DB::table('leaveapprove')->insert([
+            'teammemberid'     =>     $team->createdby,
+            'leavetype'     =>     $team->leavetype,
+            'totaldays'     =>     $totalrqstday,
+            'year'     =>     '2023',
+            'created_at'          =>     date('y-m-d'),
+            'updated_at'              =>    date('y-m-d'),
+          ]);
+
+
+
+
+          $period = CarbonPeriod::create($team->from, $team->to);
+          $datess = [];
+          foreach ($period as $date) {
+            $datess[] = $date->format('Y-m-d');
+          }
+
+
+          $getholidays = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)->select('startdate')->get();
+
+          if (count($getholidays) != 0) {
+            foreach ($getholidays as $date) {
+              $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+            }
+          } else {
+            $hdatess[] = 0;
+          }
+          $sl_leave = array_diff($datess, $hdatess);
+
+          //  dd( $cl_leave );
+          $sl_leave_total = count(array_diff($datess, $hdatess));
+
+          $lstatus = "SL/A";
+
+
+
+
+          $noofdaysaspertimesheet = DB::table('timesheets')
+            ->where('created_by', auth()->user()->teammember_id)
+            ->where('date', '>=', '2023-04-26')
+            ->where('date', '<=', '2023-05-25')
+            ->select('timesheets.*')
+            ->first();
+          // dd($noofdaysaspertimesheet );
+
+          foreach ($sl_leave as $cl_leave) {
+
+
+
+
+            $cl_leave_day = date('d', strtotime($cl_leave));
+            $cl_leave_month = date('F', strtotime($cl_leave));
+
+            if ($cl_leave_day >= 26 && $cl_leave_day <= 31) {
+              $cl_leave_month = date('F', strtotime($cl_leave . ' +1 month'));
+            }
+
+
+            $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+              ->where('month', $cl_leave_month)->first();
+
+            $column = '';
+            switch ($cl_leave_day) {
+              case '26':
+                $column = 'twentysix';
+                break;
+              case '27':
+                $column = 'twentyseven';
+                break;
+              case '28':
+                $column = 'twentyeight';
+                break;
+              case '29':
+                $column = 'twentynine';
+                break;
+              case '30':
+                $column = 'thirty';
+                break;
+              case '31':
+                $column = 'thirtyone';
+                break;
+              case '01':
+                $column = 'one';
+                break;
+              case '02':
+                $column = 'two';
+                break;
+              case '03':
+                $column = 'three';
+                break;
+              case '04':
+                $column = 'four';
+                break;
+              case '05':
+                $column = 'five';
+                break;
+              case '06':
+                $column = 'six';
+                break;
+              case '07':
+                $column = 'seven';
+                break;
+              case '08':
+                $column = 'eight';
+                break;
+              case '09':
+                $column = 'nine';
+                break;
+              case '10':
+                $column = 'ten';
+                break;
+              case '11':
+                $column = 'eleven';
+                break;
+              case '12':
+                $column = 'twelve';
+                break;
+              case '13':
+                $column = 'thirteen';
+                break;
+              case '14':
+                $column = 'fourteen';
+                break;
+              case '15':
+                $column = 'fifteen';
+                break;
+              case '16':
+                $column = 'sixteen';
+                break;
+              case '17':
+                $column = 'seventeen';
+                break;
+              case '18':
+                $column = 'eighteen';
+                break;
+              case '19':
+                $column = 'ninghteen';
+                break;
+              case '20':
+                $column = 'twenty';
+                break;
+              case '21':
+                $column = 'twentyone';
+                break;
+              case '22':
+                $column = 'twentytwo';
+                break;
+              case '23':
+                $column = 'twentythree';
+                break;
+              case '24':
+                $column = 'twentyfour';
+                break;
+              case '25':
+                $column = 'twentyfive';
+                break;
+            }
+
+            if (!empty($column)) {
+
+              DB::table('attendances')
+                ->where('employee_name', $team->createdby)
+                ->where('month', $cl_leave_month)
+                ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+                ->whereRaw("{$column} != 'LWP'")
+                ->update([
+                  $column => $lstatus,
+                ]);
+            }
+          }
+        }
+
+        // // dd($id);
+        // when vsademo occure error
+
+        // $applyleaveteam = DB::table('leaveteams')
+        //   ->leftjoin('teammembers', 'teammembers.id', 'leaveteams.teammember_id')
+        //   ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+        //   ->where('leaveteams.leave_id', $id)
+        //   ->select('teammembers.emailid')->get();
+        // //   dd($applyleaveteam);
+        // if ($applyleaveteam != null) {
+        //   foreach ($applyleaveteam as $applyleaveteammail) {
+        //     $data = array(
+        //       'emailid' =>  $applyleaveteammail->emailid,
+        //       'team_member' =>  $team->team_member,
+        //       'from' =>  $team->from,
+        //       'to' =>  $team->to,
+        //     );
+
+        //     Mail::send('emails.applyleaveteam', $data, function ($msg) use ($data) {
+        //       $msg->to($data['emailid']);
+        //       $msg->subject('VSA Leave Approved');
+        //     });
+        //   }
+        // }
+        // dd($id);
+
+        $data = array(
+          'emailid' =>  $team->emailid,
+          'id' =>  $id,
+          'from' =>  $team->from,
+          'to' =>  $team->to,
+        );
+
+        Mail::send('emails.applyleavestatus', $data, function ($msg) use ($data) {
+          $msg->to($data['emailid']);
+          // $msg->cc('priyankasharma@kgsomani.com');
+          $msg->subject('VSA Leave Approved');
+        });
+      }
+
+      if ($request->status == 2) {
+        $team = DB::table('applyleaves')
+          ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+          ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+          ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+          ->where('applyleaves.id', $id)
+          ->select('applyleaves.*', 'teammembers.emailid', 'teammembers.team_member', 'roles.rolename', 'leavetypes.name')->first();
+
+        $data = array(
+          'emailid' =>  $team->emailid,
+          'id' =>  $id,
+          'from' =>  $team->from,
+          'to' =>  $team->to,
+        );
+
+        Mail::send('emails.applyleavereject', $data, function ($msg) use ($data) {
+          $msg->to($data['emailid']);
+          // $msg->cc('priyankasharma@kgsomani.com');
+          $msg->subject('VSA Leave Reject');
+        });
+
+        $period = CarbonPeriod::create($team->from, $team->to);
+        $datess = [];
+        foreach ($period as $date) {
+          $datess[] = $date->format('Y-m-d');
+          DB::table('timesheets')->where('date', $date->format('Y-m-d'))
+            ->where('created_by', $team->createdby)->delete();
+          DB::table('timesheetusers')->where('createdby', $team->createdby)
+            ->where('date', $date->format('Y-m-d'))->delete();
+        }
+
+        $getholidays = DB::table('holidays')->where('startdate', '>=', $team->from)
+          ->where('enddate', '<=', $team->to)->select('startdate')->get();
+
+        if (count($getholidays) != 0) {
+          foreach ($getholidays as $date) {
+            $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+          }
+        } else {
+          $hdatess[] = 0;
+        }
+
+        $leave = array_diff($datess, $hdatess);
+        $leave_total = count(array_diff($datess, $hdatess));
+        $lstatus = NULL;
+
+        foreach ($leave as $cl_leave) {
+          $cl_leave_day = date('d', strtotime($cl_leave));
+          $cl_leave_month = date('F', strtotime($cl_leave));
+
+          if ($cl_leave_day >= 26 && $cl_leave_day <= 31) {
+            $cl_leave_month = date('F', strtotime($cl_leave . ' +1 month'));
+          }
+
+          $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+            ->where('month', $cl_leave_month)->first();
+
+          $column = '';
+          switch ($cl_leave_day) {
+            case '26':
+              $column = 'twentysix';
+              break;
+            case '27':
+              $column = 'twentyseven';
+              break;
+            case '28':
+              $column = 'twentyeight';
+              break;
+            case '29':
+              $column = 'twentynine';
+              break;
+            case '30':
+              $column = 'thirty';
+              break;
+            case '31':
+              $column = 'thirtyone';
+              break;
+            case '01':
+              $column = 'one';
+              break;
+            case '02':
+              $column = 'two';
+              break;
+            case '03':
+              $column = 'three';
+              break;
+            case '04':
+              $column = 'four';
+              break;
+            case '05':
+              $column = 'five';
+              break;
+            case '06':
+              $column = 'six';
+              break;
+            case '07':
+              $column = 'seven';
+              break;
+            case '08':
+              $column = 'eight';
+              break;
+            case '09':
+              $column = 'nine';
+              break;
+            case '10':
+              $column = 'ten';
+              break;
+            case '11':
+              $column = 'eleven';
+              break;
+            case '12':
+              $column = 'twelve';
+              break;
+            case '13':
+              $column = 'thirteen';
+              break;
+            case '14':
+              $column = 'fourteen';
+              break;
+            case '15':
+              $column = 'fifteen';
+              break;
+            case '16':
+              $column = 'sixteen';
+              break;
+            case '17':
+              $column = 'seventeen';
+              break;
+            case '18':
+              $column = 'eighteen';
+              break;
+            case '19':
+              $column = 'ninghteen';
+              break;
+            case '20':
+              $column = 'twenty';
+              break;
+            case '21':
+              $column = 'twentyone';
+              break;
+            case '22':
+              $column = 'twentytwo';
+              break;
+            case '23':
+              $column = 'twentythree';
+              break;
+            case '24':
+              $column = 'twentyfour';
+              break;
+            case '25':
+              $column = 'twentyfive';
+              break;
+          }
+
+          // if (!empty($column)) {
+          //   $columnValue = DB::table('attendances')
+          //     ->where('employee_name', $team->createdby)
+          //     ->where('month', $cl_leave_month)
+          //     ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+          //     ->value($column);
+
+          //   if ($columnValue == "SL/C" || $columnValue == "SL/A") {
+          //     DB::table('attendances')
+          //       ->where('employee_name', $team->createdby)
+          //       ->where('month', $cl_leave_month)
+          //       ->decrement('sick_leave');
+          //   }
+
+          //   if ($columnValue == "EL/C" || $columnValue == "EL/A") {
+          //     DB::table('attendances')
+          //       ->where('employee_name', $team->createdby)
+          //       ->where('month', $cl_leave_month)
+          //       ->decrement('exam_leave');
+          //   }
+          //   if ($columnValue == "BL/C" || $columnValue == "BL/A") {
+          //     DB::table('attendances')
+          //       ->where('employee_name', $team->createdby)
+          //       ->where('month', $cl_leave_month)
+          //       ->decrement('birthday_religious');
+          //   }
+          //   if ($columnValue == "LWP") {
+          //     DB::table('attendances')
+          //       ->where('employee_name', $team->createdby)
+          //       ->where('month', $cl_leave_month)
+          //       ->decrement('LWP');
+          //   }
+          //   DB::table('attendances')
+          //     ->where('employee_name', $team->createdby)
+          //     ->where('month', $cl_leave_month)
+          //     ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+          //     ->update([
+          //       $column => $lstatus
+          //     ]);
+          // }
+
+        }
+      }
+
+      $data = $request->except(['_token', 'teammember_id']);
+      $data['updatedby'] = auth()->user()->teammember_id;
+      Applyleave::find($id)->update($data);
+      $output = array('msg' => 'Updated Successfully');
+      return redirect('applyleave')->with('success', $output);
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      $output = array('msg' => $e->getMessage());
+      return back()->withErrors($output)->withInput();
+    }
+  }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

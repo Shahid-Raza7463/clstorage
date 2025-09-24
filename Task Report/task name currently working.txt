@@ -1,0 +1,2648 @@
+attendance module requarment 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222
+attendance
+
+1.Client want to attendance report on admin dashboard 
+5.Admin can export excel report all users
+6.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w)
+7.After implementation attendance client want to display total working days, total casual leave, total exam leave ,total travel and total days of month,
+8.on admin panale , client want to add filter functionality on attendance using date like from start date to end date.
+
+2.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+3.on staff,manager and partner dashboard,all working days should be display after click on total working days
+4.staff,manager and partner can export excel
+
+
+
+
+
+
+
+Affected page 
+1.leave   ............
+2.revert leave ............
+3.rejected team timesheet   ...............
+4.rejected partner timesheet   ...............
+5.submitted timesheet page, where admin and partner can reject particular timesheet  ..............
+7.rejected timesheet during leave apply that is automatic approved  ......................
+6.When Admin fill leave date in profile section in that time will be afect attandance ................
+7. submit timesheet then calculation left   ......................... 
+8.if user fill 2 timesheet in one days 
+
+approved by ajit 
+1.casula leave apply and approved then attendance table not affected only affexted on submit casula leave
+
+
+
+Exam leave = EL     ................................
+casual leave = CL    ...........................
+timesheet filled  = P  ......................
+
+holidays  = H   .............................
+Travel = T full days .............
+Off/holidays (sturday and sunday) =   W (sunday) ............   oh for sturdays   .............   
+
+
+
+unlocated 
+travel
+seminar conference 
+off/ holidays 
+
+
+testing purpos
+22222222222222222222222222222222222222222222222222222222222222222222222222222222
+attendance
+
+1.Client want to attendance report on admin dashboard   ````````````
+
+5.Admin can export excel report all users  ```````````````````
+
+6.On admin dashboard, client want to display attendance according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w) ``````
+
+7.After implementation attendance client want to display total working days, total casual leave, total exam leave ,total travel and total days of month, ```````````````````
+
+8.on admin panale , client want to add filter functionality on attendance using date like from start date to end date. ``````````````````````
+
+2.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),```````````````````````
+
+
+3.on staff,manager and partner dashboard,all working days should be display after click on total working days  ````````````````````````````````
+4.staff,manager and partner can export excel ``````````````````````
+
+
+
+
+
+
+
+Affected page 
+1.leave   ............  ````````````
+2.revert leave ............  ````````````
+
+
+3.rejected team timesheet   ............... ```````````````
+4.submitted team timesheet  ``````````````````
+4.rejected partner timesheet   ...............  ``````````````````
+4.submitted partner timesheet   `````````````````````
+5.submitted timesheet page, where admin and partner can reject particular timesheet  ..............  `````
+7.rejected timesheet during leave apply that is automatic approved  ......................  ``````````
+7. submit timesheet then calculation left   ......................... ```````````````````
+
+
+Exam leave = EL     ................................  ```````````````
+casual leave = CL    ...........................    `````````````````
+timesheet filled  = P  ......................    ```````````````````
+holidays  = H   .............................  `````````````````````
+Travel = T full days .............   ``````````````````````
+
+Off/holidays (sturday and sunday) =   W (sunday) ............   oh for sturdays   ............. ``````   
+
+
+
+unlocated 
+travel
+seminar conference 
+off/ holidays 
+
+
+6.When Admin fill leave date in profile section in that time will be afect attandance ........`````````  
+8.if user fill 2 timesheet in one days .......................... ````````````````````
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2.timesheet block days want to decrease now days is 14 days 
+3.some modification in timesheet not fill reminder (mail)
+3. wednesday and suterday mail 
+
+1.7 days block 
+timesheet block before date 
+
+
+leave reason 
+timesheet request 
+
+
+
+
+
+12-09-24
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222
+1.The client wants to know the active and inactive users in the attendance report.==============
+
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this. ====================
+
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date. ==============
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.======================
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+
+22222222222222222222222222222222222222222
+timesheet featues 
+
+Filter implimentation on submitted team timesheet for admin.
+When assignment closed then assignment should be not selected in Assignment select box on add assignmnet page.
+Seprated timesheet submitted data becouse it was coming in one column .
+Team Timesheet report on admin and partner.
+Refresh all input field when date changes on add timesheet page.
+Client want to client list according open assignment and date of closed assignment .
+Display warning message on click approve button and open modal box on click reject button (timesheet request view page ).
+timesheet request list for patner and admin where admin and partner can approved and reject timesheet request.
+total hour and hour shoud be 0 after exam leave and casual leave taken.
+filter add on using assignmentname on team timesheet report.
+submit a saved timesheet forcefully when the user goes.
+Separate weekly timesheet on admin ,partner,and manager.
+Get work items from calendar when user choose of holiday.
+Highlight Sunday date on timesheet create calender.
+Admin add secondary patner inside assignment. 
+Display warning message on timesheet create page when user's timesheet rejected.
+Timesheet request remark should be mandatory currently it gets submitted after entering a space.  
+Attachment file shoud be on timesheet request create form.
+Leave can not apply before submitted timesheet date, 11 septamber 2023, but timesheet rejected then it will be apply only that days.
+When submitted timesheet rejected then user can apply leave on that days and submitted timesheet overwrite according leave.  
+Submitted timesheet rejected edit functionality.
+Display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave and Timesheet Request Listing pages.
+Timesheet rejected more than one days. 
+Display warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+A user's saved timesheet can also be deleted by the admin. 
+A user cannot submit a new timesheet request within 24 hours if they already have an open timesheet request. 
+Last week submitted timesheet excel will be send after clicking on timesheet all button on admin and partner id. 
+A user's saved timesheet can also be deleted by the admin. 
+A user cannot submit a new timesheet request within 24 hours if they already have an open timesheet request. 
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222
+applyleave features 
+  
+ 
+When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+When a user applies for leave, the partner receives a notification, and after approval, the user also receives a notification.
+Display a popup message when clicking on the "View Details" text in the Reason and Remark columns on the Apply Leave Listing pages.
+Exam leave has an auto-submit functionality: if a user submits timesheets on a weekly basis consistently and then applies for leave, their exam leave timesheet will be automatically submitted.
+Insert value 0 to total hour and hour after exam leave and casual leave taken. 
+Leave can not apply before submitted timesheet date, 11 septamber 2023, but timesheet rejected then it will be apply only that days.
+When submitted timesheet rejected then user can apply leave on that days and submitted timesheet overwrite according leave.  
+On apply leave page, alart box on click approved and reject button.
+When user apply leave revert on start leave date then all data should be delete.
+Count for Approved leaves for the Year (Jan to Dec) should be visible to the User in their portal.
+Filter functionality with proper validation exist on apply leave listed page.
+Leave revert functionality also exist.
+Leave will be auto-approved when a user applies for leave on one or more consecutive days with rejected timesheets. Approval from the admin or partner is not required.
+Casual leave revert module.
+
+
+
+22222222222222222222222222222222222222222
+Rejoining & Promotion Process on other position
+https://capitallio.atlassian.net/browse/VS-118
+
+
+In case of rejoining, “Rejoining date” is to be entered.
+If the designation of the rejoined individual is same, then the Employee code should remain same.
+In case there is change in designation, then the employee will be assigned a  new code.
+The new code should be linked to the old code and all the previous data will be accessible with the use of previous employee code and employee name.
+In case of change in code, previous code should be mentioned on the profile of employee.
+In case there is a change in designation, but the individual is mapped to a particular assignment then his right related to that assignment should not change till the assignment is over.
+Similar process to be carried out in case of Promotion of an employee from manager to partner.
+pormotion and rejoining listing will be show on admin dashboard.
+
+The user should not be able to fill the timesheet before the rejoining date.
+The User should not be able to apply leave before re-joining date.
+The timesheet report will be show new staff code for the user even after the promotion, in new assignment.
+When the super admin rejects a timesheet for a new assignment, the timesheet should be the new staff code in 'Rejected Timesheet'. However, when the user resubmits it, the new code appears.
+when user will rejoin manager to partner after that all previous data will be show according manager and current data will be show according partner.
+when user will promote manager to partner after that all previous data will be show according manager and current data will be show according partner.
+
+
+
+22222222222222222222222222222222222222222
+Assignment features 
+
+The client wants to remove the 'type' input field from the team member addition form when the assignment is closed, and display it only when the assignment is open.
+Assignment Details on mail when assignment closed by otp.
+Assignment budgetting and assignment mapping should be in one place.
+When assignment closed then assignment should be not selected in timesheet Assignment field.
+Filter functionality On Team Timesheet report page.
+The selection of assignment according Asssignment closed date and open assignment.
+The date format should be 01-01-2024 on the webpage and also 01-01-2024 in Excel.
+Implemented checkbox on assignment create page so that user submit form without select teammemebr currently user can not create assignment without teammember selection.
+Assignment viewer list on  assignmentview  page to view user only.
+After creating assignment partner and listed team recieved mail with assignment details.
+Total hour will be show on assignmnt view page to partner, manager and staff.
+While adding User in an assignment, the "teammember select box" should not display inactive users.
+Assignment total hour show on open assignment page.
+Assignmwnt total hour show on admin panel according teamwise.
+Assignment total hours show on assignment time report tab.
+We can add secondary patner inside assignment. 
+Filter implementation on Assignment time report 
+The partner list and theire total hour on assignment view page. 
+
+
+22222222222222222222222222222222222222222
+Notification features 
+1.When the admin sends a notification, it will appear in the user's notification tab. If the notification is unread, the text color will be red; if the notification is read, the text color will be black
+
+
+
+
+22222222222222222222222222222222222222222
+Attendance features
+https://capitallio.atlassian.net/browse/VS-154
+
+The attendance report should be on admin and partner dashboard. 
+Admin and partner can export excel report all users.
+On admin and partner panel, attendance record should be display according date wise and all date contain persent (P) , absent (A), travel (T),Casual leave (cl),exam laeve (EL), holidays (H) And sundauy (O or w).
+On admin and partner panel,filter functionality on attendance using date like from start date to end date.
+When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+After submitting the leaving date, the attendance report will be updated by marking entries with a cross sign (X) for all dates following the leaving date.
+If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+Attendance data will be after new teammeber creating time. 
+We can not select start date and end date in future on attendance page (filter functionality).
+When the admin approves exam leave, if there are any holidays during the exam leave period, the attendance for those dates will display an 'H' to indicate a holiday.
+attendance report will be display from April to September. Currently, the data is only available from October because the attendance module has been running since then.
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.testing purpose for tester  attendance module
+22222222222222222222222222222222222222222222222222
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+1.Client want to attendance report on admin dashboard 
+2.Admin can export excel report all users attendance
+3.On admin dashboard, client want to display attendance according date wise and all date contain wording like persent (P), travel (T), Casual leave (cl),exam laeve (EL), holidays(H), sundauy (W), sturdays (OH) and Rejected timesheet (R)
+here T will be assign only full days travel 
+4.Attendance table contain below column 
+  Employee name,role months, date from 01 to 31, Total Number of days,Total Working days,Total Casual Leave,Total Exam Leave,	Total Travel,Total Offholidays,Total Weekend,Total Holidays
+5.client want to filter functionality on attendance click (Attendance tab)
+6.client want to display total working days on staff,manager and partner dashboard only current year like 2024-25 (apr to current month),
+7.on staff,manager and partner dashboard,all working days should be display after click on total working days box
+8.staff,manager and partner can export total working days excell
+9.on attendance page,Validation should be on date after click attendance tab where admin can filter attendance
+10.Attendance tab should be aceess only partner and admin
+
+
+Now You have to test attendance table hare 
+
+11.attendance table will be update only when user submitted theire timesheet not on create timesheet 
+12.when user apply exam leave and admin approved it then attendance table will be update 
+13.when user apply Casual leave and user submited theire timesheet then attendance table will be update
+14.WHen user submitted leave revert request after approved it. attandence table will be update 
+15.When admin and partner reject user timesheet and user submit rejected timesheet in both case attandance table will be update
+16.If a timesheet is rejected on a specific date, the user can apply for leave on those days, and the attendance table will be updated accordingly
+17. when admin fill laeving date in profile section in that time all save timesheet currently submitted automatic in this case attendance table will be update
+18. if user fill two timesheet in one days and both timesheet has a P then no of persent column will be count 1 and if user fill two timesheet in one days and one timesheet contain T and one timesheet contain P then it will be count no of persent 1 and assign P
+
+
+Now You have to test are you sure message on click approved and reject button in (admin and partner)
+19.Apply leave section 
+20.revert leave section
+21.open leave section
+22.timesheet request list section 
+23.timesheet request box on dashboard 
+24.leave box on dashboard section
+
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+1.The client wants to remove the 'type' input field from the team member addition form when the assignment is closed, and display it only when the assignment is open.
+
+
+2.The client wants to send an email with the leave reason, staff code, and updated email formate.
+3.The client wants to send an email with the timesheet request reason, staff code, and updated email formate.
+
+4.The client wants to modify the timesheet block for tasks. They want the timesheet to be blocked after 16 days, but if the last submitted date falls on a Saturday, it will block after 17 days. If the last submitted date falls on a Sunday, it will block after 16 days.
+
+5.The client wants to modify the timesheet request approval email
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+Steps:-
+1.Navigate to the application
+2.Click on 'Client' dropdown.
+2.Click on 'Assignment List'.
+3.Click on Client name hyperlink, click on year and click on 'Assignment Id.
+4.click on Teammember List plus icon: 
+
+
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+1.The client wants to know the active and inactive users in the attendance report.==============
+
+2.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this. ====================
+
+3.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date. ==============
+
+4.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.======================
+5.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+
+2222222222222222222222222222
+1.The client wants to know the active and inactive users in the attendance report.
+
+Admin Id 
+Steps:-
+1.Navigate to the application
+2.Click on 'Dashboard' dropdown.
+2.Click on 'Teammember Box on dashboard'.
+3.Click on Teammember name hyperlink, after that please enter leaving date and click on submit button.
+
+Expected result: After submitting the leaving date, the attendance report will be updated by marking entries with a cross sign (X) for all dates following the leaving date
+
+
+2222222222222222222222222222
+1.If a user does not submit their timesheet continuously for one month, the attendance record should reflect this.
+
+Expected result: On the first day of the month, attendance records will be created for all active team members.
+
+
+
+2222222222222222222222222222
+1.When selecting an employee name, start date, and end date, the client wants to check the leaving date. If the start date is after the leaving date, a warning message should appear: "You cannot select a date after the leaving date.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+
+2222222222222222222222222222
+1.When selecting an employee name, start date, and end date, the client wants to check the joining date. If the start date is before the joining date, a warning message should appear: "You cannot select a date before the joining date.
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+
+1.When selecting start date and end date, You cannot select a date in future date
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Attendance tab,
+4.click on 'fill data and click search button'
+
+
+2222222222222222222222
+1.The client wants a warning message when saving timesheet data that exists after the leaving date in the profile section, once the leaving date has been entered.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Dashboard' dropdown.
+2.Click on 'Teammember Box on dashboard'.
+3.Click on Teammember name hyperlink, after that please enter leaving date and click on submit button.
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+
+
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+1.When creating a new teammember on that time attendence record should be created also.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Team' dropdown.
+3.Click on 'team list tab,
+4.click on 'Add Teammember'
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+
+
+2.testing purpose for tester
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+The user should not create duplicate assignments when clicking the submit button multiple times.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Add Assignment.
+after that please enter all date and click on submit button.
+
+333333333333333333333333333333333333333333333333333333333333333333333333333333333333333
+The user should not create duplicate assignments when clicking the submit button multiple times.
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Client/Assignmnet' dropdown.
+2.Click on 'Add Assignment.
+
+In this form, when a name is selected and the plus icon is clicked, a new input box should appear to select another name. In this case, the previously selected name should no longer be shown in the dropdown box
+
+
+
+
+
+testning purpose 
+222222222222222222222222222222222222222222222222222222222222
+1.all timesheet submitted data get 
+2.All sunday date will be get
+3.all sturday date will be get 
+4.All holiday date will be get 
+5.All cl date get 
+6.All el date get 
+7.All travel date will be get.
+
+
+chalanging
+1.i have not idea joinig date 
+2.leaving date also 
+3.cross sign after leaving date 
+
+
+
+
+
+
+10.1 Client selected (off/holiday) - 0 hours of work = H in attendance - QA Pass
+
+10.2 If user selects (off/holiday) client for 0 hours + work for 1 Hour = P  in attendance 
+
+10.3 If user selects (off/holiday) client for 0 hours + Travel for 1 Hour = T  in attendance 
+
+10.4 If user selects (off/holiday) client for 0 hours + work for 8 Hour = P  in attendance 
+
+10.5 If user selects (off/holiday) client for 0 hours + Travel for 8 Hour = T  in attendance 
+
+10.6 If user selects (off/holiday) client for 0 hours + work for 4 Hour = P  in attendance 
+
+10.7 If user selects (off/holiday) client for 0 hours + Travel for 4 Hour = T  in attendance 
+
+10.8  If user selects (off/holiday) client for 0 hours + work for 4 Hour +Travel for 4 Hour = P
+	
+
+send karna hai 			
+2222222222222222222222222222222222222222222222222222222
+1.When creating a new teammember on that time attendence record should be created also.
+
+2.When selecting start date and end date, You cannot select a date in future date
+
+3.Attendance data not updating proper with active & inactive users.(has point)
+
+4.In Teams tab, for two different user's same staff code is coming.
+
+5.Options alignment on the apply leave page in Admin account is not proper
+
+6.If timesheet is rejected on continuesly more than 1 days, the user can apply for leave on those days, and the attendance table will be updated accordingly.
+
+2.client want to change filter formate on applyleave page currently working using ajax but client want to serach button
+2.Table Design fixed on applyleave page 
+3.Validation on filter like validation on date 
+4.show approved and reject button on applyleave page 
+5.fixed accending order and descending order after filter data 
+6.Fixed data width inside excell after export data in excell 
+
+2222222222222222222222222222222222222222222222222
+
+!!!2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+!!!1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+!!!3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+!!!!1.Attendance revert exam leave problem fixed (user name gurvesh)
+!!!2.Attendance inserting leaving date after deleting attendance problem fixed (user name gurvesh)
+!!!1.Exam leave count problem tested and fixed 
+2.All attendance get using year column on everywhere on attendance module
+
+
+1.Revert exam leave count problem fixed in Attendance module.
+2.
+
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Report tab' dropdown.
+4.click on 'Attendance'
+
+
+//////
+ check teammember list
+ 
+ 22222222222222222222222222222222222222222222222222 
+
+exam me holidays only goes and el
+casual leave me cl only goes not W and H 
+
+
+testing for demo 
+222222222222222222222222222222222222222222222222222222222222222
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed 
+Total hour count bugs, bugs no is vs-224
+
+
+
+
+
+222222222222222222222222222222222222222222222222
+
+To Do 
+1.Client want to stop send mail to particular partner from timesheet not fill reminder.#
+2.Delete submitted timesheet of Surya Kant Verma after leaving date.
+3.In attendance module,insert H wording for 5 users who is apply leave before october
+4.CreatedBy column will be display on assignment folder file listing page
+5.User can not enter time in this formate 08:00
+6.Client want to Add partner button on assignmentview page
+7.assignment viewer implementation on open assignment (discuss)   ignore
+8.Client list edit functionality on assinmentview page (discuss)   ignore
+9.Udin date formate want to fixed
+10.assignment should be not show after inactive on that assignment for users (bugs)
+11.if casual leave timesheet submitted after that admin can not reject casula leave timesheet submitted data
+12.data handover form want to implement.  ignore 
+13.When a user exits, they can fill out their timesheet on the same day before 6 PM.
+14.The joining date will be displayed in the attendance module.
+15.Fixed attendance data for users who applied for leave before October.
+16.admin and partner can not reject submitted timesheet before joinig date.
+
+
+17. admin acoount inactive automatic.
+18.total hour for closed assignment.  ignore
+19. travel box seprately on dashboard  ignore 
+20.assignment closed button acending order (discuss)
+21.resend otp during closed assignment.
+22 task on whatshapp
+
+
+
+1.Stop sending timesheet reminder emails to a specific partner as requested by the client.
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
+3.In the attendance module, insert "H" for 5 users who applied for leave before October.
+4.Add a CreatedBy column to display on the assignment folder file listing page.
+5.Restrict users from entering time in the format 08:00.
+6.Add a Partner button on the assignment view page as requested by the client.
+7.Udin date format needs to be fixed.
+8.Ensure assignments do not appear for users after being marked inactive on that assignment (bug fix).
+9.Restrict admin from rejecting casual leave timesheets if submitted.
+10.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+11.Display the joining date in the attendance module.
+12.Fixed attendance data for users who applied for leave before October.
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.
+14.Assignment viewer implementation on open assignment.
+15.Client list edit functionality on the assignment view page.
+16.Data handover form implementation.
+
+
+
+
+
+
+1.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+2.Implement a feature to calculate and display the total hours for all closed assignments before 2024.
+3.Add a travel box on the dashboard as requested by the client.
+4.Implement ascending and descending order sorting for open and closed assignments.
+5.Add a Resend OTP button during the closed assignment process.
+6.Ensure OTP for closing an assignment is not generated if there are any pending independencies.
+
+
+22222222222222222222222222222222222222222222222222222222
+To Do 
+1.client want to stop mail to particular  partner for timesheet not fill reminder 
+
+2.Surya Kant Verma ka leaving date check karke leaving date ke baad ke date ka 2 timesheet submit hai use delete 
+3.exam leave 5 user left to insert H wording.
+
+4.created by column will be come inside assinment filoder 
+5.timesheet restrected 08:00 hour
+6.partner adding from assignment view page
+7.assignment viewer implementation on open assignment (discuss)   ignore
+8.clent list edit functionality on assinmentview page (discuss)   ignore
+9.Udin date formate want to fixed
+10.assignment shold be not show after inactive on that assignment(bugs)
+11.if casual leave data submitted after that admin can not reject casula leave 
+  1.1 if holidays exist in calander then user applyleave and select start date and end date on holidays then not apply holidays
+12.data handover form want to implement.  ignore 
+16.admin and partner can not reject submitted timesheet before joinig date.
+
+17. admin acoount inactive automatic.
+18.total hour for closed assignment.  ignore
+19. travel box seprately on dashboard  ignore 
+20.assignment closed button acending order (discuss)
+21.resend otp during closed assignment.
+22 task on whatshapp
+23.The client wants "Approve" and "Reject" buttons to be included in the email for approving or rejecting leave and timesheet requests
+
+
+1.When a user exits, they can fill out their timesheet on the same day before 6 PM.
+2.The joining date will be displayed in the attendance module.
+3.Fixed attendance data for users who applied for leave before October.
+
+
+
+222222222222222222222222222222222222222222222222222
+
+
+
+attendance bugs
+22222222222222222222222222222222222222222222222222222
+
+ID: 770 - Amit
+ID: 772 - Ankit Kumar
+ID: 806 - Sachin Kumar
+ID: 794 - Tannu Sharma
+ID: 913 - Ananya Singh
+ID: 943 - Nitin
+ID: 835 - Vishal Singh
+ID: 940 - Subhash Kumar Mishra
+ID: 944 - Vishal Kumar Thakur
+ID: 938 - Sandeep Singh
+ID: 916 - Punit Kumar
+ID: 947 - Sarthak Kejriwal
+ID: 891 - Sudheer Rawat
+ID: 805 - Ravi Kumar
+ID: 832 - Vaibhav Arora
+ID: 889 - Mohit Kumar
+ID: 782 - Antima Jhajhra
+ID: 828 - Sahil Kumar
+ID: 881 - Rohit Kumar
+ID: 817 - Hemant Kumar
+ID: 811 - Tushar Garg
+ID: 785 - Kanika Singhal
+ID: 830 - Sohan Jha
+ID: 879 - Jassi Gupta
+ID: 812 - Yog Madhu
+
+Vishal Singh M1001 - April data is missing  because rejoinig date of this user in may 9, 2024. and (25-12-2023 to 30-12-2023) to (06-05-2024 to 11-05-2024)
+Vishal Singh M1065 - missing 24th aug data  because this user has not submitted timesheet on 24th August
+Vishal Kumar Thakur M1023 - missing data also missing name in timesheet but name is showing in attendance drop-down  becouse this user naver fill timesheet and submitted timesheet
+
+i have to update
+Sudheer Rawat S1055 - 15th nov data missing 
+Sandeep Singh M1071 - 20th to 30th missing data  in september data exist
+Vishal Kumar Thakur M1077 - 25th to 30th sep data missing   in september
+
+
+
+Sahil Kumar
+Anu anjali
+Vishal Singh   already done 
+Dheeraj Jain
+Shakti K.C.
+Akansha Prakash
+
+
+2222222222222222222222222222222222222222222222222
+
+1.In attandance module, Some modification on joining date 
+2.When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+3.Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
+
+# this is for promotion and rejoining on other post
+ 1.if user worked on attendance as a manager in that case staffcode will be show as a manager if user worked on attendance as a partner in that case staffcode will be show as a partner
+ 2.in joinig date,joining date will be show newest.
+
+you have to check Admin ,partner, manager and staff id
+Steps:-
+1.Navigate to the application
+2.Click on 'Report' dropdown.
+4.click on 'Attendance' hare you can see Joining date column 
+
+
+
+
+
+
+
+
+
+# When a user exits, allow them to fill out their timesheet on the same day before 6 PM.
+
+on Admin id
+Steps:-
+1.Navigate to the application
+2.Click on 'dashboard',
+3.Click on 'Team member box'
+4.Click on 'team member name' hyperlink, you can see hare Timesheet Access field.
+
+you have to check partner, manager and staff id
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'my timesheet.
+4.click on 'Add Timesheet'
+
+
+
+# Ensure assignments do not appear for users after being marked inactive on that assignment (bug).
+  1. If admin inactive karta hai users ko kisi bhi assignment se to vo assignment show nahi hoga us user ko 
+
+on Admin id
+Steps:-
+1.Navigate to the application
+2.Click on 'View All Assignment in Assignment Section',
+3.Click on 'Assignment Id hyperlink',
+4.Go to Teammember list section hare you can see active/inactive button
+
+you have to check manager and staff id
+Steps:-
+1.Navigate to the application
+2.Click on 'dashboard',
+3.Click on 'Open Assignment box' hare will be hide
+
+Steps:-
+1.Navigate to the application
+2.Click on 'Assignment Section',
+
+
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Assignment List' page.
+4.Click on Client name hyperlink, click on year,
+
+
+
+this tab only for manager not for staff
+Steps:-
+1.Navigate to the application.
+2.Click on 'Client' dropdown.
+3.Click on 'Client' dropdown and navigate to 'Client List' page.
+4.Click on Client name hyperlink, click on Assignment,
+
+
+
+Keshav Chowdhary		
+780
+
+"2024-12-02"  rejoining date 
+"2024-07-27"  last submission date
+
+222222222222222222222222222222222222222222222222222222222222222222
+
+
+01.Add a travel box on the dashboard as requested by the client.
+We have to test total travel days in attendance after that on dasboard, jitna total days hai us attendance me vo total travel days show hoga total travel days box
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'total travel days Box'.
+4.	Click on the total travel days Box.
+
+
+02.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+before filter applying on apply leave data data will be show created first 
+after filter applying on apply leave data data will be show latest 
+
+
+For Admin IDs
+Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Apply Leave tab',
+4.Hare you have to filter data 
+
+
+03.Fix the issue with the Last Submission Report on mail.
+Every wedenesday and sturdays mail sent on admin in which ek excell jata hai us excell me jitne bhi user hai us user ka timesheet last submision date and name and mail id jata hai 
+
+
+
+04.Fix the issue with the Timesheet not Submission Report on mail.
+Every wedenesday and sturdays mail sent on admin in which ek excell jata hai us excell me jitne bhi user hai jo timesheet saved karke chhor diya hai us user ka name jata hai aur jo timesheet kabhi nahi bhara hai us user ka name jata hai 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222
+1.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+2.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+
+
+1.Implement a calendar feature on the Add Timesheet page.
+222222222222222222
+
+
+bhaskar kumar data 
+1.if timesheet submitted on sturday then date will be enable next mondays `````` 1   ////   11111111111
+2.if timesheet submitted on sunday then date will be enable next mondays ``````  2   ////    111111111
+3.when user saved timesheet data then date will be show next days  ``````````````3   /////  1111111111
+4.after timesheet submited data continuesly casual leave applyled then after end date, date will be show ````````4  ///// 1111
+5.after timesheet submited data continuesly exam leave applyled then after end date, date will be show  `````````5   ////  1111111
+6.when casual leave apply and gap date will be exist between save timesheet and startdate of casual leave then, date will be show after saved timesheet date  `````6 , 7, 8 and 9  /////  1111111
+8.when exam leave apply and gap date will be exist between save timesheet and startdate of exam leave then, date will be show after saved timesheet date    ``````````` 6 , 7, 8 and 9  /////   1111111111
+7.when casual leave apply and gap date will be not exist between save timesheet and startdate of casual leave then, after casual leave end date will be show  ``````7 and 9   ///// 111
+9.when exam leave apply and gap date will be not exist between save timesheet and startdate of exam leave then, after exam leave end date will be show      ```````````7 and 9  /////  11111111
+
+10.when user has a casual leave timesheet after submitted timesheet date will be show casual leaveend date  ( sunday submit) not need to test 
+11.when user has a exam leave timesheet after submitted timesheet date will be show exam leaveend date    ( sunday submit)   not need to test 
+
+
+14.if you are not working on sunday and want to date enable for monday then you have to submit timesheet of that week.  ````` ////   11111111111
+15.if date is enable in future and user try submit there timesheet on that time user can not submit timesheet  ........ ///////
+16. if user submit current date timesheet then date not enable in future this is for only saved timesheet  ``````  //////
+17. fill 2 timesheet in one days
+
+18. apply multiple leave on save timesheet 
+19. user can not leave apply if users not saved timesheet on joinig date and rejoining date 
+
+Ankesh Chandra ankeshc@vsa.co.in   908 on same post
+13.when user rejoining and promoting in that case will be also problem  ````````` 13  1111111111111111
+
+
+Cratika Singh   cratikas@vsa.co.in  id 973
+12.When user new joinee then on that time also will be problem   `````````12 
+
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+revised version 
+1.If a timesheet is submitted on Saturday, the next date will be enabled on the following Monday.
+2.If a timesheet is submitted on Sunday, the next date will also be enabled on the following Monday.
+3.When a user saves timesheet data, the next date will be displayed.
+4.For casual leave, after the end date, the next date will be displayed.
+5.For exam leave, after the end date, the next date will be displayed.
+6.When casual leave is applied, and there is a gap between the saved timesheet date and the start date of casual leave, the next date will be displayed after the saved timesheet date.
+7.When casual leave is applied, and there is no gap between the saved timesheet date and the start date of casual leave, the next date will be displayed after the casual leave end date.
+
+
+8.When exam leave is applied, and there is a gap between the saved timesheet date and the start date of exam leave, the next date will be displayed after the saved timesheet date.
+9.When exam leave is applied, and there is no gap between the saved timesheet date and the start date of exam leave, the next date will be displayed after the exam leave end date.
+
+
+10.When a user has a casual leave timesheet, the next date will be displayed after the casual leave end date.
+11.When a user has an exam leave timesheet, the next date will be displayed after the exam leave end date.
+12.For new joiners, there may also be issues with the date logic.
+13.For users who are rejoining or getting promoted, there may also be issues with the date logic.
+
+
+
+bhasker 
+chetan for new joinee
+ankesh chandra for rejoining
+
+1 ,2 , 3, 4, 5, 6, 7, 8, 9, 10, 11
+      //* timesheets
+      'timesheetreport',
+      // 'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+12
+
+ //* timesheets
+      'timesheetreport',
+      // 'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+      //* attendances
+      // 'attendances',
+
+      //* assignments
+      // 'assignmentbudgetings',
+      // 'assignmentmappings',
+      // 'assignmentteammappings',
+      // 'assignments',
+
+      //* another tables
+      'Users',
+      'teammembers',	
+	
+13
+
+      //* timesheets
+      'timesheetreport',
+      // 'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+      //* attendances
+      // 'attendances',
+
+      //* assignments
+      // 'assignmentbudgetings',
+      // 'assignmentmappings',
+      // 'assignmentteammappings',
+      // 'assignments',
+
+      //* another tables
+      'Users',
+      'teammembers',
+      'teamrolehistory',
+      'rejoiningsamepost',
+
+
+
+
+
+
+
+
+
+1.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+2.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+3.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.
+4.Fix the issue with the Timesheet not Submission Report on mail.
+5.Add a travel box on the dashboard as requested by the client.
+6.Fix the issue with the Last Submission Report on mail.
+7.Total count in attendance data is not showing correct.(bugs for travel box)
+8.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+
+
+
+
+1.Implement a calendar feature on the Add Timesheet page
+2.Udin date format needs to be fixed.``````````
+3.Restrict users from entering time in the format 08:00.````````
+4.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+
+
+
+
+
+2.Udin date format needs to be fixed.``````````
+The date format in the Udin List section will be: dd-mm-yyyy (like 01-01-1999).
+
+
+
+
+3.Restrict users from entering time in the format 08:00.````````
+
+you can not edit Total Hour field.
+hour field should be not in this formate 00:00 only accept hour like 0,1,2,3, 3tc
+
+
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+07.applyleaves  
+08.attendances
+
+09.teamrolehistory
+10.rejoiningsamepost
+
+
+1.if timesheet submitted on sturday then date will be enable next mondays 
+2.if timesheet submitted on sunday then date will be enable next mondays 
+3.when user saved timesheet data then date will be show next days 
+4.after timesheet submited data continuesly casual leave applyled then after end date, date will be show
+5.after timesheet submited data continuesly exam leave applyled then after end date, date will be show
+6.when casual leave apply and gap date will be exist between save timesheet and startdate of casual leave then, date will be show after saved timesheet date
+7.when casual leave apply and gap date will be not exist between save timesheet and startdate of casual leave then, after casual leave end date will be show
+8.when exam leave apply and gap date will be exist between save timesheet and startdate of exam leave then, date will be show after saved timesheet date
+9.when exam leave apply and gap date will be not exist between save timesheet and startdate of exam leave then, after exam leave end date will be show
+10.when user has a casual leave timesheet after submitted timesheet date on sunday then will be show casual leaveend date 
+11.when user has a exam leave timesheet after submitted timesheet date on starday then will be show exam leaveend date 
+12.When user new joinee then on that time also will be problem
+13.when user rejoining and promoting in that case will be also problem
+14.if you are not working on sunday and want to date enable for monday then you have to submit timesheet of that week.
+15.if date is enable in future and user try submit there timesheet on that time user can not submit timesheet
+16. if user submit current date timesheet then date not enable in future this is for only saved timesheet 
+
+
+
+1.If a timesheet is submitted on Saturday, the date will be enabled the following Monday.
+2.If a timesheet is submitted on Sunday, the date will be enabled the following Monday.
+3.When a user saves timesheet data, the next day's date will be displayed.
+4.If casual leave is applied immediately after submitting the timesheet, the date will be displayed after the leave's end date.
+5.If exam leave is applied immediately after submitting the timesheet, the date will be displayed after the leave's end date.
+6.When casual leave is applied and there is a gap between the saved timesheet date and the casual leave start date, the date will be displayed after the saved timesheet date.
+7.When casual leave is applied without any gap between the saved timesheet date and the casual leave start date, the date will be displayed after the casual leave's end date.
+8.When exam leave is applied and there is a gap between the saved timesheet date and the exam leave start date, the date will be displayed after the saved timesheet date.
+9.When exam leave is applied without any gap between the saved timesheet date and the exam leave start date, the date will be displayed after the exam leave's end date.
+10.If you are not working on Sunday and want the date to be enabled on Monday, you must submit the timesheet for that week.
+11.If a date is enabled in the future and the user tries to submit their timesheet, they will not be able to submit it.
+12.If a user submits a timesheet for the current date, future dates will not be enabled. This applies only to saved timesheets.
+13. New Joiner Case
+  1.If a user is a new joiner, their date will be enabled on their joining date.
+  2.After submitting timesheets for one week post-joining, all previous test cases will apply.
+
+14. After Rejoining (Same Post or Different Post)
+   1.If a user rejoins, their date will be enabled on their rejoining date.
+   2.After submitting timesheets for one week post-rejoining, all previous test cases will apply.
+   
+   
+   
+   
+37.Client wants to add multiple partner in lead partner and other partner column
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+manger id
+1.Assignment Report List page per otherpartner column me change karna hoga open and close assignment ke liye 
+2.Assignment Details page per Partner List section me bhi change karna hoga 
+3.jab user leave apply karta hai to us page per bhi change karna hoga 
+4.Clent list ke assignment section me bhi change karna hoga 
+5.Assignment List page per bhi change karna hoga 
+6.jab koi user timesheet request create karge on that time bhi change hoga 
+
+partner id
+7.when partner closed karega assignment ko to change karna hoga 
+8.when assignment create karega admin and partner then change karna hoga 
+9.Assignment List page per 2 section hai assigned partner and other partner to yaha bhi change karna hoga 
+
+admin id 
+10.Assignment List page per other partner column me plus icon yaha se other partner add karta hai admin to yaha bhi change hoga 
+11.Assignment time report page per total hour ke liye bhi change karna hoga 
+
+
+
+
+1. Assignment Report List Page: Update the "Other Partner" column for both open and closed assignments.
+2. Assignment Details Page: Make changes in the "Partner List" section.
+3. Leave Application Page: Update the relevant section when a user applies for leave.
+4. Client List Assignment Section: Reflect changes in the "Assignment" section of the Client List page.
+5. Assignment List Page: Implement changes here as well.
+6. Timesheet Request Creation: Update the process when a user creates a timesheet request.
+7. Closing Assignments by Partner: Apply changes when a partner closes an assignment.
+8. Assignment Creation: Update the process when an admin or partner creates an assignment.
+9. Assignment List Page (Partner Sections): "Assigned Partner" section left and Update and "Other Partner" sections only.
+10. Add Other Partners: Ensure changes are reflected when an admin uses the "+" icon in the "Other Partner" column to add a partner.
+11. Assignment Time Report Page: Make updates for the "Total Hour" section.
+12.Timesheet Deletion: Apply changes when a user deletes a timesheet.
+13.Timesheet Editing: Apply changes when a user edits a timesheet.
+14.Timesheet Saving: Apply changes when a user saves a timesheet.
+
+
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+30, 31 dec name user sarthak kejriwal
+
+suryakant verma leaving date 26-09-2024
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+applyleaves  table me 
+809
+id = 975  to column me 2024-09-26 
+
+
+
+
+leaveapprove table me 
+
+id = 985 totaldays 40 se 39 kare 
+
+
+
+timesheets table me
+
+2024-09-27 se aage 01 tak ka timesheet delete karna hai 
+
+
+
+
+timesheetusers table me
+
+2024-09-27 se aage 01 tak ka timesheet delete karna hai 
+
+
+
+
+timesheetreport table me 
+
+id = 10558 totaldays = 4 and dayscount = 4
+
+
+
+attendance table me 
+id = 1355
+27	28	29 ko null kare 
+
+exam_leave  = 25
+Offholidays = 0 
+sundaycount = 0 
+
+
+after that call client and said to insert leaving date 26 september 
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+1. Assignment Report List Page: Update the "Other Partner" column for both open and closed assignments.
+2. Assignment Details Page: Make changes in the "Partner List" section.
+3. Client List Assignment Section: Reflect changes in the "Assignment" section of the Client List page.
+4. Assignment List Page: Implement changes here as well.
+5. Closing Assignments by Partner: Apply changes when a partner closes an assignment.
+6. Assignment Creation: Update the process when an admin or partner creates an assignment.
+7. Assignment List Page (Partner Sections): "Assigned Partner" section left and Update and "Other Partner" sections only.
+8. Add Other Partners: Ensure changes are reflected when an admin uses the "+" icon in the "Other Partner" column to add a partner.
+9. Assignment Time Report Page: Make updates for the "Total Hour" section.
+10.Timesheet Deletion: Apply changes when a user deletes a timesheet.
+11.Timesheet Editing: Apply changes when a user edits a timesheet.
+12.Timesheet Saving: Apply changes when a user saves a timesheet.
+
+
+
+
+1.Can all partners involved in an assignment close it?
+2.If multiple partners are added, will the assignment data be accessible only to the lead partner, or to all partners assigned to the assignment?
+3.Wherever the "other partner" column exists, should the details of all other partners be displayed?
+4.For an assignment, should only the total hours of the lead partner and other partners be shown, or the total hours of all partners?
+5.Should an admin have access to add multiple partners, for example, by using a "+" icon?
+6.In the "Assignment" section, do the details of "other partners" need to be displayed for every assignment?
+7.Logs will be implemented
+8.Assignment reopen case will be raise on this case what will be do 
+9.all included partner will be submit timesheet or only lead partner and other partner will be submit timesheet
+
+
+
+
+1.Can all partners involved in an assignment close the assignment, or is this restricted to specific partners?
+2.If multiple partners are added to an assignment, will the assignment data be accessible only to the lead partner, or to all assigned partners?
+3.Should the details of all "other partners" be displayed wherever the "other partner" column exists?
+4.For an assignment, should only the total hours of the lead partner and "other partners" be shown, or should the total hours of all partners be displayed?
+5.Should the admin have the ability to add multiple partners, such as using a "+" icon in the "Other Partner" column?
+6.Will logs be implemented to track changes or actions performed?
+7.If an assignment is reopened, what steps or processes need to be followed?
+8.Should all included partners be able to submit timesheets, or is this limited to only the lead partner and "other partners"?
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+2.Replace "Miss." with "Ms." across all places on the portal
+3.Move the Edit button to the first position on the Timesheet Saved Listing page after that fixed date sorting and data in excel.
+4.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+5.Prevent admin and partner from rejecting submitted timesheets data before the user’s joining date.6.
+6.Restrict admin and partner from rejecting casual leave timesheets data if submitted.
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+8.If a user deletes saved timesheet data, a log entry should be created to record the action
+
+Clent wants to fill 2 days timesheet for Sarthak kejriwal from backend.
+The client mentioned that there is no timesheet for Sarthak for the 2 days
+Add a CreatedBy column to display on the assignment folder file listing page.
+
+
+
+
+2222222222222222222222222222222222222222
+1.Implement a calendar feature on the Add Timesheet page
+2.Udin date format needs to be fixed.
+3.Restrict users from entering time in the format 08:00.
+
+
+The data for existing other partners, will be transferred to a another existing table.
+
+
+
+2025-01-25
+
+vsalive, vsalocal 	
+client
+1.I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date
+2.The client mentioned that after rejoining, the user's joining date and leaving date were not displaying correctly. I have checked and implemented the necessary fix
+
+
+
+
+
+
+
+1.Delete the submitted timesheet of Apurva Yadav after their leaving date.
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Client wants to add multiple partner in lead partner and other partner column
+222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+1.Changes will be applied on the Add Timesheet page
+   2.1 Modification on client select box and assignment select box on add timesheet page 7`````` 11111111
+   2.1 Total hour update on timesheet create 8``` 1111111111
+   2.2 Total hour update on timesheet delete for only users  9```` 1111111
+   2.3 Total hour update on timesheet edit 10 ````` 111111
+
+3.Changes will be applied in the Partner Section on the Assignment Details page.  1```````` 1111 
+
+4.Changes will be applied on the Independence Confirmation page. 2````````````````` ///// 111111
+  
+6.when partner added on that time mail also will be sent mail 3````````````````````////// 111111111
+
+7.home pahe per count 15   4 ///// 11111111
+8. data will be on click 15 5 ////// 111111111111
+
+5.http://127.0.0.1:8000/yearwise?year=2024&&clientid=160  modified  6 ````````````////// 111111111111 
+http://127.0.0.1:8000/yearwise?year=2024&&clientid=140  vsademo
+
+26-02, 28-02, 03-03, 10-03, 11-03, 12-03 casual leave  = user id = 936 (pooja )
+838
+WEL100799
+TAT100872
+user vignesh 
+january month 
+travel 1 hai bta 2 hai
+
+
+vsademo
+1.one assignment me will be not leadpartner, otherpartner , assignmentteammaping 
+2.only will be exit leadpartner
+MNA100030
+MAN100044
+
+
+
+
+
+2222222222222222222222222222222222222
+client
+
+1.client want to button for latest attendance data on attendance report page...
+2.I received a bug today from the client side. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied...
+3.client want to attedance count command run on every daye of every months
+
+I have checked this, and everything is fine except the mail integration, which is not implemented. I will integrate it
+the approver is still Harish which is why it wasn't visible in Simmi's ID. You had selected it in the dropdown but didn’t save it, so it didn’t reflect in Simmi’s ID Please check again
+
+
+
+
+I am working on profile validation
+222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Team Member Name hyperlink.
+5.  fill data and click submit button
+
+Steps: 2
+1.	Navigate to the application.
+2.	Click on the 'Dashboard'.
+3.	Click on the 'Team Member Box'.
+4.	Click on the Add Teammember.
+5.  fill data and click submit button
+
+
+
+1.	All mandatory fields are required.
+2.	Profile picture should be in .jpg, .jpeg, or .png format.
+3.	Personal Email ID should be valid.
+4.	Mobile Number should contain only digits, not text.
+5.	Emergency Mobile Number should contain only digits, not text.
+6.	Date of Birth should not be in the future.
+7.	Aadhaar Number should contain only digits, not text.
+8.	PAN Card Number should be valid.
+9.	Mother's Mobile Number should contain only digits, not text.
+10.	Father's Mobile Number should contain only digits, not text.
+11.	Bank Account Number should contain only digits, not text.
+12.	Joining Date should not be in the future.
+13.	Leaving Date should not be in the future.
+
+
+
+22222222222222222222222222
+
+
+1.mandatry filed requared ``````
+2.mobile number should be not text 
+3.Adhhar number should not be text 
+4.IN PAN CARD FIELD, validation on digit and space.
+5Bank proof view filed will be fix 
+6.validation on leaving date user can not select in future 
+933
+
+
+I have uploaded tasks on VSAdemo, and functional testing has been completed
+
+3.Approved Leave Count visible to user..
+
+
+atishay 
+1. timesheet request seplrate on 
+signout 
+
+
+// start hare
+// 22222222222222222222222222222222222222222222222222222222222222222222
+
+// exam leave delete karna ho to 
+
+/////////// attendance table me 
+// id = 940
+
+April months
+// holidays = 1
+// exam_leave  = 29
+
+May months
+// exam_leave  = 13
+
+
+
+
+
+/////////// applyleaves  table me 
+940
+// id = 1770  delete
+
+
+
+
+
+/////////// leaveapprove  table me 
+id 1678  delete
+
+
+
+
+
+/////////// timesheets table me
+// id = 153644 se 153708 delete
+// id = 153640 se 153643 delete
+
+
+
+
+
+
+
+/////////// timesheetusers table me
+// teamid = 153644 se 153708 delete
+// id = 156458 se 156461 delete
+
+
+
+
+/////////// timesheetreport table me 
+id = 940 and search using startdate 2025-03-03
+you will get 2 result 
+
+totaldayes 8 se 4 kare 
+
+
+
+
+Client wants to add multiple partner in lead partner and other partner column  ```start  2nd time
+
+// 22222222222222222222222222222222222222222222222222222222222222222222
+
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+          var maxField = 60; // Input fields increment limitation
+          var addButtonpartner = $('.add_buttonnpartner'); // Add button selector
+          var wrapper = $('.field_wrapperpartner'); // Input field wrapper
+          var x = 1; // Initial field counter
+
+          // Function to update options based on selected team members
+          //   function updateDropdowns() {
+          //       var selectedValues = [];
+
+          //       // Get all selected team member IDs
+          //       $('.language').each(function() {
+          //           var selectedValue = $(this).val();
+          //           if (selectedValue) {
+          //               selectedValues.push(selectedValue);
+          //           }
+          //       });
+
+          //       // Update each dropdown's options
+          //       $('.language').each(function() {
+          //           var dropdown = $(this);
+          //           var currentValue = dropdown.val();
+
+          //           dropdown.find('option').each(function() {
+          //               var optionValue = $(this).val();
+
+          //               // If optionValue is selected in another dropdown, remove it from this dropdown
+          //               if (optionValue && selectedValues.includes(optionValue) && optionValue !==
+          //                   currentValue) {
+          //                   $(this).remove(); // Remove selected option
+          //               }
+          //           });
+          //       });
+          //   }
+
+          // Initialize Select2 for the first select box
+          $('.language').select2();
+
+          //   // Update dropdowns on page load
+          //   updateDropdowns();
+
+          // Trigger update when any dropdown changes
+          //   $(wrapper).on('change', '.language', function() {
+          //       updateDropdowns();
+          //   });
+
+          // Once add button is clicked
+          $(addButtonpartner).click(function() {
+              if (x < maxField) {
+                  x++; // Increment field counter
+
+                  var fieldHTML =
+                      '<div class="row row-sm hidedive"><div class="col-6"><div class="form-group">' +
+                      '<label class="font-weight-600">Additional Partner *</label>' +
+                      '<select required class="language form-control enablefalse" id="teammember_' + x +
+                      '" name="teammember_id[]">' +
+                      '<option value="">Please Select One</option>' +
+                      '@foreach ($partner as $teammemberData)' +
+                      '<option value="{{ $teammemberData->id }}">' +
+                      '{{ $teammemberData->team_member }} ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})</option>' +
+                      '@endforeach</select></div></div>' +
+                      '<a style="margin-top: 36px;" href="javascript:void(0);" class="remove_buttonpartner">' +
+                      '<img src="{{ url('backEnd/image/remove-icon.png') }}" /></a></div></div>';
+
+
+                  $(wrapper).append(fieldHTML); // Add field html
+
+                  // Initialize Select2 for the newly added select box
+                  $('#teammember_' + x).select2();
+
+
+              }
+          });
+
+          // Once remove button is clicked
+          $(wrapper).on('click', '.remove_buttonpartner', function(e) {
+              e.preventDefault();
+              // Get the selected value of the dropdown being removed
+              var removedValue = $(this).closest('.row').find('.language').val();
+              // Remove field html
+              $(this).closest('.row').remove();
+              x--; // Decrement field counter
+
+              // Re-add the removed value to all dropdowns if it was selected
+              if (removedValue) {
+                  $('.language').each(function() {
+                      var dropdown = $(this);
+                      // Check if option already exists
+                      if (!dropdown.find('option[value="' + removedValue + '"]').length) {
+                          dropdown.append('<option value="' + removedValue + '">' + teamMembers[
+                              removedValue] + '</option>');
+                      }
+                  });
+              }
+
+          });
+      });
+  </script>
+  
+  
+  
+  
+  
+  
+  <div class="field_wrapperpartner">
+    <div class="row row-sm">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Lead Partner *</label>
+                <select required class="language form-control" id="category" name="leadpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }} (
+                            {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }} )</option>
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-5">
+            <div class="form-group">
+                <label class="font-weight-600">Other Partner </label>
+                <select class="language form-control" name="otherpartner"
+                    @if (Request::is('client/*/edit')) > <option disabled
+            style="display:block">Please Select One</option>
+
+            @foreach ($partner as $teammemberData)
+            <option value="{{ $teammemberData->id }}"
+            @if ($client->leadpartner == $teammemberData->id) selected @endif>
+                    {{ $teammemberData->team_member }}</option>
+                    @endforeach
+                @else
+                    <option></option>
+                    <option value="">Please Select One</option>
+                    @foreach ($partner as $teammemberData)
+                        <option value="{{ $teammemberData->id }}">
+                            {{ $teammemberData->team_member }}
+                            ({{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                        </option>
+
+                    @endforeach
+                    @endif
+                </select>
+            </div>
+        </div>
+        <div class="col-1">
+            <div class="form-group" style="margin-top: 36px;">
+                <a href="javascript:void(0);" class="add_buttonnpartner" title="Add field"><img
+                        src="{{ url('backEnd/image/add-icon.png') }}" /></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+Need option to fill mutiple days timesheet at once
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+UI Handling   1 ```````````
+From date will be handled using the date picker  `````
+Client off holidays will be handled (Saturday)  1 `````````
+Auto-fill for 1st, 2nd, 3rd, 4th, and 5th Saturdays  1 ``````````
+Total hour calculation validation on the timesheet  1  ```````
+Total hour calculation on the assignment  1   ```````````
+
+If an assignment is closed before a specific date, it should not appear in the timesheet for that date  2
+Date enable functionality will be modified ````````````
+If a user selects 4 days while creating a timesheet but fills in data for only 2 days, this case will be handled 1
+If a user joins between Monday and Saturday, the date enable functionality will be modified accordingly  ///////
+default 1 week (7 days) timesheet will be show  ``````````````
+if user applied leave on date then what will be do 
+validation on all field 2 days
+
+1.total hour   `````` 
+2.offholidays   `````
+3.leave related ```````
+4.validation 
+5.Design 
+5.when closed assignment will be not come 
+6.exam leave applied and implement condition in store function ``````
+
+
+
+
+1.bulk me ek hafte ka timesheet fill kare and save kare  ..`
+2.bulk me more than one timesheet filled kare..`
+3.casual leave apply on monday then please check kare to date and from date sahi aa raha hai ya nahi.. `
+4.casual leave apply seprate 2 days in a week then please check kare to date and from date sahi aa raha hai ya nahi .. `
+
+5.exam leave apply on monday (Approved/Reject) then please check kare to date and from date sahi aa raha hai ya nahi..`
+
+6.exam leave apply seprate 2 days in a week  (Approved/Reject) then please check kare to date and from date sahi aa raha hai ya nahi..`
+
+7.If an assignment is closed before a specific date, it should not appear in the timesheet for that date..
+
+8.partner and manager can select off/holiday client only 2nd and 4rth sturday and on holidays..`
+9.staff can select off/holiday client all sturday and on holidays..`
+10.You can only add up to 4 fields per section. and remove those filed..`
+11.user can not change 'to date' only change 'from date'..`
+12.if user select 2 days timsheet on that time user can saved only 2 days timsheet..`
+
+13.reject 2nd and 4rth starday timesheet (off/holidays timsheet nahi hona chahiye ) of any manager and partner and edit and select offholiday client..`
+
+16.when user create subfiled on that case all field of subfiled are mandatry.. `
+17.please check date sequence like date 1, 2, 3 etc..`
+18.user can not select off/holidays client from any subchiled field..`
+19.All mandatory fields are required..`
+20.hour field should contain only digits, not text..`
+21.user can not be fill timesheet in the future..`
+22.The total hours cannot be greater than 12 this is for all section..`
+23.when remove any subfield and hour is exist on that time total hour will be reduce..`
+24.If a user selects 4 days while creating a timesheet but fills in data for only 2 days then user can not submit becouse all days mandatry..`
+
+25.default 1 week (7 days) timesheet will be show..`
+26.if user applied casual leave on any date then apllied leave date will be not show when filling timesheet..
+
+26.if user applied exam leave on any date and this leave approved then apllied leave date will be not show when filling timesheet..
+27.Auto-fill for 1st, 2nd, 3rd, 4th, and 5th Saturdays only for staff..`
+27.Auto-fill for 2nd, and 4th, Saturdays only for manager and staff..`
+28.Total hour calculation on the assignment when timesheet saving ..`
+29.If a user joins between Monday and Saturday..`
+30.Auto-fill for holidays date ..`
+
+
+
+For Partner, Manager, and Staff IDs
+Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+1.Fill timesheet in bulk for one full week and save the data successfully.
+
+2.Fill multiple timesheets after change 'to date' and ensure all are saved properly.
+
+3.Apply casual leave on a Monday – check if both the "From Date" and "To Date" are showing correctly.
+
+4.Apply casual leave for two separate days within a week – ensure both "From Date" and "To Date" are accurate.
+
+5.Apply exam leave on a Monday (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+6.Apply exam leave for two separate days in a week (Approved/Rejected) – verify the accuracy of the "From Date" and "To Date".
+
+7.Partners and Managers can select Off/Holiday client only on 2nd & 4th Saturdays and official holidays.
+
+8.Staff can select Off/Holiday client on all Saturdays and official holidays.
+
+9.A maximum of 4 fields can be added per section. User should also be able to remove fields.
+
+10.User cannot change the ‘To Date’; only the ‘From Date’ will be change.
+
+11.If user selects 2 days while filling timesheet, then only 2 days' data can be saved.
+
+12.Reject 2nd and 4th Saturday timesheets for Partner/Manager in which rejected timesheet should not be off/holidays client .
+
+13.When creating a child field, all fields inside the child field must be mandatory.
+
+14.Check date sequence to ensure days are ordered like 1, 2, 3, etc.
+
+15.User cannot select Off/Holiday client from child fields.
+
+16.All mandatory fields must be filled before submission.
+
+17.The Hour field should accept only digits (no text).
+
+18.User cannot fill timesheets for future dates.
+
+19.Total hours cannot exceed 12 in any section.
+
+20.When a child field is removed, the total hours should automatically decrease based on the removed entry.
+
+21.If a user selects 4 days but fills data for only 2 days, submission should be restricted (all selected days are mandatory).
+
+22.By default, timesheet for 7 days (1 week) should be displayed if user not saved 1 week timesheet on that case.
+
+23.If a user has applied for casual leave on a particular date, that date should not appear while filling the timesheet.
+
+24.If a user has applied for exam leave and it is approved, the leave date should not appear during timesheet filling.
+
+25.Auto-fill timesheet for 1st to 5th Saturdays for staff only.
+
+26.Auto-fill timesheet for 2nd and 4th Saturdays for managers and partners only.
+
+27.Total hours should be updated on assignment as the timesheet is saved.
+
+28.If a user joins between Monday and Saturday, system should allow accurate date handling.
+
+29.Auto-fill for official holiday dates should be available.
+
+30. If a user selects an Off/Holiday client in any main field, then:
+
+   All child fields under that main field should be automatically removed and 
+
+   The total hour should be recalculated accordingly
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+{#3303 ▼
+  +"teammember_id": 936
+  +"staffcode": "M1070"
+  +"rolename": "Manager"
+  +"team_member": "Pooja kumari"
+  +"assignmentgenerate_id": "MAN100025"
+}
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+      <form method="post" action="{{ url('filterindependencereport') }}" enctype="multipart/form-data" style="margin-bottom: -11px;">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="teammemberId">Team Member</label></strong>
+                                    <select class="language form-control" name="teammemberId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('teammember_id') as $independenceData)
+                                            <option value="{{ $independenceData->teammember_id }}" 
+                                                @if(isset($independence->teammember_filter) 
+                                                    {{ $independence->teammember_filter == $independenceData->teammember_id ? 'selected' : '' }}
+                                                @endif>
+                                                {{ $independenceData->team_member }} ({{ $independenceData->staffcode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="assignmentId">Assignment Id</label></strong>
+                                    <select class="language form-control" name="assignmentId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('assignmentgenerate_id') as $independenceData)
+                                            <option value="{{ $independenceData->assignmentgenerate_id }}"
+                                                @if(isset($independence->assignment_filter))
+                                                    {{ $independence->assignment_filter == $independenceData->assignmentgenerate_id ? 'selected' : '' }}
+                                                @endif>
+                                                {{ $independenceData->assignmentgenerate_id }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="statusId">Status</label></strong>
+                                    <select class="language form-control" name="statusId">
+                                        <option value="">Please Select One</option>
+                                        <option value="Pending" 
+                                            @if(isset($independence->status_filter) 
+                                                {{ $independence->status_filter == 'Pending' ? 'selected' : '' }}
+                                            @endif>Pending</option>
+                                        <option value="Submitted"
+                                            @if(isset($independence->status_filter)) 
+                                                {{ $independence->status_filter == 'Submitted' ? 'selected' : '' }}
+                                            @endif>Submitted</option>
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-2 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <label for="search">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success btn-block">Search</button>
+                                    @if(isset($independence->teammember_filter) || isset($independence->assignment_filter) || isset($independence->status_filter))
+                                        <a href="{{ route('independencereport') }}" class="btn btn-danger btn-block mt-2">Reset</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+					
+					
+					
+           <form method="post" action="{{ url('filterindependencereport') }}" enctype="multipart/form-data" style="margin-bottom: -11px;">
+                        @csrf
+                        <div class="row">
+                            <!-- Team Member -->
+                            <div class="col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <strong><label for="teammemberId">Team Member</label></strong>
+                                    <select class="language form-control" name="teammemberId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('teammember_id') as $independenceData)
+                                            <option value="{{ $independenceData->teammember_id }}"
+                                                @if(isset($independence->teammember_filter) && $independence->teammember_filter == $independenceData->teammember_id) selected @endif>
+                                                {{ $independenceData->team_member }} ({{ $independenceData->staffcode }})
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- Assignment ID -->
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="assignmentId">Assignment Id</label></strong>
+                                    <select class="language form-control" name="assignmentId">
+                                        <option value="">Please Select One</option>
+                                        @foreach ($independence->unique('assignmentgenerate_id') as $independenceData)
+                                            <option value="{{ $independenceData->assignmentgenerate_id }}"
+                                                @if(isset($independence->assignment_filter) && $independence->assignment_filter == $independenceData->assignmentgenerate_id) selected @endif>
+                                                {{ $independenceData->assignmentgenerate_id }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- Status -->
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <strong><label for="statusId">Status</label></strong>
+                                    <select class="language form-control" name="statusId">
+                                        <option value="">Please Select One</option>
+                                        <option value="Pending"
+                                            @if(isset($independence->status_filter) && $independence->status_filter == 'Pending') selected @endif>
+                                            Pending
+                                        </option>
+                                        <option value="Submitted"
+                                            @if(isset($independence->status_filter) && $independence->status_filter == 'Submitted') selected @endif>
+                                            Submitted
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- Search & Reset -->
+                            <div class="col-md-2 col-sm-6 mb-3">
+                                <div class="form-group">
+                                    <label for="search">&nbsp;</label>
+                                    <button type="submit" class="btn btn-success btn-block">Search</button>
+                                    @if(isset($independence->teammember_filter) || isset($independence->assignment_filter) || isset($independence->status_filter))
+                                        <a href="{{ route('independencereport') }}" class="btn btn-danger btn-block mt-2">Reset</a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+					
+					
+  +request: Symfony\Component\HttpFoundation\InputBag {#45 ▼
+    #parameters: array:4 [▼
+      "_token" => "FTjC5ePYdB4JtGx0NBv05hsHvnsekNMpcWx8rnqK"
+      "teammemberId" => "933"
+      "assignmentId" => "MNA100030"
+      "statusId" => "Submitted"
+    ]
+  }					
+  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+fianl from hare 
+
+1
+Md Shahid Raza
+
+2
+Laravel Developer
+
+3
+Atishay Jain
+
+4
+VSA
+
+5
+Develop and maintain backend functionality using Laravel, Write optimized SQL queries for large datasets, Optimize queries and controllers for performance, Debug and resolve application issues, Maintain code versioning using Git, Participate in daily stand-ups. Handle bug fixing and production support issues, update task descreption on Jira for testing, Implementation of a new task
+
+6
+Yes, Fully
+
+7
+My daily tasks are fully aligned with my defined KRAs.
+
+8
+1.Backend Development using Laravel, 2. Database Design and Query Optimization, 3.Code Maintenance, Deployment, and Support, 4. Performance Optimization, 5. The description has been updated on Jira for all In process tasks
+
+9
+1.Backend Development using Laravel. A. Develop and maintain Laravel-based applications and modules. B. Implement controllers, models, and business logic. 2. Database Design and Query Optimization. A. Design normalized tables and relationships in MySQL. B. Write optimized queries, joins, and indexes for large datasets. 3. Code Maintenance, Deployment, and Support. A. Fix bugs and issues in the codebase. B. Push updates to staging/live environments using Bitbucket. 4. Performance Optimization. A. Use pagination, eager loading, and indexing for speed improvements. 5. Task Documentation and Updates on Jira. A. Regularly update task status and progress on Jira. B. Document important steps, blockers under each task ticket
+
+10
+implementing new tasks and resolving bugs on VSA
+
+11
+I want to contribute more to Performance Optimization because it directly improves the application’s speed and efficiency, and helps in building scalable systems. I also enjoy analyzing slow queries and finding ways to optimize backend processes.
+
+12
+I face challenges such as unexpected data being removed from the backend, and I currently do not have direct access to upload or deploy code on the live server, which limits my ability to resolve issues quickly.
+
+13
+Gaining access to the live deployment environment would significantly improve efficiency, as it would reduce dependency delays
+
+14
+Backend: PHP (Laravel), Database: MySQL, Frontend : HTML, CSS, JavaScript, Bootstrap, Libraries, Tools: Git, Postman, XAMPP, phpMyAdmin, Jira, Bitbucket. Others: jQuery, DataTables, AJAX, Json.
+
+15
+Advanced JavaScript concepts
+
+16
+training sessions or webinars to upskill the tech team.
+
+
+https://forms.office.com/Pages/ResponseDetailPage.aspx?id=tRLJslORgk2tC-qCsgEPd8lzwwFkxVNFmI_MGKqJ6uRUQjNTQVc5M1pLTUs2UkRLUExSMFBZM0QwTC4u&rid=9&GetResponseToken=lIGCGXEJT94VCieWWSN3rEyhsqBn615F1JpWOdqskx0&origin=rc&prevsubpage=rcfre&d1obforrc=1&rcsidebar=0 
+
+KRA tasks 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.upload excel and listing data according degination 
+2.degination incraement and decreament 
+
+
+3.
+
+
+Employee account - KRA visible to all employees (non-editable)
+
+HR Account 
+
+HR/Admin can edit Employee KRAs
+
+HR can edit column names 
+
+HR can add/del column and row 
+
+HR can create New Designation and upload/add KRAs
+
+Notifications 
+
+Notify employee when KRAs is modified
+
+Notify reporting manager/partner about employee’s KRA edit
+
+Mail Content - Pending from Shivam/HR
+
+
+
+
+
+1.ui bnana hai 
+2.jab excell upload karenge to priev ho jayega and niche instruction likhunga ki is excell me 2nd row ko as a column heading pick karunga
+3.column null nahi hoga 
+4.after that i can submit it 
+
+# tables
+
+1.column1, column 2, coulumn 3 
+2. and column 1, and column 2 me jo bhi value dalenge vo dusre table me store hoga 
+
+#edit / permission 
+1. agar kisi ko permission dena hai extra column ko to ek new record create ho jayega and user ka id jayega us column me and jab fetch karunga tab jis column me user ka id hai vo latest pick karenge 
+2.
+
+
+
+
+
+Kras Meeting 
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+partnar me notification  tri sharadh
+
+manager and article me
+all manager and all article 
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+2024-07-08 12:52:04
+
+2025-06-14 12:52:04
+
+
+array:6 [▼
+  0 => 11782
+  1 => 11783
+  2 => 12038
+  3 => 12039
+  4 => 13126
+  5 => 13127
+]
+
+
+$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
+
+
+967
+864
+844
+
+
+array:56 [▼
+  0 => array:2 [▼
+    "teamid" => 864
+    "delete_ids" => array:9 [▼
+      0 => 10947
+      1 => 10948
+      2 => 11501
+      3 => 11502
+      4 => 12146
+      5 => 12147
+      6 => 12148
+      7 => 12529
+      8 => 12530
+    ]
+  ]
+  1 => array:2 [▼
+    "teamid" => 889
+    "delete_ids" => array:2 [▼
+      0 => 8474
+      1 => 16249
+    ]
+  ]
+  2 => array:2 [▼
+    "teamid" => 844
+    "delete_ids" => array:6 [▼
+      0 => 11782
+      1 => 11783
+      2 => 12038
+      3 => 12039
+      4 => 13126
+      5 => 13127
+    ]
+  ]
+  3 => array:2 [▼
+    "teamid" => 819
+    "delete_ids" => array:7 [▼
+      0 => 13692
+      1 => 13693
+      2 => 13694
+      3 => 14714
+      4 => 14715
+      5 => 14716
+      6 => 14717
+    ]
+  ]
+  4 => array:2 [▼
+    "teamid" => 777
+    "delete_ids" => array:2 [▼
+      0 => 13120
+      1 => 13379
+    ]
+  ]
+  5 => array:2 [▶]
+  6 => array:2 [▶]
+  7 => array:2 [▶]
+  8 => array:2 [▶]
+  9 => array:2 [▶]
+  10 => array:2 [▶]
+  11 => array:2 [▶]
+  12 => array:2 [▶]
+  13 => array:2 [▶]
+  14 => array:2 [▶]
+  15 => array:2 [▶]
+  16 => array:2 [▶]
+  17 => array:2 [▶]
+  18 => array:2 [▶]
+  19 => array:2 [▶]
+  20 => array:2 [▶]
+  21 => array:2 [▶]
+  22 => array:2 [▶]
+  23 => array:2 [▶]
+  24 => array:2 [▶]
+  25 => array:2 [▶]
+  26 => array:2 [▶]
+  27 => array:2 [▶]
+  28 => array:2 [▶]
+  29 => array:2 [▶]
+  30 => array:2 [▶]
+  31 => array:2 [▶]
+  32 => array:2 [▶]
+  33 => array:2 [▶]
+  34 => array:2 [▶]
+  35 => array:2 [▶]
+  36 => array:2 [▶]
+  37 => array:2 [▶]
+  38 => array:2 [▶]
+  39 => array:2 [▶]
+  40 => array:2 [▶]
+  41 => array:2 [▶]
+  42 => array:2 [▶]
+  43 => array:2 [▶]
+  44 => array:2 [▶]
+  45 => array:2 [▶]
+  46 => array:2 [▼
+    "teamid" => 959
+    "delete_ids" => array:9 [▼
+      0 => 11407
+      1 => 11408
+      2 => 11497
+      3 => 11498
+      4 => 11979
+      5 => 11980
+      6 => 14093
+      7 => 14805
+      8 => 14806
+    ]
+  ]
+  47 => array:2 [▶]
+  48 => array:2 [▶]
+  49 => array:2 [▶]
+  50 => array:2 [▼
+    "teamid" => 967
+    "delete_ids" => array:4 [▼
+      0 => 12156
+      1 => 12157
+      2 => 14291
+      3 => 14292
+    ]
+  ]
+  51 => array:2 [▶]
+  52 => array:2 [▶]
+  53 => array:2 [▶]
+  54 => array:2 [▶]
+  55 => array:2 [▶]
+]
+]
+
+
+Rahul Singhal  864  2023-10-30
+sunny gupta 
+
+
+Sachin Kumar	S1052	02-06-2025 to 08-06-2025	13-06-2025 05:53 PM	14	112   888
+
+Sachin Kumar	S1052	26-05-2025 to 31-05-2025	04-06-2025 05:28 PM	12	68
+
+Sachin Kumar	S1052	27-01-2025 to 01-02-2025	10-02-2025 03:09 PM	12	79
+
+Sachin Kumar	M1103	19-05-2025 to 24-05-2025	31-05-2025 10:54 AM	12	32
+
+Vishal Singh	M1065	14-04-2025 to 20-04-2025	23-04-2025 10:33 AM	14	116
+
+Vishal Singh	M1065	07-04-2025 to 13-04-2025	17-04-2025 10:33 AM	14	118
+
+Vishal Singh	M1065	31-03-2025 to 05-04-2025	16-04-2025 01:41 PM	12	102
+
+Vishal Singh	M1065	24-03-2025 to 29-03-2025	16-04-2025 01:37 PM	12	94
+
+Vishal Singh	M1065	17-03-2025 to 22-03-2025	24-03-2025 04:21 PM	12	93
+
+Vishal Singh	M1065	10-03-2025 to 15-03-2025	18-03-2025 01:13 PM	12	66
+
+Vishal Singh	M1065	03-03-2025 to 08-03-2025	18-03-2025 12:59 PM	12	87     928
+
+Vishal Singh	M1001	25-11-2024 to 30-11-2024	02-12-2024 06:52 PM	12	99    835
+
+
+ // $teammembers = DB::table('timesheetreport')
+    //   // ->where('teamid', 847)
+    //   ->distinct()
+    //   ->pluck('teamid')
+    //   ->toArray();
+
+    // $updatedteamlist = [];
+    // foreach ($teammembers as $teamId) {
+    //   $allData = DB::table('timesheetreport')
+    //     ->where('teamid', $teamId)
+    //     ->get();
+
+    //   $grouped = $allData->groupBy(function ($item) {
+    //     return $item->teamid . '|' . $item->startdate . '|' . $item->partnerid;
+    //   });
+
+    //   $deleteIds = [];
+
+    //   $grouped->each(function ($group) use (&$deleteIds) {
+    //     if ($group->count() > 1) {
+    //       $sorted = $group->sortBy('id')->values();
+    //       $duplicates = $sorted->slice(1)->pluck('id')->toArray();
+    //       $deleteIds = array_merge($deleteIds, $duplicates);
+    //     }
+    //   });
+
+
+    //   if (!empty($deleteIds)) {
+    //     // $updatedteamlist[] = $teamId;
+    //     $updatedteamlist[] = [
+    //       'teamid' => $teamId,
+    //       'delete_ids' => $deleteIds
+    //     ];
+
+    //     DB::table('timesheetreport')
+    //       ->where('teamid', $teamId)
+    //       ->whereIn('id', $deleteIds)
+    //       ->delete();
+    //   }
+    // }
+    // dd($updatedteamlist);
+	
+	
+	
+	  public function allteamsubmitted()
+	  
+	  
+	   public function allteamsubmitted()
+  {
+    // Fetch all necessary data in a single query
+    $get_datess = DB::table('timesheetreport')
+      ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+      ->leftJoin('teamrolehistory', function ($join) {
+        $join->on('teamrolehistory.teammember_id', '=', 'teammembers.id')
+          ->on('teamrolehistory.created_at', '<', 'timesheetreport.created_at');
+      })
+      ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+      // ->where('timesheetreport.teamid', 868)
+      ->select(
+        'timesheetreport.*',
+        'teamrolehistory.newstaff_code',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'partners.team_member as partnername',
+        'teammembers.emailid'
+      )
+      ->latest()
+      ->get();
+
+    $permissiontimesheet = DB::table('timesheetreport')->first();
+
+    // Map and group data
+    $groupedData = $get_datess->groupBy(function ($item) {
+      return $item->team_member . '|' . $item->week;
+    })->map(function ($group) {
+      $firstItem = $group->first();
+
+      return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'dayscount' => $group->sum('dayscount'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'emailid' => $firstItem->emailid,
+        // Use newstaff_code if available, otherwise staffcode
+        'staffcode' => $firstItem->newstaff_code ?? $firstItem->staffcode,
+        'partnerid' => $firstItem->partnerid,
+      ];
+    });
+
+    $get_date = collect($groupedData->values());
+
+
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'permissiontimesheet'));
+  }
+  
+  
+  
+  
+  @if (Auth::user()->role_id == 11)
+        <div class="body-content">
+            <div class="row">
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 bg-info text-white rounded mb-3 p-3 shadow-sm text-center">
+                        <a href="{{ url('assignmentmapping') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Assignment</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $assignmentcount }}</div>
+                            <small style="color:white;">Latest Assignment</small>
+                            <a></a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 bg-primary text-white rounded mb-3 p-3 shadow-sm text-center">
+                        <a href="{{ url('client') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Client</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $client }}</div>
+                            <small style="color:white;">active clients</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 bg-success text-white rounded mb-3 p-3 shadow-sm text-center">
+                        <a href="{{ url('teammember') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Team Member</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $teammember }}</div>
+                            <small style="color:white;">active Member</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <!--Active users indicator-->
+                    <div class="p-2 text-white rounded mb-3 p-3 shadow-sm text-center"
+                        style="background-color: darkcyan;">
+                        <a href="{{ url('notification') }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Notification</div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $notification }}</div>
+                            <small style="color:white;">Latest Notification</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif  ye mera design hai but mai is design ko change karna chahta hu like image ke tarah mai image attach kar deta hu aur is image me jo content hai vahi content rakhna static
+	
+	
+	.card-header h2
+Specificity: (0,1,1)
+ {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-left: -16px;
+	
+	
+	Illuminate\Support\Collection {#3026 ▼
+  #items: array:11 [▼
+    0 => {#2980 ▼
+      +"id": 830
+      +"staffcode": "M1019"
+      +"team_member": "Sohan Jha"
+    }
+    1 => {#2990 ▼
+      +"id": 844
+      +"staffcode": "P1009"
+      +"team_member": "Sunny Gupta"
+    }
+    2 => {#3025 ▼
+      +"id": 849
+      +"staffcode": "M1029"
+      +"team_member": "Dinesh Maurya"
+    }
+    3 => {#3023 ▼
+      +"id": 858
+      +"staffcode": "M1038"
+      +"team_member": "Pratibha Sharma"
+    }
+    4 => {#3022 ▼
+      +"id": 869
+      +"staffcode": "M1049"
+      +"team_member": "Vishvdev Arya"
+    }
+    5 => {#3021 ▼
+      +"id": 918
+      +"staffcode": "M1059"
+      +"team_member": "Kartic Bindal"
+    }
+    6 => {#3020 ▼
+      +"id": 932
+      +"staffcode": "M1066"
+      +"team_member": "Sakshi Sharma"
+    }
+    7 => {#3019 ▼
+      +"id": 934
+      +"staffcode": "M1068"
+      +"team_member": "Prateek Kumar"
+    }
+    8 => {#3018 ▼
+      +"id": 965
+      +"staffcode": "M1089"
+      +"team_member": "Aditya Gahlot"
+    }
+	
+	
+    9 => {#3017 ▼
+      +"id": 972
+      +"staffcode": "M1096"
+      +"team_member": "Akshi Jain"
+    }
+    10 => {#3016 ▼
+      +"id": 982
+      +"staffcode": "M1098"
+      +"team_member": "Madhurima das"
+    }
+  ]
+  #escapeWhenCastingToString: false
+}
+
+31-05-2025
+858
+2025-05-31
+
+
+
+33
+OFF100004
+887
+0
+213
+4th Saturday
+N/A
+0
+
+
+
+thirtyone OH  remove P
+offholidays increase 1 days 
+no_of_days_present  decrease 1 days 
+
+
+Illuminate\Support\Collection {#3026 ▼
+  #items: array:11 [▼
+    0 => 830
+    1 => 844
+    2 => 849
+    3 => 858
+    4 => 869
+    5 => 918
+    6 => 932
+    7 => 934
+    8 => 965
+    9 => 972
+    10 => 982
+  ]
+  #escapeWhenCastingToString: false
+}
+
+
+  $teammemberId = DB::table('teammembers')
+      ->whereIn('staffcode', ['M1038', 'M1096', 'M1029', 'M1019', 'M1098', 'M1068', 'M1066', 'M1089', 'M1049', 'P1009', 'M1059'])
+      ->pluck('id');
+
+    // $timesheetdata = DB::table('timesheetusers')
+    //   ->whereIn('createdby', $teammemberId)
+    //   ->where('date', '2025-05-31')
+    //   ->update([
+    //     'client_id' => 33,
+    //     'assignmentgenerate_id' => 'OFF100004',
+    //     'partner' => 887,
+    //     'totalhour' => 0,
+    //     'assignment_id' => 213,
+    //     'workitem' => '14th Saturday',
+    //     'location' => 'N/A',
+    //     'hour' => 0,
+    //   ]);
+
+    $attendancesdata = DB::table('attendances')
+      ->whereIn('employee_name', $teammemberId)
+      ->where('month', 'May')
+      ->where('year', '2025')
+      ->get();
+
+    foreach ($attendancesdata as $attendances) {
+      // DB::beginTransaction();
+
+      $updateddata = DB::table('attendances')
+        ->where('id', $attendances->id)
+        ->update([
+          'thirtyone' => 'OH',
+          'offholidays' => $attendances->offholidays + 1,
+          'no_of_days_present' => $attendances->no_of_days_present - 1,
+
+        ]);
+      // ->get();
+
+
+      $updateddatacheck = DB::table('attendances')
+        ->where('id', $attendances->id)
+        ->get();
+
+      dd($updateddatacheck);
+
+      // DB::commit();
+    }
+
+
+   
+   950   ayush
+   timesheet not 
+   timesheetreport not
+   
+  
+   timesheetusers yes one days 31 
+   
+   
+   
+   applyleave 2038 id delete 
+   
+   
+   
+   attendances yes  sasual leave kam karna hai and offholidays badhana hai 
+   
+     leaveapprove 
+ 1945  id delete 
+   
+   ayushi go
+   
+      timesheet not 
+   timesheetreport not
+   
+   
+      timesheetusers yes one days 31 
+	  
+	     applyleave 2039 id delete 
+		 
+		    attendances yes  sasual leave kam karna hai and offholidays badhana hai 
+   
+   
+   
+  leaveapprove 
+ 1949  id delete 
+ 
+   
+2222222222222222222222222222222222222222222222222222222222222222222
+

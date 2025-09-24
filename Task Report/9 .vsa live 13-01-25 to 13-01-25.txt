@@ -1,0 +1,1165 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Comment all places on vsademo
+app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+itsupport_delhi@vsa.co.in  ise comment kar de 
+
+
+
+agar is per koi bhi update ho to profile me 10th and 12th ka documnet check karle ek baar ye baar baar problem aata hai 
+independence ke ander create and view file insert karna hai 
+IndependenceController.php
+TeammemberController (1).php
+
+
+Please check once vsalive bugs hare file
+
+
+
+vsalocal vsademo vsalive, ```start hare 
+
+7.Udin date format needs to be fixed. ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+<td>{{ $udinData->udindate ? date
+                                                        <td>{{ $udinData->udindate ? date('d-m-Y', strtotime($udinData->udindate)) : 'NA' }}
+                                                        </td>
+
+
+end hare
+
+
+5.Restrict users from entering time in the format 08:00.   ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\form.blade.php
+
+    <div class="col-2" style="margin-left: 759px;">
+        <div class="form-group">
+            <label class="font-weight-600">Total Hour</label>
+            <input type="text" class="time form-control" id="totalhours" name="totalhour"
+                value="{{ $timesheet->hour ?? '0' }}" autocomplete="off" readonly>
+        </div>
+    </div>
+	
+end hare 
+
+
+
+
+1.Implement a calendar feature on the Add Timesheet page. ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+in create function
+
+return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData',
+
+
+   } else {
+
+      $authUserId = auth()->user()->teammember_id;
+
+      // Fetch common data
+      $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+        ->where('teamid', $authUserId)
+        ->latest()
+        ->first();
+
+      $timesheetmaxDateRecord = DB::table('timesheetusers')
+        ->where('status', '0')
+        ->where('createdby', $authUserId)
+        ->whereNotIn('client_id', ['134'])
+        ->orderBy('date', 'desc')
+        ->first();
+
+      $leaveDates = DB::table('timesheetusers')
+        ->where('status', '0')
+        ->where('createdby', $authUserId)
+        ->whereIn('client_id', ['134'])
+        ->orderBy('date')
+        ->pluck('date'); // Fetch all leave dates as a collection
+
+      $leavedataforcalander = $leaveDates->first();
+      $leavedataforcalander1 = $leaveDates->last();
+
+      // Fetch rejoining data
+      $rejoiningdate = $this->getRejoiningDate($authUserId, $lasttimesheetsubmiteddata);
+      // Calculate difference in days
+      $differenceInDays = $this->calculateDateDifference(
+        $lasttimesheetsubmiteddata,
+        $timesheetmaxDateRecord,
+        $leavedataforcalander,
+        $rejoiningdate
+      );
+
+      $newteammember = null;
+      if (!$lasttimesheetsubmiteddata) {
+        // Fetch new team member joining date
+        $newteammember = DB::table('teammembers')
+          ->where('id', $authUserId)
+          ->value('joining_date');
+      }
+
+      return view('backEnd.timesheet.create', compact('client', 'teammember', 'assignment', 'partner', 'timesheetrejectData', 'lasttimesheetsubmiteddata', 'timesheetmaxDateRecord', 'leavedataforcalander1', 'differenceInDays', 'newteammember', 'rejoiningdate'));
+    }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+after create fun add this 
+
+   private function getRejoiningDate($userId, $lasttimesheetsubmiteddata)
+  {
+    $rejoiningData = DB::table('teammembers')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+      ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+      ->where('teammembers.id', $userId)
+      ->select('teamrolehistory.rejoiningdate', 'rejoiningsamepost.rejoiningdate as samepostrejoiningdate')
+      ->first();
+
+    if ($rejoiningData) {
+      $rejoiningDateStore = $rejoiningData->samepostrejoiningdate ?? $rejoiningData->rejoiningdate;
+
+      if ($rejoiningDateStore && $lasttimesheetsubmiteddata) {
+        $rejoiningdate = Carbon::parse($rejoiningDateStore);
+        $lastSubmissionDate = Carbon::parse($lasttimesheetsubmiteddata->enddate);
+
+        return $rejoiningdate->greaterThan($lastSubmissionDate) ? $rejoiningDateStore : null;
+      }
+    }
+
+    return null;
+  }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+after getRejoiningDate($userId, $lasttimesheetsubmiteddata) fun add this 
+
+    private function calculateDateDifference($lastTimesheet, $timesheetMaxDate, $leaveDate, $rejoiningDate)
+  {
+    if ($lastTimesheet && !$timesheetMaxDate && !$leaveDate && !$rejoiningDate) {
+      return 1; // Default difference
+    }
+
+    if ($lastTimesheet && $timesheetMaxDate && !$leaveDate) {
+      return Carbon::parse($timesheetMaxDate->date)->diffInDays(Carbon::parse($lastTimesheet->enddate));
+    }
+
+    if ($timesheetMaxDate && $leaveDate) {
+      return Carbon::parse($timesheetMaxDate->date)->diffInDays(Carbon::parse($leaveDate));
+    }
+
+    if ($lastTimesheet && $leaveDate) {
+      return Carbon::parse($lastTimesheet->enddate)->diffInDays(Carbon::parse($leaveDate));
+    }
+    return 0;
+  }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+find   <script src="{{ url('backEnd/dist/js/pages/forms-basic.active.js') }}"></script> below this script add it 
+
+  <script>
+      // Pass the PHP data to JavaScript
+      var lasttimesheetsubmiteddata = @json($lasttimesheetsubmiteddata);
+      var timesheetmaxDateRecord = @json($timesheetmaxDateRecord);
+      var leavedataforcalander1 = @json($leavedataforcalander1);
+      var differenceInDays = @json($differenceInDays);
+      var newteammember = @json($newteammember);
+      var rejoiningdate = @json($rejoiningdate);
+  </script>
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+
+ @if (Request::is('invoice/create') || Request::is('invoice/*/edit')
+ 
+ 
+     <script>
+         $(function() {
+             $('#datepicker').datepicker({
+                 dateFormat: 'dd-mm-yy'
+             });
+         });
+         //  $(function() {
+         //      $("#datepickers").datepicker({
+         //          maxDate: new Date,
+         //          dateFormat: 'dd-mm-yy'
+         //      });
+         //  });
+     </script>
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+         <script>
+         document.addEventListener('DOMContentLoaded', function() {
+             // Declare endDate outside of the conditions
+             let endDate = null;
+
+             // Function to parse and validate dates
+             function parseDate(date) {
+                 let parsedDate = new Date(date);
+                 if (isNaN(parsedDate)) {
+                     console.error("Invalid date format:", date);
+                     return null;
+                 }
+                 return parsedDate;
+             }
+
+             // Helper function to adjust endDate
+             function adjustEndDateForWeekend(date) {
+                 if (date.getDay() === 6) {
+                     console.log("Incremented date is Sunday, adding another day.");
+                     date.setDate(date.getDate() + 1); // Increment by one more day
+                 }
+             }
+
+             // Check the conditions for calculating the endDate
+             if (timesheetmaxDateRecord && leavedataforcalander1) {
+                 if (differenceInDays > 1) {
+                     endDate = parseDate(timesheetmaxDateRecord.date);
+                 } else {
+                     endDate = parseDate(leavedataforcalander1);
+                 }
+
+                 if (!endDate && lasttimesheetsubmiteddata) {
+                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                     if (endDate) adjustEndDateForWeekend(endDate);
+                 }
+             } else if (lasttimesheetsubmiteddata && !timesheetmaxDateRecord && !leavedataforcalander1 && !
+                 rejoiningdate) {
+                 console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                 endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                 if (endDate) adjustEndDateForWeekend(endDate);
+             } else if (lasttimesheetsubmiteddata && timesheetmaxDateRecord && !leavedataforcalander1) {
+                 console.log("Using timesheetmaxDateRecord date:", timesheetmaxDateRecord.date);
+                 endDate = parseDate(timesheetmaxDateRecord.date);
+             } else if (newteammember && !lasttimesheetsubmiteddata) {
+                 //  } else if (newteammember) {
+
+                 //  console.log("Using newteammember data:", newteammember);
+                 //  endDate = timesheetmaxDateRecord ? parseDate(timesheetmaxDateRecord.date) : parseDate(
+                 //      newteammember);
+                 //  if (endDate) endDate.setDate(endDate.getDate() - 1);
+
+                 if (timesheetmaxDateRecord) {
+                     endDate = parseDate(timesheetmaxDateRecord.date)
+                 } else {
+                     console.log("Using newteammember data:", newteammember);
+                     endDate = parseDate(newteammember);
+                     endDate.setDate(endDate.getDate() - 1);
+                 }
+             } else if (rejoiningdate) {
+                 console.log("Using rejoiningdate data:", rejoiningdate);
+                 endDate = parseDate(rejoiningdate);
+                 if (endDate) endDate.setDate(endDate.getDate() - 1);
+             } else if (leavedataforcalander1 && lasttimesheetsubmiteddata) {
+                 if (differenceInDays === 2 || differenceInDays === 1) {
+                     endDate = parseDate(leavedataforcalander1);
+                 } else {
+                     console.log("Using lasttimesheetsubmiteddata.enddate:", lasttimesheetsubmiteddata.enddate);
+                     endDate = parseDate(lasttimesheetsubmiteddata.enddate);
+                     if (endDate) adjustEndDateForWeekend(endDate);
+                 }
+             }
+
+             // Set date in the datepicker if endDate is valid
+             if (endDate) {
+                 let today = new Date();
+                 today.setHours(0, 0, 0, 0); // Normalize today's date to remove time part
+                 endDate.setHours(0, 0, 0, 0); // Normalize endDate to remove time part
+
+                 // Increment endDate if it's not today's date  or  Increment endDate if enddate lesstahn today date and not increamner end date if enddate greater than today date
+                 //  if (endDate.getTime() !== today.getTime() && endDate.getTime() <= today.getTime()) {
+                 //      endDate.setDate(endDate.getDate() + 1);
+                 //  }
+
+                 //  if (endDate.getTime() <= today.getTime()) {
+                 if (endDate.getTime() < today.getTime()) {
+                     endDate.setDate(endDate.getDate() + 1);
+                 }
+
+
+                 let formattedDate = ('0' + endDate.getDate()).slice(-2) + '-' +
+                     ('0' + (endDate.getMonth() + 1)).slice(-2) + '-' +
+                     endDate.getFullYear();
+
+                 // Set the calculated date in the datepicker input field
+                 document.getElementById('datepickers').value = formattedDate;
+
+                 // Initialize the datepicker with the calculated maxDate
+                 $("#datepickers").datepicker({
+                     maxDate: endDate,
+                     minDate: endDate, // Set the same date for minDate if needed
+                     dateFormat: 'dd-mm-yy'
+                 });
+
+                 console.log("Adjusted date set in datepicker:", endDate);
+             } else {
+                 console.log("No valid timesheet or submitted date data found to set datepicker.");
+             }
+         });
+     </script>
+ 
+ 
+ 
+ 
+ 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\create.blade.php
+<p style="float: right;color: white"><b>Select Date : </b>
+
+
+
+
+
+                                  {{-- <div class="col-md-5">
+                                      <p style="float: right;color: white"><b>Select Date : </b> <input type="text"
+                                              id="datepickers" name="date" value="{{ date('d-m-Y') }}" readonly></p>
+                                  </div> --}}
+                                  <div class="col-md-5">
+                                      <p style="float: right; color: white">
+                                          <b>Select Date: </b>
+                                          <input type="text" id="datepickers" name="date" readonly>
+                                      </p>
+                                  </div>
+								  
+								  
+	
+
+	
+								  
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+add this code in end of file 
+
+ <script>
+     $(document).ready(function() {
+         $('#datevalid').on('change', function() {
+             var startclear = $('#datevalid');
+             var startDateInput1 = $('#datevalid').val();
+             var startDate = new Date(startDateInput1);
+             var startyear = startDate.getFullYear();
+             var yearLength = startyear.toString().length;
+             if (yearLength > 4) {
+                 alert('Enter four digits for the year');
+                 startclear.val('');
+             }
+         });
+     });
+ </script>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+ find text  <input type="date" name="udindate" value="" class=" form-control">
+ 
+ 
+replace it 
+                                    <input type="date" name="udindate" id="datevalid" value=""
+                                        class=" form-control">
+
+
+
+						
+						
+								 						  
+								  
+1.Implement a calendar feature on the Add Timesheet page.  ```end hare
+
+
+
+
+
+3.Users can apply for a maximum of 10 days of leave, specifically for casual leave only ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+ elseif ($request->leavetype == 9) {  add this below code before   foreach ($period as $date) {
+
+       $to = Carbon::createFromFormat('Y-m-d', $request->to ?? '');
+        $from = Carbon::createFromFormat('Y-m-d', $request->from);
+        $requestdays = $to->diffInDays($from) + 1;
+        $period = CarbonPeriod::create($request->from, $request->to);
+        $datess = [];
+
+        // Calculate the total number of days (inclusive of both start and end dates)
+        $totaldayscount = $to->diffInDays($from) + 1;
+        if ($totaldayscount > 10) {
+          return back()->with('statuss', ['msg' => 'You cannot apply casual leave for more than 10 days']);
+        }
+		
+		
+
+
+
+
+
+
+
+
+
+
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date.  ( 1 days ) ```start
+Restrict admin and partner from rejecting casual leave and exam leave timesheets data if submitted.
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\weeklylist.blade.php
+find text  <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
+
+
+
+                                            @if ($timesheetDatas->assignmentgenerate_id != null)
+                                                <a href="{{ url('/timesheet/reject/' . $timesheetDatas->id) }}"
+                                                    onclick="return confirm('Are you sure you want to Reject this timesheet?');">
+                                                    <button class="btn btn-danger"
+                                                        style="height: 16px; width: auto; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px;"
+                                                        {{ $timesheetDatas->status == 2 ? 'disabled' : '' }}>
+                                                        Reject
+                                                    </button>
+                                                </a>
+                                            @else
+                                                <span>NA</span>
+                                            @endif
+
+
+
+
+
+
+
+
+
+
+
+
+Move the Edit button to the first position on the Timesheet Saved Listing page. ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+
+
+                                   <th>Action</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Day</th>
+                                    <th>Client Name</th>
+                                    <th>Client Code</th>
+                                    <th>Assignment Name</th>
+                                    <th>Assignment Id</th>
+                                    <th>Work Item</th>
+                                    <th>Location</th>
+                                    <th>Partner</th>
+                                    <th>Partner Code</th>
+                                    <th>Hour</th>
+                                    <th>Total Hour</th>
+									
+									
+	
+
+	
+									
+find text 									
+ <td style="display: none;">{{ $timesheetDatas->id }}</td>
+ after this line replace till  @endphp
+ 
+ 
+ 
+                                        @php
+
+                                            $date = $timesheetDatas->date;
+
+                                            $leaves = DB::table('applyleaves')
+                                                ->where('applyleaves.createdby', auth()->user()->teammember_id)
+                                                ->where('status', '!=', 2)
+                                                ->select('applyleaves.from', 'applyleaves.to')
+                                                ->get();
+
+                                            $leavesWithinRange = $leaves->filter(function ($leave) use ($date) {
+                                                return $leave->from <= $date && $leave->to >= $date;
+                                            });
+                                        @endphp
+
+
+                                        <td>
+                                            @if ($client_id->status == 0)
+                                                @if ($leavesWithinRange->isEmpty())
+                                                    @if ($timesheetDatas->assignmentgenerate_id != null)
+                                                        <a href="{{ url('/savedtimesheet/edit/' . $timesheetDatas->id) }}"
+                                                            class="btn btn-info-soft btn-sm"><i class="far fa-edit"></i></a>
+                                                        <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->timesheetid) }}"
+                                                            onclick="return confirm('Are you sure you want to delete this item?');"
+                                                            class="btn btn-danger-soft btn-sm"><i
+                                                                class="far fa-trash-alt"></i></a>
+                                                    @endif
+                                                @endif
+                                            @else
+                                                delete blocked
+                                            @endif
+                                        </td>
+                  <td>
+                                            @if ($client_id->status == 0)
+                                                <span class="badge badge-pill badge-warning">saved</span>
+                                            @else
+                                                <span class="badge badge-pill badge-danger">submit</span>
+                                            @endif
+                                        </td>
+										
+										
+					
+ <td>{{ $total }}</td>
+remove this td 
+
+                                         <td>
+                                            @if ($client_id->status == 0)
+                                                @if ($leavesWithinRange->isEmpty())
+                                                    @if ($timesheetDatas->assignmentgenerate_id != null)
+                                                        <a href="{{ url('/timesheet/destroy/' . $timesheetDatas->timesheetid) }}"
+                                                            onclick="return confirm('Are you sure you want to delete this item?');"
+                                                            class="btn btn-danger-soft btn-sm"><i
+                                                                class="far fa-trash-alt"></i></a>
+                                                        <a href="{{ url('/savedtimesheet/edit/' . $timesheetDatas->id) }}"
+                                                            class="btn btn-info-soft btn-sm"><i class="far fa-edit"></i></a>
+                                                    @endif
+                                                @endif
+                                            @else
+                                                delete blocked
+                                            @endif
+                                        </td>					
+										
+										
+										
+		
+		
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "pageLength": 14,
+            dom: 'Bfrtip',
+            "order": [
+                // [2, "desc"]
+            ],
+
+            columnDefs: [{
+                targets: [0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+                orderable: false
+            }],
+
+            buttons: [{
+                    extend: 'excelHtml5',
+                    filename: 'Timesheet Save',
+                    // remove extra date from column
+                    exportOptions: {
+                        columns: ':visible',
+                        format: {
+                            body: function(data, row, column, node) {
+                                if (column === 2) {
+                                    var cleanedText = $(data).text().trim();
+                                    var dateParts = cleanedText.split(
+                                        '-');
+                                    // Assuming the date format is yyyy-mm-dd
+                                    if (dateParts.length === 3) {
+                                        return dateParts[2] + '-' + dateParts[1] + '-' +
+                                            dateParts[0];
+                                    }
+                                }
+                                if (column === 1 || column === 11 || column === 0) {
+                                    var cleanedText = $(data).text().trim();
+                                    return cleanedText;
+                                }
+                                return data;
+                            }
+                        }
+                    },
+
+                    //  Remove extra space 
+                    customize: function(xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                        // remove extra spaces
+                        $('c', sheet).each(function() {
+                            var originalText = $(this).find('is t').text();
+                            var cleanedText = originalText.replace(/\s+/g, ' ')
+                                .trim();
+                            $(this).find('is t').text(cleanedText);
+                        });
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+end hare
+
+7.The client wants to fix the ordering of data in the assignment folder based on date and time ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolderfile\index.blade.php
+
+find text  strtotime($assignmentfolderData->created_at)   and replace it
+
+                                    <td>{{ date('d-m-Y h:i A', strtotime($assignmentfolderData->created_at)) }}</td>
+
+
+
+find text <table
+replace table tag                 
+
+                           <table id="examplee" class="table display table-bordered table-striped table-hover">
+
+
+
+
+
+find text @endsection after this line add below code 
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "order": [],
+            columnDefs: [{
+                targets: [
+                    0, 1, 2, 3
+                    @if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14 || $teamleader == Auth::user()->teammember_id)
+                        @if ($assignmentbudgeting->status == 1)
+                            , 5
+                        @endif
+                    @endif
+                ],
+                orderable: false
+            }],
+            buttons: []
+        });
+    });
+</script>
+
+
+
+
+
+end hare
+
+timesheet delete logs ```start  check on live
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+public function destroy(Request $request, $id)
+replace this line  and 
+
+  
+  
+find text  DB::table('timesheetusers')->where('timesheetid', $id)->delete();  after this line add this code 
+
+      $actionName = class_basename($request->route()->getActionname());
+      $pagename = substr($actionName, 0, strpos($actionName, "Controller"));
+      $userId = auth()->user()->teammember_id;
+      // dd('Saved Timesheet Delete: Date ( ' . $timesheetdelete->date . ', ' . $timesheetdelete->createdby . ')');
+      DB::table('activitylogs')->insert([
+        'user_id' => $userId,
+        'ip_address' => $request->ip(),
+        'activitytitle' => $pagename,
+        'description' => 'Saved Timesheet Delete: Details ( ' . $timesheetdelete->date . ', ' . $timesheetdelete->createdby . ' )',
+        'created_at' => now(),
+        'updated_at' => now(),
+      ]);
+  
+  
+  
+ 
+ 
+ 
+ 
+end hare
+  
+28.Replace "Miss" with "Ms." across all places on the portal. ((implementation)) start````
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+titles table me 
+Replace "Miss." with "Ms."
+
+
+
+end hare 
+
+
+
+
+
+
+1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetrequestController.php
+
+->where('timesheetrequests.createdby', auth()->user()->teammember_id)
+
+1
+
+       $hasopenRequests = $mytimesheetrequest->contains('status', 0);
+	   
+	   hasopenRequests  pass in blade file using compact
+
+
+2
+
+  $hasopenRequests = $mytimesheetrequest->contains('status', 0);
+  
+   hasopenRequests  pass in blade file using compact
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheetrequest\teamtimesheetrequest.blade.php
+ <th class="textfixed">Reason for Reject</th> after it 
+ 
+ 
+ 1
+
+
+                                           @if ($hasopenRequests)
+                                                <th>Action</th>
+                                            @endif
+											
+											
+
+
+ {{ $timesheetrequestsData->remark ?? 'NA' }}  find it and after this td 
+ 
+ 
+ 1
+ 
+ 
+                                                <td>
+                                                    @if ($timesheetrequestsData->status == 0)
+                                                        <a href="{{ url('/timesheetrequestform/' . $timesheetrequestsData->id) }}"
+                                                            class="btn btn-info-soft btn-sm"><i class="far fa-edit"></i></a>
+                                                    @else
+                                                        @if ($hasopenRequests)
+                                                            <span>NA</span>
+                                                        @endif
+                                                    @endif
+                                                </td>
+												
+												
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+find public function savedtimesheetEdit(Request $request, $id)  add this fun aftr it 
+
+    //! When we update this function from vsalocal then please update partner varable becouse client want to hide admin name sukhbahadur
+  public function timesheetrequestform(Request $request, $id)
+  {
+
+    $timesheetrequestedit = DB::table('timesheetrequests')
+      ->leftjoin('clients', 'clients.id', 'timesheetrequests.client_id')
+      ->leftjoin('assignments', 'assignments.id', 'timesheetrequests.assignment_id')
+      ->leftjoin('teammembers', 'teammembers.id', 'timesheetrequests.partner')
+      ->leftjoin('teammembers as createdby', 'createdby.id', 'timesheetrequests.createdby')
+      ->where('timesheetrequests.id', $id)
+      ->select(
+        'timesheetrequests.*',
+        'clients.client_name',
+        'clients.client_code',
+        'assignments.assignment_name',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'createdby.team_member as createdbyauth',
+        'createdby.staffcode as staffcodeid',
+      )
+      ->first();
+
+
+    if (auth()->user()->role_id == 13) {
+      // for vsalive 
+      // $partner = DB::table('teammembers')
+      //   ->where('role_id', '=', 11)
+      //   ->whereNotIn('id', [447])
+      //   ->where('status', '=', 1)
+      //   ->where('team_member', '!=', 'Partner')
+      //   ->select('id', 'team_member', 'staffcode')
+      //   ->get();
+
+      // for vsademo 
+      $partner = Teammember::where('role_id', '=', 11)->where('status', '=', 1)->where('team_member', '!=', 'Partner')->with('title')->get();
+    } else {
+      // for vsalive 
+      // $partner = DB::table('teammembers')
+      //   ->whereNotIn('id', [887, 663, 841, 836, 843, 447])
+      //   ->where('role_id', '=', 13)
+      //   ->where('status', '=', 1)
+      //   ->select('id', 'team_member', 'staffcode')
+      //   ->orderBy('team_member', 'asc')
+      //   // ->distinct()
+      //   ->get();
+      // for vsademo 
+      $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+        ->orderBy('team_member', 'asc')->get();
+    }
+
+    // dd($timesheetrequestedit);
+    return view('backEnd.timesheet.timesheetrequestedit', compact('timesheetrequestedit', 'partner'));
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+Route::get('/timesheetrequestform/{id}',  [TimesheetController::class, 'timesheetrequestform']);
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\timesheetrequestedit.blade.php
+replace all code 
+
+{{-- library  --}}
+<link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+
+
+@extends('backEnd.layouts.layout')
+
+@section('backEnd_content')
+    <div class="body-content">
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="card mb-4">
+                    <div class="card-header" style="background:#37A000">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 style="color:white" class="fs-17 font-weight-600 mb-0">Timesheet Request Edit</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @component('backEnd.components.alert')
+                        @endcomponent
+                        <form method="post" action="{{ url('/timesheetrequestupdate') }}" enctype="multipart/form-data"
+                            id="detailsForm" style="margin-bottom: 0px;">
+                            @csrf
+                            {{-- @php
+                                dd($timesheetrequestedit);
+                            @endphp --}}
+                            <div class="row row-sm" style="margin-bottom: 19px;">
+                                <div class="col-sm-6">
+                                    <label for="">Employee Name</label>
+                                    <input required type="text" name="teammember" class="form-control"
+                                        value="{{ $timesheetrequestedit->createdbyauth }}" placeholder="Enter Employee Name"
+                                        readonly>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <label for="">Date</label>
+                                    <input required type="text" name="created_at" class="form-control"
+                                        value=" {{ date('d-m-Y', strtotime($timesheetrequestedit->created_at)) }}"
+                                        placeholder="Enter Employee Name" readonly>
+                                </div>
+                            </div>
+                            <div class="row row-sm">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600" style="width:100px;">Reason *</label>
+                                        <textarea required rows="4" name="reason" class="form-control" placeholder="Enter Reason">{{ $timesheetrequestedit->reason }}</textarea>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="timesheetrequestid"
+                                            value="{{ $timesheetrequestedit->id }}" class="form-control"
+                                            placeholder="Enter Location">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="hidden" name="attachmentexist"
+                                            value="{{ $timesheetrequestedit->attachment }}" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600">Attachment :</label>
+                                        <input type="file" name="file" id="file-1" class="custom-input-file">
+                                        <label for="file-1" id="file-label">
+                                            <i class="fa fa-upload"></i>
+                                            <span>Choose a file…</span>
+                                        </label>
+                                        <span class="text-danger" style="font-weight: 300">File types: png, pdf, jpeg, jpg.
+                                            Max
+                                            size: 5
+                                            MB</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row row-sm">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-600">Approver *</label>
+                                        <select required class="language form-control" name="approver">
+                                            <option value="">Please Select One</option>
+                                            @foreach ($partner as $teammemberData)
+                                                <option
+                                                    value="{{ $teammemberData->id }}"{{ $timesheetrequestedit->partner == $teammemberData->id ?? '' ? 'selected="selected"' : '' }}>
+                                                    {{ $teammemberData->team_member }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success" style="float:right">Submit</button>
+                                <a class="btn btn-secondary" href="{{ url('timesheetrequestlist') }}">
+                                    Back</a>
+                            </div>
+
+                        </form>
+                        <hr class="my-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('file-1').addEventListener('change', function() {
+            var fileLabel = document.getElementById('file-label').querySelector('span');
+            if (this.files.length > 0) {
+                fileLabel.textContent = this.files[0].name;
+            } else {
+                fileLabel.textContent = "Choose a file…";
+            }
+        });
+    });
+</script>
+
+<!--Page Active Scripts(used by this page)-->
+<script src="{{ url('backEnd/dist/js/pages/forms-basic.active.js') }}"></script>
+<!--Page Scripts(used by all page)-->
+<script src="{{ url('backEnd/dist/js/sidebar.js') }}"></script>
+
+
+
+
+
+
+
+
+
+
+Route::post('/timesheetrequestupdate',  [TimesheetController::class, 'timesheetrequestupdate']);
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+add this fun  public function savedtimesheeteditstore(Request $request)
+
+   public function timesheetrequestupdate(Request $request)
+  {
+    try {
+      $request->validate([
+        'reason' => 'required',
+        'file' => 'nullable|mimes:png,pdf,jpeg,jpg|max:5120',
+      ], [
+        'file.max' => 'The file may not be greater than 5 MB.',
+      ]);
+
+      $fileName =  $request->attachmentexist ?? null;
+      if ($request->hasFile('file')) {
+        // public\backEnd\image\confirmationfile
+        $destinationPath = public_path('backEnd/image/confirmationfile');
+        // Delete the existing file if it exists
+        if ($request->attachmentexist) {
+          $existingFilePath = $destinationPath . '/' . $request->attachmentexist;
+          if (file_exists($existingFilePath)) {
+            unlink($existingFilePath);
+          }
+        }
+        // Process the new file upload
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $file->move($destinationPath, $fileName);
+      }
+
+      DB::table('timesheetrequests')
+        ->where('id', $request->timesheetrequestid)
+        ->update([
+          'reason' => $request->reason,
+          'partner' => $request->approver,
+          'attachment' => $fileName,
+          'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+      // timesheet request mail to partner
+      $teammembermail = Teammember::where('id', $request->approver)->pluck('emailid')->first();
+      $name = Teammember::where('id', auth()->user()->teammember_id)
+        ->select('team_member', 'staffcode')
+        ->first();
+
+      $data = array(
+        'teammember' => $name ?? '',
+        'reason' => $request->reason ?? '',
+        'created_at' => date('d-m-Y H:i:s'),
+        'email' => $teammembermail ?? '',
+        'id' => $id ?? '',
+      );
+
+      Mail::send('emails.timesheetrequestform', $data, function ($msg) use ($data) {
+        $msg->to($data['email']);
+        // $msg->cc('itsupport_delhi@vsa.co.in');
+        $msg->subject('Timesheet Submission Request has been Edited');
+      });
+
+      $output = array('msg' => 'Updated Successfully');
+      return back()->with('success', $output);
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+    }
+  }
+
+
+
+
+
+
+
+
+
+is function me file store hota hai so please connect s3
+ $destinationPath = public_path('backEnd/image/confirmationfile');
+
+
+end hare 
+
+
+vsalocal vsademo vsalive, ```end hare 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

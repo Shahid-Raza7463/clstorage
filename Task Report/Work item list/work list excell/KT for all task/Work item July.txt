@@ -1,0 +1,87 @@
+01-07-24
+1.tushar garg problem fixed 
+2.client want to display warning message on timesheet create page when user timesheet rejected       (in QA and test on vsademo)
+3.timesheet request remark should be mandatory currently it gets submitted after entering a space.   (implemented and IN QA)
+4.Add timesheet request button will be show according current timesheet request   (implemented and IN QA)
+5.client want to attachment file on timesheet request create form
+
+02-07-24
+5.client want to attachment file on timesheet request create form   (implemented and IN QA)
+1.leave can not apply before submitted timesheet date, 11 septamber 2023, but timesheet rejected then it will be apply only that days
+
+03-07-24
+1.leave can not apply before submitted timesheet date, 11 septamber 2023, but timesheet rejected then it will be apply only that days
+23.when submitted timesheet rejected then user can aplly leave on that days and submitted timesheet overwrite according leave  
+
+
+04-07-24
+23.when submitted timesheet rejected then user can aplly leave on that days and submitted timesheet overwrite according leave  
+1.Assignment viewer list on  assignmentview  page to view user only
+
+05-07-24
+1.Assignment viewer list on  assignmentview  page to view user only documention completed
+2.submitted timesheet rejected edit functionality modification 
+
+06-07-24
+28.Submitted timesheet rejected edit functionality modification 
+
+
+08-07-24
+28.Submitted timesheet rejected edit functionality modification 
+29 on UDIN List page udin documentation date implementation.Currently created date coming
+
+09-07-24
+1.Documentation create below work item and uploaded on vsademo after that tested
+
+  1.Assignment viewer list on  assignmentview  page to view user only documention completed
+  28.Submitted timesheet rejected edit functionality modification 
+  29 on UDIN List page udin documentation date implementation.Currently created date coming
+
+10-07-24
+1.All bugs done after QA failed
+
+
+
+11-07-24
+tester create 2 task so i have done 
+1.timesheet request form warning message 
+2.revert leave date not show proper 
+
+12-07-24
+# documentation create below task 
+ 1. on UDIN List page udin documentation date implementation.Currently created date coming   (bugs)
+ 2.timesheet request remark should be mandatory currently it gets submitted after entering a space.  (bugs)
+ 3.Date formate fix on apply leave  but it does not work 
+4.revert leave date not show proper  (bugs)
+
+
+15-07-24
+1.uplaod all code on server from vsademo and tested
+
+
+16-07-24
+1.uplaod all code on server from vsademo and tested
+2.Client want to implement promotion process to users.
+
+
+17-07-24 festival leave
+
+18-07-24
+1.Client want to implement promotion process to users.
+
+19-07-24
+1.Client want to implement promotion process to users.
+
+20-07-24
+1.Client want to implement promotion process to users.
+
+22-07-24
+1.Client want to implement promotion process to users.
+2.Client want to implement promotion process to users documentation completed .
+
+23-07-24
+1.Client want to implement promotion process to users and uploaded code on server and functional tested by me.
+2.Client want to implement rejoining process to users.
+
+
+Client want to implement rejoining process to users.

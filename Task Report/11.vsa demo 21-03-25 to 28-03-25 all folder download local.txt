@@ -1,0 +1,451 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+important point 
+When the VSALocal update is completed in VSADemo, move all the data to Vvsalocal, vsademo ```start . Similarly, continue moving data from VSADemo to VSALive
+
+Comment all places on vsademo and uncomment on vsalive 
+
+#1
+   app\Http\Controllers\ApplyleaveController.php
+   app\Http\Controllers\TimesheetController.php
+
+   itsupport_delhi@vsa.co.in  ise comment kar de and add own mail on vsademo sukhbahadur1993@gmail.com
+
+#2
+     agar is per koi bhi update ho to profile me 10th and 12th ka documnet check karle ek baar ye baar baar problem aata hai 
+     independence ke ander create and view file insert karna hai 
+     IndependenceController.php
+     TeammemberController (1).php
+
+Please check once vsalive bugs hare file
+
+
+composer require maennchen/zipstream-php
+;extension=gd
+SHA100054
+BIR100318
+BIR100405
+
+assignmentbudgetings
+assignmentmappings
+assignmentteammappings
+assignmentfolderfiles
+assignmentfolders
+
+this file inside vsademo temp/ download issue 
+
+vsalocal, vsademo ```start 
+Data Download issue - Ajit Ranjan ```start hare
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+
+
+use App\Models\Assignmentfolderfile;
+use ZipArchive;
+// use File;
+use App\Jobs\CreateAllzip;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use ZipStream\Option\Archive;
+use ZipStream\Option\File;
+use STS\ZipStream\ZipStreamFacade as ZipStreamcreate;
+use ZipStream\ZipStream;
+use ZipStream\Option\Archive as ZipOptions;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+
+	    //! s3 connection on live 
+	   public function createzipfolder(Request $request)
+    {
+        $assignmentfoldername = DB::table('assignmentfolders')
+            ->leftJoin('assignmentfolderfiles', 'assignmentfolderfiles.assignmentfolder_id', 'assignmentfolders.id')
+            ->where('assignmentfolders.assignmentgenerateid', $request->assignmentgenerateid)
+            ->select('assignmentfolders.*', 'assignmentfolderfiles.filesname', 'assignmentfolderfiles.realname')
+            ->get();
+
+        // Set ZIP file name
+        $zipFileName = $request->assignmentgenerateid . '.zip';
+
+        // Streamed response for downloading the zip file
+        $response = new StreamedResponse(function () use ($assignmentfoldername) {
+            $options = new ZipOptions();
+            $options->setSendHttpHeaders(true);
+            $zip = new ZipStream(null, $options);
+
+            foreach ($assignmentfoldername as $folder) {
+                if (!empty($folder->filesname)) {
+                    // Get file path
+                    $filePath = storage_path('app/public/image/task/' . $folder->filesname);
+
+                    if (file_exists($filePath)) {
+                        // Read file content and add to zip
+                        $zip->addFileFromPath($folder->assignmentfoldersname . '/' . $folder->realname, $filePath);
+                    }
+                } else {
+                    // // Create an empty file for empty folders so that  stop zip corruption
+                    // $zip->addFile($folder->assignmentfoldersname . '/empty.txt', '');
+                    $zip->addFile($folder->assignmentfoldersname . '/', '');
+                }
+            }
+
+            $zip->finish();
+        });
+
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $zipFileName . '"');
+
+        return $response;
+    }
+	
+	
+	
+	
+	
+	
+	
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolder\zipcreatedwaiting.blade.php
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#downloadButton').click(function(e) {
+            e.preventDefault();
+            var assignmentgenerateid1 = '{{ $assignmentgenerateid }}';
+
+            // Show waiting message
+            $('#loadingMessage').show();
+            $('#downloadButton').hide();
+
+            // Redirect user to download the zip
+            window.location.href = '/createzipfolder?assignmentgenerateid=' + assignmentgenerateid1;
+            // Show afterzipcreated div after 10 seconds
+            setTimeout(function() {
+                $('#loadingMessage').hide();
+                $('#afterzipcreated').show();
+            }, 3000);
+
+            // setTimeout(function() {
+            //     window.location.href = '/assignmentfoldercreate/' + assignmentgenerateid1;
+            // }, 3000);
+        });
+    });
+</script>
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolder\zipcreatedwaiting.blade.php
+
+
+         <div class="card-body">
+                @if (!isset($message))
+                    <div>
+                        <button type="button" id="downloadButton" class="btn btn-outline-primary">Create Zip
+                            File</button>
+                    </div>
+                @endif
+                @if (isset($message))
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                @endif
+                <div class="row">
+                    {{-- waiting message  --}}
+                    <div id="loadingMessage" style="display:none; margin-bottom: 10px;" class="text-success">
+                        Creating your zip file. Please wait...
+                    </div>
+                    <div id="afterzipcreated" style="display:none; margin-bottom: 10px;" class="text-success">
+                        ZIP file created successfully. Your download will start automatically.
+                    </div>
+                    {{-- display file name that was created --}}
+                    <div id="createdzipfile" style="display:none; margin-bottom: 10px;">
+                    </div>
+                </div>
+                {{-- <div class="row">
+                    <div>
+                        <a href="{{ route('createdzipdownload', ['assignmentgenerateid' => $assignmentgenerateid]) }}"
+                            class="btn btn-success" style="color:white; display:none;" id="downloadzip">Download
+                            zip file</a>
+                    </div>
+                </div> --}}
+            </div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolderfile\index.blade.php
+
+ <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right"
+                style="width: {{ isset($assignmentfolderfile[0]->assignmentfolder_id) && $assignmentbudgeting->status == 1 ? '400px' : '277px' }};">
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolder\index.blade.php
+
+
+
+            <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right"
+                style="width: {{ $assignmentfolderpermission->status == 1 && $assignmentfolder->isNotEmpty() ? '369px' : '202px' }};">
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+
+ //! s3 connection on live 
+    public function store(Request $request)
+    {
+        //dd($request);
+        $request->validate([
+            'particular' => 'required',
+            'file' => 'required',
+        ]);
+
+        try {
+            $data = $request->except(['_token']);
+            $files = [];
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $realname = $file->getClientOriginalName();
+                    $name = time() . $realname;
+                    $destinationPath = storage_path('app/public/image/task');
+                    // $name = $file->getClientOriginalName();
+                    $sizeKB = round($file->getSize() / 1024, 2);
+                    $file->move($destinationPath, $name);
+
+                    // $path = $file->storeAs($request->assignmentgenerateid, $name, 's3');
+                    $files[] = [
+                        'realname' => $realname,
+                        'name' => $name,
+                        'size' => $sizeKB,
+                    ];
+                }
+            }
+
+            // dd($files);
+            foreach ($files as $filess) {
+                // dd($files); die;
+                $s = DB::table('assignmentfolderfiles')->insert([
+                    'particular' => $request->particular,
+                    'assignmentgenerateid' => $request->assignmentgenerateid,
+                    'assignmentfolder_id' =>  $request->assignmentfolder_id,
+                    'createdby' =>  auth()->user()->teammember_id,
+                    'filesname' =>  $filess['name'],
+                    'realname' =>  $filess['realname'],
+                    'filesize' => $filess['size'],
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+            //dd($data);
+            $output = array('msg' => 'Submit Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentfolderfileController.php
+
+        $assignmentbudgeting = DB::table('assignmentbudgetings')
+            ->where('assignmentgenerate_id', $foldername->assignmentgenerateid)->first();
+            
+        $teamleader = DB::table('assignmentmappings')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+            ->where('assignmentmappings.assignmentgenerate_id', $foldername->assignmentgenerateid)
+            ->where('type', 0)->pluck('teammember_id')->first();
+			
+			
+			
+        return view('backEnd.assignmentfolderfile.index', compact('teamleader', 'assignmentbudgeting', 'assignmentfolderfile', 'id', 'foldername', 'financial'));
+			
+			
+			
+			
+			
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentfolderfile\index.blade.php	
+			
+			
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "order": [],
+            columnDefs: [{
+                targets: [
+                    0, 1, 2, 3
+                    @if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14 || $teamleader == Auth::user()->teammember_id)
+                        @if ($assignmentbudgeting->status == 1)
+                            , 5
+                        @endif
+                    @endif
+                ],
+                orderable: false
+            }],
+            buttons: []
+        });
+    });
+</script>			
+			
+			
+			
+			
+
+Data Download issue - Ajit Ranjan ```end hare
+vsalocal, vsademo ```end 
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1159 @@
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+replace store() function 
+
+
+  public function store(Request $request)
+  {
+    dd($request);
+    $request->validate([
+      'leavetype' => "required",
+      'to' => "required",
+      'from' => "required",
+    ]);
+
+    $skipaftertrue = false;
+    $from = Carbon::createFromFormat('d-m-Y', $request->from);
+    // $from = Carbon::createFromFormat('Y-m-d', '2024-03-11');
+    $to = Carbon::createFromFormat('d-m-Y', $request->to ?? '');
+    // software created date 
+    $softwarermaked = Carbon::createFromFormat('Y-m-d', '2023-09-11');
+
+    // timesheetreport latest submitted date 
+    $latesttimesheetsubmitted = DB::table('timesheetreport')
+      ->where('teamid', auth()->user()->teammember_id)
+      ->latest()
+      ->first();
+
+    $latesttimesheetsubmittedformate = Carbon::createFromFormat('Y-m-d', $latesttimesheetsubmitted->enddate);
+
+    // Check if the from date is in the past
+    if ($latesttimesheetsubmittedformate->greaterThan($from)) {
+
+      // Check if the from date is in the past
+      if ($softwarermaked->greaterThan($from)) {
+        $output = ['msg' => 'You cannot apply leave before 11-09-2023'];
+        return back()->with('statuss', $output);
+      }
+
+      $rejectedtimesheet = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+
+
+      $rejectedtimesheetformate = null;
+      if ($rejectedtimesheet) {
+        $rejectedtimesheetformate = Carbon::createFromFormat('Y-m-d', $rejectedtimesheet->date);
+      }
+
+      if ($rejectedtimesheetformate && $rejectedtimesheetformate->isSameDay($from)) {
+
+        // Update total hour
+        $timesheetdelete = DB::table('timesheetusers')->where('timesheetid', $rejectedtimesheet->timesheetid)->first();
+        if (auth()->user()->role_id == 14 || auth()->user()->role_id == 15) {
+
+          $gettotalteamhour = DB::table('assignmentmappings')
+            ->leftJoin(
+              'assignmentteammappings',
+              'assignmentteammappings.assignmentmapping_id',
+              'assignmentmappings.id',
+            )
+            ->where(
+              'assignmentmappings.assignmentgenerate_id',
+              $timesheetdelete->assignmentgenerate_id
+            )
+            ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+            ->first();
+
+          if ($gettotalteamhour) {
+            // dd($gettotalteamhour);
+            $gettotalteamhour = $gettotalteamhour->teamhour;
+            $finalresult =  $gettotalteamhour - $timesheetdelete->hour;
+
+            $totalteamhourupdate = DB::table('assignmentmappings')
+              ->leftJoin(
+                'assignmentteammappings',
+                'assignmentteammappings.assignmentmapping_id',
+                'assignmentmappings.id',
+              )
+              ->where(
+                'assignmentmappings.assignmentgenerate_id',
+                $timesheetdelete->assignmentgenerate_id
+              )
+              ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+              // ->get();
+              ->update(['teamhour' =>  $finalresult]);
+          }
+        }
+
+        if (auth()->user()->role_id == 13) {
+          $assignmentdata = DB::table('assignmentmappings')
+            ->where('assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+            ->first();
+
+          $finalresultleadpatner =  $assignmentdata->leadpartnerhour - $timesheetdelete->hour;
+          $finalresultotherpatner =  $assignmentdata->otherpartnerhour - $timesheetdelete->hour;
+
+          if ($assignmentdata->leadpartner == auth()->user()->teammember_id) {
+            $update2 = DB::table('assignmentmappings')
+              ->where('assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+              ->where('leadpartner', auth()->user()->teammember_id)
+              ->update(['leadpartnerhour' => $finalresultleadpatner]);
+          }
+          if ($assignmentdata->otherpartner == auth()->user()->teammember_id) {
+            $update2 = DB::table('assignmentmappings')
+              ->where('assignmentgenerate_id', $timesheetdelete->assignmentgenerate_id)
+              ->where('otherpartner', auth()->user()->teammember_id)
+              ->update(['otherpartnerhour' => $finalresultotherpatner]);
+          }
+        }
+        // Update total hour end 
+
+        DB::table('timesheets')->where('id', $rejectedtimesheet->timesheetid)->update([
+          'status'   => 3,
+        ]);
+
+        if ($request->leavetype == 9) {
+          DB::table('timesheetusers')->where('id', $rejectedtimesheet->id)->update([
+            'status'   => 3,
+            'client_id'     =>    134,
+            'workitem'     =>     $request->reasonleave,
+            'assignmentgenerate_id' => null,
+            'location'     =>     '',
+            'hour'     =>     0,
+            'totalhour' =>      0,
+            'assignment_id'     =>     215,
+            'partner'     =>     887,
+          ]);
+        } else {
+          DB::table('timesheetusers')->where('id', $rejectedtimesheet->id)->update([
+            'status'   => 3,
+            'client_id'     =>    134,
+            'assignmentgenerate_id' => null,
+            'workitem'     =>     $request->reasonleave,
+            'location'     =>     '',
+            'hour'     =>     0,
+            'totalhour' =>      0,
+            'assignment_id'     =>     214,
+            'partner'     =>     887,
+          ]);
+        }
+
+        $id = DB::table('applyleaves')->insertGetId([
+          'leavetype'         =>     $request->leavetype,
+          'type'         =>     $request->type,
+          'examtype'         =>     $request->examtype,
+          'otherexam'         =>     $request->otherexam,
+          'from'         =>     date('Y-m-d', strtotime($request->from)),
+          'to'         =>     date('Y-m-d', strtotime($request->to)),
+          'reasonleave'         =>     $request->reasonleave,
+          'approver'         =>     $request->approver,
+          'status'         =>    1,
+          'createdby'         =>     auth()->user()->teammember_id,
+          'created_at'          =>    date('Y-m-d H:i:s'),
+          'updated_at'              =>    date('Y-m-d H:i:s'),
+        ]);
+
+        $output = array('msg' => 'Create Successfully');
+        return back()->with('success', $output);
+      } else {
+        $output = ['msg' => 'You cannot apply leave before Submitted timesheet date'];
+        return back()->with('statuss', $output);
+      }
+    }
+
+    if ($from->equalTo($to) && $from->dayOfWeek === Carbon::SUNDAY) {
+      $output = ['msg' => 'You cannot apply leave for Sunday'];
+      return back()->with('statuss', $output);
+    }
+
+    // timesheetcheck 
+    $timesheetcheck = DB::table('timesheets')
+      ->where('created_by', auth()->user()->teammember_id)
+      ->select('date')
+      ->get();
+    if (count($timesheetcheck) != 0) {
+      foreach ($timesheetcheck as $timesheetchecks) {
+        $leaveDates = CarbonPeriod::create(
+          date('Y-m-d', strtotime($request->from)),
+          date('Y-m-d', strtotime($request->to))
+        );
+
+        foreach ($leaveDates as $leaveDate) {
+          if ($leaveDate->format('Y-m-d') == $timesheetchecks->date) {
+            $output = array('msg' => 'You Have already filled timesheet for the Day (' . date('d-m-Y', strtotime($leaveDate)) . ')');
+            return back()->with('statuss', $output);
+          }
+        }
+      }
+    }
+    //dd('hi');
+
+    //duplicate leave check
+    $leaves = DB::table('applyleaves')
+      ->where('applyleaves.createdby', auth()->user()->teammember_id)
+      ->where('status', '!=', 2)
+      ->select('applyleaves.from', 'applyleaves.to')
+      ->get();
+
+    $leaveDates = [];
+    foreach ($leaves as $leave) {
+      $days = CarbonPeriod::create(
+        date('Y-m-d', strtotime($leave->from)),
+        date('Y-m-d', strtotime($leave->to))
+      );
+
+      foreach ($days as $day) {
+        $leaveDates[] = $day->format('Y-m-d');
+      }
+    }
+
+    $currentDay =  date('Y-m-d', strtotime($request->from));
+    $lastDay =  date('Y-m-d', strtotime($request->to));
+
+    if (count($leaves) != 0) {
+      foreach ($leaveDates as $leaveDate) {
+        if ($leaveDate >= $currentDay && $leaveDate <= $lastDay) {
+          $output = array('msg' => 'You Have Leave for the Day (' . date('d-m-Y', strtotime($leaveDate)) . ')');
+          return back()->with('statuss', $output);
+        }
+      }
+    }
+
+    $currentdate = date('Y-m-d');
+    $currentYear = date('Y');
+    $financialYearStart = $currentYear . '-04-01';
+    $financialYearEnd = ($currentYear + 1) . '-03-31';
+
+    $teammember = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+
+
+    try {
+
+      $currentDate = Carbon::now();
+      $day = $currentDate->day;
+      $currentYear = $currentDate->year;
+
+
+
+      //birthday-festival leave 
+      if ($request->leavetype == 8) {
+        $to = Carbon::createFromFormat('d-m-Y', $request->to ?? '');
+        $from = Carbon::createFromFormat('d-m-Y', $request->from);
+        $diff_in_days = $to->diffInDays($from) + 1;
+
+
+        $financialYearStart = $currentYear . '-04-01';
+        $financialYearEnd = ($currentYear + 1) . '-03-31';
+
+        $count = DB::table('applyleaves')
+          ->where('status', '!=', '2')
+          ->where('leavetype', $request->leavetype)
+          ->where('createdby', auth()->user()->teammember_id)
+          ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+          ->first();
+
+
+        $teammember = DB::table('teammembers')
+          ->where('id', auth()->user()->teammember_id)
+          ->first();
+
+        $requestedDate = date('F d', strtotime($request->to));
+        $birthdayDate = date('F d', strtotime($teammember->dateofbirth));
+
+        if ($request->type == 0) {
+          if ($request->to != $request->from) {
+
+            $output = ['msg' => 'You can take only one day birthday leave'];
+            return back()->with('success', $output);
+          }
+          if ($requestedDate != $birthdayDate) {
+
+            $output = ['msg' => 'Your request for the birthday date is wrong'];
+            return back()->with('success', $output);
+          }
+          if ($diff_in_days < 2 && $count != null) {
+            $output = ['msg' => 'You have already taken a birthday leave'];
+            return back()->with('success', $output);
+          }
+        } elseif ($request->type == 1) {
+          if ($diff_in_days < 2) {
+            if ($count != null) {
+              $output = ['msg' => 'You have already taken a festival leave'];
+              return back()->with('success', $output);
+            }
+          } else {
+            $output = ['msg' => 'You can take only one day festival leave'];
+            return back()->with('success', $output);
+          }
+        }
+
+
+        $columnMappings = [
+          '26' => 'twentysix',
+          '27' => 'twentyseven',
+          '28' => 'twentyeight',
+          '29' => 'twentynine',
+          '30' => 'thirty',
+          '31' => 'thirtyone',
+          '01' => 'one',
+          '02' => 'two',
+          '03' => 'three',
+          '04' => 'four',
+          '05' => 'five',
+          '06' => 'six',
+          '07' => 'seven',
+          '08' => 'eight',
+          '09' => 'nine',
+          '10' => 'ten',
+          '11' => 'eleven',
+          '12' => 'twelve',
+          '13' => 'thirteen',
+          '14' => 'fourteen',
+          '15' => 'fifteen',
+          '16' => 'sixteen',
+          '17' => 'seventeen',
+          '18' => 'eighteen',
+          '19' => 'ninghteen',
+          '20' => 'twenty',
+          '21' => 'twentyone',
+          '22' => 'twentytwo',
+          '23' => 'twentythree',
+          '24' => 'twentyfour',
+          '25' => 'twentyfive',
+        ];
+
+        $requestedDay = date('d', strtotime($request->to));
+        $requestedDay = date('d', strtotime($request->to));
+        $requestedMonth = $from->format('F');
+        if (isset($columnMappings[$requestedDay])) {
+          $columnName = $columnMappings[$requestedDay];
+          if (in_array($requestedDay, ['26', '27', '28', '29', '30', '31'])) {
+            $requestedMonth = $from->copy()->addMonth()->format('F');
+          }
+          DB::table('attendances')
+            ->updateOrInsert(
+              [
+                'employee_name' => auth()->user()->teammember_id,
+                'month' => $requestedMonth
+              ],
+              [
+                $columnName => 'BL/C',
+                'birthday_religious' => DB::raw('COALESCE(birthday_religious, 0) + 1'),
+                'created_at' => now(),
+                'updated_at' => now()
+              ],
+              [
+                'created_at' => now()
+              ]
+            );
+        }
+      } elseif ($request->leavetype == 9) {
+
+
+
+        $to = Carbon::createFromFormat('d-m-Y', $request->to ?? '');
+        $from = Carbon::createFromFormat('d-m-Y', $request->from);
+        $requestdays = $to->diffInDays($from) + 1;
+
+
+
+        $period = CarbonPeriod::create($request->from, $request->to);
+        $datess = [];
+        foreach ($period as $date) {
+          $datess[] = $date->format('Y-m-d');
+
+          //  dd($date->format('Y-m-d'));
+          $id = DB::table('timesheets')->insertGetId(
+            [
+              'created_by' => auth()->user()->teammember_id,
+              'month'     =>     date('F', strtotime($date->format('Y-m-d'))),
+              'date'     =>    $date->format('Y-m-d'),
+              'created_at'          =>     date('Y-m-d H:i:s'),
+            ]
+          );
+          $a = DB::table('timesheetusers')->insert([
+            'date'     =>    $date->format('Y-m-d'),
+            'client_id'     =>    134,
+            'workitem'     =>     $request->reasonleave,
+            'location'     =>     '',
+            //   'billable_status'     =>     $request->billable_status[$i],
+            'timesheetid'     =>     $id,
+            'date'     =>    $date->format('Y-m-d'),
+            'hour'     =>     0,
+            'totalhour' =>      0,
+            'assignment_id'     =>     215,
+            'partner'     =>     887,
+            // adding approver in patner section 
+            // 'partner'     =>     $request->approver,
+            'createdby' => auth()->user()->teammember_id,
+            'created_at'          =>     date('Y-m-d H:i:s'),
+            'updated_at'              =>    date('Y-m-d H:i:s'),
+          ]);
+        }
+
+
+        $getholidays = DB::table('holidays')->where('startdate', '>=', date('Y-m-d', strtotime($request->from)))
+          ->where('enddate', '<=', date('Y-m-d', strtotime($request->to)))->select('startdate')->get();
+
+
+
+        $hdatess = [];
+        foreach ($getholidays as $date) {
+          $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+        }
+
+
+        $cl_leave = array_diff($datess, $hdatess);
+
+
+        $cl_leave_total = count($cl_leave);
+
+        $lstatus = "CL/C";
+
+        if ($teammember->joining_date < $financialYearStart) {
+
+          $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $financialYearStart);
+        } else {
+
+          $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $teammember->joining_date);
+        }
+
+
+
+
+        $diff_in_months = $startDate->diffInMonths($currentdate) + 1;
+
+
+        $totalcountCasual = 1.5 * $diff_in_months;
+        if (\Carbon\Carbon::parse($teammember->joining_date)->diffInDays($currentdate) <= 90) {
+          $totalcountCasual = 0;
+        }
+        $teamdate = \Carbon\Carbon::createFromFormat('Y-m-d', $teammember->joining_date);
+        $teammonthcount = $teamdate->diffInMonths($currentdate) + 1;
+
+
+        $columnMappings = [
+          '26' => 'twentysix',
+          '27' => 'twentyseven',
+          '28' => 'twentyeight',
+          '29' => 'twentynine',
+          '30' => 'thirty',
+          '31' => 'thirtyone',
+          '01' => 'one',
+          '02' => 'two',
+          '03' => 'three',
+          '04' => 'four',
+          '05' => 'five',
+          '06' => 'six',
+          '07' => 'seven',
+          '08' => 'eight',
+          '09' => 'nine',
+          '10' => 'ten',
+          '11' => 'eleven',
+          '12' => 'twelve',
+          '13' => 'thirteen',
+          '14' => 'fourteen',
+          '15' => 'fifteen',
+          '16' => 'sixteen',
+          '17' => 'seventeen',
+          '18' => 'eighteen',
+          '19' => 'ninghteen',
+          '20' => 'twenty',
+          '21' => 'twentyone',
+          '22' => 'twentytwo',
+          '23' => 'twentythree',
+          '24' => 'twentyfour',
+          '25' => 'twentyfive',
+        ];
+
+        foreach ($cl_leave as $requestedDate) {
+          $day = date('d', strtotime($requestedDate));
+          $requestedMonth = date('F', strtotime($requestedDate));
+
+
+          if ($day >= 26 && $day <= 31) {
+            $requestedDateTime = new DateTime($requestedDate);
+
+
+
+            $requestedDateTime->modify('first day of next month');
+            $requestedMonth = $requestedDateTime->format('F');
+          }
+
+          $appliedCasual = DB::table('applyleaves')
+            ->where('status', '!=', '2')
+            ->where('leavetype', $request->leavetype)
+            ->where('createdby', auth()->user()->teammember_id)
+            ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+            ->get();
+          //dd($appliedCasual);
+
+
+          $countCasual = 0;
+          $casualDates = [];
+          $holidaydates = [];
+          foreach ($appliedCasual as $CasualLeave) {
+
+            $fromDate = \Carbon\Carbon::createFromFormat('Y-m-d', $CasualLeave->from);
+            $toDate = \Carbon\Carbon::createFromFormat('Y-m-d', $CasualLeave->to);
+            $period = CarbonPeriod::create($fromDate, $toDate);
+
+
+
+            foreach ($period as $date) {
+              $casualDates[] = $date->format('Y-m-d');
+
+              //dd($date->format('Y-m-d'));
+
+
+            }
+
+            $getholidays = DB::table('holidays')->get();
+
+
+            foreach ($getholidays as $date) {
+              $holidaydates[] = date('Y-m-d', strtotime($date->startdate));
+            }
+            $casualDates = array_unique($casualDates);
+          }
+
+          //    die;
+
+          $attendanceRecord = DB::table('attendances')
+            ->where('employee_name', auth()->user()->teammember_id)
+            ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+            ->get();
+          $columns = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'ninghteen', 'twenty', 'twentyone', 'twentytwo', 'twentythree', 'twentyfour', 'twentyfive', 'twentysix', 'twentyseven', 'twentyeight', 'twentynine', 'thirty', 'thirtyone'];
+          $clInAttendance = 0;
+          foreach ($attendanceRecord as $item) {
+            foreach ($columns as $column) {
+              if ($item->$column === 'CL/C' || $item->$column === 'CL/A') {
+                $clInAttendance++;
+              }
+            }
+          }
+
+          if ($clInAttendance >= $totalcountCasual || $totalcountCasual - $clInAttendance == 0.5) {
+
+            $lstatus = 'LWP';
+          }
+
+          $attendanceUpdateData = [];
+          $attendances = DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)->first();
+
+          if ($attendances == null) {
+            if ($lstatus == 'CL/C') {
+              $attendanceData = [
+                'employee_name' => auth()->user()->teammember_id,
+                'month' => $requestedMonth,
+                'casual_leave' => 1,
+                'created_at' => Carbon::now(),
+              ];
+            } else {
+              $attendanceData = [
+                'employee_name' => auth()->user()->teammember_id,
+                'month' => $requestedMonth,
+                'lwp' => 1,
+                'created_at' => Carbon::now(),
+              ];
+            }
+
+
+            DB::table('attendances')->insert($attendanceData);
+          } else {
+            if ($lstatus == 'CL/C') {
+              DB::table('attendances')
+                ->where('employee_name', auth()->user()->teammember_id)
+                ->where('month', $requestedMonth)
+                ->update(['casual_leave' => DB::raw('COALESCE(casual_leave, 0) + 1')]);
+            } else {
+              DB::table('attendances')
+                ->where('employee_name', auth()->user()->teammember_id)
+                ->where('month', $requestedMonth)
+                ->update(['lwp' => DB::raw('COALESCE(lwp, 0) + 1')]);
+            }
+          }
+
+          $column = $columnMappings[$day] ?? null;
+          if ($column !== null) {
+            $attendanceUpdateData[$column] = $lstatus;
+          }
+
+
+          //Update the attendance data for the current date
+          DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)->update($attendanceUpdateData);
+        }
+      }
+      // Casual leave end
+
+      elseif ($request->leavetype == 10) {
+
+        $sick = DB::table('leavetypes')->where('name', 'Sick Leave')->where('year', $currentYear)->first();
+
+        //      $availableleave = $sick->noofdays - $takeleavecount ;
+        //  dd($availableleave);
+        $to = Carbon::createFromFormat('d-m-Y', $request->to ?? '');
+        $from = Carbon::createFromFormat('d-m-Y', $request->from);
+        $requestdays = $to->diffInDays($from) + 1;
+
+
+
+
+
+        $period = CarbonPeriod::create($request->from, $request->to);
+        $datess = [];
+        foreach ($period as $date) {
+          $datess[] = $date->format('Y-m-d');
+        }
+        // dd($datess);
+        // Convert the period to an array of dates
+        // $dates = $period->toArray();
+
+        $getholidays = DB::table('holidays')->where('startdate', '>=',  date('Y-m-d', strtotime($request->from)))
+          ->where('enddate', '<=', date('Y-m-d', strtotime($request->to)))->select('startdate')->get();
+
+        if (count($getholidays) != 0) {
+          foreach ($getholidays as $date) {
+            $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+          }
+        } else {
+          $hdatess[] = 0;
+        }
+        //dd($hdatess);
+
+        $sl_leave = array_diff($datess, $hdatess);
+        $sl_leave_total = count(array_diff($datess, $hdatess));
+
+        $lstatus = "SL/C";
+
+
+        $columnMappings = [
+          '26' => 'twentysix',
+          '27' => 'twentyseven',
+          '28' => 'twentyeight',
+          '29' => 'twentynine',
+          '30' => 'thirty',
+          '31' => 'thirtyone',
+          '01' => 'one',
+          '02' => 'two',
+          '03' => 'three',
+          '04' => 'four',
+          '05' => 'five',
+          '06' => 'six',
+          '07' => 'seven',
+          '08' => 'eight',
+          '09' => 'nine',
+          '10' => 'ten',
+          '11' => 'eleven',
+          '12' => 'twelve',
+          '13' => 'thirteen',
+          '14' => 'fourteen',
+          '15' => 'fifteen',
+          '16' => 'sixteen',
+          '17' => 'seventeen',
+          '18' => 'eighteen',
+          '19' => 'ninghteen',
+          '20' => 'twenty',
+          '21' => 'twentyone',
+          '22' => 'twentytwo',
+          '23' => 'twentythree',
+          '24' => 'twentyfour',
+          '25' => 'twentyfive',
+        ];
+        foreach ($sl_leave as $requestedDate) {
+
+
+          $day = date('d', strtotime($requestedDate));
+          $requestedMonth = date('F', strtotime($requestedDate));
+
+          if ($day >= 26 && $day <= 31) {
+            $requestedDateTime = new DateTime($requestedDate);
+            $requestedDateTime->modify('first day of next month');
+            $requestedMonth = $requestedDateTime->format('F');
+          }
+
+          $appliedSick = DB::table('applyleaves')
+            ->where('status', '!=', '2')
+            ->where('leavetype', $request->leavetype)
+            ->where('createdby', auth()->user()->teammember_id)
+            ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+            ->get();
+
+          $countSick = 0;
+          $sickDates = [];
+          $holidaydates = [];
+          foreach ($appliedSick as $sickLeave) {
+
+            $fromDate = \Carbon\Carbon::createFromFormat('Y-m-d', $sickLeave->from);
+            $toDate = \Carbon\Carbon::createFromFormat('Y-m-d', $sickLeave->to);
+            $period = CarbonPeriod::create($fromDate, $toDate);
+
+
+            foreach ($period as $date) {
+              $sickDates[] = $date->format('Y-m-d');
+            }
+
+            $getholidays = DB::table('holidays')->get();
+
+
+            foreach ($getholidays as $date) {
+              $holidaydates[] = date('Y-m-d', strtotime($date->startdate));
+            }
+            $sickDates = array_unique($sickDates);
+          }
+
+
+          $attendanceRecord = DB::table('attendances')
+            ->where('employee_name', auth()->user()->teammember_id)
+            ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+            ->get();
+          $columns = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'ninghteen', 'twenty', 'twentyone', 'twentytwo', 'twentythree', 'twentyfour', 'twentyfive', 'twentysix', 'twentyseven', 'twentyeight', 'twentynine', 'thirty', 'thirtyone'];
+          $slInAttendance = 0;
+          foreach ($attendanceRecord as $item) {
+            foreach ($columns as $column) {
+              if ($item->$column === 'SL/C' || $item->$column === 'SL/A') {
+                $slInAttendance++;
+              }
+            }
+          }
+
+          if ($slInAttendance >= $sick->noofdays) {
+
+            $lstatus = 'LWP';
+          }
+
+          $attendanceUpdateData = [];
+          $attendances = DB::table('attendances')
+            ->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)
+            ->first();
+
+          $attendanceData = [
+            'employee_name' => auth()->user()->teammember_id,
+            'month' => $requestedMonth,
+            'created_at' => Carbon::now()
+          ];
+
+          if ($lstatus == 'SL/C') {
+            $attendanceData['sick_leave'] = 1;
+          } else {
+            $attendanceData['lwp'] = 1;
+          }
+
+          if ($attendances == null) {
+            DB::table('attendances')->insert($attendanceData);
+          } else {
+            if ($lstatus == 'SL/C') {
+              DB::table('attendances')
+                ->where('employee_name', auth()->user()->teammember_id)
+                ->where('month', $requestedMonth)
+                ->update(['sick_leave' => DB::raw('COALESCE(sick_leave, 0) + 1')]);
+            } else {
+              DB::table('attendances')
+                ->where('employee_name', auth()->user()->teammember_id)
+                ->where('month', $requestedMonth)
+                ->update(['lwp' => DB::raw('COALESCE(lwp, 0) + 1')]);
+            }
+          }
+
+
+          $column = $columnMappings[$day] ?? null;
+          if ($column !== null) {
+            $attendanceUpdateData[$column] = $lstatus;
+          }
+
+          //Update the attendance data for the current date
+          DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)->update($attendanceUpdateData);
+        }
+      } elseif ($request->leavetype == 11) {
+        $to = Carbon::createFromFormat('d-m-Y', $request->to ?? '');
+        $from = Carbon::createFromFormat('d-m-Y', $request->from);
+        $requestdays = $to->diffInDays($from) + 1;
+
+
+
+
+
+        $period = CarbonPeriod::create($request->from, $request->to);
+        $datess = [];
+        foreach ($period as $date) {
+          $datess[] = $date->format('Y-m-d');
+        }
+        // dd($datess);
+        // Convert the period to an array of dates
+        // $dates = $period->toArray();
+
+        $getholidays = DB::table('holidays')->where('startdate', '>=',  date('Y-m-d', strtotime($request->from)))
+          ->where('enddate', '<=', date('Y-m-d', strtotime($request->to)))->select('startdate')->get();
+        if (count($getholidays) != 0) {
+          foreach ($getholidays as $date) {
+            $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+          }
+        } else {
+          $hdatess[] = 0;
+        }
+
+
+        $exam_leave = array_diff($datess, $hdatess);
+        $exam_leave_total = count(array_diff($datess, $hdatess));
+
+        $lstatus = "EL/C";
+
+
+
+
+        $columnMappings = [
+          '26' => 'twentysix',
+          '27' => 'twentyseven',
+          '28' => 'twentyeight',
+          '29' => 'twentynine',
+          '30' => 'thirty',
+          '31' => 'thirtyone',
+          '01' => 'one',
+          '02' => 'two',
+          '03' => 'three',
+          '04' => 'four',
+          '05' => 'five',
+          '06' => 'six',
+          '07' => 'seven',
+          '08' => 'eight',
+          '09' => 'nine',
+          '10' => 'ten',
+          '11' => 'eleven',
+          '12' => 'twelve',
+          '13' => 'thirteen',
+          '14' => 'fourteen',
+          '15' => 'fifteen',
+          '16' => 'sixteen',
+          '17' => 'seventeen',
+          '18' => 'eighteen',
+          '19' => 'ninghteen',
+          '20' => 'twenty',
+          '21' => 'twentyone',
+          '22' => 'twentytwo',
+          '23' => 'twentythree',
+          '24' => 'twentyfour',
+          '25' => 'twentyfive',
+        ];
+
+        foreach ($exam_leave as $exam_leave) {
+
+          $day = date('d', strtotime($exam_leave));
+          $requestedMonth = date('F', strtotime($exam_leave));
+
+          if ($day >= 26 && $day <= 31) {
+            $requestedDateTime = new DateTime($exam_leave);
+            $requestedDateTime->modify('first day of next month');
+            $requestedMonth = $requestedDateTime->format('F');
+          }
+
+
+          $attendanceUpdateData = [];
+          $attendances = DB::table('attendances')
+            ->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)
+            ->first();
+
+          $attendanceData = [
+            'employee_name' => auth()->user()->teammember_id,
+            'month' => $requestedMonth,
+            'created_at' => Carbon::now()
+          ];
+
+          if ($lstatus == 'EL/C') {
+            $attendanceData['exam_leave'] = 1;
+          } else {
+            $attendanceData['lwp'] = 1;
+          }
+
+          if ($attendances == null) {
+            DB::table('attendances')->insert($attendanceData);
+          } else {
+            if ($lstatus == 'EL/C') {
+              DB::table('attendances')
+                ->where('employee_name', auth()->user()->teammember_id)
+                ->where('month', $requestedMonth)
+                ->update(['exam_leave' => DB::raw('COALESCE(sick_leave, 0) + 1')]);
+            } else {
+              DB::table('attendances')
+                ->where('employee_name', auth()->user()->teammember_id)
+                ->where('month', $requestedMonth)
+                ->update(['lwp' => DB::raw('COALESCE(lwp, 0) + 1')]);
+            }
+          }
+
+
+          $column = $columnMappings[$day] ?? null;
+          if ($column !== null) {
+            $attendanceUpdateData[$column] = $lstatus;
+          }
+
+          //Update the attendance data for the current date
+          DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)->update($attendanceUpdateData);
+        }
+      }
+
+      if ($request->hasFile('report')) {
+        $file = $request->file('report');
+        $destinationPath = 'backEnd/image/report';
+        $name = $file->getClientOriginalName();
+        $s = $file->move($destinationPath, $name);
+        $data['salaryincomefile'] = $name;
+        $data['report'] = $name;
+      }
+      $id = DB::table('applyleaves')->insertGetId([
+        'leavetype'         =>     $request->leavetype,
+        'approver'         =>     $request->approver,
+        'from'         =>     date('Y-m-d', strtotime($request->from)),
+        'type'         =>     $request->type,
+        'examtype'         =>     $request->examtype,
+        'otherexam'         =>     $request->otherexam,
+        'to'         =>     date('Y-m-d', strtotime($request->to)),
+        'report'         => $data['report'] ?? '',
+        'status'         =>    0,
+        'reasonleave'         =>     $request->reasonleave,
+        'createdby'         =>     auth()->user()->teammember_id,
+        'created_at'          =>    date('Y-m-d H:i:s'),
+        'updated_at'              =>    date('Y-m-d H:i:s'),
+      ]);
+      if ($request->teammember_id != null) {
+        foreach ($request->teammember_id as $teammember) {
+          DB::table('leaveteams')->insert([
+            'leave_id'         =>     $id,
+            'teammember_id'         =>     $teammember,
+            'created_at'          =>     date('Y-m-d H:i:s'),
+            'updated_at'              =>     date('Y-m-d H:i:s'),
+          ]);
+        }
+      }
+      $teammemberemail = Teammember::where('id', $request->approver)->first();
+      //  dd($teammemberemail);
+      $teammembername = Teammember::where('id', auth()->user()->teammember_id)->first();
+
+      $data = array(
+        'id' => $id,
+        'leavetype'         =>     $request->leavetype,
+        'from'         =>     date('Y-m-d', strtotime($request->from)),
+        'to'         =>      date('Y-m-d', strtotime($request->to)),
+        'teammembername'         =>    $teammembername->team_member,
+        'teammemberemail' => $teammemberemail->emailid ?? '',
+        'id' => $id ?? ''
+
+      );
+
+      Mail::send('emails.applyleaveform', $data, function ($msg) use ($data) {
+        $msg->to($data['teammemberemail']);
+        //   $msg->cc('itsupport_delhi@vsa.co.in');
+        $msg->subject('VSA Apply Leave Request');
+      });
+
+
+      $output = array('msg' => 'Create Successfully');
+      return back()->with('success', $output);
+    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      $output = array('msg' => $e->getMessage());
+      return back()->withErrors($output)->withInput();
+    }
+  }
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\NotificationController.php
+add filterDataAdmin() function 
+replace filterDataAdmin() function 
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\form.blade.php
+
+find text    <label class="font-weight-600">From *</label>
+replace  replace from and to date
+
+
+   <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">From *</label>
+            <input type="text" id="startDate" name="from" value="dd-mm-yyyy" required
+                class="form-control datepicker" placeholder="" maxlength="10">
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="font-weight-600">To *</label>
+            <input type="text" id="endDate" name="to" value="dd-mm-yyyy" required
+                class="form-control datepicker" placeholder="" maxlength="10">
+
+        </div>
+    </div>
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\form.blade.php
+add this javascript end of page
+
+
+
+{{-- validation for date --}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script>
+    $(document).ready(function() {
+        var startDateInput = $('#startDate');
+        var endDateInput = $('#endDate');
+
+        function compareDates() {
+
+            var startDateInput1 = startDateInput.val();
+            // alert("Value of workitem: " + startDateInput1);
+            // Split the input string to extract day, month, and year
+            var parts = startDateInput1.split('-');
+            var day = parts[0];
+            var month = parts[1] - 1;
+            var year = parts[2];
+            // Create a new Date object with the parsed values
+            var startDate = new Date(year, month, day);
+
+
+            var endDateInput1 = endDateInput.val();
+            // alert(endDateInput1);
+            // Split the input string to extract day, month, and year
+            var parts = endDateInput1.split('-');
+            var day = parts[0];
+            var month = parts[1] - 1;
+            var year = parts[2];
+            // Create a new Date object with the parsed values
+            var endDate = new Date(year, month, day);
+
+            // var startDate = new Date(startDateInput.val());
+            // var endDate = new Date(endDateInput.val());
+
+            if (startDate > endDate) {
+                alert('End date should be greater than or equal to the Start date');
+                endDateInput.val(''); // Clear the end date input
+            }
+        }
+
+        startDateInput.on('input', compareDates);
+        endDateInput.on('blur', compareDates);
+    });
+</script> --}}
+<script>
+    $(document).ready(function() {
+        var startDateInput = $('#startDate');
+        var endDateInput = $('#endDate');
+
+        function compareDates() {
+            var startDate = Date.parse(startDateInput.val());
+            var endDate = Date.parse(endDateInput.val());
+
+            if (!isNaN(startDate) && !isNaN(endDate) && startDate > endDate) {
+                alert('End date should be greater than or equal to the Start date');
+                endDateInput.val(''); // Clear the end date input
+            }
+        }
+
+        startDateInput.on('input', compareDates);
+        endDateInput.on('blur', compareDates);
+    });
+</script>
+
+
+{{-- validation for year --}}
+<script>
+    $(document).ready(function() {
+        $('#startDate').on('change', function() {
+            var startclear = $('#startDate');
+            var startDateInput1 = $('#startDate').val();
+            // Split the input string to extract day, month, and year
+            var parts = startDateInput1.split('-');
+            var day = parts[0];
+            var month = parts[1] - 1;
+            var year = parts[2];
+            // Create a new Date object with the parsed values
+            var startDate = new Date(year, month, day);
+            var startyear = startDate.getFullYear();
+            var yearLength = startyear.toString().length;
+            if (yearLength > 4) {
+                alert('Enter four digits for the year');
+                startclear.val('');
+            }
+        });
+        $('#endDate').on('change', function() {
+            var endclear = $('#endDate');
+            var endDateInput1 = $('#endDate').val();
+            // Split the input string to extract day, month, and year
+            var parts = endDateInput1.split('-');
+            var day = parts[0];
+            var month = parts[1] - 1;
+            var year = parts[2];
+            // Create a new Date object with the parsed values
+            var endtDate = new Date(year, month, day);
+            var endyear = endtDate.getFullYear();
+            var endyearLength = endyear.toString().length;
+            if (endyearLength > 4) {
+                alert('Enter four digits for the year');
+                endclear.val('');
+            }
+        });
+    });
+</script>
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\js.blade.php
+
+find text    $('.datepicker').datepicker({
+replace   @if statment
+
+ @if (Request::is('invoice/create') ||
+         Request::is('invoice/*/edit') ||
+         Request::is('timesheet/create') ||
+         Request::is('applyleave/create'))
+     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+     @if (Request::is('invoice/create') || Request::is('invoice/*/edit') || Request::is('timesheet/create'))
+         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+     @endif
+     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+     <script>
+         $(function() {
+             $('#datepicker').datepicker({
+                 dateFormat: 'dd-mm-yy'
+             });
+         });
+         $(function() {
+             $('.datepicker').datepicker({
+                 dateFormat: 'dd-mm-yy'
+             });
+         });
+         $(function() {
+             $("#datepickers").datepicker({
+                 maxDate: new Date,
+                 dateFormat: 'dd-mm-yy'
+             });
+         });
+     </script>
+ @endif
+
+
+
+
+
+################################################################################################################################
+Route 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+

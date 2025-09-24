@@ -1,0 +1,61 @@
+GIT AND BITBUCKET
+######################################################################################
+i am using this for bitbucket for first time 
+
+git init
+with created new folder vsa-demo and all code clone
+   git clone https://capitall-india-admin@bitbucket.org/capitallio/vsa-demo.git
+
+without created new folder vsa-demo only data clone inside vsa-demo
+   git clone https://capitall-india-admin@bitbucket.org/capitallio/vsa-demo.git .
+
+after that you will get vsalive folder and go inside it and run below command
+git init
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://capitall-india-admin@bitbucket.org/capitall-india/vsalive.git
+git push -u origin main
+
+######################################################################################
+for already connected bitbucet then 
+
+git status
+git add .
+git commit -m "first commit"
+git push -u origin main
+
+
+08-03-2025
+22222222222222222222222222222222222222222222222222
+git clone https://capitall-india-admin@bitbucket.org/capitallio/vsa-demo.git .
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+fetch data from branch
+git init  # Initialize Git inside vsalive if not already done
+git remote add origin https://capitall-india-admin@bitbucket.org/capitallio/vsa.git
+git fetch origin dev-Mds
+git checkout -b dev-Mds origin/dev-Mds
+
+
+
+2222222222222222222222222222222222222222222222222
+git rm -r --cached backEnd public storage
+git commit -m "Removed backEnd, public, and storage from Git tracking"
+git push origin main
+
+
+2222222222222222222222222222222222222222222222222222222222222222222
+push data on dev-Mds 
+
+git status
+git add .
+git commit -m "Vsa final code updated now"
+git push origin dev-Mds
+
+
+push data on vsa-demo
+
+git status
+git add .
+git commit -m "first commit"
+git push -u origin main

@@ -1,0 +1,121 @@
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+replace adminsearchtimesheet() function 
+
+
+    public function adminsearchtimesheet(Request $request)
+  {
+    // dd($request, 'hi2');
+    // Get all input from form
+    $startDate = $request->input('startdate', null);
+    $endDate = $request->input('enddate', null);
+    $teamId = $request->input('teamid', null);
+    $teammemberId = $request->input('teammemberId', null);
+    $year = $request->input('year', null);
+    $clientId = $request->input('clientId', null);
+    $assignmentId = $request->input('assignmentId', null);
+
+    $teammembers = DB::table('teammembers')
+      ->where('status', 1)
+      ->whereIn('role_id', [14, 15, 13, 11])
+      ->select('team_member', 'id', 'staffcode')
+      ->orderBy('team_member', 'ASC')
+      ->get();
+
+    $clientsname = DB::table('clients')
+      ->whereIn('status', [0, 1])
+      ->select('id', 'client_name', 'client_code')
+      ->orderBy('client_name', 'ASC')
+      ->get();
+
+    $assignmentsname = DB::table('assignments')
+      ->where('status', 1)
+      ->select('id', 'assignment_name')
+      ->orderBy('assignment_name', 'ASC')
+      ->get();
+
+    if (auth()->user()->role_id == 11) {
+      $timesheetData = DB::table('timesheetusers')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+        // When startDate and endDate exist then run 'when' clause
+        ->when($startDate && $endDate && $teammemberId && $year, function ($query) use ($startDate, $endDate, $teammemberId) {
+          // dd('teammemberId');
+          return $query->where('timesheetusers.createdby', $teammemberId)
+            ->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->when($startDate && $endDate && $clientId && $year, function ($query) use ($startDate, $endDate, $clientId) {
+          // dd($clientId);
+          return $query->where('timesheetusers.client_id', $clientId)
+            ->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->when($startDate && $endDate && $assignmentId && $year, function ($query) use ($startDate, $endDate, $assignmentId) {
+          // dd('assignmentId');
+          return $query->where('timesheetusers.assignment_id', $assignmentId)
+            ->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->when($startDate && $endDate && $year && $teammemberId == null && $clientId == null && $assignmentId == null, function ($query) use ($startDate, $endDate, $year) {
+          // dd('year');
+          return $query->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+        ->leftjoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+        ->select('timesheetusers.*', 'assignments.assignment_name', 'clients.client_name', 'teammembers.team_member', 'teammembers.staffcode', 'patnerid.team_member as patnername')
+        ->orderBy('date', 'DESC')
+        ->get();
+
+      $request->flash();
+      return view('backEnd.timesheet.timesheetdownload', compact('timesheetData', 'teammembers', 'clientsname', 'assignmentsname'));
+    }
+    // for patner team timesheet 
+    else {
+      $timesheetData = DB::table('timesheetusers')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+        // When startDate and endDate exist then run 'when' clause
+        ->when($startDate && $endDate && $teammemberId && $year, function ($query) use ($startDate, $endDate, $teammemberId) {
+          return $query->where('timesheetusers.createdby', $teammemberId)
+            ->where('timesheetusers.partner', auth()->user()->teammember_id)
+            ->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->when($startDate && $endDate && $clientId && $year, function ($query) use ($startDate, $endDate, $clientId) {
+          // dd($clientId);
+          return $query->where('timesheetusers.client_id', $clientId)
+            ->where('timesheetusers.partner', auth()->user()->teammember_id)
+            ->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->when($startDate && $endDate && $assignmentId && $year, function ($query) use ($startDate, $endDate, $assignmentId) {
+          // dd('assignmentId');
+          return $query->where('timesheetusers.assignment_id', $assignmentId)
+            ->where('timesheetusers.partner', auth()->user()->teammember_id)
+            ->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate);
+        })
+        ->when($startDate && $endDate && $year && $teammemberId == null && $clientId == null && $assignmentId == null, function ($query) use ($startDate, $endDate, $year) {
+          return $query->where('timesheetusers.date', '>=', $startDate)
+            ->where('timesheetusers.date', '<=', $endDate)
+            ->where('timesheetusers.partner', auth()->user()->teammember_id);
+        })
+        ->whereIn('timesheetusers.status', [1, 2, 3])
+        ->leftjoin('clients', 'clients.id', 'timesheetusers.client_id')
+        ->leftjoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+        ->leftjoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+        ->select('timesheetusers.*', 'assignments.assignment_name', 'clients.client_name', 'teammembers.team_member', 'teammembers.staffcode', 'patnerid.team_member as patnername')
+        ->orderBy('date', 'DESC')
+        ->get();
+      // dd($timesheetData);
+      $request->flash();
+      return view('backEnd.timesheet.timesheetdownload', compact('timesheetData', 'teammembers', 'clientsname', 'assignmentsname'));
+    }
+  }
+
+
+
+################################################################################################################################
+Route 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222

@@ -1,0 +1,199 @@
+01-11-24
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+	
+	
+02-11-24
+03-11-24
+04-11-24
+1.Retrieve all active team members and create their attendance records from April to September.
+    1.1 Update attendance records based on timesheets submitted by team members.
+    1.2 Update attendance records for timesheets submitted on Saturdays.
+    1.3 Update attendance records for timesheets submitted on Sundays.
+    1.4 Update attendance records for timesheets submitted on holidays.
+    1.5 Update attendance records for timesheets submitted for exam leave.
+    1.6 Update attendance records for timesheets submitted for casual leave.
+    1.7 Update attendance records for timesheets submitted for travel.
+    1.8 Mark attendance records with a cross (X) for dates after a team member’s leaving date.
+    1.9 Update the total count column in the attendance records.
+
+
+05-11-24
+1.Total working days on dashboard 
+2.Total approved leave count on dashboard
+3.All functional testing done 
+
+
+
+06-11-24
+1.Retrieve all active team members and create their attendance records from April to September updated on vsalive and tested by me 
+1.Total working days on dashboard upload on vsalive and vsademo 
+2.Total approved leave count on dashboard upload on vsalive and vsademo 
+
+
+
+
+07-11-24
+5.clent want to Assignment viewer list on admin and partner.
+5.clent want to Attendance inside report tab.
+1.vsa project docs timesheet features and leave features completed
+2.leave request problem fixed (Deepak kumar)
+
+08-11-24
+1.Completed documentation and uploaded on vsademo and vsalive 
+     5.clent want to Assignment viewer list on admin and partner.
+     5.clent want to Attendance inside report tab. 
+2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+
+09-11-24
+10-11-24
+11-11-24
+2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+3.Timesheet rejected problem fixed
+
+
+12-11-24
+1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+2.Functional testing for today's and yesterday's work is complete
+3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+1.Attendance revert exam leave problem fixed (user name gurvesh)
+5.tesing Attendance inserting leaving date after delete problem
+
+
+13-11-24
+1.Attendance revert exam leave problem fixed (user name gurvesh)
+2.Attendance inserting leaving date after delete problem fixed (user name gurvesh)
+
+14-11-24
+1.Exam leave count problem teted and fixed 
+2.All attendance get using year column on everywhere on attendance module 
+
+
+15-11-24
+16-11-24
+1.Deployment on vsalive ,Tasks (VSA-151,154,169,196,197,198,223,225,228,231,232,235).
+2.kanika proble fixed 
+
+timesheet done 
+
+17-11-24
+18-11-24
+#i have tested and uploded on vsademo below all tasks 
+2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+1.Attendance revert exam leave problem fixed (user name gurvesh)
+2.Attendance inserting leaving date after deleting attendance problem fixed (user name gurvesh)
+3.After inserting the leave date, all saved timesheets are submitted forcefully. Therefore, it is necessary to check if the exam leave and other saved timesheets are submitted, and then verify the total count column in the attendance
+1.Exam leave count problem tested and fixed
+2.All attendance get using year column on everywhere on attendance module
+
+19-11-24
+I have uploaded on vsalive all below listed and tested tasks
+2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+1.Attendance revert exam leave problem fixed (user name gurvesh)
+2.Attendance inserting leaving date after deleting attendance problem fixed (user name gurvesh)
+3.After inserting the leave date, all saved timesheets are submitted forcefully. Therefore, it is necessary to check if the exam leave and other saved timesheets are submitted, and then verify the total count column in the attendance
+1.Exam leave count problem tested and fixed
+2.All attendance get using year column on everywhere on attendance module
+
+
+20-11-24
+I have uploaded on vsalive all below listed and tested tasks
+2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+1.The client wants rejected timesheet data to be displayed separately, as it is currently merged in one section on the timesheet rejected page. (bugs)
+3.ordering using month name like Dec,Nov,Oct etc ON attendance tab,
+1.Attendance revert exam leave problem fixed (user name gurvesh)
+2.Attendance inserting leaving date after deleting attendance problem fixed (user name gurvesh)
+3.After inserting the leave date, all saved timesheets are submitted forcefully. Therefore, it is necessary to check if the exam leave and other saved timesheets are submitted, and then verify the total count column in the attendance
+1.Exam leave count problem tested and fixed
+2.All attendance get using year column on everywhere on attendance module  ####################
+
+1.Auto submit exam leave test with pooja kumari all scenireo
+2.Jira updated
+3.Riddima Aggarwal exam leave on sunday delete and updated (01-09-2024)
+
+21-11-24
+# Admin and partner can create an assignment without selecting staff and team leader.
+1.1. When the admin or partner checks the "Name" checkbox, the "Name" and "Type" fields will be disabled.
+1.2. The plus icon will be hidden.
+1.3. If the admin or partner has already clicked the plus icon and then clicks the "Name" checkbox, all "Name" and "Type" fields will be disabled, and both the plus and minus icons will be hidden.
+4.tested and upload code on vsalive
+5. bugs fixed 2.Client want to implement attendence tab for staff and manager currently working on admin and partner.
+
+
+
+22-11-24
+1.code uploaded on vsademo
+The 'Submit Timesheet for Week' button will be displayed if one week of data exists on the Timesheet Save Listing page.
+2.new joinig problem checked and its allready running good
+3.work on documentation 
+
+23-11-24
+24-11-24
+25-11-24
+Users can edit saved timesheets.
+Users cannot delete or edit saved timesheets dated before their joining date.
+Users cannot delete or edit exam leave and casual leave saved timesheets on the Timesheet Save Listing page.
+The 'Submit Timesheet for Week' button will be displayed if one week of data exists on the Timesheet Save Listing page.
+Attendance records have been fixed for all exit users from 01-09-2024 to 25-11-2024. Please verify the attendance records for these users (September to November).
+
+timesheet done 
+
+
+26-11-24
+Attendance records have been fixed for all exit users from 01-09-2024 to 25-11-2024. Please verify the attendance records for these users (September to November).Users can edit saved timesheets.
+Users cannot delete or edit saved timesheets dated before their joining date.
+Users cannot delete or edit exam leave and casual leave saved timesheets on the Timesheet Save Listing page.
+
+ 
+27-11-24
+Users can edit saved timesheets.
+Users cannot delete or edit saved timesheets dated before their joining date.
+Users cannot delete or edit exam leave and casual leave saved timesheets on the Timesheet Save Listing page.
+2.meeting with HR maam
+3.code upload Documntation for vsademo.
+4.i have making bugs report for HR maam
+Rejected timesheet data is not showing for the user's ID.(bugs)
+When an assignment is created, an email will be sent to the partner. The date format in the email will be: dd-mm-yyyy (e.g., 01-01-1999).
+7.user can not delete and edit before rejoining timesheet 
+
+
+28-11-24
+1.Upload code on vsademo and functional testing done 
+2.update all scenerio on jira 
+4.i have making bugs report for HR maam ############################
+
+
+29-11-24
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed on vsalive
+Total hour count bugs fixed, bugs no is vs-224.
+
+
+30-11-24
+The user cannot apply for leave on a Sunday.
+The user cannot apply for leave on a holiday.
+The user cannot apply for leave if the "From" date is a Sunday or the "To" date is a Sunday.
+The user cannot apply for leave if the "From" date is a holiday or the "To" date is a holiday.
+The user cannot apply for leave if the "From" date is a Saturday or the "To" date is a Saturday, this is only for staff.
+When a user's timesheet is rejected continuously for more than 8 days, if the user has not submitted the Sunday date timesheet, they currently cannot apply for leave. However, if the Sunday timesheet is submitted, the user can apply for leave. The client now wants the functionality updated so that the user can apply for leave even if the Sunday timesheet is not submitted
+In attendance module total no of days 0 for october months fixed on vsalive
+Total hour count bugs fixed, bugs no is vs-224.
+
+ 

@@ -1,0 +1,87 @@
+Regarding Vs code / regarding vscode
+22222222222222222222222222222222
+22222222222222222222222222222222
+22222222222222222222222222222222
+22222222222222222222222222222222
+Theme use only
+1.monokai
+2.monokai diamond
+
+22222222222222222222222222222222
+2
+own keayboard shortcut / regarding keyboard shortcut
+goto this file C:\Users\KGS-429\AppData\Roaming\Code\User\keybindings.json
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+=",
+        "command": "editor.action.fontZoomIn"
+    },
+    {
+        "key": "ctrl+-",
+        "command": "editor.action.fontZoomOut"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "editor.action.fontZoomReset"
+    }
+
+     // {
+    //     "key": "ctrl+up",
+    //     "command": "editor.action.fontZoomIn"
+    // },
+    // {
+    //     "key": "ctrl+down",
+    //     "command": "editor.action.fontZoomOut"
+    // },
+    // {
+    //     "key": "ctrl+0",
+    //     "command": "editor.action.fontZoomReset"
+    // }
+]
+
+
+1
+Steps:
+VS Code खोलो
+Ctrl + K फिर Ctrl + S दबाओ → यह Keyboard Shortcuts खोलेगा
+ऊपर दाएँ कोने में {} icon (Open Keyboard Shortcuts JSON) पर क्लिक करो
+इसमें ये JSON add करो:
+
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+=",
+        "command": "editor.action.fontZoomIn"
+    },
+    {
+        "key": "ctrl+-",
+        "command": "editor.action.fontZoomOut"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "editor.action.fontZoomReset"
+    }
+
+     // {
+    //     "key": "ctrl+up",
+    //     "command": "editor.action.fontZoomIn"
+    // },
+    // {
+    //     "key": "ctrl+down",
+    //     "command": "editor.action.fontZoomOut"
+    // },
+    // {
+    //     "key": "ctrl+0",
+    //     "command": "editor.action.fontZoomReset"
+    // }
+]
+
+22222222222222222222222222222222
+go to setting and search 'wrap' then on it 
+
+22222222222222222222222222
+go to setting and search 'Format On Save' then on it 
+
+22222222222222222222222222
+go to setting and search 'Mouse Wheel Zoom On Save' then on it 

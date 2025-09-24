@@ -1,0 +1,1206 @@
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Comment all places on vsademo
+app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+
+itsupport_delhi@vsa.co.in  ise comment kar de 
+
+
+
+agar is per koi bhi update ho to profile me 10th and 12th ka documnet check karle ek baar ye baar baar problem aata hai 
+independence ke ander create and view file insert karna hai 
+IndependenceController.php
+TeammemberController (1).php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+vsalocal,vsademo,vsalive ```start
+1.Fix the issue with the Last Submission Report on mail. ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Console\Commands\TimesheetnotfilllastweekReminder.php
+
+
+       //! uncomment this mail // $msg->to('itsupport_delhi@vsa.co.in');
+    public function handle()
+    {
+        if (now()->format('H:i') === '18:00') {
+            if ('Wednesday' == date('l', time()) || 'Saturday' == date('l', time())) {
+                // Get all active team member 
+                $teammember = DB::table('teammembers')
+                    ->leftJoin('timesheetusers', 'timesheetusers.createdby', 'teammembers.id')
+                    ->where('teammembers.status', 1)
+                    // ->whereIn('teammembers.id', [780])
+                    ->where('timesheetusers.date', '<=', now()->subWeeks(1)->endOfWeek())
+                    ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.id')
+                    ->distinct('timesheetusers.createdby')
+                    ->get();
+
+                // Get the last submission date for each user only sunday and suterday
+                foreach ($teammember as $user) {
+                    $lastSubmissionDate = DB::table('timesheetusers')
+                        ->where('createdby', $user->id)
+                        ->where('date', '<=', now()->subWeeks(1)->endOfWeek())
+                        ->where('status', '!=', 0)
+                        ->where(function ($query) {
+                            $query->whereRaw('DAYOFWEEK(date) = 1') // Sunday
+                                ->orWhereRaw('DAYOFWEEK(date) = 7'); // Saturday
+                        })
+                        ->max('date');
+
+                    $user->last_submission_date = $lastSubmissionDate ? Carbon::parse($lastSubmissionDate)->format('d-m-Y') : '';
+
+                    // Check for rejoining users
+                    $rejoiningDataall = DB::table('teammembers')
+                        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                        ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+                        ->where('teammembers.id', $user->id)
+                        ->select(
+                            'teamrolehistory.rejoiningdate',
+                            'rejoiningsamepost.rejoiningdate as samepostrejoiningdate'
+                        )
+                        ->first();
+
+                    if ($rejoiningDataall) {
+                        $rejoiningDatestore = $rejoiningDataall->samepostrejoiningdate ?? $rejoiningDataall->rejoiningdate;
+
+                        if ($rejoiningDatestore) {
+                            $rejoiningDateCarbon = Carbon::parse($rejoiningDatestore);
+
+                            if ($lastSubmissionDate) {
+                                $lastSubmissionCarbon = Carbon::parse($lastSubmissionDate);
+
+                                if (!$lastSubmissionCarbon->greaterThan($rejoiningDateCarbon)) {
+                                    $user->last_submission_date = ''; // Skip user
+                                }
+                            } else {
+                                $user->last_submission_date = ''; // Skip user
+                            }
+                        }
+                    }
+                    // Check for rejoining users  end hare
+                }
+
+                // Prepare Excel data
+                $excelData = $teammember->filter(function ($user) {
+                    return !empty($user->last_submission_date);
+                })->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                        'last_submission_date' => $user->last_submission_date,
+                    ];
+                })->toArray();
+
+                if (!empty($excelData)) {
+                    $export = new TimesheetLastWeekExport(collect($excelData));
+                    $excelFileName = 'Timesheet_last_week.xlsx';
+                    Excel::store($export, $excelFileName);
+
+                    // Send Email
+                    $emailData = [
+                        'subject' => "Timesheet Not filled Last Week",
+                        'teammember' => $teammember->map(function ($user) {
+                            return (object) [
+                                'team_member' => $user->team_member,
+                                'emailid' => $user->emailid,
+                                'last_submission_date' => $user->last_submission_date,
+                            ];
+                        }),
+                    ];
+
+                    Mail::send('emails.timesheetnotfilledlastweekreminder', $emailData, function ($msg) use ($emailData, $excelFileName) {
+                        // $msg->to('itsupport_delhi@vsa.co.in');
+                        // $msg->cc('Admin_delhi@vsa.co.in');
+                        $msg->to('shahidraza@capitall.io');
+                        $msg->attach(storage_path('app/' . $excelFileName), [
+                            'as' => $excelFileName,
+                            'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        ]);
+                        $msg->subject($emailData['subject']);
+                    });
+                } else {
+                    // display log message
+                    Log::info('No data available for Excel generation.');
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Console\Commands\TimesheetnotfillReminder.php
+
+
+use Illuminate\Console\Command;
+use DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel; // Import Excel facade
+use App\Exports\TeammemberExport;
+
+
+        public function handle()
+    {
+        if (now()->format('H:i') === '18:01') {
+            if ('Wednesday' == date('l', time()) || 'Saturday' == date('l', time())) {
+                // Get distinct createdby values
+                $createdby = DB::table('timesheetusers')->select('createdby')->distinct()->get()->pluck('createdby')->toArray();
+
+                // Team members who have saved timesheets but not submitted
+                $teammemberOnlySave = DB::table('teammembers')
+                    ->leftJoin('timesheets', 'timesheets.created_by', 'teammembers.id')
+                    ->where('teammembers.status', 1)
+                    ->whereIn('timesheets.created_by', $createdby)
+                    ->select('teammembers.team_member', 'teammembers.emailid', 'teammembers.id')
+                    ->groupBy('teammembers.team_member', 'teammembers.emailid', 'teammembers.id')
+                    ->havingRaw('COUNT(DISTINCT timesheets.id) = COUNT(CASE WHEN timesheets.status = 0 THEN 1 ELSE NULL END)')
+                    ->get();
+
+                // Team members who have never filled a timesheet
+                $teammemberNeverFilled = DB::table('teammembers')
+                    ->leftJoin('timesheetusers', 'timesheetusers.createdby', 'teammembers.id')
+                    ->whereNull('timesheetusers.createdby')
+                    ->where('teammembers.status', 1)
+                    ->whereIn('teammembers.role_id', [14, 15, 13, 11])
+                    ->select('teammembers.team_member', 'teammembers.emailid', 'teammembers.id')
+                    ->get();
+
+                // Team members rejoining on different or same posts
+                $rejoiningUsers = DB::table('teamrolehistory')
+                    ->leftJoin('teammembers', 'teammembers.id', '=', 'teamrolehistory.teammember_id')
+                    ->select('teamrolehistory.id', 'teamrolehistory.teammember_id', 'teammembers.team_member', 'teammembers.emailid')
+                    ->distinct()
+                    ->get()
+                    ->merge(
+                        DB::table('rejoiningsamepost')
+                            ->leftJoin('teammembers', 'teammembers.id', '=', 'rejoiningsamepost.teammember_id')
+                            ->select('rejoiningsamepost.id', 'rejoiningsamepost.teammember_id', 'teammembers.team_member', 'teammembers.emailid')
+                            ->distinct()
+                            ->get()
+                    );
+
+                // dd($rejoiningUsers);
+
+                foreach ($rejoiningUsers as $user) {
+                    $lastSubmissionDate = DB::table('timesheetusers')
+                        ->where('createdby', $user->teammember_id)
+                        ->where('date', '<=', now()->subWeeks(1)->endOfWeek())
+                        ->where('status', '!=', 0)
+                        ->where(function ($query) {
+                            $query->whereRaw('DAYOFWEEK(date) = 1') // Sunday
+                                ->orWhereRaw('DAYOFWEEK(date) = 7'); // Saturday
+                        })
+                        ->max('date');
+
+                    $user->last_submission_date = $lastSubmissionDate ? Carbon::parse($lastSubmissionDate)->format('d-m-Y') : '';
+
+                    // Check rejoining dates
+                    $rejoiningData = DB::table('teammembers')
+                        ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+                        ->leftJoin('rejoiningsamepost', 'rejoiningsamepost.teammember_id', '=', 'teammembers.id')
+                        ->where('teammembers.id', $user->teammember_id)
+                        ->select('teamrolehistory.rejoiningdate', 'rejoiningsamepost.rejoiningdate as samepostrejoiningdate')
+                        ->first();
+
+                    if ($rejoiningData) {
+                        $rejoiningDate = $rejoiningData->samepostrejoiningdate ?? $rejoiningData->rejoiningdate;
+
+                        if ($rejoiningDate) {
+                            $rejoiningDateCarbon = Carbon::parse($rejoiningDate);
+                            if ($lastSubmissionDate) {
+                                $lastSubmissionCarbon = Carbon::parse($lastSubmissionDate);
+                                if (!$lastSubmissionCarbon->lessThan($rejoiningDateCarbon)) {
+                                    $user->last_submission_date = ''; // Skip user
+                                }
+                            } else {
+                                $user->last_submission_date = ''; // Skip user
+                            }
+                        }
+                    }
+                }
+
+                // Prepare Excel data
+                $excelData = $rejoiningUsers->filter(function ($user) {
+                    return !empty($user->last_submission_date);
+                })->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                    ];
+                })->merge($teammemberOnlySave->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                    ];
+                }))->merge($teammemberNeverFilled->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                    ];
+                }))->toArray();
+
+                // Store Excel file
+                $export = new TeammemberExport(collect($excelData));
+                $excelFileName = 'Timesheet_Not_Submitted.xlsx';
+                Excel::store($export, $excelFileName);
+
+                // Prepare email data
+                // $emailData = [
+                //     'subject' => "Timesheet not filled till date",
+                //     'teammemberOnlySave' => $teammemberOnlySave,
+                // ];
+                // get data on mail blade file
+                $emailData = array(
+                    'subject' => "Timesheet not filled till date",
+                    'teammemberOnlySave' => $teammemberOnlySave->map(function ($user) {
+                        return (object) [
+                            'team_member' => $user->team_member,
+                            'emailid' => $user->emailid,
+                            // 'last_submission_date' => $user->last_submission_date,
+                        ];
+                    }),
+                );
+
+                // Send email
+                // Mail::send('emails.timesheetnotfilledreminder', $emailData, function ($msg) use ($emailData, $excelFileName) {
+                //     $msg->to('itsupport_delhi@vsa.co.in');
+                //     $msg->cc('Admin_delhi@vsa.co.in');
+                //     $msg->attach(storage_path('app/' . $excelFileName), [
+                //         'as' => $excelFileName,
+                //         'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                //     ]);
+                //     $msg->subject($emailData['subject']);
+                // });
+                Mail::send('emails.timesheetnotfilledremidner', $emailData, function ($msg) use ($emailData, $excelFileName) {
+                    // $msg->to('itsupport_delhi@vsa.co.in');
+                    // $msg->cc('Admin_delhi@vsa.co.in');
+                    $msg->to('shahidraza@capitall.io');
+                    // Attach the Excel file to the email
+                    $msg->attach(storage_path('app/' . $excelFileName), [
+                        'as' => $excelFileName,
+                        'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    ]);
+                    $msg->subject($emailData['subject']);
+                });
+            }
+        }
+    }
+
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222
+1.Fix the issue with the Last Submission Report on mail. ```end
+
+
+35.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.  ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\applyleave\teamapplication.blade.php
+
+
+  $('#examplee').DataTable({
+  
+  
+            //  "order": [
+            //      [4, "asc"]
+            //  ],
+            "order": [
+                @if (Request::is('filtering-applyleve'))
+                    [3, "desc"]
+                @else
+                    [4, "asc"]
+                @endif
+            ],
+           
+
+
+
+
+
+35.On the "Apply Leave Filter" page, after filtering by date, the data should be displayed in ascending order.  ```end
+
+
+Add a travel box on the dashboard as requested by the client. ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\BackEndController.php
+
+find text 
+  DB::raw('SUM(casual_leave) as total_casual_leave'),
+  
+you have get three result 
+
+1
+
+    $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(travel) as total_travel_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totaltraveldays = $attendancerecordData->total_travel_days;
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+
+      // total working days end hare 
+      return view('backEnd.index', compact('notification', 'opentimesheetrequests', 'openleave', 'mentor', 'mentees', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays', 'totaltraveldays'));
+    }
+	
+	
+	
+2
+  $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(travel) as total_travel_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totaltraveldays = $attendancerecordData->total_travel_days;
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+      // total working days end hare 
+
+      return view('backEnd.index', compact('opentimesheetrequests', 'openleave', 'tender', 'mentor', 'mentees', 'notification', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays', 'totaltraveldays'));
+    }
+	
+	
+	
+3.
+
+  $attendancerecordData = DB::table('attendances')
+        ->where('employee_name', auth()->user()->teammember_id)
+        ->whereBetween('fulldate', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+        ->select(
+          DB::raw('SUM(no_of_days_present) as total_working_days'),
+          DB::raw('SUM(travel) as total_travel_days'),
+          DB::raw('SUM(casual_leave) as total_casual_leave'),
+          DB::raw('SUM(exam_leave) as total_exam_leave')
+        )
+        ->first();
+
+      $totaltraveldays = $attendancerecordData->total_travel_days;
+      $totalworkingdays = $attendancerecordData->total_working_days;
+      $totalCasualLeave = $attendancerecordData->total_casual_leave;
+      $totalExamLeave = $attendancerecordData->total_exam_leave;
+      $totalLeaveDays = $totalCasualLeave + $totalExamLeave;
+      // total working days end hare 
+      // manager
+      return view('backEnd.index', compact('notification', 'mentor', 'mentees', 'assignmentcount', 'assignment', 'pageid', 'assetticket', 'client', 'teammember', 'notificationDatas', 'upcomingBirthdays', 'workAnniversaries', 'upcomingHolidays', 'todayBirthdays', 'approvedleavesvaluecount', 'totalworkingdays', 'currentMonth', 'totalLeaveDays', 'totaltraveldays'));
+    }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\index.blade.php
+
+ <div style="color:white;" class="fs-32 text-monospace">{{ $totalworkingdays ?? '0' }}
+ 
+ you will get 3 result 
+ 
+ 
+1
+
+               <div class="col-md-6 col-lg-3">
+                    <div class="p-2 text-white rounded mb-3 p-3 shadow-sm text-center" style="background: darkcyan;green">
+                        <a href="{{ url('totaltraveldays', auth()->user()->teammember_id) }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Total Travel Days
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $totaltraveldays ?? '0' }}
+                            </div>
+                            <small style="color:white;">Days (April to {{ $currentMonth }})</small>
+                        </a>
+                    </div>
+                </div>
+				
+				
+
+2
+
+
+               <div class="col-md-6 col-lg-3">
+                    <div class="p-2 text-white rounded mb-3 p-3 shadow-sm text-center" style="background: darkcyan;green">
+                        <a href="{{ url('totaltraveldays', auth()->user()->teammember_id) }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Total Travel Days
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $totaltraveldays ?? '0' }}
+                            </div>
+                            <small style="color:white;">Days (April to {{ $currentMonth }})</small>
+                        </a>
+                    </div>
+                </div>
+
+
+3
+
+
+                <div class="col-md-6 col-lg-3">
+                    <div class="p-2 text-white rounded mb-3 p-3 shadow-sm text-center" style="background: darkcyan;green">
+                        <a href="{{ url('totaltraveldays', auth()->user()->teammember_id) }}">
+                            <div style="color:white;"
+                                class="opacity-50 header-pretitle fs-11 font-weight-bold text-uppercase">Total Travel Days
+                            </div>
+                            <div style="color:white;" class="fs-32 text-monospace">{{ $totaltraveldays ?? '0' }}
+                            </div>
+                            <small style="color:white;">Days (April to {{ $currentMonth }})</small>
+                        </a>
+                    </div>
+                </div>
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+web.php
+  Route::get('/totalworkingdays/{teamid}', [TimesheetController::class, 'totalworkingdays']);
+after it 
+
+  Route::get('/totaltraveldays/{teamid}', [TimesheetController::class, 'totaltraveldays']);
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+after it add thiis code  public function totalworkingdays(Request $request, $teamid)
+
+  
+  public function totaltraveldays(Request $request, $teamid)
+  {
+
+    // total working days start using financial year
+    $currentDate = Carbon::now();
+    $currentMonth = $currentDate->format('F');
+    if ($currentDate->month >= 4) {
+      // Current year financial year
+      $startDate = Carbon::create($currentDate->year, 4, 1);
+      $endDate = Carbon::create($currentDate->year + 1, 3, 31);
+    } else {
+      // Previous year financial year
+      $startDate = Carbon::create($currentDate->year - 1, 4, 1);
+      $endDate = Carbon::create($currentDate->year, 3, 31);
+    }
+
+    $query = DB::table('timesheetusers')
+      ->leftJoin('teammembers', 'teammembers.id', 'timesheetusers.createdby')
+      ->leftJoin('clients', 'clients.id', 'timesheetusers.client_id')
+      ->leftJoin('assignments', 'assignments.id', 'timesheetusers.assignment_id')
+      ->leftJoin('teammembers as patnerid', 'patnerid.id', 'timesheetusers.partner')
+      ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'patnerid.id')
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'timesheetusers.assignmentgenerate_id')
+      ->select(
+        'timesheetusers.*',
+        'assignments.assignment_name',
+        'clients.client_name',
+        'clients.client_code',
+        'teammembers.team_member',
+        'teammembers.staffcode',
+        'patnerid.team_member as patnername',
+        'patnerid.staffcode as patnerstaffcode',
+        'assignmentbudgetings.assignmentname',
+        'teamrolehistory.newstaff_code',
+        'assignmentbudgetings.created_at as assignmentcreateddate'
+      )
+      ->where('timesheetusers.createdby', $teamid)
+      ->whereIn('timesheetusers.status', [1, 2, 3])
+      ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+      // Get only travel data
+      ->whereIn('timesheetusers.assignmentgenerate_id', ['OFF100003'])
+      ->orderBy('timesheetusers.date', 'DESC');
+
+    // Apply role-specific filters if necessary
+    if (auth()->user()->role_id == 13) {
+      // Add any specific conditions or modifications for role_id 13 if needed.
+    }
+
+    $timesheetData = $query->get();
+    return view('backEnd.timesheet.totaltraveldays', compact('timesheetData'));
+  }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\totaltraveldays.blade.php
+replace all code 
+
+   <!--Third party Styles(used by this page)-->
+ <link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+ <link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+ <link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+
+ @extends('backEnd.layouts.layout') @section('backEnd_content')
+     <!--Content Header (Page header)-->
+     <div class="content-header row align-items-center m-0">
+         <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+         </nav>
+         <div class="col-sm-8 header-title p-0">
+             <div class="media">
+                 <div class="header-icon text-success mr-3"><i class="typcn typcn-puzzle-outline"></i></div>
+                 <div class="media-body">
+                     <h1 class="font-weight-bold">Total Travel Days</h1>
+                     <small>Team Workbook List</small>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <!--/.Content Header (Page header)-->
+     <div class="body-content">
+         <div class="card mb-4">
+             <div class="card-body">
+                 @component('backEnd.components.alert')
+                 @endcomponent
+                 <div class="table-responsive">
+                     @if (Request::is('adminsearchtimesheet') || Request::is('totaltraveldays/*') || Request::is('searchingtimesheet'))
+                         {{-- <table id="examplee" class="table display table-bordered table-striped table-hover">
+                             <thead>
+                                 <tr>
+                                     <th style="display: none;">id</th>
+                                     @if (Auth::user()->role_id == 11 || Request::is('adminsearchtimesheet') || (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                                         <th class="textfixed">Employee Name</th>
+                                         <th class="textfixed">Employee Code</th>
+                                     @endif
+                                     <th>Date</th>
+                                     <th>Day</th>
+                                     <th>Client Name</th>
+                                     <th class="textfixed">Client Code</th>
+                                     <th>Assignment Name</th>
+                                     <th class="textfixed">Assignment Id</th>
+                                     <th>Work Item</th>
+                                     <th>Location</th>
+                                     <th>Partner</th>
+                                     <th class="textfixed">Partner Code</th>
+                                     <th>Hour</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 @foreach ($timesheetData as $timesheetDatas)
+                                     <tr>
+                                         @php
+                                             $permotioncheck = DB::table('teamrolehistory')
+                                                 ->where('teammember_id', $timesheetDatas->createdby)
+                                                 ->first();
+                                             $datadate = $timesheetDatas->assignmentcreateddate
+                                                 ? Carbon\Carbon::createFromFormat(
+                                                     'Y-m-d H:i:s',
+                                                     $timesheetDatas->assignmentcreateddate,
+                                                 )
+                                                 : null;
+
+                                             $permotiondate = null;
+                                             if ($permotioncheck) {
+                                                 $permotiondate = Carbon\Carbon::createFromFormat(
+                                                     'Y-m-d H:i:s',
+                                                     $permotioncheck->created_at,
+                                                 );
+                                             }
+                                         @endphp
+                                         <td style="display: none;">{{ $timesheetDatas->id }}</td>
+                                         @if (Auth::user()->role_id == 11 || Request::is('adminsearchtimesheet') || (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                                             <td> {{ $timesheetDatas->team_member ?? '' }} </td>
+                                             @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                 <td>{{ $permotioncheck->newstaff_code }}</td>
+                                             @else
+                                                 <td>{{ $timesheetDatas->staffcode }}</td>
+                                             @endif
+                                         @endif
+
+                                         <td class="textfixed"> <span style="display: none;">
+                                                 {{ date('Y-m-d', strtotime($timesheetDatas->date)) }}</span>{{ date('d-m-Y', strtotime($timesheetDatas->date)) }}
+                                         </td>
+                                         <td class="textfixed">
+                                             @if ($timesheetDatas->date != null)
+                                                 {{ date('l', strtotime($timesheetDatas->date)) }}
+                                             @endif
+                                         </td>
+                                         <td class="textfixed">{{ $timesheetDatas->client_name ?? '' }}
+                                         </td>
+                                         <td>{{ $timesheetDatas->client_code ?? '' }}
+                                         </td>
+                                         <td class="textfixed">
+                                             {{ $timesheetDatas->assignment_name ?? '' }}
+                                             @if ($timesheetDatas->assignmentname != null)
+                                                 ({{ $timesheetDatas->assignmentname ?? '' }})
+                                             @endif
+                                         </td>
+                                         <td>
+                                             {{ $timesheetDatas->assignmentgenerate_id ?? '' }}
+                                         </td>
+                                         <td class="textfixed"> {{ $timesheetDatas->workitem ?? '' }}</td>
+                                         <td class="textfixed">{{ $timesheetDatas->location ?? '' }} </td>
+                                         <td class="textfixed"> {{ $timesheetDatas->patnername ?? '' }}
+                                         </td>
+                                         <td>
+                                             @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                 {{ $timesheetDatas->newstaff_code ?? '' }}
+                                             @else
+                                                 {{ $timesheetDatas->patnerstaffcode ?? '' }}
+                                             @endif
+                                         </td>
+                                         <td>{{ $timesheetDatas->hour ?? '' }}</td>
+                                     </tr>
+                                 @endforeach
+                             </tbody>
+                         </table> --}}
+
+                         <table id="examplee" class="table display table-bordered table-striped table-hover">
+                             <thead>
+                                 <tr>
+                                     <th style="display: none;">id</th>
+                                     @if (Auth::user()->role_id == 11 ||
+                                             Request::is('adminsearchtimesheet') ||
+                                             (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                                         <th class="textfixed">Employee Name</th>
+                                         <th class="textfixed">Employee Code</th>
+                                     @endif
+                                     <th>Date</th>
+                                     <th>Day</th>
+                                     <th>Client Name</th>
+                                     <th class="textfixed">Client Code</th>
+                                     <th>Assignment Name</th>
+                                     <th class="textfixed">Assignment Id</th>
+                                     <th>Work Item</th>
+                                     <th>Location</th>
+                                     <th>Partner</th>
+                                     <th class="textfixed">Partner Code</th>
+                                     <th>Hour</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 @php
+                                     $hasData = false;
+                                 @endphp
+                                 @foreach ($timesheetData as $timesheetDatas)
+                                     @php
+                                         $timesheetanotherdata = DB::table('timesheetusers')
+                                             ->where('timesheetid', $timesheetDatas->timesheetid)
+                                             ->count();
+                                     @endphp
+                                     @if ($timesheetanotherdata <= 1)
+                                         @php
+                                             $hasData = true;
+                                         @endphp
+                                         <tr>
+                                             @php
+                                                 $permotioncheck = DB::table('teamrolehistory')
+                                                     ->where('teammember_id', $timesheetDatas->createdby)
+                                                     ->first();
+                                                 $datadate = $timesheetDatas->assignmentcreateddate
+                                                     ? Carbon\Carbon::createFromFormat(
+                                                         'Y-m-d H:i:s',
+                                                         $timesheetDatas->assignmentcreateddate,
+                                                     )
+                                                     : null;
+
+                                                 $permotiondate = null;
+                                                 if ($permotioncheck) {
+                                                     $permotiondate = Carbon\Carbon::createFromFormat(
+                                                         'Y-m-d H:i:s',
+                                                         $permotioncheck->created_at,
+                                                     );
+                                                 }
+                                             @endphp
+                                             <td style="display: none;">{{ $timesheetDatas->id }}</td>
+                                             @if (Auth::user()->role_id == 11 ||
+                                                     Request::is('adminsearchtimesheet') ||
+                                                     (Auth::user()->role_id == 13 && Request::is('admintimesheetlist')))
+                                                 <td> {{ $timesheetDatas->team_member ?? '' }} </td>
+                                                 @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                     <td>{{ $permotioncheck->newstaff_code }}</td>
+                                                 @else
+                                                     <td>{{ $timesheetDatas->staffcode }}</td>
+                                                 @endif
+                                             @endif
+
+                                             <td class="textfixed"> <span style="display: none;">
+                                                     {{ date('Y-m-d', strtotime($timesheetDatas->date)) }}</span>{{ date('d-m-Y', strtotime($timesheetDatas->date)) }}
+                                             </td>
+                                             <td class="textfixed">
+                                                 @if ($timesheetDatas->date != null)
+                                                     {{ date('l', strtotime($timesheetDatas->date)) }}
+                                                 @endif
+                                             </td>
+                                             <td class="textfixed">{{ $timesheetDatas->client_name ?? '' }}
+                                             </td>
+                                             <td>{{ $timesheetDatas->client_code ?? '' }}
+                                             </td>
+                                             <td class="textfixed">
+                                                 {{ $timesheetDatas->assignment_name ?? '' }}
+                                                 @if ($timesheetDatas->assignmentname != null)
+                                                     ({{ $timesheetDatas->assignmentname ?? '' }})
+                                                 @endif
+                                             </td>
+                                             <td>
+                                                 {{ $timesheetDatas->assignmentgenerate_id ?? '' }}
+                                             </td>
+                                             <td class="textfixed"> {{ $timesheetDatas->workitem ?? '' }}</td>
+                                             <td class="textfixed">{{ $timesheetDatas->location ?? '' }} </td>
+                                             <td class="textfixed"> {{ $timesheetDatas->patnername ?? '' }}
+                                             </td>
+                                             <td>
+                                                 @if ($permotioncheck && $datadate && $datadate->greaterThan($permotiondate))
+                                                     {{ $timesheetDatas->newstaff_code ?? '' }}
+                                                 @else
+                                                     {{ $timesheetDatas->patnerstaffcode ?? '' }}
+                                                 @endif
+                                             </td>
+                                             <td>{{ $timesheetDatas->hour ?? '' }}</td>
+                                         </tr>
+                                     @endif
+                                 @endforeach
+                                 @if (!$hasData)
+                                     <tr>
+                                         <td colspan="11" style="text-align: center;">Data not available
+                                         </td>
+                                     </tr>
+                                 @endif
+                             </tbody>
+                         </table>
+                     @endif
+                 </div>
+             </div>
+         </div>
+     </div>
+ @endsection
+
+ <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+ <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+ <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+ <script>
+     $(document).ready(function() {
+         $('#examplee').DataTable({
+             dom: 'Bfrtip',
+             "order": [],
+             searching: false,
+
+             columnDefs: [{
+                 targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                 orderable: false
+             }],
+
+             buttons: [{
+                     extend: 'excelHtml5',
+                     filename: 'Total_Travel_days',
+
+                     //   remove extra date from column
+                     exportOptions: {
+                         columns: ':visible',
+                         format: {
+                             body: function(data, row, column, node) {
+                                 // it should be column number 2
+                                 if (column === 0) {
+                                     // If the data is a date, extract the date without HTML tags
+                                     var cleanedText = $(data).text().trim();
+                                     var dateParts = cleanedText.split(
+                                         '-');
+                                     // Assuming the date format is yyyy-mm-dd
+                                     if (dateParts.length === 3) {
+                                         return dateParts[2] + '-' + dateParts[1] + '-' +
+                                             dateParts[0];
+                                     }
+                                 }
+                                 return data;
+                             }
+                         }
+                     },
+
+                     //   set width in excell
+                     customize: function(xlsx) {
+                         var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                         // set column width
+                         $('col', sheet).eq(0).attr('width', 11);
+                         $('col', sheet).eq(1).attr('width', 12);
+                         $('col', sheet).eq(2).attr('width', 30);
+                         $('col', sheet).eq(3).attr('width', 11);
+                         $('col', sheet).eq(4).attr('width', 30);
+                         $('col', sheet).eq(5).attr('width', 13);
+                         $('col', sheet).eq(9).attr('width', 12);
+
+                         $('c', sheet).each(function() {
+                             var originalText = $(this).find('is t').text();
+                             var cleanedText = originalText.replace(/\s+/g, ' ')
+                                 .trim();
+                             $(this).find('is t').text(cleanedText);
+                         });
+                     }
+                 },
+                 'colvis'
+             ]
+         });
+     });
+ </script>
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222
+Add a travel box on the dashboard as requested by the client.  ```end
+
+timesheetnotfilllastweekreminder hit url 
+timesheetnotfillreminder
+
+
+
+
+1.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+```start 1
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\HolidayController.php
+
+
+      public function index()
+    {
+        $currentDate = Carbon::now();
+        $currentYear = $currentDate->year;
+
+        $oldyearstart = '2023';
+        $tillyearend = $currentDate->year;
+
+        $tillyearend = $currentDate->year;
+        $oldyearstart = 2023;
+        $years = range($tillyearend, $oldyearstart);
+
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18) {
+            $holidayDatas  =  DB::table('holidays')
+                ->where('status', 1)
+                ->where('year', $currentYear)
+                ->select('holidays.*')->orderBy('startdate', 'asc')->get();
+            return view('backEnd.holiday.index', compact('holidayDatas', 'years', 'currentYear'));
+        } else {
+            $holidayDatas  = DB::table('holidays')
+                ->where('status', 1)
+                ->where('year', $currentYear)
+                ->select('holidays.*')->orderBy('startdate', 'asc')->get();
+            return view('backEnd.holiday.index', compact('holidayDatas', 'years', 'currentYear'));
+        }
+    }
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\HolidayController.php
+
+       public function holidays(Request $request)
+    {
+        $currentDate = Carbon::now();
+        $tillyearend = $currentDate->year;
+
+        $oldyearstart = 2023;
+        $years = range($tillyearend, $oldyearstart);
+
+        $holidayDatas  = DB::table('holidays')
+            ->where('status', 1)
+            ->where('year', $request->year)
+            ->select('holidays.*')->orderBy('startdate', 'asc')->get();
+
+        return view('backEnd.holiday.index', compact('holidayDatas', 'years'));
+    }
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\holiday\index.blade.php
+
+<div class="btn-group mb-2 mr-1">
+
+
+                    <div class="btn-group mb-2 mr-1">
+                        @php
+                            $selectedYear = Request::query('year');
+                            if ($selectedYear == null) {
+                                $selectedYear = $currentYear;
+                            } else {
+                                $selectedYear = Request::query('year');
+                            }
+                        @endphp
+                        <button type="button" class="btn btn-info-soft btn-sm dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            @if (in_array($selectedYear, $years))
+                                {{ $selectedYear }}
+                            @else
+                                Choose Year
+                            @endif
+                        </button>
+                        <div class="dropdown-menu">
+                            @foreach ($years as $year)
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/holidays?year=' . $year) }}">{{ $year }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+2.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+``` start 2
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app/Console/Kernel.php
+
+this is updated already
+    $schedule->command('command:Leavetypesupdate')->yearlyOn(12, 31, '23:59')->withoutOverlapping()->emailOutputTo('shahidraza@capitall.io');
+
+
+app/Console/Commands/LeaveTypesUpdate.php
+
+<?php
+
+namespace App\Console\Commands;
+
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+
+class LeaveTypesUpdate extends Command
+{
+
+    protected $signature = 'command:Leavetypesupdate';
+
+    protected $description = 'Update Tables';
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function handle()
+    {
+        // $previousYear = '2024';
+        // $currentYear = '2025';
+        $currentYear = Carbon::now()->year;
+        $previousYear = Carbon::now()->subYear()->year;
+
+        DB::table('leavetypes')
+            ->where('year', $previousYear)
+            ->update([
+                'year' => $currentYear,
+                'startdate' => "{$previousYear}-04-01",
+                'enddate' => "{$currentYear}-03-31"
+            ]);
+
+        // dd('hi');
+        // $this->info("Leavetypes updated from $previousYear to $currentYear");
+    }
+}
+
+
+
+
+
+find text Route::get('/timesheetnotfilllastweekreminder', [HomeController::class, 'timesheetnotfilllastweekreminder']);
+add below route after it 
+
+Route::get('/Leavetypesupdate', [HomeController::class, 'Leavetypesupdate']);
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app/Http/Controllers/HomeController.php
+after it  public function createAttendance()
+
+  public function Leavetypesupdate()
+  {
+    $exitCode = Artisan::call('command:Leavetypesupdate')->daily()->withoutOverlapping();
+    return  redirect('/');
+  }
+
+
+
+
+``` end 
+
+
+bugs ```start
+22222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetrequestController.php
+
+ $totalcountupdatetravel = max(0, $attendances->travel - 1);
+
+1
+                                    } elseif ($iftwotimesheetinday == 'T') {
+                                        $totalcountupdatetravel = max(0, $attendances->travel - 1); // Subtract 1 but ensure it doesn't go below 0
+                                        DB::table('attendances')
+                                            ->where('id', $attendances->id)
+                                            ->update([
+                                                'travel' => $totalcountupdatetravel,
+                                            ]);
+                                        $updatewording = "P";
+                                        $totalcountupdate = $attendances->$totalcountColumn + 1;
+                                    }
+									
+									
+									
+2
+
+
+                                } elseif ($iftwotimesheetinday == 'T') {
+                                    // this code running on local only isme travelcount ka issue fixed kiya gya hai
+                                    $totalcountupdatetravel = max(0, $attendances->travel - 1); // Subtract 1 but ensure it doesn't go below 0
+                                    DB::table('attendances')
+                                        ->where('id', $attendances->id)
+                                        ->update([
+                                            'travel' => $totalcountupdatetravel,
+                                        ]);
+                                    $updatewording = "P";
+                                    $totalcountupdate = $attendances->$totalcountColumn + 1;
+                                }
+
+22222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+elseif ($iftwotimesheetinday == 'T') {
+
+                                    } elseif ($iftwotimesheetinday == 'T') {
+                                        $totalcountupdatetravel = max(0, $attendances->travel - 1); // Subtract 1 but ensure it doesn't go below 0
+                                        DB::table('attendances')
+                                            ->where('id', $attendances->id)
+                                            ->update([
+                                                'travel' => $totalcountupdatetravel,
+                                            ]);
+                                        $updatewording = "P";
+                                        $totalcountupdate = $attendances->$totalcountColumn + 1;
+                                    }
+									
+									
+									
+									
+
+
+									
+
+
+
+22222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+
+                                if ($client == 32) {
+                                    $updatewording = 'T'; // Travel
+                                } elseif ($client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $timesheet->workitem) == 'Saturday') {
+                                    $updatewording = 'OH'; // Off holidays
+                                } elseif ($client == 33) {
+                                    $updatewording = 'H'; // Other holidays from calendar
+                                } elseif ($assignmentid == 213 && $timesheet->workitem == 'NA') {
+                                    $updatewording = null;  //beforjoining data
+                                } elseif ($client == 134 && $assignmentid == 215) {
+                                    $updatewording = 'CL'; // Casual leave
+                                } elseif ($client == 134 && $assignmentid == 214) {
+                                    $updatewording = 'EL'; // Exam leave
+                                } else {
+                                    $updatewording = 'P'; // Default presence
+                                }
+								
+								
+								
+
+
+22222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TeammemberController.php
+
+find text if ($client == 32) {
+
+                            $totalCountMapping = [
+                                'P' => 'no_of_days_present',
+                                'CL' => 'casual_leave',
+                                'EL' => 'exam_leave',
+                                'T' => 'travel',
+                                'OH' => 'offholidays',
+                                'W' => 'sundaycount',
+                                'H' => 'holidays',
+                                null => 'beforejoiningcount'
+                            ];
+	
+
+	
+							
+222222222222222222222222222222222222
+bugs ```end
+
+
+vsalocal,vsademo,vsalive ```end hare   and vsalive bugs check once  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

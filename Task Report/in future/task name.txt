@@ -1,0 +1,1 @@
+kb calculation problem becouse jab ham file delete krta hu to vo filesize database se delete nahi ho raha hai to mujhe database se bhi delete karna hoga jab ham portal se delete karte hai tab 

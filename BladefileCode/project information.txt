@@ -1,0 +1,664 @@
+password Azaz~123 copy from database 
+$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
+
+
+{{-- * database error /regarding database error --}}
+performanceevaluationforms
+
+Simmi1@capitall.io
+bugs occure in testing 
+
+Poojakumari+14@capitall.io
+Test@123
+
+vsalocal, vsademo, vsalive//
+http://13.200.130.146/
+admin@atr.com
+Admin@123
+
+harish+3@capitall.io
+941
+Guneet@capitall.io
+937
+
+employeepayrolls
+
+
+
+
+optimize this code with best time complexity
+
+
+222222222222222222222222222222222222
+itsupport_delhi@vsa.co.in mail comment kar do
+https://vsa.capitall.io/create-attendance
+
+https://capitallio.atlassian.net/wiki/x/AYCADw
+
+
+https://capitallio-my.sharepoint.com/:w:/r/personal/poojakumari_capitall_io/_layouts/15/Doc.aspx?sourcedoc=%7BE5ACE42F-E3A8-4267-83FD-9C4200CD53DF%7D&file=Document.docx&fromShare=true&action=default&mobileredirect=true
+
+
+
+Meeting ID: 465 880 761 796
+
+Passcode: 6DzVZk
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+VS-200  to  VS-204
+
+ftp://192.168.43.223.4703
+
+
+ //   $msg->cc('itsupport_delhi@vsa.co.in');
+
+backEnd\image\vlogo.png
+vsalogo.png
+#############################################################
+wifi password 
+vsacapi
+SysCap@Set%9313
+
+#############################################################
+25-07-24  updated on vsalocal,vsademo,vsalive
+
+updated on vsalocal,vsademo
+
+vsalive updated code 
+vsademo updated code and database 
+
+newstaff
+teamrolehistory
+#############################################################
+1.password all project
+  1.3   Azaz~123    vsa
+  1.2   Azaz~1234    vsademo
+
+  1.1   Azaz~12345    vsalive
+
+##############################################################
+vsa credentials 
+1.itsupport  878
+2.sunny    844
+3.bhasker     847 
+4.nidhia@vsa.co.in  Staff 787
+itsupport_delhi@vsa.co.in
+	Dhruva@vsa.co.in staff  
+
+
+http://127.0.0.1:8000/assignmentconfirmation/ABD100411
+TES100010
++request: Symfony\Component\HttpFoundation\InputBag {#52
+    #parameters: array:2 [
+      "assignmentid" => "ABD100411"
+      "status" => "0"
+    ]
+  }
+
+confirmationstatus
+resources\views\backEnd\assignmentconfirmation\index.blade.php
+replace this below file hare 
+
+
+
+use App\Models\Client;
+
+confirmationAccept
+
+ $client = DB::table('templates')->where('id', $request->template_id)->first();
+
+
+
+1.my local project in this folder
+C:\Shahid Raza\Capitall\Project\Send by Sir\Updated Code 17 jan 24\02-03-24 
+
+1.Working on this folder
+C:\Shahid Raza\Capitall\Project\Send by Sir\Updated Code 17 jan 24\02-03-24
+
+1.Working on this database
+new database 
+
+1.https://vsa.capitall.io/login
+https://compliancetest.capitall.io/user/login
+wifi check speed
+ping google.com -t
+aiws wifi password is #SarSet%556&4890
+http://127.0.0.1:8000/home
+Azaz~123
+
+1.password
+office_1966
+
+sukhbahadur1993@gmail.com
+Sukh@2023
+
+you are laravel and javascript expert
+you are laravel expert
+http://127.0.0.1:8000/viewassignment/BET100051
+2
+
+
+Login url 
+http://127.0.0.1:8000/expertaff-login
+abcde@gmail.com
+password Azaz~123
+
+change login url from 
+routes\auth.php file 
+
+
+
+live 
+https://www.expertaff.com/login
+abcde@gmail.com
+password 1111
+
+if you need to create client then 
+OFF100003 official travel
+ 
+1.client table 
+2.assignmentbudgetings
+3.assignmentmappings
+4.assignmentteammappings
+5.assignments
+
+
+#############################################################
+kgsdemo credentials
+
+regarding data 
+
+1.assignmentmappings
+2.assignmentbudgetings
+3.assignmentteammappings
+4.assignments
+5.assignmentplannings
+
+6.invoices
+7.outstandings
+8.outstationconveyances
+9.payments
+
+10.timesheetusers
+11.timesheets
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################################
+kgs credentials
+https://cronapi.capitall.io/designation
+
+https://cronapi.capitall.io/
+Vinita@54321
+
+Email : sukhbahadur19931@gmail.com
+Password : Azaz~123
+Password : Vinita@54321
+Designation : Super admin
+Role : Super admin
+447
+
+Email : poojakumari+13@capitall.io
+Password : Azaz~123
+Designation : manager
+Role : Accountant 
+818
+
+Email : hr1@kgsomani.com
+Password : Vinita@54321
+Designation : manager
+Role : Accountant 
+818
+
+Email : sukhbahadur1@capitall.io
+Password : Vinita@54321
+Designation : 13
+Role : super admin 
+169
+
+Email : sukhbahadur19931@gmail.com
+Password : Vinita@54321
+Designation : Super admin
+Role : Super admin
+447
+
+
+Email : saurabhjain1@kgsomani.com
+Password : Vinita@54321
+Designation : Partner
+Role :  
+818
+
+
+Email : tripti1@kgsomani.com
+Password : Vinita@54321
+Designation : manager
+Role : Accountant 
+818
+
+Email : hr1@kgsomani.com
+Password : Vinita@54321
+Designation : hr
+Role : 18
+203
+
+Email : shahidraza@capitall.io
+Password : Vinita@54321
+Designation : manager
+Role : 14
+203
+
+
+
+ 
+
+
+#############################################################
+vsademo credentials
+http://127.0.0.1:8000/teamstatus?status=1
+
+
+Link : https://vsademo.capitall.io
+Email : sukhbahadur1993@gmail.com
+Password : Sukh@2023
+Role : Admin
+447
+
+Link : https://vsademo.capitall.io
+Email : shahidraza@capitall.io
+Password : Azaz~123
+Role : Partner
+951
+
+Link : https://vsademo.capitall.io
+Email : Harish@capitall.io
+Password : Sukh@2024
+Role : Partner
+933
+
+
+Link : https://vsademo.capitall.io
+Email : Guneet@capitall.io
+Password : R9QhzV2vyt@2023
+Role : Staff
+937
+
+Link : https://vsademo.capitall.io
+Email : poojakumari@capitall.io
+Password : Poja@2024
+Role : Manager
+936
+
+
+Link : https://vsademo.capitall.io
+Email : simmi@capitall.io
+Password : Sims@123
+Role : Partner
+935
+
+i ma working with atishay sir to UAT
+
+222222222222222222222222222222222222222222222222222222222
+regarding data clean 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+7.applyleaves  
+8.attendances
+
+9.teamrolehistory
+10.rejoiningsamepost
+
+11.Users table me role id = 15
+12.teammembers table me leaving date = null and role id = 15
+
+if assignment want to clean then 
+13.assignmentmappings
+14.assignmentteammappings
+
+
+
+i need this table to update 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+
+11.applyleaves  
+12.attendances
+
+13.Users
+14.teammembers
+15.Clients
+
+16.teamrolehistory
+17.rejoiningsamepost
+18.independences
+
+
+
+
+
+
+if any problem on timesheet page to vsalive then ye table maange
+
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+7.applyleaves  
+8.attendances
+
+9.Users
+10.teammembers
+
+11.teamrolehistory
+12.rejoiningsamepost
+
+
+222222222222222222222222222222222222222222222222222222222
+regarding tables delete 
+
+
+   $tables = [
+      //* timesheets
+      'timesheetreport',
+      'timesheetrequests',
+      'timesheets',
+      'timesheetusers',
+
+      //* applyleaves
+      'applyleaves',
+      'leaveapprove',
+      'leaverequest',
+
+      //* attendances
+      'attendances',
+
+      //* assignments
+      'assignmentbudgetings',
+      'assignmentmappings',
+      'assignmentteammappings',
+      'assignments',
+
+      //* another tables
+      'Users',
+      'teammembers',
+      'teamrolehistory',
+      'rejoiningsamepost',
+      'Clients',
+      'independences',
+    ];
+
+
+    foreach ($tables as $table) {
+      if (Schema::hasTable($table)) {
+        Schema::drop($table);
+        echo "'{$table}'.<br>";
+      } else {
+        echo "'{$table}'.<br>";
+      }
+    }
+
+    return response('Tables deleted successfully!', 200);
+
+
+
+
+    // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
+    // $authteamid = 844;
+    // $startdate = '2025-03-17';
+    // $enddate = '2025-03-29';
+
+    // $nextweektimesheet1 = DB::table('timesheetusers')
+    //   ->where('createdby', $authteamid)
+    //   ->whereBetween('date', [$startdate,  $enddate])
+    //   ->update(['status' => 0]);
+    // // ->get();
+    // // ->update(['createdby' => 8471]);
+    // // ->delete();
+
+    // $nextweektimesheet2 = DB::table('timesheets')
+    //   ->where('created_by', $authteamid)
+    //   ->whereBetween('date', [$startdate,  $enddate])
+    //   ->update(['status' => 0]);
+    // // ->get();
+    // // ->update(['created_by' => 8471]);
+    // // ->delete();
+
+    // $nextweektimesheet3 = DB::table('timesheetreport')
+    //   ->where('teamid', $authteamid)
+    //   ->whereBetween('startdate', [$startdate, $enddate])
+    //   ->delete();
+    // // ->get();
+    // // ->update(['teamid' => 8471]);
+
+    // // $attendanceexist = DB::table('attendances')
+    // //   ->where('employee_name', $authteamid)
+    // //   ->where('month', 'December')
+    // //   ->delete();
+    // // ->update(['teamid' => 8471]);
+
+    // dd('successfully done');
+
+    // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+    DB::table('timesheetreport')
+      ->delete();
+    DB::table('timesheetrequests')
+      ->delete();
+    DB::table('timesheets')
+      ->delete();
+    DB::table('timesheetusers')
+      ->delete();
+
+
+    DB::table('applyleaves')
+      ->delete();
+    DB::table('leaveapprove')
+      ->delete();
+    DB::table('leaverequest')
+      ->delete();
+
+
+    DB::table('attendances')
+      ->delete();
+
+
+    DB::table('teamrolehistory')
+      ->delete();
+    DB::table('rejoiningsamepost')
+      ->delete();
+    // DB::table('Users')
+    //   ->delete();
+    // DB::table('teammembers')
+    //   ->delete();
+
+    dd('hi');
+
+
+
+222222222222222222222222222222
+assignment issue on vsademo off/holidays
+
+assignmentbudget 
+OFF100004
+1.id 65  client id 33 se 3311 ya ise row ko delete kar de
+2.
+
+assignmentmappings
+OFF100004
+1.id = 26  leadpartner = 887 kare 
+2.
+
+assignmentteammappings
+OFF100003
+assignmentmapping_id = 24 and delete all data hare 
+
+UNA100004
+assignmentmapping_id = 25 and delete all data hare 
+
+
+C:\xampp\htdocs\vsademo
+vsademo fixed offholidays client isme sirf ye below tables hai 
+
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+
+after that all below tables clean karwaye 
+
+1.timesheetreport,
+2.timesheetrequests,
+3.timesheets,
+4.timesheetusers
+
+5.leaveapprove   
+6.leaverequest 
+
+07.applyleaves  
+08.attendances
+
+13.Users table me role id = 14
+14.teammembers table me leaving date = null and role id = 14
+
+16.teamrolehistory
+17.rejoiningsamepost
+
+
+2222222222222222222222222222222222222222
+regarding KT / for KT
+
+✅ 1. Project ka Overview
+•	Project ka purpose kya hai?
+•	Kaunse modules kaise kaam karte hain
+•	User roles & permissions
+•	Important workflows (jaise login, payment, report generation, etc.)
+•	Key features kya hain? like timesheet and assignment 
+•	prd hai kiya iska 
+•	git version controll
+
+
+
+✅ 3. Database Structure
+•	Kaun-kaunse tables hain
+•	Important relationships (one-to-many, many-to-many)
+
+
+
+
+Client want to implement Rejoining process to users.
+this all code in this file 10 .vsa demo 03-02-25 to 03-02-25
+
+https://capitallio.atlassian.net/browse/KCOMS-70 
+https://capitallio.atlassian.net/browse/KCOMS-162
+
+
+12.When the KRA of any user under a designation is modified, an email will be sent to that user and to all partners.
+13.When the KRA of a designation partner is edited, a notification will be sent to Tripti Ma'am and Maheshwari Sir.
+14.The implementation for editing the KRA template is still pending.
+15.When the KRA of any designation is edited, a notification will be sent to all users under that designation and to all partners.
+
+2025-06-20 
+
+regarding kRA data 
+
+krasdata
+krasnotifications
+krastargetnotification
+krasteam
+
+designations
+Uesrs 
+teammembers
+
+
+
+anujsomani1@kgsomani.com
+Vinita@54321
+
+
+accounts1@kgsomani.com
+Vinita@54321
+
+
+*Closing Date :
+Which ever is first
+a) When a Draft Report is updated in the Documentation
+or
+b) Documentation is closed 
+or 
+
+c)calculate the diffence between Tentative Start date and End Date and then Add those days to the date of 1st timesheet filled and calculate the expected closure date 
+
+
+and Invoice of that Assignment code is not generated then display the amount of Fees (exc GST) that is mentioned at the time of Assignment Cretation.
+
+
+draftreportdate
+Documentcompletedate 
+
+TentativeStartdate
+TentativeEndDate
+
+todaydate nikal kar todaydate me utna days add kare jo mujhe TentativeStartdate and TentativeEndDate ke beech ka deffrence nikla hai aur latestdate me assign kare ab draftreportdate ,Documentcompletedate and latestdate me jo date sabse pahle aayega use closed date manege aur closed date get() jis varable me karenge usme assign kar denge 
+
+
+  $billspending = DB::table('assignmentmappings')
+        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+        ->leftJoin('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+        ->whereNull('invoices.assignmentgenerate_id')
+        ->where('assignmentbudgetings.date', > yaha closed date se ) 
+        ->sum('assignmentmappings.engagementfee');  abhi ye code chal raha tha but isme new logic diya gya hai logic ye hai 
+

@@ -1,0 +1,108 @@
+2222222222222222
+###  Note understand this code 
+
+<div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Client *</label>
+            <select class="search_test" id="category" name="client_id"
+                @if (Request::is('assignmentmapping/*/edit')) > <option disabled style="display:block">Please Select One
+                </option>
+
+                @foreach ($client as $clientData)
+                <option value="{{ $clientData->id }}"
+                    {{ $assignmentmapping->client->id == $clientData->id ?? '' ? 'selected="selected"' : '' }}>
+                    {{ $clientData->client_name }} </option>
+                @endforeach
+
+
+                @else
+                <option></option>
+                <option value="">Please Select One</option>
+                @foreach ($client as $clientData)
+                <option value="{{ $clientData->id }}">
+                    {{ $clientData->client_name }} </option>
+
+                @endforeach @endif
+                </select>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label class="font-weight-600">Assignment *</label>
+            <select class="form-control" id="subcategory_id" name="assignment_id">
+            </select>
+        </div>
+    </div>
+
+
+##############3
+  <script>
+      $(function() {
+          $('#category').on('change', function() {
+              var category_id = $(this).val();
+
+              $.ajax({
+                  type: "GET",
+                  url: "{{ url('assignmentmapping/create') }}",
+                  data: "category_id=" + category_id,
+                  success: function(res) {
+
+                      $('#subcategory_id').html(res);
+
+
+                  },
+                  error: function() {
+
+                  },
+              });
+          });
+      });
+  </script>
+################
+
+
+ public function create(Request $request)
+    {
+
+        $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+            ->orderBy('team_member', 'asc')->get();
+        $teammember = Teammember::where('status', '1')->whereIn('role_id', [14, 15])->with('title', 'role')
+            ->orderBy('team_member', 'asc')->get();
+        // dd($partner);
+        if ($request->ajax()) {
+
+            if (isset($request->category_id)) {
+                // dd($request->category_id);
+                echo "<option>Please Select One</option>";
+                foreach (Assignment::leftJoin('assignmentbudgetings', function ($join) {
+                    $join->on('assignments.id', 'assignmentbudgetings.assignment_id');
+                })->where('assignmentbudgetings.client_id', $request->category_id)->select('assignments.*', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentbudgetings.duedate')->get() as $sub) {
+
+                    echo "<option value='" . $sub->assignmentgenerate_id . "'>" . $sub->assignment_name  . '(' . $sub->assignmentgenerate_id . ')' . "</option>";
+                }
+            }
+        } else {
+            if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12) {
+                $client = Client::where('status', 1)->latest()->get();
+                // return view('backEnd.assignmentmapping.create', compact('client', 'teammember', 'partner'));
+                return view('backEnd.assignmentmapping.create', ['success' => true, 'client' => $client, 'teammember' => $teammember, 'partner' => $partner]);
+            } else {
+                $client = DB::table('assignmentbudgetings')
+                    ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                    ->Where('assignmentbudgetings.created_by', auth()->user()->id)
+                    ->select('clients.client_name', 'clients.id')
+                    ->distinct()->get();
+
+                //	DB::table('clients')->
+                //  orWhere('clients.leadpartner',auth()->user()->teammember_id)->
+                //  orWhere('clients.createdbyadmin_id',auth()->user()->id)->
+                //	 orWhere('clients.updatedbyadmin_id',auth()->user()->id)->
+                //   select('clients.client_name','clients.id')->get();
+
+                // return view('backEnd.assignmentmapping.create' compact('client', 'teammember', 'partner'));
+                return view('backEnd.assignmentmapping.create', ['success' => true, 'client' => $client, 'teammember' => $teammember, 'partner' => $partner]);
+            }
+        }
+    }
+
+22222222222222

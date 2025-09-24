@@ -1,0 +1,63 @@
+222222222222222222222
+### route file
+
+  Route::get('/assignmentajax',  [AssignmentmappingController::class, 'get_assignmentteam']);
+
+
+#### controller file
+
+   public function get_assignmentteam(Request $request)
+    {
+        $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+            ->orderBy('team_member', 'asc')->get();
+        $teammember = Teammember::where('status', '1')->whereIn('role_id', [14, 15])->with('title', 'role')
+            ->orderBy('team_member', 'asc')->get();
+        // dd($teammember);
+
+        $data = [
+            'teammember' => $teammember,
+            'partner' => $partner,
+        ];
+
+        return response()->json($data);
+    }
+
+### script file
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+      $(document).ready(function() {
+          // Make an Ajax request to fetch team member data
+          $.ajax({
+              //   url: '/assignmentajax',
+              url: "{{ url('assignmentajax') }}",
+              type: 'GET',
+              success: function(data) {
+                  var selectBox = $('#teammember-select');
+
+                  // Populate the select box with data from the server
+                  data.teammember.forEach(function(teammemberData) {
+                      selectBox.append($('<option>', {
+                          value: teammemberData.id,
+                          text: teammemberData.team_member + ' (' + teammemberData
+                              .role.rolename + ') (' + teammemberData.staffcode +
+                              ')'
+                      }));
+                  });
+              }
+          });
+      });
+  </script>
+
+###### blade file
+
+        <div class="col-6">
+            <div class="form-group">
+                <label class="font-weight-600">Name *</label>
+                <select class="language form-control" id="teammember-select" name="teammember_id[]">
+                    <option value="0">Please Select One</option>
+                </select>
+            </div>
+        </div>
+
+222222222222222222

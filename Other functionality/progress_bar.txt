@@ -1,0 +1,178 @@
+22222222222222222
+
+  {{-- progress bar style --}}
+    <style>
+        .progress {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            background-color: #f5f5f5
+        }
+
+        .bar {
+            width: 0%;
+            background-color: #007bff;
+            height: 20px;
+        }
+
+        .percent {
+            position: absolute;
+            display: inline-block;
+            /* top: 85%; */
+            left: 50%;
+            color: white;
+        }
+    </style>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel4"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="detailsForm" method="post" action="{{ url('assignmentfiles/upload') }}"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header" style="background: #37a000">
+                        <h5 style="color: white" class="modal-title font-weight-600" id="exampleModalLabel4">Add File</h5>
+                        <div>
+                            <ul>
+                                @foreach ($errors->all() as $e)
+                                    <li style="color: red;">{{ $e }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="details-form-field form-group row">
+                            <label for="particular" class="col-sm-3 col-form-label font-weight-600">Particular:</label>
+                            <div class="col-sm-9">
+                                <input id="particular" class="form-control" name="particular" type="text">
+                                <input type="hidden" class="form-control" name="assignmentfolder_id"
+                                    value="{{ $id }}" type="text">
+                                <input type="hidden" class="form-control" name="assignmentgenerateid"
+                                    value="{{ $foldername->assignmentgenerateid }}" type="text">
+                            </div>
+                        </div>
+                        <div class="details-form-field form-group row">
+                            <label for="file" class="col-sm-3 col-form-label font-weight-600">File:</label>
+                            <div class="col-sm-9">
+                                <input id="file" class="form-control" name="file[]" multiple type="file">
+                                <span>Maximum file upload: 50 at once</span>
+                            </div>
+                        </div>
+                        {{-- <div class="details-form-field form-group row progress-container" style="display: none;">
+                            <label for="name" class="col-sm-3 col-form-label font-weight-600">File Uplade:</label>
+                            <div class="col-sm-9 d-flex justify-content-center align-items-center">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+                                        aria-valuemin="0" aria-valuemax="100">0%</div>
+                                </div>
+                            </div>
+                        </div> --}}
+                        <div class="details-form-field form-group row">
+                            <label for="name" class="col-sm-3 col-form-label font-weight-600">File upload:</label>
+                            <div class="col-sm-9 d-flex justify-content-center align-items-center">
+                                <div class="progress">
+                                    <div class="bar"></div>
+                                    <div class="percent">0%</div>
+                                </div>
+                                <div id="status"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+#####################
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery Form Plugin CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script> --}}
+
+    <script type="text/javascript">
+        var bar = $('.bar');
+        var percent = $('.percent');
+
+        $('form').ajaxForm({
+            beforeSend: function() {
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                console.log(percentComplete);
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+                console.log(percentVal);
+            },
+            complete: function(xhr) {
+                // status.html(xhr.responseText);
+                // $("#network_form")[0].reset();
+                window.location = "{{ url('/') }}/assignmentfolderfiles/{$foldername->id}";
+                // window.location = "{{ url('/') }}/test";
+                // alert('your data successfully Added');
+            }
+        });
+    </script>
+
+
+
+controller file 
+
+
+ public function store(Request $request)
+    {
+        // dd(auth()->user()->teammember_id);
+        $request->validate([
+            'particular' => 'required',
+            'file' => 'required',
+        ]);
+
+        try {
+            $data = $request->except(['_token']);
+            $files = [];
+
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $name = $file->getClientOriginalName();
+                    $path = $file->storeAs('public\image\task', $name);
+                    $files[] = $name;
+                }
+            }
+            foreach ($files as $filess) {
+                // dd($auth()->user()->teammember_id);
+                // dd($files); die;
+                $s = DB::table('assignmentfolderfiles')->insert([
+                    'particular' => $request->particular,
+                    'assignmentgenerateid' => $request->assignmentgenerateid,
+                    'assignmentfolder_id' =>  $request->assignmentfolder_id,
+                    // 'createdby' =>  auth()->user()->teammember_id,
+                    'filesname' => $filess,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+            }
+            $output = array('msg' => 'Submit Successfully');
+            return back()->with('success', ['message' => $output, 'success' => true]);
+        } catch (Exception $e) {
+            // dd($e);
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+2222222222

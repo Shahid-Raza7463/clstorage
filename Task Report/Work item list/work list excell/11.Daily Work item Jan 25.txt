@@ -1,0 +1,1465 @@
+01-01-2025
+new year Leave
+
+02-01-2025
+1.i have created documentation for (Add a travel box on the dashboard as requested by the client.)
+1.Apply leave year problem fixed; this occurred because of the year change in 2025.
+2.Sunny Sir wants to delete the empty team member list.
+3.Holidays for 2025 have been uploaded on VSA, and functional testing has been completed.
+4.I have uploaded 4 In Progress tasks on VSAdemo (VS-377, 373, 372, 368), and functional testing has been completed
+
+03-01-2025
+1.I have uploaded 4 In Progress tasks on VSAdemo (VS-377, 373, 372, 368), and functional testing has been completed
+2.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+3.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+
+04-01-2025
+1.The client wants to fix the issue where, when the user clicks on holidays, the holiday data will default to the current year, and the current year will also be displayed in the dropdown menu.
+2.Whenever the year changes, an error appears on the Apply Leave page because the year has to be manually inserted into the database. This needs to be implemented dynamically.
+3.I have created documentation
+4.I have uploaded 2 In Progress tasks on VSAdemo (VS-388, 389), and functional testing has been completed
+5.The client wants to delete 2 submitted timesheets of Tulsi Ray
+
+05-01-2025
+06-01-2025
+1.Udin date format needs to be fixed.
+2.Investigate why the Admin account is getting automatically inactivated as reported by the client.
+3.Restrict users from entering time in the format 08:00.
+
+07-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+2.The client approved a leave request by mistake and now wants to correct the data for that user
+3.The client wants to update the assignment number from LAN100683 to BIR100683.
+4.The client wants to transfer the data from LAN100683 to LAN100684.
+5.kt for pooja 
+
+08-01-2025
+1.The client wants to update the assignment number from LAN100683 to BIR100683.
+2.The client wants to transfer the data from LAN100683 to LAN100684.
+3.Implement a calendar feature on the Add Timesheet page.
+4.Total count in attendance data is not showing correct (bugs created by pooja).
+
+``````````````````````````````
+
+09-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+
+10-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+
+11-01-2025
+12-01-2025
+13-01-2025
+1.I have deployed 7 QA Passed task on vsalive (VS-389, VS-388, VS-377, VS-373, VS-372, VS-368, VS-302)
+2.My Attendance report verification shared by atishay jain after that i have verified
+
+14-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+2.optimize all code 
+3.Functional testing done for all 16 scenerio (Implement a calendar feature on the Add Timesheet page.)
+
+15-01-2025
+1.Implement a calendar feature on the Add Timesheet page.
+2.Functional testing done for all 16 scenerio after optimize the code (Implement a calendar feature on the Add Timesheet page.)
+
+
+16-01-2025
+1.Tasks VS-395, VS-367, VS-348, VS-346 has been uploaded to vsademo, and functional testing has been completed 
+2.Test descreption added on jira for VS-395, VS-367, VS-348, VS-346
+
+```````````````````````````````
+
+17-01-2025
+1.The Assignment is not coming to user I need to test
+2.Bugs raised by pooja, Udin date format needs to be fixed.
+3.Users can apply for a maximum of 10 days of leave, specifically for casual leave only
+
+
+18-01-2025
+  sick leave
+19-01-2025
+   Sunday 
+
+20-01-2025
+33.Move the Edit button to the first position on the Timesheet Saved Listing page.  
+13.Prevent admin and partner from rejecting submitted timesheets before the user’s joining date. 
+
+
+
+
+21-01-2025
+7.The client wants to fix the ordering of data in the assignment folder based on date and time
+3.Create excel file for Affected page before implement task ()
+4.The client mentioned that there is no timesheet for Sarthak for the 2 days. However, I have checked and confirmed that Sarthak had submitted his timesheet only until the 28th, which is why there is no data available for the 30th and 31th december
+
+``````````````````````````````````````
+
+22-01-2025
+1.If a user deletes saved timesheet data, a log entry should be created to record the action
+2.Restrict admin from rejecting casual leave timesheets if submitted.
+3.Clent wants to fill 2 days timesheet for Sarthak kejriwal from backend.
+4.Replace "Miss" with "Ms." across all places on the portal.
+
+23-01-2025
+1.Replace "Miss." with "Ms." across all places on the portal.
+2.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request
+
+
+
+24-01-2025
+1.functional testing has been completed for (28.Replace "Miss" with "Ms." across all places on the portal.) and (1.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request)
+2.Delete the submitted timesheet of Surya Kant Verma after their leaving date.
+3.kt to pooja kumari 
+
+``````````````````````````````````````
+25-01-2025
+Starday
+26-01-2025
+26 january 
+
+27-01-2025
+1.I have uploaded 'In Progress' tasks on VSAdemo (VS-411, 409, 407, 406, 405, 404, 402, 401, 365, 363, 362, 345), and functional testing has been completed 
+2.all question and all afected points created by me for client on multiple partner adding tasks 
+
+28-01-2025
+1.I have uploaded 'In Progress' tasks on VSAdemo (VS-411, 409, 407, 406, 405, 404, 402, 401, 365, 363, 362, 345), and functional testing has been completed
+2.Test descreption added on jira for (VS-411, 409, 407, 406, 405, 404, 402, 401, 365, 363, 362, 345)
+
+
+29-01-2025
+1.Implement a feature to calculate and display the total hours for all closed assignments before 2024
+2.old bugs fixed
+
+
+30-01-2025
+1.I have uploaded 'QA paased' tasks on VSAlive (VS-395, 348 ,346), and functional testing has been completed
+2.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(pending)
+3.When the user submitted their timesheet, an error occurred. I have checked and fixed the issue.
+4.There was an attendance data issue on January 19. I have resolved it
+
+
+31-01-2025
+2.Fix the content display issue on the Work Item section of the Timesheet Saved Listing page.(pending)
+1.i have listed affected point from new scenerio to multiple partner adding tasks
+3.After updated this task Implement a calendar feature on the Add Timesheet page.on vsalve i have recieved bugs offholidays is not coming in clicnt select box
+
+`````````````````````````
+
+o1-02-2025
+1.I received a bug from the client side on task VSA-304, next date is not enable for shanyam agarwal on timesheet page
+2.I received a bug from the client side on task rejoining module. The issue occurs when the admin updates the profile of rejoined users, display a warning message: 'Please delete saved timesheet after the leaving date
+
+o2-02-2025
+sunday
+o3-02-2025
+1.The client mentioned that after rejoining, the user's joining date and leaving date were not displaying correctly. I have checked and implemented the necessary fix
+2.Client wants to add multiple partner in lead partner and other partner column (half days)
+3.I have uploaded 'bugs' tasks on VSAlive and functional testing has been completed
+
+
+o4-02-2025
+1.Client wants to add multiple partner in lead partner and other partner column (half days)
+2.Delete the submitted timesheet of Apurva Yadav after their leaving date...
+3.client want to attedance count command run on 24 of every months...
+
+
+
+o5-02-2025 leave for election delhi
+1.After the QA passed the task, I received a bug today from the client side on task VS-395. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied.
+
+
+o6-02-2025
+1.After the QA passed the task, I received a bug today from the client side on task VS-395. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied.
+
+o7-02-2025
+1.After the QA passed the task, I received a bug today from the client side on task VS-395. I am currently working on fixing it bugs is date enable problem for sachin kumar when multiple leave applied...
+2.Total travel count problem fixed in excel sheet i have cheked and not met any problrm ...
+3.Some modification on this assignment DIL100754...
+4.client want to button for latest attendance data on attendance report page...
+
+````````````````````````````````````````````````
+
+10-02-2025
+1.I have uploaded 3 tasks on VSAlive and functional testing has been completed...
+1.Client wants to add multiple partner in lead partner and other partner column.. (half days)
+
+
+11-02-2025
+1.I have completed editing testing and created doc file.. 
+1.Client wants to add multiple partner in lead partner and other partner column.. full days
+
+12-02-2025
+casual leave
+13-02-2025
+casual leave
+14-02-2025
+casual leave
+
+
+15-02-2025
+1.Client wants to add multiple partner in lead partner and other partner column..
+2.functional testing on this task Client wants to add multiple partner in lead partner and other partner column..
+3.The date enable problem for ayush garg fixed..
+
+
+17-02-2025
+1.functional testing on this task on local Client wants to add multiple partner in lead partner and other partner column..
+2.I have uploaded tasks on VSAdemo, and functional testing has been completed
+
+
+18-02-2025
+1.I have uploaded tasks on VSAdemo, and functional testing has been completed
+2.User have applied for leave on 12th and 14th of the month and getting option to fill the timesheet from 15th and not getting option for filling 13th of the month..
+
+
+19-02-2025
+1.User have applied for leave on 12th and 14th of the month and getting option to fill the timesheet from 15th and not getting option for filling 13th of the month..
+
+
+20-02-2025
+1.User have applied for leave on 12th and 14th of the month and getting option to fill the timesheet from 15th and not getting option for filling 13th of the month..
+
+
+
+21-02-2025
+1.helped simmi maam to testing 
+2.deployed previous bugs on vsa live 
+3.The client wants to modify the timesheet request approval email..
+4.Add an edit functionality on the Timesheet Request List, allowing users to edit and resubmit their timesheets request.. mail integrated 
+
+
+
+24-02-2025
+1.The client wants the URL to redirect to the open leave page when the partner clicks on the 'Here' button in the email
+
+
+
+25-02-2025
+1.I am working on profile validation 
+2.worked on bugs that is created by simmi 
+
+26-02-2025
+holidays
+
+27-02-2025
+1.I am working on profile validation...
+2.UI fixed on profile edit page ... 
+3.Ui fixed for teammember create page ...
+
+
+28-02-2025
+1.I am working on profile validation...
+2.UI fixed on profile edit page ... 
+3.Ui fixed for teammember create page ...
+4.Created doc for update on vsademo 
+5.upload all code on vsademo and functional testing done.
+
+
+01-03-2025
+1.upload all code on vsademo and functional testing done 
+2.Meeting with anuj sir and create all jira task in excell
+3.Pop-up message when manager sends timesheet Request
+
+
+
+
+03-03-2025
+1. Client wants to add multiple partner in lead partner and other partner column (uploaded on vsademo and testing done)
+2. I have added descreptrion on jira.
+
+04-03-2025
+1.I have deployed UAT Passed task on vsalive...
+
+
+05-03-2025
+1.User is able to fill the timesheet beyond 'Leaving Date'.
+2.If user have leaveing date then not will be active by admin
+
+06-03-2025
+sick leave
+
+07-03-2025
+1.When any user applies the leave 2 times for the same time period, it gets approved after that it shows that the user is on the leave twice for the same date in the time sheet..
+2.Date format to be consistent..
+3.The person who is in 'To' is able to navigate the link & data is visible to him, issue is with person who is in 'cc'..
+4.Spelling of Promotion bugs...
+
+08-03-2025
+1.only upload on vsademo and test it on vsademo  User is able to fill the timesheet beyond 'Leaving Date
+2.I have deployed In Progress task on vsademo..
+3.UI fix on tables..
+4,Worked for bitbucket
+
+09-03-2025
+sunady
+
+10-03-2025
+1.Deployed bugs on vsalive (redirect openleave on click hare )
+2.Apply leave data fixed from backend
+3.all code uploaded on bitbucket like vsalive and vsademo 
+
+/////////////////////////
+
+11-03-2025
+1.the exported leave report contains incorrect employee codes.(bugs)
+2.Attendance report is generating for a calendar year but not for a F.Y
+
+12-03-2025
+1.Rejoining/Promotion features Deployed pending
+2.When admin and partner create assignment on that time form should be validate
+3.uploaded bugs on vsalive and tested done 
+
+
+13-03-2025
+1.When admin and partner create assignment on that time form should be validate
+2.documentation created and functional testing done 
+
+14-03-2025
+holi 
+
+15-03-2025
+1.code upload on vsademo 
+1.Rejoining/Promotion features Deployed pending
+
+16-03-2025
+sunday
+
+17-03-2025
+1.Rejoining/Promotion features Deployed admin completed
+2.After a user rejoins, when the admin filters the data, a warning message appears stating, 'User left on 31-07-2024'.
+
+
+``````````````````````````````````
+18-03-2025
+1.Rejoining/Promotion features Deployed (All role completed )
+2.code upload on vsademo 
+
+19-03-2025
+1.Kt for testing 
+2.jira descreption updated 
+3.Dashboard - signout and assignment box (UI-fixed) 
+
+
+20-03-2025
+1.remove s3 connection and added local connection for files
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+21-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+
+22-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+
+23-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+23-03-2025
+sunday
+
+25-03-2025
+1.When a user downloads all folders, a progress bar should be displayed, allowing them to pause and resume the download
+
+````````````````````
+26-03-2025
+1.upload uat pass task on vsalive and functional testing done 
+2.Need option to fill mutiple days timesheet at once
+
+
+27.03-25
+1.All UAT passed task uploaded on vsalive and functional testing done.
+
+28.03-25
+Casual laeve 
+
+29.03-25
+Casual laeve 
+
+30.03-25
+sunday
+
+31.03-25
+holidays (eid)
+
+01.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+02.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+03.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+
+04.04-25
+1.Need option to fill mutiple days timesheet at once
+2.the implementation of a feature to send a One-Time Password (OTP) to the other partner when the other partner initiates the closure of an assignment.
+
+
+05.04-25
+1.Partner role will be display on assignment view page 
+2.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+
+
+06.04-25
+Sunday
+
+07.04-25
+1.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+
+08.04-25
+1.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+
+09.04-25
+1.Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"
+2.Error in "Time Sheet Report". Time sheet days and hours are calculated wrongly in the report.
+3.All In Progress task upload on vsademo and functional testing completed 
+4.I have to deploye 4 In Progress task on vsademo
+
+10.04-25
+1.Descreption of All In Progress task updated on jira 
+2.Need option to fill mutiple days timesheet at once
+
+
+11.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+12.04-25
+casual leave 
+
+13.04-25
+Sunday
+
+
+14.04-25
+1.Need option to fill mutiple days timesheet at once
+
+
+15.04-25
+1.UAT done with atishay sir 
+2.I have to deploye 3 UAT Passed task on vsalive 
+3.Need option to fill mutiple days timesheet at once
+
+16.04-25
+4 days taken from 15 (Need option to fill mutiple days timesheet at once)
+1.Need option to fill mutiple days timesheet at once
+2.old data issue on timesheet report 
+
+
+17.04-25
+1.Need option to fill mutiple days timesheet at once
+2.staffcode problem checked 
+
+18.04-25
+1.testing all scenrrio of multiple timesheet task 
+
+19.04-25
+1.testing all scenrrio of Need option to fill mutiple days timesheet at once
+
+20.04-25
+Sunday
+
+
+21.04-25
+Jira Descreption uploaded on jira 
+Dashboard - signout and assignment box (UI-fixed) 
+Dashboard - Client Box (UI-Text) 
+
+
+22.04-25
+Required attachment to be visible in notification module in OMS
+
+
+23.04-25
+Required attachment to be visible in notification module in OMS
+
+
+24.04-25
+1.Required attachment to be visible in notification module in OMS
+2.Required a new report for "Pending Independence Confirmation" under the Report tab.
+
+
+
+25.04-25
+1.Required a new report for "Pending Independence Confirmation" under the Report tab.
+
+
+26.04-25
+1.KT, for VSA-456 task
+1.Required a new report for "Pending Independence Confirmation" under the Report tab.
+
+`````````````
+27.04-25
+Sunday
+
+28.04-25
+1.Required a new report for "Pending Independence Confirmation" under the Report tab.
+2.Arrange all the sub-tabs inside the Report tab in ascending order 
+
+
+
+29.04-25
+1.code uploaded on vsademo.
+2.Arrange all the sub-tabs inside the Report tab in ascending order.
+3.Required a Delete action for "Qualification documents".
+4.log created for file deleted.
+
+
+30.04-25
+1.Required a Delete action for "Qualification documents". upload on vsalive
+2.validation is not showing for 'Hour' column. 
+3.Calendar Dates getting open for around 1 month.
+
+`````````````````````
+01-05-2025
+1.Implementation in the Attendance module
+2.I have to deploy UAT Passed task on vsa total task (7)
+
+02-05-2025
+1.Implementation in the Attendance module
+2.Arrange all the sub-tabs inside the Report tab in ascending order
+
+
+03-05-2025
+1.Implementation in the Attendance module
+2.Arrange all the sub-tabs inside the Report tab in ascending order
+3.After a user rejoins, when the admin filters the data, a warning message appears like 'User left on (date)'.
+
+04-05-2025
+Sunday
+
+
+05-05-2025
+I have to deploy In Progress tasks on vsademo, (VS-518, 510, 486)
+2.Whenever 'To' date is edited before submitting timesheet, all inputed data gets omitted. (1 hour wiorked on it )
+3.Descreption of All In Progress task updated on jira 
+
+
+06-05-2025
+1.Whenever 'To' date is edited before submitting timesheet, all inputed data gets omitted.
+
+
+07-05-2025
+1.Whenever 'To' date is edited before submitting timesheet, all inputed data gets omitted.
+2.I have to deploy In Progress tasks on vsademo, (VS-519)
+3.Update the period from 'April to current month' to 'January to current month" in the Dashboard KPIs
+
+
+08-05-2025
+1.Update the period from 'April to current month' to 'January to current month" in the Dashboard KPIs
+2.KT for 8 IN QA task completed
+3.I have to deploy In Progress tasks on vsademo, (VS-521)
+4.Incorrect UI after user rejoins
+
+```````````````````````````````````````````````
+
+
+09-05-2025
+1.Incorrect UI after user rejoins.
+2.'Leaving Date' is not getting updated in the Team List.
+3.Column name for rejoining in the 'Edit Team Member' should be correct.
+
+10-05-2025
+Starday
+
+
+11-05-2025
+Sunday 
+
+
+14-05-2025
+1.Appointment letter - click on Attachment throws error
+2.At the time of Assignment view page, user is not able to add 'Other Partner' or 'Additional Partner'.
+3.Missing Assignment in the Manager Role
+
+
+partner id 
+1.Assignment Report tab
+2.inside client list report, assigbment section 
+3.dashboard 
+
+for client 
+http://127.0.0.1:8000/assignmentmapping
+
+<th>Additional Partner</th>
+
+  <th class="textfixed">Additional Partner</th>
+
+
+you have to check on rejected timesheet BAN100842
+
+
+15-05-2025
+1.Missing Assignment in the Manager Role
+
+
+16-05-2025
+1.Missing Assignment in the Manager Role
+2.functional testing done on vsalocal 
+3.live code on vsademo VS-503
+4.Incorrect Joining date for employee who rejoins
+
+`````````````````````````````````````````````````````
+\BackEndController.php
+17-05-2025
+1.functional testing done on vsademo
+2.Missing Assignment in the Manager Role (Submitted timesheet rejected )
+3.Test descreption added on jira for (VS-503)
+
+
+18-05-2025
+1.In the Team Application tab on the Partner ID, the latest data should appear by default
+
+
+19-05-2025
+1.In the Team Application tab on the Partner ID, the latest data should appear by default
+   Data should be latest in tables
+   filter reset button should be visible 
+   validation on filter 
+   
+   
+   
+  
+20-05-25
+1.In the Team Application tab on the Partner ID, the latest data should appear by default
+
+
+
+21-05-25
+1.The filter reset functionality should clear all applied filters
+2.The design of the navigation button should be fixed.
+
+````````````````````````````````````````````
+
+22-05-25
+1.The filter reset functionality should clear all applied filters. deployed on vsademo
+2.The design of the navigation button should be fixed. deployed on vsademo
+3.kt for KRA
+4.I have to deploy UAT Passed tasks on vsa, (VS-496, 521, 519, 518, 513, 512, 510, 500, 492, 491, 490, 457, 456)
+
+
+
+23-05
+1.I have to deploy UAT Passed tasks on vsa, (VS-496, 521, 519, 518, 513, 512, 510, 500, 492, 491, 490, 457, 456)
+
+
+24-05
+1.Working on KRA Flow 
+
+
+25-05
+sunday
+
+
+26-05
+1.Working on KRA Flow (only create tables and indexing data )
+2.Modification on Adding Multiple timesheet module 
+
+
+27-05
+1.Modification on Adding Multiple timesheet module 
+
+
+
+28-05
+1.Modification on Adding Multiple timesheet module 
+2.deployment on vsademo done 
+
+29-05
+1.Working on KRA Flow 
+
+
+30-05
+1.Working on KRA Flow 
+
+``````````````````````````````````````
+31.5
+1.Kras Delete functionality for all row 
+2.designation wise kras should be show 
+3.employee only view data not delete, edit upload data 
+4.on table, excel button should be hide 
+
+01,6
+sunday
+
+02.06
+1.Working on KRA Flow 
+2.I have to deploy VS-529
+
+
+03.06
+1.Kras code upload on kgsdemo
+2.Column add/del and rename on kras 
+
+
+04.06
+1.Column add/del and rename on kras completed
+2.validaton on all form on kra 
+
+
+05.06
+1.Designation column should be delete in teammmembers table.
+2.KRAs UI fixed. 
+3.data indexing on KRAs for new design page.  
+
+06.06
+1.Data indexing dynamic on KRAs for new design page. 
+2.All KRAs View page fixed according teamwise 
+3.Removed Casual leave data from backend (Vishal singh)
+4.All KRAs delete according teamwise 
+
+07-06
+bakrid 
+
+08-06
+Sunday
+
+09.06
+1.Jira descrepiton added on KRAs
+2.Vsa task related Kt with Pooja kumari 
+3.All KRAs Upload according teamwise
+4.Bulk Upload KRAs
+
+
+10-06
+1.Bulk Upload KRAs Compeleted
+2.table Ascending icon issue on KRAs Copleted
+3.I have tesing completed on KRAs
+4.KRAs save as template or not completed 
+
+
+11.06
+1.Kras code upload on kgsdemo for functional testing
+2.Removed Casual leave data from backend (Vishal singh)
+3.bugs 
+Incorrect spelling in attendance report.
+
+
+12-06
+1.Missing Partner code, in Timesheet report tab.
+2.In previous added assignment, 'Staff Code' is not getting updated.
+3.Incorrect Staff Code in 'Independence' report.
+4.Incorrect date picking in 'Attendance' module in rejoining case.
+5.All 5 bugs code upload on vsademo and functional testing done 
+
+
+13.06
+1.Missing Partner code, in Timesheet report tab.
+2.KRAs edit/Delete row wise,
+3.KRAs column edit/Delete/add,
+4.Kras Functional testing completed 
+
+
+14 and 15 sat, sun
+
+16.
+1. notification on KRAs 
+2. common kra update issue 
+3. kras teplate new scnereo 
+
+
+
+17.06
+All KRA templates should be displayed dynamically in dropdown.
+Template Name should be entered only after clicking the checkbox.
+When a template is selected from the dropdown, a preview should be available.
+Proper validation should be applied on the form.
+
+
+18.
+1.All KRA templates should be displayed dynamically in dropdown (modal no 2)
+2.Notification UI and logic have been completed. 
+
+19.06
+Notification integration completed for upload, delete, and update actions.
+Testing completed for one designation.
+Notification listing implemented.
+Existing notification is deleted if already set.
+Form validation added for setting notifications.
+
+
+
+20.06
+Implemented search input and lengthMenu in the table.
+Updated the designation column in the teammembers table.
+Deployed the updated code on kgsdemo.
+Completed functional testing on local (HR/Admin and team-wise) and on the live environment. 
+
+21.06
+Added Created Date and Updated Date columns.
+Implemented logic to update the Updated Date on record modification.
+Identified an issue with the assignment name for Assignment ID NEW100962 (VSA).
+Implemented KRA Template listing only (no create/edit yet).
+
+
+
+
+22.06
+sunday
+
+23.06
+1.Implemented KRA Template listing, edit, and delete functionality.
+2.Completed functional testing.
+3.Deployed the code on kgsdemo.
+4.For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing.
+
+
+24.06
+1.For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing.
+1.1 On Admin ID: Team Timesheet Report module.
+1.2 On Partner and Manager ID: Timesheet Report module.
+
+
+
+25.06
+1.For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing.
+    1.1 On Admin ID: timesheet page.
+    1.2 On Admin partner and manager ID: submitted timesheet page.
+    1.3 On Admin partner and manager ID: weeklylist page.
+    1.4 On Admin ID: Rejected Submitted timesheet page.
+	
+2.Krishak Bharati Cooperative Limited client name issue fixed from backend (VSA)
+
+
+26.06
+1.All pending UAT task done with atishay 
+1.For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing.
+    1.5 On partner and manager ID: total travel days page.
+    1.6 On partner and manager ID: total working days page.
+	1.7 On partner and manager ID: Timesheet Report module.
+	1.8 On partner and manager ID: timesheet page.
+
+
+27.06
+1.For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing.
+	1.9 On partner and manager ID: Rejected Submitted timesheet page.
+	1.10 On partner and manager ID: Rejected team timesheet.
+	1.11 On partner and manager ID: team timesheet.
+	1.12 Optimized code 
+	
+	
+	
+30.06
+1.Task ID VS-539 has been completed and deployed on VSAdemo. Functional testing has also been completed
+
+
+
+
+
+01-07
+1.jira descreption update 
+2 data related task on vsa
+
+
+02-07
+1.data related task 
+2.uploaded and functional testing done 
+
+
+
+
+
+03-07
+1.The issue in the data-related task has been fixed and tested on the user ID
+2.Consolidate mail to be sent to the user when KRA edits are done
+  2.1 The user can not view draft KRA
+  2.2 The HR will be able to view KRAs, even if they are in draft 
+  2.3 Create a draft for the column rename in the KRA module 
+  
+  
+04-07
+2.Consolidate mail to be sent to the user when KRA edits are done 
+  2.3 Create a draft for the column delete in the KRA module
+  2.3 Create a draft for the column added in the KRA module
+
+
+
+09-07
+1.Reporting Manager - show in List view (Reporting manager assigned to employee during onboarding, HR can edit them)  
+2.First Upload of KRA - Mail to Employee and (current) Reporting Manager
+   2.1 When a KRA is deleted, an email will be sent to the employee and their reporting manage
+   2.2 When a draft KRA is finalized, an email will also be sent to the employee and their reporting manager 
+   2.3 When a KRA is Uploaded, an email will be sent to the employee and their reporting manage
+
+
+10-07
+1.Reporting Manager can View KRA (non-editable)
+2.table heading design fixed
+3.code optimize 
+4.New four point functional testing completed
+
+
+11-07
+1.KRA Mudule function testing 
+2.Kra Module deployed on kgsdemo
+
+
+
+
+12-07
+Saturday
+
+13-07
+Sundays
+
+14-07
+1.Watched the KGS demo video and noted down key points.
+2.some point discuss with bahadur 
+3.Set up the code for the KGS demo
+4.billing pending 
+
+
+####################################################
+start from hare kgs dashboard 
+
+
+15-07
+1.Bills Pending
+2.Bills Pending For Collection
+3.Assignments Completed
+4.Delayed Assignments
+
+
+16-07
+5.Exceptional Expenses
+6.New Tenders Submitted
+7.ECQR Audits Due
+8.Audit Acceptance Pending
+
+17-07
+8.Audit Acceptance Pending
+9.Assignment Status Overview
+10.Document Completion Progress
+11.ECQR Audits & Quality Reviews
+12.Partner-wise P&L Statement
+
+
+18-07
+13.Assignment-wise P&L Analysis
+14.Documentation Status Overview
+15.Unresolved Tickets - HR, IT & Admin
+16.High Priority Tasks Pending
+17.Monthly Expense Analysis
+
+
+19-07 not include
+1.There are some changes in the database. Some team members have filled in incorrect timesheet data, and I’m currently working on fixing it.
+
+
+`````````````````````````````````````````````````
+20-07
+Sundays
+
+
+21-07
+1.There are some changes in the database. Some team members have filled in incorrect timesheet data, and I’m currently working on fixing it.
+2.mentioned some new changes 
+3.deployed on vsa and fucntional testing done live 
+4.vsa new points listing 
+
+22.07
+1.chart UI completed
+
+
+23.07
+1.chart UI completed
+
+
+24.7
+High Priority Tasks Pending
+ECQR Audits & Quality Reviews
+Document Completion Progress
+Unresolved Tickets - HR, IT & Admin
+
+
+25.7
+1.Unresolved Tickets - HR, IT & Admin
+2.Upcoming Assignments
+3.Payments Not Recieved within 15 days
+4.Assignment-wise P&L Analysis
+5.Timesheet Filled On Closed Assignment
+
+
+26.07
+Sataurdays
+
+
+27.07
+Sundays
+
+28.07
+1.Assignment-wise P&L Analysis
+2.Loss Making Assignments
+3.Partner-wise P&L Statement
+
+
+29.07
+0.Discussion with Shivam regarding tasks
+1.Upcoming Assignments
+2.Document Completion Progress
+3.Timesheet Filled On Closed Assignment
+
+30.07
+1.Assignment Status Overview progress bar 
+2.Staff Allocation vs Actual Timesheet Analysis 
+3.vsa tasks, Sudhir rawat timesheet modificaton for sunday
+4.Monthly Expense Analysis
+
+
+31.07
+1.Monthly Expense Analysis
+2.Cash Flow Analysis
+
+01.08
+1..Cash Flow Analysis
+2.Invoice Due vs Assignment Billing vs Cash Recovery
+3.Lap Days Analysis (Assignment to Invoice)
+
+
+
+04-08
+1.code review with bahadur
+2.some changes on 3 place, exceptional expence  , bill pending for collection
+3.Budget vs Actual P&L
+
+
+05-08
+1.Partner-wise P&L Statement calculation issue fixed 
+2.some design fixed 
+3.functional testing on some section 
+
+
+
+06-8
+1.DOwnload button on:
+  Assignment-wise P&L Analysis
+  Partner-wise P&L Statement
+  Unresolved Tickets - HR, IT & Admin
+2.Work from Home monthly summary 
+3.Ui implemented for filter on dasboard
+
+07-8
+1.Working on filter
+2.7 KPI completed with filter
+
+08-8
+1.6 KPI completed with filter (total 13 completed)
+
+``````````````````````````````````````````````````````
+09 and 10 sataurday and sunday
+
+
+11-8
+1.USD convert in INR on dashboard report
+2.KRA KT to pooja kumari
+
+
+12-08
+1.April to march should be visiable on :
+  Monthly Expense Analysis
+  Cash Flow Analysis
+  Budget vs Actual P&L
+  Lap Days Analysis (Assignment to Invoice)
+  Invoice Due vs Assignment Billing vs Cash Recovery
+  Staff Allocation vs Actual Timesheet Analysis
+2.set scroll on Staff Allocation vs Actual Timesheet Analysis
+3.Assignment Status Overview
+
+
+13-08
+1.scrollbar completed on all section 
+2.kra bugs completed total 5 bugs 
+
+14.08
+1.kra bugs completed total 3 bugs 
+2.code uploaded on kgsdemo
+3.code ready for kgs live 
+
+
+15.08  to 17.08 holidays 
+
+18.08
+1.VSA issue checked and inform to atishay
+2.KRA 3 bugs completed regarding validation message
+
+
+
+
+19.08
+1.vsa issue fixed and deploy on vsademo
+3.Dashboard report module deploy on crone 
+2.KRA 3 bugs completed and 1 bugs remain also completed and deploy on crone 
+
+
+20.08
+1.Active and inactve user handling on KRA
+2.Uploaded/updated and deleted mail content teamwise integrated completed 
+3.VSA bugs deployed on vsa 
+
+
+21-08
+1.validation message on kra 
+2.Inactive user's KRA will be not show on teams KRA 
+3.KRA ready for deployment on KGSlive and functional testing completed
+
+
+22.08
+1.Anu rani data fixed from backend (VSA) 
+2.timesheet bugs checked but not found.
+3.Timesheet reports on mail 
+4.dashboard empty chart handling complete  
+
+
+23 and 24 saturday and sunda 
+
+
+25-08
+1.Upcoming Assignment' count not matching (bugs).
+2.Independence form is not visible (bugs).
+3.Count in 'NFRA Audits Due' is not correct (bugs).
+4.Remove 'Work From Home' KPI (bugs).
+5.Timesheet filled' is not getting updated (bugs).
+6.filter on kpi checked 
+7.vsa bugs checked
+
+
+26.08
+1.Allocated hour is showing zero in 'Staff Allocation vs Actual Timesheet Analysis'.
+2.Chart 'NFRA Audits &amp; Quality Reviews' should also include peer checklist as well
+3.Bills Pending For Collection' not showing any amount in KPI
+4.Not showing any amount in 'Payments Not Recieved' KPI
+5.filter on dashboard 
+
+
+27.08
+1.KGS dashboard bugs fixed 
+2.help to pooja for testing 
+
+
+28.08
+1.KGS dashboard bugs fixed 
+2.help to pooja for testing 
+
+
+29.08
+1.All Kpi tested with bahadur on kgslive data 
+2.VSA task completed and tested on local 
+
+
+`````````````````````````
+
+30.08
+1.code upload on vsademo and functional testing completed 
+2.All kgs live changes code manage on local (bahadur sent me changes code)
+3.kgs demo new changes 
+
+31.08
+sunday
+
+01-09-2025
+1.Vsa code deployed on live 
+#.kpi indexing 
+2.Bills Pending
+3.Bills Pending For Collection
+4.Assignments Completed
+
+
+02-09-2025
+#.kpi indexing (total 5 KPI)
+1.Delayed Assignments
+2.Exceptional Expenses
+3.Loss Making Assignments
+4.New Tenders Submitted
+5.Audit Acceptance Pending
+
+
+
+03-09-2025
+#.kpi indexing (total 4 KPI)
+1.NFRA Audits Due
+2.Upcoming Assignments
+3.Payments Not Recieved
+4.Timesheet Filled
+
+
+04-09-2025
+1.Budget vs Actual Cash Flow chart completed (it was hidden)
+
+#.filter on dashboard.
+1.Assignment Status Overview
+2.Document Completion Progress
+3.NFRA Audits, Quality Reviews & Peer Review
+4.Partner-wise P&L Statement
+5.Assignment-wise P&L Analysis
+
+
+
+05-09-2025
+#.filter on dashboard.
+1.Monthly Expense Analysis
+2.Cash Flow Analysis
+3.Budget vs Actual Cash Flow
+4.Budget vs Actual P&L
+5.Lap Days Analysis (Assignment to Invoice)
+6.Invoice Due vs Assignment Billing vs Cash Recovery
+7.Staff Allocation vs Actual Timesheet Analysis
+8.Unresolved Tickets - HR, IT & Admin
+
+```````````````````````````````````````````
+
+06-09
+1.filter partner wise all dashboard 
+
+07-09
+Sunday 
+
+08-09 
+sick leave 
+
+
+
+
+09-09
+1.data not found handling on all chart 
+2.some chart and box hidden for partner role.
+3.kpi indexing filter 
+
+
+10-09
+1.filters on KPI indexing page 
+2.filters on KPI indexing page functional testing completed 
+
+
+
+11-09
+1.functional testing completed on dashboard report 
+2.dashboard report code deployed on crone 
+
+
+12-09
+1.Kt with santosh 
+2.Kt with vinita 
+3.code review done 
+
+
+13-09 and 14-09
+Saturday and sunday 
+
+15-09
+1.I have to fixed financial year inside yearly dropdown
+2.Worked on UI for dashboard report 
+3.timesheet not submitted reminder fixed on VSA 
+
+
+
+16.09
+1.timesheet not submitted reminder fixed on VSA deployed on vsademo and data clean for testing 
+2.dashboard code deployed on cron 
+3.timesheet not submitted reminder related code review
+
+
+17.09
+1.Vsa task employe code related task checked 
+2.kpi heading and descreption changes completed 
+3.Collection's Outstanding kpi completed 
+
+
+
+18.09
+1.pooja raised one issue i have checked but not found any issue
+2.discuss on bill pending point 
+3.jira task create on grc 
+4.download as pdf btn implemented
+ 
+ 
+19.09
+1.Collection's Outstanding completed indexing and after filter data.
+2.delayed assignment KPI completed
+
+
+20.09
+1.delayed assignment KPI completed indexing and after filter data.
+2.All three KPI tested on local 
+3.All three kpi code deployed on cron 
+
+
+
+21-09
+Sunday
+
+
+22-09
+1.Offer later KT completed second versionn
+2.Offer later first version flow compeletd
+
+
+23-09
+1.Offer later second version flow compeletd
+2.Appointment letter process
+
+
+24-09
+1.timesheet not submitted reminder fixed on VSA code deployed on live 
+2.Appointment letter process completed 
+3.Kt wit Vinita 
+
+
+25-09
+1. Download report kt remain 
+
+
+09-09
+2.bahadur wla code integareted live bugs
+3.outstationconveyances me paid date per karna hai  
+
+
+
+Human resource 
+admin tab  ye 2 tab baki hai review ke liye 
+
+
+
+ //ffbb Assignment Status Overview
+      $assignmentOverviews = DB::table('assignmentmappings')
+        ->whereBetween('assignmentmappings.created_at', [$startDateFormatted, $endDateFormatted])
+        ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+          $query->whereMonth('assignmentmappings.created_at', $monthsdigit);
+        })
+        ->select(
+          'assignmentmappings.*',
+          'assignmentbudgetings.assignmentname',
+          'assignmentbudgetings.status',
+          DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate) as finalassignmentenddate'),
+          'clients.client_name',
+          DB::raw('(SELECT SUM(totalhour) FROM timesheetusers WHERE timesheetusers.assignmentgenerate_id = assignmentmappings.assignmentgenerate_id) as workedHours')
+        )
+        ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+        ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+        ->orderByDesc('assignmentbudgetings.id')
+        ->get()
+        ->map(function ($assignmentOverview) {
+          $totalHours = $assignmentOverview->esthours ?? 0;
+          $workedHours = $assignmentOverview->workedHours ?? 0;
+          $completionPercentage = $totalHours > 0 ? round(($workedHours / $totalHours) * 100, 2) : 0;
+          $assignmentOverview->completionPercentage = $completionPercentage;
+          return $assignmentOverview;
+        });
+
+
+
+        ->whereBetween('assignmentmappings.created_at', [$startDateFormatted, $endDateFormatted])
+		
+        ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+          $query->whereMonth('assignmentmappings.created_at', $monthsdigit);
+        })
+		
+		
+		
+		 $teamsSalaries = DB::table('employeepayrolls')
+        ->select(
+          'month',
+          'year',
+          DB::raw('SUM(total_amount_to_paid) as total_amount')
+        )
+        ->where(function ($query) use ($endYear, $startYear) {
+          // Jan to Mar from next year
+          $query->where(function ($q) use ($endYear) {
+            $q->where('year', $endYear)
+              ->whereIn('month', ['January', 'February', 'March']);
+          })
+            // Apr to Jun from current year
+            ->orWhere(function ($q) use ($startYear) {
+              $q->where('year', $startYear)
+                ->whereIn('month', ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']);
+            });
+        })
+        ->where('send_to_bank', 1)
+        ->when(!empty($months), function ($query) use ($months) {
+          $query->where('month', $months);
+        })
+        ->groupBy('year', 'month')
+        ->orderByRaw("FIELD(month, 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March')")
+        ->get();
+
+
+
+
+
+   // if ($cashFlowSpendemployee->isNotEmpty()) {
+      //   $mergedSpenddata = $cashFlowSpendvender->merge($cashFlowSpendemployee);
+
+      //   $cashFlowtotalspendData = $mergedSpenddata->groupBy(function ($item) {
+      //     return $item->month . '-' . $item->year;
+      //   })->map(function ($group) {
+      //     return (object) [
+      //       'month' => $group->first()->month,
+      //       'year' => $group->first()->year,
+      //       'total_amounts' => $group->sum('total_amounts'),
+      //     ];
+      //   })->sortBy(function ($item) {
+      //     $order = ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'];
+      //     return array_search($item->month, $order);
+      //   })->values();
+      // }
+
+      dd($cashFlowRecieved, $cashFlowSpendvender, $cashFlowSpendemployee, $mergedSpenddata, $cashFlowtotalspendData);
+
+
+
+
+
+   $addonpartner = Teammember::where('role_id', '=', 13)
+            ->where('status', '=', 1)
+            ->leftJoin('teamrolehistory', 'teamrolehistory.teammember_id', '=', 'teammembers.id')
+            ->with('title')
+            ->orderBy('team_member', 'asc')
+            ->select('teammembers.*', 'teamrolehistory.newstaff_code')
+            ->get();
+			
+			   @foreach ($addonpartner as $teammemberData)
+                                                                            <option value="{{ $teammemberData->id }}">
+                                                                                {{ $teammemberData->team_member }} (
+                                                                                {{ $teammemberData->newstaff_code ?? ($teammemberData->staffcode ?? '') }})
+                                                                            </option>
+                                                                        @endforeach
+
+
+
+
+
+
+
+     
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2025-07-12
+2025-02-07
+
+2024-09-13
+
+Ctrl + Shift + M
+
+
+
+Shahid Raza try clicking this
+  https://somani-insight-hub.lovable.app/
+  
+  
+timesheet/edit/7960
+timesheet/destroy/7961
+
+6590
+
+priyankasharma1@kgsomani.com
+160
+Vinita@54321
+
+hamidraza746308@gmail.com
+
+User Name - shahidraza9@capitall.io
+Password - 21603

@@ -1,0 +1,152 @@
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+replace timesheet_teamlist() function 
+
+  public function timesheet_teamlist()
+  {
+
+    if (auth()->user()->role_id == 13) {
+      // get all partner
+      // dd('hi');
+      $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+        ->orderBy('team_member', 'asc')->get();
+
+      $get_datess = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.partnerid', auth()->user()->teammember_id)
+        ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.emailid', 'partners.team_member as partnername')
+        ->latest()->get();
+
+      // For permission
+      $permissiontimesheet = DB::table('timesheetreport')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->first();
+      // dd($permissiontimesheet);
+    } else {
+
+      $partner = Teammember::where('role_id', '=', 13)->where('status', '=', 1)->with('title')
+        ->orderBy('team_member', 'asc')->get();
+      $get_datess = DB::table('timesheetreport')
+        ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+        ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.emailid', 'partners.team_member as partnername')
+        ->latest()->get();
+      // For permission working 
+      $permissiontimesheet = DB::table('timesheetreport')
+        ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+        ->first();
+    }
+
+    $groupedData = $get_datess->groupBy(function ($item) {
+      return $item->team_member . '|' . $item->week;
+    })->map(function ($group) {
+      $firstItem = $group->first();
+
+      return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'emailid' => $firstItem->emailid,
+        'partnerid' => $firstItem->partnerid,
+      ];
+    });
+
+    $get_date = collect($groupedData->values());
+
+
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'partner', 'permissiontimesheet'));
+  }
+
+
+
+Controller 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+replace allteamsubmitted() function 
+
+
+  public function allteamsubmitted()
+  {
+    // die;
+    $get_datess = DB::table('timesheetreport')
+      ->leftjoin('teammembers', 'teammembers.id', 'timesheetreport.teamid')
+      ->leftjoin('teammembers as partners', 'partners.id', 'timesheetreport.partnerid')
+      // ->where('timesheetreport.teamid', auth()->user()->teammember_id)
+      ->select('timesheetreport.*', 'teammembers.team_member', 'teammembers.emailid', 'partners.team_member as partnername', 'teammembers.emailid')
+      ->latest()->get();
+
+    $permissiontimesheet = DB::table('timesheetreport')->first();
+
+    // maping double date ************
+    $groupedData = $get_datess->groupBy(function ($item) {
+      return $item->team_member . '|' . $item->week;
+    })->map(function ($group) {
+      $firstItem = $group->first();
+
+      return (object)[
+        'id' => $firstItem->id,
+        'teamid' => $firstItem->teamid,
+        'week' => $firstItem->week,
+        'totaldays' => $group->sum('totaldays'),
+        'totaltime' => $group->sum('totaltime'),
+        'startdate' => $firstItem->startdate,
+        'enddate' => $firstItem->enddate,
+        'partnername' => $firstItem->partnername,
+        'created_at' => $firstItem->created_at,
+        'team_member' => $firstItem->team_member,
+        'emailid' => $firstItem->emailid,
+        'partnerid' => $firstItem->partnerid,
+      ];
+    });
+
+    $get_date = collect($groupedData->values());
+
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'permissiontimesheet'));
+  }
+
+
+
+
+
+Blade 222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\myteamindex.blade.php
+find text   <label class="font-weight-600">Team Name</label>
+
+
+                          @if (Auth::user()->role_id == 11 || (Auth::user()->role_id == 13 && Request::is('timesheet/teamlist')))
+                              <div class="col-4">
+                                  <div class="form-group">
+                                      <label class="font-weight-600">Team Name</label>
+                                      <select class="language form-control" id="category7" name="teamname">
+                                          <option value="">Please Select One</option>
+                                          @php
+                                              $displayedValues = [];
+                                          @endphp
+                                          @foreach ($get_date as $jobDatas)
+                                              @if (!in_array($jobDatas->emailid, $displayedValues))
+                                                  <option value="{{ $jobDatas->teamid }}">
+                                                      {{ $jobDatas->team_member }} ({{ $jobDatas->emailid }})
+                                                  </option>
+                                                  @php
+                                                      $displayedValues[] = $jobDatas->emailid;
+                                                  @endphp
+                                              @endif
+                                          @endforeach
+                                      </select>
+                                  </div>
+                              </div>
+                          @endif
+
+
+
+
+
+

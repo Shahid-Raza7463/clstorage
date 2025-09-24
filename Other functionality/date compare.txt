@@ -1,0 +1,43 @@
+222222222222
+
+    <div class="col-2">
+        <div class="form-group">
+            <label class="font-weight-600">Period Start</label>
+            <input type="date" name="periodstart" id="startDate" value="{{ $assignmentmapping->periodstart ?? '' }}"
+                class="form-control " placeholder="Enter Period start">
+        </div>
+    </div>
+
+    <div class="col-2">
+        <div class="form-group">
+            <label class="font-weight-600">Period End</label>
+            <input type="date" required id="endDate" name="periodend"
+                value="{{ $assignmentmapping->periodend ?? '' }}" class="form-control" placeholder="Enter Perio End">
+            <span id="error"></span>
+        </div>
+    </div>
+
+#############################
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var startDateInput = $('#startDate');
+        var endDateInput = $('#endDate');
+
+        function compareDates() {
+            var startDate = new Date(startDateInput.val());
+            var endDate = new Date(endDateInput.val());
+
+            if (startDate > endDate) {
+                alert('End date should be greater than or equal to the Start date');
+                endDateInput.val(''); // Clear the end date input
+            }
+        }
+
+        startDateInput.on('input', compareDates);
+        endDateInput.on('blur', compareDates);
+    });
+</script>
+
+22222222222222
