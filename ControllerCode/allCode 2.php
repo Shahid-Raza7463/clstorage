@@ -52,6 +52,13 @@ if ($request->is('userprofile/*')) {
 }
 
 
+if ($request->is('userprofile/*')) {
+    // Matches same as Blade
+}
+
+
+
+
 $urlPath = $request->path();
 if (preg_match('#^userprofile/\d+$#', $urlPath)) {
     // Matches "userprofile/" followed by digits
