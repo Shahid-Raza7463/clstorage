@@ -1306,7 +1306,10 @@ Sunday
 24-09
 1.timesheet not submitted reminder fixed on VSA code deployed on live 
 2.Appointment letter process completed 
-3.Kt wit Vinita 
+3.Kt with Vinita 
+
+
+
 
 
 25-09
