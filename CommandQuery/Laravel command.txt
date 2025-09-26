@@ -245,6 +245,7 @@ Route::get('/test', function () {
 
 22222222222222
 22222222222
+composer clear-cache
 composer require yajra/laravel-datatables-oracle
 22222222
 login instalation
@@ -618,6 +619,7 @@ Route::get('/test', function () {
 
 22222222222222
 22222222222
+composer clear-cache
 composer require yajra/laravel-datatables-oracle
 22222222
 login instalation

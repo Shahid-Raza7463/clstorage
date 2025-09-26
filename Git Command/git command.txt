@@ -243,7 +243,32 @@ C:\xampp\htdocs\Github Transfer>
  git branch -d vsa
 
 
+2222222222222222222222222222222222222222222222222222222222222222
+Options A: to resolve
+Option A: Merge remote changes into local, resolve conflicts, then push
 
+git pull origin main
+Isse remote changes aapke local branch me merge ho jayenge.
+
+Agar merge conflicts aaye, unhe resolve karo (open files, fix, then git add them).
+
+Commit the merge (agar auto-merge commit na bana ho).
+
+Fir git push origin main.
+
+Option B: Rebase your local commits onto remote, then push
+
+git fetch origin
+
+git rebase origin/main
+— Ye aapke local commits ko remote commits ke baad “reapply” karega.
+
+Agar conflicts aaye, resolve karo, phir git rebase --continue.
+
+Phir git push origin main (agar rebase ne history ko change na kiya ho)
+Agar push reject hota hai, use force push (agar sure ho):
+
+git push origin main --force
 
 
 

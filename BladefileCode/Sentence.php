@@ -442,6 +442,7 @@ class Sentence extends Command
     // Pooja, please call me whenever you are free
     // I have created the VSA task (ID 332) and deployed it on vsademo. We can test it now
     // It will take me 2 days to complete, excluding the mail-related point
+    // The issue has been resolved, please check and let me know in case if it still persists.
 
 
     // 222222222222222222222222222222222222222222222222222222222222222222222

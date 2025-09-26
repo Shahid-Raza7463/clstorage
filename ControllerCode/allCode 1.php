@@ -11648,8 +11648,13 @@ Output:
           ]);
         }
       }
-    //* regarding Ascending / regarding Descending / regarding order /regarding ordering 
+    //* regarding Ascending / regarding Descending / regarding order /regarding ordering / regarding desc / regarding asc
 
+//     Difference:
+
+// asc → sabse pehla (oldest) record milega
+
+// desc → sabse last (latest) record milega
     $getauthh =  DB::table('timesheetusers')
     ->where('createdby', auth()->user()->teammember_id)
     ->orderBy('id', 'asc')->paginate(10);
