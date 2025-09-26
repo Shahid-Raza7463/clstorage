@@ -33,6 +33,15 @@ class Allcode extends Controller
         //* regarding 
         // Start Hare
         // Start Hare
+        try {
+    $lasttimesheetsubmiteddata = DB::table('timesheetreport')
+        ->where('teamid', $authUserId)
+        ->orderBy('enddate', 'desc')
+        ->firstOrFail();
+} catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+    $lasttimesheetsubmiteddata = ['message' => 'No timesheet found'];
+}
+
         //! End hare 
         //* regarding  request in function
         // Start Hare

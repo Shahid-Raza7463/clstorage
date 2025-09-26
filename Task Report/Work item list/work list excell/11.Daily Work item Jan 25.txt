@@ -1309,6 +1309,13 @@ Sunday
 3.Kt with Vinita 
 
 
+25-09
+1.Application Kt Manager/ staff / partner / it / hr 
+2.Request to Review Accuracy of Auto-Generated Report (i have cheked and not found any bugs).VSA task
+3.One more functionality added to the Autosubmit Exam Leave functionality. VSA task
+
+
+
 
 
 
@@ -1466,3 +1473,94 @@ hamidraza746308@gmail.com
 
 User Name - shahidraza9@capitall.io
 Password - 21603
+
+
+
+
+  // $authteamid = 821;
+    // $startdate = '2025-08-18';
+    // $enddate = '2025-09-09';
+
+
+    // $nextweektimesheet1 = DB::table('timesheetusers')
+    //   ->where('createdby', $authteamid)
+    //   ->whereBetween('date', [$startdate,  $enddate])
+    //   ->update(['status' => 0]);
+    // // ->get();
+    // // ->update(['createdby' => 8471]);
+    // // ->delete();
+
+    // $nextweektimesheet2 = DB::table('timesheets')
+    //   ->where('created_by', $authteamid)
+    //   ->whereBetween('date', [$startdate,  $enddate])
+    //   ->update(['status' => 0]);
+    // // ->get();
+    // // ->update(['created_by' => 8471]);
+    // // ->delete();
+
+    // $nextweektimesheet3 = DB::table('timesheetreport')
+    //   ->where('teamid', $authteamid)
+    //   ->whereBetween('startdate', [$startdate, $enddate])
+    //   ->delete();
+    // // ->get();
+    // // ->update(['teamid' => 8471]);
+
+    // // $attendanceexist = DB::table('attendances')
+    // //   ->where('employee_name', $authteamid)
+    // //   ->where('month', 'December')
+    // //   ->delete();
+    // // ->update(['teamid' => 8471]);
+
+    // dd('successfully done');
+
+    // $tables = [
+    //   //* timesheets
+    //   'timesheetreport',
+    //   'timesheetrequests',
+    //   'timesheets',
+    //   'timesheetusers',
+
+    //   //* applyleaves
+    //   'applyleaves',
+    //   'leaveapprove',
+    //   'leaverequest',
+
+    //   //* attendances
+    //   'attendances',
+
+    //   // //* assignments
+    //   // 'assignmentbudgetings',
+    //   // 'assignmentmappings',
+    //   // 'assignmentteammappings',
+    //   // 'assignments',
+
+    //   // //* another tables
+    //   // 'Users',
+    //   // 'teammembers',
+    //   // 'teamrolehistory',
+    //   // 'rejoiningsamepost',
+    //   // 'Clients',
+    //   // 'independences',
+    // ];
+
+
+    // foreach ($tables as $table) {
+    //   if (Schema::hasTable($table)) {
+    //     Schema::drop($table);
+    //     echo "'{$table}'.<br>";
+    //   } else {
+    //     echo "'{$table}'.<br>";
+    //   }
+    // }
+
+    // return response('Tables deleted successfully!', 200);
+	
+	
+	
+	$previousMonday = $requestedDate
+	
+	 $createdbyList = DB::table('timesheetusers')
+            ->where('createdby', 821)
+            ->distinct()
+            ->pluck('createdby')
+            ->toArray();
