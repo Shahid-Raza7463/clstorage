@@ -20,15 +20,512 @@ class Allcode extends Controller
         //! End hare 
         //* regarding 
         // Start Hare
+         $outstationData = DB::table('outstationconveyances')
+            ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'outstationconveyances.assignmentgenerate_id')
+            ->leftJoin('assignments', 'assignments.id', '=', 'outstationconveyances.assignment_id')
+            ->leftJoin('clients', 'clients.id', '=', 'outstationconveyances.client_id')
+            ->where('outstationconveyances.createdby', '!=', 336)
+            ->where('outstationconveyances.status', 6)
+            ->when(!empty($conveyanceType), function ($query) use ($conveyanceType) {
+                // ✅ When conveyance type is selected
+                return $query->where('outstationconveyances.conveyance', $conveyanceType);
+            }, function ($query) {
+                // ✅ When conveyance type is NOT selected (default to both)
+                return $query->whereIn('outstationconveyances.conveyance', ['Local Conveyance', 'Outstation Conveyance']);
+            })
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereBetween('outstationconveyances.paiddate', [$startDateFormatted, $endDateFormatted]);
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereMonth('outstationconveyances.paiddate', $monthsdigit);
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('assignmentmappings.leadpartner', $partnerId);
+            })
+            ->select(
+                'outstationconveyances.*',
+                'assignmentmappings.leadpartner',
+                'clients.client_name',
+                'assignments.assignment_name as assignmentsname'
+            )
+            ->get();
+
+        $outstationData = DB::table('outstationconveyances')
+            ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'outstationconveyances.assignmentgenerate_id')
+            ->leftjoin('assignments', 'assignments.id', 'outstationconveyances.assignment_id')
+            ->leftjoin('clients', 'clients.id', 'outstationconveyances.client_id')
+            ->where('outstationconveyances.createdby', '!=', 336)
+            ->where('outstationconveyances.status', 6)
+            ->when(!empty($conveyanceType), function ($query) use ($conveyanceType) {
+                // Jab conveyanceType hai - specific type ke liye
+                $query->where('outstationconveyances.conveyance', $conveyanceType);
+            }, function ($query) {
+                // Jab conveyanceType nahi hai - dono types ke liye
+                $query->whereIn('outstationconveyances.conveyance', ['Local Conveyance', 'Outstation Conveyance']);
+            })
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereBetween('outstationconveyances.paiddate', [$startDateFormatted, $endDateFormatted]);
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereMonth('outstationconveyances.paiddate', $monthsdigit);
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('assignmentmappings.leadpartner', $partnerId);
+            })
+            ->select('outstationconveyances.*', 'assignmentmappings.leadpartner', 'clients.client_name', 'assignments.assignment_name  as assignmentsname')
+            ->get();
+
+        $total1 = $outstationData->sum('finalamount') ?? 0;
         // Start Hare
         //! End hare 
-        //* regarding 
+        $upcomingFromPlannings = DB::table('assignmentplannings')
+    ->where('status', 0)
+    ->whereBetween('assignmentstartdate', [
+        Carbon::today()->subDays(30), // Past 30 days
+        Carbon::today()->addDays(30)  // Next 30 days
+    ])
+    ->count();
+        //* regarding session  
         // Start Hare
+
+        return session()->all();
+        $value = $request->session()->get('key');
+        $value = $request->session()->get('key', 'default');
+
+        // Retrieve a piece of data from the session...
+        $value = session('key');
+
+        // Specifying a default value...
+        $value = session('key', 'default');
+
+        // Store a piece of data in the session...
+        session(['key' => 'value']);
+        $data = $request->session()->all();
+
+        $data = $request->session()->only(['username', 'email']);
+
+        $data = $request->session()->except(['username', 'email']);
+
+        if ($request->session()->has('users')) {
+            // ...
+        }
+
+        if ($request->session()->exists('users')) {
+            // ...
+        }
+
+        if ($request->session()->missing('users')) {
+            // ...
+        }
+        // Via a request instance...
+        $request->session()->put('key', 'value');
+
+        // Via the global "session" helper...
+        session(['key' => 'value']);
+
+        $request->session()->push('user.teams', 'developers');
+
+        $value = $request->session()->pull('key', 'default');
+
+        $request->session()->increment('count');
+
+        $request->session()->increment('count', $incrementBy = 2);
+
+        $request->session()->decrement('count');
+
+        $request->session()->decrement('count', $decrementBy = 2);
+
+        $request->session()->flash('status', 'Task was successful!');
+
+        $request->session()->reflash();
+
+        $request->session()->keep(['username', 'email']);
+
+        $request->session()->now('status', 'Task was successful!');
+
+        // Forget a single key...
+        $request->session()->forget('name');
+
+        // Forget multiple keys...
+        $request->session()->forget(['name', 'status']);
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+        $request->session()->invalidate();
+
+
+        $discount = $request->session()->cache()->get('discount');
+
+        $request->session()->cache()->put(
+            'discount',
+            10,
+            now()->addMinutes(5)
+        );
+        
         // Start Hare
         //! End hare 
-        //* regarding 
+        //* regarding Eloquent relationships / regarding Eloquent model / regarding relationships 
         // Start Hare
         // Start Hare
+        
+        $assignments = Assignmentmapping::with([
+            'assignmentBudgeting.client:id,client_name',
+            'assignmentBudgeting.assignment:id,assignment_name',
+            'leadPartner:id,team_member',
+            'otherPartner:id,team_member',
+            'reviewerPartner:id,team_member',
+            'assignmentTeamMappings.teamMember:id,team_member',
+            'invoices:id,assignmentgenerate_id,status,amount,total,currency,invoice_id,created_at',
+            'timsheetusers.createdBy:id,cost_hour,team_member', // Fetch timesheetuser and teammember cost hour
+            'outstationConveyances' => function ($query) {
+                $query->select('id', 'assignmentgenerate_id', 'bill', 'finalamount');
+            },
+        ])
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $lossAssignments->pluck('assignmentgenerate_id'))
+            ->get()
+            ->map(function ($assignment) {
+
+                // Calculate total user cost
+                $totalCost = $assignment->timsheetusers->sum(function ($timesheet) {
+                    $hours = $this->convertHourToDecimal($timesheet->hour);
+                    $costHour = optional($timesheet->createdBy)->cost_hour ?? 0;
+
+                    return $hours * $costHour;
+                });
+
+                //  Calculate total invoice amount where invoice approved
+                $convertedInvoices = $this->convertInvoicestoINR($assignment->invoices);
+                $totalInvoiceAmt = $convertedInvoices
+                    ->where('status', 2)
+                    ->sum('total');
+
+
+                // Calculate total user convence 
+                $conveyancesAmt = $assignment->outstationConveyances
+                    ->where('bill', 'No')
+                    ->sum('finalamount');
+
+                $assignment->totalusercost = round($totalCost, 2);
+                $assignment->totalinvoiceamt = round($totalInvoiceAmt, 2);
+                $assignment->totalconveyancesamt = $conveyancesAmt;
+
+                return $assignment;
+            });
+
+        return $assignments;
+        // Start Hare
+        $assignments = Assignmentmapping::with([
+    'assignmentBudgeting.client:id,client_name',
+    'assignmentBudgeting.assignment:id,assignment_name',
+    'leadPartner:id,team_member',
+    'otherPartner:id,team_member',
+    'reviewerPartner:id,team_member',
+    'assignmentTeamMappings.teamMember:id,team_member',
+
+    // Select only required columns from invoices
+    'invoices:id,assignmentgenerate_id,status,total,currency',
+
+    // Select only required columns from timsheetusers and related createdBy
+    'timsheetusers' => function ($query) {
+        $query->select('id', 'assignmentgenerate_id', 'hour', 'createdby')
+              ->with(['createdBy:id,cost_hour,team_member']);
+    },
+
+    // Select only required columns from outstationConveyances
+    'outstationConveyances' => function ($query) {
+        $query->select('id', 'assignmentgenerate_id', 'bill', 'finalamount');
+    },
+])
+->whereIn('assignmentmappings.assignmentgenerate_id', $lossAssignments->pluck('assignmentgenerate_id'))
+->get()
+->map(function ($assignment) {
+
+    // Calculate total user cost
+    $totalCost = $assignment->timsheetusers->sum(function ($timesheet) {
+        $hours = $this->convertHourToDecimal($timesheet->hour);
+        $costHour = optional($timesheet->createdBy)->cost_hour ?? 0;
+        return $hours * $costHour;
+    });
+
+    // Convert invoice to INR and sum approved ones
+    $convertedInvoices = $this->convertInvoicestoINR($assignment->invoices);
+    $totalInvoiceAmt = $convertedInvoices
+        ->where('status', 2)
+        ->sum('total');
+
+    // Calculate total conveyance where bill = 'No'
+    $conveyancesAmt = $assignment->outstationConveyances
+        ->where('bill', 'No')
+        ->sum('finalamount');
+
+    $assignment->totalusercost = round($totalCost, 2);
+    $assignment->totalinvoiceamt = round($totalInvoiceAmt, 2);
+    $assignment->totalconveyancesamt = $conveyancesAmt;
+
+    return $assignment;
+});
+
+return $assignments;
+
+        // Start Hare
+        // one to one relation
+// User model 
+  public function getteammember()
+    {
+        return $this->hasOne(Teammember::class, 'id', 'teammember_id');
+    }
+
+    public function getrole()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+// Usercontroller
+    public function index()
+    {
+        $date = User::with('getteammember', 'getrole')->find(659);
+        return $date;
+    }
+    // app\Models\Teammember.php
+      public function getusers()
+    {
+        return $this->hasOne(User::class, 'teammember_id', 'id');
+    }
+
+    // Mentor relation (self one-to-one / many-to-one)
+    public function getmentor()
+    {
+        return $this->belongsTo(Teammember::class, 'mentor_id', 'id');
+    }
+
+    // Reporting head relation (self one-to-one / many-to-one)
+    public function getreportingHead()
+    {
+        return $this->belongsTo(Teammember::class, 'reportinghead', 'id');
+    }
+
+    // Created by (another teammember created this record)
+    public function getcreatedBy()
+    {
+        return $this->belongsTo(Teammember::class, 'created_by', 'id');
+    }
+
+    // Updated by (another teammember updated this record)
+    public function getupdatedBy()
+    {
+        return $this->belongsTo(Teammember::class, 'updated_by', 'id');
+    }
+
+    // Agar designation alag table me store hai
+    public function getdesignationDetails()
+    {
+        return $this->belongsTo(Designation::class, 'designation', 'id');
+    }
+
+    public function getuserstimesheet()
+    {
+        return $this->hasMany(Timesheetuser::class, 'createdby', 'id');
+    }
+    
+// app\Http\Controllers\TeammemberController.php        
+  $data = Teammember::with('getuserstimesheet')->find(617);
+        return $data;
+// app\Models\Timesheetuser.php
+    public function getusersteammember()
+    {
+        return $this->hasOne(Teammember::class, 'id', 'createdby');
+    }
+
+    public function getuserspartner()
+    {
+        return $this->hasOne(Teammember::class, 'id', 'partner');
+    }
+
+// http://127.0.0.1:8000/timesheet
+          $data = Timesheetuser::with('getusersteammember:id,team_member', 'getuserspartner:id,team_member')
+      ->where('createdby', 617)->get();
+    return $data;
+
+// uesr model 
+    public function getteammember()
+    {
+        return $this->hasOne(Teammember::class, 'id', 'teammember_id');
+    }
+
+    public function getrole()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+// uesr model end hare 
+
+    // teammember model 
+     public function getusers()
+    {
+        return $this->hasOne(User::class, 'teammember_id', 'id');
+    }
+
+    // Mentor relation (self one-to-one / many-to-one)
+    public function getmentor()
+    {
+        return $this->belongsTo(Teammember::class, 'mentor_id', 'id');
+    }
+
+    // Reporting head relation (self one-to-one / many-to-one)
+    public function getreportingHead()
+    {
+        return $this->belongsTo(Teammember::class, 'reportinghead', 'id');
+    }
+
+    // Created by (another teammember created this record)
+    public function getcreatedBy()
+    {
+        return $this->belongsTo(Teammember::class, 'created_by', 'id');
+    }
+
+    // Updated by (another teammember updated this record)
+    public function getupdatedBy()
+    {
+        return $this->belongsTo(Teammember::class, 'updated_by', 'id');
+    }
+
+    // Agar designation alag table me store hai
+    public function getdesignationDetails()
+    {
+        return $this->belongsTo(Designation::class, 'designation', 'id');
+    }
+
+          $data = Teammember::with(['getusers', 'getmentor', 'getreportingHead', 'getcreatedBy', 'getupdatedBy', 'getdesignationDetails'])->find(712);
+        return $data;
+    // teammember end hare 
+
+        
+    public function getusers()
+    {
+        return $this->hasOne(User::class, 'teammember_id', 'id');
+    }
+
+        $date = Teammember::with('getusers')->find(712);
+        return $date;
+
+        Route::resource('/users', UserController::class);
+   public function getteammember()
+    {
+        return $this->belongsTo(teammember::class, 'teammember_id', 'id');
+    }
+    public function index()
+    {
+        $date = User::with('getteammember')->find(659);
+        return $date;
+    }
+
+    
+    public function getteammember()
+    {
+        return $this->hasOne(teammember::class, 'id', 'teammember_id');
+    }
+
+       $teamdata = Teammember::with('getrole')->find(712);
+        return $teamdata;
+
+        
+    public function getrole()
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+        //elequent 
+        // $teamdata = Teammember::with('getuser')->find(6);
+        // return $teamdata;
+
+        $teamdata = Teammember::with('getuser')->find(6);
+        return $teamdata;
+
+        
+    public function getuser()
+    {
+        return $this->hasOne(User::class);
+    }
+
+        // Start Hare
+        
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'assignmentgenerate_id', 'assignmentgenerate_id')
+            ->where('status', 2) // ✅ sirf status = 2 wale
+            ->select('id', 'assignmentgenerate_id', 'invoice_id', 'invoicedate', 'total', 'pocketexpenseamount', 'status', 'created_at');
+    }
+        // Start Hare
+
+        
+        $assignments = Assignmentmapping::with([
+            'assignmentBudgeting.client:id,client_name',
+            'assignmentBudgeting.assignment:id,assignment_name',
+            'leadPartner:id,team_member',
+            'invoices' => function ($q) {
+                $q->where('status', 2) // ✅ sirf status = 2
+                    ->select('id', 'assignmentgenerate_id', 'invoice_id', 'invoicedate', 'total', 'pocketexpenseamount', 'status', 'created_at');
+            }
+        ])
+            ->whereHas('assignmentBudgeting', function ($q) {
+                $q->where('status', 0)
+                    ->whereNotNull('percentclosedate');
+            })
+            ->whereHas('invoices', function ($q) {
+                $q->where('status', 2); // ✅ invoice must exist aur status = 2
+            })
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereHas('assignmentBudgeting', function ($q) use ($startDateFormatted, $endDateFormatted) {
+                    $q->whereBetween('otpverifydate', [$startDateFormatted, $endDateFormatted]);
+                });
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereHas('assignmentBudgeting', function ($q) use ($monthsdigit) {
+                    $q->whereMonth('otpverifydate', $monthsdigit);
+                });
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('leadpartner', $partnerId);
+            })
+            ->select('assignmentmappings.*')
+            ->distinct('assignmentmappings.assignmentgenerate_id')
+            ->get();
+        // Start Hare
+        
+        $assignments = Assignmentmapping::with([
+            'assignmentBudgeting.client:id,client_name',
+            'assignmentBudgeting.assignment:id,assignment_name',
+            'leadPartner:id,team_member',
+            'invoices' // get invoice data in relation section 
+        ])
+            ->whereHas('assignmentBudgeting', function ($q) {
+                $q->where('status', 0)
+                    ->whereNotNull('percentclosedate');  // Documentation 100% done
+            })
+            ->whereHas('invoices') // invoice must exist
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereHas('assignmentBudgeting', function ($q) use ($startDateFormatted, $endDateFormatted) {
+                    $q->whereBetween('otpverifydate', [$startDateFormatted, $endDateFormatted]);
+                });
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereHas('assignmentBudgeting', function ($q) use ($monthsdigit) {
+                    $q->whereMonth('otpverifydate', $monthsdigit);
+                });
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('leadpartner', $partnerId);
+            })
+            ->select('assignmentmappings.*')
+            ->distinct('assignmentmappings.assignmentgenerate_id')
+            ->get();
+        // Start Hare
+public function invoices()
+{
+    return $this->hasMany(Invoice::class, 'assignmentgenerate_id', 'assignmentgenerate_id')
+                ->where('status', 2);
+}
+
+      
         //! End hare 
         //* regarding 
         // Start Hare

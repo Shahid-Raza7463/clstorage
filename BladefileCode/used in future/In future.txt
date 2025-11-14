@@ -147,22 +147,155 @@ app\Http\Controllers\TimesheetController.p
 		
 		timesheet report 
 		821
+    19379
 		2025-08-16 10:48:12
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+ // filter KPI Upcoming Assignments
+      $upcomingQuery = DB::table('assignmentplannings')
+        ->where('status', 0)
+        // ->whereDate('assignmentstartdate', '<=', Carbon::today()->addDays(30)->endOfDay())
+        ->whereBetween('assignmentstartdate', [$startDateFormatted, $endDateFormatted]);
+      if (!empty($monthsdigit)) {
+        $upcomingQuery->whereMonth('assignmentstartdate', $monthsdigit);
+      }
+      if (!empty($partnerId)) {
+        $upcomingQuery->where('assignmentplannings.engagementpartner', $partnerId);
+      }
+      $upcomingFromPlannings = $upcomingQuery->count();
 
 
+      $upcomingFromBudgetingsQuery = DB::table('assignmentbudgetings')
+        ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+        ->whereBetween(DB::raw('COALESCE(assignmentbudgetings.actualstartdate, assignmentbudgetings.tentativestartdate)'), [
+          Carbon::today()->startOfDay(),
+          Carbon::today()->addDays(30)->endOfDay()
+        ])
+        ->whereBetween(DB::raw('COALESCE(assignmentbudgetings.actualstartdate, assignmentbudgetings.tentativestartdate)'), [$startDateFormatted, $endDateFormatted]);
+      if (!empty($monthsdigit)) {
+        $upcomingFromBudgetingsQuery->whereMonth(DB::raw('COALESCE(assignmentbudgetings.actualstartdate, assignmentbudgetings.tentativestartdate)'), $monthsdigit);
+      }
+      if (!empty($partnerId)) {
+        $upcomingFromBudgetingsQuery->where('assignmentmappings.leadpartner', $partnerId);
+      }
+      $upcomingFromBudgetings = $upcomingFromBudgetingsQuery->count();
+
+      // $upcomingFromBudgetingsQuery = DB::table('assignmentbudgetings')
+      //   ->join('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+      //   ->whereBetween(
+      //     DB::raw('COALESCE(assignmentbudgetings.actualstartdate, assignmentbudgetings.tentativestartdate)'),
+      //     [Carbon::today()->startOfDay(), Carbon::today()->addDays(30)->endOfDay()]
+      //   );
+
+      // // ✅ Sirf tabhi filter lagao jab FY current ho
+      // if (Carbon::now()->between($startDateFormatted, $endDateFormatted)) {
+      //   $upcomingFromBudgetingsQuery->whereBetween(
+      //     DB::raw('COALESCE(assignmentbudgetings.actualstartdate, assignmentbudgetings.tentativestartdate)'),
+      //     [$startDateFormatted, $endDateFormatted]
+      //   );
+      // } else {
+      //   // Agar filter pichle saal ka FY hai to result 0 kar do
+      //   $upcomingFromBudgetingsQuery->whereRaw('1=0');
+      // }
+
+      // if (!empty($monthsdigit)) {
+      //   $upcomingFromBudgetingsQuery->whereMonth(
+      //     DB::raw('COALESCE(assignmentbudgetings.actualstartdate, assignmentbudgetings.tentativestartdate)'),
+      //     $monthsdigit
+      //   );
+      // }
+
+      // if (!empty($partnerId)) {
+      //   $upcomingFromBudgetingsQuery->where('assignmentmappings.leadpartner', $partnerId);
+      // }
+
+      // $upcomingFromBudgetings = $upcomingFromBudgetingsQuery->count();
+
+
+      $totalUpcomingAssignments = $upcomingFromPlannings + $upcomingFromBudgetings;
+
+
+
+    // Assignments Completed
+      $assignmentdata = DB::table('assignmentbudgetings')
+        // Invoice is created
+        ->join('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+        ->where('assignmentbudgetings.status', 0)
+        ->whereNotNull('assignmentbudgetings.percentclosedate') // Documentation 100% done
+        ->select('assignmentbudgetings.assignmentgenerate_id')
+        ->distinct()
+        ->get();
+
+      $assignmentcompleted = $assignmentdata->count();
+
+      $assignmentcompleted = DB::table('assignmentbudgetings')
+        // Invoice is created
+        ->join('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentbudgetings.assignmentgenerate_id')
+        ->where('assignmentbudgetings.status', 0)
+        ->whereNotNull('assignmentbudgetings.percentclosedate')
+        ->distinct('assignmentbudgetings.assignmentgenerate_id')  // Documentation 100% done
+        ->count('assignmentbudgetings.assignmentgenerate_id');
+
+      dd($assignmentcompleted);
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+                 //  prevent date after current date 
+                 if (endDate.getTime() > today.getTime()) {
+                     endDate = new Date(today);
+                     //  endDate.setDate(today.getDate());
+                 }
+
+                 if (originalDate.getTime() > today.getTime()) {
+                     originalDate = new Date(today);
+                 }
+
+                 //  prevent date after current date 
+                 //  if (endDate.getTime() > today.getTime() && originalDate.getTime() < today.getTime()) {
+                 //      endDate = new Date(today);
+                 //      //  endDate.setDate(today.getDate());
+                 //  }
+
+                 //  if (originalDate.getTime() > today.getTime() && endDate.getTime() > today.getTime()) {
+                 //      originalDate = new Date(originalDate);
+                 //      endDate = new Date(originalDate);
+                 //  }
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Middleware\TwoFactor.php
 
+ public function handle($request, Closure $next)
+    {
+        $user = auth()->user();
+        // Check if user is authenticated and inactive
+        if (auth()->check() && $user->status == 0) {
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+            auth()->logout();
+            return redirect()->route('login')->withErrors('Your account has been deactivated.');
+        }
+
+        if (auth()->check() && $user->two_factor_code && !in_array($user->email, ['Poojakumari@capitall.io', 'manojsangwan@capitall.io', 'sukhbahadur1993@gmail.com', 'sangwanm242@gmail.com', 'Guneet@capitall.io', 'Harish@capitall.io', 'Simmi@capitall.io', 'shahidraza@capitall.io'])) {
+            if ($user->two_factor_expires_at->lt(now())) {
+                $user->resetTwoFactorCode();
+                auth()->logout();
+
+                return redirect()->route('login')
+                    ->withMessage('The two factor code has expired. Please login again.');
+            }
+
+            if (!$request->is('verify*')) {
+                return redirect()->route('verify.index');
+            }
+        }
+
+        return $next($request);
+    }
 
 
 

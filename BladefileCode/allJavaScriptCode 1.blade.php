@@ -43,15 +43,931 @@
 {{--  Start Hare --}}
 <script></script>
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding date validtio    --}}
 {{--  Start Hare --}}
-<script></script>
+
+<script>
+    // working 
+    // $('input[name="joining_date"], input[name="leavingdate"]').on('blur', function() {
+    //     var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+    //     var rejoinedExitDate =
+    //         "{{ $rejoineduser->rejoiniedexitdate ?? ($teammember->leavingdate ?? '') }}";
+
+    //     var joinDate = $('input[name="joining_date"]').val();
+    //     var leaveDate = $('input[name="leavingdate"]').val();
+
+    //     // Validate only when both inputs have full valid date format (YYYY-MM-DD)
+    //     if (/^\d{4}-\d{2}-\d{2}$/.test(joinDate) && /^\d{4}-\d{2}-\d{2}$/.test(leaveDate)) {
+    //         var join = new Date(joinDate);
+    //         var leave = new Date(leaveDate);
+
+    //         if (isNaN(join.getTime()) || isNaN(leave.getTime())) {
+    //             return; // skip invalid
+    //         }
+
+    //         if (leave <= join) {
+    //             alert("Please select Leaving Date greater than Joining/Rejoining Date");
+
+    //             // Reset to original values after alert
+    //             $('input[name="joining_date"]').val(rejoiningDate);
+    //             $('input[name="leavingdate"]').val(rejoinedExitDate);
+    //         }
+    //     } else {
+    //         // No validation if the user hasn’t completed the full date yet
+    //         return;
+    //     }
+    // });
+
+    // working 
+    // $('input[name="joining_date"], input[name="leavingdate"]').on('blur', function() {
+    //     var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+    //     var rejoinedExitDate =
+    //         "{{ $rejoineduser->rejoiniedexitdate ?? $teammember->leavingdate }}";
+
+    //     var joinDate = $('input[name="joining_date"]').val();
+    //     var leaveDate = $('input[name="leavingdate"]').val();
+
+    //     console.log("rejoiningDate:", rejoiningDate);
+    //     console.log("rejoinedExitDate:", rejoinedExitDate);
+    //     console.log("joinDate:", joinDate);
+    //     console.log("leaveDate:", leaveDate);
+
+    //     // Only validate if both have values
+    //     if (joinDate && leaveDate) {
+    //         var join = new Date(joinDate);
+    //         var leave = new Date(leaveDate);
+
+    //         if (leave <= join) {
+    //             alert("Please select Leaving Date greater than Joining/Rejoining Date");
+    //             $('input[name="joining_date"]').val(rejoiningDate);
+    //             $('input[name="leavingdate"]').val(rejoinedExitDate);
+    //         }
+    //     }
+    // });
+
+    // var dateValidationTimeout;
+    // $('input[name="joining_date"], input[name="leavingdate"]').on('input', function() {
+    //     clearTimeout(dateValidationTimeout);
+
+    //     dateValidationTimeout = setTimeout(function() {
+    //         var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+    //         var rejoinedExitDate =
+    //             "{{ $rejoineduser->rejoiniedexitdate ?? $teammember->leavingdate }}";
+
+    //         var joinDate = $('input[name="joining_date"]').val();
+    //         var leaveDate = $('input[name="leavingdate"]').val();
+
+    //         if (joinDate && leaveDate && joinDate.length === 10 && leaveDate.length ===
+    //             10) {
+    //             var join = new Date(joinDate);
+    //             var leave = new Date(leaveDate);
+
+    //             if (leave <= join) {
+    //                 alert("Please select Leaving Date greater than Joining/Rejoining Date");
+    //                 $('input[name="joining_date"]').val(rejoiningDate);
+    //                 $('input[name="leavingdate"]').val(rejoinedExitDate);
+    //             }
+    //         }
+    //     }, 2000); // 1 second delay after typing stops
+    // });
+
+    $('input[name="joining_date"], input[name="leavingdate"]').on('blur', function() {
+        var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+        var rejoinedExitDate = "{{ $rejoineduser->rejoiniedexitdate ?? $teammember->leavingdate }}";
+
+        var joinDate = $('input[name="joining_date"]').val();
+        var leaveDate = $('input[name="leavingdate"]').val();
+
+        console.log("rejoiningDate:", rejoiningDate);
+        console.log("rejoinedExitDate:", rejoinedExitDate);
+        console.log("joinDate:", joinDate);
+        console.log("leaveDate:", leaveDate);
+
+        // Only validate if both have values
+        if (joinDate && leaveDate) {
+            var join = new Date(joinDate);
+            var leave = new Date(leaveDate);
+
+            if (leave <= join) {
+                alert("Please select Leaving Date greater than Joining/Rejoining Date");
+                $('input[name="joining_date"]').val(rejoiningDate);
+                $('input[name="leavingdate"]').val(rejoinedExitDate);
+            }
+        }
+    });
+
+
+    $('form').on('submit', function(e) {
+        var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+        var rejoinedExitDate = "{{ $rejoineduser->rejoiniedexitdate ?? $teammember->leavingdate }}";
+
+        var joinDate = $('input[name="joining_date"]').val();
+        var leaveDate = $('input[name="leavingdate"]').val();
+
+        if (joinDate && leaveDate) {
+            var join = new Date(joinDate);
+            var leave = new Date(leaveDate);
+
+            if (leave <= join) {
+                alert("Please select Leaving Date greater than Joining/Rejoining Date");
+                $('input[name="joining_date"]').val(rejoiningDate);
+                $('input[name="leavingdate"]').val(rejoinedExitDate);
+                e.preventDefault(); // Form submit rok de
+                return false;
+            }
+        }
+    });
+
+    var dateValidationTimeout;
+
+    $('input[name="joining_date"], input[name="leavingdate"]').on('input', function() {
+        clearTimeout(dateValidationTimeout);
+
+        dateValidationTimeout = setTimeout(function() {
+            var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+            var rejoinedExitDate =
+                "{{ $rejoineduser->rejoiniedexitdate ?? $teammember->leavingdate }}";
+
+            var joinDate = $('input[name="joining_date"]').val();
+            var leaveDate = $('input[name="leavingdate"]').val();
+
+            // Only validate if both dates are complete (YYYY-MM-DD format)
+            if (joinDate && leaveDate && joinDate.length === 10 && leaveDate.length === 10) {
+                var join = new Date(joinDate);
+                var leave = new Date(leaveDate);
+
+                if (leave <= join) {
+                    alert("Please select Leaving Date greater than Joining/Rejoining Date");
+                    $('input[name="joining_date"]').val(rejoiningDate);
+                    $('input[name="leavingdate"]').val(rejoinedExitDate);
+                }
+            }
+        }, 1000); // 1 second delay after typing stops
+    });
+
+    function validateDates() {
+        var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+        var rejoinedExitDate = "{{ $rejoineduser->rejoiniedexitdate ?? $teammember->leavingdate }}";
+
+        var joinDate = $('input[name="joining_date"]').val();
+        var leaveDate = $('input[name="leavingdate"]').val();
+
+        // Basic format validation
+        var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+        if (joinDate && leaveDate && dateRegex.test(joinDate) && dateRegex.test(leaveDate)) {
+            var join = new Date(joinDate);
+            var leave = new Date(leaveDate);
+
+            if (leave <= join) {
+                alert("Please select Leaving Date greater than Joining/Rejoining Date");
+                $('input[name="joining_date"]').val(rejoiningDate);
+                $('input[name="leavingdate"]').val(rejoinedExitDate);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Blur event for manual typing
+    $('input[name="joining_date"], input[name="leavingdate"]').on('blur', validateDates);
+
+    // Change event for date picker
+    $('input[name="joining_date"], input[name="leavingdate"]').on('change', validateDates);
+
+    // Form submission validation
+    $('form').on('submit', function(e) {
+        if (!validateDates()) {
+            e.preventDefault();
+        }
+    });
+
+
+    $('input[name="joining_date"], input[name="leavingdate"]').on('blur', function() {
+        var rejoiningDate = "{{ $rejoineduser->rejoiningdate ?? '' }}";
+        var rejoinedExitDate = "{{ $rejoineduser->rejoiniedexitdate ?? ($teammember->leavingdate ?? '') }}";
+
+        var joinDate = $('input[name="joining_date"]').val();
+        var leaveDate = $('input[name="leavingdate"]').val();
+
+        // ✅ Validate only when both inputs have full valid date format (YYYY-MM-DD)
+        if (/^\d{4}-\d{2}-\d{2}$/.test(joinDate) && /^\d{4}-\d{2}-\d{2}$/.test(leaveDate)) {
+            var join = new Date(joinDate);
+            var leave = new Date(leaveDate);
+
+            if (isNaN(join.getTime()) || isNaN(leave.getTime())) {
+                return; // skip invalid
+            }
+
+            if (leave <= join) {
+                alert("Please select Leaving Date greater than Joining/Rejoining Date");
+
+                // Reset to original values after alert
+                $('input[name="joining_date"]').val(rejoiningDate);
+                $('input[name="leavingdate"]').val(rejoinedExitDate);
+            }
+        } else {
+            // 👇 No validation if the user hasn’t completed the full date yet
+            return;
+        }
+    });
+
+
+    $(document).on('input change', 'input[name="joining_date"], input[name="leavingdate"]', function() {
+        var $joinInput = $('input[name="joining_date"]');
+        var $leaveInput = $('input[name="leavingdate"]');
+
+        // Original values (for reset on invalid)
+        var originalJoining = "{{ $latest?->date ?? ($teammember->final_joiningdate ?? '') }}";
+        var originalLeaving = "{{ $latest?->exit_date ?? ($teammember->leavingdate ?? '') }}";
+
+        var joinVal = $joinInput.val().trim();
+        var leaveVal = $leaveInput.val().trim();
+
+        // Skip if both are empty
+        if (!joinVal || !leaveVal) return;
+
+        // Parse dates (supports manual typing in YYYY-MM-DD)
+        var joinDate = parseDate(joinVal);
+        var leaveDate = parseDate(leaveVal);
+
+        // If parsing failed
+        if (!joinDate || !leaveDate) {
+            // Optional: highlight invalid
+            // $joinInput.toggleClass('is-invalid', !joinDate);
+            // $leaveInput.toggleClass('is-invalid', !leaveDate);
+            return;
+        }
+
+        // Compare: Leaving > Joining
+        if (leaveDate > joinDate) {
+            // Valid → remove any error style
+            $joinInput.removeClass('is-invalid');
+            $leaveInput.removeClass('is-invalid');
+        } else {
+            // Invalid
+            alert("Please select Leaving Date greater than Joining/Rejoining Date");
+
+            // Reset to original safe values
+            $joinInput.val(originalJoining).removeClass('is-invalid');
+            $leaveInput.val(originalLeaving).removeClass('is-invalid');
+        }
+    });
+
+    // Helper: Parse YYYY-MM-DD string to Date object
+    function parseDate(dateStr) {
+        if (!dateStr) return null;
+        var parts = dateStr.split('-');
+        if (parts.length !== 3) return null;
+        var year = parseInt(parts[0], 10);
+        var month = parseInt(parts[1], 10) - 1; // JS months are 0-indexed
+        var day = parseInt(parts[2], 10);
+        if (isNaN(year) || isNaN(month) || isNaN(day)) return null;
+        var date = new Date(year, month, day);
+        // Check if date is valid (e.g., not Feb 30)
+        if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+            return null;
+        }
+        return date;
+    }
+</script>
 {{--  Start Hare --}}
-<script></script>
+
+<script>
+    $(document).ready(function() {
+        $('#enableDesignation').on('change', function() {
+            $('#designationSelect').prop('disabled', !this.checked);
+        });
+
+        // check session for which tab should be active
+        @if (session('activeTab') == 'rejoining')
+            $('#pills-user-tab').tab('show');
+        @endif
+
+        $('.alert-success, .alert-danger').delay(5000).fadeOut(400);
+    });
+</script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
-<script></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var table = $('#examplee').DataTable({
+            "pageLength": 100,
+            dom: 'Bfrtip',
+            "order": [
+                [0, "desc"]
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                // {
+                //     extend: 'excelHtml5',
+                //     action: function(e, dt, button, config) {
+                //         // Prepare data array
+                //         var data = [];
+
+                //         // Header 15,  columns 8 assignment + 7 invoice
+                //         var headers = [
+                //             'Assignment Code', 'Client Name', 'Assignment Name',
+                //             'Partner Name', 'Document Completed Date',
+                //             '% of Document Completed', 'Status',
+                //             'Assignment Closed Date', 'Assignment Created Date',
+                //             'Invoice Number', 'Date of Invoice',
+                //             'Basic Invoice Amount', 'OPE', 'GST',
+                //             'Total Invoice Amount', 'Payment Status'
+                //         ];
+                //         data.push(headers);
+
+                //         // every <tr> in the original table
+                //         $('#examplee tbody tr').each(function() {
+                //             var $tr = $(this);
+                //             var invoices = $tr.data('invoices') || [];
+
+                //             // Main assignment row 8 columns
+                //             var mainRow = [];
+
+                //             // we use :eq() because the first <td> id is hidden
+                //             mainRow.push($tr.find('td:eq(1)').text()
+                //                 .trim()); // Assignment Code
+                //             mainRow.push($tr.find('td:eq(2)').text()
+                //                 .trim()); // Client Name
+                //             mainRow.push($tr.find('td:eq(3)').text()
+                //                 .trim()); // Assignment Name
+                //             mainRow.push($tr.find('td:eq(4)').text()
+                //                 .trim()); // Partner Name
+                //             mainRow.push($tr.find('td:eq(5)').text()
+                //                 .trim()); // Document Completed Date
+                //             mainRow.push($tr.find('td:eq(6)').text()
+                //                 .trim()); // % of Document Completed
+                //             mainRow.push($tr.find('td:eq(7)').text().trim()); // Status
+                //             mainRow.push($tr.find('td:eq(8)').text()
+                //                 .trim()); // Assignment Closed Date
+                //             mainRow.push($tr.find('td:eq(9)').text()
+                //                 .trim()); // Assignment Created Date
+
+                //             // remaining 7 invoice columns with empty strings
+                //             for (var i = 0; i < 7; i++) mainRow.push('');
+                //             data.push(mainRow);
+
+                //             // //Invoice row if any
+                //             invoices.forEach(function(inv) {
+                //                 var invRow = [];
+
+                //                 // 8 empty cells for the assignment part
+                //                 for (var j = 0; j < 9; j++) invRow.push('');
+
+                //                 // Invoice fields
+                //                 invRow.push(inv.invoice_id ?? 'N/A');
+                //                 invRow.push(
+                //                     inv.created_at ?
+                //                     new Date(inv.created_at).toISOString()
+                //                     .split('T')[0] :
+                //                     'N/A'
+                //                 );
+                //                 invRow.push(inv.amount ?? 0);
+                //                 invRow.push(inv.pocketexpenseamount ?? 0);
+                //                 invRow.push((inv.total ?? 0) - (inv.amount ??
+                //                     0)); // GST
+                //                 invRow.push(inv.total ?? 0);
+                //                 invRow.push(
+                //                     inv.paymentstatus == null ?
+                //                     'Not Received' :
+                //                     (inv.paymentstatus ?? 'N/A')
+                //                 );
+
+                //                 data.push(invRow);
+                //             });
+                //         });
+
+                //         //Export with SheetJS (XLSX)
+                //         var ws = XLSX.utils.aoa_to_sheet(data);
+                //         var wb = XLSX.utils.book_new();
+                //         XLSX.utils.book_append_sheet(wb, ws, 'Assignments');
+                //         wb = applyExcelStyling(wb);
+                //         XLSX.writeFile(wb, 'assignments_completed.xlsx');
+                //     }
+
+
+                // },
+                {
+                    extend: 'excelHtml5',
+                    action: function(e, dt, button, config) {
+                        // Prepare data array
+                        var data = [];
+                        // Header 16,  columns 9 assignment + 7 invoice
+                        var headers = [
+                            'Assignment Code', 'Client Name', 'Assignment Name',
+                            'Partner Name', 'Document Completed Date',
+                            '% of Document Completed', 'Status',
+                            'Assignment Closed Date', 'Assignment Created Date',
+                            'Invoice Number', 'Date of Invoice',
+                            'Basic Invoice Amount', 'OPE', 'GST',
+                            'Total Invoice Amount', 'Payment Status'
+                        ];
+                        data.push(headers);
+
+                        // Use DataTables to get only parent rows
+                        table.rows({
+                            page: 'current'
+                        }).every(function(rowIdx, tableLoop, rowLoop) {
+                            var tr = this.node();
+                            var $tr = $(tr);
+
+                            if ($tr.hasClass('child') || $tr.prev().hasClass('shown')) {
+                                return; // Skip child rows
+                            }
+
+                            var invoices = $tr.data('invoices') || [];
+
+                            // Main assignment row 9 columns
+                            var mainRow = [];
+                            // we use :eq() because the first <td> id is hidden
+                            mainRow.push($tr.find('td:eq(1)').text()
+                                .trim()); // Assignment Code
+                            mainRow.push($tr.find('td:eq(2)').text()
+                                .trim()); // Client Name
+                            mainRow.push($tr.find('td:eq(3)').text()
+                                .trim()); // Assignment Name
+                            mainRow.push($tr.find('td:eq(4)').text()
+                                .trim()); // Partner Name
+                            mainRow.push($tr.find('td:eq(5)').text()
+                                .trim()); // Document Completed Date
+                            mainRow.push($tr.find('td:eq(6)').text()
+                                .trim()); // % of Document Completed
+                            mainRow.push($tr.find('td:eq(7)').text().trim()); // Status
+                            mainRow.push($tr.find('td:eq(8)').text()
+                                .trim()); // Assignment Closed Date
+                            mainRow.push($tr.find('td:eq(9)').text()
+                                .trim()); // Assignment Created Date
+
+                            // remaining 7 invoice columns with empty strings
+                            for (var i = 0; i < 7; i++) mainRow.push('');
+                            data.push(mainRow);
+
+                            // Invoice row if any
+                            invoices.forEach(function(inv) {
+                                var invRow = [];
+
+                                // 9 empty cells for the assignment part
+                                for (var j = 0; j < 9; j++) invRow.push(
+                                    '');
+
+                                // Invoice fields 
+                                invRow.push(inv.invoice_id ?? 'N/A');
+                                invRow.push(
+                                    inv.created_at ?
+                                    new Date(inv.created_at).toISOString()
+                                    .split('T')[0] :
+                                    'N/A'
+                                );
+                                invRow.push(inv.amount ?? 0);
+                                invRow.push(inv.pocketexpenseamount ?? 0);
+                                invRow.push((inv.total ?? 0) - (inv.amount ??
+                                    0)); // GST
+                                invRow.push(inv.total ?? 0);
+                                invRow.push(
+                                    inv.paymentstatus == null ?
+                                    'Not Received' :
+                                    (inv.paymentstatus ?? 'N/A')
+                                );
+                                data.push(invRow);
+                            });
+                        });
+
+                        //Export with SheetJS (XLSX)
+                        var ws = XLSX.utils.aoa_to_sheet(data);
+                        var wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, 'Assignments');
+                        wb = applyExcelStyling(wb);
+                        XLSX.writeFile(wb, 'assignments_completed.xlsx');
+                    }
+                },
+                'colvis'
+            ]
+        });
+
+        // click on invoice number count 
+        $('#examplee tbody').on('click', '.toggle-invoices', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // expand row hide
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // expand row show
+                var invoices = tr.data('invoices');
+                var html = '<div class="p-3" style="background-color: white">' +
+                    '<h6 style="display: flex; justify-content: space-between; align-items: center;">' +
+                    '<b>Invoice Details</b>' +
+                    '<i class="fa fa-times close-icon" style="cursor: pointer;"></i>' +
+                    '</h6>' +
+                    '<table class="table table-sm table-bordered">' +
+                    '<thead><tr>' +
+                    '<th>Invoice Number</th><th>Date of Invoice</th><th>Basic Invoice Amount</th><th>OPE</th><th>GST</th><th>Total Invoice Amount</th><th>Payment Status</th>' +
+                    '</tr></thead><tbody>';
+
+                invoices.forEach(function(inv) {
+                    let paymentstatusBadge = '';
+
+                    if (inv.paymentstatus == null) {
+                        paymentstatusBadge = '<b style="color:red;">Not Received</b>';
+                    } else {
+                        paymentstatusBadge = '<b style="color:#28A745;">' + (inv
+                            .paymentstatus ??
+                            'N/A') + '</b>';
+
+                    }
+
+                    html += '<tr>' +
+                        '<td>' + (inv.invoice_id ?? 'N/A') + '</td>' +
+                        '<td>' + (inv.created_at ? new Date(inv.created_at).toISOString().split(
+                            "T")[0] : 'N/A') + '</td>' +
+                        '<td>' + (inv.amount ?? 0) + '</td>' +
+                        '<td>' + (inv.pocketexpenseamount ?? 0) + '</td>' +
+                        '<td>' + ((inv.total ?? 0) - (inv.amount ?? 0)) + '</td>' +
+                        '<td>' + (inv.total ?? 0) + '</td>' +
+                        '<td>' + paymentstatusBadge + '</td>' +
+                        '</tr>';
+                });
+
+                html += '</tbody></table></div>';
+
+                row.child(html).show();
+                tr.addClass('shown');
+            }
+        });
+
+        $('#examplee tbody').on('click', '.close-icon', function(e) {
+            // prevent toggle-invoices click
+            e.stopPropagation();
+
+            // find the parent row from the child row div
+            var tr = $(this).closest('tr')
+                .prev();
+            var row = table.row(tr);
+            row.child.hide();
+            tr.removeClass('shown');
+        });
+
+        function applyExcelStyling(workbook) {
+            var ws = workbook.Sheets["Assignments"];
+
+            ws['!cols'] = [{
+                    wch: 18
+                }, // Assignment Code
+                {
+                    wch: 22
+                }, // Client Name
+                {
+                    wch: 30
+                }, // Assignment Name
+                {
+                    wch: 22
+                }, // Partner Name
+                {
+                    wch: 22
+                }, // Document Completed Date
+                {
+                    wch: 22
+                }, //% of Document Completed
+                {
+                    wch: 15
+                }, // Status
+                {
+                    wch: 22
+                }, // Assignment Closed Date
+                {
+                    wch: 22
+                }, // Assignment Created Date
+                {
+                    wch: 18
+                }, // Invoice Number
+                {
+                    wch: 18
+                }, // Date of Invoice
+                {
+                    wch: 18
+                }, // Basic Amount
+                {
+                    wch: 12
+                }, // OPE
+                {
+                    wch: 12
+                }, // GST
+                {
+                    wch: 18
+                }, // Total Amount
+                {
+                    wch: 18
+                } // Payment Status
+            ];
+
+            return workbook;
+        }
+
+        $('#examplee thead tr').clone(true).addClass('filters').appendTo('#examplee thead');
+        $('#examplee thead .filters th').each(function() {
+            var title = $(this).text();
+            var data_name = $(this).data('name');
+            var data_filter = $(this).data('filter');
+
+            if (title == 'SR.' || title == 'Options' || data_name == '#' || data_filter == 'false') {
+                $(this).html('');
+            } else {
+                $(this).html('<input type="text" class="form-control" placeholder="' + title + '" />');
+            }
+        });
+
+        $('#examplee thead .filters input').on('blur keyup change', function() {
+            var columnIndex = $(this).parent().index();
+            table.column(columnIndex).search($(this).val()).draw();
+        });
+
+    });
+</script>
+{{--  Start Hare --}}
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var table = $('#examplee').DataTable({
+            "pageLength": 100,
+            dom: 'Bfrtip',
+            "order": [
+                [0, "desc"]
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text: 'Excel with Invoices',
+                    action: function(e, dt, button, config) {
+                        // Prepare data array
+                        var data = [];
+
+                        // Header 15,  columns 8 assignment + 7 invoice
+                        var headers = [
+                            'Assignment Code', 'Client Name', 'Assignment Name',
+                            'Partner Name', 'Document Completed Date', 'Status',
+                            'Assignment Closed Date', 'Assignment Created Date',
+                            'Invoice Number', 'Date of Invoice',
+                            'Basic Invoice Amount', 'OPE', 'GST',
+                            'Total Invoice Amount', 'Payment Status'
+                        ];
+                        data.push(headers);
+
+                        // every <tr> in the original table
+                        $('#examplee tbody tr').each(function() {
+                            var $tr = $(this);
+                            var invoices = $tr.data('invoices') || [];
+
+                            // Main assignment row 8 columns
+                            var mainRow = [];
+
+                            // we use :eq() because the first <td> id is hidden
+                            mainRow.push($tr.find('td:eq(1)').text()
+                                .trim()); // Assignment Code
+                            mainRow.push($tr.find('td:eq(2)').text()
+                                .trim()); // Client Name
+                            mainRow.push($tr.find('td:eq(3)').text()
+                                .trim()); // Assignment Name
+                            mainRow.push($tr.find('td:eq(4)').text()
+                                .trim()); // Partner Name
+                            mainRow.push($tr.find('td:eq(5)').text()
+                                .trim()); // Document Completed Date
+                            mainRow.push($tr.find('td:eq(6)').text().trim()); // Status
+                            mainRow.push($tr.find('td:eq(7)').text()
+                                .trim()); // Assignment Closed Date
+                            mainRow.push($tr.find('td:eq(8)').text()
+                                .trim()); // Assignment Created Date
+
+                            // remaining 7 invoice columns with empty strings
+                            for (var i = 0; i < 7; i++) mainRow.push('');
+                            data.push(mainRow);
+
+                            //Invoice row if any
+                            invoices.forEach(function(inv) {
+                                var invRow = [];
+
+                                // 8 empty cells for the assignment part
+                                for (var j = 0; j < 8; j++) invRow.push('');
+
+                                // Invoice fields
+                                invRow.push(inv.invoice_id ?? 'N/A');
+                                invRow.push(
+                                    inv.created_at ?
+                                    new Date(inv.created_at).toISOString()
+                                    .split('T')[0] :
+                                    'N/A'
+                                );
+                                invRow.push(inv.amount ?? 0);
+                                invRow.push(inv.pocketexpenseamount ?? 0);
+                                invRow.push((inv.total ?? 0) - (inv.amount ??
+                                    0)); // GST
+                                invRow.push(inv.total ?? 0);
+                                invRow.push(
+                                    inv.paymentstatus == null ?
+                                    'Not Received' :
+                                    (inv.paymentstatus ?? 'N/A')
+                                );
+
+                                data.push(invRow);
+                            });
+                        });
+
+                        //Export with SheetJS (XLSX)
+                        var ws = XLSX.utils.aoa_to_sheet(data);
+                        var wb = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(wb, ws, 'Assignments');
+                        XLSX.writeFile(wb, 'assignments_completed.xlsx');
+                    }
+                },
+
+                // {
+                //     extend: 'excelHtml5',
+                //     text: 'Excel with Invoices (All)',
+                //     action: function(e, dt, button, config) {
+                //         var data = [];
+
+                //         // Header
+                //         var headers = [
+                //             'Assignment Code', 'Client Name', 'Assignment Name',
+                //             'Partner Name', 'Document Completed Date', 'Status',
+                //             'Assignment Closed Date', 'Assignment Created Date',
+                //             'Invoice Number', 'Date of Invoice',
+                //             'Basic Invoice Amount', 'OPE', 'GST',
+                //             'Total Invoice Amount', 'Payment Status'
+                //         ];
+                //         data.push(headers);
+
+                //         // Get ALL rows from DataTable (ignores pagination, search, etc.)
+                //         dt.rows({
+                //             page: 'all'
+                //         }).every(function() {
+                //             var tr = this.node(); // <tr> element
+                //             var $tr = $(tr);
+                //             var invoices = $tr.data('invoices') || [];
+
+                //             // --- Main Assignment Row ---
+                //             var mainRow = [
+                //                 $tr.find('td:eq(1)').text()
+                //                 .trim(), // Assignment Code
+                //                 $tr.find('td:eq(2)').text().trim(), // Client Name
+                //                 $tr.find('td:eq(3)').text()
+                //                 .trim(), // Assignment Name
+                //                 $tr.find('td:eq(4)').text().trim(), // Partner Name
+                //                 $tr.find('td:eq(5)').text()
+                //                 .trim(), // Document Completed Date
+                //                 $tr.find('td:eq(6)').text().trim(), // Status
+                //                 $tr.find('td:eq(7)').text()
+                //                 .trim(), // Assignment Closed Date
+                //                 $tr.find('td:eq(8)').text()
+                //                 .trim() // Assignment Created Date
+                //             ];
+                //             // Add 7 empty cells for invoice columns
+                //             for (var i = 0; i < 7; i++) mainRow.push('');
+                //             data.push(mainRow);
+
+                //             // --- Invoice Rows ---
+                //             invoices.forEach(function(inv) {
+                //                 var invRow = ['', '', '', '', '', '', '',
+                //                     ''
+                //                 ]; // 8 empty for assignment
+
+                //                 invRow.push(inv.invoice_id ?? 'N/A');
+                //                 invRow.push(
+                //                     inv.created_at ?
+                //                     new Date(inv.created_at).toISOString()
+                //                     .split('T')[0] :
+                //                     'N/A'
+                //                 );
+                //                 invRow.push(inv.amount ?? 0);
+                //                 invRow.push(inv.pocketexpenseamount ?? 0);
+                //                 invRow.push((inv.total ?? 0) - (inv.amount ??
+                //                     0)); // GST
+                //                 invRow.push(inv.total ?? 0);
+                //                 invRow.push(
+                //                     inv.paymentstatus == null ?
+                //                     'Not Received' :
+                //                     (inv.paymentstatus ?? 'N/A')
+                //                 );
+
+                //                 data.push(invRow);
+                //             });
+                //         });
+
+                //         // Export
+                //         var ws = XLSX.utils.aoa_to_sheet(data);
+                //         var wb = XLSX.utils.book_new();
+                //         XLSX.utils.book_append_sheet(wb, ws, "Assignments");
+                //         XLSX.writeFile(wb, 'all_assignments_with_invoices.xlsx');
+                //     }
+                // },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+
+        // click on invoice number count 
+        $('#examplee tbody').on('click', '.toggle-invoices', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // expand row hide
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // expand row show
+                var invoices = tr.data('invoices');
+                var html = '<div class="p-3" style="background-color: white">' +
+                    '<h6 style="display: flex; justify-content: space-between; align-items: center;">' +
+                    '<b>Invoice Details</b>' +
+                    '<i class="fa fa-times close-icon" style="cursor: pointer;"></i>' +
+                    '</h6>' +
+                    '<table class="table table-sm table-bordered">' +
+                    '<thead><tr>' +
+                    '<th>Invoice Number</th><th>Date of Invoice</th><th>Basic Invoice Amount</th><th>OPE</th><th>GST</th><th>Total Invoice Amount</th><th>Payment Status</th>' +
+                    '</tr></thead><tbody>';
+
+                invoices.forEach(function(inv) {
+                    let paymentstatusBadge = '';
+
+                    if (inv.paymentstatus == null) {
+                        paymentstatusBadge = '<b style="color:red;">Not Received</b>';
+                    } else {
+                        paymentstatusBadge = '<b style="color:#28A745;">' + (inv
+                            .paymentstatus ??
+                            'N/A') + '</b>';
+
+                    }
+
+                    html += '<tr>' +
+                        '<td>' + (inv.invoice_id ?? 'N/A') + '</td>' +
+                        '<td>' + (inv.created_at ? new Date(inv.created_at).toISOString().split(
+                            "T")[0] : 'N/A') + '</td>' +
+                        '<td>' + (inv.amount ?? 0) + '</td>' +
+                        '<td>' + (inv.pocketexpenseamount ?? 0) + '</td>' +
+                        '<td>' + ((inv.total ?? 0) - (inv.amount ?? 0)) + '</td>' +
+                        '<td>' + (inv.total ?? 0) + '</td>' +
+                        '<td>' + paymentstatusBadge + '</td>' +
+                        '</tr>';
+                });
+
+                html += '</tbody></table></div>';
+
+                row.child(html).show();
+                tr.addClass('shown');
+            }
+        });
+
+        $('#examplee tbody').on('click', '.close-icon', function(e) {
+            // prevent toggle-invoices click
+            e.stopPropagation();
+
+            // find the parent row from the child row div
+            var tr = $(this).closest('tr')
+                .prev();
+            var row = table.row(tr);
+            row.child.hide();
+            tr.removeClass('shown');
+        });
+    });
+</script>
 {{--  regarding filter --}}
 <script></script>
 

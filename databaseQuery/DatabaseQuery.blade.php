@@ -17,6 +17,29 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+CREATE TABLE `user_staffcode_history` (
+`id` INT(11) NOT NULL AUTO_INCREMENT,
+`teammember_id` INT(10) NOT NULL,
+`role_id` INT(11) NOT NULL,
+`staff_code` VARCHAR(20) NOT NULL,
+`staffcodenumber` INT(11) NOT NULL,
+`change_type` ENUM('promotion','rejoining_same_post','rejoining_other_post') NOT NULL,
+`effective_from` DATE NOT NULL,
+`effective_to` DATE DEFAULT NULL,
+`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+`updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY (`id`)
+);
+
+
+<pre>
+  | id | teammember_id | role_id | staff_code | change_type          | effective_from | effective_to |
+| -- | ------------- | ------- | ---------- | -------------------- | -------------- | ------------ |
+| 1  | 780           | 15      | S1014      | rejoining_same_post  | 2024-05-01     | 2024-12-01   |
+| 2  | 780           | 14      | M1094      | promotion            | 2024-12-02     | 2025-10-19   |
+| 3  | 780           | 13      | P1005      | rejoining_other_post | 2025-10-20     | NULL         |
+
+</pre>
 {{-- * regarding max value   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
@@ -177,7 +200,7 @@ with
 CREATE TABLE IF NOT EXISTS `table_name`
 
 {{--  Start Hare --}}
-{{-- * regarding databse import using Cmd / regarding import  --}}
+{{-- * regarding database import using Cmd / regarding import / regarding phpmyadmin  --}}
 {{--  Start Hare --}}
 
 {{--  Database connect with cmd --}}
@@ -195,9 +218,9 @@ Aapko phpMyAdmin mein jo bhi database hai uski list dikh jayegi!
 {{--  Start Hare --}}
 1.Database import using command / regarding import database
 cd C:\xampp\mysql\bin folder me cmd open kare using adminstrate
-{{-- 1.mysql -u root kgsdemo < "C:\xampp\htdocs\admin_cronapi.sql"  --}}
+{{-- 1.mysql -u root vsalive < "C:\xampp\htdocs\database\vsalive.sql"  --}}
 
-check databse and tables 
+check databse and tables
 mysql -u root kgsdemo
 SHOW TABLES;
 

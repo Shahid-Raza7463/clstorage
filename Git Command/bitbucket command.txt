@@ -1,5 +1,21 @@
 GIT AND BITBUCKET
 ######################################################################################
+######################################################################################
+######################################################################################
+bit bucket me already code dala tha but bitbucket se repo delete kar diya gya then 
+
+git config --global --add safe.directory C:/xampp/htdocs/vsademo
+git remote -v
+git status
+
+
+(Ye changes kahin lose nahi honge)
+git add .
+git commit -m "Current code moved to vsa-demo branch"
+git checkout -b vsa-demo
+git push -u origin vsa-demo
+
+######################################################################################
 i am using this for bitbucket for first time 
 
 git init

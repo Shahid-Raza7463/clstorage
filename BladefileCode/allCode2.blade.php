@@ -87,23 +87,428 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+                                    <td>
+                                        {{ $row->totalinvoiceamt ? number_format($row->totalinvoiceamt, 0, '.', ',') : 'N/A' }}
+                                    </td>
 {{--  Start Hare --}}
+<table id="examplee" class="table display table-bordered table-striped table-hover">
+    <thead>
+        <tr>
+            <th style="display: none;">id</th>
+            <th class="textfixed">Assignment Code</th>
+            <th class="textfixed">Client Name</th>
+            <th class="textfixed">Assignment Name</th>
+            <th class="textfixed">Partner Name</th>
+            <th class="textfixed">Document Completed Date</th>
+            <th class="textfixed">Status</th>
+            <th class="textfixed">Assignment Closed Date</th>
+            <th class="textfixed">Assignment Created Date</th>
+            <th class="textfixed">Total Invoices</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($assignments as $row)
+            @php
+                $filteredInvoices = $row->invoices->where('status', 2);
+                $hasInvoices = $filteredInvoices->count() >= 1;
+                $statusColor =
+                    $row->assignmentBudgeting &&
+                    $row->assignmentBudgeting->percentclosedate &&
+                    $row->invoices->isNotEmpty()
+                        ? 'success'
+                        : 'danger';
+                $statusText =
+                    $row->assignmentBudgeting &&
+                    $row->assignmentBudgeting->percentclosedate &&
+                    $row->invoices->isNotEmpty()
+                        ? 'Completed'
+                        : 'Not Completed';
+            @endphp
+
+            <!-- Main Assignment Row -->
+            <tr class="assignment-row {{ $hasInvoices ? 'has-invoices' : '' }}">
+                <td style="display: none;">{{ $row->id }}</td>
+                <td class="fw-semibold text-primary">{{ $row->assignmentgenerate_id }}</td>
+                <td>{{ optional($row->assignmentBudgeting->client)->client_name ?? 'N/A' }}</td>
+                <td class="textfixed">{{ optional($row->assignmentBudgeting)->assignmentname ?? 'N/A' }}
+                </td>
+                <td>{{ optional($row->leadPartner)->team_member ?? 'N/A' }}</td>
+                <td class="text-nowrap">
+                    {{ optional($row->assignmentBudgeting)->percentclosedate ?? 'N/A' }}</td>
+                <td class="textfixed">
+                    <span class="badge bg-{{ $statusColor }}">{{ $statusText }}</span>
+                </td>
+                <td class="text-nowrap">
+                    {{ $row->assignmentBudgeting && $row->assignmentBudgeting->otpverifydate
+                        ? date('Y-m-d', strtotime($row->assignmentBudgeting->otpverifydate))
+                        : 'N/A' }}
+                </td>
+                <td class="text-nowrap">{{ date('Y-m-d', strtotime($row->created_at)) }}</td>
+                <td>
+                    <span class="badge {{ $hasInvoices ? 'bg-success' : 'bg-secondary' }} px-2 py-1">
+                        {{ $filteredInvoices->count() }}
+                    </span>
+                </td>
+            </tr>
+
+            <!-- Invoice Details Row -->
+            @if ($hasInvoices)
+                <tr class="invoice-details-row">
+                    <td colspan="10" class="p-0 border-0">
+                        <div class="invoice-container m-3 p-3 bg-light rounded border">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0 text-dark fw-bold">
+                                    <i class="fas fa-file-invoice me-2"></i>
+                                    Invoice Details
+                                    <small class="text-muted ms-2">({{ $filteredInvoices->count() }}
+                                        invoices)</small>
+                                </h6>
+                                <span class="badge bg-info">Total Amount:
+                                    ₹{{ number_format($filteredInvoices->sum('total') ?? 0, 2) }}</span>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th width="15%">Invoice Number</th>
+                                            <th width="12%">Date of Invoice</th>
+                                            <th width="15%">Basic Amount</th>
+                                            <th width="12%">OPE</th>
+                                            <th width="12%">GST</th>
+                                            <th width="15%">Total Amount</th>
+                                            <th width="19%">Payment Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($filteredInvoices as $invoice)
+                                            @php
+                                                $gstAmount = ($invoice->total ?? 0) - ($invoice->amount ?? 0);
+                                                $paymentStatus = $invoice->paymentstatus;
+                                                $statusBadge = $paymentStatus
+                                                    ? '<span class="badge bg-success">' . e($paymentStatus) . '</span>'
+                                                    : '<span class="badge bg-danger">Not Received</span>';
+                                            @endphp
+                                            <tr>
+                                                <td class="fw-semibold text-primary">
+                                                    {{ $invoice->invoice_id ?? 'N/A' }}</td>
+                                                <td class="text-nowrap">
+                                                    {{ $invoice->created_at ? date('M d, Y', strtotime($invoice->created_at)) : 'N/A' }}
+                                                </td>
+                                                <td class="text-success fw-semibold">
+                                                    ₹{{ number_format($invoice->amount ?? 0, 2) }}</td>
+                                                <td>₹{{ number_format($invoice->pocketexpenseamount ?? 0, 2) }}
+                                                </td>
+                                                <td class="text-info">
+                                                    ₹{{ number_format($gstAmount, 2) }}</td>
+                                                <td class="fw-bold text-dark">
+                                                    ₹{{ number_format($invoice->total ?? 0, 2) }}</td>
+                                                <td>{!! $statusBadge !!}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    @if ($filteredInvoices->count() > 1)
+                                        <tfoot class="table-active">
+                                            <tr>
+                                                <td colspan="2" class="fw-bold text-end">Totals:</td>
+                                                <td class="fw-bold">
+                                                    ₹{{ number_format($filteredInvoices->sum('amount') ?? 0, 2) }}
+                                                </td>
+                                                <td class="fw-bold">
+                                                    ₹{{ number_format($filteredInvoices->sum('pocketexpenseamount') ?? 0, 2) }}
+                                                </td>
+                                                <td class="fw-bold">
+                                                    ₹{{ number_format($filteredInvoices->sum('total') - $filteredInvoices->sum('amount'), 2) }}
+                                                </td>
+                                                <td class="fw-bold">
+                                                    ₹{{ number_format($filteredInvoices->sum('total') ?? 0, 2) }}
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    @endif
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            @endif
+        @endforeach
+    </tbody>
+</table>
+{{-- ! End hare --}}
+{{-- * regarding  --}}
+{{--  Start Hare --}}
+<select class="language form-control" id="categoryy" name="teammember">
+    <option value="">Please Select One</option>
+    @php
+        $latestStaffCodes = DB::table('teamrolehistory')
+            ->select('teammember_id', 'newstaff_code')
+            ->whereIn('id', function ($query) {
+                $query->selectRaw('MAX(id)')->from('teamrolehistory')->groupBy('teammember_id');
+            })
+            ->pluck('newstaff_code', 'teammember_id');
+    @endphp
+    @foreach ($teammember as $teammemberData)
+        @php
+            $teamstaffcode = $latestStaffCodes[$teammemberData->id] ?? $teammemberData->staffcode;
+        @endphp
+        <option value="{{ $teammemberData->id }}">
+            {{ $teammemberData->team_member }} ({{ $teamstaffcode ?? 'N/A' }})
+        </option>
+    @endforeach
+</select>
+@php
+    // Get all latest newstaff_codes grouped by teammember_id
+    $teamRoleHistory = DB::table('teamrolehistory')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ->groupBy('teammember_id')
+        ->map(function ($records) {
+            return $records->first()->newstaff_code;
+        });
+@endphp
+
+@foreach ($teammember as $member)
+    @php
+        // Pick latest newstaff_code if available, else fallback to staffcode
+        $staffCode = $teamRoleHistory[$member->id] ?? $member->staffcode;
+    @endphp
+    <option value="{{ $member->id }}">
+        {{ $member->team_member }} ({{ $staffCode ?? 'N/A' }})
+    </option>
+@endforeach
+
+{{--  Start Hare --}}
+<td>{{ ($row->totalusercost ?? 0) + ($row->totalconveyancesamt ?? 0) }}</td>
+<td>{{ number_format(($row->totalusercost ?? 0) + ($row->totalconveyancesamt ?? 0), 2) }}
+</td>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+<link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet">
+
+@extends('backEnd.layouts.layout') @section('backEnd_content')
+    <div class="content-header row align-items-center m-0">
+        <div class="col-sm-6 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-puzzle-outline"></i></div>
+                <div class="media-body">
+                    <h1 class="font-weight-bold">Home</h1>
+                    <small>Assignment List</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="body-content">
+        <div class="card mb-4">
+            <div class="card-body">
+                <br>
+                <div class="table-responsive">
+                    <table id="examplee" class="table display table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">id</th>
+                                <th class="textfixed">Assignment Code</th>
+                                <th class="textfixed">Client Name</th>
+                                <th class="textfixed">Assignment Name</th>
+                                <th class="textfixed">Partner Name</th>
+                                <th class="textfixed">Document Completed Date</th>
+                                <th class="textfixed">Total Invoices</th>
+                                <th class="textfixed">Status</th>
+                                <th class="textfixed">Assignment Closed Date</th>
+                                <th class="textfixed">Assignment Created Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($assignments as $row)
+                                @php
+                                    $filteredInvoices = $row->invoices->where('status', 2);
+                                @endphp
+                                <tr data-invoices='@json($filteredInvoices)'>
+                                    <td style="display: none;">{{ $row->id }}</td>
+                                    <td>{{ $row->assignmentgenerate_id }}</td>
+                                    <td>{{ optional($row->assignmentBudgeting->client)->client_name ?? 'N/A' }}</td>
+                                    <td class="textfixed">
+                                        {{ optional($row->assignmentBudgeting)->assignmentname ?? 'N/A' }}
+                                    </td>
+                                    <td>{{ optional($row->leadPartner)->team_member ?? 'N/A' }}</td>
+                                    <td>{{ optional($row->assignmentBudgeting)->percentclosedate ?? 'N/A' }}</td>
+                                    <td>
+                                        <span
+                                            class="badge toggle-invoices"style=" background-color: e5e7eb; height: 21px; width: 59px; cursor: pointer;">
+                                            {{ $filteredInvoices->count() }}
+                                        </span>
+                                    </td>
+                                    <td class="textfixed">
+                                        @if ($row->assignmentBudgeting && $row->assignmentBudgeting->percentclosedate && $row->invoices->isNotEmpty())
+                                            <b style="color:green;">Completed</b>
+                                        @else
+                                            <b style="color:red;">Not Completed</b>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{ $row->assignmentBudgeting && $row->assignmentBudgeting->otpverifydate
+                                            ? date('Y-m-d', strtotime($row->assignmentBudgeting->otpverifydate))
+                                            : 'N/A' }}
+                                    </td>
+                                    <td>{{ date('Y-m-d', strtotime($row->created_at)) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var table = $('#examplee').DataTable({
+            dom: 'Bfrtip',
+            "order": [
+                [0, "desc"]
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+
+        // click on invoice number count 
+        $('#examplee tbody').on('click', '.toggle-invoices', function() {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // expand row hide
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // expand row show
+                var invoices = tr.data('invoices');
+                var html = '<div class="p-3" style="background-color: white">' +
+                    '<h6 style="display: flex; justify-content: space-between; align-items: center;">' +
+                    '<b>Invoice Details</b>' +
+                    '<i class="fa fa-times close-icon" style="cursor: pointer;"></i>' +
+                    '</h6>' +
+                    '<table class="table table-sm table-bordered">' +
+                    '<thead><tr>' +
+                    '<th>Invoice Number</th><th>Date of Invoice</th><th>Basic Invoice Amount</th><th>OPE</th><th>GST</th><th>Total Invoice Amount</th><th>Payment Status</th>' +
+                    '</tr></thead><tbody>';
+
+                invoices.forEach(function(inv) {
+                    let paymentstatusBadge = '';
+
+                    if (inv.paymentstatus == null) {
+                        paymentstatusBadge = '<b style="color:red;">Not Received</b>';
+                    } else {
+                        paymentstatusBadge = '<b style="color:#28A745;">' + (inv
+                            .paymentstatus ??
+                            'N/A') + '</b>';
+
+                    }
+
+                    html += '<tr>' +
+                        '<td>' + (inv.invoice_id ?? 'N/A') + '</td>' +
+                        '<td>' + (inv.created_at ? new Date(inv.created_at).toISOString().split(
+                            "T")[0] : 'N/A') + '</td>' +
+                        '<td>' + (inv.amount ?? 0) + '</td>' +
+                        '<td>' + (inv.pocketexpenseamount ?? 0) + '</td>' +
+                        '<td>' + ((inv.total ?? 0) - (inv.amount ?? 0)) + '</td>' +
+                        '<td>' + (inv.total ?? 0) + '</td>' +
+                        '<td>' + paymentstatusBadge + '</td>' +
+                        '</tr>';
+                });
+
+                html += '</tbody></table></div>';
+
+                row.child(html).show();
+                tr.addClass('shown');
+            }
+        });
+
+        $('#examplee tbody').on('click', '.close-icon', function(e) {
+            // prevent toggle-invoices click
+            e.stopPropagation();
+
+            // find the parent row from the child row div
+            var tr = $(this).closest('tr')
+                .prev();
+            var row = table.row(tr);
+            row.child.hide();
+            tr.removeClass('shown');
+        });
+    });
+</script>
+
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding badge   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+
+<td>
+    <span class="badge toggle-invoices"style=" background-color: e5e7eb; height: 21px; width: 59px; cursor: pointer;">
+        {{ $filteredInvoices->count() }}
+    </span>
+</td>
+<span class="badge toggle-invoices"
+    style="background-color: #e5e7eb; height: 21px; width: 59px; cursor: pointer; display: inline-block; text-align: center; line-height: 21px;">
+    {{ $filteredInvoices->count() }}
+</span>
+
+
+{{-- <span>
+                                            <i class="fa fa-chevron-right"></i>
+                                            <i class="fa fa-chevron-down"></i>
+                                        </span> --}}
+
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding Eloquent relationships / regarding Eloquent model / regarding relationship  --}}
+
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- ! End hare --}}
-{{-- * regarding  --}}
 {{--  Start Hare --}}
-{{--  Start Hare --}}
+@php
+    $filteredInvoices = $row->invoices->where('status', 2);
+@endphp
+
+<td>{{ $filteredInvoices->pluck('invoice_id')->implode(', ') ?: 'N/A' }}</td>
+<td>{{ $filteredInvoices->pluck('created_at')->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))->implode(', ') ?: 'N/A' }}
+</td>
+<td>{{ $filteredInvoices->pluck('total')->implode(', ') ?: 'N/A' }}</td>
+<td>{{ $filteredInvoices->pluck('pocketexpenseamount')->implode(', ') ?: 'N/A' }}</td>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
