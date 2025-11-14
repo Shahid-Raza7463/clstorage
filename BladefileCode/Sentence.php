@@ -48,6 +48,12 @@ class Sentence extends Command
     // Shahid Raza
 
 
+
+    //  Dear IT Team,
+    // I would like to inform you that I am facing some issues with my laptop. Please look into it and help resolve the issue at the earliest.
+    // Thank you for your support.
+
+
     // I just wanted to inform you that my friend Astha Gupta has applied for the Data Analyst position via email at hr@capitall.io.
     // Kindly have a look at her resume when you get a chance. Thank you
 
@@ -242,7 +248,8 @@ class Sentence extends Command
     // I want to talk to you. Can we talk now
 
     // Yes, this still exists, and it is correct. However, after rejoining, when the admin updates the user's profile, such as their qualification, the warning message is still displayed in that case
-
+    // Yes, Pooja Kumari, it is correct
+    // I have some personal work.
     // After the QA passed the task, I received a bug from the client side on  task VS-395. so i am working on it.
     // After the QA passed the task, I received a bug from the client side on task VS-395. I am currently working on fixing it
 
@@ -443,7 +450,20 @@ class Sentence extends Command
     // I have created the VSA task (ID 332) and deployed it on vsademo. We can test it now
     // It will take me 2 days to complete, excluding the mail-related point
     // The issue has been resolved, please check and let me know in case if it still persists.
-
+    // I received a call from the client, and he assigned me a task which is already solved on VSAdemo but is pending deployment on VSA. I also checked in the Jira backup, and this task has already passed UAT
+    // Atishay Jain, I have created all the UAT passed tasks on GRC. Please check from your side
+    // and i will be working on VSA for the next 2 days, so after 2 days i will take 3 days 
+    // Ma’am, just to confirm, in the meeting, do I need to show only the KPI or include the chart too.
+    // Simmi Ma’am, could you please send an email to Atishay so that I can work on dashboard chart.
+    // Atishay Jain I’m picking up this task. simmi ma’am  I may not be able to confirm the chart-related data at the moment.
+    // Atishay Jain, 4 tasks deployed on vsa and I have already sent tasks name to you. cc prashant 
+    // Pooja Kumari, All bugs completed please check now 
+    // simmi the VSA task will take around 5–6 days, so even with stretching, it won’t be completed sooner. As of now, the VSA work needs to be done on an urgent basis Shahid might handle it midway.
+    // I have checked the chart and would like to discuss it with you. Could you please connect with me
+    // the Cash Flow chart has been implemented as per the meeting video and after that we have approved with shivam 
+    // simmi please provide me the access for the recording I have sent
+    // please let me know the priorities,  should I focus on the dashboard bugs or this issue first. Atishay Jain simmi, cc prashant
+    // should I continue working on the dashboard or switch to VSA? I’m currently working on the dashboard
 
     // 222222222222222222222222222222222222222222222222222222222222222222222
 

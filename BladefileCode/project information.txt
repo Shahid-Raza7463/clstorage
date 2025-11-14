@@ -1,6 +1,34 @@
 password Azaz~123 copy from database 
+
+https://bitbucket.org/capitallio/workspace/overview/
+
+https://13.200.130.146/phpMyAdmin/index.php?route=/&reload=1
+DB_DATABASE=vsademo
+DB_USERNAME=vsademo
+DB_PASSWORD=Vsaaa_@2023
+
+
+DB_DATABASE=admin_cronapi
+DB_USERNAME=cronapi
+DB_PASSWORD=Security@65456
+
+
+
+vsademo Shahid@123
+
+$2y$10$YKDfTaPzwHflBBmO.1v7eu0FqsieDIjL0skuRojNhx1SfLZKwI9m2
+
+ 937 gunnet  Guneet@capitall.io 
+ 936 pooja  Poojakumari@capitall.io
+ 935 simmi  Simmi@capitall.io
+ 951 shahid   shahidraza@capitall.io
+ 
+
+
 $2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
 
+
+https://vsademo.capitall.io/submittedexamleavetimesheet
 
 {{-- * database error /regarding database error --}}
 performanceevaluationforms
@@ -165,22 +193,70 @@ OFF100003 official travel
 #############################################################
 kgsdemo credentials
 
-regarding data 
+regarding data clean on kgsdemo 
+
+
+regarding dashboard data cleaned 
 
 1.assignmentmappings
 2.assignmentbudgetings
 3.assignmentteammappings
-4.assignments
-5.assignmentplannings
+4.assignmentplannings
 
-6.invoices
-7.outstandings
-8.outstationconveyances
-9.payments
+5.invoices
+6.outstandings
+7.outstationconveyances
+8.payments
 
-10.timesheetusers
-11.timesheets
+9.employeepayrolls
+10.budget
+11.Assetticket
+12.annual_independence_declarations
+13.independences
 
+14.timesheetusers
+15.timesheets
+16.vendorlist
+17.tasks
+
+
+
+    $tables = [
+      //* assignments
+      'assignmentmappings',
+      'assignmentbudgetings',
+      'assignmentteammappings',
+      'assignmentplannings',
+
+      'invoices',
+      'outstandings',
+      // 'outstationconveyances',
+      'payments',
+
+      //* assignments
+      // 'employeepayrolls',
+      // 'budget',
+      // 'Assetticket',
+      // 'annual_independence_declarations',
+      // 'independences',
+
+      'timesheetusers',
+      'timesheets',
+      // 'vendorlist',
+      // 'tasks',
+    ];
+
+
+    foreach ($tables as $table) {
+      if (Schema::hasTable($table)) {
+        Schema::drop($table);
+        echo "'{$table}'.<br>";
+      } else {
+        echo "'{$table}'.<br>";
+      }
+    }
+
+    return response('Tables deleted successfully!', 200);
 
 
 
@@ -324,7 +400,23 @@ Role : Partner
 i ma working with atishay sir to UAT
 
 222222222222222222222222222222222222222222222222222222222
-regarding data clean 
+222222222222222222222222222222222222222222222222222222222
+regarding assignment clean / regarding clean
+
+ DB::table('assignmentbudgetings')
+      ->whereNotIn('client_id', [29, 32, 33, 34])
+      ->delete();
+
+
+    DB::table('assignmentteammappings')
+      ->delete();
+
+
+    DB::table('assignmentmappings')
+      ->whereNotIn('assignmentgenerate_id', ['UNA100004', 'OFF100003', 'OFF100004'])
+      ->delete();
+
+regarding data clean on vsademo
 
 1.timesheetreport,
 2.timesheetrequests,
@@ -340,14 +432,22 @@ regarding data clean
 9.teamrolehistory
 10.rejoiningsamepost
 
-11.Users table me role id = 15
-12.teammembers table me leaving date = null and role id = 15
+11.Users table me role id = 14
+12.teammembers table me leavingdate = null and role id = 14
 
 if assignment want to clean then 
+
 13.assignmentmappings
 14.assignmentteammappings
+15.assignmentbudgetings
 
 
+
+
+
+
+
+22222222222222222222222222222222222222222222222222
 
 i need this table to update 
 
@@ -449,6 +549,11 @@ regarding tables delete
 
 
 
+   DB::table('teammembers')
+      ->whereIn('id', [935, 936, 937, 951])
+      ->update([
+        'joining_date' => '2025-08-01',
+      ]);
 
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
     // $authteamid = 844;
@@ -482,7 +587,7 @@ regarding tables delete
     // //   ->where('employee_name', $authteamid)
     // //   ->where('month', 'December')
     // //   ->delete();
-    // // ->update(['teamid' => 8471]);
+    // // ->update(['employee_name' => 8471]);
 
     // dd('successfully done');
 
@@ -628,6 +733,7 @@ teammembers
 anujsomani1@kgsomani.com
 Vinita@54321
 
+Shahid@123
 
 accounts1@kgsomani.com
 Vinita@54321
@@ -662,3 +768,37 @@ todaydate nikal kar todaydate me utna days add kare jo mujhe TentativeStartdate 
         ->where('assignmentbudgetings.date', > yaha closed date se ) 
         ->sum('assignmentmappings.engagementfee');  abhi ye code chal raha tha but isme new logic diya gya hai logic ye hai 
 
+
+
+timesheet/edit/7960
+timesheet/destroy/7961
+
+6590
+
+priyankasharma1@kgsomani.com
+160
+Vinita@54321
+
+hamidraza746308@gmail.com
+
+User Name - shahidraza9@capitall.io
+Password - 21603
+
+
+    DB::table('timesheetreport')
+      ->where('teamid', '!=', 780)
+      ->delete();
+
+
+       // DB::table('timesheetrequests')
+    //   ->where('createdby', '!=', 780)
+    //   ->delete();
+
+    // DB::table('teamrolehistory')
+    //   ->where('teammember_id', '!=', 780)
+    //   ->delete();
+
+
+    // DB::table('teammembers')
+    //   ->whereNotIn('id', [780, 878])
+    //   ->delete();

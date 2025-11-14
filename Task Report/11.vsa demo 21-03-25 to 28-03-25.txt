@@ -679,7 +679,7 @@ Error in "Time Sheet Report". Time sheet days and hours are calculated wrongly i
 
 
 Required OTP to be received to other partner along with Lead Partner, while "Closing an Assignment" and "Confirmation Module"  ```start 
-vsademo ```start 			  
+vsademo, vsalive ```start 			  
 2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 final otp done hare 
 resources\views\backEnd\assignmentconfirmation\index.blade.php
@@ -4936,7 +4936,7 @@ Calendar Dates getting open for around 1 month. ```end hare
 
 
 After a user rejoins, when the admin filters the data, a warning message appears like 'User left on (date)'. ```start 2nd time
-Modification in the Attendance module included in this code 
+Modification in the Attendance module included in this code  ``1122
 
 vsalocal, vsademo, vsalive//..
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -5999,7 +5999,7 @@ Appointment letter - click on Attachment throws error ```end hare
 
 								
 
-Missing Assignment in the Manager Role ```start
+Missing Assignment in the Manager Role ```start ``1122
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ReportController.php
 remove all // public function who is commented on vsalive and vsademo done 
@@ -6491,7 +6491,7 @@ app\Http\Controllers\AttendanceController.php
 Incorrect Joining date for employee who rejoins ```bugs end hare  
 
 
-In the Team Application tab on the Partner ID, the latest data should appear by default ```start
+In the Team Application tab on the Partner ID, the latest data should appear by default ```start ``1122
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
   public function index()
@@ -6796,7 +6796,7 @@ find it and replace
 In the Team Application tab on the Partner ID, the latest data should appear by default ```end hare 
 
 
-The filter reset functionality should clear all applied filters ```start 
+The filter reset functionality should clear all applied filters ```start ``1122
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\applyleave\teamapplication.blade.php
  value="{{ old('endperiod') }}">
@@ -7491,7 +7491,7 @@ after all li
 
 The design of the navigation button should be fixed. ```end hare 
 
-Modification on Adding Multiple timesheet module ```start
+Modification on Adding Multiple timesheet module ```start ``1122
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\create.blade.php
 
@@ -7765,7 +7765,7 @@ Incorrect spelling in attendance report. ```start hare
 Incorrect spelling in attendance report. end hare 
 
 
-Missing Partner code, in Timesheet report tab. ```start hare 
+Missing Partner code, in Timesheet report tab. ```start hare ``1122
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
 
@@ -8138,7 +8138,7 @@ resources\views\backEnd\timesheet\timesheetdownload.blade.php
 Missing Partner code, in Timesheet report tab. end hare 
 
 
-Incorrect date picking in 'Attendance' module in rejoining case.  ```start
+Incorrect date picking in 'Attendance' module in rejoining case.  ```start ``1122
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TeammemberController.php
 if ($request->leavingdate != null && $request->status == 1) {
@@ -8363,7 +8363,7 @@ find and remove this code
 Incorrect date picking in 'Attendance' module in rejoining case					
 
 
-For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing. ```start
+For the following five clients, Off/Holidays, Official Travel, Unallocated, Seminar/Conference and Apply Leave, the old code is still appearing the old code is still appearing. ```start   ``1122
 vsademo, 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\TimesheetController.php
@@ -10277,7 +10277,7 @@ add this 2 function after searched function
 
 
 
-For the following five clients, Off/Holidays, Official Travel, Unallocated,  Seminar/Conference and Apply Leave, the old code is still appearing. end hare 
+For the following five clients, Off/Holidays, Official Travel, Unallocated, Seminar/Conference and Apply Leave, the old code is still appearing the old code is still appearing. end hare 
 
 
 On the Timesheet Report page, the total hours are exceeding 84 for old data  ```start
@@ -10380,6 +10380,8 @@ On the Timesheet Report page, the total hours are exceeding 84 for old data  ```
 
 I have observed a bug in VSA live. The issue is that users are able to submit timesheets in advance for Casual Leave and Exam Leave, even though the timesheet module had already been tested.
 timsheet submit in advance on vsalive ```start hare 
+
+vsalocal, vsademo, vsalive
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\timesheet\index.blade.php
 $startdateofdata = Carbon\Carbon::createFromFormat('Y-m-d', $timesheetsaved->date ?? '');

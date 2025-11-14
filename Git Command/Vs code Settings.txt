@@ -1,7 +1,19 @@
 Regarding Vs code / regarding vscode
 22222222222222222222222222222222
 22222222222222222222222222222222
+regarding multiple select 
+
+cltrl+click one by one select
+cltrl+shift+scrole touchpad multiple select 
+
+
+
 22222222222222222222222222222222
+regarding Suggestions / regarding delay
+Quick Suggestions Delay
+go to setting and search 'Quick Suggestions Delay' then set 1 value 
+
+
 22222222222222222222222222222222
 Theme use only
 1.monokai

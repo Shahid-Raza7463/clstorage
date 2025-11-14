@@ -1,5 +1,28 @@
 Regarding Command prompt
 #################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+#################################################################################
+regarding pdf
+https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/  install 
+and then 
+
+open cmd using adminstrate
+cd C:\xampp\htdocs
+pdftk s1.pdf s2.pdf cat output merged.pdf
+pdftk merged.pdf cat 1-3 5-end output merged_fixed.pdf   page 4 deleted hare 
+pdftk corrupted.pdf output repaired.pdf
+
+
+pdftk C:\xampp\htdocs\s1.pdf C:\xampp\htdocs\s2.pdf cat output C:\xampp\htdocs\merged.pdf
+
+
+
+#################################################################################
 copy any file and folder from one drive to another 
 robocopy "E:\shahid" "D:\Backup\shahid" /E /Z /DCOPY:T /R:3 /W:5
 

@@ -1,4 +1,53 @@
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Admin: Can promote or rejoin any user multiple times across different roles.
+Users: Staff, Manager, and Partner (for whom rejoining and promotion data must display correctly).
+Steps to Navigate:
+Use Admin ID
+1.	Navigate to the application.
+2.	Click on the ‘Promotion/Rejoining’ tab.
+3.	Promote or rejoin a user (either on the same post or a different post).
+After promoting or rejoining a user, we need to test all the points mentioned below:
+•	We can promote a user (Staff to Manager and Manager to Partner).
+•	We cannot promote a user directly from Staff to Partner or Partner to Admin.
+•	We can rejoin a user on the same post or another post (like Staff to Staff, Staff to Manager, etc.).
+1.	If a user rejoins with the same role, the same staff code should be displayed.
+2.	If a user rejoins on another post or is promoted to another post, then in that case:
+3.	Assignment and Assignment-related data (like saved timesheet, submitted timesheet, rejected timesheet, rejected team timesheet,  submitted team timesheet etc.):
+• If a new assignment is created after promotion/rejoining → show the new staff code according to the role-wise staff code.
+• If an old assignment (created before promotion/rejoining) → show the old staff code.
+4.	Apply Leave, Timesheet Request & Leave Request or leave related data:
+• Requests made before rejoining/promotion → old staff code should be displayed.
+• Requests made after rejoining/promotion → new staff code should be displayed according to the role-wise staff code.
+5.	We have to test on the Report, Client/Assignment, Team, Promotion/Rejoining, and Human Resources tabs.
+6.	We need to test all dropdown fields where the staff code appears, hare latest code will be display.
+7.	We have to test all sections on the Dashboard where the staff code is coming.
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+Regarding ETA / Regarding time 
+re joining module version 2
+I have taken 9 days but not completed in 9 days so give time 14 days 
+
+
+22222222222222
+teammember edit per koi bhi work ho to 1 days 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 When admin reject users timesheet after that users edit and submit rejected timesheet
 
 Stepsw:-
@@ -1151,9 +1200,13 @@ The Excel file contains team member names and email IDs. The report should inclu
 4.Team members who have been promoted and, after promotion, have not filled a single timesheet.
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 The quick brown fox jumps over the lazy dog.
+the quic
