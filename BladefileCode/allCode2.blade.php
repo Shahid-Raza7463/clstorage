@@ -81,15 +81,20 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding cache in blade file /   --}}
 {{--  Start Hare --}}
+all cache store this location
+storage\framework\views
+storage\framework\views\2d8ab15d1e529421574a5bed535ae1dd83623bfb.php
+
 {{--  Start Hare --}}
+
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
-                                    <td>
-                                        {{ $row->totalinvoiceamt ? number_format($row->totalinvoiceamt, 0, '.', ',') : 'N/A' }}
-                                    </td>
+<td>
+    {{ $row->totalinvoiceamt ? number_format($row->totalinvoiceamt, 0, '.', ',') : 'N/A' }}
+</td>
 {{--  Start Hare --}}
 <table id="examplee" class="table display table-bordered table-striped table-hover">
     <thead>

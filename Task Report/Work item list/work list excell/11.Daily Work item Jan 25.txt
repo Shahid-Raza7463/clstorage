@@ -1606,11 +1606,141 @@ Sunday
 2.validation on accountatnt approved invoice form completed 
 3.Excel download is not working when clicking on 'Total Invoice'
 
+
+``````````````````````````````````
+
 14-11
 1.KPI "Independence Acceptance Pending" not showing names of Partner who has not filled the independence
 2.i have helped to pooja kumari for testing dashboard 
 
 
+15 and 16 
+
+17-11
+1.actual cost issue (cache related problem). 
+2.i have reviewed the entire HR query flow.
+
+````````````````
+
+18-11
+1.i have reviewed the entire HR query flow.
+2.Help Desk Updates for OMS and Admin Query
+
+
+19-11
+1.UAT complete with atishay 
+2.i have reviewed the entire HR query flow.
+3.Re joining module version 2 deployed on vsa
+
+
+20-11
+1.Re joining module version 2 deployed on vsa 
+2.attendence issue fixed from backend
+
+``````````````````````
+21-11
+1.Assignmnt no showing on jassy gupta portal (bugs)
+2.actual cost issue on cron fixed
+3.vsa new task discussion with bahadur sir.
+4.Help Desk Updates for OMS and Admin Query
+  4.1 OMS Query
+
+22 and 23 staurday and sunday
+
+
+24-11
+sick leave 
+
+25-11
+1.Help Desk Updates for OMS and Admin Query
+  1.1 OMS Query
+  2.validation on form 
+  
+  ``````````````````````````````````
+
+
+26-11
+1.Help Desk Updates for OMS and Admin Query.
+  1.1 OMS Query completed, testing completed and deployed done on crone. 
+
+27-11-2025
+1.forget password issue checked 
+2.multiple recoed created in users table so i have fixed.
+3.sahil timesheet issue checked and explain to atishay. this issue not from our side 
+
+
+28-11
+1.Help Desk Updates for OMS and Admin Query.
+  1.1 Admin Query.
+
+
+29-11-2025
+1.Help Desk Updates for OMS and Admin Query.
+  1.1 Admin Query completed, testing completed and deployed done on crone. 
+
+``````````````````````````````````````````````
+
+30-11-25
+sunday 
+
+
+01-12-2025
+1.Issue in Timesheet for a Rejoined User - Sahil Kumar
+2.Timesheet download Issue
+
+02-12-25
+1.testing vsa task and deployed 
+2.Issue in Timesheet for a Rejoined User - Sahil Kumar
+3.I have completed kt with Atul (Admin Query) 
+4.I have completed kt with Pooja (Admin Query, OMS Query) 
+
+
+03-12-25
+1.All Vsa task updated on excel shared by simmi maam  
+2.Dashboard management deployed on kgs
+
+
+04-12-25
+1.Cache implemeted on Dashboard managemen
+2.Indexing on Dashboard management
+
+
+
+05-12-25
+1.Indexing on Dashboard management completed
+
+
+```````````````````````````````````````
+
+06-12-25
+1.Leave count is not matching for 'Disha' (I have worked on API)
+
+
+07-12-2025
+1.Leave count is not matching for 'Disha'
+2'Not-checking' not showing correct count in some cases.
+3.Column '10.31 AM-12 PM' will be replaced as "10.30 AM-12 PM"
+4.On Time column will include time only till 10:29AM
+
+
+maine prashnat sir se discussed kar liya hu as per prashant Weakend and holidays marked as W,H
+
+On weekend &amp; holidayas well 'L' should be marked
+
+
+
+controller code 
+blade code 
+email code 
+model code 
+
+
+
+client has rejoined without entering the leaving date, due to which user's timesheet could not be submitted. To fix this issue, the timesheet dated 12-05-2025 needs to be either deleted or submitted. Once that is done, the issue will be resolved automatically
+
+auditticket
+
+app\Http\Controllers\DashboardReport.php
 
 
 darftreportdate ko rename karna hai on kgsdemo 
@@ -1630,6 +1760,36 @@ Ctrl + Shift + M
 
 arihant1@kgsomani.com
 	  
-	  
 
+
+1827987560 ajit anydesk id 
+
+
+11-05-2025
+
+
+admin query will be show admin, super admin, anuj sir
+oms query will be show shimmi, super admin, admin not anuj sir 
+
+
+1
+in tasks table
+generateticket_id   bigint(20) , null 
+
+
+
+2
+we have to add budget table 
+
+
+3
+add below column in assignmentbudgetings
+
+finaldraftreportdate	varchar(50)	utf8mb4_unicode_ci		Yes	NULL
+percentclosedate	varchar(300)	utf8mb4_unicode_ci		Yes	NULL
+
+
+4
+reload image will be add
+https://cronapi.capitall.io/backEnd/image/reload.png
 
