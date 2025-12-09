@@ -10,6 +10,77 @@
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Salary Should be encrypted/decrypted in the system
+
+What is the process for payroll calculation?
+
+What is the process for generating the payslip?
+
+Will the payslip be editable manually or not ?
+
+How many leaves are considered paid and unpaid?
+
+Is there any probation period for employees? If yes, how is payroll handled during probation?
+
+Will the payroll rules remain the same for all employees or will they differ based on designation/role?
+
+What will be the payroll cycle — 25th to 26th or 1st to 30th?
+
+If weekly timesheets are submitted, how should they be integrated with payroll?
+
+If a casual leave is not approved, how should it be handled in payroll?
+
+How should payroll be managed when leaves are reverted (revert leave functionality)?
+
+How should payroll be managed when timesheets are rejected ?
+
+In case of a promotion, will the salary be revised or remain the same?
+
+In case of rejoining, will the salary be revised or remain the same?
+
+Is check-in required, If yes, check in connected or not to payroll calculations?
+
+Is check-out required, If yes, check in connected or not to payroll calculations?
+
+Will check-in/check-out be available on the web or mobile app?
+
+What all functionalities should be included in the mobile app?
+
+is half-day functionality or not if yes, how to mange it?
+
+is comp-off leave or not?
+
+If a user checks in or checks out late, how to mange in that case?
+
+What will be the rules for Saturday for staff, managers, and partners?
+
+If a user fills the timesheet for the previous day, how should that be handled?
+
+If a user forgets to check in, in that case how to manage it ?
+
+If a timesheet is rejected, how should payroll be adjusted?
+
+If a user exits the organization on a specific date, how should final payroll be handled?
+
+What will be the payroll approval workflow? (For example: HR approval → Final approval → Accountant approval)
+
+
+
+
+
+
+28.Is there an appointment letter or not?
+29.Is there an increment letter or not?
+30.Is the long weekend applicable or not? If yes, how should it be managed?
+31.How many leaves does a user get in a year?
+32.Blockage: If a leave is not approved and the payslip is generated, will it be auto-approved on the last day of the month, or what will be the process?
+33.Will there be an add-on system to allow users to fill timesheets for the previous month?
+34.If the payslip is generated and later the user submits a timesheet that gets rejected, how should it be handled?
+35.Please confirm the payroll generation components such as PF, TDS, etc.
+36.If a user takes an advance amount, how will that amount be deducted from their salary?
+37.Is the bonus applicable to users or not?
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
 Admin: Can promote or rejoin any user multiple times across different roles.
@@ -1209,4 +1280,3 @@ The Excel file contains team member names and email IDs. The report should inclu
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 The quick brown fox jumps over the lazy dog.
-the quic

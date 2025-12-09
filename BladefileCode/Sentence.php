@@ -10,7 +10,7 @@ class Sentence extends Command
   {
 
 
-
+    // I currently don’t have any pending tasks. Please let me know which module I should work on next.
     //* mail formate 
     // write subject
 
@@ -250,6 +250,7 @@ class Sentence extends Command
     // Yes, this still exists, and it is correct. However, after rejoining, when the admin updates the user's profile, such as their qualification, the warning message is still displayed in that case
     // Yes, Pooja Kumari, it is correct
     // I have some personal work.
+    // i have reviewed the entire HR query flow.
     // After the QA passed the task, I received a bug from the client side on  task VS-395. so i am working on it.
     // After the QA passed the task, I received a bug from the client side on task VS-395. I am currently working on fixing it
 
@@ -286,7 +287,7 @@ class Sentence extends Command
 
     // maam leaving date ke baad user can not login isiliye koi bhi leave apply nahi kar sakta hai 
 
-
+    // Please create both tasks on GRC so that I can pick them
     // client want to redirect url on open leave page when partner click on hare button on mail 
     // I have attached all QA-passed tasks that are currently pending in UAT 
     // I have completed this task and moved it to QA
@@ -294,7 +295,7 @@ class Sentence extends Command
     // since there is delay in code merge of KYC, we can pick up VSA tasks in QA ?
     // Shahid Raza where are we on this
     // where are we on the ticketing system??
-
+    // I am working on a data-related bug, so there is no need to test it. I have already discussed this with Prashant
     // I just want to know if I should pick up the new bug reported via email or continue working on my existing in-progress task
 
     // I am moving the status from IN UAT to Done because this code has been reviewed by Prashant Sir
@@ -366,6 +367,7 @@ class Sentence extends Command
     // The same has been implemented. Please check and confirm.
     // Do let me know in case of any issue.
     // The same will be implemented by EOD
+    // I will deploy it on demo by EOD
     // This is a gentle reminder to you.
     // I am writing to bring to your attention an issue regarding the submitted timesheet. The value entered in the "Filled Day column is exceeding the upper limit,  Kindly look into this matter ASAP.
     // Attached relevant screenshot for your reference.
@@ -432,16 +434,18 @@ class Sentence extends Command
     // this is just for your information. I am sharing the screenshot of my leave for your reference. 
     // simmi ma'am I have not yet received the KRA mail content.
     // , I’ve received the KGS dashboard recording, but I don’t have access to view the video. Kindly provide me with the necessary access.
-
+    // No, this will be completed tomorrow by half morning.
     // 3 things I have checked as mentioned by Vinita that she has added in APK & working fine;
     // But I am checking few other points as well, which I mentioned will take some more time.
     // Please confirm should I complete testing or pause here & start VDR?
+    // I am ready to deploy the VSA task. Can we proceed
     // I am currently working on the VSA task and pausing the KGS dashboard report task for now
     // Please send me all these tables from VSAlive
     // Ok prashant we have already given a due date so align sukhbahadur if possible
     // I am ready to deploy on VSA. Can i deploy it Atishay Jain
     // I am sharing the code with Sukh Bahadur to deploy on the demo. After the update, I will inform here
     // I am working on the VSA issue and pausing work on the Dashboard report
+    // Thanks and noted
     // Can we deploy KRA module on KGS live
     // I have checked on live as well, everything is fine.
     // for birthday Thank you so much for the wonderful wishes!
@@ -464,6 +468,95 @@ class Sentence extends Command
     // simmi please provide me the access for the recording I have sent
     // please let me know the priorities,  should I focus on the dashboard bugs or this issue first. Atishay Jain simmi, cc prashant
     // should I continue working on the dashboard or switch to VSA? I’m currently working on the dashboard
+    // I can not pick the Admin Query task without a proper description. Please update the description, sukhbahadur, so that after implementing the task I can assign it to Pooja Kumari cc prashant, simmi 
+    // inform the person who created it.
+
+    // Salary Should be encrypted/decrypted in the system
+
+    // What is the process for payroll calculation?
+
+    // What is the process for generating the payslip?
+
+    // Will the payslip be editable manually or not ?
+
+    // How many leaves are considered paid and unpaid?
+
+    // Is there any probation period for employees? If yes, how is payroll handled during probation?
+
+    // Will the payroll rules remain the same for all employees or will they differ based on designation/role?
+
+    // What will be the payroll cycle — 25th to 26th or 1st to 30th?
+
+    // If weekly timesheets are submitted, how should they be integrated with payroll?
+
+    // If a casual leave is not approved, how should it be handled in payroll?
+
+    // How should payroll be managed when leaves are reverted (revert leave functionality)?
+
+    // How should payroll be managed when timesheets are rejected ?
+
+    // In case of a promotion, will the salary be revised or remain the same?
+
+    // In case of rejoining, will the salary be revised or remain the same?
+
+    // Is check-in required, If yes, check in connected or not to payroll calculations?
+
+    // Is check-out required, If yes, check in connected or not to payroll calculations?
+
+    // Will check-in/check-out be available on the web or mobile app?
+
+    // What all functionalities should be included in the mobile app?
+
+    // is half-day functionality or not if yes, how to mange it?
+
+    // is comp-off leave or not?
+
+    // If a user checks in or checks out late, how to mange in that case?
+
+    // What will be the rules for Saturday for staff, managers, and partners?
+
+    // If a user fills the timesheet for the previous day, how should that be handled?
+
+    // If a user forgets to check in, in that case how to manage it ?
+
+    // If a timesheet is rejected, how should payroll be adjusted?
+
+    // If a user exits the organization on a specific date, how should final payroll be handled?
+
+    // What will be the payroll approval workflow? (For example: HR approval → Final approval → Accountant approval)
+    // Having network issue at my end
+
+
+    // I need the Admin Query description so that I can pick up this task. Currently, only the OMS query description is available
+    // Is there an appointment letter or not?
+    // Is there an increament letter or not?
+    // 28.Is there an appointment letter or not?
+    // 29.Is there an increment letter or not?
+    // 30.Is the long weekend applicable or not? If yes, how should it be managed?
+    // 31.How many leaves does a user get in a year?
+    // 32.Blockage: If a leave is not approved and the payslip is generated, will it be auto-approved on the last day of the month, or what will be the process?
+    // 33.Will there be an add-on system to allow users to fill timesheets for the previous month?
+    // 34.If the payslip is generated and later the user submits a timesheet that gets rejected, how should it be handled?
+    // 35.Please confirm the payroll generation components such as PF, TDS, etc.
+    // 36.If a user takes an advance amount, how will that amount be deducted from their salary?
+    // 37.Is the bonus applicable to users or not?
+    // Should I start working on this, or should I wait for Shivam’s confirmation?
+    // Please confirm whether I should proceed with this task or wait for Shivam’s approval
+    // I currently don’t have any pending tasks. Please let me know which module I should work on next.
+    // I currently do not have any pending tasks. Please let me know which tasks I should work on next.
+    // I have discussed it with prashant. Weekends and holidays should be marked as ‘W’ and ‘H’ and Also in long weekend.
+    // should I keep a meeting with kgs team at 3 for KT
+    // But eta remains same
+    // All queries resolved prashant,
+    // The Invoice date cannot be before or after the visiting period dates. If any invoice of the said period is raised then the approval limit for food/Travel will be zero. = If dates fall out of travel date show = Null / Not Applicable 
+    // One bug has been resolved and the remaining bugs are still pending
+    // any update on close and archive TC status?
+    // prashant did you meet Kapil. I need to share ETAs on Monday. End of month?
+    // We still need to clarify a few points, and after that, we will be able to estimate the effort level. But this will take time at least 10–15 days (not confirmed yet).
+    // Tripti was asking about its deployment date ?
+    // These points have been discussed between prashant and me. We need to discuss these points.
+
+
 
     // 222222222222222222222222222222222222222222222222222222222222222222222
 

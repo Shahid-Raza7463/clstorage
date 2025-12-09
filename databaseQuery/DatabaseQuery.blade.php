@@ -139,6 +139,164 @@ dd($explain);
 
 
 {{--  Start Hare --}}
+1.assignmentmappings table
+
+
+CREATE INDEX idx_assignmentmappings_assignmentgenerate_id ON assignmentmappings(assignmentgenerate_id);
+
+CREATE INDEX idx_assignmentmappings_created_at ON assignmentmappings(created_at);
+
+CREATE INDEX idx_assignmentmappings_eqcrpartner ON assignmentmappings(eqcrpartner);
+
+CREATE INDEX idx_assignmentmappings_leadpartner ON assignmentmappings(leadpartner);
+
+CREATE INDEX idx_assignmentmappings_otherpartner ON assignmentmappings(otherpartner);
+
+CREATE INDEX idx_assignmentmappings_eqcrapplicability ON assignmentmappings(eqcrapplicability);
+
+CREATE INDEX idx_assignmentmappings_financial_range ON assignmentmappings(created_at, assignmentgenerate_id);
+
+2. assignmentbudgetings table
+
+CREATE INDEX idx_assignmentbudgetings_assignmentgenerate_id ON assignmentbudgetings(assignmentgenerate_id);
+
+CREATE INDEX idx_assignmentbudgetings_status ON assignmentbudgetings(status);
+
+CREATE INDEX idx_assignmentbudgetings_percentclosedate ON assignmentbudgetings(percentclosedate);
+
+CREATE INDEX idx_assignmentbudgetings_otpverifydate ON assignmentbudgetings(otpverifydate);
+
+CREATE INDEX idx_assignmentbudgetings_dates ON assignmentbudgetings(actualenddate, tentativeenddate);
+
+CREATE INDEX idx_assignmentbudgetings_client_id ON assignmentbudgetings(client_id);
+
+CREATE INDEX idx_assignmentbudgetings_financial_dates ON assignmentbudgetings(periodstartdate, periodenddate);
+
+CREATE INDEX idx_assignmentbudgetings_status_assignment_id ON assignmentbudgetings(status, assignmentgenerate_id);
+
+3. invoices table
+
+CREATE INDEX idx_invoices_assignmentgenerate_id ON invoices(assignmentgenerate_id);
+
+CREATE INDEX idx_invoices_currency ON invoices(currency);
+
+CREATE INDEX idx_invoices_status ON invoices(status);
+
+CREATE INDEX idx_invoices_created_at ON invoices(created_at);
+
+CREATE INDEX idx_invoices_partner ON invoices(partner);
+
+CREATE INDEX idx_invoices_currency_status ON invoices(currency, status);
+
+CREATE INDEX idx_invoices_assignment_currency ON invoices(assignmentgenerate_id, currency);
+
+4. timesheetusers table
+
+CREATE INDEX idx_timesheetusers_assignmentgenerate_id ON timesheetusers(assignmentgenerate_id);
+
+CREATE INDEX idx_timesheetusers_createdby ON timesheetusers(createdby);
+
+CREATE INDEX idx_timesheetusers_date ON timesheetusers(date);
+
+CREATE INDEX idx_timesheetusers_created_at ON timesheetusers(created_at);
+
+CREATE INDEX idx_timesheetusers_assignment_createdby ON timesheetusers(assignmentgenerate_id, createdby);
+
+CREATE INDEX idx_timesheetusers_totalhour ON timesheetusers(totalhour);
+
+5. teammembers table
+
+CREATE INDEX idx_teammembers_role_id ON teammembers(role_id);
+
+CREATE INDEX idx_teammembers_status ON teammembers(status);
+
+CREATE INDEX idx_teammembers_id_role ON teammembers(id, role_id);
+
+CREATE INDEX idx_teammembers_cost_hour ON teammembers(cost_hour);
+
+6. outstandings table
+
+CREATE INDEX idx_outstandings_bill_no ON outstandings(BILL_NO);
+
+CREATE INDEX idx_outstandings_created_at ON outstandings(created_at);
+
+CREATE INDEX idx_outstandings_amt ON outstandings(AMT);
+
+CREATE INDEX idx_outstandings_bill_created ON outstandings(BILL_NO, created_at);
+
+7. payments table
+
+CREATE INDEX idx_payments_invoiceid ON payments(invoiceid);
+
+CREATE INDEX idx_payments_paymentdate ON payments(paymentdate);
+
+CREATE INDEX idx_payments_amountreceived ON payments(amountreceived);
+
+8. assignmentteammappings table
+
+CREATE INDEX idx_assignmentteammappings_teammember_id ON assignmentteammappings(teammember_id);
+
+CREATE INDEX idx_assignmentteammappings_assignmentmapping_id ON assignmentteammappings(assignmentmapping_id);
+
+CREATE INDEX idx_assignmentteammappings_created_at ON assignmentteammappings(created_at);
+
+9. annual_independence_declarations table
+
+CREATE INDEX idx_annual_independence_assign_created ON annual_independence_declarations(assignmentgenerateid,
+createdby);
+
+CREATE INDEX idx_annual_independence_type ON annual_independence_declarations(type);
+
+10. independences table
+
+CREATE INDEX idx_independences_assign_created ON independences(assignmentgenerate_id, createdby);
+
+11. clients table
+
+CREATE INDEX idx_clients_id ON clients(id);
+
+12. outstationconveyances table
+
+CREATE INDEX idx_outstationconveyances_status ON outstationconveyances(status);
+
+CREATE INDEX idx_outstationconveyances_assignmentgenerate_id ON outstationconveyances(assignmentgenerate_id);
+
+CREATE INDEX idx_outstationconveyances_bill ON outstationconveyances(bill);
+
+CREATE INDEX idx_outstationconveyances_paiddate ON outstationconveyances(paiddate);
+
+CREATE INDEX idx_outstationconveyances_approveddate ON outstationconveyances(approveddate);
+
+CREATE INDEX idx_outstationconveyances_finalamount ON outstationconveyances(finalamount);
+
+13. vendorlist table
+
+CREATE INDEX idx_vendorlist_status ON vendorlist(status);
+
+CREATE INDEX idx_vendorlist_approvedate ON vendorlist(approvedate);
+
+CREATE INDEX idx_vendorlist_amount ON vendorlist(amount);
+
+14. timesheets table
+
+CREATE INDEX idx_timesheets_date ON timesheets(date);
+
+CREATE INDEX idx_timesheets_created_by ON timesheets(created_by);
+
+16. employeepayrolls table
+
+CREATE INDEX idx_employeepayrolls_month_year ON employeepayrolls(month, year);
+
+CREATE INDEX idx_employeepayrolls_send_to_bank ON employeepayrolls(send_to_bank);
+
+CREATE INDEX idx_employeepayrolls_total_amount ON employeepayrolls(total_amount_to_paid);
+
+17. budget table
+
+CREATE INDEX idx_budget_month_year ON budget(month, year);
+
+CREATE INDEX idx_budget_inflow_outflow ON budget(budgetinflow, budgetoutflow);
+
 {{-- * regarding phpmyadmin /regarding mysql You probably tried to upload a file that is too large. Please refer to documentation for a workaround for this limit.  --}}
 {{--  Start Hare --}}
 {{-- i am uploading 284mb file after that ye error message aa raha hai mujhe ise fix karna hai phpmyadmin --}}
@@ -217,8 +375,10 @@ Aapko phpMyAdmin mein jo bhi database hai uski list dikh jayegi!
 
 {{--  Start Hare --}}
 1.Database import using command / regarding import database
-cd C:\xampp\mysql\bin folder me cmd open kare using adminstrate
+cd C:\xampp\mysql\bin
+folder me cmd open kare using adminstrate
 {{-- 1.mysql -u root vsalive < "C:\xampp\htdocs\database\vsalive.sql"  --}}
+{{-- 1.mysql -u root kgsdemo < "C:\xampp\htdocs\database\kgsdemo.sql"  --}}
 
 check databse and tables
 mysql -u root kgsdemo
@@ -338,7 +498,10 @@ SELECT COALESCE(NULL, 1, 2, 'W3Schools.com');
 // HAVING COUNT(*) > 1
 // );
 
-SELECT teammember_id, email FROM users GROUP BY email HAVING COUNT(*) > 1;
+SELECT teammember_id, email, created_at FROM users GROUP BY email HAVING COUNT(*) > 1;
+
+SELECT id, team_member, emailid FROM teammembers GROUP BY emailid HAVING COUNT(*) > 1;
+
 {{--  Start Hare --}}
 C:\xampp\php\php.ini
 

@@ -7565,6 +7565,281 @@ Implementation in the Attendance module
 
 
 
+27-11-2025  vsalive 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+login 
+reset password
+signout
+password settings
+
+
+app\Http\Controllers\TeamloginController.php
+
+
+            $data['status'] = 1;
+            $existUser = User::where('email', $request->teammember_id)->first();
+            if ($existUser) {
+                $existUser->update($data);
+            } else {
+                User::create($data);
+            }
+
+
+
+
+vsalive
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+
+  private function promotionOrRejoined($timesheetData)
+  {
+    $targetClients = [29, 34, 32, 33, 134];
+    return $timesheetData->map(function ($row) use ($targetClients) {
+
+      if (in_array($row->client_id, $targetClients)) {
+        $timesheetDate = $row->date
+          ? Carbon::parse($row->date)->endOfDay()
+          : null;
+        $row->final_teamstaffcode = $this->getStaffCodeAt($row->createdby, $timesheetDate);
+        $row->final_partnerstaffcode = $this->getStaffCodeAt($row->partner, $timesheetDate);
+      } else {
+        // $row->final_teamstaffcode = $this->getStaffCodeAt($row->createdby, $row->assignmentcreated);
+        // $row->final_partnerstaffcode = $this->getStaffCodeAt($row->partner, $row->assignmentcreated);
+
+        $dateCheck = $row->assignmentcreated
+          ? $row->assignmentcreated
+          : Carbon::parse($row->date)->endOfDay();
+
+        $row->final_teamstaffcode = $this->getStaffCodeAt($row->createdby, $dateCheck);
+        $row->final_partnerstaffcode = $this->getStaffCodeAt($row->partner, $dateCheck);
+      }
+
+      return $row;
+    });
+  }
+  
+  
+serch    $targetClients = [29, 34, 32, 33, 134];
+
+and update balde file 
+
+resources\views\backEnd\timesheet\rejectedlistteam.blade.php
+
+ if (in_array($item->client_id, $targetClients)) {
+                                                        $timesheetDate = $item->date
+                                                            ? Carbon\Carbon::parse($item->date)->endOfDay()
+                                                            : null;
+                                                        $final_partnerstaffcode = $getStaffCodeAt(
+                                                            $item->partner,
+                                                            $timesheetDate,
+                                                        );
+                                                    } else {
+                                                        $dateCheck = $item->assignmentcreated
+                                                            ? $item->assignmentcreated
+                                                            : Carbon\Carbon::parse($item->date)->endOfDay();
+
+                                                        $final_partnerstaffcode = $getStaffCodeAt(
+                                                            $item->partner,
+                                                            $dateCheck,
+                                                        );
+                                                    }
+													
+													
+resources\views\backEnd\timesheet\hrindex.blade.php
+
+
+                                                if (in_array($item->client_id, $targetClients)) {
+                                                    $timesheetDate = $item->date
+                                                        ? Carbon\Carbon::parse($item->date)->endOfDay()
+                                                        : null;
+                                                    $final_partnerstaffcode = $getStaffCodeAt(
+                                                        $item->partner,
+                                                        $timesheetDate,
+                                                    );
+                                                } else {
+                                                    $dateCheck = $item->assignmentcreated
+                                                        ? $item->assignmentcreated
+                                                        : Carbon\Carbon::parse($item->date)->endOfDay();
+
+                                                    $final_partnerstaffcode = $getStaffCodeAt(
+                                                        $item->partner,
+                                                        $dateCheck,
+                                                    );
+                                                }
+
+
+end hare 
+
+
+app\Http\Controllers\PromotionandrejoiningController.php
+
+
+        $rejoiningcheckanotherpost = DB::table('teamrolehistory')
+            ->where('teammember_id', $request->employeeid)
+            ->orderByDesc('id')
+            ->first();
+
+        // this functionality also in teammember edit form 
+        $latestteamrolehistory = DB::table('teamrolehistory as teamrolehistorydata')
+            ->select(
+                'teamrolehistorydata.teammember_id',
+                'teamrolehistorydata.created_at as rejoiningdate',
+                'teamrolehistorydata.rejoiniedexitdate'
+            )
+            ->whereRaw('teamrolehistorydata.id = (SELECT MAX(teamrolehistorylatest.id) FROM teamrolehistory as teamrolehistorylatest WHERE teamrolehistorylatest.teammember_id = teamrolehistorydata.teammember_id)');
+
+
+        $latestrejoiningsamepost = DB::table('rejoiningsamepost as rejoiningsamepostdata')
+            ->select(
+                'rejoiningsamepostdata.teammember_id',
+                'rejoiningsamepostdata.rejoiningdate',
+                'rejoiningsamepostdata.rejoiniedexitdate'
+            )
+            ->whereRaw('rejoiningsamepostdata.id = (SELECT MAX(rejoiningsamepostlatest.id) FROM rejoiningsamepost as rejoiningsamepostlatest WHERE rejoiningsamepostlatest.teammember_id = rejoiningsamepostdata.teammember_id)');
+
+
+        $teamrecord = DB::table('teammembers')
+            ->where('teammembers.id', $request->employeeid)
+            ->leftJoinSub($latestteamrolehistory, 'latestrecord', function ($join) {
+                $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+            })
+            ->leftJoinSub($latestrejoiningsamepost, 'latestrecord2', function ($join) {
+                $join->on('latestrecord2.teammember_id', '=', 'teammembers.id');
+            })
+            ->select([
+                'teammembers.id',
+                'teammembers.team_member',
+                DB::raw('COALESCE(latestrecord.rejoiningdate, latestrecord2.rejoiningdate, teammembers.joining_date) AS final_joiningdate'),
+                DB::raw('COALESCE(latestrecord.rejoiniedexitdate, latestrecord2.rejoiniedexitdate, teammembers.leavingdate) AS final_leavingdate'),
+            ])
+            ->first();
+
+        if ($teamrecord) {
+            $finalJoining = Carbon::parse($teamrecord->final_joiningdate)->format('Y-m-d');
+            $finalLeaving = Carbon::parse($teamrecord->final_leavingdate)->format('Y-m-d');
+            if (empty($teamrecord->final_leavingdate) || $finalLeaving < $finalJoining) {
+                $output = array('msg' => "Please enter leaving date");
+                return back()->with('statuss', $output)->with('activeTab', 'rejoining');
+            }
+        }
+
+
+
+
+sahil timesheet fixed 
+timesheetusers table me id 154908
+createdby 82811
+
+timesheet table me  id = 152160
+createdby 82811
+
+
+
+rejoiningsamepost
+id 15
+
+rejoiniedexitdate
+2025-05-11
+
+
+
+attendances table id 1958
+12 t0 30 tak 
+X
+
+exam_leave 
+12 se 11
+
+
+
+applyleaves
+id 1699
+
+2025-05-12 to 2025-05-11
+
+
+leaveapprove
+id 1613
+
+94 to 93
+
+
+attendances table me 
+employee_name = 828
+ id = 1958
+is id ke baad jitne bhi attendence record hai use delete karna hai vsalive per
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
@@ -7582,90 +7857,8 @@ app\Http\Controllers\ApplyleaveController.php
 
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
 
 
 
@@ -7687,3 +7880,175 @@ i have worked 2.5 days then now total 9 - 2.5 = 6.5
 final date 31 october 
 
 
+
+
+change_type in teammember  varchar(200) default null
+
+change_type in samepost  varchar(200) default null
+
+change_type in teamrole 
+
+
+Done
+Role admin, partner, manager, staff
+
+Rejoining entry point, completed 
+promotion entry point completed 
+
+Submitted Timesheet completed
+Submitted Timesheet after filter completed
+Weeklylist completed
+
+Apply leave listing completed.
+Apply leave listing after filter completed
+
+Attendence completed
+Attendence after filter completed
+
+timesheet request 
+team timesheet request 
+admin timesheet request
+
+rejected submitted timesheet 
+
+ 
+ 
+ 
+ 
+
+
+
+rejected submitted team timeshheet
+team submitted timesheet default 
+team submitted timesheet filter 
+timesheet list on manager partner and admin 
+
+`````````````````````````````````````````
+Apply leave revert list on admin , manager , partner  
+team Apply leave revert list on partner 
+
+
+Reprt section 
+Active Team Report
+Assignment Report List
+Assignment Time Report
+Assignment Viewer List report
+Independence Confirmation
+Promotion and Rejoining
+Team Timesheet Report
+
+Confirmation List
+/viewclient/191
+open_leave
+
+
+open_timesheet request 
+
+add timesheet request button 
+timesheet submitt weekly time 
+
+
+
+Assignment Folder
+
+app\Console\Commands\TimesheetnotfillReminder.php  cron 
+
+change_type column add 
+
+
+
+
+
+regarding vsalive to vsademo / regarding vsademo to vsalive 
+two facter middlware 
+partner me id 447 nahi aana chahiye 
+it wala email 
+//!
+
+
+samepost me change type me data fill 
+teamrole me bhi chnage type fill
+
+rejoiningsamepost 
+teamrolehistory is dono table me change type me data filed
+
+
+	admin per timesheet me teammember not coming 
+					
+					jussi gupta 
+					assignment list 
+
+
+
+vsalive done
+app\Http\Controllers\PromotionandrejoiningController.php
+
+
+        // $rejoiningdatamerge = $rejoiningdata->merge($rejoiningdatasamepost);
+        // dd($rejoiningdatamerge);
+
+        $rejoiningdatamerge = $rejoiningdata
+            ->merge($rejoiningdatasamepost)
+            ->sortByDesc('created_at')
+            ->values(); // index reset
+        // dd($rejoiningdatamerge);
+		
+	
+vsalive done	
+app\Console\Commands\TimesheetnotfillReminder.php
+
+
+                // Prepare Excel data
+                $excelData = $rejoiningUsers->filter(function ($user) {
+                    return !empty($user->last_submission_date);
+                })->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                    ];
+                })->merge($teammemberOnlySave->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                    ];
+                }))->merge($teammemberNeverFilled->map(function ($user) {
+                    return [
+                        'team_member' => $user->team_member,
+                        'emailid' => $user->emailid,
+                    ];
+                }))
+                    ->unique('emailid')
+                    ->values()
+                    ->toArray();
+					
+				
+					
+					
+					
+					
+	vsalive done				
+					app\Http\Controllers\ClientController.php
+					
+					
+            // dd(auth()->user()->clientassignment);
+            $clientassignment =  DB::table('assignmentmappings')
+                ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                ->leftjoin('teammembers as leadpartner', 'leadpartner.id', 'assignmentmappings.leadpartner')
+                ->leftjoin('teammembers as otherpartner', 'otherpartner.id', 'assignmentmappings.otherpartner')
+                ->leftjoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                ->leftjoin('clients', 'clients.id', 'assignmentbudgetings.client_id')
+                ->leftjoin('assignments', 'assignments.id', 'assignmentmappings.assignment_id')
+                ->where('assignmentbudgetings.client_id', $id)
+                ->where('assignmentteammappings.teammember_id', auth()->user()->teammember_id)
+                ->where('assignmentteammappings.status', 1)
+                ->select(
+                    'assignmentmappings.*',
+                    'assignmentbudgetings.duedate',
+                    'assignmentbudgetings.assignmentname',
+                    'assignmentbudgetings.status',
+                    'assignments.assignment_name',
+                    'clients.client_name',
+                    'clients.client_code',
+                    'leadpartner.team_member as leadpartnername',
+                    'otherpartner.team_member as otherpartnername',
+                )->distinct()->get();

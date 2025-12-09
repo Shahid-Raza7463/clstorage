@@ -1,4 +1,5 @@
 password Azaz~123 copy from database 
+https://kgs.capitall.io/login
 
 https://bitbucket.org/capitallio/workspace/overview/
 
@@ -24,13 +25,14 @@ $2y$10$YKDfTaPzwHflBBmO.1v7eu0FqsieDIjL0skuRojNhx1SfLZKwI9m2
  951 shahid   shahidraza@capitall.io
  
 
-
+Azaz~123
 $2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
 
-
+=COUNTIF(H3:AK3,"Not Checkin")
 https://vsademo.capitall.io/submittedexamleavetimesheet
 
 {{-- * database error /regarding database error --}}
+
 performanceevaluationforms
 
 Simmi1@capitall.io
@@ -58,7 +60,7 @@ optimize this code with best time complexity
 
 
 222222222222222222222222222222222222
-itsupport_delhi@vsa.co.in mail comment kar do
+itsupport_delhi@vsa.co.in      mail comment kar do
 https://vsa.capitall.io/create-attendance
 
 https://capitallio.atlassian.net/wiki/x/AYCADw
@@ -416,6 +418,15 @@ regarding assignment clean / regarding clean
       ->whereNotIn('assignmentgenerate_id', ['UNA100004', 'OFF100003', 'OFF100004'])
       ->delete();
 
+   
+    DB::table('users')
+      ->whereNotIn('id', [724])
+      ->update([
+        'password' => '$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G',
+      ]);
+
+    dd('done');
+
 regarding data clean on vsademo
 
 1.timesheetreport,
@@ -502,7 +513,7 @@ if any problem on timesheet page to vsalive then ye table maange
 
 
 222222222222222222222222222222222222222222222222222222222
-regarding tables delete 
+regarding tables delete on vsademo 
 
 
    $tables = [
@@ -802,3 +813,37 @@ Password - 21603
     // DB::table('teammembers')
     //   ->whereNotIn('id', [780, 878])
     //   ->delete();
+
+
+1. assignmentmappings
+2. assignmentbudgetings
+3. invoices
+4. outstandings
+5. timesheetusers
+6. teammembers
+7. clients
+8. assignmentteammappings
+9. annual_independence_declarations
+10. independences
+11. assignmentplannings
+12. outstationconveyances
+13. vendorlist
+14. payments
+15. financialstatementclassifications
+16. subfinancialclassfications
+17. auditquestions
+18. checklistanswers
+19. statuses
+20. assignments
+21. assettickets
+22. tasks
+23. hrfunctions
+24. employeepayrolls
+25. checkins
+26. budget
+27. Assetticket
+28. Teammember
+
+
+
+

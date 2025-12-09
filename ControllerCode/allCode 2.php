@@ -20,6 +20,586 @@ class Allcode extends Controller
         //! End hare 
         //* regarding 
         // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+        // Start Hare
+        //! End hare 
+        //* regarding skip / regarding count 
+        // Start Hare
+        // Start Hare
+        
+            $report = DB::table('teammembers')
+                ->leftJoin('checkins', 'teammembers.id', '=', 'checkins.teammember_id')
+                ->leftJoin('roles', 'teammembers.role_id', '=', 'roles.id')
+                ->leftJoin('clients', 'checkins.client_id', '=', 'clients.id')
+                ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+                ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+                ->leftJoin('teammembers as teampartner', 'teampartner.id', '=', 'assignmentmappings.leadpartner')
+                ->leftJoin('holidays', function ($join) {
+                    $join->on(DB::raw('STR_TO_DATE(checkins.date, "%d-%m-%Y")'), '=', 'holidays.startdate');
+                })
+                ->whereBetween(
+                    DB::raw('STR_TO_DATE(checkins.date, "%d-%m-%Y")'),
+                    [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]
+                )
+                ->select(
+                    'teammembers.id',
+                    'teammembers.joining_date',
+                    'teammembers.team_member',
+                    'roles.rolename',
+
+                    DB::raw('GROUP_CONCAT(DISTINCT clients.client_name) as client_Namess'),
+                    DB::raw('GROUP_CONCAT(DISTINCT checkins.assignment_id) as assignmentid'),
+                    DB::raw('GROUP_CONCAT(DISTINCT assignments.assignment_name) as assignmentname'),
+                    DB::raw('GROUP_CONCAT(DISTINCT teampartner.team_member) as teampartner'),
+
+                    DB::raw('COUNT(*) as Total_Checkin'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Office" THEN 1 ELSE 0 END) as Office'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Work From Home" THEN 1 ELSE 0 END) as WFM'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Client Place" THEN 1 ELSE 0 END) as Client_Place'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Business Development" THEN 1 ELSE 0 END) as Business_Development'),
+                    DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
+                    DB::raw('SUM(CASE WHEN checkins.time >= "10:30:00" AND checkins.time < "12:00:00" THEN 1 ELSE 0 END) as chgg'),
+                    DB::raw('SUM(CASE WHEN checkins.time > "12:01:00" THEN 1 ELSE 0 END) as After_12_PM'),
+                    DB::raw('SUM(CASE WHEN checkins.typeval IS NULL THEN 1 ELSE 0 END) as Unallocated'),
+
+                    DB::raw('GROUP_CONCAT(DISTINCT CONCAT(STR_TO_DATE(checkins.date, "%d-%m-%Y"), " ", TIME_FORMAT(checkins.time, "%H:%i:%s"))) as checkin_datetime'),
+
+                    //-- Leave Count
+                    DB::raw('(SELECT COUNT(*) FROM applyleaves 
+                      WHERE applyleaves.createdby = teammembers.id 
+                      AND applyleaves.from BETWEEN "' . $startDate->format('Y-m-d') . '" 
+                      AND "' . $endDate->format('Y-m-d') . '") as Leave_Count'),
+
+                    //-- Leave Days
+                    DB::raw('(SELECT SUM(DATEDIFF(
+                CASE WHEN `to` > "' . $endDate->format('Y-m-d') . '" THEN "' . $endDate->format('Y-m-d') . '" ELSE `to` END,
+                CASE WHEN `from` < "' . $startDate->format('Y-m-d') . '" THEN "' . $startDate->format('Y-m-d') . '" ELSE `from` END
+            ) + 1)
+            FROM applyleaves 
+            WHERE applyleaves.createdby = teammembers.id 
+              AND (`from` BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '"
+              OR `to` BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '"
+              OR (`from` < "' . $startDate->format('Y-m-d') . '" AND `to` > "' . $endDate->format('Y-m-d') . '")
+            )) as Leave_Days'),
+
+                    DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '" AND holidays.status = 3) as weekends_Count'),
+                    DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '" AND holidays.status = 1) as holidaymonth_Count'),
+                    DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '") as Holiday_Count'),
+
+                    DB::raw('(' . $daysInMonth . ' - (SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '")) as totalcheckin_count'),
+                    DB::raw('COUNT(DISTINCT holidays.startdate) as holiday_working_count'),
+                    DB::raw('COUNT(*) - COUNT(DISTINCT holidays.startdate) as Total_Checkin_minus_holiday_count'),
+
+                    DB::raw('(' . $daysInMonth . ' - (SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '")) - COUNT(*) + COUNT(DISTINCT holidays.startdate) as not_checkin'),
+
+                    //----------------------------------------------------
+                    // ⭐ ADDED: TOTAL TIMESHEET FILLED COUNTER
+                    //----------------------------------------------------
+                    DB::raw('(SELECT COUNT(*) FROM timesheetusers
+                      WHERE timesheetusers.createdby = teammembers.id
+                      AND STR_TO_DATE(timesheetusers.date, "%d-%m-%Y")
+                      BETWEEN "' . $startDate->format('Y-m-d') . '" 
+                      AND "' . $endDate->format('Y-m-d') . '"
+                     ) AS Timesheet_Filled_Count')
+                )
+                ->groupBy('teammembers.id', 'teammembers.joining_date', 'teammembers.team_member', 'roles.rolename')
+                ->orderBy('teammembers.id', 'asc')   // ⭐ Required before skip/take
+                ->offset(2)   // same as skip(31)
+                ->limit(1)    // same as take(10)
+                ->get();
+
+
+            dd($report);
+            $report->dump();
+        //! End hare 
+        //* regarding api
+        // Start Hare
+        // Start Hare
+        
+http://127.0.0.1:8000/api/check-In/store
+
+http://127.0.0.1:8000/api/clientlist
+{
+    "user_id": 5,
+    "checkin_date": "2025-12-06",
+    "type": "in",
+    "location": "Office"
+}
+http://127.0.0.1:8000/api/check-In?role_id=18&teammember_id=5
+$request->merge([
+    'role_id' => $request->role_id ?? 18,
+    'teammember_id' => $request->teammember_id ?? 1
+]);
+
+dd($request->all());
+$validator = Validator::make($request->all(), [
+    'role_id' => 'required',
+    'teammember_id' => 'required',
+]);
+
+if ($validator->fails()) {
+    return response()->json($validator->errors(), 422);
+}
+
+dd($request->role_id);
+http://127.0.0.1:8000/api/check-In?role_id=18&teammember_id=5
+
+
+      $request->merge([
+            'role_id' => $request->role_id ?? 14,
+            'teammember_id' => $request->teammember_id ?? 14
+        ]);
+
+        // dd($request->role_id);
+		
+		
+		
+	        $request->merge([
+            'role_id' => 14,
+            'teammember_id' => 14
+        ]);
+
+        dd($request->role_id);
+
+
+
+2025-10-07
+
+2025-10-09
+
+   dd('jksj');
+                    $currentDate = Carbon::today(); // No need to format, use Carbon directly
+                    // $currentMonth = $currentDate->month;
+                    $currentMonth = 12;
+
+                    $leaveData = DB::table('applyleaves')
+                        ->where('createdby', $request->teammember_id)
+                        ->whereMonth('from', $currentMonth)
+                        ->first();
+
+                    dd($currentDate);
+
+                    if ($leaveData) {
+                        $from = Carbon::parse($leaveData->from);
+                        $to = Carbon::parse($leaveData->to);
+
+                        // Check if today is between from & to
+                        if ($currentDate->betweenIncluded($from, $to)) {
+                            dd('gd');
+                            return response()->json(['error' => 'You have applied leave on this day.'], 400);
+                        }
+                    }
+
+                    dd($currentDate, $currentMonth, $leaveData, $from, $to);
+        //! End hare 
+        //* regarding 
+        // Start Hare
+         // $currentTime = Carbon::now(); // Convert current time to a Carbon instance
+                    // // $monthsdigit = $currentTime->month;
+                    // $monthsdigit = 12;
+                    // $currentDateformate = Carbon::now()->format('Y-m-d');
+
+                    // // $currentTime = Carbon::createFromTime(14, 30, 0); // Create a Carbon instance for 2:30 PM
+                    // $leavedatacheck = DB::table('applyleaves')
+                    //     ->where('createdby', $request->teammember_id)
+                    //     ->whereMonth('from', $monthsdigit)
+                    //     ->first();
+
+                    // $to = Carbon::createFromFormat('Y-m-d', $leavedatacheck->to ?? '');
+                    // $from = Carbon::createFromFormat('Y-m-d', $leavedatacheck->from);
+                    // $period = CarbonPeriod::create($leavedatacheck->from, $leavedatacheck->to);
+
+                    // $datess = [];
+                    // foreach ($period as $date) {
+                    //     $datess[] = $date->format('Y-m-d');
+                    // }
+
+                    // if (in_array($currentDateformate, $datess)) {
+                    //     return response()->json(['error' => 'You have applied leave on this days.'], 400);
+                    // }
+
+                    // dd($to, $from, $period, $datess, $currentDateformate);
+                    // $currentDate = Carbon::today(); // No need to format, use Carbon directly
+                    // $currentMonth = $currentDate->month;
+
+                    // $leaveData = DB::table('applyleaves')
+                    //     ->where('createdby', $request->teammember_id)
+                    //     ->whereMonth('from', $currentMonth)
+                    //     ->first();
+
+
+                    // if ($leaveData) {
+                    //     $from = Carbon::parse($leaveData->from);
+                    //     $to = Carbon::parse($leaveData->to);
+
+                    //     // Check if today is between from & to
+                    //     if ($currentDate->betweenIncluded($from, $to)) {
+                    //         return response()->json(['error' => 'You have applied leave on this day.'], 400);
+                    //     }
+                    // }
+
+                    // $leaveData = DB::table('applyleaves')
+                    //     ->where('createdby', $request->teammember_id)
+                    //     ->whereMonth('to', $currentMonth)
+                    //     ->first();
+
+                    // if ($leaveData) {
+                    //     $from = Carbon::parse($leaveData->from);
+                    //     $to = Carbon::parse($leaveData->to);
+
+                    //     // Check if today is between from & to
+                    //     if ($currentDate->betweenIncluded($from, $to)) {
+                    //         return response()->json(['error' => 'You have applied leave on this day.'], 400);
+                    //     }
+                    // }
+
+                    // dd($currentDate, $currentMonth, $leaveData, $from, $to);
+
+                    $currentDate = Carbon::today();
+
+                    $leaveExists = DB::table('applyleaves')
+                        ->where('createdby', $request->teammember_id)
+                        ->whereDate('from', '<=', $currentDate)
+                        ->whereDate('to', '>=', $currentDate)
+                        ->exists();
+
+                    if ($leaveExists) {
+                        return response()->json(['error' => 'You have applied leave on this day.'], 400);
+                    }
+
+                    dd($currentDate);
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        public function index()
+{
+    if (!in_array(auth()->user()->role_id, [11, 12])) { ... }
+
+    $fy = now()->month >= 4 ? now()->year : now()->year - 1;
+
+    // 1. Pre-computed heavy data (daily refresh)
+    $precomputed = Cache::remember("dashboard_precomputed_{$fy}", now()->addHours(24), function () use ($fy) {
+        return [
+            'monthly_billing' => $this->getMonthlyBillingPrecomputed($fy),
+            'monthly_recovery' => $this->getMonthlyRecoveryPrecomputed($fy),
+            'partner_pnl' => $this->getPartnerPnLPrecomputed($fy),
+            'assignment_overview' => $this->getAssignmentOverviewPrecomputed($fy),
+            // ... aur heavy cheezein
+        ];
+    });
+
+    // 2. Real-time critical data (har baar fresh)
+    $realtime = [
+        'billspending' => $this->getBillsPending(),                    // real-time
+        'outstanding' => $this->getOutstandingTotal(),                 // real-time
+        'delayedAssignments' => $this->getDelayedAssignments(),        // real-time
+        'totalNotFilled' => $this->getIndependencePending(),           // real-time
+        'totalUpcomingAssignments' => $this->getUpcomingAssignments(), // real-time
+        'workFromHome' => $this->getWFHToday(),                        // real-time
+        'tickets' => $this->getLiveTickets(),                          // real-time
+    ];
+
+    // Merge both
+    $data = array_merge($precomputed, $realtime);
+
+    return view('backEnd.kgsdashboardreport', [
+        'billspending' => $data['billspending'],
+        'monthly_billing' => $data['monthly_billing'],
+        // ... baaki sab
+    ]);
+}
+        // Start Hare
+        
+  $dateToCheck = $row->assignmentcreated
+          ? $row->assignmentcreated
+          : Carbon::parse($row->date)->endOfDay();
+
+        $row->final_teamstaffcode = $this->getStaffCodeAt($row->createdby, $dateToCheck);
+        $row->final_partnerstaffcode = $this->getStaffCodeAt($row->partner, $dateToCheck);
+		
+		
+		      ->whereIn('timesheetusers.client_id', [56])
+      ->whereNotNull('timesheetusers.date')
+      ->whereNull('assignmentbudgetings.created_at')
+ if ($request->department == 1) {
+
+            $ticketData = DB::table('tasks')->where('id', $request->ticket_id)->first();
+
+            $newRequest = new Request();
+            // $newRequest->merge([
+            //     'subject' => $ticketData->taskname,
+            //     'message' => $ticketData->description,
+            //     'created_by' => $ticketData->createdby,
+            //     'partner_id' => $ticketData->partner_id,
+            //     'inform_partner' => $ticketData->inform_partner,
+            //     'type' => 0,
+
+            // ]);
+
+            $newRequest = Request::create('/ticket/create', 'POST', [
+                'subject' => $ticketData->taskname,
+                'message' => $ticketData->description,
+                'created_by' => $ticketData->createdby,
+                'partner_id' => $ticketData->partner_id,
+                'inform_partner' => $ticketData->inform_partner,
+                'type' => 0,
+            ]);
+
+            $Controller = new TicketController();
+            $Controller->insertTicket($newRequest);
+
+            dd('shahid', $Controller);
+
+            $deletedRows = DB::table('tasks')->where('id', $request->ticket_id)->delete();
+
+            $output = array('msg' => 'Ticket Moved IT Department Successfully');
+            // return back()->with('success', $output);
+            return redirect('/hrticket')->with('success', $output);
+        }
+          // Fetch IT and Finance Tickets or Unresolved Tickets - HR, IT & Admin
+      $ticketDatas = Assetticket::with(['financerequest', 'createdBy', 'partner'])
+        ->whereIn('type', [0, 1])
+        ->whereBetween('created_at', [$financialStartDate, $financialEndDate])
+        ->orderByDesc('id')
+        // ->limit(4)
+        ->get()
+        ->map(function ($item) {
+          return [
+            'ticket_id' => $item->generateticket_id,
+            'department' => $item->type == 0 ? 'IT' : 'Finance',
+            'created_by' => $item->createdBy->team_member ?? '',
+            'subject' => $item->subject,
+            'assigned_to' => $item->partner->team_member ?? '',
+            'created_at' => $item->created_at,
+            'status' => $item->status,
+            'source' => 'ticket',
+          ];
+        })->toArray();
+
+
+
+      // Fetch HR Tasks
+      $hrTickets = DB::table('tasks')
+        ->select(
+          'tasks.*',
+          'patnerid.team_member as partnername',
+          'createdby.team_member as createdbyname',
+          'hrfunctions.hrfunction'
+        )
+        ->where('tasks.task_type', 4)
+        ->whereBetween('tasks.created_at', [$financialStartDate, $financialEndDate])
+        ->leftJoin('teammembers as patnerid', 'patnerid.id', '=', 'tasks.partner_id')
+        ->leftJoin('teammembers as createdby', 'createdby.id', '=', 'tasks.createdby')
+        ->leftJoin('hrfunctions', 'hrfunctions.id', '=', 'tasks.hrfunction')
+        ->orderByDesc('tasks.id')
+        // ->limit(4)
+        ->get()
+        ->map(function ($item) {
+          return [
+            'ticket_id' => $item->generateticket_id ?? 'NA',
+            'department' => 'HR',
+            'created_by' => $item->createdbyname ?? '',
+            'subject' => $item->taskname ?? '',
+            'assigned_to' => $item->partnername ?? '',
+            'created_at' => $item->created_at,
+            'status' => $item->status,
+            'source' => 'hr',
+          ];
+        })->toArray();
+
+      $allTickets = collect(array_merge($ticketDatas, $hrTickets));
+
+      // $allTickets = $ticketDatas->merge($hrTickets);
+        // Start Hare
+        $allTickets = collect()
+    ->merge(
+        Assetticket::with(['createdBy', 'partner'])
+            ->whereIn('type', [0, 1])
+            ->whereBetween('created_at', [$financialStartDate, $financialEndDate])
+            ->latest()
+            ->get()
+            ->map(fn($i) => (object)[ 
+                'ticket_id'   => $i->generateticket_id,
+                'department'  => $i->type == 0 ? 'IT' : 'Finance',
+                'created_by'  => $i->createdBy?->team_member ?? 'N/A',
+                'subject'     => $i->subject,
+                'assigned_to' => $i->partner?->team_member ?? 'Unassigned',
+                'created_at'  => $i->created_at,
+                'status'      => $i->status,
+                'source'      => 'ticket',
+            ])
+    )
+    ->merge(
+        DB::table('tasks')
+            ->select('tasks.*', 'p.team_member as partnername', 'c.team_member as createdbyname')
+            ->where('task_type', 4)
+            ->whereBetween('created_at', [$financialStartDate, $financialEndDate])
+            ->leftJoin('teammembers as p', 'p.id', '=', 'tasks.partner_id')
+            ->leftJoin('teammembers as c', 'c.id', '=', 'tasks.createdby')
+            ->latest('tasks.id')
+            ->get()
+            ->map(fn($i) => (object)[ 
+                'ticket_id'   => $i->generateticket_id ?? 'NA',
+                'department'  => 'HR',
+                'created_by'  => $i->createdbyname ?? 'N/A',
+                'subject'     => $i->taskname ?? 'No Title',
+                'assigned_to' => $i->partnername ?? 'Unassigned',
+                'created_at'  => $i->created_at,
+                'status'      => $i->status,
+                'source'      => 'hr',
+            ])
+    )
+    ->sortByDesc('created_at')
+    ->values()
+    ->take(10);
+        $allTickets = collect();
+
+// IT + Finance
+Assetticket::with(['createdBy', 'partner'])
+    ->whereIn('type', [0, 1])
+    ->whereBetween('created_at', [$financialStartDate, $financialEndDate])
+    ->orderByDesc('id')
+    ->chunk(100, function ($tickets) use ($allTickets) {
+        foreach ($tickets as $item) {
+            $allTickets->push([
+                'ticket_id'     => $item->generateticket_id,
+                'department'    => $item->type == 0 ? 'IT' : 'Finance',
+                'created_by'    => optional($item->createdBy)->team_member ?? 'N/A',
+                'subject'       => $item->subject,
+                'assigned_to'   => optional($item->partner)->team_member ?? 'Not Assigned',
+                'created_at'    => $item->created_at,
+                'status'        => $item->status,
+                'source'        => 'ticket',
+            ]);
+        }
+    });
+
+// HR Tasks
+DB::table('tasks')->select(...)->get()->each(function ($item) use ($allTickets) {
+    $allTickets->push([...]);
+});
+
+$allTickets = $allTickets->sortByDesc('created_at')->values()->take(10);
+        // Start Hare
+        // IT & Finance Tickets
+$ticketDatas = Assetticket::with(['createdBy', 'partner'])
+    ->whereIn('type', [0, 1])
+    ->whereBetween('created_at', [$financialStartDate, $financialEndDate])
+    ->orderByDesc('id')
+    ->get()
+    ->map(function ($item) {
+        return [
+            'ticket_id'     => $item->generateticket_id,
+            'department'    => $item->type == 0 ? 'IT' : 'Finance',
+            'created_by'    => optional($item->createdBy)->team_member ?? 'N/A',
+            'subject'       => $item->subject ?? 'No Subject',
+            'assigned_to'   => optional($item->partner)->team_member ?? 'Not Assigned',
+            'created_at'    => $item->created_at,
+            'status'        => $item->status,
+            'source'        => 'ticket',
+        ];
+    })->toArray(); // ← Important
+
+// HR Tasks
+$hrTickets = DB::table('tasks')
+    ->select('tasks.*', 'patnerid.team_member as partnername', 'createdby.team_member as createdbyname')
+    ->where('tasks.task_type', 4)
+    ->whereBetween('tasks.created_at', [$financialStartDate, $financialEndDate])
+    ->leftJoin('teammembers as patnerid', 'patnerid.id', '=', 'tasks.partner_id')
+    ->leftJoin('teammembers as createdby', 'createdby.id', '=', 'tasks.createdby')
+    ->orderByDesc('tasks.id')
+    ->get()
+    ->map(function ($item) {
+        return [
+            'ticket_id'     => $item->generateticket_id ?? 'NA',
+            'department'    => 'HR',
+            'created_by'    => $item->createdbyname ?? 'N/A',
+            'subject'       => $item->taskname ?? 'No Task',
+            'assigned_to'   => $item->partnername ?? 'Not Assigned',
+            'created_at'    => $item->created_at,
+            'status'        => $item->status,
+            'source'        => 'hr',
+        ];
+    })->toArray(); // ← Important
+
+// Now merge safely
+$allTickets = collect(array_merge($ticketDatas, $hrTickets))
+                ->sortByDesc('created_at')
+                ->values()
+                ->take(10); // or limit(4)
+
+// dd($allTickets); → 100% working, no error
+        //! End hare 
+        //* regarding 
+        // Start Hare
          $outstationData = DB::table('outstationconveyances')
             ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'outstationconveyances.assignmentgenerate_id')
             ->leftJoin('assignments', 'assignments.id', '=', 'outstationconveyances.assignment_id')

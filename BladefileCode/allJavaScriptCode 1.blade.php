@@ -39,9 +39,209 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
-<script></script>
+<script>
+    document.getElementById("myForm").addEventListener("submit", function(e) {
+        let requiredFields = document.querySelectorAll("#myForm [required]");
+        let missingFields = [];
+
+        requiredFields.forEach((field) => {
+            let isHidden = field.offsetParent === null; // hidden or display:none
+
+            if (!field.value.trim() && isHidden) {
+                missingFields.push(field.name || field.id);
+            }
+        });
+
+        if (missingFields.length > 0) {
+            console.log("Form not submitting because these hidden required fields are empty:");
+            console.table(missingFields);
+            e.preventDefault();
+        }
+    });
+
+    requiredFields.forEach((field) => {
+        if (field.offsetParent === null) {
+            field.removeAttribute("required");
+        }
+    });
+</script>
 {{--  Start Hare --}}
-<script></script>
+<script>
+    $(document).ready(function() {
+        $('#tasknameselect').change(function() {
+            var selectedTask = $(this).val();
+
+            if (selectedTask === "Client") {
+                $('#clientshow').show();
+                $('#assignmentshow').show();
+
+                $("#clientid").prop("required", true);
+                $("#assignmentids").prop("required", true);
+
+                // Reset both dropdowns properly
+                $('#clientid').prop('selectedIndex', 0); // "Please Select One" पर ले जाएं
+                $('#assignmentids').html('<option value="">Select Assignment</option>');
+
+                // अगर edit mode में हैं तो भी force reset करें (important!)
+                $('#clientid option').prop('selected', false);
+                $('#clientid option[value=""]').prop('selected', true);
+
+            } else {
+                // General या कोई और task चुना
+                $('#clientshow').hide();
+                $('#assignmentshow').hide();
+
+                $("#clientid").prop("required", false);
+                $("#assignmentids").prop("required", false);
+
+                // Reset client dropdown
+                $('#clientid').prop('selectedIndex', 0);
+                $('#clientid option').prop('selected', false);
+                $('#clientid option[value=""]').prop('selected', true);
+
+                // Clear assignments
+                $('#assignmentids').empty();
+            }
+        });
+
+        // AJAX: जब client चुने तो assignment लोड हों
+        $('#clientid').on('change', function() {
+            var cid = $(this).val();
+
+            if (cid === "" || cid === null) {
+                $('#assignmentids').html('<option value="">Select Assignment</option>');
+                return;
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('assignmentidresponce') }}",
+                data: {
+                    cid: cid
+                },
+                success: function(response) {
+                    $('#assignmentids').html(response);
+                },
+                error: function() {
+                    alert('Something went wrong while loading assignments');
+                    $('#assignmentids').html('<option value="">Error loading</option>');
+                }
+            });
+        });
+
+        // Optional: Page load पर भी सही state set करें (अगर edit page हो)
+        $('#tasknameselect').trigger('change');
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        // जब task type change हो
+        $('#tasknameselect').on('change', function() {
+
+            // हमेशा पहले reset करो (यह सबसे ज़रूरी लाइन है)
+            $('#clientid')
+                .val('') // value खाली करो
+                .find('option').prop('selected', false) // सभी selected हटाओ
+                .first().prop('selected', true); // पहले option को select करो
+
+            // reset assignment placeholder भी साथ में करो
+            $('#assignmentids').html('<option value="">Select Assignment</option>');
+
+            // अब UI show/hide logic
+            if ($(this).val() === "Client") {
+                $('#clientshow').show();
+                $('#assignmentshow').show();
+                $("#clientid").prop("required", true);
+                $("#assignmentids").prop("required", true);
+            } else {
+                $('#clientshow').hide();
+                $('#assignmentshow').hide();
+                $("#clientid").prop("required", false);
+                $("#assignmentids").prop("required", false);
+            }
+
+            // किसी भी attached change handler को notify करने के लिए trigger कर देना अच्छा है
+            // (उदाहरण: अगर किसी जगह '#clientid' का change handler AJAX call करता हो)
+            $('#clientid').trigger('change');
+        });
+
+
+        // client select का change handler (AJAX) — खाली value आने पर request मत चलाओ
+        $('#clientid').on('change', function() {
+            var cid = $(this).val();
+
+            if (!cid) {
+                // ख़ाली होने पर default placeholder रखो
+                $('#assignmentids').html('<option value="">Select Assignment</option>');
+                return;
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('assignmentidresponce') }}",
+                data: {
+                    cid: cid
+                },
+                success: function(response) {
+                    $('#assignmentids').html(response);
+                },
+                error: function() {
+                    alert('Something went wrong');
+                }
+            });
+        });
+
+    });
+</script>
+
+// working
+<script>
+    $(document).ready(function() {
+        $('#tasknameselect').change(function() {
+            if ($(this).val() === "Client") {
+                $('#clientshow').show();
+                $('#assignmentshow').show();
+                $("#clientid").prop("required", true);
+                $("#assignmentids").prop("required", true);
+                $('#assignmentids').html('<option value="">Select Assignment</option>');
+                $('#clientid').val('').trigger('change');
+            } else {
+                $('#clientshow').hide();
+                $('#assignmentshow').hide();
+                $("#clientid").prop("required", false);
+                $("#assignmentids").prop("required", false);
+                $('#assignmentids').html('');
+                // $('#assignmentids').empty();
+                // $('#clientid').val('');
+                $('#clientid').val('').trigger('change');
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#clientid').on('change', function() {
+            var cid = $(this).val();
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('assignmentidresponce') }}",
+                data: {
+                    cid: cid
+                },
+                success: function(response) {
+                    $('#assignmentids').html(response);
+                },
+                error: function() {
+                    alert('Something went wrong');
+                }
+            });
+        });
+    });
+</script>
 {{-- ! End hare --}}
 {{-- * regarding date validtio    --}}
 {{--  Start Hare --}}
