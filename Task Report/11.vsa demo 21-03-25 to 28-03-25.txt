@@ -10507,6 +10507,341 @@ Illuminate\Support\Collection {#3304 ▼
 
 
 
+```7777
+
+    <table id="tableData" class="table table-bordered table-striped display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Assignment Id</th>
+                                <th rowspan="2">Assignment</th>
+                                <th rowspan="2">Assignment Name</th>
+                                <th rowspan="2">Client</th>
+                                <th rowspan="2">Billing Date</th>
+                                <th rowspan="2">Period Start</th>
+                                <th rowspan="2">Period End</th>
+                                <th rowspan="2">Assigned Partner</th>
+                                <th rowspan="2">Other Partner</th>
+                                <th rowspan="2">Manager</th>
+                                <th colspan="7" class="text-center">Checklist</th>
+                                <th colspan="8" class="text-center">Reviewer Checklist</th>
+                            </tr>
+                            <tr>
+                                <th>OverAll Documentation Status</th>
+                                <th>% of Documentation Completed (Close)</th>
+                                <th>Not Applicable</th>
+                                <th>Open</th>
+                                <th>Submitted</th>
+                                <th>Review-TL</th>
+                                <th>Close</th>
+                                <th>Total</th>
+                                <th>Total ( Expect NA )</th>
+                                <th>EQCR Type</th>
+                                <th>OverAll Documentation Status</th>
+                                <th>% of Documentation Completed (Close)</th>
+                                <th>Open</th>
+                                <th>Submitted</th>
+                                <th>Review-TL</th>
+                                <th>Close</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+                    </table>and javascript is 
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+        let dataTable;
+        let debounceTimer;
+
+        // Initialize DataTable
+        function initializeDataTable() {
+            dataTable = $('#tableData').DataTable({
+                serverSide: true,
+                ajax: {
+                    url: '{{ url('documentationfilter') }}',
+                    type: 'GET',
+                    data: d => ({
+                        ...d,
+                        clientId: $('#clientid').val(),
+                        partnerId: $('#partnerId').val(),
+                        status: $('#status').val(),
+                        fromdate: $('#fromdate').val(),
+                        todate: $('#todate').val()
+                    }),
+                    beforeSend: showProgressBar,
+                    complete: hideProgressBar
+                },
+                dom: 'Bfrtip',
+                columns: [{
+                        data: 'assignmentgenerate_id',
+                        render: (data) =>
+                            `<a href="{{ url('/viewassignment/') }}/${data}">${data}</a>`
+                    },
+                    {
+                        data: 'assignment_name'
+                    },
+                    {
+                        data: 'assignmentname'
+                    },
+                    {
+                        data: 'client_name'
+                    },
+
+                    {
+                        data: 'periodstart',
+                        render: (data) => data ? new Date(data).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: '2-digit',
+                            year: 'numeric'
+                        }) : ''
+                    },
+                    {
+                        data: 'periodend',
+                        render: (data) => data ? new Date(data).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: '2-digit',
+                            year: 'numeric'
+                        }) : ''
+                    },
+                    {
+                        data: 'leadpartner_name'
+                    },
+                    {
+                        data: 'otherpartner_name'
+                    },
+                    {
+                        data: 'sub_team_members'
+                    },
+                    {
+                        data: 'assignmentbudgetingsstatus',
+                        render: (data) =>
+                            `<span class="badge badge-${data == 1 ? 'primary' : 'danger'}">${data == 1 ? 'OPEN' : 'CLOSED'}</span>`
+                    },
+                    {
+                        data: 'documentation_percentage',
+                        render: (data) => `${data}%`
+                    },
+                    {
+                        data: 'status_counts.NOT-APPLICABLE'
+                    },
+                    {
+                        data: null,
+                        render: (data) => data.status_counts.TOTAL - (data.status_counts.SUBMITTED +
+                            data.status_counts.CLOSE + data.status_counts['REVIEW-TL'] + data
+                            .status_counts['NOT-APPLICABLE'])
+                    },
+                    {
+                        data: 'status_counts.SUBMITTED'
+                    },
+                    {
+                        data: 'status_counts.REVIEW-TL'
+                    },
+                    {
+                        data: 'status_counts.CLOSE'
+                    },
+                    {
+                        data: 'status_counts.TOTAL'
+                    },
+                    {
+                        data: null,
+                        render: (data) => data.status_counts.TOTAL - data.status_counts[
+                            'NOT-APPLICABLE']
+                    },
+                    {
+                        data: 'eqcr_type_name',
+                        render: (data) => data || 'N/A'
+                    },
+                    {
+                        data: 'reviewer_status',
+                        render: (data) => {
+                            const badgeClass = {
+                                'OPEN': 'primary',
+                                'CLOSED': 'danger',
+                                'N/A': 'secondary'
+                            } [data] || 'secondary';
+                            return `<span class="badge badge-${badgeClass}">${data || 'N/A'}</span>`;
+                        }
+                    },
+                    {
+                        data: 'reviewer_documentation_percentage',
+                        render: (data) => `${data}%`
+                    },
+                    {
+                        data: null,
+                        render: (data) => data.reviewer_status_counts.TOTAL - (data
+                            .reviewer_status_counts.SUBMITTED + data.reviewer_status_counts
+                            .CLOSE + data.reviewer_status_counts['REVIEW-TL'])
+                    },
+                    {
+                        data: 'reviewer_status_counts.SUBMITTED'
+                    },
+                    {
+                        data: 'reviewer_status_counts.REVIEW-TL'
+                    },
+                    {
+                        data: 'reviewer_status_counts.CLOSE'
+                    },
+                    {
+                        data: 'reviewer_status_counts.TOTAL'
+                    }
+                ],
+                columnDefs: [{
+                    targets: '_all',
+                    defaultContent: '-'
+                }],
+                order: [],
+                //  buttons: ['copyHtml5', 'excelHtml5', 'pdfHtml5', 'colvis'],
+                buttons: [{
+                        extend: 'excel',
+                        className: 'btn btn-sm btn-success',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        action: function(e, dt) {
+                            let params = dt.ajax.params();
+                            params.export_type = 'excel';
+
+                            // collect only visible column indexes
+                            let visibleCols = dt.columns(':visible').indexes().toArray();
+                            params.visible_columns = visibleCols;
+
+                            $.ajax({
+                                url: '{{ url('documentationfilter') }}',
+                                type: 'GET',
+                                data: params,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                xhrFields: {
+                                    responseType: 'blob'
+                                },
+                                success: function(data) {
+                                    let blob = new Blob([data], {
+                                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                    });
+                                    let a = document.createElement('a');
+                                    let url = window.URL.createObjectURL(blob);
+                                    a.href = url;
+                                    a.download = "assignments.xlsx";
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                    window.URL.revokeObjectURL(url);
+                                }
+                            });
+                        }
+                    },
+
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-sm btn-warning',
+                        text: '<i class="fas fa-columns"></i> Columns visibility'
+                    }
+                ],
+                paging: true,
+                processing: true
+            });
+        }
+
+        // Progress bar functions
+        let progressInterval;
+
+        function showProgressBar() {
+            const $loadingBar = $('#loading-bar');
+            const $container = $('#loading-bar-container').show();
+
+            $loadingBar.css('width', '0%').attr('aria-valuenow', 0).text('Loading... 0%');
+            let progress = 0;
+
+            progressInterval = setInterval(() => {
+                progress = Math.min(progress + 10, 90);
+                $loadingBar.css('width', `${progress}%`)
+                    .attr('aria-valuenow', progress)
+                    .text(`Loading... ${progress}%`);
+            }, 500);
+        }
+
+        function hideProgressBar() {
+            clearInterval(progressInterval);
+            const $loadingBar = $('#loading-bar');
+            $loadingBar.css('width', '100%')
+                .attr('aria-valuenow', 100)
+                .text('Loading... 100%');
+
+            setTimeout(() => $('#loading-bar-container').hide(), 300);
+        }
+
+        // Filter handling
+        function toggleResetButton() {
+            const hasFilters =
+                ($('#clientid').val() && $('#clientid').val().length > 0) ||
+                ($('#partnerId').val() && $('#partnerId').val().length > 0) ||
+                ($('#status').val() && $('#status').val().length > 0) ||
+                $('#fromdate').val() || $('#todate').val();
+            $('#reset-filters').toggleClass('d-none', !hasFilters);
+        }
+
+        // Date Validation and Filter Event Handler
+        $('#clientid, #partnerId, #status, #fromdate, #todate').on('change', function() {
+            const fromDate = $('#fromdate').val();
+            const toDate = $('#todate').val();
+
+            // Clear previous validation states
+            $('#fromdate, #todate').removeClass('is-invalid');
+            $('#fromdate-error, #todate-error').text('');
+
+            // Validate date range
+            if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+                $('#todate').val('').addClass('is-invalid');
+                $('#todate-error').text('End date cannot be before start date.');
+                toggleResetButton();
+                return;
+            }
+
+            // Debounced DataTable reload
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                dataTable.ajax.reload();
+                toggleResetButton();
+            }, 300);
+        });
+
+        // Reset all filters
+        $('#reset-filters').on('click', function(e) {
+            e.preventDefault();
+
+            // Clear inputs
+            $('#fromdate, #todate').val('').removeClass('is-invalid');
+
+            // Clear multi-select filters (Select2)
+            $('#clientid').val(null).trigger('change');
+            $('#partnerId').val(null).trigger('change');
+            $('#status').val(null).trigger('change');
+
+            // Clear error messages
+            $('#fromdate-error, #todate-error').text('');
+
+            // Reload DataTable with no filters
+            dataTable.ajax.reload();
+
+            // Hide reset button
+            toggleResetButton();
+        });
+
+        // Initialize
+        initializeDataTable();
+        toggleResetButton();
+    });
+</script>  jab ye table load hota hai to mai excelbutton per click karta hu to downlaod nahi ho raha hai please fix it and iske alawa koi detalis chahiye to btana 
+
 
 
 

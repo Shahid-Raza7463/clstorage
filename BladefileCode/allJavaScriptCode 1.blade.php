@@ -34,11 +34,517 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 <script></script>
-{{--  Start Hare --}}
-<script></script>
+{{--  regarding loading indicater --}}
+<script>
+    $(document).ready(function() {
+        let dataTable;
+        let debounceTimer;
+
+        // Initialize DataTable
+        function initializeDataTable() {
+            dataTable = $('#tableData').DataTable({
+                serverSide: true,
+                ajax: {
+                    url: '{{ url('documentationfilter') }}',
+                    type: 'GET',
+                    data: d => ({
+                        ...d,
+                        clientId: $('#clientid').val(),
+                        partnerId: $('#partnerId').val(),
+                        status: $('#status').val(),
+                        fromdate: $('#fromdate').val(),
+                        todate: $('#todate').val()
+                    }),
+                    beforeSend: showProgressBar,
+                    complete: hideProgressBar
+                },
+                dom: 'Bfrtip',
+                columns: [{
+                        data: 'assignmentgenerate_id',
+                        render: (data) =>
+                            `<a href="{{ url('/viewassignment/') }}/${data}">${data}</a>`
+                    },
+                    {
+                        data: 'assignment_name'
+                    },
+                    {
+                        data: 'assignmentname'
+                    },
+                    {
+                        data: 'client_name'
+                    },
+                    {
+                        data: 'invoicedate',
+                        // render: (data) => data ? new Date(data).toLocaleDateString('en-US', {
+                        //     // month: 'long',
+                        //     // day: '2-digit',
+                        //     // year: 'numeric'
+                        // }) : ''
+                    },
+                    {
+                        data: 'periodstart',
+                        render: (data) => data ? new Date(data).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: '2-digit',
+                            year: 'numeric'
+                        }) : ''
+                    },
+                    {
+                        data: 'periodend',
+                        render: (data) => data ? new Date(data).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: '2-digit',
+                            year: 'numeric'
+                        }) : ''
+                    },
+                    {
+                        data: 'leadpartner_name'
+                    },
+                    {
+                        data: 'otherpartner_name'
+                    },
+                    {
+                        data: 'sub_team_members'
+                    },
+                    {
+                        data: 'assignmentbudgetingsstatus',
+                        render: (data) =>
+                            `<span class="badge badge-${data == 1 ? 'primary' : 'danger'}">${data == 1 ? 'OPEN' : 'CLOSED'}</span>`
+                    },
+                    {
+                        data: 'documentation_percentage',
+                        render: (data) => `${data}%`
+                    },
+                    {
+                        data: 'status_counts.NOT-APPLICABLE'
+                    },
+                    {
+                        data: null,
+                        render: (data) => data.status_counts.TOTAL - (data.status_counts.SUBMITTED +
+                            data.status_counts.CLOSE + data.status_counts['REVIEW-TL'] + data
+                            .status_counts['NOT-APPLICABLE'])
+                    },
+                    {
+                        data: 'status_counts.SUBMITTED'
+                    },
+                    {
+                        data: 'status_counts.REVIEW-TL'
+                    },
+                    {
+                        data: 'status_counts.CLOSE'
+                    },
+                    {
+                        data: 'status_counts.TOTAL'
+                    },
+                    {
+                        data: null,
+                        render: (data) => data.status_counts.TOTAL - data.status_counts[
+                            'NOT-APPLICABLE']
+                    },
+                    {
+                        data: 'eqcr_type_name',
+                        render: (data) => data || 'N/A'
+                    },
+                    {
+                        data: 'reviewer_status',
+                        render: (data) => {
+                            const badgeClass = {
+                                'OPEN': 'primary',
+                                'CLOSED': 'danger',
+                                'N/A': 'secondary'
+                            } [data] || 'secondary';
+                            return `<span class="badge badge-${badgeClass}">${data || 'N/A'}</span>`;
+                        }
+                    },
+                    {
+                        data: 'reviewer_documentation_percentage',
+                        render: (data) => `${data}%`
+                    },
+                    {
+                        data: null,
+                        render: (data) => data.reviewer_status_counts.TOTAL - (data
+                            .reviewer_status_counts.SUBMITTED + data.reviewer_status_counts
+                            .CLOSE + data.reviewer_status_counts['REVIEW-TL'])
+                    },
+                    {
+                        data: 'reviewer_status_counts.SUBMITTED'
+                    },
+                    {
+                        data: 'reviewer_status_counts.REVIEW-TL'
+                    },
+                    {
+                        data: 'reviewer_status_counts.CLOSE'
+                    },
+                    {
+                        data: 'reviewer_status_counts.TOTAL'
+                    }
+                ],
+                columnDefs: [{
+                    targets: '_all',
+                    defaultContent: '-'
+                }],
+                order: [],
+                //  buttons: ['copyHtml5', 'excelHtml5', 'pdfHtml5', 'colvis'],
+                buttons: [{
+                        extend: 'excel',
+                        className: 'btn btn-sm btn-success',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        action: function(e, dt) {
+                            let params = dt.ajax.params();
+                            params.export_type = 'excel';
+
+                            // Show loading indicator for Excel
+                            $('#loading-bar-container').show();
+                            $('#loading-bar').css('width', '0%')
+                                .attr('aria-valuenow', 0)
+                                .text('Preparing Excel... 0%');
+
+                            // Show progress
+                            let progress = 0;
+                            let progressInterval = setInterval(() => {
+                                progress = Math.min(progress + 5, 95);
+                                $('#loading-bar').css('width', `${progress}%`)
+                                    .attr('aria-valuenow', progress)
+                                    .text(`Preparing Excel... ${progress}%`);
+                            }, 200);
+
+                            // collect only visible column indexes
+                            let visibleCols = dt.columns(':visible').indexes().toArray();
+                            params.visible_columns = visibleCols;
+
+                            $.ajax({
+                                url: '{{ url('documentationfilter') }}',
+                                type: 'GET',
+                                data: params,
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                xhrFields: {
+                                    responseType: 'blob'
+                                },
+                                success: function(data) {
+                                    clearInterval(progressInterval);
+                                    $('#loading-bar').css('width', '100%')
+                                        .text('Downloading... 100%');
+
+                                    let blob = new Blob([data], {
+                                        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                    });
+                                    let a = document.createElement('a');
+                                    let url = window.URL.createObjectURL(blob);
+                                    a.href = url;
+                                    a.download = "assignments.xlsx";
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                    window.URL.revokeObjectURL(url);
+
+                                    // Hide loading bar after download
+                                    setTimeout(() => {
+                                        $('#loading-bar-container').hide();
+                                    }, 500);
+                                },
+                                error: function() {
+                                    clearInterval(progressInterval);
+                                    alert(
+                                        'Error exporting Excel. Please try again.'
+                                    );
+                                    $('#loading-bar-container').hide();
+                                }
+                            });
+                        }
+                    },
+
+                    {
+                        extend: 'colvis',
+                        className: 'btn btn-sm btn-warning',
+                        text: '<i class="fas fa-columns"></i> Columns visibility'
+                    }
+                ],
+                paging: true,
+                processing: true
+            });
+        }
+
+        // Progress bar functions
+        let progressInterval;
+
+        function showProgressBar() {
+            const $loadingBar = $('#loading-bar');
+            const $container = $('#loading-bar-container').show();
+
+            $loadingBar.css('width', '0%').attr('aria-valuenow', 0).text('Loading... 0%');
+            let progress = 0;
+
+            progressInterval = setInterval(() => {
+                progress = Math.min(progress + 10, 90);
+                $loadingBar.css('width', `${progress}%`)
+                    .attr('aria-valuenow', progress)
+                    .text(`Loading... ${progress}%`);
+            }, 500);
+        }
+
+        function hideProgressBar() {
+            clearInterval(progressInterval);
+            const $loadingBar = $('#loading-bar');
+            $loadingBar.css('width', '100%')
+                .attr('aria-valuenow', 100)
+                .text('Loading... 100%');
+
+            setTimeout(() => $('#loading-bar-container').hide(), 300);
+        }
+
+        // Filter handling
+        function toggleResetButton() {
+            const hasFilters =
+                ($('#clientid').val() && $('#clientid').val().length > 0) ||
+                ($('#partnerId').val() && $('#partnerId').val().length > 0) ||
+                ($('#status').val() && $('#status').val().length > 0) ||
+                $('#fromdate').val() || $('#todate').val();
+            $('#reset-filters').toggleClass('d-none', !hasFilters);
+        }
+
+        // Date Validation and Filter Event Handler
+        $('#clientid, #partnerId, #status, #fromdate, #todate').on('change', function() {
+            const fromDate = $('#fromdate').val();
+            const toDate = $('#todate').val();
+
+            // Clear previous validation states
+            $('#fromdate, #todate').removeClass('is-invalid');
+            $('#fromdate-error, #todate-error').text('');
+
+            // Validate date range
+            if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+                $('#todate').val('').addClass('is-invalid');
+                $('#todate-error').text('End date cannot be before start date.');
+                toggleResetButton();
+                return;
+            }
+
+            // Debounced DataTable reload
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                dataTable.ajax.reload();
+                toggleResetButton();
+            }, 300);
+        });
+
+        // Reset all filters
+        $('#reset-filters').on('click', function(e) {
+            e.preventDefault();
+
+            // Clear inputs
+            $('#fromdate, #todate').val('').removeClass('is-invalid');
+
+            // Clear multi-select filters (Select2)
+            $('#clientid').val(null).trigger('change');
+            $('#partnerId').val(null).trigger('change');
+            $('#status').val(null).trigger('change');
+
+            // Clear error messages
+            $('#fromdate-error, #todate-error').text('');
+
+            // Reload DataTable with no filters
+            dataTable.ajax.reload();
+
+            // Hide reset button
+            toggleResetButton();
+        });
+
+        // Initialize
+        initializeDataTable();
+        toggleResetButton();
+    });
+</script>
+
+
+<script>
+    $(function() {
+        $('#ticketForm').on('submit', function(e) {
+            const description = document.getElementById('editor').value.trim();
+
+            var isEmpty = !description ||
+                description === '' ||
+                description === '<p><br></p>' ||
+                description === '<p></p>' ||
+                description.trim() === '' ||
+                $(description).text().trim() === '';
+
+            // if (isEmpty) {
+            //     alert('Please Enter Description of Query');
+            //     return false;
+            // }
+
+            if (isEmpty) {
+                // Swal.fire({
+                //     icon: 'warning',
+                //     title: 'Description Required',
+                //     text: 'Please enter description before submitting.',
+                //     confirmButtonColor: '#d33',
+                //     allowOutsideClick: false,
+                // }).then(() => {
+                //     errorAlertOpen = false;
+                //     document.getElementById('editor').focus();
+                // });
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Description Required',
+                    text: 'Please enter description before submitting.',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#d33',
+                    allowOutsideClick: false,
+                }).then(() => {
+                    document.getElementById('editor').focus();
+                });
+
+                return false;
+            }
+
+            if (!isEmpty) {
+                Swal.fire({
+                    title: 'Inform Partner?',
+                    text: "Do You want to inform partner about the ticket?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, submit it!',
+                    cancelButtonColor: '#f39c12', // Use the color for 'Cancel' button
+                    cancelButtonText: 'Cancel',
+                    showDenyButton: true,
+                    denyButtonColor: '#d33', // Use the color for 'No, submit it!' button
+                    denyButtonText: 'No, submit it!',
+                    allowOutsideClick: false,
+                    buttons: ['cancel', 'deny', 'confirm'] // Specify the order of buttons
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user clicks 'Yes', set inform_partner to 1 and manually submit the form
+                        document.getElementById("informPartnerInput").value = "1";
+                        document.getElementById("ticketForm").submit();
+                    } else if (result.isDismissed && result.dismiss === Swal.DismissReason
+                        .cancel) {
+                        // Handle 'Cancel' button click (do nothing or provide specific action)
+                        Swal.update({
+                            showDenyButton: true,
+                            denyButtonText: 'Cancel',
+                        });
+                    } else {
+                        // If the user clicks 'No', set inform_partner to 0 and manually submit the form
+                        document.getElementById("informPartnerInput").value = "0";
+                        document.getElementById("ticketForm").submit();
+                    }
+                });
+
+                return false;
+            }
+        });
+    });
+</script>
+<script>
+    $(function() {
+        $('#ticketForm').on('submit', function(e) {
+            const description = document.getElementById('editor').value.trim();
+
+            var isEmpty = !description ||
+                description === '' ||
+                description === '<p><br></p>' ||
+                description === '<p></p>' ||
+                description.trim() === '' ||
+                $(description).text().trim() === '';
+
+            if (isEmpty) {
+                alert('Please Enter Description of Query');
+                return false;
+            }
+
+            if (!isEmpty) {
+                Swal.fire({
+                    title: 'Inform Partner?',
+                    text: "Do You want to inform partner about the ticket?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, submit it!',
+                    cancelButtonColor: '#f39c12', // Use the color for 'Cancel' button
+                    cancelButtonText: 'Cancel',
+                    showDenyButton: true,
+                    denyButtonColor: '#d33', // Use the color for 'No, submit it!' button
+                    denyButtonText: 'No, submit it!',
+                    allowOutsideClick: false,
+                    buttons: ['cancel', 'deny', 'confirm'] // Specify the order of buttons
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user clicks 'Yes', set inform_partner to 1 and manually submit the form
+                        document.getElementById("informPartnerInput").value = "1";
+                        document.getElementById("ticketForm").submit();
+                    } else if (result.isDismissed && result.dismiss === Swal.DismissReason
+                        .cancel) {
+                        // Handle 'Cancel' button click (do nothing or provide specific action)
+                        Swal.update({
+                            showDenyButton: true,
+                            denyButtonText: 'Cancel',
+                        });
+                    } else {
+                        // If the user clicks 'No', set inform_partner to 0 and manually submit the form
+                        document.getElementById("informPartnerInput").value = "0";
+                        document.getElementById("ticketForm").submit();
+                    }
+                });
+
+                return false;
+            }
+        });
+    });
+</script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<script>
+    function showConfirmation() {
+
+        // 🔴 Step 1: Description empty check
+        const description = document.getElementById('editor').value.trim();
+
+        if (description === '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Description Required',
+                text: 'Please enter Description of Query before submitting.',
+                confirmButtonColor: '#d33',
+            });
+            return false; // ❌ form submit stop
+        }
+
+        // ✅ Step 2: Confirmation popup
+        Swal.fire({
+            title: 'Inform Partner?',
+            text: "Do You want to inform partner about the ticket?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, submit it!',
+            cancelButtonColor: '#f39c12',
+            cancelButtonText: 'Cancel',
+            showDenyButton: true,
+            denyButtonColor: '#d33',
+            denyButtonText: 'No, submit it!',
+            allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("informPartnerInput").value = "1";
+                document.getElementById("ticketForm").submit();
+            } else if (result.isDenied) {
+                document.getElementById("informPartnerInput").value = "0";
+                document.getElementById("ticketForm").submit();
+            }
+        });
+
+        return false; // prevent default submit
+    }
+</script>
 <script>
     document.getElementById("myForm").addEventListener("submit", function(e) {
         let requiredFields = document.querySelectorAll("#myForm [required]");

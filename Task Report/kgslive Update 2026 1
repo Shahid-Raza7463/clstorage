@@ -1,0 +1,136 @@
+
+all completed on kgsdemo and kgslive ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+all completed on kgsdemo and kgslive ```end hare 
+
+
+
+
+###############################################################
+all pending on kgslive ```start hare
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+all pending on kgslive ```end hare
+
+
+
+#############################################################
+all pending on kgsdemo ```start hare
+
+simmi bugs oms ```start hare  this is uploaded on kgslive only
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+
+
+                                  <ul class="nav-second-level">
+                                      <li><a href="{{ url('it-support') }}">IT Support</a></li>
+                                      <li><a href="{{ url('finance-support') }}">Accounts/Finance Support</a></li>
+                                      @if (Auth::user()->teammember_id != 724)
+                                          <li><a href="{{ url('auditticket') }}">Audit Query</a> </li>
+                                      @endif
+                                      <li><a href="{{ url('omsticket') }}">OMS Query</a> </li>
+                                      <li><a href="{{ url('hrticket') }}">Hr Query</a> </li>
+                                      <li><a href="{{ url('adminticket') }}">Admin Query</a> </li>
+                                      @if (Auth::user()->teammember_id != 724)
+                                          <li><a href="{{ url('dataanalytics') }}">Data Analytics Query</a> </li>
+                                      @endif
+                                  </ul>
+
+
+
+
+
+
+app\Http\Controllers\OmsQueryticketController.php
+
+find auth()->user()->email == 'simmi@capitall.io'
+auth()->user()->teammember_id == 724
+
+
+find auth()->user()->email != 'simmi@capitall.io'
+auth()->user()->teammember_id != 724
+
+
+
+
+resources\views\backEnd\omsqueryticket\view.blade.php
+Auth()->user()->email == 'simmi@capitall.io'
+
+
+Auth()->user()->teammember_id == 724
+
+
+end hare ```
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+all pending on kgsdemo ```end hare
+
+
+

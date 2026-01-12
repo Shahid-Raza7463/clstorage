@@ -184,6 +184,137 @@ if ($attendanceDatas->isEmpty()) {
 
 //* regarding holidays update / regarding holidays 
 // Start Hare
+
+
+$holidays = [
+  [
+    'holidayname' => 'Pongal/Makara Sankaranti',
+    'startdate' => '2026-01-14',
+    'enddate' => '2026-01-14',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Republic Day',
+    'startdate' => '2026-01-26',
+    'enddate' => '2026-01-26',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Holi',
+    'startdate' => '2026-03-04',
+    'enddate' => '2026-03-04',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Ambedkar Jayanthi',
+    'startdate' => '2026-04-14',
+    'enddate' => '2026-04-14',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Raksha Bandhan',
+    'startdate' => '2026-08-28',
+    'enddate' => '2026-08-28',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Independence Day',
+    'startdate' => '2026-08-15',
+    'enddate' => '2026-08-15',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Janmashtami',
+    'startdate' => '2026-09-04',
+    'enddate' => '2026-09-04',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Ganesh (Vinayaka) Chaturthi',
+    'startdate' => '2026-09-14',
+    'enddate' => '2026-09-14',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Gandhi Jayanthi',
+    'startdate' => '2026-10-02',
+    'enddate' => '2026-10-02',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Mahanavami/Saraswathi Pooja',
+    'startdate' => '2026-10-19',
+    'enddate' => '2026-10-19',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Dussehra Vijaya Dasami',
+    'startdate' => '2026-10-20',
+    'enddate' => '2026-10-20',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Deepawali',
+    'startdate' => '2026-11-08',
+    'enddate' => '2026-11-08',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Deepawali',
+    'startdate' => '2026-11-09',
+    'enddate' => '2026-11-09',
+    'number_of_dates' => 1,
+  ],
+  [
+    'holidayname' => 'Christmas Day',
+    'startdate' => '2026-12-25',
+    'enddate' => '2026-12-25',
+    'number_of_dates' => 1,
+  ],
+];
+
+
+foreach ($holidays as $holiday) {
+  DB::table('holidays')->insert([
+    'holidayname' => $holiday['holidayname'],
+    'startdate' => $holiday['startdate'],
+    'enddate' => $holiday['enddate'],
+    'number_of_dates' => $holiday['number_of_dates'],
+    'restricted' => 'on',
+    'description' => null,
+    'year' => 2026,
+    'notify' => null,
+    'status' => 1,
+    'createdby' => null,
+    'updatedby' => null,
+    'created_at' => now(),
+    'updated_at' => now(),
+  ]);
+}
+
+
+INSERT INTO `holidays`
+(`holidayname`, `startdate`, `enddate`, `number_of_dates`, `restricted`, `description`, `year`, `notify`, `status`, `createdby`, `updatedby`, `created_at`, `updated_at`)
+VALUES
+('Pongal/Makara Sankaranti', '2026-01-14', '2026-01-14', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Republic Day', '2026-01-26', '2026-01-26', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Holi', '2026-03-04', '2026-03-04', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Ambedkar Jayanthi', '2026-04-14', '2026-04-14', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Raksha Bandhan', '2026-08-28', '2026-08-28', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Independence Day', '2026-08-15', '2026-08-15', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Janmashtami', '2026-09-04', '2026-09-04', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Ganesh (Vinayaka) Chaturthi', '2026-09-14', '2026-09-14', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Gandhi Jayanthi', '2026-10-02', '2026-10-02', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Mahanavami/Saraswathi Pooja', '2026-10-19', '2026-10-19', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Dussehra Vijaya Dasami', '2026-10-20', '2026-10-20', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Deepawali', '2026-11-08', '2026-11-08', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Deepawali', '2026-11-09', '2026-11-09', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW()),
+('Christmas Day', '2026-12-25', '2026-12-25', 1, 'on', NULL, 2026, NULL, 1, NULL, NULL, NOW(), NOW());
+
+
+// Start Hare
+
+
 $holidays = [
   [
     'holidayname' => 'Pongal/Makara Sankaranti',

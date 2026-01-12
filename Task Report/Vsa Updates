@@ -1,5 +1,10 @@
 http://127.0.0.1:8000/viewassignment/ZUA101165
 
+
+
+ if ($request->assignment === 'UNA100002') {
+
+all completed on kgsdemo and kgslive ```start hare 
 While adding a team member in the assignment, the team should be searchable  ```start
 vsademo vsalive  done 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -7771,20 +7776,225 @@ employee_name = 828
  id = 1958
 is id ke baad jitne bhi attendence record hai use delete karna hai vsalive per
 
+
+
+12-12-2025 task new ```start hare 
+1.When filling the timesheet for an unallocated client, the partner dropdown should display all partner names so that the user can select the appropriate one.
+2.When a user applies for leave, the partner's name should appear in the partner column of the timesheet instead of ‘N/A’.
+3.Timesheet submission report issue. Nalin Kumar.
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
+find  // adding approver in patner section
+
+1
+
+            // 'partner'     =>     887,
+            // adding approver in patner section 
+            'partner'     =>     $request->approver,
+			
+			
+			
+			
+2
+
+              // 'partner'     =>     887,
+              // adding approver in patner section 
+              'partner'     =>  $team->approver,
+			  
+			  
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+ if (isset($request->assignment)) {
+ 
+ 
+ 
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+          if ($request->assignment === 'UNA100002') {
+            $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          // dd($request->assignment);
+          if ($request->assignment === 'UNA100002') {
+            $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partnerbefore = DB::table('teammembers')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              ->whereNotIn('id', $excludedIds)
+              // ->orderBy('team_member')
+              ->select('id', 'team_member');
+          } else {
+            $partnerbefore = DB::table('assignmentmappings')
+              ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftJoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('teammembers.id', 'teammembers.team_member');
+          }
+
+          $partnerafter = DB::table('assignmentmappings')
+            ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->select(DB::raw("
+            CASE
+                WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.id
+                WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.id
+            END as id,
+            CASE
+                WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.team_member
+                WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.team_member
+            END as team_member
+            "));
+
+          $partnerresult = $partnerafter->union($partnerbefore)->get();
+
+          foreach ($partnerresult as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+
+          $partners = DB::table('teammembers')
+            ->where('id', auth()->user()->teammember_id)
+            ->select('teammembers.id', 'teammembers.team_member')
+            ->get();
+
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } else {
+          echo "<option value=''>Select Partner</option>";
+          if ($request->assignment === 'UNA100002') {
+            $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        }
+      }
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TimesheetController.php
+public function timesheeteditonchange(Request $request)
+
+
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+          if ($request->assignment === 'UNA100002') {
+            $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('teammembers')
+              ->where('id', auth()->user()->teammember_id)
+              ->select('teammembers.id', 'teammembers.team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } else {
+          echo "<option value=''>Select Partner</option>";
+          if ($request->assignment === 'UNA100002') {
+            $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        }
+      }
 
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
 
 
+
+resources\views\backEnd\timesheet\weeklylist.blade.php
+
+                                @if (Auth::user()->role_id == 11 ||
+                                        (isset($timesheetData[0]) && Auth::user()->teammember_id != $timesheetData[0]->createdby))
+                                    <th>Action</th>
+   
+ 
+ 
+
+end hare 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -8052,3 +8262,16 @@ app\Console\Commands\TimesheetnotfillReminder.php
                     'leadpartner.team_member as leadpartnername',
                     'otherpartner.team_member as otherpartnername',
                 )->distinct()->get();
+				
+				
+				
+
+unlocated 
+apply leave 
+nalin kumar 
+
+
+jab leave apply karta hai to timesheet me partner column me partner name jana chahiye not NA
+jab unlocated client per timesheet fill kare to partner dropdown me sabhi partner ka name aana chahiye so that user can select partner
+Nalin kumar timesheet submitted report issue 
+

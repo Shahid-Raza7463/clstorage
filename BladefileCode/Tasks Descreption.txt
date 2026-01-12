@@ -7,8 +7,103 @@
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+05-01-2026
+1.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
+  indexing file 
+  view file 
+  leave storing time   
+2.Upload all pending code on vsademo 
+3.Client name, client code, and assignment name should be displayed in the Independence tab 
+
+
+
+06-01-2026
+1.Client name, client code, and assignment name should be displayed in the Independence tab completed
+2.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
+  timesheet submission 
+  Attendence 
+  travel count box 
+  approved leave and rejected leave
+ 
+
+07-01-2026
+2.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
+  leave revert on that time 
+1.upload 2 task on vsademo  and testing completed
+
+
+1.Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Click on the 'Apply Leave' button.
+
+
+2.Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+
+Hare check after filter also 
+
+
+3.Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+3.	Click on the 'Employee' hyperlink.
+
+Submitted timesheet
+Attendence 
+travel count box 
+approved leave and rejected leave
+leave revert on that time 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+1.When filling the timesheet for an unallocated client, the partner dropdown should display all partner names so that the user can select the appropriate one.
+2.When a user applies for leave, the partner's name should appear in the partner column of the timesheet instead of ‘N/A’.
+3.Timesheet submission report issue. Nalin Kumar.
+
+2.When a user applies for leave, the partner's name should appear in the partner column of the timesheet instead of ‘NA’.
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+1.Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Apply Leave' tab.
+4.	Click on the 'Apply Leave' button.
+
+5.Apply casual leave and exam leave, and verify the saved timesheet after the leave is applied
+
+
+
+1.When filling the timesheet for an unallocated client, the partner dropdown should display all active partner names so that the user can select the appropriate one.
+
+A.Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Add Timesheet'.
+
+B.Steps:
+1.	Navigate to the application.
+2.	Click on the 'Human Resources' dropdown.
+3.	Click on the 'Timesheet' dropdown and navigate to 'My Timesheet'.
+4.	Click on 'Edit button'.
+
+C.Steps:-
+1.Navigate to the application
+2.Click on 'Human resoursec' dropdown.
+3.Click on 'Timesheet dropdown and navigate to 'Rejected Submitted timesheet.
+4.Click on 'Edit button'.
+
+# we have to test also for promoted partner or rejoined partner.
+
+
+i have explained to atishay that jab user leave apply karta hai and apply karne ke baad timesheet submit kar deta hai and leave uske baad agar reject karta hai to submitted timesheet se bhi casual leave delete ho jata hai. this is currently runnig this process
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
 Salary Should be encrypted/decrypted in the system

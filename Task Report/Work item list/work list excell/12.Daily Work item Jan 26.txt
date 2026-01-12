@@ -1,0 +1,140 @@
+01-01-2026
+New year 
+
+
+02-01-2026
+1.vsademo code upload on bitbucket 
+2.holidays list upload on vsa live 
+3.apply leave error on new year fixed(dynamic implemented)
+4.approved independence data for below listed users
+  1.Subhash Kumar Mishra
+  2.Ankush
+  3.Sohan Jha
+  4.Tushar Garg
+
+
+03-01-2026
+1.When a user’s timesheet is rejected, the user should first be able to update and resubmit the rejected timesheet.
+2.Discussion tasks with clients 
+3.approved independence data for below listed users
+  1.Subhash Kumar Mishra
+  2.Ankush
+  3.Sohan Jha
+  4.Tushar Garg
+  
+  
+04-01-2026
+Sunday
+
+05-01-2026
+1.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
+  indexing file 
+  view file 
+  leave storing time   
+2.Upload all pending code on vsademo 
+3.Client name, client code, and assignment name should be displayed in the Independence tab 
+
+
+
+
+06-01-2026
+1.Client name, client code, and assignment name should be displayed in the Independence tab completed
+2.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
+  timesheet submission 
+  Attendence 
+  travel count box 
+  approved leave and rejected leave
+ 
+
+07-01-2026
+1.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
+  leave revert on that time 
+2.dd Client name and Assignment Name in the Independence confirmation table deployed  deployed on vsademo and testing completed
+3.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available deployed on vsademo and testing completed
+4.Partner added on this assignment (BIR101359)
+5.Add Client name and Assignment Name in the Independence confirmation table deployed on vsa
+
+
+
+08-01-2026
+1.When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs
+2.When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs deployed on vsademo and testing completed
+3.KT completed with pooja (Total 4 task)
+4.Total working days, total travel days, and approved leave data should also be displayed for the previous year
+ 
+
+09-01-2026
+1.Total working days, total travel days, and approved leave data should also be displayed for the previous year
+  1.1 Total working days
+  1.2 total travel days
+  
+  
+
+
+10-01-2026
+11-01-2026
+12-01-2026
+
+
+
+
+
+11.Total working days, total travel days, and approved leave data should also be displayed for the previous year
+12.Some tabs should be hidden from the system.
+13.The Profile section should have permission control for the new Admin role.
+
+
+appointment hide 
+assignmnt budgetting hide 
+assignmnt mapping 
+
+hr profile section permission 
+
+
+13-01-2026
+14-01-2026
+15-01-2026
+16-01-2026
+17-01-2026
+18-01-2026
+19-01-2026
+20-01-2026
+21-01-2026
+22-01-2026
+23-01-2026
+24-01-2026
+25-01-2026
+26-01-2026
+27-01-2026
+28-01-2026
+29-01-2026
+30-01-2026
+31-01-2026
+
+
+
+
+
+vishal agarwal  when assignment created mail 
+
+assignmnet created mail
+
+
+
+
+
+
+
+timesheet bhi 
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2025-07-12
+2025-02-07
+
+2024-09-13
+
+
+
