@@ -73,21 +73,348 @@ class Allcode extends Controller
         //* regarding 
         // Start Hare
         // Start Hare
+        if ($hasRejectedTimesheet) {
+    return redirect()
+        ->route('rejectedlist')
+        ->with('warning', 'Please submit your rejected timesheet first.');
+}
+
+Route::get('/timesheet/mylist', [TimesheetController::class, 'timesheet_mylist'])
+    ->name('timesheet.mylist');
+
+
+    $hasRejectedTimesheet = DB::table('timesheetusers')
+    ->where('createdby', auth()->user()->teammember_id)
+    ->where('status', 2)
+    ->exists();
+
+if ($hasRejectedTimesheet) {
+    return redirect()
+        ->route('timesheet.mylist')
+        ->with('warning', 'Please submit your rejected timesheet first.');
+}
+
+return redirect('timesheet/mylist')
+    ->with('warning', 'Please submit your rejected timesheet first.');
+
+        //! End hare 
+        //* regarding update data 
+        // Start Hare
+        // Start Hare
+        
+        $usersAssignments = [
+            940 => [
+                'date' => '2025-06-27 10:20:23',
+                'assignments' => [
+                    'SAN100900',
+                    'DEV100939',
+                    'CEN100958',
+                    'CAT101076',
+                ],
+            ],
+            814 => [
+                'date' => '2025-05-10 10:20:23',
+                'assignments' => [
+                    'RSW100908',
+                    'CEN100958',
+                    'RSW100998',
+                ],
+            ],
+            830 => [
+                'date' => '2025-08-15 10:20:23',
+                'assignments' => [
+                    'INT100892',
+                    'IND100896',
+                    'JES100897',
+                    'THE101106',
+                    'RSW101117',
+                    'RSW101119',
+                    'CEN101193',
+                    'DIL101194',
+                ],
+            ],
+            811 => [
+                'date' => '2025-06-06 10:20:23',
+                'assignments' => [
+                    'FOO101089',
+                ],
+            ],
+        ];
+
+        $data = [];
+
+        foreach ($usersAssignments as $userId => $info) {
+            foreach ($info['assignments'] as $assignmentId) {
+                $data[] = [
+                    'assignmentgenerate_id' => $assignmentId,
+                    'createdby' => $userId,
+                    'created_at' => $info['date'],
+                    'updated_at' => $info['date'],
+                ];
+            }
+        }
+
+        DB::table('independences')->insert($data);
+
+
+        $assignments = [
+            'SAN100900',
+            'DEV100939',
+            'CEN100958',
+            'CAT101076',
+        ];
+
+        $data = [];
+
+        foreach ($assignments as $assignmentId) {
+            $data[] = [
+                'assignmentgenerate_id' => $assignmentId,
+                'createdby' => 940,
+                'created_at' => '2025-06-27 10:20:23',
+                'updated_at' => '2025-06-27 10:20:23',
+            ];
+        }
+
+
+
+
+        DB::table('independences')->insert($data);
+
+
+        $assignments = [
+            'RSW100908',
+            'CEN100958',
+            'RSW100998',
+        ];
+
+        $data = [];
+
+        foreach ($assignments as $assignmentId) {
+            $data[] = [
+                'assignmentgenerate_id' => $assignmentId,
+                'createdby' => 814,
+                'created_at' => '2025-05-10 10:20:23',
+                'updated_at' => '2025-05-10 10:20:23',
+            ];
+        }
+
+
+        DB::table('independences')->insert($data);
+
+
+
+
+        $assignments = [
+            'INT100892',
+            'IND100896',
+            'JES100897',
+            'THE101106',
+            'RSW101117',
+            'RSW101119',
+            'CEN101193',
+            'DIL101194',
+        ];
+
+        $data = [];
+
+        foreach ($assignments as $assignmentId) {
+            $data[] = [
+                'assignmentgenerate_id' => $assignmentId,
+                'createdby' => 830,
+                'created_at' => '2025-08-15 10:20:23',
+                'updated_at' => '2025-08-15 10:20:23',
+            ];
+        }
+
+
+        DB::table('independences')->insert($data);
+
+
+
+        $assignments = [
+            'FOO101089',
+        ];
+
+        $data = [];
+
+        foreach ($assignments as $assignmentId) {
+            $data[] = [
+                'assignmentgenerate_id' => $assignmentId,
+                'createdby' => 811,
+                'created_at' => '2025-06-06 10:20:23',
+                'updated_at' => '2025-06-06 10:20:23',
+            ];
+        }
+
+        DB::table('independences')->insert($data);
+
         //! End hare 
         //* regarding 
         // Start Hare
         // Start Hare
+        
+    $currentdate = date('Y-m-d');
+    $currentYear = date('Y');
+
+    $currentDay = date('d', strtotime($currentdate));
+    $currentMonth = date('m', strtotime($currentdate));
+
+    // Adjust year if the date is before March 26
+    if ($currentMonth <= '03') {
+      if ($currentMonth < '03' || ($currentMonth == '03' && $currentDay < 26)) {
+        $currentYear -= 1;
+      }
+    }
+
+    // dd($currentYear);
+    $financialYearStart = $currentYear . '-03-26';
+    $financialYearEnd = ($currentYear + 1) . '-03-25';
+
+    $casualteam = DB::table('teammembers')->where('id', auth()->user()->teammember_id)->first();
+
+    $birthday = DB::table('leavetypes')
+      ->where('year', $currentYear)->where('name', 'Birthday/Religious Festival')->first();
+    $Casual = DB::table('leavetypes')->where('year', $currentYear)->where('name', 'Casual Leave')->first();
+    $Sick = DB::table('leavetypes')->where('year', $currentYear)->where('name', 'Sick Leave')->first();
+    //  dd($casualteam);
+    if ($casualteam->joining_date < $Casual->startdate) {
+      $to = \Carbon\Carbon::createFromFormat('Y-m-d', $Casual->startdate);
+    } else {
+      $to = \Carbon\Carbon::createFromFormat('Y-m-d', $casualteam->joining_date);
+    }
+
+    
         //! End hare 
         //* regarding 
         // Start Hare
+        $teammembername = Teammember::query()
+    ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+        $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+    })
+    ->where('teammembers.id', auth()->user()->teammember_id)
+    ->select(
+        'teammembers.*',
+        'latestrecord.newstaff_code'
+    )
+    ->first();
+
         // Start Hare
+        <?php
+
+namespace App\Exports;
+
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
+class DocumentassigmentExport implements FromCollection, WithHeadings, WithColumnWidths, WithStyles
+{
+    protected $data;
+    protected $visibleColumns;
+
+    public function __construct($data, $visibleColumns = [])
+    {
+        $this->data = $data;
+        $this->visibleColumns = $visibleColumns;
+    }
+
+    public function collection()
+    {
+        // Return only basic data without heavy calculations
+        return collect($this->data)->map(function ($item) {
+            return [
+                'Assignment Id' => $item->assignmentgenerate_id,
+                'Assignment' => $item->assignment_name,
+                'Assignment Name' => $item->assignmentname,
+                'Client' => $item->client_name,
+                'Period Start' => $item->periodstartdate,
+                'Period End' => $item->periodenddate,
+                'Assigned Partner' => $item->leadpartner_name,
+                'Other Partner' => $item->otherpartner_name,
+                'Status' => $item->assignment_status,
+                'EQCR Type' => $this->getEQCRType($item->eqcrapplicability),
+            ];
+        });
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Assignment Id',
+            'Assignment',
+            'Assignment Name',
+            'Client',
+            'Period Start',
+            'Period End',
+            'Assigned Partner',
+            'Other Partner',
+            'Status',
+            'EQCR Type',
+        ];
+    }
+
+    private function getEQCRType($type)
+    {
+        $types = [
+            1 => 'NFRA',
+            2 => 'Quality Review',
+            3 => 'Peer Review',
+            4 => 'Others',
+            5 => 'PCAOB'
+        ];
+
+        return $types[$type] ?? '';
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 15,
+            'B' => 25,
+            'C' => 25,
+            'D' => 20,
+            'E' => 15,
+            'F' => 15,
+            'G' => 20,
+            'H' => 20,
+            'I' => 15,
+            'J' => 15,
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row as bold text
+            1 => ['font' => ['bold' => true]],
+        ];
+    }
+}
+
+        
         //! End hare 
         //* regarding 
         // Start Hare
+        Schema::dropIfExists('teammembers');
+
         // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
+        $fks = DB::select("
+    SELECT TABLE_NAME, CONSTRAINT_NAME 
+    FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+    WHERE REFERENCED_TABLE_NAME = 'teammembers'
+    AND CONSTRAINT_SCHEMA = ?
+", [env('DB_DATABASE')]);
+
+foreach ($fks as $fk) {
+    $table = $fk->TABLE_NAME;
+    $constraint = $fk->CONSTRAINT_NAME;
+    DB::statement("ALTER TABLE `$table` DROP FOREIGN KEY `$constraint`");
+}
+
+echo "All foreign keys referencing teammembers dropped!";
+
         // Start Hare
         //! End hare 
         //* regarding skip / regarding count 

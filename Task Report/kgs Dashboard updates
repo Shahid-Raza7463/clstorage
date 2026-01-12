@@ -11970,6 +11970,190 @@ end hare
 26-11-2025 ```start 
 Help Desk Updates for OMS and Admin Query
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+find  // Hr Ticket routes
+
+  // OMS Query Ticket routes 
+  Route::resource('/omsticket', OmsQueryticketController::class);
+  Route::post('/omsticket/update', [OmsQueryticketController::class, 'omsticketUpdate']);
+  Route::get('/view/omsticket/{id}', [OmsQueryticketController::class, 'viewomsticketTask']);
+  Route::post('/omsticket/complete', [OmsQueryticketController::class, 'omsticketComplete']);
+  Route::get('/assignmentidresponce', [OmsQueryticketController::class, 'assignmentidresponce']);
+
+
+
+resources\views\backEnd\omsqueryticket\create.blade.php
+add file all hare 
+
+
+resources\views\emails\omsassign.blade.php
+add emails file hare 
+
+
+
+
+
+
+
+Admin query 
+
+  // Admin Ticket routes      
+  Route::resource('/adminticket', AdmintaskController::class);
+  Route::get('/view/adminticket/{id}', [AdmintaskController::class, 'viewadminticketTask']);
+  Route::post('/adminticket/update', [AdmintaskController::class, 'adminticketUpdate']);
+  Route::post('/adminticket/complete', [AdmintaskController::class, 'adminticketComplete']);
+
+
+
+resources\views\backEnd\adminticket\create.blade.php
+add blade file hare 
+
+
+
+
+resources\views\emails\admintaskdone.blade.php
+
+add emails file 
+
+
+
+
+
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+
+                                      <li><a href="{{ url('it-support') }}">IT Support</a></li>
+                                      <li><a href="{{ url('finance-support') }}">Accounts/Finance Support</a></li>
+                                      <li><a href="{{ url('auditticket') }}">Audit Query</a> </li>
+                                      <li><a href="{{ url('omsticket') }}">OMS Query</a> </li>
+                                      <li><a href="{{ url('hrticket') }}">Hr Query</a> </li>
+                                      <li><a href="{{ url('adminticket') }}">Admin Query</a> </li>
+                                      <li><a href="{{ url('dataanalytics') }}">Data Analytics Query</a> </li>
+
+                
+				
+				
+
+
+```777
+
+
+
+in task table, add below column 
+
+assignmentgenerate_id  big int 20 default null 
+adminfunction   varchar 255 default null 
+other_adminfunction  varchar 255 default null 
+
+
+adminfunctions table upload 
+
+
+In permissions table, create new record 
+
+create new record 
+role_id 12 and page_id 16 
+    
+
+Simmi id requared on kgslive 	
+
+end hare ```
+
+
+
+Checkin Report_rule-based testing ```start 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+                                              <li><a href="{{ url('timesheetreportsection') }}">Timesheet</a></li>
+                                              <li><a href="{{ url('checkinlist') }}">Checkin Report</a></li>
+											  
+											  
+											  
+
+
+                                      <li><a href="{{ url('attendance') }}">Attendance</a></li>
+                                      <li><a href="{{ url('check-In') }}">Check In</a></li>
+                                      <li><a href="{{ url('checkinreport') }}">Check In Report</a></li>
+                                      <li><a href="{{ url('checkinlist') }}">Check In List</a></li>
+ 
+ 
+
+end hare ```
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
 routes\web.php
 
 
@@ -14915,14 +15099,18 @@ resources\views\backEnd\check-In\checkinlist.blade.php
                                 <th>On Time(Before 10.30)</th>
                                 <th>10.30 AM-12 PM</th>
 
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\CheckInController.php
  public function checkinlist()
  
  
  1
- DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
+                    DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
                     DB::raw('SUM(CASE WHEN checkins.time >= "10:30:00" AND checkins.time < "12:00:00" THEN 1 ELSE 0 END) as chgg'),
+
+
 
 
 
@@ -14946,15 +15134,20 @@ app\Http\Controllers\CheckInController.php
 
                 $entry->not_checkin = $notCheckinCount;  
 				
-				
+		
+
+
+		
 				
 
 
  public function checkinlistfiltersection(Request $request)
 	
 1
- DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
+                    DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
                     DB::raw('SUM(CASE WHEN checkins.time >= "10:30:00" AND checkins.time < "12:00:00" THEN 1 ELSE 0 END) as chgg'),
+
+
 
 
 
@@ -14982,43 +15175,1034 @@ app\Http\Controllers\CheckInController.php
 			
 end hare ```		
 	
+	
+10-12-2025  optimize ```start 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\KrasController.php
 
+all kpi loading time 
+32 s    4.4 s
+
+
+1827987560
+
+highpriorityAssignments
+
+
+ // Budget vs Actual P&L
+      $budgetRevenueandbudgetExpences = DB::table('assignmentmappings')
+
+
+1.approved and created ke case me 
+
+
+end hare 
+
+
+check in bugs 11-12-2025 ```start  kgsdemo done
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\Api\CheckInController.php
+
+            $leaveExists = DB::table('applyleaves')
+                        ->where('createdby', $request->teammember_id)
+                        ->whereIn('status', [1, 0])
+                        ->whereDate('from', '<=', $currentTime)
+                        ->whereDate('to', '>=', $currentTime)
+                        ->exists();
+
+
+
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+app\Http\Controllers\CheckInController.php
+
+update it for 2 place 
+
+               $leavesForDate = $leaves->where('from', '<=', $date)
+                    ->where('to', '>=', $date)
+                    ->where('createdby', $entry->id)
+                    ->whereIn('status', [1, 0])
+                    ->pluck('code')
+                    ->implode(', ');
+					
+					
 
 
+
+
+
+
+
+
+
+leavetypes table me code = B/RL
+
+
+
+
+app\Http\Controllers\CheckInController.php
+
+2 place 
+
+          WHERE applyleaves.createdby = teammembers.id
+              AND status IN (1,0)
+			  
+		
+		
+			  
+check s3 in leftsidebar 		  
+			  
+test
+->where('teammembers.id', 883)
+
+
+end hare ```  kgsdemo 
+
+
+17-12-2025   Help Desk Updates for OMS and Admin Query ```start hare
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+resources\views\backEnd\adminticket\view.blade.php
+find  @foreach ($sectaskk as $sectaskDatas)
+
+                                                    <div class="row">
+                                                        @php
+                                                            $isMultiple1 = count($sectaskk) > 1;
+                                                        @endphp
+                                                        @foreach ($sectaskk as $sectaskDatas)
+                                                            <div class="col-6 col-sm-4 col-md-3 text-center">
+                                                                <a target="_blank" data-toggle="tooltip"
+                                                                    title="{{ $sectaskDatas->file }}"
+                                                                    href="{{ url('backEnd/image/secretarialtask/' . $sectaskDatas->file) }}">
+                                                                    <img class="img-fluid img-thumbnail attachment-img"
+                                                                        src="{{ url('/backEnd/documents.png') }}"
+                                                                        style="height: 2rem; width: {{ $isMultiple1 ? '8rem' : '15rem' }};">
+                                                                </a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
 
 
+
+resources\views\backEnd\omsqueryticket\view.blade.php
+find  @foreach ($sectaskk as $sectasks)
+
+
+                                                   <div class="row">
+                                                        @php
+                                                            $isMultiple1 = count($sectaskk) > 1;
+                                                        @endphp
+                                                        @foreach ($sectaskk as $sectasks)
+                                                            <div class="col-6 col-sm-4 col-md-3 text-center">
+                                                                <a target="_blank" data-toggle="tooltip"
+                                                                    title="{{ $sectasks->file }}"
+                                                                    href="{{ url('backEnd/image/secretarialtask/' . $sectasks->file) }}">
+                                                                    <img class="img-fluid img-thumbnail attachment-img"
+                                                                        src="{{ url('/backEnd/documents.png') }}"
+                                                                        style="height: 2rem; width: {{ $isMultiple1 ? '8rem' : '15rem' }};">
+                                                                </a>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
+
+
+
+ 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+permissions table me 
+
+create new record 
+role_id 12 and page_id 16 
 
 
+
+resources\views\backEnd\adminticket\view.blade.php
+
+                                                            @if (Auth()->user()->role_id == 11 || Auth()->user()->role_id == 12)
+                                                                @if ($task->status === 0)
+
+
+
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+
+                      @elseif ($getroledata->page_id == 16)
+                          @if (Auth::user()->role_id != 12)
+                              <li><a href="{{ route('setting.mail_template.index') }}"><i
+                                          class="typcn typcn-mail mr-2"></i>Mail Template</a></li>
+                          @endif
+                          <li>
+                              <a class="has-arrow material-ripple" href="#">
+                                  <i class="typcn typcn-chart-pie-outline mr-2"></i>
+                                  Help Desk
+                              </a>
+                              <ul class="nav-second-level">
+                                  <li><a href="{{ url('it-support') }}">IT Support</a></li>
+                                  <li><a href="{{ url('finance-support') }}">Accounts/Finance Support</a></li>
+                                  <li><a href="{{ url('auditticket') }}">Audit Query</a> </li>
+                                  <li><a href="{{ url('omsticket') }}">OMS Query</a> </li>
+                                  <li><a href="{{ url('hrticket') }}">Hr Query</a> </li>
+                                  <li><a href="{{ url('adminticket') }}">Admin Query</a> </li>
+                                  <li><a href="{{ url('dataanalytics') }}">Data Analytics Query</a> </li>
+                              </ul>
+                          </li>
+                      @elseif ($getroledata->page_id == 18)
+
+
+
+
+app\Http\Controllers\AdmintaskController.php
+
+
+
+            if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12) {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskdone', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket Closed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket New Instruction');
+                    });
+                }
+            } else {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('poojakumari@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket Closed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('poojakumari@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket New Instruction');
+                    });
+                }
+            }
+            $output = array('msg' => 'Submit Successfully');
+
+
+
+
+
+
+
+
+resources\views\backEnd\adminticket\view.blade.php
+
+
+
+                                            @if (count($sectaskData) != 0)
+                                                <h5> <i class="fa fa-paperclip"></i> Attachments </h5>
+                                                <div class="row">
+                                                    @php
+                                                        $isMultiple = count($sectaskData) > 1;
+                                                    @endphp
+                                                    @foreach ($sectaskData as $sectaskDatas)
+                                                        <div class="col-6 col-sm-4 col-md-3 text-center">
+                                                            <a target="_blank" data-toggle="tooltip"
+                                                                title="{{ $sectaskDatas->file }}"
+                                                                href="{{ url('backEnd/image/secretarialtask/' . $sectaskDatas->file) }}">
+                                                                <img class="img-fluid img-thumbnail attachment-img"
+                                                                    src="{{ url('/backEnd/documents.png') }}"
+                                                                    style="height: 2rem; width: {{ $isMultiple ? '8rem' : '15rem' }};">
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+								
+								
+		
+
+app\Http\Controllers\AdmintaskController.php
+
+
+
+            if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12) {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskdone', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket Closed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket New Instruction');
+                    });
+                }
+            } elseif (auth()->user()->role_id == 13) {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    Mail::send('emails.admintaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('poojakumari@capitall.io');
+                        $msg->cc($data['assignby']);
+                        $msg->subject('kgs Admin Ticket Closed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    Mail::send('emails.admintaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('poojakumari@capitall.io');
+                        $msg->cc($data['assignby']);
+                        $msg->subject('kgs Admin Ticket New Instruction');
+                    });
+                }
+            } else {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('poojakumari@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket Closed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.admintaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('poojakumari@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs Admin Ticket New Instruction');
+                    });
+                }
+            }	
+
+
+
+
+resources\views\backEnd\omsqueryticket\view.blade.php
+
+
+ @if (count($sectask) != 0)
+                                                <h5> <i class="fa fa-paperclip"></i> Attachments </h5>
+                                                <div class="row">
+                                                    @php
+                                                        $isMultiple = count($sectask) > 1;
+                                                    @endphp
+                                                    @foreach ($sectask as $sectasks)
+                                                        <div class="col-6 col-sm-4 col-md-3 text-center">
+                                                            <a target="_blank" data-toggle="tooltip"
+                                                                title="{{ $sectasks->file }}"
+                                                                href="{{ url('backEnd/image/secretarialtask/' . $sectasks->file) }}">
+                                                                <img class="img-fluid img-thumbnail attachment-img"
+                                                                    src="{{ url('/backEnd/documents.png') }}"
+                                                                    style="height: 2rem; width: {{ $isMultiple ? '6rem' : '15rem' }};">
+                                                            </a>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+
+		
+
+resources\views\backEnd\adminticket\view.blade.php
+find  <option value="2" selected>Request to close
+
+    <option value="2" selected disabled>Request to
+  
+                                                                      close</option>
+
+
+
+
+resources\views\backEnd\omsqueryticket\view.blade.php
+
+
+                                                                    <option value="2" disabled selected>Request to
+                                                                        close
+                                                                    </option>
+																	
+																	
+	
+
+app\Http\Controllers\OmsQueryticketController.php
+
+
+
+            $tasks =  DB::table('tasks')->where('id', $request->task_id)->first();
+            $assignby = DB::table('teammembers')->where('id', $tasks->createdby)->first();
+
+            if (auth()->user()->role_id == 11 || auth()->user()->email == 'simmi@capitall.io') {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.omstaskdone', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket Completed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+                    Mail::send('emails.omstaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket New Instruction');
+                    });
+                }
+            } elseif (auth()->user()->role_id == 13 && auth()->user()->email != 'simmi@capitall.io') {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    Mail::send('emails.omstaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        $msg->cc($data['assignby']);
+                        $msg->subject('kgs OMS Ticket Completed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    Mail::send('emails.omstaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        $msg->cc($data['assignby']);
+                        $msg->subject('kgs OMS Ticket New Instruction');
+                    });
+                }
+            } else {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.omstaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket Completed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.omstaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket New Instruction');
+                    });
+                }
+            }
+
+            $output = array('msg' => 'Submit Successfully');
+
+			
+
+
+
+find omscontroler   $msg->subject('kgs New OMS Ticket Created');	
+  
+               $msg->subject('OMS Query Raised');
+			   
+			   
+			   
+			   
+			   
+			   
+app\Http\Controllers\OmsQueryticketController.php
+
+
+            $authname = Teammember::where('id', auth()->user()->teammember_id)->first();
+            $partnername = Teammember::where('id', $request->partner_id)->first();
+            $clientdata = DB::table('clients')
+                ->where('id', $request->client_id)
+                ->select('client_name')
+                ->first();
+
+            $clientName = $clientdata ? $clientdata->client_name : '';
+
+            $data = array(
+                'authnames' =>  $authname->team_member,
+                'taskname' =>  $request->taskname,
+                'assignmentgenerateid' =>  $request->assignmentgenerateid,
+                'description' =>  $request->description,
+                'clientname' => $clientName,
+                'partnername' =>  $partnername->team_member,
+                'ccmail' =>  $partnername->emailid,
+            );
+
+            Mail::send('emails.omsassign', $data, function ($msg) use ($data, $request) {
+                $msg->to('simmi@capitall.io');
+                if ($request->partner_id && $request->inform_partner == 1 && !empty($data['ccmail'])) {
+                    $msg->cc($data['ccmail']);
+                }
+                $msg->subject('OMS Query Raised');
+            });
+
+            $output = array('msg' => 'Create Successfully');
+			
+			
+			
+resources\views\emails\omstaskinstruction.blade.php
+
+<b>Dear Sir/Madam</b>,
+<br><br>
+<h3>Your Ticket has in New Instruction !</h3>
+<p>Ticket :<a href="{{ url('omsticket') }}">{{ $taskname ?? '' }}</a></p>
+@if ($clientname)
+    <p>Client Name: {{ $clientname }}.</p>
+    <p>Assignment Id: {{ $assignmentgenerateid }}.</p>
+@endif
+@if ($partnername)
+    <p>Partner Name: {{ $partnername }}.</p>
+@endif
+<p>Description : {!! $description ?? '' !!}</p>
+
+
+
+resources\views\emails\omsassign.blade.php
+
+<b>Dear Sir/Madam</b>,
+<br><br>
+<p> {{ $authnames }} has raised a query related to </p>
+<p>Ticket type :<a href="{{ url('omsticket') }}">{{ $taskname ?? '' }}</a></p>
+@if ($clientname)
+    <p>Client Name: {{ $clientname }}.</p>
+    <p>Assignment Id: {{ $assignmentgenerateid }}.</p>
+@endif
+@if ($partnername)
+    <p>Partner Name: {{ $partnername }}.</p>
+@endif
+<p>Description : {!! $description ?? '' !!}</p>
+
+
+
+resources\views\emails\omstaskdone.blade.php
+
+<b>Dear Sir/Madam</b>,
+<br><br>
+<h3>Your Ticket has been Closed !</h3>
+<p>Ticket Type :<a href="{{ url('omsticket') }}">{{ $taskname ?? '' }}</a></p>
+@if ($clientname)
+    <p>Client Name: {{ $clientname }}.</p>
+    <p>Assignment Id: {{ $assignmentgenerateid }}.</p>
+@endif
+@if ($partnername)
+    <p>Partner Name: {{ $partnername }}.</p>
+@endif
+<p>Description : {!! $description ?? '' !!}</p>
+
+
+
+
+
+
+omscontroleer me 
+
+
+            $tasks =  DB::table('tasks')->where('id', $request->task_id)->first();
+            $assignby = DB::table('teammembers')->where('id', $tasks->createdby)->first();
+            $partnername = Teammember::where('id', $tasks->partner_id)->first();
+            $clientdata = DB::table('clients')
+                ->where('id', $tasks->client_id)
+                ->select('client_name')
+                ->first();
+
+            $clientName = $clientdata ? $clientdata->client_name : '';
+
+            if (auth()->user()->role_id == 11 || auth()->user()->email == 'simmi@capitall.io') {
+                if ($request->status == 1) {
+
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'clientname' => $clientName,
+                        'partnername' =>  $partnername->team_member,
+                        'assignmentgenerateid' =>  $tasks->assignmentgenerate_id,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.omstaskdone', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket Completed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'clientname' => $clientName,
+                        'partnername' =>  $partnername->team_member,
+                        'assignmentgenerateid' =>  $tasks->assignmentgenerate_id,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+                    Mail::send('emails.omstaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to($data['assignby']);
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket New Instruction');
+                    });
+                }
+            } elseif (auth()->user()->role_id == 13 && auth()->user()->email != 'simmi@capitall.io') {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'clientname' => $clientName,
+                        'partnername' =>  $partnername->team_member,
+                        'assignmentgenerateid' =>  $tasks->assignmentgenerate_id,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    Mail::send('emails.omstaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        $msg->cc($data['assignby']);
+                        $msg->subject('kgs OMS Ticket Completed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'clientname' => $clientName,
+                        'partnername' =>  $partnername->team_member,
+                        'assignmentgenerateid' =>  $tasks->assignmentgenerate_id,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    Mail::send('emails.omstaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        $msg->cc($data['assignby']);
+                        $msg->subject('kgs OMS Ticket New Instruction');
+                    });
+                }
+            } else {
+                if ($request->status == 1) {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'clientname' => $clientName,
+                        'partnername' =>  $partnername->team_member,
+                        'assignmentgenerateid' =>  $tasks->assignmentgenerate_id,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.omstaskdone', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket Completed');
+                    });
+                } else {
+                    $data = array(
+                        'taskname' =>  $tasks->taskname,
+                        'description' =>  $request->remark,
+                        'assignby'  => $assignby->emailid,
+                        'assignbyname'  => $assignby->team_member,
+                        'inform_partner'  => $tasks->inform_partner,
+                        'clientname' => $clientName,
+                        'partnername' =>  $partnername->team_member,
+                        'assignmentgenerateid' =>  $tasks->assignmentgenerate_id,
+                        'partner_id'  => $tasks->partner_id,
+                    );
+
+                    $data['ccmail'] = Teammember::where('id', $tasks->partner_id)->first()->emailid;
+
+                    Mail::send('emails.omstaskinstruction', $data, function ($msg) use ($data) {
+                        $msg->to('simmi@capitall.io');
+                        if ($data['partner_id'] && $data['inform_partner'] == 1) {
+                            $msg->cc($data['ccmail']);
+                        }
+                        $msg->subject('kgs OMS Ticket New Instruction');
+                    });
+                }
+            }
+
+            $output = array('msg' => 'Submit Successfully');
+
+
+
+
+
+
+
+
+
+app\Http\Controllers\OmsQueryticketController.php
+} elseif (auth()->user()->role_id == 11 || auth()->user()->email == 'simmi@capitall.io') {
+
+
+ end hare ```
+ 
+ 19-12-2025 dashboard related bugs ```start hare 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+resources\views\backEnd\index.blade.php
 
 
+ <div class="content-header row align-items-center m-0">
+        {{-- <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+        <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+    </nav> --}}
+        {{-- <div class="col-sm-8 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-home-outline mr-2"></i></div>
+                <div class="media-body">
+                    <h1 class="font-weight-bold">Dashboard</h1>
+                    <small>From now on you will start your activities.</small>
+                </div>
+            </div>
+        </div> --}}
+
+    </div>
+    <style>
+        /* filter section  */
+        .filter-maincontainer {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin-top: 25px;
+            /* width: 930px; */
+            margin-left: 23px;
+            margin-right: 23px;
+        }
+
+        .filtercontainer {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); */
+            padding: 25px;
+            /* margin-bottom: 25px; */
+            transition: transform 0.3s ease;
+        }
+
+        #test {
+            margin-left: 0.5rem;
+        }
+    </style>
+    <div class="filter-maincontainer">
+        <div class="filtercontainer">
+            <a href="{{ url('home') }}"
+                class="{{ Request::is('home') ? 'btn btn-success' : 'btn btn-light' }} d-flex align-items-center fw-bold">
+                <i class="icon-card me-2"></i>
+                <span>Dashboard</span>
+
+            </a>
+            <a href="{{ url('dashbordreport') }}"
+                class="{{ Request::is('home') ? 'btn btn-light' : 'btn btn-success' }} d-flex align-items-center fw-bold"
+                id="test">
+                <i class="icon-programming-arrow me-2"></i>
+                <span>Dashboard Report</span>
+            </a>
+        </div>
+    </div>
+    <!--/.Content Header (Page header)-->
+
+
+
+
+
+
+   Route::get('/home', [BackEndController::class, 'index'])->name('home');
+    Route::get('/dashbordreport', [BackEndController::class, 'index'])->name('home');
+	
+	
+	
+end hare ```
+
+19-12-20205 help desc ```start hare 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+resources\views\backEnd\omsqueryticket\form.blade.php
+
+<script>
+    $(function() {
+        $('#ticketForm').on('submit', function(e) {
+            const description = document.getElementById('editor').value.trim();
+
+            var isEmpty = !description ||
+                description === '' ||
+                description === '<p><br></p>' ||
+                description === '<p></p>' ||
+                description.trim() === '' ||
+                $(description).text().trim() === '';
+
+            // if (isEmpty) {
+            //     alert('Please Enter Description of Query');
+            //     return false;
+            // }
+
+            if (isEmpty) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Description Required',
+                    text: 'Please enter description before submitting.',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#d33',
+                    allowOutsideClick: false,
+                }).then(() => {
+                    document.getElementById('editor').focus();
+                });
+
+                return false;
+            }
+
+            if (!isEmpty) {
+                Swal.fire({
+                    title: 'Inform Partner?',
+                    text: "Do You want to inform partner about the ticket?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, submit it!',
+                    cancelButtonColor: '#f39c12', // Use the color for 'Cancel' button
+                    cancelButtonText: 'Cancel',
+                    showDenyButton: true,
+                    denyButtonColor: '#d33', // Use the color for 'No, submit it!' button
+                    denyButtonText: 'No, submit it!',
+                    allowOutsideClick: false,
+                    buttons: ['cancel', 'deny', 'confirm'] // Specify the order of buttons
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // If the user clicks 'Yes', set inform_partner to 1 and manually submit the form
+                        document.getElementById("informPartnerInput").value = "1";
+                        document.getElementById("ticketForm").submit();
+                    } else if (result.isDismissed && result.dismiss === Swal.DismissReason
+                        .cancel) {
+                        // Handle 'Cancel' button click (do nothing or provide specific action)
+                        Swal.update({
+                            showDenyButton: true,
+                            denyButtonText: 'Cancel',
+                        });
+                    } else {
+                        // If the user clicks 'No', set inform_partner to 0 and manually submit the form
+                        document.getElementById("informPartnerInput").value = "0";
+                        document.getElementById("ticketForm").submit();
+                    }
+                });
+
+                return false;
+            }
+        });
+    });
+</script>
 
 
+
+
+remove this script 
+
+{{-- <script>
+    // Function to show SweetAlert2 confirmation dialog
+    function showConfirmation() {
+
+
+
+resources\views\backEnd\omsqueryticket\create.blade.php
+
+                         <form method="post" id="ticketForm" action="{{ route('omsticket.store') }}"
+                             enctype="multipart/form-data">
+							 
+							 
+
+
+end hare ```							 
+
+
+check in bugs  uploaded on kgslive only  							 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+app\Http\Controllers\CheckInController.php
+
+                // DB::raw('COUNT(*) as Total_Checkin'),
+                DB::raw('COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y")) as Total_Checkin'),
 
 
 
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+
+                DB::raw('COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y")) - COUNT(DISTINCT holidays.startdate) as Total_Checkin_minus_holiday_count'),
 
 
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\KrasController.php
+end hare 
+
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
@@ -15302,7 +16486,30 @@ adminfunction column
 
 
 
+https://capitallio-my.sharepoint.com/:w:/g/personal/sukhbahadur_capitall_io/IQDoemvQ8S3dQ6HHhjIEY-4JAbmZ8FnrusF-sLYbICT-jTE?e=eBivIb
 
+
+
+pp\Http\Controllers\KrasController.php
+
+all kpi loading time 
+32 s    4.4 s
+
+
+1827987560
+
+highpriorityAssignments
+
+
+ // Budget vs Actual P&L
+      $budgetRevenueandbudgetExpences = DB::table('assignmentmappings')
+
+
+1.approved and created ke case me 
+
+
+
+ $output = ['msg' => 'You Have Leave for the Day (' . date('d-m-Y', strtotime($leave)) . ')'];
 
 
 

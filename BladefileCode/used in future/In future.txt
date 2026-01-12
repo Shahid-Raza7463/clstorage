@@ -358,7 +358,16 @@ app\Http\Middleware\TwoFactor.php
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
-
+    //                 DB::raw('
+                // (
+                //   COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y"))
+                //   -
+                //   COUNT(DISTINCT CASE 
+                //         WHEN holidays.startdate IS NOT NULL 
+                //         THEN STR_TO_DATE(checkins.date, "%d-%m-%Y")
+                //       END)
+                // ) as Total_Checkin_minus_holiday_count
+                // '),
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222

@@ -1,0 +1,2626 @@
+
+all completed on vsademo and vsalive ```start hare ```111
+
+12-12-2025 task new ```start hare 
+1.When filling the timesheet for an unallocated client, the partner dropdown should display all partner names so that the user can select the appropriate one.
+2.When a user applies for leave, the partner's name should appear in the partner column of the timesheet instead of ‘N/A’.
+3.Timesheet submission report issue. Nalin Kumar.
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+find  // adding approver in patner section
+
+1
+
+            // 'partner'     =>     887,
+            // adding approver in patner section 
+            'partner'     =>     $request->approver,
+			
+			
+			
+			
+2
+
+              // 'partner'     =>     887,
+              // adding approver in patner section 
+              'partner'     =>  $team->approver,
+			  
+			
+
+
+			
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+ if (isset($request->assignment)) {
+ 
+ 
+ 
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+
+          $specialAssignments = ['UNA100004', 'SEM100001', 'OFF100003'];
+          if (in_array($request->assignment, $specialAssignments)) {
+            // $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              // ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } elseif ($permotioncheck && auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+
+          $specialAssignments = ['UNA100004', 'SEM100001', 'OFF100003'];
+          if (in_array($request->assignment, $specialAssignments)) {
+            // $excludedIds = [887, 663, 841, 836, 843, 447];
+            // $partnerbefore = DB::table('teammembers')
+            //   ->where('role_id', 13)
+            //   ->where('status', 1)
+            //   // ->whereNotIn('id', $excludedIds)
+            //   // ->orderBy('team_member')
+            //   ->select('id', 'team_member');
+            $partnerbefore = DB::table('teammembers')
+              ->where('id', auth()->user()->teammember_id)
+              ->select('id', 'team_member');
+          } else {
+            $partnerbefore = DB::table('assignmentmappings')
+              ->leftJoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftJoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('teammembers.id', 'teammembers.team_member');
+          }
+
+          $partnerafter = DB::table('assignmentmappings')
+            ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+            ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+            ->where(function ($query) {
+              $query->where('assignmentmappings.leadpartner', auth()->user()->teammember_id)
+                ->orWhere('assignmentmappings.otherpartner', auth()->user()->teammember_id);
+            })
+            ->select(DB::raw("
+            CASE
+                WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.id
+                WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.id
+            END as id,
+            CASE
+                WHEN assignmentmappings.leadpartner = " . auth()->user()->teammember_id . " THEN leadpartner.team_member
+                WHEN assignmentmappings.otherpartner = " . auth()->user()->teammember_id . " THEN otherpartner.team_member
+            END as team_member
+            "));
+
+          $partnerresult = $partnerafter->union($partnerbefore)->get();
+
+          foreach ($partnerresult as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          $partners = DB::table('teammembers')
+            ->where('id', auth()->user()->teammember_id)
+            ->select('id', 'team_member')
+            ->get();
+
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } else {
+          echo "<option value=''>Select Partner</option>";
+
+          $specialAssignments = ['UNA100004', 'SEM100001', 'OFF100003'];
+          if (in_array($request->assignment, $specialAssignments)) {
+            // $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              // ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        }
+      }
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+public function timesheeteditonchange(Request $request)
+
+
+      if (isset($request->assignment)) {
+        // dd($request->assignment);
+        if (auth()->user()->role_id == 11) {
+          echo "<option value=''>Select Partner</option>";
+
+          $specialAssignments = ['UNA100004', 'SEM100001', 'OFF100003'];
+          if (in_array($request->assignment, $specialAssignments)) {
+            // $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              // ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        } elseif (auth()->user()->role_id == 13) {
+          echo "<option value=''>Select Partner</option>";
+          foreach (
+            DB::table('teammembers')
+              ->where('id', auth()->user()->teammember_id)
+              ->select('id', 'team_member')
+              ->get() as $subs
+          ) {
+            echo "<option value='" . $subs->id . "'>" . $subs->team_member . "</option>";
+          }
+        } else {
+          echo "<option value=''>Select Partner</option>";
+
+          $specialAssignments = ['UNA100004', 'SEM100001', 'OFF100003'];
+          if (in_array($request->assignment, $specialAssignments)) {
+            // $excludedIds = [887, 663, 841, 836, 843, 447];
+            $partners = DB::table('teammembers')
+              ->select('id', 'team_member')
+              ->where('role_id', 13)
+              ->where('status', 1)
+              // ->whereNotIn('id', $excludedIds)
+              ->orderBy('team_member')
+              ->get();
+          } else {
+            $partners = DB::table('assignmentmappings')
+              ->leftjoin('teammembers', 'teammembers.id', 'assignmentmappings.leadpartner')
+              ->leftjoin('teammembers as team', 'team.id', 'assignmentmappings.otherpartner')
+              ->where('assignmentmappings.assignmentgenerate_id', $request->assignment)
+              ->select('team.team_member as team_member', 'team.id', 'teammembers.id', 'teammembers.team_member')
+              ->get();
+          }
+          foreach ($partners as $partner) {
+            echo "<option value='{$partner->id}'>{$partner->team_member}</option>";
+          }
+        }
+      }
+
+
+
+
+
+
+
+
+resources\views\backEnd\timesheet\weeklylist.blade.php
+
+                                @if (Auth::user()->role_id == 11 ||
+                                        (isset($timesheetData[0]) && Auth::user()->teammember_id != $timesheetData[0]->createdby))
+                                    <th>Action</th>
+   
+ 
+ 
+ 
+ 
+ 
+ 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+find  if ($request->assignment === 'UNA100002') {
+replace 5 places 
+
+
+          $specialAssignments = ['UNA100002', 'SEM100001', 'OFF100003'];
+          if (in_array($request->assignment, $specialAssignments)) {
+
+
+
+ 
+
+end hare ```111
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+
+
+
+                    $rejoiningDataall = DB::table('teammembers as tm')
+                        ->leftJoinSub($latestTeamRoleHistory, 'latest_trh', function ($join) {
+                            $join->on('latest_trh.teammember_id', '=', 'tm.id');
+                        })
+                        ->leftJoinSub($latestRejoiningSamePost, 'latest_rsp', function ($join) {
+                            $join->on('latest_rsp.teammember_id', '=', 'tm.id');
+                        })
+                        ->where('tm.id', auth()->user()->teammember_id)
+                        ->select('latest_trh.rejoiningdate', 'latest_rsp.samepostrejoiningdate')
+                        ->first();
+
+                    $hasRejoiningDate = false;
+                    $rejoineduserchecked = null;
+
+                    if ($rejoiningDataall) {
+                        $date1 = $rejoiningDataall->rejoiningdate;
+                        $date2 = $rejoiningDataall->samepostrejoiningdate;
+
+                        if ($date1 || $date2) {
+                            $hasRejoiningDate = true;
+
+                            $rejoiningDatestore = $date1 && $date2 ? max($date1, $date2) : $date1 ?? $date2;
+
+                            if (!empty($rejoiningDatestore)) {
+                                $rejoineduserchecked = DB::table('timesheetusers')
+                                    ->where('createdby', auth()->user()->teammember_id)
+                                    ->where('date', '>', $rejoiningDatestore)
+                                    ->where('status', 1)
+                                    ->orderBy('date', 'asc')
+                                    ->first();
+                            }
+                        }
+                    }
+                @endphp
+
+
+
+
+
+
+
+find 
+&& empty($rejoineduserchecked)
+
+
+                @if ($hasRejoiningDate && empty($rejoineduserchecked))
+                    <li class="breadcrumb-item"><a class="btn btn-primary-soft btn-sm"
+                            href="{{ url('timesheet/create') }}">Add Timesheet</a>
+                    </li>
+					
+	
+
+	
+					
+end hare ```
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+940
+subhashmishra@vsa.co.in
+Subhash Kumar Mishra
+
+
+  $authteamid = 940;
+    $startdate = '2025-06-30';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2528, 2666, 2802, 2943, 3085])
+      // ->get();
+      ->delete();
+
+    $leavedata = DB::table('applyleaves')
+      ->where('createdby', $authteamid)
+      ->whereIn('id', [2115])
+      // ->get();
+      ->delete();
+
+    $leaveapproveddata = DB::table('leaveapprove')
+      ->where('teammemberid', $authteamid)
+      ->whereIn('id', [2012])
+      // ->get();
+      ->delete();
+
+    dd('Successfully done');
+
+
+
+please enter exit date  28 june 2025
+
+
+end hare 
+222222222222222222222222222222222222222222222222222222222222222222222222222
+814
+ankush@vsa.co.in
+Ankush
+
+
+
+    $authteamid = 814;
+    $startdate = '2025-05-12';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2330, 2460, 2743, 2883, 3030, 3174])
+      // ->get();
+      ->delete();
+
+    $updateAttendance = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->where('id', 2192)
+      ->update([
+        'twelve'      => null,
+        'thirteen'   => null,
+        'exam_leave' => 11,
+      ]);
+
+
+    $leavedata = DB::table('applyleaves')
+      ->where('createdby', $authteamid)
+      ->where('id', 1886)
+      ->update([
+        'to' => '2025-05-11',
+      ]);
+
+
+    $leaveapproveddata = DB::table('leaveapprove')
+      ->where('teammemberid', $authteamid)
+      ->where('id', 1788)
+      ->update([
+        'totaldays' => 31,
+      ]);
+
+    dd('Successfully done');
+	
+	
+	
+please enter exit date 11 may 2025
+
+
+222222222222222222222222222222222222222222222222222222222222222
+830
+sohanj@vsa.co.in
+Sohan Jha
+
+
+  $authteamid = 830;
+    $startdate = '2025-08-18';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2747, 2889, 3036])
+      // ->get();
+      ->delete();
+
+    $updateAttendance = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->where('id', 2607)
+      ->update([
+        'eighteen'      => null,
+        'ninghteen'   => null,
+        'twenty'   => null,
+        'twentyone'   => null,
+        'twentytwo'   => null,
+        'twentythree'   => null,
+        'twentyfour'   => null,
+        'twentyfive'   => null,
+        'twentysix'   => null,
+        'twentyseven'   => null,
+        'twentyeight'   => null,
+        'twentynine'   => null,
+        'thirty'   => null,
+        'thirtyone'   => null,
+        'exam_leave' => 0,
+        'holidays' => 3,
+      ]);
+
+
+    $leavedata = DB::table('applyleaves')
+      ->where('createdby', $authteamid)
+      ->whereIn('id', [2271])
+      // ->get();
+      ->delete();
+
+    $leaveapproveddata = DB::table('leaveapprove')
+      ->where('teammemberid', $authteamid)
+      ->whereIn('id', [2200])
+      // ->get();
+      ->delete();
+
+
+    dd('Successfully done');
+
+
+
+please enter exit date 16 august 2025 
+
+222222222222222222222222222222222222222222222222222222222222222
+811
+tusharg@vsa.co.in
+Tushar Garg
+
+
+ $authteamid = 811;
+    $startdate = '2025-06-09';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2458, 2599, 2741, 2881, 3028])
+      // ->get();
+      ->delete();
+
+    dd('Successfully done');
+
+
+
+
+
+7 june 2025 exit date dale 
+
+
+
+
+completed on vsalive and pending on vsademo 
+
+vsalive completed only left on vsademo 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+
+
+
+                    $rejoiningDataall = DB::table('teammembers as tm')
+                        ->leftJoinSub($latestTeamRoleHistory, 'latest_trh', function ($join) {
+                            $join->on('latest_trh.teammember_id', '=', 'tm.id');
+                        })
+                        ->leftJoinSub($latestRejoiningSamePost, 'latest_rsp', function ($join) {
+                            $join->on('latest_rsp.teammember_id', '=', 'tm.id');
+                        })
+                        ->where('tm.id', auth()->user()->teammember_id)
+                        ->select('latest_trh.rejoiningdate', 'latest_rsp.samepostrejoiningdate')
+                        ->first();
+
+                    $hasRejoiningDate = false;
+                    $rejoineduserchecked = null;
+
+                    if ($rejoiningDataall) {
+                        $date1 = $rejoiningDataall->rejoiningdate;
+                        $date2 = $rejoiningDataall->samepostrejoiningdate;
+
+                        if ($date1 || $date2) {
+                            $hasRejoiningDate = true;
+
+                            $rejoiningDatestore = $date1 && $date2 ? max($date1, $date2) : $date1 ?? $date2;
+
+                            if (!empty($rejoiningDatestore)) {
+                                $rejoineduserchecked = DB::table('timesheetusers')
+                                    ->where('createdby', auth()->user()->teammember_id)
+                                    ->where('date', '>', $rejoiningDatestore)
+                                    ->where('status', 1)
+                                    ->orderBy('date', 'asc')
+                                    ->first();
+                            }
+                        }
+                    }
+                @endphp
+
+
+
+
+
+
+
+
+find 
+&& empty($rejoineduserchecked)
+
+
+                @if ($hasRejoiningDate && empty($rejoineduserchecked))
+                    <li class="breadcrumb-item"><a class="btn btn-primary-soft btn-sm"
+                            href="{{ url('timesheet/create') }}">Add Timesheet</a>
+                    </li>
+					
+	
+
+
+
+	
+					
+end hare ```
+
+
+Client name, client code, and assignment name should be displayed in the Independence tab  ```start hare 		  
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\IndependenceController.php
+public function independencereport()
+
+
+        // All teammember data 
+        $mainQuery = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->join('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->join('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'clients.client_code',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+            );
+
+        // Lead partner data  
+        $leadPartnerQuery = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+            ->join('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->join('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'clients.client_code',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+            );
+
+        // other partner data 
+        $otherPartnerQuery = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.otherpartner')
+            ->join('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->join('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'clients.client_code',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+            );
+
+        // Merging hare all data 
+        $independence = $mainQuery
+            ->union($leadPartnerQuery)
+            ->union($otherPartnerQuery)
+            ->get();
+
+
+
+
+
+
+
+
+app\Http\Controllers\IndependenceController.php
+ public function filterindependencereport(Request $request)
+
+
+        // Base query for team members
+        $mainQuery = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+            ->join('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->join('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'clients.client_code',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+            );
+
+        $leadPartnerQuery = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+            ->join('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->join('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'clients.client_code',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+            );
+
+        $otherPartnerQuery = DB::table('assignmentmappings')
+            ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->join('teammembers', 'teammembers.id', '=', 'assignmentmappings.otherpartner')
+            ->join('assignments', 'assignments.id', 'assignmentbudgetings.assignment_id')
+            ->join('clients', 'clients.id', 'assignmentbudgetings.client_id')
+            ->whereIn('assignmentmappings.assignmentgenerate_id', $assignmentgenerateid)
+            ->select(
+                'teammembers.id as teammember_id',
+                'teammembers.staffcode',
+                'teammembers.team_member',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'clients.client_code',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+            );
+
+
+
+
+
+
+
+
+
+
+resources\views\backEnd\independence\independencereport.blade.php
+
+            columnDefs: [{
+                    targets: [0, 1, 2, 3, 4, 5, 6],
+                    orderable: false
+                },
+				
+
+
+
+
+
+
+
+                    <table id="examplee" class="table display table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="display: none;">id</th>
+                                <th>Team Member</th>
+                                <th class="textfixed">Staff Code</th>
+                                <th>Client Name</th>
+                                <th class="textfixed">Client Code</th>
+                                <th class="textfixed">Assignment Id</th>
+                                <th>Assignment Name</th>
+                                <th>Status</th>
+                                <th>Submitted Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($independence as $independenceData)
+                                @php
+                                    // data like  "MAN100025-936"
+                                    $key =
+                                        $independenceData->assignmentgenerate_id .
+                                        '-' .
+                                        $independenceData->teammember_id;
+                                    // if data exist then find data otherwise assign null value hare
+                                    $independenceItem = $independencespendingornot[$key][0] ?? null;
+                                    // dd($independenceData);
+                                @endphp
+                                <tr>
+                                    <td style="display: none;">{{ $independenceData->teammember_id }}</td>
+                                    <td class="textfixed">
+                                        @if ($independenceItem)
+                                            <a href="{{ route('independence.show', $independenceItem->id) }}">
+                                                {{ $independenceData->team_member }}
+                                            </a>
+                                        @else
+                                            {{ $independenceData->team_member }}
+                                        @endif
+                                    </td>
+                                    <td> {{ $independenceData->teamnewstaffcode ?? ($independenceData->staffcode ?? '') }}
+                                    </td>
+
+                                    <td class="textfixed">{{ $independenceData->client_name }}</td>
+                                    <td>{{ $independenceData->client_code }}</td>
+
+                                    <td>{{ $independenceData->assignmentgenerate_id }}</td>
+                                    <td class="textfixed">
+                                        {{ $independenceData->assignment_name ?? '' }}
+                                        @if ($independenceData->assignmentname != null)
+                                            ({{ $independenceData->assignmentname ?? '' }})
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($independenceItem == null)
+                                            <span class="badge badge-pill badge-warning">Pending</span>
+                                        @else
+                                            <span class="badge badge-pill badge-success">Submitted</span>
+                                        @endif
+                                    </td>
+                                    <td class="textfixed">
+                                        @if ($independenceItem)
+                                            {{ date('d-m-Y', strtotime($independenceItem->created_at)) }}
+                                            {{ date('h:i A', strtotime($independenceItem->created_at)) }}
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+					
+					
+					
+					
+					
+
+
+                {
+                    targets: 8, // Submitted Date column
+                    type: 'date', // assign date column 
+                    render: function(data, type, row) {
+                        // date value when sorting/filtering
+                        if (type === 'sort' || type === 'type') {
+                            return data ? moment(data, 'DD-MM-YYYY hh:mm A').format(
+                                'YYYY-MM-DD HH:mm') : '';
+                        }
+                        return data;
+                    }
+                }				
+					
+Client name, client code, and assignment name should be displayed in the Independence tab end hare ```				
+
+
+all completed on vsademo and vsalive ```end hare ```1111
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+all pending on vsalive ```start hare ```222
+
+Issue with Staff Code Upgrade ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+
+
+
+            $latestHistory = DB::table('teamrolehistory as teamrolehistorydata')
+                ->select('teamrolehistorydata.teammember_id', 'teamrolehistorydata.newstaff_code')
+                ->whereRaw('teamrolehistorydata.id = (SELECT MAX(teamrolehistorylatest.id) FROM teamrolehistory as teamrolehistorylatest WHERE teamrolehistorylatest.teammember_id = teamrolehistorydata.teammember_id)');
+
+
+            if (!empty($request->teammember_id) && $request->teammember_id != '0') {
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentmappingController.php
+
+
+                $clientname = Client::where('id', $request->client_id)
+                    ->select('client_name', 'client_code')
+                    ->first();
+
+                $teamemailpartner = DB::table('teammembers')
+                    ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+                        $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+                    })
+                    ->where('teammembers.id', $request->leadpartner)
+                    ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+                    ->first();
+
+                $teamemailotherpartner = DB::table('teammembers')
+                    ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+                        $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+                    })
+                    ->where('teammembers.id', $request->otherpartner)
+                    ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+                    ->first();
+
+                $teamleader = DB::table('assignmentteammappings')
+                    ->where('assignmentmapping_id', $id)
+                    ->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
+                    ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+                        $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+                    })
+                    ->select('teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+                    ->get();
+
+                if (!empty($teammemberIds)) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            } else {
+                $clientname = Client::where('id', $request->client_id)
+                    ->select('client_name', 'client_code')
+                    ->first();
+
+                $teamemailpartner = DB::table('teammembers')
+                    ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+                        $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+                    })
+                    ->where('teammembers.id', $request->leadpartner)
+                    ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+                    ->first();
+
+                $teamemailotherpartner = DB::table('teammembers')
+                    ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+                        $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+                    })
+                    ->where('teammembers.id', $request->otherpartner)
+                    ->select('teammembers.emailid', 'teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+                    ->first();
+			
+
+
+
+	
+	
+					
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentassign.blade.php
+
+
+<p><b>Assignment Partner :</b> {{ $assignmentpartner->team_member ?? '' }}
+    ({{ $assignmentpartner->newstaff_code ?? ($assignmentpartner->staffcode ?? '') }})</p>
+<p><b>Other Partner :</b> {{ $otherpatner->team_member ?? 'N/A' }}
+    @if ($otherpatner != null)
+        ({{ $otherpatner->newstaff_code ?? ($otherpatner->staffcode ?? '') }})
+    @endif
+</p>
+
+@if (!empty($teamleader) && $teamleader->isNotEmpty())
+    <p><b>Team Leader :</b>
+        @foreach ($teamleader as $teamleaderDatas)
+            {{ $teamleaderDatas->team_member ?? '' }}
+            ({{ $teamleaderDatas->newstaff_code ?? ($teamleaderDatas->staffcode ?? '') }})
+            ,
+        @endforeach
+    </p>
+@endif
+
+
+
+
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+find $teammembername = Teammember::where('id', auth()->user()->teammember_id)->first(); and replace it 
+
+
+
+
+      $latestHistory = DB::table('teamrolehistory as teamrolehistorydata')
+        ->select('teamrolehistorydata.teammember_id', 'teamrolehistorydata.newstaff_code')
+        ->whereRaw('teamrolehistorydata.id = (SELECT MAX(teamrolehistorylatest.id) FROM teamrolehistory as teamrolehistorylatest WHERE teamrolehistorylatest.teammember_id = teamrolehistorydata.teammember_id)');
+
+      $teammembername = DB::table('teammembers')
+        ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+          $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+        })
+        ->where('teammembers.id', auth()->user()->teammember_id)
+        ->select('teammembers.*', 'latestrecord.newstaff_code')
+        ->first();
+
+
+
+
+
+
+app\Http\Controllers\ApplyleaveController.php
+
+
+        // 'teamstaffcode'         =>    $teammembername->staffcode,
+        'teamstaffcode'         =>     $teammembername->newstaff_code ?? ($teammembername->staffcode ?? ''),
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\timesheetrequestform.blade.php
+
+<p>
+    <strong>Name:</strong> {{ $teammember->team_member ?? '' }}
+    ({{ $teammember->newstaff_code ?? ($teammember->staffcode ?? '') }})<br>
+    <strong>Reason:</strong> {{ $reason ?? '' }}<br>
+    <strong>Request Date:</strong> {{ $created_at ?? '' }}
+</p>
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+ $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+ 
+ 1
+
+
+          $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+
+          $name = DB::table('teammembers')
+            ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+              $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+            })
+            ->where('teammembers.id', auth()->user()->teammember_id)
+            ->select('teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+            ->first();
+
+
+
+
+2
+
+
+
+        $teammembermail = Teammember::where('id', $request->partner)->pluck('emailid')->first();
+
+        $name = DB::table('teammembers')
+          ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+            $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+          })
+          ->where('teammembers.id', auth()->user()->teammember_id)
+          ->select('teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+          ->first();
+		  
+		  	  
+		  
+		  
+		  
+		  
+		  
+
+
+find  $latestrequest = DB::table('timesheetrequests')
+
+      $latestrequest = DB::table('timesheetrequests')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->latest()
+        ->select('created_at', 'status')
+        ->first();
+
+      $latestHistory = DB::table('teamrolehistory as teamrolehistorydata')
+        ->select('teamrolehistorydata.teammember_id', 'teamrolehistorydata.newstaff_code')
+        ->whereRaw('teamrolehistorydata.id = (SELECT MAX(teamrolehistorylatest.id) FROM teamrolehistory as teamrolehistorylatest WHERE teamrolehistorylatest.teammember_id = teamrolehistorydata.teammember_id)');
+
+
+
+
+
+
+
+
+
+find $teammembermail = Teammember::where('id', $request->approver)->pluck('emailid')->first();
+
+
+      $teammembermail = Teammember::where('id', $request->approver)->pluck('emailid')->first();
+
+      $latestHistory = DB::table('teamrolehistory as teamrolehistorydata')
+        ->select('teamrolehistorydata.teammember_id', 'teamrolehistorydata.newstaff_code')
+        ->whereRaw('teamrolehistorydata.id = (SELECT MAX(teamrolehistorylatest.id) FROM teamrolehistory as teamrolehistorylatest WHERE teamrolehistorylatest.teammember_id = teamrolehistorydata.teammember_id)');
+
+
+      $name = DB::table('teammembers')
+        ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+          $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+        })
+        ->where('teammembers.id', auth()->user()->teammember_id)
+        ->select('teammembers.team_member', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+        ->first();	
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentController.php
+
+
+      // $assignmentteammember = DB::table('assignmentteammappings')
+      //   ->join('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+      //   ->where('assignmentmapping_id', $assignment->id)
+      //   ->select('teammembers.team_member', 'assignmentteammappings.type', 'teammembers.staffcode')
+      //   ->get();
+
+      $latestHistory = DB::table('teamrolehistory as teamrolehistorydata')
+        ->select('teamrolehistorydata.teammember_id', 'teamrolehistorydata.newstaff_code')
+        ->whereRaw('teamrolehistorydata.id = (SELECT MAX(teamrolehistorylatest.id) FROM teamrolehistory as teamrolehistorylatest WHERE teamrolehistorylatest.teammember_id = teamrolehistorydata.teammember_id)');
+
+      $assignmentteammember = DB::table('assignmentteammappings')
+        ->where('assignmentmapping_id', $assignment->id)
+        ->join('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+        ->leftJoinSub($latestHistory, 'latestrecord', function ($join) {
+          $join->on('latestrecord.teammember_id', '=', 'teammembers.id');
+        })
+        ->select('teammembers.team_member', 'assignmentteammappings.type', 'teammembers.staffcode', 'latestrecord.newstaff_code')
+        ->get();
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+find  @foreach ($assignmentteammember as $teammembers)
+
+
+    @foreach ($assignmentteammember as $teammembers)
+        <span>{{ $teammembers->team_member }}
+            ({{ $teammembers->newstaff_code ?? ($teammembers->staffcode ?? '') }})
+            ,</span>
+    @endforeach
+
+
+
+
+
+Issue with Staff Code Upgrade end hare ```
+
+
+
+When a user’s timesheet is rejected, the user should first be able to update and resubmit the rejected timesheet. ```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\index.blade.php
+
+
+
+                @elseif(15 < 16)
+                        <li class="breadcrumb-item">
+                        @php
+                            $isRejected = !empty($timesheetrejectData) && $timesheetrejectData->status == 2;
+                            $label = 'Add Timesheet' . ($timesheetcount > 7 ? ' for last week' : '');
+                        @endphp
+
+                        <a class="btn btn-info-soft btn-sm"
+                            href="{{ $isRejected ? 'javascript:void(0)' : url('timesheet/create') }}"
+                            @if ($isRejected) id="add-timesheet-rejected" @endif>
+                            {{ $label }}
+                        </a>
+                    </li>
+
+
+
+
+
+
+
+                @if ($hasRejoiningDate && empty($rejoineduserchecked))
+                    <li class="breadcrumb-item">
+                        @php
+                            $isRejected = !empty($timesheetrejectData) && $timesheetrejectData->status == 2;
+                        @endphp
+                        <a class="btn btn-info-soft btn-sm"
+                            href="{{ $isRejected ? 'javascript:void(0)' : url('timesheet/create') }}"
+                            @if ($isRejected) id="add-timesheet-rejected" @endif>
+                            Add Timesheet
+                        </a>
+                    </li>
+
+
+
+
+
+
+
+                        @if ($currentdate < $timesheetrequest->validate)
+                            <li class="breadcrumb-item">
+                                @php
+                                    $isRejected = !empty($timesheetrejectData) && $timesheetrejectData->status == 2;
+                                @endphp
+                                <a class="btn btn-info-soft btn-sm"
+                                    href="{{ $isRejected ? 'javascript:void(0)' : url('timesheet/create') }}"
+                                    @if ($isRejected) id="add-timesheet-rejected" @endif>
+                                    Add Timesheet
+                                </a>
+                            </li>
+							
+							
+							
+							
+							
+							
+resources\views\backEnd\timesheet\firstindex.blade.php
+
+
+            <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+                <li class="breadcrumb-item">
+                    @php
+                        $isRejected = !empty($timesheetrejectData) && $timesheetrejectData->status == 2;
+                    @endphp
+                    <a class="btn btn-info-soft btn-sm"
+                        href="{{ $isRejected ? 'javascript:void(0)' : url('timesheet/create') }}"
+                        @if ($isRejected) id="add-timesheet-rejected" @endif>
+                        Add Timesheet
+                    </a>
+                </li>
+                <!--  <li class="breadcrumb-item"><a data-toggle="modal" data-target="#exampleModal1">Upload File</a></li>-->
+            </ol>
+
+
+
+
+
+
+
+
+app\Http\Controllers\TimesheetController.php
+ public function timesheet_mylist()
+ if (auth()->user()->role_id == 13) {
+ 
+      $timesheetrequest = DB::table('timesheetrequests')->where('createdby', auth()->user()->teammember_id)->orderBy('id', 'DESC')->first();
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+	
+	
+		
+pass this varable in view 'timesheetrejectData'
+ 
+ 
+ 
+ 
+ public function timesheet_mylist()
+ else part me 
+ 
+      $timesheetrequest = DB::table('timesheetrequests')->where('createdby', auth()->user()->teammember_id)->orderBy('id', 'DESC')->first();
+      $timesheetrejectData = DB::table('timesheetusers')
+        ->where('createdby', auth()->user()->teammember_id)
+        ->where('status', 2)
+        ->first();
+		
+		
+pass this varable in view 'timesheetrejectData'
+
+
+
+
+app\Http\Controllers\TimesheetController.php
+public function create(Request $request)
+
+
+
+    $teammember = Teammember::where('role_id', '!=', 11)->with('title', 'role')->get();
+
+    $hasRejectedTimesheet = DB::table('timesheetusers')
+      ->where('createdby', auth()->user()->teammember_id)
+      ->where('status', 2)
+      ->exists();
+
+    if ($hasRejectedTimesheet) {
+      return redirect('timesheet/mylist')
+        ->with('warning', 'Please submit your rejected timesheet first.');
+    }
+
+
+
+
+resources\views\backEnd\layouts\includes\js.blade.php
+
+
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script>
+     document.getElementById('add-timesheet-rejected').addEventListener('click', function() {
+         Swal.fire({
+             title: "Pending Rejected Timesheet",
+             text: "Please submit your rejected timesheet first. Are you sure you want to proceed?",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonText: "Yes, Proceed",
+             cancelButtonText: 'Cancel',
+             confirmButtonColor: "#2aad3f",
+             cancelButtonColor: "#d33",
+             // reverseButtons: true
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.href = '{{ url('rejectedlist') }}';
+             }
+         });
+     });
+ </script>
+
+
+
+			
+When a user’s timesheet is rejected, the user should first be able to update and resubmit the rejected timesheet. end hare ```
+
+
+
+An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available  ```start
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+regarding stucture / regarding table 
+leavetypes table me id 15 create kare 
+
+INSERT INTO `leavetypes` (`id`, `year`, `name`, `holiday`, `color`, `code`, `type`, `unit`, `Fixed`, `description`, `startdate`, `enddate`, `effective`, `effective1`, `effective2`, `leavetypemonth`, `leavetypedays`, `leavetypemonthly`, `noofdays`, `Accrualtype`, `Leavegrant`, `Accrual`, `gender`, `martialstatus`, `role`, `allow_past_days`, `allowfuture_date`, `notificationdate`, `notificationdate1`, `createdby`, `updatedby`, `created_at`, `updated_at`) VALUES
+(15, 2026, 'Unplanned Leave', 18, NULL, 'UL', 'Paid', 'Days', 'Fixed entitlement', NULL, '2023-04-01', '2024-03-31', '3', 'Month(s)', 'Date Of Joining', 3, 1, NULL, '1.5', 'Current Accrual', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Week', 6, NULL, '2021-12-12 22:21:09', '2021-12-12 22:21:09');
+
+
+
+
+leaveroles table me 3 record create kare 
+
+INSERT INTO `leaveroles` (`id`, `leavetype_id`, `role`, `created_at`, `updated_at`) VALUES
+(51, 15, 15, '2023-09-20 06:43:31', NULL),
+(49, 15, 14, NULL, NULL),
+(48, 15, 13, '2023-09-20 06:43:31', NULL);
+
+
+assignments table me create 1 record 
+INSERT INTO `assignments` (`id`, `assignment_name`, `status`, `created_at`, `updated_at`) VALUES
+(222, 'Unplanned Leave', 1, '2023-09-20 06:27:46', '2023-09-20 06:27:46');
+
+
+ALTER TABLE `attendances` ADD `unplanned_leave` VARCHAR(300) NULL DEFAULT NULL AFTER `casual_leave`;
+
+
+
+9 to 15 
+215 to 222
+Unplaned Leave
+Unplanned
+unplanned
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+store function me 
+
+      // exam leave end
+      elseif ($request->leavetype == 15) {
+        $to = Carbon::createFromFormat('Y-m-d', $request->to ?? '');
+        $from = Carbon::createFromFormat('Y-m-d', $request->from);
+        $requestdays = $to->diffInDays($from) + 1;
+        $period = CarbonPeriod::create($request->from, $request->to);
+        $datess = [];
+
+        // Calculate the total number of days (inclusive of both start and end dates)
+        $totaldayscount = $to->diffInDays($from) + 1;
+        if ($totaldayscount > 10) {
+          return back()->with('statuss', ['msg' => 'You cannot apply unplanned leave for more than 10 days']);
+        }
+
+        foreach ($period as $date) {
+          $datess[] = $date->format('Y-m-d');
+
+          $id = DB::table('timesheets')->insertGetId(
+            [
+              'created_by' => auth()->user()->teammember_id,
+              'month'     =>     date('F', strtotime($date->format('Y-m-d'))),
+              'date'     =>    $date->format('Y-m-d'),
+              'created_at'          =>     date('Y-m-d H:i:s'),
+            ]
+          );
+
+          $a = DB::table('timesheetusers')->insert([
+            'date'     =>    $date->format('Y-m-d'),
+            'client_id'     =>    134,
+            'workitem'     =>     $request->reasonleave,
+            'location'     =>     '',
+            //   'billable_status'     =>     $request->billable_status[$i],
+            'timesheetid'     =>     $id,
+            'date'     =>    $date->format('Y-m-d'),
+            'hour'     =>     0,
+            'totalhour' =>      0,
+            'assignment_id'     =>     222,
+            // 'partner'     =>     887,
+            // adding approver in patner section 
+            'partner'     =>     $request->approver,
+            'createdby' => auth()->user()->teammember_id,
+            'created_at'          =>     date('Y-m-d H:i:s'),
+            'updated_at'              =>    date('Y-m-d H:i:s'),
+          ]);
+        }
+
+        $getholidays = DB::table('holidays')->where('startdate', '>=', $request->from)
+          ->where('enddate', '<=', $request->to)->select('startdate')->get();
+
+        $hdatess = [];
+        foreach ($getholidays as $date) {
+          $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+        }
+
+        $ul_leave = array_diff($datess, $hdatess);
+        $ul_leave_total = count($ul_leave);
+        $lstatus = "UL/C";
+
+        if ($teammember->joining_date < $financialYearStart) {
+          $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $financialYearStart);
+        } else {
+          $startDate = \Carbon\Carbon::createFromFormat('Y-m-d', $teammember->joining_date);
+        }
+
+        $diff_in_months = $startDate->diffInMonths($currentdate) + 1;
+        $totalcountUnplanned = 1.5 * $diff_in_months;
+        if (\Carbon\Carbon::parse($teammember->joining_date)->diffInDays($currentdate) <= 90) {
+          $totalcountUnplanned = 0;
+        }
+
+        $teamdate = \Carbon\Carbon::createFromFormat('Y-m-d', $teammember->joining_date);
+        $teammonthcount = $teamdate->diffInMonths($currentdate) + 1;
+
+        $columnMappings = [
+          '26' => 'twentysix',
+          '27' => 'twentyseven',
+          '28' => 'twentyeight',
+          '29' => 'twentynine',
+          '30' => 'thirty',
+          '31' => 'thirtyone',
+          '01' => 'one',
+          '02' => 'two',
+          '03' => 'three',
+          '04' => 'four',
+          '05' => 'five',
+          '06' => 'six',
+          '07' => 'seven',
+          '08' => 'eight',
+          '09' => 'nine',
+          '10' => 'ten',
+          '11' => 'eleven',
+          '12' => 'twelve',
+          '13' => 'thirteen',
+          '14' => 'fourteen',
+          '15' => 'fifteen',
+          '16' => 'sixteen',
+          '17' => 'seventeen',
+          '18' => 'eighteen',
+          '19' => 'ninghteen',
+          '20' => 'twenty',
+          '21' => 'twentyone',
+          '22' => 'twentytwo',
+          '23' => 'twentythree',
+          '24' => 'twentyfour',
+          '25' => 'twentyfive',
+        ];
+
+        foreach ($ul_leave as $requestedDate) {
+          $day = date('d', strtotime($requestedDate));
+          $requestedMonth = date('F', strtotime($requestedDate));
+
+          if ($day >= 26 && $day <= 31) {
+            $requestedDateTime = new DateTime($requestedDate);
+            $requestedDateTime->modify('first day of next month');
+            $requestedMonth = $requestedDateTime->format('F');
+          }
+
+          $appliedUnplanned = DB::table('applyleaves')
+            ->where('status', '!=', '2')
+            ->where('leavetype', $request->leavetype)
+            ->where('createdby', auth()->user()->teammember_id)
+            ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+            ->get();
+
+          $countUnplanned = 0;
+          $unplannedDates = [];
+          $holidaydates = [];
+          foreach ($appliedUnplanned as $unplannedLeave) {
+            $fromDate = \Carbon\Carbon::createFromFormat('Y-m-d', $unplannedLeave->from);
+            $toDate = \Carbon\Carbon::createFromFormat('Y-m-d', $unplannedLeave->to);
+            $period = CarbonPeriod::create($fromDate, $toDate);
+
+            foreach ($period as $date) {
+              $unplannedDates[] = $date->format('Y-m-d');
+            }
+
+            $getholidays = DB::table('holidays')->get();
+            foreach ($getholidays as $date) {
+              $holidaydates[] = date('Y-m-d', strtotime($date->startdate));
+            }
+
+            $unplannedDates = array_unique($unplannedDates);
+          }
+
+          $attendanceRecord = DB::table('attendances')
+            ->where('employee_name', auth()->user()->teammember_id)
+            ->whereBetween('created_at', [$financialYearStart, $financialYearEnd])
+            ->get();
+
+          $columns = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'ninghteen', 'twenty', 'twentyone', 'twentytwo', 'twentythree', 'twentyfour', 'twentyfive', 'twentysix', 'twentyseven', 'twentyeight', 'twentynine', 'thirty', 'thirtyone'];
+          $ulInAttendance = 0;
+          foreach ($attendanceRecord as $item) {
+            foreach ($columns as $column) {
+              if ($item->$column === 'UL/C' || $item->$column === 'UL/A') {
+                $ulInAttendance++;
+              }
+            }
+          }
+
+          if ($ulInAttendance >= $totalcountUnplanned || $totalcountUnplanned - $ulInAttendance == 0.5) {
+            $lstatus = 'LWP';
+          }
+
+          $attendanceUpdateData = [];
+          $attendances = DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+            ->where('month', $requestedMonth)->first();
+          if ($attendances == null) {
+            if ($lstatus == 'UL/C') {
+              $attendanceData = [
+                'employee_name' => auth()->user()->teammember_id,
+                'month' => $requestedMonth,
+                'unplanned_leave' => 1,
+                'created_at' => Carbon::now(),
+              ];
+            } else {
+              $attendanceData = [
+                'employee_name' => auth()->user()->teammember_id,
+                'month' => $requestedMonth,
+                'lwp' => 1,
+                'created_at' => Carbon::now(),
+              ];
+            }
+            // DB::table('attendances')->insert($attendanceData);
+          } else {
+            if ($lstatus == 'UL/C') {
+              // DB::table('attendances')
+              //   ->where('employee_name', auth()->user()->teammember_id)
+              //   ->where('month', $requestedMonth)
+              //   ->update(['unplanned_leave' => DB::raw('COALESCE(unplanned_leave, 0) + 1')]);
+            } else {
+              // DB::table('attendances')
+              //   ->where('employee_name', auth()->user()->teammember_id)
+              //   ->where('month', $requestedMonth)
+              //   ->update(['lwp' => DB::raw('COALESCE(lwp, 0) + 1')]);
+            }
+          }
+
+          $column = $columnMappings[$day] ?? null;
+          if ($column !== null) {
+            $attendanceUpdateData[$column] = $lstatus;
+          }
+
+          //Update the attendance data for the current date
+          // DB::table('attendances')->where('employee_name', auth()->user()->teammember_id)
+          //   ->where('month', $requestedMonth)->update($attendanceUpdateData);
+        }
+      }
+      // unplanned leave end
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+store function
+
+   DB::table('timesheets')->where('id', $rejectedtimesheet->timesheetid)->update([
+  
+
+          DB::table('timesheets')->where('id', $rejectedtimesheet->timesheetid)->update([
+            'status'   => 3,
+          ]);
+		  
+
+          $assignmentMap = [
+            9  => 215,
+            15 => 222,
+          ];
+
+          $assignmentId = $assignmentMap[$request->leavetype] ?? 214;
+
+          DB::table('timesheetusers')
+            ->where('id', $rejectedtimesheet->id)
+            ->update([
+              'status'                => 3,
+              'client_id'             => 134,
+              'assignmentgenerate_id' => null,
+              'workitem'              => $request->reasonleave,
+              'location'              => 'NA',
+              'hour'                  => 0,
+              'totalhour'             => 0,
+              'assignment_id'         => $assignmentId,
+              'partner'               => $request->approver,
+            ]);
+
+          // Attendance code start hare 
+          $hdatess = Carbon::parse($rejectedtimesheet->date)->format('Y-m-d');
+  
+
+
+
+
+
+app\Http\Controllers\ApplyleaveController.php
+store function
+ $updatewording = $checkholidays ? 'H' : 'EL';
+
+
+
+
+              if ($request->leavetype == 9) {
+                $updatewording = 'CL';
+              } elseif ($request->leavetype == 15) {
+                $updatewording = 'UL';
+              } else {
+                $checkholidays = DB::table('holidays')
+                  ->where('startdate', '=', $hdatess)
+                  ->orWhere('enddate', '=', $hdatess)
+                  ->first();
+
+                $updatewording = $checkholidays ? 'H' : 'EL';
+              }
+
+
+
+
+
+
+
+
+
+
+app\Http\Controllers\ApplyleaveController.php
+store function
+
+
+              // Mapping for total count columns
+              $totalCountMapping = [
+                'P' => 'no_of_days_present',
+                'CL' => 'casual_leave',
+                'UL' => 'unplaned_leave',
+                'EL' => 'exam_leave',
+                'T' => 'travel',
+                'OH' => 'offholidays',
+                'W' => 'sundaycount',
+                'H' => 'holidays'
+              ];
+			  
+			  
+			  
+			  
+			  
+
+app\Http\Controllers\TimesheetrequestController.php
+ public function timesheetsubmission(Request $request)
+ 
+ 
+
+                                if ($client == 32) {
+                                    $updatewording = 'T'; // Travel
+                                } elseif ($client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $getsixdata->workitem) == 'Saturday') {
+                                    $updatewording = 'OH'; // Off holidays
+                                } elseif ($client == 33) {
+                                    $updatewording = 'H'; // Other holidays from calendar
+                                } elseif ($assignmentid == 213 && $getsixdata->workitem == 'NA') {
+                                    $updatewording = null; // Casual leave
+                                } elseif ($client == 134 && $assignmentid == 222) {
+                                    $updatewording = 'UL'; // Casual leave
+                                } elseif ($client == 134 && $assignmentid == 215) {
+                                    $updatewording = 'CL'; // Casual leave
+                                } elseif ($client == 134 && $assignmentid == 214) {
+                                    $updatewording = 'EL'; // Exam leave
+                                } else {
+                                    $updatewording = 'P'; // Default presence
+                                }
+								
+								
+								
+								
+								
+								
+								
+                            $totalCountMapping = [
+                                'P' => 'no_of_days_present',
+                                'CL' => 'casual_leave',
+                                'UL' => 'unplanned_leave',
+                                'EL' => 'exam_leave',
+                                'T' => 'travel',
+                                'OH' => 'offholidays',
+                                'W' => 'sundaycount',
+                                'H' => 'holidays',
+                                null => 'beforejoiningcount'
+                            ];
+
+
+
+
+
+
+find     if (!in_array($prevSunday, $retrievedDates)) {
+
+
+1
+
+                            $totalCountMapping = [
+                                'P' => 'no_of_days_present',
+                                'CL' => 'casual_leave',
+                                'UL' => 'unplanned_leave',
+                                'EL' => 'exam_leave',
+                                'T' => 'travel',
+                                'OH' => 'offholidays',
+                                'W' => 'sundaycount',
+                                'H' => 'holidays'
+                            ];
+		
+
+
+
+
+
+
+else{ part me 
+
+
+
+                            if ($client == 32) {
+                                $updatewording = 'T'; // Travel
+                            } elseif ($client == 33 && str_replace(['1st ', '2nd ', '3rd ', '4th ', '5th '], '', $getsixdata->workitem) == 'Saturday') {
+                                $updatewording = 'OH'; // Off holidays
+                            } elseif ($client == 33) {
+                                $updatewording = 'H'; // Other holidays from calendar
+                            } elseif ($assignmentid == 213 && $getsixdata->workitem == 'NA') {
+                                $updatewording = null; // Casual leave
+                            } elseif ($client == 134 && $assignmentid == 222) {
+                                $updatewording = 'UL'; // Casual leave
+                            } elseif ($client == 134 && $assignmentid == 215) {
+                                $updatewording = 'CL'; // Casual leave
+                            } elseif ($client == 134 && $assignmentid == 214) {
+                                $updatewording = 'EL'; // Exam leave
+                            } else {
+                                $updatewording = 'P'; // Default presence
+                            }	
+
+
+
+
+
+
+                        $totalCountMapping = [
+                            'P' => 'no_of_days_present',
+                            'CL' => 'casual_leave',
+                            'UL' => 'unplanned_leave',
+                            'EL' => 'exam_leave',
+                            'T' => 'travel',
+                            'OH' => 'offholidays',
+                            'W' => 'sundaycount',
+                            'H' => 'holidays',
+                            null => 'beforejoiningcount'
+                        ];
+
+
+
+
+
+
+sunday wala code me 
+
+
+                        $totalCountMapping = [
+                            'P' => 'no_of_days_present',
+                            'CL' => 'casual_leave',
+                            'UL' => 'unplanned_leave',
+                            'EL' => 'exam_leave',
+                            'T' => 'travel',
+                            'OH' => 'offholidays',
+                            'W' => 'sundaycount',
+                            'H' => 'holidays'
+                        ];	
+
+
+
+
+
+
+resources\views\backEnd\attendance\teamattendance.blade.php
+
+		                                    <td class="text-center"> {{ $attendanceData->unplanned_leave ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->casual_leave ?? '0' }}</td>
+
+
+
+
+
+                                <th>Total Unplanned Leave</th>
+                                <th>Total Casual Leave</th>
+
+
+
+
+
+
+resources\views\backEnd\attendance\adminattendance.blade.php
+
+
+                                    <td class="text-center"> {{ $attendanceData->unplanned_leave ?? '0' }}</td>
+                                    <td class="text-center"> {{ $attendanceData->casual_leave ?? '0' }}</td>
+									
+									
+									
+									
+
+                                <th>Total Unplanned Leave</th>
+                                <th>Total Casual Leave</th>
+
+
+
+
+
+
+
+app\Http\Controllers\ApplyleaveController.php
+find  public function update(Request $request, $id)
+  if ($team->name == 'Casual Leave')   is line ke uper add kar do 
+
+
+        if ($team->name == 'Unplanned Leave') {
+          $to = Carbon::createFromFormat('Y-m-d', $team->to ?? '');
+          $from = Carbon::createFromFormat('Y-m-d', $team->from);
+          $requestdays = $to->diffInDays($from) + 1;
+
+          $holidaycount = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)
+            ->count();
+
+          $totalrqstday = $requestdays - $holidaycount;
+          DB::table('leaveapprove')->insert([
+            'teammemberid'     =>     $team->createdby,
+            'leavetype'     =>     $team->leavetype,
+            'totaldays'     =>     $totalrqstday,
+            'year'     =>     '2023',
+            'created_at'          =>     date('y-m-d'),
+            'updated_at'              =>    date('y-m-d'),
+          ]);
+
+          $period = CarbonPeriod::create($team->from, $team->to);
+          $datess = [];
+          foreach ($period as $date) {
+            $datess[] = $date->format('Y-m-d');
+          }
+
+          $getholidays = DB::table('holidays')->where('startdate', '>=', $team->from)
+            ->where('enddate', '<=', $team->to)->select('startdate')->get();
+
+          if (count($getholidays) != 0) {
+            foreach ($getholidays as $date) {
+              $hdatess[] = date('Y-m-d', strtotime($date->startdate));
+            }
+          } else {
+            $hdatess[] = 0;
+          }
+
+          $ul_leave = array_diff($datess, $hdatess);
+          $lstatus = "UL/A";
+          foreach ($ul_leave as $ul_leave) {
+            $ul_leave_day = date('d', strtotime($ul_leave));
+            $ul_leave_month = date('F', strtotime($ul_leave));
+
+            if ($ul_leave_day >= 26 && $ul_leave_day <= 31) {
+              $ul_leave_month = date('F', strtotime($ul_leave . ' +1 month'));
+            }
+
+            $attendances = DB::table('attendances')->where('employee_name', $team->createdby)
+              ->where('month', $ul_leave_month)->first();
+
+            $column = '';
+            switch ($ul_leave_day) {
+              case '26':
+                $column = 'twentysix';
+                break;
+              case '27':
+                $column = 'twentyseven';
+                break;
+              case '28':
+                $column = 'twentyeight';
+                break;
+              case '29':
+                $column = 'twentynine';
+                break;
+              case '30':
+                $column = 'thirty';
+                break;
+              case '31':
+                $column = 'thirtyone';
+                break;
+              case '01':
+                $column = 'one';
+                break;
+              case '02':
+                $column = 'two';
+                break;
+              case '03':
+                $column = 'three';
+                break;
+              case '04':
+                $column = 'four';
+                break;
+              case '05':
+                $column = 'five';
+                break;
+              case '06':
+                $column = 'six';
+                break;
+              case '07':
+                $column = 'seven';
+                break;
+              case '08':
+                $column = 'eight';
+                break;
+              case '09':
+                $column = 'nine';
+                break;
+              case '10':
+                $column = 'ten';
+                break;
+              case '11':
+                $column = 'eleven';
+                break;
+              case '12':
+                $column = 'twelve';
+                break;
+              case '13':
+                $column = 'thirteen';
+                break;
+              case '14':
+                $column = 'fourteen';
+                break;
+              case '15':
+                $column = 'fifteen';
+                break;
+              case '16':
+                $column = 'sixteen';
+                break;
+              case '17':
+                $column = 'seventeen';
+                break;
+              case '18':
+                $column = 'eighteen';
+                break;
+              case '19':
+                $column = 'ninghteen';
+                break;
+              case '20':
+                $column = 'twenty';
+                break;
+              case '21':
+                $column = 'twentyone';
+                break;
+              case '22':
+                $column = 'twentytwo';
+                break;
+              case '23':
+                $column = 'twentythree';
+                break;
+              case '24':
+                $column = 'twentyfour';
+                break;
+              case '25':
+                $column = 'twentyfive';
+                break;
+            }
+
+            if (!empty($column)) {
+              // DB::table('attendances')
+              //   ->where('employee_name', $team->createdby)
+              //   ->where('month', $ul_leave_month)
+              //   ->whereRaw("NOT ({$column} REGEXP '^-?[0-9]+$')")
+              //   ->whereRaw("{$column} != 'LWP'")
+              //   ->update([
+              //     $column => $lstatus,
+              //   ]);
+            }
+          }
+        }
+        // Unplanned Leave end	
+		
+		
+		
+		
+		
+		
+
+app\Http\Controllers\ApplyleaveController.php
+ public function examleaverequest(Request $request, $id)
+ find  if ($team->name == 'Casual Leave')
+ 
+ replace it        if ($team->name == 'Casual Leave' || $team->name == 'Unplanned Leave') {
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+        // Exam Leave mail
+        if ($team->name == 'Exam Leave') {
+          Mail::send('emails.duringexamleavestatus', $data, function ($msg) use ($data) {
+            $msg->to($data['emailid']);
+            $msg->subject('VSA Exam Leave request Approved');
+          });
+        } elseif ($team->name == 'Unplanned Leave') {
+          Mail::send('emails.duringexamleavestatus', $data, function ($msg) use ($data) {
+            $msg->to($data['emailid']);
+            $msg->subject('VSA Unplanned leave request Approved');
+          });
+        }
+ 
+ 
+ 
+ 
+ 
+ 
+ if ($request->status == 2) {
+ 
+ 
+ 
+        // Exam Leave mail
+        if ($team->name == 'Exam Leave') {
+          Mail::send('emails.duringexamleavereject', $data, function ($msg) use ($data) {
+            $msg->to($data['emailid']);
+            // $msg->cc('priyankasharma@kgsomani.com');
+            $msg->subject('VSA Exam Leave Request Reject');
+          });
+        } elseif ($team->name == 'Unplanned Leave') {
+          Mail::send('emails.duringexamleavereject', $data, function ($msg) use ($data) {
+            $msg->to($data['emailid']);
+            // $msg->cc('priyankasharma@kgsomani.com');
+            $msg->subject('VSA Unplanned leave Request Reject');
+          });
+        }
+
+
+
+
+
+resources\views\backEnd\applyleave\index.blade.php
+find id="requestModal{{ $applyleaveDatas->id }}"
+
+	
+	                                            @if ($applyleaveDatas->leavetype == 11 || $applyleaveDatas->leavetype == 9 || $applyleaveDatas->leavetype == 15)
+
+
+
+ 
+ 
+ 
+ 
+ 
+ app\Http\Controllers\ApplyleaveController.php
+    $currentYear = date('Y');
+    $leavetype = DB::table('leavetypes')
+      ->leftjoin('leaveroles', 'leaveroles.leavetype_id', 'leavetypes.id')
+      ->where('leavetypes.year', '=',  $currentYear)
+      ->where('leaveroles.role', auth()->user()->role_id)
+      ->whereIn('leavetypes.id', [9, 11, 15])
+      ->select('leavetypes.*')->get();
+    // dd($leavetype);
+ 
+
+An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available end hare ```	
+
+
+
+When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs  w```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\viewassignment.blade.php
+
+  <form id="exampleModal120111"
+  
+                                                        <button type="submit" class="btn btn-success"
+                                                            id="otherPartnerBtn">Submit</button>
+
+
+
+
+
+ find  $('#exampleModal120').on('hidden.bs.modal', function() {
+  
+  
+    // $(this).find('input[type="hidden"]').val('');
+	
+	
+	
+
+resources\views\backEnd\layouts\includes\js.blade.php
+
+
+
+ <script>
+     document.addEventListener('DOMContentLoaded', function() {
+         const form = document.getElementById('exampleModal120111');
+         const btn = document.getElementById('otherPartnerBtn');
+
+         if (form) {
+             form.addEventListener('submit', function() {
+                 btn.disabled = true;
+                 btn.innerText = 'Please wait...';
+             });
+         }
+     });
+ </script>
+ 
+ 
+ 
+ 
+
+When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs  w```start hare  end hare 
+ 
+ 
+ 
+1.Total working days, total travel days, and approved leave data should also be displayed for the previous year
+```start hare 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+ public function totalworkingdays(Request $request, $teamid)
+  {
+
+    $selectedYear = $request->year ?? now()->year;
+
+    // total working days Jan 1 to Dec 31 of selected year
+    $startDate = Carbon::create($selectedYear, 1, 1);
+    $endDate   = Carbon::create($selectedYear, 12, 31);
+
+    // Year dropdown data
+    $currentYear   = now()->year;
+    $oldyearstart  = 2023;
+    $years   = range($currentYear, $oldyearstart);
+
+    // dd($startDate, $endDate);
+    // $startDate = Carbon::create('01-04-2024');
+    // $endDate = Carbon::create('30-09-2024');
+
+    // $home = DB::table('timesheetusers')
+    //   ->where('createdby', 847)
+    //   ->whereIn('status', [1, 2, 3])
+    //   ->whereNotIn('assignmentgenerate_id', ['OFF100004', 'OFF100003'])
+    //   ->whereNotIn('client_id', [134])
+    //   ->whereBetween('timesheetusers.date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+    //   ->select('date') // Select only the date column
+    //   ->distinct() // Apply distinct on the selected columns
+    //   ->get();
+
+    // dd($home);
+
+
+
+
+
+
+
+   return view('backEnd.timesheet.totalworkingdays', compact('timesheetData', 'years', 'selectedYear'));
+
+
+
+
+
+
+
+resources\views\backEnd\timesheet\totalworkingdays.blade.php
+
+
+
+        <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+            <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+                <li class="breadcrumb-item">
+                    <div class="btn-group mb-2 mr-1">
+                        <button type="button" class="btn btn-info-soft btn-sm dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            @if (in_array($selectedYear, $years))
+                                {{ $selectedYear }}
+                            @else
+                                Choose Year
+                            @endif
+                        </button>
+                        @if (request()->has('year'))
+                            <a href="{{ url('totalworkingdays', auth()->user()->teammember_id) }}"
+                                style=" margin-left: 10px; margin-top: 1px;">
+                                <img src="{{ url('backEnd/image/reload.png') }}" style="width: 30px; height: 30px;"
+                                    alt="Reload">
+                            </a>
+                        @endif
+                        <div class="dropdown-menu">
+                            @foreach ($years as $year)
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('totalworkingdays/' . auth()->user()->teammember_id) }}?year={{ $year }}">{{ $year }}</a>
+                            @endforeach
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+		
+		
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function totaltraveldays(Request $request, $teamid)
+  {
+
+    $selectedYear = $request->year ?? now()->year;
+
+    // total totaltraveldays days Jan 1 to Dec 31 of selected year
+    $startDate = Carbon::create($selectedYear, 1, 1);
+    $endDate   = Carbon::create($selectedYear, 12, 31);
+
+    // Year dropdown data
+    $oldyearstart  = 2023;
+    $currentYear   = now()->year;
+    $years   = range($currentYear, $oldyearstart);
+	
+	
+	
+	
+	
+	  return view('backEnd.timesheet.totaltraveldays', compact('timesheetData', 'years', 'selectedYear'));
+	  
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\totaltraveldays.blade.php
+
+
+
+
+         <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+             <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-white mb-0 float-sm-right">
+                 <li class="breadcrumb-item">
+                     <div class="btn-group mb-2 mr-1">
+                         <button type="button" class="btn btn-info-soft btn-sm dropdown-toggle" data-toggle="dropdown"
+                             aria-haspopup="true" aria-expanded="false">
+                             @if (in_array($selectedYear, $years))
+                                 {{ $selectedYear }}
+                             @else
+                                 Choose Year
+                             @endif
+                         </button>
+                         @if (request()->has('year'))
+                             <a href="{{ url('totaltraveldays', auth()->user()->teammember_id) }}"
+                                 style=" margin-left: 10px; margin-top: 1px;">
+                                 <img src="{{ url('backEnd/image/reload.png') }}" style="width: 30px; height: 30px;"
+                                     alt="Reload">
+                             </a>
+                         @endif
+                         <div class="dropdown-menu">
+                             @foreach ($years as $year)
+                                 <a style="color: #37A000" class="dropdown-item"
+                                     href="{{ url('totaltraveldays/' . auth()->user()->teammember_id) }}?year={{ $year }}">{{ $year }}</a>
+                             @endforeach
+                         </div>
+                     </div>
+                 </li>
+             </ol>
+         </nav>
+		 
+		 
+ resources\views\backEnd\applyleave\index.blade.php
+ add this script 
+ 
+<script>
+    $(document).ready(function() {
+        const approvedBox = $('#approvedLeavesBox');
+
+        if (!approvedBox.length) return;
+
+        // default My Application is active
+        approvedBox.removeClass('d-none');
+
+        // Team Application tab
+        $('#pills-user-tab').on('shown.bs.tab', function() {
+            approvedBox.addClass('d-none');
+        });
+
+        // My Application tab 
+        $('#pills-home-tab').on('shown.bs.tab', function() {
+            approvedBox.removeClass('d-none');
+        });
+    });
+</script>
+
+
+                    @if (Auth::user()->role_id == 14 || Auth::user()->role_id == 15 || Auth::user()->role_id == 13)
+                        <div class="nav-item ml-auto d-flex align-items-center">
+                            <p class="m-0 text-center flex-grow-1 text-danger" id="approvedLeavesBox">
+                                Approved leaves: {{ $approvedleavesvaluecount ?? '0' }}
+                            </p>
+                        </div>
+                    @endif
+		 
+		 
+		 
+
+1.Total working days, total travel days, and approved leave data should also be displayed for the previous year 
+end hare ```
+
+all pending on vsalive ```end hare ```2222
+
+
+
+
+
+all pending on vsademo ```start hare ```333
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+
+
+                                      {{-- <li><a href="{{ url('appointmentletter') }}">
+                                              Appointment letter</a></li> --}}
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+all pending on vsademo ```end hare ```3333
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Madhurima das 
+29 novemeber submit  21 tak ka submit kiya hai aaj means timesheet create karne ka nahi aana chahiye add request aana chahiye 
+
+
+
+1.
+
+1.Madhurima Das is facing an issue with the ‘Add Timesheet Request’ button.
+2.Timesheet data of four employees who have exited the organization needs to be deleted from the backend.
+3.Issue with Staff Code Upgrade
+
+
+subhas misra 
+sohan jha 
+tushar garg 
+ankush
+
+vishal agarwal assignment create karta hai to mail jata hai
+
+
+
+Subhash Kumar Mishra	M1073	SAN100900	Pending	
+Subhash Kumar Mishra	M1073	DEV100939	Pending	
+Subhash Kumar Mishra	M1073	CEN100958	Pending	
+Subhash Kumar Mishra	M1073	CAT101076	Pending	
+
+
+
+Ankush	M1003	RSW100908	Pending	
+Ankush	M1003	CEN100958	Pending	
+Ankush	M1003	RSW100998	Pending
+
+
+
+Sohan Jha	M1019	INT100892	Pending	
+Sohan Jha	M1019	IND100896	Pending	
+Sohan Jha	M1019	JES100897	Pending	
+Sohan Jha	M1019	THE101106	Pending	
+Sohan Jha	M1019	RSW101117	Pending	
+Sohan Jha	M1019	RSW101119	Pending	
+Sohan Jha	M1019	CEN101193	Pending	
+Sohan Jha	M1019	DIL101194	Pending
+
+
+
+Tushar Garg	S1045	FOO101089	Pending
+
+
+
+
+
+
+Create these task on GRC
+Partner added on this assignment (BIR101359)
+
+
+Created these task on GRC
+1.Madhurima Das is facing an issue with the ‘Add Timesheet Request’ button.
+2.Timesheet, applyleave and attendence data of four employees who have exited the organization needs to be deleted from the backend.
+  1.Subhash Kumar Mishra
+  2.Ankush
+  3.Sohan Jha
+  4.Tushar Garg
+3.Issue with Staff Code Upgrade
+4.Holidays list upload on vsa.
+5.Approved independence data for the following users
+  1.Subhash Kumar Mishra
+  2.Ankush
+  3.Sohan Jha
+  4.Tushar Garg
+6.Apply leave error on New Year (dynamic implemented)
+7.When a user’s timesheet is rejected, the user should first be able to update and resubmit the rejected timesheet.
+
+

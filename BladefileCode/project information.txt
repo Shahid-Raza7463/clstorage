@@ -1,5 +1,14 @@
 password Azaz~123 copy from database 
 https://kgs.capitall.io/login
+https://capitalldemo2.grc.capitall.io/admin/login
+
+
+1.Database import using command / regarding import database
+cd C:\xampp\mysql\bin
+folder me cmd open kare using adminstrate
+{{-- 1.mysql -u root vsalive < "C:\xampp\htdocs\database\vsalive.sql"  --}}
+{{-- 1.mysql -u root kgsdemo < "C:\xampp\htdocs\database\kgsdemo1.sql"  --}}
+
 
 https://bitbucket.org/capitallio/workspace/overview/
 
@@ -16,17 +25,18 @@ DB_PASSWORD=Security@65456
 
 
 vsademo Shahid@123
-
 $2y$10$YKDfTaPzwHflBBmO.1v7eu0FqsieDIjL0skuRojNhx1SfLZKwI9m2
+
+Vinita@54321
+$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye
+
+Azaz~123
+$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
 
  937 gunnet  Guneet@capitall.io 
  936 pooja  Poojakumari@capitall.io
  935 simmi  Simmi@capitall.io
  951 shahid   shahidraza@capitall.io
- 
-
-Azaz~123
-$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G
 
 =COUNTIF(H3:AK3,"Not Checkin")
 https://vsademo.capitall.io/submittedexamleavetimesheet
@@ -85,6 +95,13 @@ backEnd\image\vlogo.png
 vsalogo.png
 #############################################################
 wifi password 
+Capitall_backup
+Capitall@#1966
+
+kgs office 
+office_1966
+
+
 vsacapi
 SysCap@Set%9313
 
@@ -159,7 +176,7 @@ Azaz~123
 office_1966
 
 sukhbahadur1993@gmail.com
-Sukh@2023
+Sukh@202508
 
 you are laravel and javascript expert
 you are laravel expert
@@ -419,11 +436,35 @@ regarding assignment clean / regarding clean
       ->delete();
 
    
-    DB::table('users')
-      ->whereNotIn('id', [724])
-      ->update([
-        'password' => '$2y$10$41IkxJTGXZ/RcW3T3ZqWGeMXnAPwsxpge1Injb1jYe/xJsU1BWD7G',
-      ]);
+   app\Http\Controllers\Auth\LoginController.php
+    find   public function forgetPassword()
+
+vsademo 
+
+UPDATE users
+SET
+    password = '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye';
+
+        DB::table('users')
+            ->update([
+                'password' => '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye',
+            ]);
+
+        dd('done');
+
+
+crone
+UPDATE users
+SET
+    password = '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye',
+    password_changed_at = '2025-12-01 21:27:58';
+
+
+        DB::table('users')
+            ->update([
+                'password' => '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye',
+                'password_changed_at' => '2025-12-01 21:27:58',
+            ]);
 
     dd('done');
 
@@ -460,7 +501,7 @@ if assignment want to clean then
 
 22222222222222222222222222222222222222222222222222
 
-i need this table to update 
+i need this table to update on vsalive 
 
 1.timesheetreport,
 2.timesheetrequests,
@@ -491,7 +532,7 @@ i need this table to update
 
 
 
-if any problem on timesheet page to vsalive then ye table maange
+if any problem on timesheet page on vsalive then ye table maange 
 
 
 1.timesheetreport,
@@ -505,15 +546,60 @@ if any problem on timesheet page to vsalive then ye table maange
 7.applyleaves  
 8.attendances
 
-9.Users
-10.teammembers
+09.teamrolehistory
+10.rejoiningsamepost
 
-11.teamrolehistory
-12.rejoiningsamepost
+11.Users
+12.teammembers
+
+
+leave apply and approved 
 
 
 222222222222222222222222222222222222222222222222222222222
 regarding tables delete on vsademo 
+
+ // $tables = [
+    //   //* timesheets
+    //   'timesheetreport',
+    //   'timesheetrequests',
+    //   'timesheets',
+    //   'timesheetusers',
+
+    //   //* applyleaves
+    //   'applyleaves',
+    //   'leaveapprove',
+    //   'leaverequest',
+
+    //   //* attendances
+    //   'attendances',
+
+    //   //* assignments
+    //   // 'assignmentbudgetings',
+    //   // 'assignmentmappings',
+    //   // 'assignmentteammappings',
+    //   // 'assignments',
+
+    //   //* another tables
+    //   // 'Users',
+    //   // 'teammembers',
+    //   'teamrolehistory',
+    //   'rejoiningsamepost',
+    //   // 'Clients',
+    //   // 'independences',
+    // ];
+
+
+    // foreach ($tables as $table) {
+    //   if (Schema::hasTable($table)) {
+    //     Schema::drop($table);
+    //     echo "'{$table}'.<br>";
+    //   } else {
+    //     echo "'{$table}'.<br>";
+    //   }
+    // }
+
+    // return response('Tables deleted successfully!', 200);
 
 
    $tables = [
@@ -567,6 +653,102 @@ regarding tables delete on vsademo
       ]);
 
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+user timesheet delete 
+DB::beginTransaction();
+
+    $authteamid = 940;
+    $startdate = '2025-06-30';
+    $enddate   = '2025-12-29';
+
+    $attendencestartdate = '2025-06-01';
+    $attendenceenddate   = '2025-12-29';
+
+    $deletedDates = DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->pluck('date')
+      ->toArray();
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $dayColumns = [
+      1 => 'one',
+      2 => 'two',
+      3 => 'three',
+      4 => 'four',
+      5 => 'five',
+      6 => 'six',
+      7 => 'seven',
+      8 => 'eight',
+      9 => 'nine',
+      10 => 'ten',
+      11 => 'eleven',
+      12 => 'twelve',
+      13 => 'thirteen',
+      14 => 'fourteen',
+      15 => 'fifteen',
+      16 => 'sixteen',
+      17 => 'seventeen',
+      18 => 'eighteen',
+      19 => 'ninghteen',
+      20 => 'twenty',
+      21 => 'twentyone',
+      22 => 'twentytwo',
+      23 => 'twentythree',
+      24 => 'twentyfour',
+      25 => 'twentyfive',
+      26 => 'twentysix',
+      27 => 'twentyseven',
+      28 => 'twentyeight',
+      29 => 'twentynine',
+      30 => 'thirty',
+      31 => 'thirtyone'
+    ];
+
+    foreach ($deletedDates as $date) {
+      $day   = (int) date('d', strtotime($date));
+      $month = date('F', strtotime($date));
+      $year  = date('Y', strtotime($date));
+
+      $column = $dayColumns[$day] ?? null;
+
+      if ($column) {
+        DB::table('attendances')
+          ->where('employee_name', $authteamid)
+          ->where('month', $month)
+          ->where('year', $year)
+          ->update([
+            $column => null
+          ]);
+      }
+    }
+
+    DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereBetween('fulldate', [$attendencestartdate, $attendenceenddate])
+      ->where('no_of_days_present', 0)
+      ->delete();
+
+    DB::commit();
+
+    dd('Successfully done');
+
+
+
     // $authteamid = 844;
     // $startdate = '2025-03-17';
     // $enddate = '2025-03-29';
@@ -814,7 +996,7 @@ Password - 21603
     //   ->whereNotIn('id', [780, 878])
     //   ->delete();
 
-
+dashboard bugs 
 1. assignmentmappings
 2. assignmentbudgetings
 3. invoices
@@ -846,4 +1028,287 @@ Password - 21603
 
 
 
+ticket bugs
 
+tasks
+taskassign
+tasktrails
+task_attachments
+teammembers
+users
+
+
+
+check in bugs 
+
+1.teammembers
+4. checkins
+5. clients
+6. assignmentbudgetings
+7. assignments
+8. assignmentmappings
+9. holidays
+10. applyleaves
+11. leavetypes
+12. timesheetusers
+
+ DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+    $tables = [
+      'teammembers',
+      'checkins',
+      'clients',
+      'assignmentbudgetings',
+      'assignments',
+      'assignmentmappings',
+      'holidays',
+      'applyleaves',
+      'leavetypes',
+      'timesheetusers',
+    ];
+
+    foreach ($tables as $table) {
+      if (Schema::hasTable($table)) {
+        Schema::drop($table);
+        echo "'$table dropped'<br>";
+      } else {
+        echo "'$table not found'<br>";
+      }
+    }
+
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+    return response('Tables dropped successfully');
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+940
+subhashmishra@vsa.co.in
+Subhash Kumar Mishra
+
+
+  $authteamid = 940;
+    $startdate = '2025-06-30';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2528, 2666, 2802, 2943, 3085])
+      // ->get();
+      ->delete();
+
+    $leavedata = DB::table('applyleaves')
+      ->where('createdby', $authteamid)
+      ->whereIn('id', [2115])
+      // ->get();
+      ->delete();
+
+    $leaveapproveddata = DB::table('leaveapprove')
+      ->where('teammemberid', $authteamid)
+      ->whereIn('id', [2012])
+      // ->get();
+      ->delete();
+
+    dd('Successfully done');
+
+
+
+please enter exit date  28 june 2025
+
+
+end hare 
+222222222222222222222222222222222222222222222222222222222222222222222222222
+814
+ankush@vsa.co.in
+Ankush
+
+
+
+    $authteamid = 814;
+    $startdate = '2025-05-12';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2330, 2460, 2743, 2883, 3030, 3174])
+      // ->get();
+      ->delete();
+
+    $updateAttendance = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->where('id', 2192)
+      ->update([
+        'twelve'      => null,
+        'thirteen'   => null,
+        'exam_leave' => 11,
+      ]);
+
+
+    $leavedata = DB::table('applyleaves')
+      ->where('createdby', $authteamid)
+      ->where('id', 1886)
+      ->update([
+        'to' => '2025-05-11',
+      ]);
+
+
+    $leaveapproveddata = DB::table('leaveapprove')
+      ->where('teammemberid', $authteamid)
+      ->where('id', 1788)
+      ->update([
+        'totaldays' => 31,
+      ]);
+
+    dd('Successfully done');
+	
+	
+	
+please enter exit date 11 may 2025
+
+
+222222222222222222222222222222222222222222222222222222222222222
+830
+sohanj@vsa.co.in
+Sohan Jha
+
+
+  $authteamid = 830;
+    $startdate = '2025-08-18';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2747, 2889, 3036])
+      // ->get();
+      ->delete();
+
+    $updateAttendance = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->where('id', 2607)
+      ->update([
+        'eighteen'      => null,
+        'ninghteen'   => null,
+        'twenty'   => null,
+        'twentyone'   => null,
+        'twentytwo'   => null,
+        'twentythree'   => null,
+        'twentyfour'   => null,
+        'twentyfive'   => null,
+        'twentysix'   => null,
+        'twentyseven'   => null,
+        'twentyeight'   => null,
+        'twentynine'   => null,
+        'thirty'   => null,
+        'thirtyone'   => null,
+        'exam_leave' => 0,
+        'holidays' => 3,
+      ]);
+
+
+    $leavedata = DB::table('applyleaves')
+      ->where('createdby', $authteamid)
+      ->whereIn('id', [2271])
+      // ->get();
+      ->delete();
+
+    $leaveapproveddata = DB::table('leaveapprove')
+      ->where('teammemberid', $authteamid)
+      ->whereIn('id', [2200])
+      // ->get();
+      ->delete();
+
+
+    dd('Successfully done');
+
+
+
+please enter exit date 16 august 2025 
+
+222222222222222222222222222222222222222222222222222222222222222
+811
+tusharg@vsa.co.in
+Tushar Garg
+
+
+ $authteamid = 811;
+    $startdate = '2025-06-09';
+    $enddate   = '2025-12-29';
+
+    DB::table('timesheetusers')
+      ->where('createdby', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheets')
+      ->where('created_by', $authteamid)
+      ->whereBetween('date', [$startdate, $enddate])
+      ->delete();
+
+    DB::table('timesheetreport')
+      ->where('teamid', $authteamid)
+      ->whereBetween('startdate', [$startdate, $enddate])
+      ->delete();
+
+    $attendanceexist = DB::table('attendances')
+      ->where('employee_name', $authteamid)
+      ->whereIn('id', [2458, 2599, 2741, 2881, 3028])
+      // ->get();
+      ->delete();
+
+    dd('Successfully done');
+
+
+
+
+
+7 june 2025 exit date dale 
+
+
+
+end hare ```

@@ -291,6 +291,7 @@ class Sentence extends Command
     // client want to redirect url on open leave page when partner click on hare button on mail 
     // I have attached all QA-passed tasks that are currently pending in UAT 
     // I have completed this task and moved it to QA
+    // Belated Happy birthday @Shahid Raza on 01-01-2026
     // I have completed this task, moved it to QA, and updated the description on Jira
     // since there is delay in code merge of KYC, we can pick up VSA tasks in QA ?
     // Shahid Raza where are we on this
@@ -326,11 +327,14 @@ class Sentence extends Command
     // 12.	Joining Date should not be in the future.
     // 13.	Leaving Date should not be in the future.
     // I have moved the status from In Progress to Code Review. Please check once
+    // Apply casual leave and exam leave, and verify the saved timesheet after the leave is applied
     // I have moved the task VS-500 to Code Review.
     // I have moved this task to In UAT. Please check once
     // Hi, Shahid here.
+    // I have completed all 3 out of 3 tasks (VSA). I would like to discuss one task with you.
     // I am available on March 6. Let me know if that works for you.
-
+    // there are 3 new task in VSA please pick them up
+    // I have completed all 3 out of 3 tasks. I would like to discuss one task with you.
     // Due to network issue I can't hear your voice properly
     // i have left comments for simmi and Atishay Jain, please check once.
     // i have already moved this task in Code review and manaly maine jo 4 ya 5 place per hi work kiya hai jo unhe chahiye tha iske alawa rest of palce maine koi test nahi kiya aur nahi koi implementation  
@@ -555,6 +559,13 @@ class Sentence extends Command
     // We still need to clarify a few points, and after that, we will be able to estimate the effort level. But this will take time at least 10–15 days (not confirmed yet).
     // Tripti was asking about its deployment date ?
     // These points have been discussed between prashant and me. We need to discuss these points.
+    // Shahid Raza there are 3 new task in VSA please pick them up
+    // Pooja Kumari there is also a task pending to test in VSA, please pick it up as per your availability
+    // maam Please check the OMS Query list now. I have hidden the Audit Query and Data Analytics Query.If you find any issues, please leave a comment here
+    // When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs
+
+
+
 
 
 

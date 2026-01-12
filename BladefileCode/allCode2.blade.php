@@ -68,18 +68,553 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+
+                        @if (request()->has('year'))
+                            <a href="{{ url('totalworkingdays', auth()->user()->teammember_id) }}"
+                                style=" margin-left: 10px; margin-top: 1px;">
+                                <img src="{{ url('backEnd/image/reload.png') }}" style="width: 30px; height: 30px;"
+                                    alt="Reload">
+                            </a>
+                        @endif
+
+                        @if (Request::query('year'))
+    <a href="{{ url('totalworkingdays', auth()->user()->teammember_id) }}"
+        style="margin-left:10px; margin-top:1px;">
+        <img src="{{ url('backEnd/image/reload.png') }}"
+            style="width:30px; height:30px;"
+            alt="Reload">
+    </a>
+@endif
+
+
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+<button type="submit" class="btn btn-success" id="partnerSubmitBtn">
+    Submit
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const partnerForm = document.getElementById('exampleModal120111');
+        const submitBtn = document.getElementById('partnerSubmitBtn');
+
+        if (partnerForm) {
+            partnerForm.addEventListener('submit', function() {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Please wait...';
+            });
+        }
+    });
+</script>
+
 {{--  Start Hare --}}
+{{-- <li class="breadcrumb-item">
+                        @if ($timesheetrejectData && $timesheetrejectData->status == 2)
+                            <a href="javascript:void(0)" class="btn btn-info-soft btn-sm" id="add-timesheet-rejected">
+                                Add Timesheet
+                                @if ($timesheetcount > 7)
+                                    for last week
+                                @endif
+                            </a>
+                        @else
+                            <a class="btn btn-info-soft btn-sm" href="{{ url('timesheet/create') }}">
+                                Add Timesheet
+                                @if ($timesheetcount > 7)
+                                    for last week
+                                @endif
+                            </a>
+                        @endif
+                    </li> --}}
+
+<li class="breadcrumb-item">
+    @php
+        $isRejected = !empty($timesheetrejectData) && $timesheetrejectData->status == 2;
+        $label = 'Add Timesheet' . ($timesheetcount > 7 ? ' for last week' : '');
+    @endphp
+
+    <a class="btn btn-info-soft btn-sm" href="{{ $isRejected ? 'javascript:void(0)' : url('timesheet/create') }}"
+        @if ($isRejected) id="add-timesheet-rejected" @endif>
+        {{ $label }}
+    </a>
+</li>
+{{-- ! End hare --}}
+{{-- * regarding sweetalert / regarding alert --}}
+{{--  Start Hare --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('add-timesheet-rejected').addEventListener('click', function() {
+        Swal.fire({
+            title: "Pending Rejected Timesheet",
+            text: "Please submit your rejected timesheet first. Are you sure you want to proceed?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Proceed",
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            // reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '{{ url('rejectedlist') }}';
+            }
+        });
+    });
+
+    Swal.fire({
+        title: 'Inform Partner?',
+        text: "Do You want to inform partner about the ticket?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, submit it!',
+        cancelButtonColor: '#f39c12', // Use the color for 'Cancel' button
+        cancelButtonText: 'Cancel',
+        showDenyButton: true,
+        denyButtonColor: '#d33', // Use the color for 'No, submit it!' button
+        denyButtonText: 'No, submit it!',
+        allowOutsideClick: false,
+        buttons: ['cancel', 'deny', 'confirm'] // Specify the order of buttons
+    })
+</script>
+{{--  Start Hare --}}
+@if ($timesheetrejectData && $timesheetrejectData->status == 2)
+    <li class="breadcrumb-item">
+        <a href="{{ url('rejectedlist') }}" class="btn btn-info-soft btn-sm"
+            onclick="return confirm('Please submit your rejected timesheet first. Are you sure you want to proceed?');">
+            Add Timesheet
+        </a>
+    </li>
+@else
+    <li class="breadcrumb-item">
+        <a class="btn btn-info-soft btn-sm" href="{{ url('timesheet/create') }}">
+            Add Timesheet
+        </a>
+    </li>
+@endif
+{{--  Start Hare --}}
+@if (!empty($timesheetrejectData) && $timesheetrejectData->status == 2)
+    <li class="breadcrumb-item">
+        <a href="javascript:void(0);" class="btn btn-info-soft btn-sm" onclick="redirectToRejectedList()">
+            Add Timesheet
+        </a>
+    </li>
+@else
+    <li class="breadcrumb-item">
+        <a class="btn btn-info-soft btn-sm" href="{{ url('timesheet/create') }}">
+            Add Timesheet
+        </a>
+    </li>
+@endif
+
+<script>
+    function redirectToRejectedList() {
+        if (confirm('Please submit your rejected timesheet first. Are you sure you want to proceed?')) {
+            window.location.href = "{{ url('rejectedlist') }}";
+        }
+        // Cancel → nothing happens
+    }
+</script>
+
+{{--  Start Hare --}}
+@if ($timesheetrejectData && $timesheetrejectData->status == 2)
+    <li class="breadcrumb-item">
+        <a href="javascript:void(0)" class="btn btn-info-soft btn-sm" id="add-timesheet-rejected">
+            Add Timesheet
+        </a>
+    </li>
+@else
+    <li class="breadcrumb-item">
+        <a class="btn btn-info-soft btn-sm" href="{{ url('timesheet/create') }}">
+            Add Timesheet
+        </a>
+    </li>
+@endif
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('add-timesheet-rejected').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Pending Rejected Timesheet',
+            text: 'Please submit your rejected timesheet first. Are you sure you want to proceed?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Proceed',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '{{ url('rejectedlist') }}';
+            }
+        });
+    });
+</script>
+
+{{--  Start Hare --}}
+{{-- * regarding sweetalert / regarding alert --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    Swal.fire("SweetAlert2 is working!");
+    //    Start Hare
+    Swal.fire({
+        title: "The Internet?",
+        text: "That thing is still around?",
+        icon: "question"
+    });
+    //    Start Hare
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+        footer: '<a href="#">Why do I have this issue?</a>'
+    });
+    //    Start Hare
+    Try me!
+        Swal.fire({
+            imageUrl: "https://placeholder.pics/svg/300x1500",
+            imageHeight: 1500,
+            imageAlt: "A tall image"
+        });
+    //    Start Hare
+    Swal.fire({
+        title: "Drag me!",
+        icon: "success",
+        draggable: true
+    });
+    //    Start Hare
+    Swal.fire({
+        title: "<strong>HTML <u>example</u></strong>",
+        icon: "info",
+        html: `
+    You can use <b>bold text</b>,
+    <a href="#" autofocus>links</a>,
+    and other HTML tags
+  `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: `
+    <i class="fa fa-thumbs-up"></i> Great!
+  `,
+        confirmButtonAriaLabel: "Thumbs up, great!",
+        cancelButtonText: `
+    <i class="fa fa-thumbs-down"></i>
+  `,
+        cancelButtonAriaLabel: "Thumbs down"
+    });
+    //    Start Hare
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
+    });
+
+    //    Start Hare
+    Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Your work has been saved",
+        showConfirmButton: false,
+        timer: 1500
+    });
+
+    //    Start Hare
+    Swal.fire({
+        title: "Custom animation with Animate.css",
+        showClass: {
+            popup: `
+      animate__animated
+      animate__fadeInUp
+      animate__faster
+    `
+        },
+        hideClass: {
+            popup: `
+      animate__animated
+      animate__fadeOutDown
+      animate__faster
+    `
+        }
+    });
+    //    Start Hare
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+            });
+        }
+    });
+    //    Start Hare
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            swalWithBootstrapButtons.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+            });
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithBootstrapButtons.fire({
+                title: "Cancelled",
+                text: "Your imaginary file is safe :)",
+                icon: "error"
+            });
+        }
+    });
+    //    Start Hare
+    Swal.fire({
+        title: "Sweet!",
+        text: "Modal with a custom image.",
+        imageUrl: "https://unsplash.it/400/200",
+        imageWidth: 400,
+        imageHeight: 200,
+        imageAlt: "Custom image"
+    });
+    //    Start Hare
+    Swal.fire({
+        title: "Custom width, padding, color, background.",
+        width: 600,
+        padding: "3em",
+        color: "#716add",
+        background: "#fff url(/images/trees.png)",
+        backdrop: `
+    rgba(0,0,123,0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `
+    });
+    //    Start Hare
+    et timerInterval;
+    Swal.fire({
+        title: "Auto close alert!",
+        html: "I will close in <b></b> milliseconds.",
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+                timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+        }
+    }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.timer) {
+            console.log("I was closed by the timer");
+        }
+    });
+    //    Start Hare
+    Swal.fire({
+        title: "هل تريد الاستمرار؟",
+        icon: "question",
+        iconHtml: "؟",
+        confirmButtonText: "نعم",
+        cancelButtonText: "لا",
+        showCancelButton: true,
+        showCloseButton: true
+    });
+    //    Start Hare
+
+    Swal.fire({
+        title: "Submit your Github username",
+        input: "text",
+        inputAttributes: {
+            autocapitalize: "off"
+        },
+        showCancelButton: true,
+        confirmButtonText: "Look up",
+        showLoaderOnConfirm: true,
+        preConfirm: async (login) => {
+            try {
+                const githubUrl = `
+        https://api.github.com/users/${login}
+      `;
+                const response = await fetch(githubUrl);
+                if (!response.ok) {
+                    return Swal.showValidationMessage(`
+          ${JSON.stringify(await response.json())}
+        `);
+                }
+                return response.json();
+            } catch (error) {
+                Swal.showValidationMessage(`
+        Request failed: ${error}
+      `);
+            }
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: `${result.value.login}'s avatar`,
+                imageUrl: result.value.avatar_url
+            });
+        }
+    });
+    //    Start Hare
+    //    Start Hare
+    //    Start Hare
+</script>
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+
+<style>
+    /* Filter section */
+    .filter-maincontainer {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin-top: 25px;
+        margin-left: 23px;
+        margin-right: 23px;
+    }
+
+    .filtercontainer {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+    }
+
+    .filtercontainer:hover {
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    /* Custom Button Styles */
+    .btn-custom {
+        padding: 12px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        margin-right: 15px;
+        min-width: 160px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-dashboard {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-dashboard:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-report {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        border: none;
+    }
+
+    .btn-report:hover {
+        background: linear-gradient(135deg, #e686f7 0%, #f14a62 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(245, 87, 108, 0.4);
+        color: white;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .btn-custom {
+            display: block;
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 12px;
+        }
+
+        .filtercontainer {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="filter-maincontainer">
+    <div class="filtercontainer">
+        <a href="" class="btn-custom btn-dashboard" role="button">
+            Dashboard
+        </a>
+        <a href="" class="btn-custom btn-report" role="button">
+            Dashboard Report
+        </a>
+    </div>
+</div>
 {{--  Start Hare --}}
-{{-- ! End hare --}}
-{{-- * regarding  --}}
-{{--  Start Hare --}}
-{{--  Start Hare --}}
+
+@php
+    $timesheetData = $query->get();
+    $firstRow = $timesheetData->first();
+
+    return view('backEnd.timesheet.weeklylist', compact('timesheetData', 'firstRow'));
+
+@endphp
+
+@if (Auth::user()->role_id == 11 || ($firstRow && Auth::user()->teammember_id != $firstRow->createdby))
+    <th>Action</th>
+@endif
+
+
+
+@if (Auth::user()->role_id == 11 ||
+        (isset($timesheetData[0]) && Auth::user()->teammember_id != $timesheetData[0]->createdby))
+    <th>Action</th>
+@endif
+
+@if (Auth::user()->role_id == 11 ||
+        ($timesheetData->count() > 0 && Auth::user()->teammember_id != $timesheetData[0]->createdby))
+    <th>Action</th>
+@endif
+
+
 {{-- ! End hare --}}
 {{-- * regarding cache in blade file /   --}}
 {{--  Start Hare --}}
