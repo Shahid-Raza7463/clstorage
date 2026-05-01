@@ -612,4 +612,19 @@ git push -u origin shahid-iac
 git diff resources/views/iacdashboard/iacengagement.blade.php
 git diff routes/web.php
 
+ git rebase --abort
+ 
+ | Action            | Key   |
+| ----------------- | ----- |
+| Mode se bahar     | `Esc` |
+| Edit start        | `i`   |
+| Save + exit       | `:wq` |
+| Exit without save | `:q!` |
+
+| Command | Meaning               |
+| ------- | --------------------- |
+| `:wq`   | save + exit ✅         |
+| `:wq!`  | force save + exit ✅   |
+| `:q!`   | exit without saving ❌ |
+
 https://bitbucket.org/capitallio/ifchub/pull-requests/new?source=shahid-iac&t=1
