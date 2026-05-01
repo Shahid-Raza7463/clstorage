@@ -36,3 +36,4 @@ Task Report/excell import
 *.wmv
 *.sql
 
+.env 
