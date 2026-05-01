@@ -1,0 +1,310 @@
+01-04-2026
+02-04-2026
+
+03-04-2026
+1.Logs on teammember Create.
+2.Logs on assignment create.
+3.Logs on assignment update.
+4.Logs on teammember update.
+5.Logs on partner added
+6.Logs on teammember added 
+
+
+04-04-2026 
+# Logs implemented on below listed points 
+1.Assignment Edit
+2.Assignment Create
+3.Add Assignment Name
+4.Add Teammember to Assignment
+5.Teammember List – Added from Assignment View Page
+6.Partner List – Added from Assignment View Page
+7.Assignment Viewer – Added 
+8.Confirmation – Open and Closed
+9.Edit Client Details
+10.Add Client
+11.Teammember – Active and Inactive
+12.Add New Teammember
+13.Edit Teammember Details
+14.Leave – Approve and Reject
+15.Timesheet Request – Approve and Reject
+
+
+
+
+05-04-2026
+Sunday 
+
+
+06-04-2026
+# Logs implemented on below listed points 
+16.Notification – Added
+17.Create Login Member
+18.Leave Revert – Approve/Reject
+19.Reject Submitted Timesheet
+20.Promotion and Rejoining
+
+````````````````````````````````````````````````````
+
+07-04-2026
+leave
+
+08-04-2026
+1.in changes column, i have fixed user readable 
+2.logs button added on teammember 
+3.logs button added to notification 
+4.create common model and javascript for logs 
+
+
+09-04-2026
+1.logs button added to confirmation 
+2.excell button and serch added on logs table 
+3.logs button added to Timesheet_rejceted 
+logs button added to Assignment 
+logs button added to Notification 
+logs button added to Teammember 
+logs button added to Teammember_rejoining 
+logs button added to Teammember_status 
+logs button added to Teammember_promotion 
+logs button added to Leave_revert 
+logs button added to Leave 
+logs button added to Teammember_credential 
+logs button added to Timesheet_requests 
+logs button added to Client 
+logs button added to Assignment_team 
+logs button added to Assignment_partner 
+
+
+10-04-2026
+1. old data fixed for user readable 
+2. new data fixed for user readable 
+3. All logs related code optimize and testing completed.
+
+11-04-2026
+Starday
+
+12-04-2026
+Sunday 
+
+
+13-04-2026
+1.filter on logs list using 4 fields 
+2.Functional testing completed afetr logs implement 
+3.Code deployed from local to vsademo 
+4.functional testing completed on vsademo 
+
+
+14-04-2026
+1.Grc descreption updated 
+2.learing Codex AI and claoude code ai 
+
+
+
+
+confiramtion degin issue on vsademo 
+
+
+
+assignment completed me pura assignment nahi aa raha ahi 
+bills pending me bhi same 
+
+assignment excell not working 
+4 me excell and data all verify karna hai 
+
+
+15-04-2026
+1.Document Status Excel Download
+2.Logs kt with pooja 
+3.4 task kt with bahadur 
+  1.https://kgs.capitall.io/ assignments/completed 
+  2.Problem in downloading excel of Documentation Status
+  3.Document Status Excel Download
+  4.Export Functionality Issue in Report Section (Assignment Full List)
+
+
+16-04-2026
+1.'Action' column shows action as 'Update' (logs bugs)
+2.Incorrect Date format in 'Changes' column (logs bugs)
+3.In Action column 'Created' should be 'Create' (logs bugs)
+4.'Updated At' not capturing correct time  working on it 
+5. meeting with client for logs implementation 
+6.https://kgs.capitall.io/ assignments/completed 
+7.Problem in downloading excel of Documentation Status
+8.Document Status Excel Download
+9.Export Functionality Issue in Report Section (Assignment Full List)
+
+
+
+
+
+
+17-04-2026
+1.https://kgs.capitall.io/ assignments/completed 
+2.Problem in downloading excel of Documentation Status
+3.Document Status Excel Download
+4.Export Functionality Issue in Report Section (Assignment Full List)
+5.Alignment of Logs on 'Client' page is not correct
+6.Data not correct in 'Change' column for Client logs
+7.Log for Updating client classification is not working correctly
+8.In Logs 'Change' column should be replaced with Details/Summary
+9.'Change' column in Logs should capture the detail when new entry is created 
+10.In Logs 'Created date' column name should be replaced with Timestamp.  (discard)
+11.In Logs page, 'Teammember Name' should be removed
+12.Sometimes Logs not capturing properly
+13.Promotion &amp; Rejoining related log not visible on their tab
+
+
+	
+
+
+18-04-2026
+1.In Logs page, 'Teammember Name' should be removed
+2.Assignment priode end date changes on vsa live
+3.team staff code miising on logs 
+4.If a new logs is created after promotion/rejoining → Show new staff code.
+5.If a new logs is created before promotion/rejoining → Show old staff code.
+6.Incomplete capture of details in Logs
+7.'Updated At' not capturing correct time
+8.Approve not working in 'Revert Leave' approval flow
+9.Reject button in 'Revert Leave' not asking for reason
+10.For Revert leave logs not capturing correct details
+
+
+``````````````````````````````
+
+19-04-2026
+Sunday
+
+20-04-2026
+1.Helpdesk _OMS Query Bug
+2.Dynamic Article Payroll Management with Excel Import &amp; NEFT Conversion
+
+
+
+
+
+
+21-04-2026
+1.Dynamic Article Payroll Management with Excel Import &amp; NEFT Conversion
+  1.1 added import functionality 
+  1.2 all month and year should be dynamic 
+2.payrollarticleneft 
+
+
+
+
+22-04-2026
+1.Alignment of Logs on 'Client' page is not correct
+2.remove staffcodenumber and add staffcode in teammember_rejoining logs
+3.remove staffcodenumber and add staffcode in teammember_promotion logs
+4.add year filed inside add excell on 
+5.add filter on NEFT Format List 
+6.add filter on Article Payroll List
+7.add indexing page on client on vsademo 
+
+
+
+23-04-2026
+1.all previous kgs task deployed on cron 
+2.functional testring completed 
+3.Staff code not showing correct in Audit Log
+4.alinment issue on vsademo for logs fixed 
+
+
+
+
+24-04-2026
+1.Employee Payroll editable 
+2.Employee Payroll after edit, we can not genrete again 
+3.logs implemented 
+4.Vsa issue checked i have not found any issue 
+
+
+chuskuk
+
+
+25-04-2026
+Sturday 
+
+26-04-2026
+Sunday
+
+27-04-2026
+1.Previous Kgs task deployed on kgsdemo and functional testing completed on kgsdemo 
+2.All codes related logs got from vsademo 
+2.Vsa logs deployed on vsalive, and functional testing completed
+
+V.ANKAR AIYAR & CO
+V.SANKAR AIYAR & CO
+
+
+
+
+28-04-2026
+1.Chakshu khanna issue i have checked 
+2. Kt with pooja for KGS task 
+
+29-04-2026
+30-04-2026
+31-04-2026
+
+
+composer remove vendor/horizon
+
+
+composer require laravel/horizon
+chuchuk karke user hai jiska staff code nahi aa raha hai 
+
+
+BIH101595  end date 27 replace to 17.
+
+
+
+
+app\Http\Controllers\NeftController.php
+
+
+https://cronapi.capitall.io/employeepayroll
+
+https://cronapi.capitall.io/attendance
+
+
+
+Dasboard Filters - 
+Financial Year (dropdown)
+Task Type (dropdown - IAC, ACB)
+Task Sub-type (Audit Reporting/Non-Audit Reporting) - When ACB is selected
+Assignee
+Reviewer
+
+
+Financial Year
+Task Type
+Task Sub-type
+Assignee
+Reviewer
+
+
+https://bitbucket.org/capitallio/ifchub/pull-requests/245
+
+
+app\Http\Controllers\Admin\Dashboard\iacengagement\IacengagementRepository.php, resources\views\iacdashboard\iacengagement.blade.php  and resources\views\iacdashboard\iacdashboardcount.blade.php  is three file me status me change huwa hai to mujhe code me bhi change karna hoga ab status  is tarah hai open, 
+
+
+open,
+recommended for closure
+Recommended for Closure
+
+resources\views\iacdashboard\iacdashboardcount.blade.php  ab is file me card hoga Total Tasks, Open, Recommended for Closure, Completed and Overdue and baki ka jo 2 status tha Under Review and Awaiting Approval  ye basically open me count hoga yaani Open, Under Review, Awaiting Approval ye teeno open me count hoga and jab is open wale count per click karunga 
+
+
+Total Action Items
+total action items
+
+
+	Plus iac wala doc bhi update kr diya h
+	icon add karna hai 
+	
+	
+
+
+

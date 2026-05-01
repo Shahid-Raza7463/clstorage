@@ -9,13 +9,33 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 {{-- * regarding  --}}
+UPDATE articlepayrolls
+SET currentyear = 2028
+WHERE currentyear = 2026;
 {{--  Start Hare --}}
+DELETE FROM assignmentmappings
+WHERE assignmentgenerate_id NOT IN (395928892120, 448882706406);
+
+
+DELETE FROM assignmentbudgetings
+WHERE assignmentgenerate_id NOT IN (395928892120, 448882706406);
+
+
 {{--  Start Hare --}}
+CREATE DATABASE IF NOT EXISTS `npcinew` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016
+DEFAULT ENCRYPTION='N' */;
+USE `npcinew`;
+{{-- * regarding   --}}
+{{--  Start Hare --}}
+SELECT status, COUNT(*) as total
+FROM audit_cycles
+GROUP BY status;
+{{--  Start Hare --}}
+SHOW CREATE TABLE users;
+DESCRIBE assignments;
 {{-- * regarding  --}}
 {{--  Start Hare --}}
-{{--  Start Hare --}}
-{{-- * regarding  --}}
-{{--  Start Hare --}}
+SELECT * FROM `timesheetusers` WHERE `createdby` = 951
 {{--  Start Hare --}}
 CREATE TABLE `user_staffcode_history` (
 `id` INT(11) NOT NULL AUTO_INCREMENT,

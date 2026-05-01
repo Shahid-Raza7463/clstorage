@@ -8,8 +8,41 @@ regarding
 22222222222222222222222222222222222222222222222222222222222222222222222222
 regarding
 
+
+composer remove laravel/horizon
+
 22222222222222222222222222222222222222222222222222222222222222222222222222
-regarding
+regarding PhpOffice / regarding OpenSpout
+composer require phpoffice/phpspreadsheet
+composer require openspout/openspout
+
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Writer\XLSX\Writer;
+use OpenSpout\Writer\XLSX\Options;
+
+testing completed fine working 
+ public function documentationstatus()
+    {
+        // PhpSpreadsheet test
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'PhpSpreadsheet OK');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save(storage_path('app/phpspreadsheet_test.xlsx'));
+
+        // ✅ OpenSpout v4 test - Correct method
+        $writer = new Writer();
+        $writer->openToFile(storage_path('app/openspout_test.xlsx'));
+
+        $writer->addRow(Row::fromValues(['OpenSpout OK']));
+        $writer->close();
+
+        return 'Both PhpSpreadsheet & OpenSpout are working fine ✅';
+    }
 
 
 # regarding library installed / regarding third party installed ```start hare 

@@ -1,16 +1,33 @@
-password Azaz~123 copy from database 
+ Azaz~123 copy from database 
 https://kgs.capitall.io/login
 https://capitalldemo2.grc.capitall.io/admin/login
+sanjeet new admin 
+
+SET FOREIGN_KEY_CHECKS=0;
+
+SET FOREIGN_KEY_CHECKS=1;
+
+SHOW CREATE TABLE observations;
+
+
+app\Http\Controllers\JobController.php
+
+http://127.0.0.1:8000/api/check-In?role_id=13&teammember_id=13
+
+taskkill /IM php.exe /F  
+like 
+PS C:\xampp\htdocs\kgslive> taskkill /IM php.exe /F  
 
 
 1.Database import using command / regarding import database
 cd C:\xampp\mysql\bin
 folder me cmd open kare using adminstrate
-{{-- 1.mysql -u root vsalive < "C:\xampp\htdocs\database\vsalive.sql"  --}}
-{{-- 1.mysql -u root kgsdemo < "C:\xampp\htdocs\database\kgsdemo1.sql"  --}}
+{{-- 1.mysql -u root vsalive1 < "C:\xampp\htdocs\database\vsalive2.sql"  --}}
+{{-- 1.mysql -u root vsalive22 < "C:\xampp\htdocs\database\vsa1.sql"  --}}
 
 
 https://bitbucket.org/capitallio/workspace/overview/
+https://bitbucket.org/capitallio/workspace/projects/
 
 https://13.200.130.146/phpMyAdmin/index.php?route=/&reload=1
 DB_DATABASE=vsademo
@@ -380,6 +397,38 @@ http://127.0.0.1:8000/teamstatus?status=1
 
 Link : https://vsademo.capitall.io
 Email : sukhbahadur1993@gmail.com
+Password : Vinita@54321
+Role : Admin
+
+Link : https://vsademo.capitall.io
+Email : shahidraza@capitall.io
+Password : Vinita@54321
+Role : Partner
+
+Link : https://vsademo.capitall.io
+Email : Harish@capitall.io
+Password : Vinita@54321
+Role : Partner
+
+
+Link : https://vsademo.capitall.io
+Email : Guneet@capitall.io
+Password : Vinita@54321
+Role : Staff
+
+Link : https://vsademo.capitall.io
+Email : poojakumari@capitall.io
+Password : Vinita@54321
+Role : Manager
+
+
+Link : https://vsademo.capitall.io
+Email : simmi@capitall.io
+Password : Vinita@54321
+Role : Partner
+
+Link : https://vsademo.capitall.io
+Email : sukhbahadur1993@gmail.com
 Password : Sukh@2023
 Role : Admin
 447
@@ -441,9 +490,16 @@ regarding assignment clean / regarding clean
 
 vsademo 
 
+
+
+
 UPDATE users
 SET
     password = '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye';
+
+
+
+
 
         DB::table('users')
             ->update([
@@ -454,10 +510,12 @@ SET
 
 
 crone
+
+
 UPDATE users
 SET
     password = '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye',
-    password_changed_at = '2025-12-01 21:27:58';
+    password_changed_at = '2026-02-01 21:27:58';
 
 
         DB::table('users')
@@ -486,6 +544,8 @@ regarding data clean on vsademo
 
 11.Users table me role id = 14
 12.teammembers table me leavingdate = null and role id = 14
+
+
 
 if assignment want to clean then 
 
@@ -532,7 +592,7 @@ i need this table to update on vsalive
 
 
 
-if any problem on timesheet page on vsalive then ye table maange 
+if any error on timesheet page on vsalive then ye table maange on vsademo
 
 
 1.timesheetreport,
@@ -951,16 +1011,6 @@ Documentcompletedate
 TentativeStartdate
 TentativeEndDate
 
-todaydate nikal kar todaydate me utna days add kare jo mujhe TentativeStartdate and TentativeEndDate ke beech ka deffrence nikla hai aur latestdate me assign kare ab draftreportdate ,Documentcompletedate and latestdate me jo date sabse pahle aayega use closed date manege aur closed date get() jis varable me karenge usme assign kar denge 
-
-
-  $billspending = DB::table('assignmentmappings')
-        ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
-        ->leftJoin('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
-        ->whereNull('invoices.assignmentgenerate_id')
-        ->where('assignmentbudgetings.date', > yaha closed date se ) 
-        ->sum('assignmentmappings.engagementfee');  abhi ye code chal raha tha but isme new logic diya gya hai logic ye hai 
-
 
 
 timesheet/edit/7960
@@ -1312,3 +1362,139 @@ Tushar Garg
 
 
 end hare ```
+
+with time increase 
+
+    $usersAssignments = [
+      966 => [
+        'date' => '2025-01-10 10:11:00',
+        'assignments' => [
+          'BIR100941',
+          'BIR100942',
+        ],
+      ],
+      852 => [
+        'date' => '2025-04-28 10:11:00',
+        'assignments' => [
+          'SEL100933',
+          'DEV100939',
+          'SEL100963',
+          'SWA100964',
+          'RIC100965',
+          'ST.100910',
+          'CEN101040',
+          'SEL101041',
+          'SWA101042',
+        ],
+      ],
+    ];
+
+    $data = [];
+
+    foreach ($usersAssignments as $userId => $info) {
+      $dateTime = Carbon::parse($info['date']);
+
+      foreach ($info['assignments'] as $index => $assignmentId) {
+        $newDate = $dateTime->copy()->addMinutes($index);
+        $data[] = [
+          'assignmentgenerate_id' => $assignmentId,
+          'createdby' => $userId,
+          'created_at' => $newDate,
+          'updated_at' => $newDate,
+        ];
+      }
+    }
+
+    DB::table('independences')->insert($data);
+
+    dd('completed');
+
+
+
+withot time increate 
+
+        $usersAssignments = [
+            940 => [
+                'date' => '2025-01-10 10:11:00',
+                'assignments' => [
+                    'SAN100900',
+                    'DEV100939',
+                    'CEN100958',
+                    'CAT101076',
+                ],
+            ],
+            814 => [
+                'date' => '2025-01-10 10:11:00',
+                'assignments' => [
+                    'RSW100908',
+                    'CEN100958',
+                    'RSW100998',
+                ],
+            ],
+            830 => [
+                'date' => '2025-01-10 10:11:00',
+                'assignments' => [
+                    'INT100892',
+                    'IND100896',
+                    'JES100897',
+                    'THE101106',
+                    'RSW101117',
+                    'RSW101119',
+                    'CEN101193',
+                    'DIL101194',
+                ],
+            ],
+            811 => [
+                'date' => '2025-01-10 10:11:00',
+                'assignments' => [
+                    'FOO101089',
+                ],
+            ],
+        ];
+
+        $data = [];
+
+        foreach ($usersAssignments as $userId => $info) {
+            foreach ($info['assignments'] as $assignmentId) {
+                $data[] = [
+                    'assignmentgenerate_id' => $assignmentId,
+                    'createdby' => $userId,
+                    'created_at' => $info['date'],
+                    'updated_at' => $info['date'],
+                ];
+            }
+        }
+
+        DB::table('independences')->insert($data);
+
+        dd('completed');
+
+
+
+
+
+
+independences ke liye 
+http://127.0.0.1:8000/independencereport
+            ->where('teammembers.id', 966)
+
+
+7.assignmentbudgetings
+8.assignmentmappings
+9.assignmentteammappings
+10.assignments
+
+13.Users
+14.teammembers
+15.Clients
+
+18.independences
+
+13.Users
+14.teammembers
+16.teamrolehistory
+17.rejoiningsamepost
+
+         console.log("lasttimesheetsubmiteddata:", lasttimesheetsubmiteddata);
+        console.log("timesheetmaxDateRecord:", timesheetmaxDateRecord);
+        console.log("leavedataforcalander1:", leavedataforcalander1);

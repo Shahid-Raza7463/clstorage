@@ -33,6 +33,162 @@
 {{-- ! End hare --}}
 {{-- * regarding  --}}
 {{--  Start Hare --}}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#examplee').DataTable({
+            "pageLength": 50,
+            dom: 'Bfrtip',
+            "order": [
+                [0, "desc"]
+            ],
+
+            buttons: [
+
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [0, ':visible']
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [0, 1, 2, 5]
+                    }
+                },
+                'colvis'
+            ]
+        });
+    });
+</script>
+
+@if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14)
+    <script>
+        $(document).ready(function() {
+            $('#teamcheckin').DataTable({
+                "pageLength": 50,
+                dom: 'Bfrtip',
+                "order": [
+                    [0, "desc"]
+                ],
+
+                buttons: [
+
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [0, ':visible']
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [0, 1, 2, 5]
+                        }
+                    },
+                    'colvis'
+                ]
+            });
+        });
+    </script>
+@endif
+
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        document.getElementById('pills-home-tab').addEventListener('click', function() {
+            showDropdown('mycheckin');
+        });
+
+        @if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14)
+            document.getElementById('pills-teamcheckin-tab').addEventListener('click', function() {
+                showDropdown('teamcheckin');
+            });
+        @endif
+
+        $('a[data-toggle="pill"]').on('shown.bs.tab', function(e) {
+            var target = $(e.target).attr("id");
+            if (target === 'pills-home-tab') {
+                showDropdown('mycheckin');
+            } else if (target === 'pills-teamcheckin-tab') {
+                showDropdown('teamcheckin');
+            }
+        });
+
+        function showDropdown(type) {
+            if (type === 'mycheckin') {
+                document.getElementById('mycheckin-dropdown').style.display = 'block';
+                document.getElementById('teamcheckin-dropdown').style.display = 'none';
+            } else if (type === 'teamcheckin') {
+                document.getElementById('mycheckin-dropdown').style.display = 'none';
+                document.getElementById('teamcheckin-dropdown').style.display = 'block';
+            }
+        }
+    });
+</script> --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        function showDropdown(type) {
+            if (type === 'mycheckin') {
+                $('#mycheckin-dropdown').show();
+                $('#teamcheckin-dropdown').hide();
+            } else {
+                $('#mycheckin-dropdown').hide();
+                $('#teamcheckin-dropdown').show();
+            }
+        }
+
+        showDropdown("{{ $section }}");
+
+        $('#pills-home-tab').on('shown.bs.tab', function() {
+            showDropdown('mycheckin');
+        });
+
+        $('#pills-teamcheckin-tab').on('shown.bs.tab', function() {
+            showDropdown('teamcheckin');
+        });
+
+    });
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        $('#pills-home-tab').on('shown.bs.tab', function() {
+            $('#sectionInput').val('mycheckin');
+        });
+
+        $('#pills-teamcheckin-tab').on('shown.bs.tab', function() {
+            $('#sectionInput').val('teamcheckin');
+        });
+
+    });
+</script>
 <script></script>
 {{--  regarding loading indicater --}}
 <script>

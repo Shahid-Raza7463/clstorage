@@ -1,0 +1,154 @@
+01-03-2026
+Sunday 
+
+02-03-2026
+01.Today Check IN report on partner dashboard  deployed on cron only testing left (Completed)
+02.Help Desk - OMS Query _ Sort is not working fine
+03.Help Desk - Admin Query _ Sort is not working fine
+04.Data cleaned from vsademo for testing 
+05.Remove Aman goyal and add vishal agarwal in assignment id (TRI101489)
+06.Working on Incident Tracking tasks 
+
+
+
+03-03-2026
+01.Setup GRC project on local machin 
+02.Internal Audit - Fix Project Start & End Date Reset Issue
+
+
+
+04-03-2026
+Holi leave 
+
+05-03-2026
+1.Deployement completed following tasks 
+   1.1.User should be able to fill the timesheet for previous dates even if the assignment is closed.
+   1.2.Profile does not active when join user on same date.
+   1.3.Add checklist to be hidden.
+   1.4.Unplanned Leave hide from Assignment list in add assignment.
+   1.5.Gender should not be show in profile section.
+02.working on grc (irl assignee to column)
+
+
+06-03-2026
+01.working on grc (irl assignee to column).
+02.Internal Audit --> Report > PPT format is not allowed
+
+
+07-03-2026
+1.Internal Audit --> Report > PPT format is not allowed
+2.Locations -- Newly created Locations appear at the bottom of the list instead of top
+
+
+08-03-2026
+Sundays
+
+
+09-03-2026
+1.Fix Special Character (“&”) Handling Issue
+ 1.1 Audit Plans
+     Internal Audit
+2.all previous grs task deployed on grc demo and functional testing completed
+
+
+
+10-03-2026
+1.Fix Special Character (“&”) Handling Issue
+ 1.3 Control Assessment->self assesment 
+2.Internal Audit --> Report > PPT format is not allowed
+  2.1 Multiple file accepeted,
+  2.1 every file size should be 100 MB 
+3.NPCL Kt with Gaurav.
+
+
+11-03-2026
+1.Fix Special Character (“&”) Handling Issue
+ 1.4 Control Assessment->external assesment
+ 1.5 Observations->Observations 
+ 1.6 Observations->Observations->Actionables
+ 1.7 Observations->Observations->Management Comments
+ 1.8 Risk and control libray->Processes
+ 1.9 Risk and control libray->Subprocess
+ 1.10 Risk and control libray->Risk Register
+ 1.11 Risk and control libray->Controls
+ 1.12 Risk and control libray->Controls
+ 1.13 Organization setup->Companies
+ 1.14 Organization setup->Locations
+ 1.15 Organization setup->Departments
+ 1.16 Organization setup->Teams
+ 1.17 Organization setup->roles
+ 1.18 IRLs
+ 1.19 Settings->configuration->Dropdown
+
+
+
+
+
+12-03-2026
+1.Internal Audit --> Report > PPT format is not allowed
+ 1.1 attachment UI created 
+ 1.2 attachment edit features modification 
+ 1.3 File Version History page UI fixed 
+ 1.4 S3 connected on store and edit attachment and code deployed on bitbucket 
+
+
+
+13-03-2026
+1.Internal Audit --> Audit Procedures > Reviewer is not able to see "Perform Action"
+2.RCM_Bulk_Upload_Errors
+
+
+14-03-2026
+Sturday
+
+15-03-2026
+Sunday
+
+16-03-2026
+Reopen bugs list
+1.Fix Special Character (“&”) Handling Issue
+2.Internal Audit --> Report > PPT format is not allowed 
+3.IRL--> Not able to assign IRL from IRL tab > Internal Audit
+4.RCM_Bulk_Upload_Errors
+
+17-03-2026
+1.all 4 bugs functional testing on dev
+2.Internal Audit --> Reviewer Selection Validation Popup. working 
+3.NPCI  tab sticky completed
+
+
+18-03-2026
+1.NPCI dashboard 
+  1.Audit engagement page 
+
+
+  Route::match(['get', 'post'], 'atrdashboard', [AtrdashboardController::class, 'atrDashboard'])->name('atrdashboard');
+
+19-03-2026
+1.NPCI dashboard 
+  1.Audit engagement page 
+  
+  
+20-03-2026
+1.The assignment JAG101107, currently under the client ‘Jagori Rural Charitable Trust’, needs to be moved to the client ‘Jagori (10531)'.
+resources\views\dashboard-components\audit-dashboard-filters.blade.php
+21-03-2026
+22-03-2026
+23-03-2026
+24-03-2026
+25-03-2026
+1.all dashboard code pused on npci-dev
+1.junk code remove from   dashboard issue aa raha tha 
+26-03-2026
+27-03-2026
+28-03-2026
+29-03-2026
+30-03-2026
+31-03-2026
+1.All check box completed on both department and engagement
+2.No data avilable handle on both 
+3.
+
+						
+						
+						

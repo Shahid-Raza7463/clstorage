@@ -57,6 +57,117 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 <style>
+    /* =========================
+   MODERN DASHBOARD TABLE - FINAL COMBINED
+========================= */
+
+    /* TABLE BASE */
+    .modern-dashboard-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+        /* row gap (card feel) */
+        font-size: 14px;
+    }
+
+    /* HEADER */
+    .modern-dashboard-table thead th {
+        text-align: left;
+        padding: 12px 16px;
+        font-weight: 600;
+        color: #6b7280;
+        font-size: 12px;
+        text-transform: uppercase;
+        position: sticky;
+        top: 0;
+        background: #ffffff;
+        z-index: 2;
+    }
+
+    /* ROW BASE */
+    .modern-dashboard-table tbody tr {
+        background: #ffffff;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* ZEBRA (alternate rows) */
+    .modern-dashboard-table tbody tr:nth-child(even) {
+        background-color: #f9fafb;
+    }
+
+    /* CELL STYLING */
+    .modern-dashboard-table tbody td {
+        padding: 14px 16px;
+        border-top: 1px solid #f1f5f9;
+        border-bottom: 1px solid #f1f5f9;
+        transition: color 0.2s ease;
+    }
+
+    /* LEFT ROUNDED CORNER */
+    .modern-dashboard-table tbody tr td:first-child {
+        border-left: 1px solid #f1f5f9;
+        border-radius: 8px 0 0 8px;
+    }
+
+    /* RIGHT ROUNDED CORNER */
+    .modern-dashboard-table tbody tr td:last-child {
+        border-right: 1px solid #f1f5f9;
+        border-radius: 0 8px 8px 0;
+    }
+
+    /* =========================
+   HOVER EFFECT (MAIN UX)
+========================= */
+    .modern-dashboard-table tbody tr:hover {
+        background-color: #eef6ff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-1px);
+        cursor: pointer;
+    }
+
+    /* LEFT ACCENT BORDER ON HOVER */
+    .modern-dashboard-table tbody tr:hover td:first-child {
+        border-left: 4px solid #2563eb;
+    }
+
+    /* TEXT HOVER EFFECT (IMPORTANT ONLY) */
+    .modern-dashboard-table tbody tr:hover td:first-child {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+
+    /* OPTIONAL: FULL ROW TEXT EFFECT (UNCOMMENT IF NEEDED) */
+    /*
+.modern-dashboard-table tbody tr:hover td {
+    color: #2563eb;
+    text-decoration: underline;
+}
+*/
+
+    /* CLICK FEEL */
+    .modern-dashboard-table tbody tr:active {
+        transform: scale(0.99);
+    }
+
+    /* =========================
+   OPTIONAL MODES
+========================= */
+
+    /* COMPACT MODE */
+    .modern-dashboard-table.compact tbody td {
+        padding: 8px 12px;
+    }
+
+    /* LARGE MODE */
+    .modern-dashboard-table.large tbody td {
+        padding: 18px 20px;
+    }
+
+    /* DISABLED ROW */
+    .modern-dashboard-table tbody tr.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
 </style>
 {{-- * regarding  scroll --}}
 {{--  Start Hare --}}

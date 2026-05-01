@@ -29,8 +29,8 @@
 
 07-01-2026
 2.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available
-  leave revert on that time 
-1.upload 2 task on vsademo  and testing completed
+  leave revert on that time.
+1.upload 2 task on vsademo and testing completed.
 
 
 1.Steps:

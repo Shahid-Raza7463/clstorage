@@ -444,6 +444,7 @@ class Sentence extends Command
     // Please confirm should I complete testing or pause here & start VDR?
     // I am ready to deploy the VSA task. Can we proceed
     // I am currently working on the VSA task and pausing the KGS dashboard report task for now
+    // I am pausing the KGS task (Excel-related) as I need to deploy the VSA QA task.
     // Please send me all these tables from VSAlive
     // Ok prashant we have already given a due date so align sukhbahadur if possible
     // I am ready to deploy on VSA. Can i deploy it Atishay Jain
@@ -563,11 +564,78 @@ class Sentence extends Command
     // Pooja Kumari there is also a task pending to test in VSA, please pick it up as per your availability
     // maam Please check the OMS Query list now. I have hidden the Audit Query and Data Analytics Query.If you find any issues, please leave a comment here
     // When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs
+    // has this Excel been updated? You mentioned yesterday that some changes were required in this Exce
+    // VSA task is urgent, I am currently working on it and have paused the check-in report task. I have already discussed this with Prashant. Atishay Jain cc simmi prashant
+    // Could you please share this document with me today, if possible?
+    // These are the points I would like to discuss
+    // Pooja Kumari, could you please confirm the sign-off status of the VSA QA tasks?
+    // Ma’am, the ‘Conveyance Amount’ column indicates the total amount demanded for that assignment ID, and the ‘Amount’ column shows the approved amount for that assignment
+    // Currently, users would need to calculate the difference manually, However, we can add a column to display the unapproved amount if required.
+
+    // 1.Assignment Edit
+    // 2.Assignment Create
+    // 3.Add Assignment Name
+    // 4.Add Teammember to Assignment
+    // 5.Teammember List – Added from Assignment View Page
+    // 6.Partner List – Added from Assignment View Page
+    // 7.Teammember List – Active and Inactive Team from Assignment
+    // 8.Assignment Viewer – Added
+    // 9.Client Contact – Added
+    // 10.UDIN List – Added
+    // 11.Confirmation List
+    // 12.Confirmation – Open and Closed
+    // 13.Upload Confirmation File
+    // 14.Folder Added to Assignment
+    // 15.Add File in Folder
+    // 16.Edit Client Details
+    // 17.Add Client
+    // 18.Teammember – Active and Inactive
+    // 19.Add New Teammember
+    // 20.Edit Teammember Details
+    // 21.Leave – Approve and Reject
+    // 22.Timesheet Request – Approve and Reject
+    // 23.Notification – Added
+    // 24.Edit Holiday
+    // 25.Add Checklist
+    // 26.Create Login Member
+    // 27.Leave Revert – Approve/Reject
+    // 28.User Timesheet Delete
+    // 29.Reject Submitted Timesheet
+    // 30.Promotion and Rejoining
+    // 31.Knowledgebase – Add and Delete
+
+    // regarding office 
+    // Hi Prashant, I had reached out regarding the task discussion. Please let me know a suitable time to connect today, as I’m currently blocked on this.
+
+    // 1111111111111111111111111111111
+    //     Hi Prashant,
+
+    // I had reached out earlier regarding the task discussion but couldn’t connect. I understand you might be busy.
+
+    // Since I’m currently blocked on this, could you please let me know a convenient time to connect today? If it works for you, I’m available anytime between [mention your time slots].
+    // prashant please review & merge this PR
 
 
 
+    //     1111111111111111111111111
+
+    //     Hi Prashant,
+    // I had messaged earlier regarding the task. Please let me know a suitable time to connect so I can proceed further.
+
+    // Pooja Kumari can you please retest the bugs that are resolved?
+    // Need confirmation from Saurav to pick this as currently working on another task
 
 
+
+    //     2222222222222222222222222222222222
+    //     Dear Sir/Madam,
+
+    // I would like to opt for the New Tax Regime for the Financial Year 2025-26. Kindly proceed with TDS calculation accordingly.
+
+    // Thank you.
+
+    // Regards,
+    // [Your Name]
 
     // 222222222222222222222222222222222222222222222222222222222222222222222
 

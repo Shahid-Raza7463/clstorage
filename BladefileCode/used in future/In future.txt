@@ -1,5 +1,533 @@
+c:\xampp\htdocs\vsalive\app\Http\Controllers\11ActivitylogsController.php c:\xampp\htdocs\vsalive\app\Http\Controllers\ActivitylogsController.php22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+DRl 
+
+resources\views\auditengagement.blade.php
+        $openClosed = [
+            'open' => 'background-color:#DBEAFE; color:#1E40AF;', // soft blue
+            'closed' => 'background-color:#DCFCE7; color:#166534;', // soft green
+        ];
+		
+		
+		 @foreach (['open', 'closed'] as $status)
+		 
+		     protected function actionablestatusPieChartdashboard3($request = null)
+    {
+        // Define the labels in lowercase to match status keys
+        // $labels = ['reviewed', 'submitted', 'pending', 'rejected'];
+        $labels = ['open', 'closed'];
+		
+		
+		resources\views\charts\dashboardchart\actionable-status-pie-chart3.blade.php
+
+       const customColorMapping = {
+            "Open": "#6b7280",
+            "Closed": "#22c55e",
+            // Add more label-color pairs as needed
+        };
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 
+    public function reportlogs($request, $uuid)
+    {
+        $report = ProjectReport::uuid($uuid)->first();
+
+        $fileVersions = DB::table('project_report_logs')
+            ->where('project_report_id', $report->id)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('assignment._partials.report_logs', compact('fileVersions'));
+    }
+
+
+       // Check for file upload
+if ($request->hasFile('attachment')) {
+
+    $storageDisk = "local"; // production me getStorageDisk() use karna
+    $driver = $storageDisk == "local" ? 'local' : 's3';
+
+    $newAttachmentPath = [];
+
+    foreach ($request->file('attachment') as $file) {
+
+        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+        if ($driver == 'local') {
+
+            $uploaded = uploadFile($file, 'uploads/attachment/');
+
+            if ($uploaded) {
+                $newAttachmentPath[] = asset($uploaded);
+            }
+
+        } else {
+
+            $uploaded = uploadToS3($file, 'uploads/attachment/', $filename);
+
+            if ($uploaded) {
+                $newAttachmentPath[] = $uploaded;
+            }
+        }
+    }
+
+    if (!empty($newAttachmentPath)) {
+
+        $data['attachment'] = $newAttachmentPath[0];
+        $data['attachment_json'] = json_encode($newAttachmentPath);
+        $data['attachmentjson_count'] = count($newAttachmentPath);
+
+        DB::table('project_report_logs')->insert([
+            'project_report_id' => $report->id,
+            'version' => $request->report_type,
+            'attachment' => $data['attachment'],
+            'attachment_json' => json_encode($newAttachmentPath), // ensure full array stored
+            'uploaded_by' => auth()->id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+}
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+<td>
+                                        @php
+                                            $attachments = json_decode($project->attachment_json, true);
+                                            $classes = ['primary', 'secondary', 'danger', 'info', 'success', 'dark'];
+                                        @endphp
+
+                                        @if (!empty($attachments))
+                                            @foreach ($attachments as $attachment)
+                                                @php
+                                                    $randomClass = $classes[array_rand($classes)];
+                                                    $extension = getFileExtension($attachment);
+                                                    $previewUrl = generatePreviewUrl($attachment);
+                                                    $downloadUrl = generateDownloadUrl($attachment);
+                                                @endphp
+
+                                                <div class="card mb-1 border-0 shadow-none">
+                                                    <div class="p-1 d-flex justify-content-between align-items-center">
+
+                                                        <div class="d-flex align-items-center">
+                                                            <span
+                                                                class="avatar-sm bg-{{ $randomClass }} text-white rounded d-flex align-center justify-center me-2">
+                                                                {{ '.' . $extension }}
+                                                            </span>
+
+                                                            <div>
+                                                                <small class="text-muted">
+                                                                    File: {{ basename($attachment) }}
+                                                                </small><br>
+
+                                                                <small class="text-muted">
+                                                                    Uploaded:
+                                                                    {{ $project->created_at->timezone('Asia/Kolkata')->format('d-M-Y, g:i A') }}
+                                                                </small>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="d-flex align-items-center">
+
+                                                            <span
+                                                                class="fs-20 text-{{ $randomClass }} actionHandler me-2"
+                                                                data-url="{{ route('admin.file.viewframe') }}"
+                                                                data-file-url="{{ $previewUrl }}"
+                                                                data-handler="openFilePreview">
+                                                                <i class="las la-eye"></i>
+                                                            </span>
+
+                                                            <a href="{{ $downloadUrl }}"
+                                                                class="fs-20 text-{{ $randomClass }}" download
+                                                                target="_blank">
+                                                                <i class="las la-download"></i>
+                                                            </a>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p class="text-center text-muted"><b>No Attachment Found</b></p>
+                                        @endif
+                                    </td>
+                                    
+    public function reportstore($request)
+    {
+        try {
+
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'attachment' => 'required|array',
+                    'attachment.*' => [
+                        'file',
+                        'max:102400',
+                        new FileTypeRule([
+                            'application/pdf',
+                            'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.ms-excel',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'application/vnd.ms-powerpoint',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                            'application/zip',
+                        ])
+                    ],
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => '400',
+                    'errors' => $validator->errors(),
+                ], 400);
+            }
+            $reportExists = ProjectReport::where([
+                'report_name' => $request->report_name,
+                'project_id' => $request->project_id,
+                'organization_id' => organizationId(),
+            ])->exists();
+
+            if ($reportExists) {
+                return response()->json([
+                    'status' => '500',
+                    'msg' => 'Report name already exists.',
+                ], 500);
+            }
+            $data = [
+                'uuid' => (string) Uuid::uuid4(),
+                'report_name' => $request->report_name,
+                'project_id' => $request->project_id,
+                'report_type' => $request->report_type,
+                'organization_id' => organizationId(),
+                'created_by' => authUser()->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            // if ($request->hasFile('attachment')) {
+            //     $storageDisk = getStorageDisk();
+            //     $driver = $storageDisk == "local" ? 'local' : 's3';
+            //     $file = $request->file('attachment');
+            //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+            //     if ($driver == 'local') {
+            //         $path = asset(uploadFile($file, 'uploads/attachment/'));
+            //     } else {
+            //         $path = uploadToS3($file, 'uploads/attachment/', $filename);
+            //     }
+
+            //     $data['attachment'] = $path;
+            // }
+
+            if ($request->hasFile('attachment')) {
+                $paths = [];
+                foreach ($request->file('attachment') as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    // public folder
+                    $destinationPath = public_path('admin/testfolder');
+                    $file->move($destinationPath, $filename);
+                    $paths[] = asset('admin/testfolder/' . $filename);
+                }
+
+                if (!empty($paths)) {
+                    $data['attachment'] = $paths[0];
+                    $data['attachment_json'] = json_encode($paths);
+                }
+            }
+
+            $created = ProjectReport::create($data);
+            // Create a log or backup of the upload (for version history)
+            if ($created && isset($data['attachment'])) {
+                DB::table('project_report_logs')->insert([
+                    'project_report_id' => $created->id,
+                    'version' => $created->report_type,
+                    'attachment' => $data['attachment'],
+                    'attachment_json' => $data['attachment_json'],
+                    'uploaded_by' => authUser()->id,
+                    'created_at' => now()
+                ]);
+            }
+
+            // dd('done');
+
+            if ($created) {
+                $created->synchronizeLog([
+                    'event' => 'Report',
+                    'comment' => "Report Created",
+                    'logged_by' => authUser()->id,
+                ]);
+                return response()->json([
+                    'status' => '200',
+                    'msg' => 'Created Successfully',
+                    'redirect' => url()->previous(),
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => '500',
+                    'msg' => 'Failed to create report'
+                ], 500);
+            }
+        } catch (Throwable $th) {
+            return response()->json([
+                'status' => '500',
+                'msg' => 'Something went wrong',
+                'exception' => $th->getMessage(),
+                'trace' => $th->getTrace(),
+            ], 500);
+        }
+    }
+
+ public function reportstore($request)
+    {
+        try {
+
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'attachment' => 'required|array',
+                    'attachment.*' => [
+                        'file',
+                        'max:102400',
+                        new FileTypeRule([
+                            'application/pdf',
+                            'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.ms-excel',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'application/vnd.ms-powerpoint',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                            'application/zip',
+                        ])
+                    ],
+                ]
+            );
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => '400',
+                    'errors' => $validator->errors(),
+                ], 400);
+            }
+            $reportExists = ProjectReport::where([
+                'report_name' => $request->report_name,
+                'project_id' => $request->project_id,
+                'organization_id' => organizationId(),
+            ])->exists();
+
+            if ($reportExists) {
+                return response()->json([
+                    'status' => '500',
+                    'msg' => 'Report name already exists.',
+                ], 500);
+            }
+            $data = [
+                'uuid' => (string) Uuid::uuid4(),
+                'report_name' => $request->report_name,
+                'project_id' => $request->project_id,
+                'report_type' => $request->report_type,
+                'organization_id' => organizationId(),
+                'created_by' => authUser()->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+
+            // if ($request->hasFile('attachment')) {
+
+            //     $storageDisk = getStorageDisk();
+            //     $driver = $storageDisk == "local" ? 'local' : 's3';
+
+            //     $paths = [];
+
+            //     foreach ($request->file('attachment') as $file) {
+
+            //         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+            //         if ($driver == 'local') {
+            //             $path = asset(uploadFile($file, 'uploads/attachment/'));
+            //         } else {
+            //             $path = uploadToS3($file, 'uploads/attachment/', $filename);
+            //         }
+
+            //         $paths[] = $path;
+            //     }
+
+            //     $data['attachment'] = $paths[0] ?? null; // first file
+            //     $data['attachment_json'] = json_encode($paths); // all files
+            // }
+
+            if ($request->hasFile('attachment')) {
+
+                $paths = [];
+
+                foreach ($request->file('attachment') as $file) {
+
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                    // public folder path
+                    $destinationPath = public_path('admin/testfolder');
+
+                    // file move
+                    $file->move($destinationPath, $filename);
+
+                    // browser access url
+                    $paths[] = asset('admin/testfolder/' . $filename);
+                }
+
+                if (!empty($paths)) {
+                    $data['attachment'] = $paths[0]; // first file
+                    $data['attachment_json'] = json_encode($paths); // all files
+                }
+            }
+
+            // dd($paths);
+
+            $created = ProjectReport::create($data);
+            // Create a log or backup of the upload (for version history)
+            if ($created && isset($data['attachment'])) {
+                DB::table('project_report_logs')->insert([
+                    'project_report_id' => $created->id,
+                    'version' => $created->report_type,
+                    // 'attachment' => $data['attachment'],
+                    'attachment' => 'hi shahid',
+                    'attachment_json' => $data['attachment_json'],
+                    'uploaded_by' => authUser()->id,
+                    'created_at' => now()
+                ]);
+            }
+
+            dd('done');
+
+            if ($created) {
+                $created->synchronizeLog([
+                    'event' => 'Report',
+                    'comment' => "Report Created",
+                    'logged_by' => authUser()->id,
+                ]);
+                return response()->json([
+                    'status' => '200',
+                    'msg' => 'Created Successfully',
+                    'redirect' => url()->previous(),
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => '500',
+                    'msg' => 'Failed to create report'
+                ], 500);
+            }
+        } catch (Throwable $th) {
+            return response()->json([
+                'status' => '500',
+                'msg' => 'Something went wrong',
+                'exception' => $th->getMessage(),
+                'trace' => $th->getTrace(),
+            ], 500);
+        }
+    }
+
+ public function allteamsubmitted()
+  {
+    $get_date = DB::table('timesheetreport as t')
+      ->leftJoin('teammembers as tm', 'tm.id', '=', 't.teamid')
+      ->leftJoin('teammembers as p', 'p.id', '=', 't.partnerid')
+      ->select(
+        DB::raw('MIN(t.id) as id'),
+        't.teamid',
+        't.week',
+        DB::raw('SUM(t.totaldays) as totaldays'),
+        DB::raw('SUM(t.totaltime) as totaltime'),
+        DB::raw('SUM(t.dayscount) as dayscount'),
+        DB::raw('MIN(t.startdate) as startdate'),
+        DB::raw('MAX(t.enddate) as enddate'),
+        DB::raw('MAX(t.created_at) as created_at'),
+        'tm.team_member',
+        'tm.emailid',
+        DB::raw('MAX(p.team_member) as partnername'),
+        DB::raw('MAX(t.partnerid) as partnerid')
+      )
+      ->groupBy('t.teamid', 't.week', 'tm.team_member', 'tm.emailid')
+      ->orderByDesc(DB::raw('MAX(t.created_at)'))
+      ->limit(50)
+      ->get();
+
+    $get_date->each(function ($item) {
+      $item->staffcode = $this->getStaffCodeAt($item->teamid, $item->created_at);
+    });
+
+    $permissiontimesheet = DB::table('timesheetreport')->first();
+
+    return view('backEnd.timesheet.myteamindex', compact('get_date', 'permissiontimesheet'));
+  }
+
+
+
+
+
+<table class="table display table-bordered table-striped table-hover basic">
+    <thead>
+        <tr>
+            <th>Team Name</th>
+            <th>Period Date ( Monday To Saturday )</th>
+            <th>Total Timesheet Filled Day</th>
+            <th>Total Hour</th>
+            <th>Partner</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($get_date as $job)
+            <tr>
+                <td>
+                    <a href="{{ route('weeklylist', [
+                        'id' => $job->id,
+                        'teamid' => $job->teamid,
+                        'partnerid' => $job->partnerid,
+                        'startdate' => $job->startdate,
+                        'enddate' => $job->enddate
+                    ]) }}">
+                        {{ $job->team_member }}
+                    </a>
+                </td>
+                <td>{{ $job->week }}</td>
+                <td>{{ $job->totaldays }}</td>
+                <td>{{ $job->totaltime }}</td>
+                <td>{{ $job->partnername }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="5" class="text-center">No records found</td>
+            </tr>
+        @endforelse
+    </tbody>
+</table>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+<select class="form-control" disabled>
+    <option value="2" selected>Request to close</option>
+</select>
+
+
+        $request->validate([
+            'file.*' =>  'nullable|file|mimes:jpeg,png,jpg,pdf,doc,docx,xlsx,xls,csv,pptx,zip,rar',
+            'status' => 'required'
+        ], [
+            'status.required' => 'Please select status'
+        ]);
+
+<input type="hidden" name="status" value="2">
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
@@ -371,7 +899,262 @@ app\Http\Controllers\ApplyleaveController.php
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+    // deepseek good code with all value 
+    // public function documentationfilterexcel(Request $request)
+    // {
+    //     $fromDate = $request->fromdate;
+    //     $toDate = $request->todate;
+    //     $status = $request->status;
+    //     $search = trim($request->input('search.value', ''));
+
+    //     // Build the same query as documentationfilter
+    //     $query = DB::table('assignmentmappings')
+    //         ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+    //         ->join('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+    //         ->join('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', '=', 'assignmentmappings.id')
+    //         ->join('assignments', 'assignments.id', '=', 'assignmentmappings.assignment_id')
+    //         ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+    //         ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+    //         ->select(
+    //             'assignmentmappings.*',
+    //             'assignmentbudgetings.duedate',
+    //             'assignmentbudgetings.draftreportdate',
+    //             'assignmentbudgetings.status as assignmentbudgetingsstatus',
+    //             'assignmentbudgetings.finalreportdate',
+    //             'assignmentbudgetings.moneyreceiveddate',
+    //             'assignmentbudgetings.assignmentname',
+    //             'assignments.assignment_name',
+    //             'clients.client_name',
+    //             'assignmentbudgetings.periodstartdate as periodstart',
+    //             'assignmentbudgetings.periodenddate as periodend',
+    //             'leadpartner.team_member as leadpartner_name',
+    //             'otherpartner.team_member as otherpartner_name'
+    //         )
+    //         ->distinct('assignmentmappings.assignmentgenerate_id');
+
+    //     // Apply filters - same as documentationfilter
+    //     if ($request->filled('clientId')) {
+    //         $query->whereIn('assignmentbudgetings.client_id', $request->clientId);
+    //     }
+
+    //     if ($request->filled('partnerId')) {
+    //         $partnerIds = $request->partnerId;
+    //         $query->where(function ($q) use ($partnerIds) {
+    //             $q->whereIn('assignmentmappings.leadpartner', $partnerIds);
+    //         });
+    //     }
+
+    //     if (isset($status) && ($status === "0" || !empty($status))) {
+    //         $query->whereIn('assignmentbudgetings.status', $status);
+    //     }
+
+    //     if ($fromDate) {
+    //         $query->whereDate('assignmentbudgetings.created_at', '>=', $fromDate);
+    //     }
+
+    //     if ($toDate) {
+    //         $query->whereDate('assignmentbudgetings.created_at', '<=', $toDate);
+    //     }
+
+    //     if ($search) {
+    //         $searchValueLower = '%' . strtolower($search) . '%';
+    //         $query->where(function ($q) use ($searchValueLower) {
+    //             $q->whereRaw('LOWER(assignments.assignment_name) LIKE ?', [$searchValueLower])
+    //                 ->orWhereRaw('LOWER(assignmentbudgetings.assignmentname) LIKE ?', [$searchValueLower])
+    //                 ->orWhereRaw('LOWER(clients.client_name) LIKE ?', [$searchValueLower])
+    //                 ->orWhereRaw('LOWER(leadpartner.team_member) LIKE ?', [$searchValueLower])
+    //                 ->orWhereRaw('LOWER(otherpartner.team_member) LIKE ?', [$searchValueLower])
+    //                 ->orWhereRaw('LOWER(assignmentmappings.assignmentgenerate_id) LIKE ?', [$searchValueLower])
+    //                 ->orWhereRaw('IF(assignmentbudgetings.status = 1, "OPEN", "CLOSED") LIKE ?', [$searchValueLower]);
+    //         });
+    //     }
+
+    //     // Fetch all rows (NO pagination)
+    //     $rows = $query->get();
+
+    //     // Process each record - SAME LOGIC as documentationfilter
+    //     foreach ($rows as $mapping) {
+    //         $assignmentId = $mapping->assignmentgenerate_id;
+
+    //         // Get assignment_id and eqcrapplicability
+    //         $assignmentMapping = DB::table('assignmentmappings')
+    //             ->where('assignmentgenerate_id', $assignmentId)
+    //             ->select('assignment_id', 'eqcrapplicability')
+    //             ->first();
+
+    //         // Determine EQCR type name
+    //         $eqcrTypeName = '';
+    //         $eqcrAssignmentId = null;
+
+    //         if (isset($assignmentMapping->eqcrapplicability)) {
+    //             switch ($assignmentMapping->eqcrapplicability) {
+    //                 case 1:
+    //                     $eqcrTypeName = 'NFRA';
+    //                     break;
+    //                 case 2:
+    //                     $eqcrTypeName = 'Quality Review';
+    //                     break;
+    //                 case 3:
+    //                     $eqcrTypeName = 'Peer Review';
+    //                     break;
+    //                 case 4:
+    //                     $eqcrTypeName = 'Others';
+    //                     break;
+    //                 case 5:
+    //                     $eqcrTypeName = 'PCAOB';
+    //                     break;
+    //             }
+
+    //             $specialAssignment = DB::table('assignments')
+    //                 ->where('assignment_name', $eqcrTypeName)
+    //                 ->first();
+
+    //             if ($specialAssignment) {
+    //                 $eqcrAssignmentId = $specialAssignment->id;
+    //             }
+    //         }
+
+    //         $mapping->eqcr_type_name = $eqcrTypeName;
+
+    //         // Regular Checklist Calculations
+    //         $classificationIds = DB::table('financialstatementclassifications')
+    //             ->where('assignment_id', $assignmentMapping->assignment_id)
+    //             ->where(function ($q) use ($assignmentId) {
+    //                 $q->whereNull('assignmentgenerate_id')
+    //                     ->orWhere('assignmentgenerate_id', $assignmentId);
+    //             })
+    //             ->when($eqcrAssignmentId, function ($query) use ($eqcrAssignmentId) {
+    //                 $query->where('assignment_id', '!=', $eqcrAssignmentId);
+    //             })
+    //             ->pluck('id');
+
+    //         $subClassIds = DB::table('subfinancialclassfications')
+    //             ->whereIn('financialstatemantclassfication_id', $classificationIds)
+    //             ->pluck('id');
+
+    //         $totalQuestions = DB::table('auditquestions')
+    //             ->whereIn('financialstatemantclassfication_id', $classificationIds)
+    //             ->whereIn('subclassfied_id', $subClassIds)
+    //             ->count();
+
+    //         $statusCounts = DB::table('checklistanswers')
+    //             ->join('statuses', 'checklistanswers.status', '=', 'statuses.id')
+    //             ->where('checklistanswers.assignment_id', $assignmentId)
+    //             ->whereIn('checklistanswers.financialstatemantclassfication_id', $classificationIds)
+    //             ->whereIn('checklistanswers.subclassfied_id', $subClassIds)
+    //             ->select(
+    //                 'statuses.name as status_name',
+    //                 DB::raw('COUNT(*) as count')
+    //             )
+    //             ->groupBy('statuses.name')
+    //             ->pluck('count', 'status_name');
+
+    //         $closedQuestions = ($statusCounts['CLOSE'] ?? 0) + ($statusCounts['NOT-APPLICABLE'] ?? 0);
+
+    //         $mapping->documentation_percentage = $totalQuestions > 0 ? round(($closedQuestions / $totalQuestions) * 100, 2) : 0;
+
+    //         // FIX 1: Convert array to object for consistent access
+    //         $mapping->status_counts = (object)[
+    //             'NOT-APPLICABLE' => $statusCounts['NOT-APPLICABLE'] ?? 0,
+    //             'SUBMITTED' => $statusCounts['SUBMITTED'] ?? 0,
+    //             'OPEN' => $statusCounts['OPEN'] ?? 0,
+    //             'CLOSE' => $closedQuestions,
+    //             'REVIEW-TL' => $statusCounts['REVIEW-TL'] ?? 0,
+    //             'TOTAL' => $totalQuestions
+    //         ];
+
+    //         // Reviewer Checklist Calculations
+    //         // FIX 2: Initialize as object
+    //         $mapping->reviewer_status_counts = (object)[
+    //             'SUBMITTED' => 0,
+    //             'OPEN' => 0,
+    //             'CLOSE' => 0,
+    //             'REVIEW-TL' => 0,
+    //             'TOTAL' => 0
+    //         ];
+
+    //         $mapping->reviewer_documentation_percentage = 0;
+
+    //         if (!empty($eqcrTypeName) && $eqcrAssignmentId) {
+    //             $reviewerClassificationIds = DB::table('financialstatementclassifications')
+    //                 ->where('assignment_id', $eqcrAssignmentId)
+    //                 ->where(function ($q) use ($assignmentId) {
+    //                     $q->whereNull('assignmentgenerate_id')
+    //                         ->orWhere('assignmentgenerate_id', $assignmentId);
+    //                 })
+    //                 ->pluck('id');
+
+    //             $reviewerSubClassIds = DB::table('subfinancialclassfications')
+    //                 ->whereIn('financialstatemantclassfication_id', $reviewerClassificationIds)
+    //                 ->pluck('id');
+
+    //             $reviewerTotalQuestions = DB::table('auditquestions')
+    //                 ->whereIn('financialstatemantclassfication_id', $reviewerClassificationIds)
+    //                 ->whereIn('subclassfied_id', $reviewerSubClassIds)
+    //                 ->count();
+
+    //             $reviewerStatusCounts = DB::table('checklistanswers')
+    //                 ->join('statuses', 'checklistanswers.status', '=', 'statuses.id')
+    //                 ->where('checklistanswers.assignment_id', $assignmentId)
+    //                 ->whereIn('checklistanswers.financialstatemantclassfication_id', $reviewerClassificationIds)
+    //                 ->whereIn('checklistanswers.subclassfied_id', $reviewerSubClassIds)
+    //                 ->select(
+    //                     'statuses.name as status_name',
+    //                     DB::raw('COUNT(*) as count')
+    //                 )
+    //                 ->groupBy('statuses.name')
+    //                 ->pluck('count', 'status_name');
+
+    //             $reviewerClosedQuestions = $reviewerStatusCounts['CLOSE'] ?? 0;
+
+    //             $mapping->reviewer_documentation_percentage = $reviewerTotalQuestions > 0 ?
+    //                 round(($reviewerClosedQuestions / $reviewerTotalQuestions) * 100, 2) : 0;
+
+    //             // FIX 3: Convert array to object
+    //             $mapping->reviewer_status_counts = (object)[
+    //                 'SUBMITTED' => $reviewerStatusCounts['SUBMITTED'] ?? 0,
+    //                 'OPEN' => $reviewerStatusCounts['OPEN'] ?? 0,
+    //                 'CLOSE' => $reviewerClosedQuestions,
+    //                 'REVIEW-TL' => $reviewerStatusCounts['REVIEW-TL'] ?? 0,
+    //                 'TOTAL' => $reviewerTotalQuestions
+    //             ];
+    //         }
+
+    //         // Fetch additional fields
+    //         $mapping->invoicedate = DB::table('invoices')
+    //             ->where('assignmentgenerate_id', $assignmentId)
+    //             ->orderBy('id', 'DESC')
+    //             ->value('invoicedate');
+
+    //         $mapping->sub_team_members = DB::table('assignmentmappings')
+    //             ->leftJoin('assignmentteammappings', 'assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+    //             ->leftJoin('teammembers', 'teammembers.id', 'assignmentteammappings.teammember_id')
+    //             ->leftJoin('roles', 'roles.id', 'teammembers.role_id')
+    //             ->where('assignmentteammappings.type', 0)
+    //             ->where('assignmentmappings.id', $mapping->id)
+    //             ->select(DB::raw("GROUP_CONCAT(CONCAT(teammembers.team_member, ' (', roles.rolename, ')')) as sub_team_members"))
+    //             ->groupBy('assignmentmappings.id')
+    //             ->value('sub_team_members') ?? '';
+
+    //         // Set reviewer_status
+    //         // FIX 4: Access as object properties
+    //         if ($mapping->reviewer_status_counts->TOTAL > 0) {
+    //             $mapping->reviewer_status = ($mapping->reviewer_status_counts->CLOSE == $mapping->reviewer_status_counts->TOTAL) ? 'CLOSED' : 'OPEN';
+    //         } else {
+    //             $mapping->reviewer_status = 'N/A';
+    //         }
+    //     }
+
+    //     $visibleColumns = $request->visible_columns ?? [];
+
+    //     // FIX 5: Add timestamp to filename to avoid overwriting
+    //     $fileName = 'documentationstatus_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    //     return Excel::download(
+    //         new DocumentassigmentExport($rows, $visibleColumns),
+    //         $fileName
+    //     );
+    // }
 
 
 
@@ -439,11 +1222,6 @@ app\Http\Controllers\ApplyleaveController.php
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
-
-
-
-
-
 
 
 

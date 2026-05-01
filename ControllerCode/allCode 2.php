@@ -10,7 +10,8 @@ class Allcode extends Controller
     // -----------------------------30-12-2024------------------------------------------
     public function store(Request $request)
     {
-        //* regarding 
+        //* regarding
+         
         // Start Hare
         // Start Hare
         //! End hare 
@@ -52,26 +53,341 @@ class Allcode extends Controller
         //! End hare 
         //* regarding 
         // Start Hare
+         public function payroll_index()
+    {
+        if (auth()->user()->role_id == 11 or auth()->user()->role_id == 17 or auth()->user()->role_id == 18) {
+            $months = $this->articlePayrollMonths();
+            $years = $this->articlePayrollYears();
+            $currentYear = Carbon::now()->year;
+            $currentMonth = Carbon::now()->format('F');
+
+            $payrollData = DB::table('articlepayrolls')
+                ->leftjoin('teammembers', 'teammembers.id', 'articlepayrolls.emailid')
+                ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+                // ->where('articlepayrolls.currentyear', '2023')
+                // ->where('articlepayrolls.month', 'September')
+                ->where('articlepayrolls.currentyear', $currentYear)
+                ->where('articlepayrolls.month', $currentMonth)
+                ->select('articlepayrolls.*', 'teammembers.team_member', 'teammembers.verify', 'roles.rolename')
+                ->get();
+
+            return view('backEnd.payroll.payrollarticleindex', compact('payrollData', 'months', 'years', 'currentMonth'));
+        }
+        abort(403, ' you have no permission to access this page ');
+    }
+        // Start Hare
+        $tables = ['teamrolehistory', 'rejoiningsamepost'];
+
+$rejoiningData = null;
+
+foreach ($tables as $table) {
+    $rejoiningData = DB::table($table)
+        ->where('id', $request->rejoinedId)
+        ->where('teammember_id', $id)
+        ->where('change_type', $request->change_type)
+        ->latest()
+        ->first();
+
+    if ($rejoiningData) break;
+}
+        //! End hare 
+        //* regarding grc
+
+         // Check for file upload
+            // if ($request->hasFile('attachment')) {
+            //     // $storageDisk = getStorageDisk();
+            //     $storageDisk = "local";
+            //     $driver = $storageDisk == "local" ? 'local' : 's3';
+            //     $file = $request->file('attachment');
+            //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+            //     if ($driver == 'local') {
+            //         $newAttachmentPath = asset(uploadFile($file, 'uploads/attachment/'));
+            //     } else {
+            //         $newAttachmentPath = uploadToS3($file, 'uploads/attachment/', $filename);
+            //     }
+
+            //     $data['attachment'] = $newAttachmentPath;
+
+            //     // Log the uploaded file
+            //     DB::table('project_report_logs')->insert([
+            //         'project_report_id' => $report->id,
+            //         'version' => $request->report_type,
+            //         'attachment' => $newAttachmentPath,
+            //         'uploaded_by' => auth()->id(),
+            //         'created_at' => now(),
+            //         'updated_at' => now(),
+            //     ]);
+            // }
+
+            if ($request->hasFile('attachment')) {
+                // $storageDisk = getStorageDisk();
+                $storageDisk = "local";
+                $driver = $storageDisk == "local" ? 'local' : 's3';
+                $paths = [];
+
+                foreach ($request->file('attachment') as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    if ($driver == 'local') {
+                        $newAttachmentPath[] =  asset(uploadFile($file, 'uploads/attachment/'));
+                    } else {
+                        $newAttachmentPath[] = uploadToS3($file, 'uploads/attachment/', $filename);
+                    }
+                }
+
+                if (!empty($newAttachmentPath)) {
+                    $data['attachment'] = $newAttachmentPath[0];
+                    $data['attachment_json'] = json_encode($newAttachmentPath);
+                    $data['attachmentjson_count'] = count($newAttachmentPath);
+                }
+
+                // Log the uploaded file
+                DB::table('project_report_logs')->insert([
+                    'project_report_id' => $report->id,
+                    'version' => $request->report_type,
+                    'attachment' => $data['attachment'],
+                    'attachment_json' => $data['attachment_json'],
+                    'uploaded_by' => auth()->id(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+          if ($request->hasFile('attachment')) {
+                // $storageDisk = getStorageDisk();
+                $storageDisk = "local";
+                $driver = $storageDisk == "local" ? 'local' : 's3';
+                $paths = [];
+
+                foreach ($request->file('attachment') as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    if ($driver == 'local') {
+                        $paths[] = asset(uploadFile($file, 'uploads/attachment/'));
+                    } else {
+                        $paths[] = uploadToS3($file, 'uploads/attachment/', $filename);
+                    }
+                }
+
+                if (!empty($paths)) {
+                    $data['attachment'] = $paths[0];
+                    $data['attachment_json'] = json_encode($paths);
+                    $data['attachmentjson_count'] = count($paths);
+                }
+            }
+
+            $created = ProjectReport::create($data);
+            // Create a log or backup of the upload (for version history)
+            if ($created && isset($data['attachment'])) {
+                DB::table('project_report_logs')->insert([
+                    'project_report_id' => $created->id,
+                    'version' => $created->report_type,
+                    'attachment' => $data['attachment'],
+                    'attachment_json' => $data['attachment_json'],
+                    'uploaded_by' => authUser()->id,
+                    'created_at' => now()
+                ]);
+            }
+        
+  if ($request->hasFile('attachment')) {
+
+                $storageDisk = getStorageDisk();
+                $driver = $storageDisk == "local" ? 'local' : 's3';
+                $paths = [];
+
+                foreach ($request->file('attachment') as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    if ($driver == 'local') {
+                        $uploaded = uploadFile($file, 'uploads/attachment/');
+                        $paths[] = asset($uploaded);
+                    } else {
+                        $uploaded = uploadToS3($file, 'uploads/attachment/', $filename);
+                        $paths[] = $uploaded;
+                    }
+                }
+
+                if (!empty($paths)) {
+                    $data['attachment'] = $paths[0]; // first file
+                    $data['attachment_json'] = json_encode($paths); // all files
+                    $data['attachmentjson_count'] = count($paths); // total files
+                }
+            }
+
+            if ($request->hasFile('attachment')) {
+                $paths = [];
+                foreach ($request->file('attachment') as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    // public folder report_name
+                    $destinationPath = public_path('admin/testfolder');
+                    $file->move($destinationPath, $filename);
+                    $paths[] = asset('admin/testfolder/' . $filename);
+                }
+
+                if (!empty($paths)) {
+                    $data['attachment'] = $paths[0];
+                    $data['attachment_json'] = json_encode($paths);
+                    $data['attachmentjson_count'] = count($paths);
+                }
+            }
+        // Start Hare
+        // Start Hare
+        $email = auth()->user()->email;
+        Mail::send('emails.timesheetnotfilledlastweekreminder', $emailData, function ($msg) use ($emailData, $excelFileName, $email) {
+
+    $msg->to($email);
+
+    $msg->attach(storage_path('app/' . $excelFileName), [
+        'as' => $excelFileName,
+        'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    ]);
+
+    $msg->subject($emailData['subject']);
+});
+
+        //! End hare 
+        //* regarding api / regarding api call / 
+        // Start Hare
+
+    public function checkinreport(Request $request)
+    {
+        $newRequest = new Request([
+            'role_id' => 13,
+            'teammember_id' => auth()->user()->teammember_id
+        ]);
+
+        $checkInController = app(\App\Http\Controllers\Api\CheckInController::class);
+
+        $response = $checkInController->checkInList($newRequest);
+
+        $data = $response->getData()->result;
+
+        dd($data);
+    }
+        // Start Hare
+        // In DocumentassigmentExport.php
+use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+
+class DocumentassigmentExport implements FromCollection, WithHeadings, WithStyles, WithEvents
+{
+    // ... existing code ...
+    
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the first row (headers)
+            1 => [
+                'font' => [
+                    'bold' => true,
+                    'color' => ['rgb' => 'FFFFFF'],
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['rgb' => '337AB7'],
+                ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+            ],
+        ];
+    }
+    
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function(AfterSheet $event) {
+                // Auto-size columns
+                $event->sheet->getDelegate()->getDefaultColumnDimension()->setAutoSize(true);
+                
+                // Add borders to all cells
+                $event->sheet->getDelegate()->getStyle(
+                    $event->sheet->getDelegate()->calculateWorksheetDimension()
+                )->getBorders()->getAllBorders()->setBorderStyle(
+                    \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                );
+            },
+        ];
+    }
+}
+        //! End hare 
+        //* regarding 
+        // regarding library / regarding composer installed. 
+            // 1.vendor
+            // 2.composer.lock
+            // 3.composer.json
         // Start Hare
         //! End hare 
         //* regarding 
         // Start Hare
+        //  // without static keyboard
+        //     $helper = new HelperFunctions();
+        //     $finalJoiningDate = $helper->getFinalJoiningDate($id);
+
+
+        // // with static keyboard
+        //     use App\Helpers\HelperFunctions;
+
+        //     $finalJoiningDate = HelperFunctions::getFinalJoiningDate($id);
+
+        //     @php
+        //         $teamType0 = getAssignmentTeam($assignmentmappingDatas->id);
+        //     @endphp     
+
+        //     @foreach ($teamType0 as $sub)
+        //     {{ getStaffCodeAt($sub->teamid, $sub->created_at) }}
+        //     @endforeach
+
+       
         // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
-        // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
-        // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
-        // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
+        
+                    $hasSavedTimesheet = DB::table('timesheetusers')
+                        ->where('createdby', $id)
+                        ->where('date', '>', $request->leavingdate)
+                        ->where('status', 0)
+                        ->exists();
+
+                    if ($hasSavedTimesheet) {
+                        $output = array('msg' => 'Please delete save timesheet after leaving date');
+                        return back()->with('statuss', $output);
+                    }
+
+                    $hasRejectedTimesheet = DB::table('timesheetusers')
+                        ->where('createdby', $id)
+                        ->where('status', 2)
+                        ->exists();
+
+                    if ($hasRejectedTimesheet) {
+                        $output = array('msg' => 'User has rejected timesheet. Please submit timesheet from user side');
+                        return back()->with('statuss', $output);
+                    }
+$timesheetIssue = DB::table('timesheetusers')
+    ->select('status', 'date')
+    ->where('createdby', $id)
+    ->where(function ($q) use ($request) {
+        $q->where(function ($q1) use ($request) {
+            $q1->where('status', 0)
+               ->where('date', '>', $request->leavingdate);
+        })
+        ->orWhere('status', 3);
+    })
+    ->first();
+
+if ($timesheetIssue) {
+
+    if ($timesheetIssue->status == 0) {
+        return back()->with('statuss', [
+            'msg' => 'Please delete saved timesheet after leaving date'
+        ]);
+    }
+
+    if ($timesheetIssue->status == 3) {
+        return back()->with('statuss', [
+            'msg' => 'User has rejected timesheet. Please submit timesheet from user side'
+        ]);
+    }
+}
+
         // Start Hare
         if ($hasRejectedTimesheet) {
     return redirect()
@@ -157,6 +473,9 @@ return redirect('timesheet/mylist')
         DB::table('independences')->insert($data);
 
 
+
+
+          // Start Hare
         $assignments = [
             'SAN100900',
             'DEV100939',
@@ -2142,6 +2461,10 @@ dd($workFromHome);
         //! End hare 
         //* regarding 
         // Start Hare
+          $filters['engagement'] = Engagement::join('audit_plans', 'audit_plans.id', '=', 'engagements.audit_plan_id')
+            ->select('engagements.*')
+            ->orderBy('engagements.created_at', 'ASC')
+            ->get();
         // Start Hare
             $teamHours = DB::table('assignmentteammappings')
       ->join('teammembers', 'teammembers.id', '=', 'assignmentteammappings.teammember_id')
@@ -2177,6 +2500,118 @@ dd($workFromHome);
         // Start Hare
         // Start Hare
         // Start Hare
+
+            <div class="offcanvas offcanvas-end shadow" tabindex="-1" id="riskLevelOffcanvas"
+        style="width: 800px; border-left: none;">
+        <div class="offcanvas-header border-bottom py-3 px-4 bg-light">
+            <h5 class="offcanvas-title fw-bold" style="color: #1e293b; font-size: 1.1rem;">Risk Level Details</h5>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" style="padding: 20px;">
+            <table class="reportTable w-100">
+                <thead>
+                    <tr>
+                        <th>Engagement</th>
+                        <th>Observation Title</th>
+                        <th>Risk Grading</th>
+                        <th>Due Date</th>
+                        <th>Owner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($byRiskLevel as $data)
+                        @php
+                            $status = strtolower(trim($data->status ?? ''));
+                            $risk = strtolower(trim($data->risk_grading ?? ''));
+
+                            $statusStyle = $statusStyles[$status] ?? 'background-color:#e5e7eb; color:#374151;';
+                            $riskStyle = $riskStyles[$risk] ?? 'background-color:#e5e7eb; color:#374151;';
+                        @endphp
+
+                        <tr>
+                            <td>
+                                <a href="#" style="font-size: 14px;">
+                                    {{ \Illuminate\Support\Str::limit($data->engagement_name, 35, '...') ?? 'N/A' }}
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="#" style="font-size: 14px;">
+                                    {{ $data->name ?? 'N/A' }}
+                                </a>
+                            </td>
+
+                            <td>
+                                <span class="badge" style="{{ $riskStyle }}">
+                                    {{ ucfirst($data->risk_grading) }}
+                                </span>
+                            </td>
+
+                            <td style="font-size: 13px; white-space: nowrap;">
+                                {{ $data->due_date ?? 'N/A' }}
+                            </td>
+
+                            <td style="font-size: 13px;">
+                                {{ $data->owner_name ?? 'N/A' }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @foreach ($subobservationbyStatus as $subobservation)
+                                        @php
+                                            $status = strtolower(trim($subobservation->status ?? ''));
+
+                                            $statusStyle =
+                                                $openClosed[$status] ?? 'background-color:#e5e7eb; color:#374151;';
+
+                                        @endphp
+                                        <tr>
+                                            <td><a href="#"
+                                                    style="font-size: 12px; font-weight: 500;">{{ \Illuminate\Support\Str::limit($subobservation->observations_name, 35, '...') ?? 'N/A' }}</a>
+                                            </td>
+
+                                            <td><a href="#"
+                                                    style="font-size: 12px; font-weight: 500;">{{ $subobservation->name ?? 'N/A' }}</a>
+                                            </td>
+
+                                            <td style="font-size: 12px; padding: 12px 10px !important;">
+                                                {{ $subobservation->owner_name ?? 'N/A' }}</td>
+                                            <td>
+                                                <span class="badge"
+                                                    style="{{ $statusStyle }} padding: 6px 12px; font-weight: 500; font-size: 11px;">
+                                                    {{ ucfirst($subobservation->status) }}
+                                                </span>
+                                            </td>
+
+                                            <td style="font-size: 12px; color: #64748b; padding: 12px 10px !important;">
+                                                {{ $subobservation->due_date ?? 'N/A' }}</td>
+
+                                            <td class="text-center" style="padding: 12px 10px !important;">
+                                                @php
+                                                    $dueDate = Carbon\Carbon::parse($subobservation->due_date);
+                                                    $today = Carbon\Carbon::today();
+                                                    $diffInDays = $today->diffInDays($dueDate);
+                                                    if ($today->greaterThan($dueDate)) {
+                                                        $diffInDays += 1; // Add 1 to include the start day when due date is past
+                                                    }
+                                                @endphp
+
+                                                <div
+                                                    style="background-color: #fee2e2; color: #ef4444; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; line-height: 1.1;">
+                                                    <span> {{ $diffInDays }}</span>
+                                                    <span style="font-size: 8px;">days</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+        @php
+    dd($byRiskLevel);
+@endphp
         // Start Hare
         // Start Hare
           // Lap Days Analysis (Assignment to Invoice)
@@ -4075,6 +4510,34 @@ public function download(Request $request, $name)
 
         //! End hare 
     }
+    DROP TABLE IF EXISTS `assignments`;
+
+CREATE TABLE `assignments` (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) DEFAULT NULL,
+  `report_no` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `company_id` text NOT NULL,
+  `location_id` text NOT NULL,
+  `process_id` text NOT NULL,
+  `subprocess_id` text NOT NULL,
+  `period_coverage` varchar(50) DEFAULT '',
+  `is_internal_or_external` varchar(50) DEFAULT NULL,
+  `audit_firm` varchar(255) DEFAULT NULL,
+  `start_date` varchar(255) DEFAULT NULL,
+  `end_date` varchar(255) DEFAULT NULL,
+  `audit_options` text DEFAULT NULL,
+  `organization_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `attributes` longtext DEFAULT NULL,
+  `project_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `current_status_assignee_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `current_transition_id` bigint(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
     // -----------------------------30-12-2024------------------------------------------
 }

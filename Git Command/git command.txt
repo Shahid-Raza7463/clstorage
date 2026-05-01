@@ -1,5 +1,45 @@
 GIT AND GITHUB
 #################################################################################
+bhi ab ye btao ki mere pass ek developer hai usko maine npci-dev ka latest code clone karwa diya hai
+
+
+Great 👍 — tumne sahi start karwaya usko (latest npci-dev clone 👍)
+
+Ab main tumhe proper team workflow batata hoon jo tum us developer ko follow karwao 👇
+
+✅ Us developer ko kya karna chahiye (step-by-step)
+🔹 Step 1: Apni branch banaye (VERY IMPORTANT)
+git checkout -b npcidev-developername
+
+👉 Example:
+
+git checkout -b npcidev-rahul
+
+✔ Isse:
+
+Wo direct npci-dev me kaam nahi karega
+Apni separate branch me kaam karega
+🔹 Step 2: Daily ka workflow
+
+Har kaam ke baad:
+
+git add .
+git commit -m "work done"
+git pull origin npci-dev
+
+👉 Isse:
+
+Latest team code bhi aata rahega
+Conflicts kam honge
+🔹 Step 3: Apni branch push kare
+git push origin npcidev-rahul
+🔹 Step 4: Final merge (tum karoge ya wo PR banayega)
+Option 1 (Best 👍 – PR flow)
+Wo GitHub/GitLab par Pull Request banaye:
+npcidev-rahul → npci-dev
+
+
+#################################################################################
 i am using this 
 1.Go to git hub and create repositery 
 2.open command line using administrate
@@ -149,14 +189,18 @@ git pull origin main
 git fetch origin main
 git merge origin/main
 
+
+
+https://bitbucket.org/capitallio/workspace/overview/
+https://bitbucket.org/capitallio/workspace/projects/
 ######################################################################################
 Bitbucket
 1.git clone https://capitall-india-admin@bitbucket.org/capitall-india/vsa.git
 3.cd vsa
 2.git checkout vsa-shahid
 4.git add .
-5.git commit -m "first commit"
-6.git push origin vsashahid
+5.git commit -m "Updated code"
+6.git push origin vsa-shahid
 end hare 
 
 
@@ -272,6 +316,299 @@ git push origin main --force
 
 
 
+2222222222222222222222222222222222222222222
+project clone from bitbucket exist project clone 
+22222222222222222222222222222222222222222222222222222222222222222222
+start hare 
+1
+cd C:\xampp\htdocs
+git clone https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git
+cd ifchub
+git branch -a
+git checkout kkc
+git branch
+git pull origin kkc
+
+cd C:\xampp\htdocs\npci-dev
+when ek hi reposentry ka dusra directry clon karna ho tab 
+2
+cd C:\xampp\htdocs
+cd C:\xampp\htdocs\ifchub-npci
+git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git .
+git status if any error then 
+    git config --global --add safe.directory C:/xampp/htdocs/ifchub-npci1  ye permission deta hai ki han ye folder safe hai 
+git status
+git branch
 
 
 
+
+copy .env.example .env
+set database config 
+composer install
+if any error then 
+    create cache folder hare C:\xampp\htdocs\ifchub-npci\bootstrap
+    composer dump-autoload
+php artisan key:generate
+php artisan serve
+
+http://127.0.0.1:8000
+http://localhost/ifchub/public
+
+
+end hare 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222
+Bilkul 👍 — main tumhe clean step-by-step commands de deta hoon jo tumne use kiye, taki future me easily recover kar sako.
+
+🔥 🎯 Goal
+
+👉 Apna original code wapas lana (specific commit se)
+
+✅ ✅ FULL PROCESS (SAVE THIS)
+🟢 Step 1: Commit history check karo
+git log --oneline
+
+👉 Yahan se:
+
+apna commit ID identify karo
+Example: d9e4849f
+🟢 Step 2: Us commit par jao
+git checkout d9e4849f
+
+👉 Result:
+
+Tum detached HEAD me chale jaoge (normal hai)
+🟢 Step 3: New branch bana lo (VERY IMPORTANT)
+git checkout -b shahid-original-work
+
+👉 Taaki code safe rahe
+
+🟢 Step 4: Agar branch galat commit pe ho to fix karo
+git reset --hard d9e4849f
+
+👉 Ye ensure karega:
+
+exact wahi code mile jo us commit me tha
+🟢 Step 5: Verify karo
+git log --oneline -1
+
+👉 Output:
+
+d9e4849f Updated code
+🟢 Step 6: (Optional but Recommended) Remote backup
+git push origin shahid-original-work
+🧠 🔥 PRO VERSION (Shortcut)
+
+👉 Agar directly clean branch banana ho:
+
+git checkout -b shahid-original-work d9e4849f
+
+👉 Ye:
+
+branch bhi banata hai
+correct commit pe bhi le jata hai
+⚠️ Important Notes
+
+❌ Ye mat karo:
+
+git pull
+git merge
+
+👉 Jab tak sure na ho — warna phir se conflict
+
+💡 Bonus (Recovery trick)
+
+Agar commit ID yaad nahi ho:
+
+git reflog
+
+👉 Ye tumhari puri history dikha deta hai (life saver 🔥)
+
+🧾 Final Summary (1 line)
+
+👉 Commit dhundo → checkout karo → branch banao → reset karo → done
+
+Agar chaho:
+👉 main tumhare liye ek Git cheat sheet (PDF type notes) bana deta hoon jo tum daily use kar sako
+
+Batao 👍
+22222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222
+22222222222222222222222222222222222222222222222222222222222222222222
+Working on NPCI Project
+22222222222222222222222222222222222222222222222222222222222222222222 
+
+
+git status , git add . ,git commit -m"comma" , git pull git push
+
+
+git pull origin npci-dev --rebase
+git pull origin npci-dev --rebase
+git add .
+git rebase --continue
+git push origin npci-dev
+
+git push origin npci-dev --force
+
+
+
+git revert 14d09e3
+git revert d9e4849
+git push origin npci-dev
+
+
+
+git fetch origin
+git reset --hard origin/npci-dev
+
+git checkout -b backup-branch
+git fetch origin
+git reset --hard origin/npci-dev
+
+
+git checkout -b shahid-work-backup
+git add .
+git commit -m "Recovered my work"
+
+git push origin shahid-work-backup
+git push origin shahid-work-backup
+git diff npci-dev
+git push origin npci-dev
+
+
+22222222222222222222222222222
+git add .
+git commit -m "Your changes"
+
+
+git checkout npci-dev
+git pull origin npci-dev
+git merge npci-devlatest
+git push origin npci-dev
+
+
+regarding push code
+
+cd C:\xampp\htdocs\ifchub
+cd C:\xampp\htdocs\npci-dev
+git branch
+git add . 
+git commit -am "All minor Changed completed"
+git status
+git pull origin npci-dev 
+git push origin kkc 
+git push origin shahid-npcidashboard 
+git push origin shahid-iac 
+
+git add .
+git commit -am "fetch latest code"
+git pull origin npci-dev
+git push origin HEAD
+git merge npci-dev
+
+
+git checkout npci-dev
+git pull origin npci-dev
+git merge npcidev-shahid
+git push origin npci-dev
+git reset --hard
+
+php artisan migrate:refresh --path=\database\migrations\2026_03_14_164508_create_sub_observations_table.php
+
+
+
+
+
+cd C:\xampp\htdocs\npci-dev
+git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git .
+git status
+git config --global --add safe.directory C:/xampp/htdocs/npci-dev
+git status
+git branch
+composer install
+php artisan key:generate
+git branch
+git pull origin npci-dev
+git status
+git checkout -b npcishahid-new
+git branch
+git pull origin npci-dev
+
+
+git status
+git add .
+git commit -am "fetch latest code"
+git pull origin npci-dev
+git push origin HEAD
+
+php artisan migrate:fresh --seed
+
+
+git stash
+git pull origin npci-dev
+git stash pop
+
+git merge --abort
+git reset --hard 64965df0
+
+      C:\xampp\htdocs\npci-dev>git log --oneline -5
+64965df0 (HEAD -> shahid-raza) atr and audit dashboard completed
+68a57556 Merge branch 'npci-dev' of https://bitbucket.org/capitallio/ifchub into shahid-raza
+b79ee89c Merged in fixes-29-mar-26 (pull request #105)
+635c184c Merged in add-microsoft-sso-npci (pull request #102)
+4a35e584 Merged in pdf-landscape-a3 (pull request #106)
+
+C:\xampp\htdocs\npci-dev>
+
+
+new branch create and work 
+git checkout npci-dev
+git pull origin npci-dev
+git checkout -b shahid-raza-new
+git push -u origin shahid-raza-new
+
+
+conflict time solved 
+
+git pull origin npci-dev
+git pull origin npci-dev
+git add .
+git status
+git pull origin npci-dev
+git stash
+git status
+git stash apply
+git commit -am "Conflict resolved"
+git status
+git pull origin npci-dev
+git pull origin npci-dev
+git status
+git reset --hard
+git stash
+git status
+git pull origin shahid-raza-new
+git status
+git checkout npci-dev
+git status
+git pull origin npci-dev
+git branch -D shahid-raza-new
+git fetch origin shahid-raza-new
+git checkout shahid-raza-new
+git status
+git status
+git status
+
+
+Option 1: Fresh branch from latest npci-dev (BEST)
+git checkout npci-dev
+git pull origin npci-dev
+git checkout -b shahid-iac
+git push -u origin shahid-iac
+
+
+git diff resources/views/iacdashboard/iacengagement.blade.php
+git diff routes/web.php
+
+https://bitbucket.org/capitallio/ifchub/pull-requests/new?source=shahid-iac&t=1

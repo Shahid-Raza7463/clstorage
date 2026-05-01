@@ -1,6 +1,35 @@
 Regarding Vs code / regarding vscode
 22222222222222222222222222222222
 22222222222222222222222222222222
+22222222222222222222222222222222
+22222222222222222222222222222222
+22222222222222222222222222222222
+Aap Visual Studio Code me jo behavior dekh rahe ho wo Go to Definition setting ki wajah se change ho gaya hai. Pehle Ctrl + Click se file open hoti thi, ab Alt + Click se ho rahi hai. Isko wapas Ctrl + Click karne ke liye setting change karni padegi.
+
+Fix (Step-by-Step)
+
+VS Code Settings open karo
+
+Shortcut: Ctrl + ,
+
+Search box me likho:
+
+multi cursor modifier
+
+Waha ek option milega:
+Editor: Multi Cursor Modifier
+
+Usko Alt par set kar do.
+
+👉 Matlab setting aisi honi chahiye:
+
+Editor: Multi Cursor Modifier = Alt
+Iska effect
+
+Ctrl + Click → Go to Definition (Controller file open ho jayegi)
+
+Alt + Click → Multi cursor
+22222222222222222222222222222222
 regarding multiple select 
 
 cltrl+click one by one select

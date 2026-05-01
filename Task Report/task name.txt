@@ -886,6 +886,831 @@ total 5 reminder sending on vsa.
 
 
 
+1.User should be able to fill the timesheet for previous dates even if the assignment is closed.
+2.Profile does not active when join user on same date.
+3.Add checklist to be hidden.
+4.Unplanned Leave hide from Assignment list in add assignment.
+5.Gender should not be show in profile section.
+
+
+
+
+ ->rawColumns(['title', 'status', 'checkbox', 'due_date','assigned_to'])->make(true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+Create these task on GRC
+22.Approved independence data for the following users
+ 1.1 Tulsi Ray
+ 1.2 Nitin 
+23.User can fill timesheet on closed assignment, this was fixed from backend
+24.Apply unplanned leave for backdated dates for users from backend and added timesheet access for user.
+25.User has been removed from assignment ID THE101072 (added by mistake).
+
+
+26.During the creation of a new team member, the employee code is not being generated.
+
+
+
+Created these task on GRC
+
+1.Madhurima Das is facing an issue with the ‘Add Timesheet Request’ button.
+2.Timesheet, applyleave and attendence data of four employees who have exited the organization needs to be deleted from the backend.
+  1.Subhash Kumar Mishra
+  2.Ankush
+  3.Sohan Jha
+  4.Tushar Garg
+3.Issue with Staff Code Upgrade
+4.Holidays list upload on vsa.
+5.Approved independence data for the following users
+  1.Subhash Kumar Mishra
+  2.Ankush
+  3.Sohan Jha
+  4.Tushar Garg
+6.Apply leave error on New Year (dynamic implemented)
+7.When a user’s timesheet is rejected, the user should first be able to update and resubmit the rejected timesheet. 
+
+8.An unplanned leave option should be added to the system. Currently, only casual leave and exam leave are available.
+9.Client name, client code, and assignment name should be displayed in the Independence tab .
+10.When an other partner is added from the assignment view page, sometimes it gets added successfully, and sometimes a ‘Page Expired’ issue occurs
+11.Total working days, total travel days, and approved leave data should also be displayed for the previous year.
+
+12.Modules / Tabs that are not used, should be hidden from the system.
+13.The Profile section should have permission control for the new Admin role.
+14.Partner added on this assignment (BIR101359)
+15.Timesheet, apply leave and attendance data of mployees needs to be deleted from the backend.
+
+16.After rejoining only timesheet should be rejected which are submitted after rejoining date  bugs
+17..At the time of leaving rejected timesheet should also be submitted or system should ask user to fill the rejected timesheet before leaving bugs
+
+18.User should be able to fill the timesheet for previous dates even if the assignment is closed.
+
+19.Approved independence data for the following users
+1.1 Mohit Yadav (total 9 assignment)
+1.2 Ishu Bansal (total 1 assignment)
+
+
+20.The timesheet submitted report email should also be sent to the new Admin.
+21.The approved leave KPI count is not matching with the user portal.
+
+
+
+
+-Add checklist to be hidden.
+-Unplanned Leave hide from Assignment list in add assignment.
+-Submitted timesheet tab takes too much time to Load.
+-Same day pe joining pe profile active nahi hota hai.
+-Admin Profile main gender show mat karo bhai.
+
+
+
+bhai admin main ke profile ke logs ban jayegnge kya?
+
+
+1.Assignment edit
+2.Assignment create 
+3.Add Assignment name 
+4.added teammember in assignment
+
+5.Teammember List: added in assignment from assignment view page 
+6.Partner List: added in assignment from assignment view page 
+7.Teammember List: active and inactive team from assignment 
+8.Assignment Viewer: added
+9.Client Contact added  
+10.UDIN List added 
+
+11.Confirmation List
+12.Confirmation open and closed 
+13.Upload Confirmation file 
+
+14. folder added on assignment 
+15. Add file in folder
+
+16.Client details edit 
+17.Add client 
+
+18.teammember active and inactive 
+19.add new teammember 
+20.Edit teammember details 
+
+21.Leave approved and reject
+22.Timesheet request approved and reject
+
+23.Notification added 
+
+24.Edit Holiday
+25.Add Checklist
+26.Create login member 
+27.leave revert approved /reject 
+28.User Timesheet delete 
+29.reject submitted timesheet 
+30.Promotion and Rejoining
+31.Knowledgebase List added and delete.
+
+
+atishayjain+1@capitall.io
+
+
+
+
+soumya@capitall.io
+
+
+
+
+
+
+
+1.Assignment Edit
+2.Assignment Create
+3.Add Assignment Name
+4.Add Teammember to Assignment
+5.Teammember List – Added from Assignment View Page
+6.Partner List – Added from Assignment View Page
+7.Teammember List – Active and Inactive Team from Assignment
+8.Assignment Viewer – Added
+9.Client Contact – Added
+10.UDIN List – Added
+11.Confirmation List
+12.Confirmation – Open and Closed
+13.Upload Confirmation File
+14.Folder Added to Assignment
+15.Add File in Folder
+16.Edit Client Details
+17.Add Client
+18.Teammember – Active and Inactive
+19.Add New Teammember
+20.Edit Teammember Details
+21.Leave – Approve and Reject
+22.Timesheet Request – Approve and Reject
+23.Notification – Added
+24.Edit Holiday
+25.Add Checklist
+26.Create Login Member
+27.Leave Revert – Approve/Reject
+28.User Timesheet Delete
+29.Reject Submitted Timesheet
+30.Promotion and Rejoining
+31.Knowledgebase – Add and Delete
+
+
+
+
+all pending on vsademo ```start hare ```333
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+   Route::match(['get', 'post'], 'atrdashboard', [AtrdashboardController::class, 'atrDashboard'])->name('atrdashboard');
+   
+app\Http\Controllers\Admin\Dashboard\AtrdashboardController.php
+
+    public function atrDashboard(Request $request)
+    {
+        return $this->repository->atrDashboard($request);
+    }
+
+
+
+
+app\Http\Controllers\Admin\Dashboard\AtrdashboardRepository.php
+
+
+public function atrDashboard($request)
+    {
+        $redirect = redirectToAccessibleDashboard();
+        if ($redirect) {
+            return $redirect;
+        }
+
+        $counts = $this->getCounts($request);
+        $filters = $this->getFilters();
+        $charts = $this->getCharts($request);
+        $observationStatus = $this->observationStatus($request);
+        // return $observationStatus;
+        $observationstatuslist = $this->observationStatus($request);
+        $actionablesStatus = $this->UpcomingActionable($request);
+        $overdueactionable = $this->actionableStatus($request);
+        $actionableStatusList = $this->actionableStatus($request);
+        $actionableList = $this->actionableStatus($request);
+        $processwiseObservationAgeing = $this->processwiseObservationAgeing($request);
+        $ageingCounts = $processwiseObservationAgeing['ageingCounts'];
+        $totals = $processwiseObservationAgeing['totals'];
+
+        $issueStatus = getWorkflowStatus('observation');
+
+        // Handle AJAX requests
+        if ($request->isMethod('post')) {
+            $tables = [
+                'observationStatus' => view('dashboard_reports.partials.observation_status', compact('observationStatus'))->render(),
+                'observationstatuslist' => view('dashboard_reports.partials.observation_status_list', compact('observationstatuslist'))->render(),
+                'actionablesStatus' => view('dashboard_reports.partials.actionable_status', compact('actionablesStatus'))->render(),
+                'overdueactionable' => view('dashboard_reports.partials.overdueactionable', compact('overdueactionable'))->render(),
+                'actionableStatusList' => view('dashboard_reports.partials.actionable_status_list', compact('actionableStatusList'))->render(),
+                'actionableList' => view('dashboard_reports.partials.actionable_list', compact('actionableList'))->render(),
+                'ageingCounts' => view('dashboard_reports.partials.processwise_observation_ageing', compact('ageingCounts', 'totals'))->render(),
+
+            ];
+            //  dd($tables);
+            return response()->json([
+                'charts' => $charts,
+                'counts' => $counts,
+                'tables' => $tables,
+            ]);
+        }
+        // dd($charts);
+        // For GET requests, load the main dashboard view
+        return view('atrdashboard', compact(
+
+            'issueStatus',
+            'charts',
+            'counts',
+            'filters',
+            'observationStatus',
+            'actionablesStatus',
+            'observationstatuslist',
+            'overdueactionable',
+            'actionableStatusList',
+            'actionableList',
+            'ageingCounts',
+            'totals'
+        ));
+    }
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\emails\assignmentclosed.blade.php
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+all pending on vsademo ```end hare ```3333
+
+
+
+side barr on en tracjker 
+Color Coding   in 2nd in audit
+3rd chart pannel  
+
+
+
+
+
+    <div class="offcanvas offcanvas-end shadow" tabindex="-1" id="DRLStatuspannel"
+        style="width: 600px; border-left: none;">
+        <div class="offcanvas-header border-bottom py-3 px-4 bg-light">
+            <h5 class="offcanvas-title fw-bold" style="color: #1e293b; font-size: 1.1rem;">DRL Status
+                Details
+            </h5>
+            <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        @php
+            $drlGrouped = $drlstatusdata->groupBy(function ($item) {
+                return strtolower($item->status);
+            });
+
+            $total = $drlstatusdata->count();
+
+            $drlStats = [];
+
+            foreach (['open', 'closed'] as $status) {
+                $count = isset($drlGrouped[$status]) ? $drlGrouped[$status]->count() : 0;
+
+                $drlStats[$status] = [
+                    'count' => $count,
+                    'percentage' => $total > 0 ? round(($count / $total) * 100, 1) : 0,
+                    'items' => $drlGrouped[$status] ?? collect(),
+                ];
+            }
+        @endphp
+
+
+
+        <div class="offcanvas-body" style="padding: 20px; background-color: #f8fafc;">
+
+            {{-- OPEN CARD --}}
+            <div class="sub-obs-card mb-3">
+                <div class="sub-obs-header d-flex justify-content-between">
+                    <div class="sub-obs-title d-flex align-items-center gap-2">
+                        <div class="status-dot" style="background:#6b7280;"></div>
+                        <span>Open</span>
+                    </div>
+                    <div class="sub-obs-count">{{ $drlStats['open']['count'] }}</div>
+                </div>
+
+                <div class="sub-obs-progress-container d-flex align-items-center gap-2">
+                    <div class="sub-obs-progress-bar w-100">
+                        <div class="sub-obs-progress-fill"
+                            style="width: {{ $drlStats['open']['percentage'] }}%; background:#6b7280;"></div>
+                    </div>
+                    <div>{{ $drlStats['open']['percentage'] }}%</div>
+                </div>
+
+                <div>
+                    <a href="javascript:void(0)" onclick="showDRLDetails('open')" class="text-primary">
+                        Click to view details
+                    </a>
+                </div>
+            </div>
+
+
+            {{-- CLOSED CARD --}}
+            <div class="sub-obs-card">
+                <div class="sub-obs-header d-flex justify-content-between">
+                    <div class="sub-obs-title d-flex align-items-center gap-2">
+                        <div class="status-dot" style="background:#22c55e;"></div>
+                        <span>Closed</span>
+                    </div>
+                    <div class="sub-obs-count">{{ $drlStats['closed']['count'] }}</div>
+                </div>
+
+                <div class="sub-obs-progress-container d-flex align-items-center gap-2">
+                    <div class="sub-obs-progress-bar w-100">
+                        <div class="sub-obs-progress-fill"
+                            style="width: {{ $drlStats['closed']['percentage'] }}%; background:#22c55e;"></div>
+                    </div>
+                    <div>{{ $drlStats['closed']['percentage'] }}%</div>
+                </div>
+
+                <div>
+                    <a href="javascript:void(0)" onclick="showDRLDetails('closed')" class="text-primary">
+                        Click to view details
+                    </a>
+                </div>
+            </div>
+
+            <div id="drlDetailSection" style="display:none;">
+                <h6 class="fw-bold mt-3">Detailed List</h6>
+
+                <div id="drlDetailList"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const drlData = @json($drlStats);
+
+        function showDRLDetails(type) {
+
+            let container = document.getElementById('drlDetailList');
+            let section = document.getElementById('drlDetailSection');
+
+            let items = drlData[type].items;
+
+            let html = '';
+
+            items.forEach(item => {
+                html += `
+                <div class="card mb-2 p-3">
+                    <div class="fw-semibold">${item.audit_requirement ?? 'N/A'}</div>
+
+                    <div class="d-flex justify-content-between mt-2">
+                        <div>
+                            <div><b>Engagement:</b> ${item.engagement_name ?? 'N/A'}</div>
+                            <div><b>Assignee:</b> ${item.assignee_name ?? 'N/A'}</div>
+                            <div><b>Due Date:</b> ${item.due_date ?? 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            });
+
+            container.innerHTML = html;
+            section.style.display = 'block';
+        }
+    </script>
+
+
+
+
+
+    <script>
+        function handleRiskTab(element, riskLevel) {
+
+            let parent = element.parentElement;
+            let tabs = parent.children;
+
+            // Reset tabs UI      if (riskMatch && engagementMatch) {
+            for (let i = 0; i < tabs.length; i++) {
+                let tab = tabs[i];
+                tab.style.borderBottom = '2px solid transparent';
+                tab.style.color = '#64748b';
+                tab.style.fontWeight = '500';
+
+                let badge = tab.querySelector('span');
+                badge.style.background = '#f1f5f9';
+                badge.style.color = '#64748b';
+            }
+
+            // Active tab UI
+            element.style.borderBottom = '2px solid #ef4444';
+            element.style.color = '#ef4444';
+            element.style.fontWeight = '600';
+
+            let activeBadge = element.querySelector('span');
+            activeBadge.style.background = '#fee2e2';
+            activeBadge.style.color = '#ef4444';
+
+            // Set active risk
+            document.querySelectorAll('[data-risk]').forEach(tab => {
+                tab.classList.remove('active-risk');
+            });
+            element.classList.add('active-risk');
+
+            // ❌ only filter (no count update)
+            applyFilters(false);
+        }
+
+        function applyFilters(updateCount = false) {
+
+            let selectedRisk = document.querySelector('.active-risk')?.dataset.risk || 'all';
+
+            let checkedEngagements = Array.from(document.querySelectorAll('.engagement-filter:checked'))
+                .map(cb => cb.value);
+
+            let rows = document.querySelectorAll('#engagementRiskTable tbody tr');
+
+            let count = 1;
+
+            // Count object
+            let counts = {
+                all: 0,
+                critical: 0,
+                high: 0,
+                medium: 0,
+                low: 0
+            };
+
+            // rows.forEach(row => {
+
+            //     let rowRisk = (row.getAttribute('data-risk') || '').toLowerCase().trim();
+            //     let rowEngagement = (row.getAttribute('data-engagement') || '').toLowerCase().trim();
+
+            //     let riskMatch = (selectedRisk === 'all') || (rowRisk === selectedRisk);
+            //     let engagementMatch = checkedEngagements.includes(rowEngagement);
+
+            //     if (riskMatch && engagementMatch) {
+            //         row.style.display = '';
+
+            //         // Reindex
+            //         row.firstElementChild.innerText = count++;
+
+            //         // ✅ Count only when checkbox changes
+            //         if (updateCount) {
+            //             counts.all++;
+
+            //             if (counts[rowRisk] !== undefined) {
+            //                 counts[rowRisk]++;
+            //             }
+            //         }
+
+            //     } else {
+            //         row.style.display = 'none';
+            //     }
+            // });
+
+            rows.forEach(row => {
+
+                let rowRisk = (row.getAttribute('data-risk') || '').toLowerCase().trim();
+                let rowEngagement = (row.getAttribute('data-engagement') || '').toLowerCase().trim();
+
+                let engagementMatch = checkedEngagements.includes(rowEngagement);
+                let riskMatch = (selectedRisk === 'all') || (rowRisk === selectedRisk);
+
+                // ✅ FILTERING (UI ke liye)
+                if (riskMatch && engagementMatch) {
+                    row.style.display = '';
+                    row.firstElementChild.innerText = count++;
+                } else {
+                    row.style.display = 'none';
+                }
+
+                // ✅ COUNTING (sirf engagement ke basis par)
+                if (updateCount && engagementMatch) {
+                    counts.all++;
+
+                    if (counts[rowRisk] !== undefined) {
+                        counts[rowRisk]++;
+                    }
+                }
+
+            });
+
+            // ✅ Update counts only when needed
+            if (updateCount) {
+
+                document.getElementById('showingCount').innerText = counts.all;
+
+                document.querySelector('.count-all').innerText = counts.all;
+                document.querySelector('.count-critical').innerText = counts.critical;
+                document.querySelector('.count-high').innerText = counts.high;
+                document.querySelector('.count-medium').innerText = counts.medium;
+                document.querySelector('.count-low').innerText = counts.low;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Default load
+            handleRiskTab(document.querySelector('[data-risk="all"]'), 'All');
+
+            // ✅ Checkbox change → filter + count update
+            document.querySelectorAll('.engagement-filter').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    applyFilters(true);
+                });
+            });
+
+        });
+    </script>
+	
+	
+	
+	department 
+	
+	
+	
+	    <script>
+        function handleDeptRiskTab(element, riskLevel) {
+
+            let card = element.closest('.card-body'); // ✅ scope fix
+            let parent = element.parentElement;
+            let tabs = parent.children;
+
+            // Reset UI
+            for (let i = 0; i < tabs.length; i++) {
+                let tab = tabs[i];
+                tab.style.borderBottom = '2px solid transparent';
+                tab.style.color = '#64748b';
+                tab.style.fontWeight = '500';
+
+                let badge = tab.querySelector('span');
+                if (badge) {
+                    badge.style.background = '#f1f5f9';
+                    badge.style.color = '#64748b';
+                }
+            }
+
+            // Active UI
+            element.style.borderBottom = '2px solid #ef4444';
+            element.style.color = '#ef4444';
+            element.style.fontWeight = '600';
+
+            let badge = element.querySelector('span');
+            if (badge) {
+                badge.style.background = '#fee2e2';
+                badge.style.color = '#ef4444';
+            }
+
+            // ✅ scoped active class
+            card.querySelectorAll('[data-risk]').forEach(tab => {
+                tab.classList.remove('active-dept-risk');
+            });
+
+            element.classList.add('active-dept-risk');
+
+            applyDeptFilters(card, false); // ✅ pass card
+        }
+
+        function applyDeptFilters(card, updateCount = false) {
+
+            let selectedRisk = card.querySelector('.active-dept-risk')?.dataset.risk || 'all';
+
+            let checkedDepartments = Array.from(card.querySelectorAll('.department-filter:checked'))
+                .map(cb => cb.value);
+
+            let rows = card.querySelectorAll('#departmentRiskTable tbody tr');
+
+            let count = 1;
+
+            let counts = {
+                all: 0,
+                critical: 0,
+                high: 0,
+                medium: 0,
+                low: 0
+            };
+
+            rows.forEach(row => {
+
+                let rowRisk = (row.dataset.risk || '').toLowerCase().trim();
+                let rowDept = (row.dataset.department || '').toLowerCase().trim();
+
+                let deptMatch = checkedDepartments.includes(rowDept);
+
+                // ✅ count (independent)
+                if (updateCount && deptMatch) {
+                    counts.all++;
+
+                    if (counts[rowRisk] !== undefined) {
+                        counts[rowRisk]++;
+                    }
+                }
+
+                let riskMatch = (selectedRisk === 'all') || (rowRisk === selectedRisk);
+
+                if (riskMatch && deptMatch) {
+                    row.style.display = '';
+                    row.children[0].innerText = count++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            if (updateCount) {
+                card.querySelector('#deptShowingCount').innerText = counts.all;
+
+                card.querySelector('.dept-count-all').innerText = counts.all;
+                card.querySelector('.dept-count-critical').innerText = counts.critical;
+                card.querySelector('.dept-count-high').innerText = counts.high;
+                card.querySelector('.dept-count-medium').innerText = counts.medium;
+                card.querySelector('.dept-count-low').innerText = counts.low;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let card = document.querySelector('#departmentRiskTable')?.closest('.card-body');
+
+            if (!card) return;
+
+            let defaultTab = card.querySelector('[data-risk="all"]');
+
+            if (defaultTab) {
+                handleDeptRiskTab(defaultTab, 'All');
+            }
+
+            card.querySelectorAll('.department-filter').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    applyDeptFilters(card, true);
+                });
+            });
+
+        });
+    </script>
+	
+	
+	  <div
+                            style="width: 100%; overflow-x: auto; border-bottom: 1px solid #f1f5f9; margin-bottom: 16px; -webkit-overflow-scrolling: touch;">
+                            <div class="d-flex align-items-center"
+                                style="gap: 24px; white-space: nowrap; padding-right: 24px; padding-bottom: 4px;">
+                                <div onclick="handleDeptRiskTab(this, 'All')" data-risk="all"
+                                    style="padding-bottom: 12px; border-bottom: 2px solid #ef4444; color: #ef4444; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+
+                                    All
+                                    <span class="dept-count-all"
+                                        style="background: #fee2e2; color: #ef4444; font-size: 10px; padding: 1px 6px; border-radius: 12px; font-weight: 600;">
+                                        {{ $totalObservationsdepartment }}
+                                    </span>
+                                </div>
+                                <div onclick="handleDeptRiskTab(this, 'Critical')" data-risk="critical"
+                                    style="padding-bottom: 12px; border-bottom: 2px solid transparent; color: #64748b; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                                    Critical <span class="dept-count-critical"
+                                        style="background: #fee2e2; color: #ef4444; font-size: 10px; padding: 1px 6px; border-radius: 12px; font-weight: 600;">{{ $riskCounts['critical'] ?? 0 }}</span>
+                                </div>
+                                <div onclick="handleDeptRiskTab(this, 'High')" data-risk="high"
+                                    style="padding-bottom: 12px; border-bottom: 2px solid transparent; color: #64748b; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                                    High <span class="dept-count-high"
+                                        style="background: #f1f5f9; color: #64748b; font-size: 10px; padding: 1px 6px; border-radius: 12px; font-weight: 600;">{{ $riskCounts['high'] ?? 0 }}</span>
+                                </div>
+                                <div onclick="handleDeptRiskTab(this, 'Medium')" data-risk="medium"
+                                    style="padding-bottom: 12px; border-bottom: 2px solid transparent; color: #64748b; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                                    Medium <span class="dept-count-medium"
+                                        style="background: #f1f5f9; color: #64748b; font-size: 10px; padding: 1px 6px; border-radius: 12px; font-weight: 600;">{{ $riskCounts['medium'] ?? 0 }}</span>
+                                </div>
+                                <div onclick="handleDeptRiskTab(this, 'Low')" data-risk="low"
+                                    style="padding-bottom: 12px; border-bottom: 2px solid transparent; color: #64748b; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                                    Low <span class="dept-count-low"
+                                        style="background: #f1f5f9; color: #64748b; font-size: 10px; padding: 1px 6px; border-radius: 12px; font-weight: 600;">{{ $riskCounts['low'] ?? 0 }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+
 
 
 

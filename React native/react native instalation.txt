@@ -505,6 +505,9 @@ post http://127.0.0.1:8000/api/logout
 https://jsonplaceholder.typicode.com/users
 
 
+http://127.0.0.1:8000/api/check-In?role_id=13&teammember_id=13  with maramiter 
+
+
 
 222222222222222222222222222222222222222222222222222222222222222222222222222222
 connect json serve with react native 
