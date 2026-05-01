@@ -520,11 +520,12 @@ php artisan migrate:refresh --path=\database\migrations\2026_03_14_164508_create
 
 
 
-
+cd C:\Shahid Raza\Capitall\VSA project functionality
 cd C:\xampp\htdocs\npci-dev
 git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git .
 git status
 git config --global --add safe.directory C:/xampp/htdocs/npci-dev
+git config --global --add safe.directory "C:/Shahid Raza/Capitall/VSA project functionality"
 git status
 git branch
 composer install
