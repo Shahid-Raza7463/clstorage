@@ -5,9 +5,304 @@ regarding
 22222222222222222222222222222222222222222222222222222222222222222222222222
 regarding
 
+
 22222222222222222222222222222222222222222222222222222222222222222222222222
 regarding
 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding
+Stage 1: DRAFT EMAIL CREATION
+├─ Template: emails.draftemailform
+├─ Recipient: Candidate email
+├─ Subject: "Onboarding Documents"
+└─ Content: Personalized onboarding form link
+
+Stage 2: FORM SUBMISSION
+├─ Template: emails.candidateform / emails.articlemailform
+├─ Recipient: HR/Admin team
+├─ Action: Candidate submits onboarding form
+└─ Link: /candidateboarding or /articleonboarding
+
+Stage 3: EMPLOYEE INTRODUCTION
+├─ Template: emails.interoductionMail
+├─ Recipient: All team members (role_id 1 = active employees)
+├─ Subject: "Welcome to CapITall || Mr/Ms. {name}"
+└─ Triggered: When sendMail() is executed
+
+Stage 4: COMPANY CREDENTIALS
+├─ Template: Email with login credentials
+├─ Recipient: Employee personal email
+├─ Action: User account created with temporary password
+└─ Method: sendcapitallcred()
+
+
+
+
+
+CANDIDATEONBOARDING:
+status = 0 (Pending)  →  [User clicks Convert]  →  status = 1 (Converted)
+
+ARTICLEONBOARDING:
+status = NULL (Pending)  →  [User clicks Convert]  →  status = 1 (Converted)
+
+EMPLOYEEONBOARDING:
+[Created during convert]  →  mail_status = 0 (Mail not sent)  →  [Send mail]  →  mail_status = 1 (Sent)
+
+EMPLOYEEONBOARDING_MAIL:
+[Draft created]  →  status = 1 (Draft)  →  [Send button]  →  [Record email history]
+
+
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        COMPLETE ONBOARDING FLOW                              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+                    ┌──────────────────────────┐
+                    │    1. DRAFT EMAIL        │
+                    │   /draftemail (POST)     │
+                    │   DraftemailController   │
+                    │   → store()              │
+                    └────────────┬─────────────┘
+                                 │ [Encrypt email + generate link]
+                                 │ [Save to draftemails table]
+                                 ↓
+                    ┌──────────────────────────┐
+                    │   EMAIL SENT TO          │
+                    │      CANDIDATE           │
+                    │  (draftemailform.blade)  │
+                    │  Subject: Onboarding     │
+                    └────────────┬─────────────┘
+                                 │ [Candidate clicks link]
+                                 ↓
+                    ┌──────────────────────────────────────────┐
+                    │  2A. CANDIDATE ONBOARDING FORM           │
+                    │  /candidateonboardingform/{entity}/{}    │
+                    │  (Regular Employees & Interns)          │
+                    │  HomeController::candidatestore()       │
+                    └────────────┬─────────────────────────────┘
+                                 │                  ↑
+                        ┌────────┴─────────────┐    │
+                        │                      │    │
+                        ↓                      ↓    │
+        ┌─────────────────────────┐   ┌──────────────────────┐
+        │  Role 15 (CA Article)   │   │ Roles 13,14,16,17... │
+        │      /articleonboarding │   │  /candidateboarding  │
+        │      Store in:          │   │    Store in:         │
+        │  articleonboardings     │   │ candidateonboardings │
+        │  status = NULL          │   │   status = 0         │
+        └────────────┬────────────┘   └──────────┬───────────┘
+                     │                           │
+                     └───────────┬────────────────┘
+                                 │ [Notification sent to HR]
+                                 ↓
+                    ┌──────────────────────────┐
+                    │  3. PENDING CONVERSION   │
+                    │   /candidateboarding     │
+                    │   View candidates       │
+                    │   (status = 0 or NULL)  │
+                    └────────────┬─────────────┘
+                                 │ [HR reviews data]
+                                 │ [HR clicks CONVERT]
+                                 ↓
+                    ┌──────────────────────────────────────┐
+                    │  4. CONVERT CANDIDATE TO EMPLOYEE    │
+                    │  CandidateboardingController::        │
+                    │  candidateconvert() / articleconvert()│
+                    │  Action: /candidateconvert/{id}      │
+                    └────────────┬─────────────────────────┘
+                                 │ [Copy data to employeeonboardings]
+                                 │ [Create new Teammember]
+                                 │ [Create Attendance record]
+                                 │ [Update source status = 1]
+                                 │ [Send email to admin]
+                                 ↓
+                    ┌──────────────────────────┐
+                    │  5. EMPLOYEE ONBOARDING  │
+                    │   /employeeonboarding    │
+                    │   View converted emp.    │
+                    │   (from employeeonboarding)
+                    └────────────┬─────────────┘
+                                 │
+                        ┌────────┴─────────────┐
+                        │                      │
+                        ↓                      ↓
+            ┌─────────────────────┐  ┌──────────────────┐
+            │ SEND WELCOME EMAIL  │  │ SETUP CREDENTIALS│
+            │ /sendmail/{id}      │  │ /capitallcred    │
+            │ sendMail()          │  │ sendcapitallcred()
+            │ → interoductionMail │  │ Creates user acc.│
+            │   to all team       │  │ + password       │
+            └─────────────────────┘  └──────────────────┘
+                     │                       │
+                     │ [mail_status = 1]    │ [user account created]
+                     └─────────┬────────────┘
+                               │
+                               ↓
+                    ┌──────────────────────────┐
+                    │   6. ONBOARDING COMPLETE │
+                    │                          │
+                    │ Employee has:            │
+                    │ ✓ Teamember record       │
+                    │ ✓ Attendance entry       │
+                    │ ✓ Welcome email sent     │
+                    │ ✓ Company credentials    │
+                    │ ✓ User account active    │
+                    └──────────────────────────┘
+
+
+
+CONTROLLERS:
+├── DraftemailController.php
+│   └── index(), store()
+├── CandidateboardingController.php
+│   ├── index()
+│   ├── candidateconvert()
+│   ├── candidateupdate()
+│   ├── articleconvert()
+│   ├── articleupdate()
+│   └── candidatedetails()
+├── ArticleonboardingController.php
+│   └── index()
+├── EmployeeonboardingController.php
+│   ├── index()
+│   ├── sendMailform()
+│   ├── sendMailPreview()
+│   ├── sendMail()
+│   ├── sendcapitallcred()
+│   └── capitallcred()
+└── HomeController.php
+    ├── candidateonboardingForm*() (multiple entity versions)
+    └── articleonboardingForm()
+
+MODELS:
+├── Draftemail.php
+├── Candidateonboarding.php
+├── Articleonboarding.php (used via DB facade)
+
+VIEWS:
+├── backEnd/draftemail/index.blade.php
+├── backEnd/candidateboarding/index.blade.php
+├── backEnd/articleonboarding/index.blade.php
+├── backEnd/employeeonboarding/index.blade.php
+└── emails/{various}
+
+ROUTES:
+├── /draftemail (POST → store)
+├── /candidateonboardingform/{entity}/{encryptedEmail}
+├── /articleonboardingform/{encryptedEmail}
+├── /candidateboarding (GET → index, POST → convert)
+├── /candidateconvert/{id} (POST)
+├── /articleonboarding (GET → index)
+└── /employeeonboarding (GET → index)
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding s3 on local 
+serch Step 1: MinIO Download
+
+https://dl.min.io/server/minio/release/windows-amd64/minio.exe
+Official download page:
+
+
+
+
+# for local minio
+FILESYSTEM_DISK=s3
+AWS_ACCESS_KEY_ID=minioadmin
+AWS_SECRET_ACCESS_KEY=minioadmin
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=candidateonboarding
+AWS_ENDPOINT=http://127.0.0.1:9000
+AWS_URL=http://127.0.0.1:9000/candidateonboarding
+AWS_USE_PATH_STYLE_ENDPOINT=true
+
+
+
+    use Illuminate\Support\Facades\Storage;
+    Route::get('/minio-test', function () {
+
+      Storage::disk('s3')->put(
+        'test.txt',
+        'MinIO Working'
+      );
+
+      return Storage::disk('s3')->url(
+        'test.txt'
+      );
+    });
+    http://127.0.0.1:8000/minio-test
+
+
+
+    Route::get('/passport-test', function () {
+
+      $file = '1781291294Screenshot_1.png';
+
+      return Storage::disk('s3')->url($file);
+    });
+
+    mc.exe anonymous set public myminio/capitall-storage
+
+    composer require league/flysystem-aws-s3-v3
+
+
+# for local minio
+FILESYSTEM_DISK=s3
+AWS_ACCESS_KEY_ID=minioadmin
+AWS_SECRET_ACCESS_KEY=minioadmin
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=capitall-storage
+AWS_ENDPOINT=http://127.0.0.1:9000
+AWS_URL=http://127.0.0.1:9000/capitall-storage
+AWS_USE_PATH_STYLE_ENDPOINT=true
+
+
+cd C:\Users\KGS-429\Downloads
+set MINIO_ROOT_USER=minioadmin
+set MINIO_ROOT_PASSWORD=minioadmin
+minio.exe server minio-data --console-address ":9001"
+
+
+
+
+C:\Users\KGS-429\Downloads>mc.exe rm --recursive --force myminio/candidateonboarding
+Removed `myminio/candidateonboarding/1781291727Screenshot_4.png`.
+Removed `myminio/candidateonboarding/candidateonboarding/1781291294Screenshot_1.png`.
+Removed `myminio/candidateonboarding/test.txt`.
+
+C:\Users\KGS-429\Downloads>mc.exe rb myminio/candidateonboarding
+Removed `myminio/candidateonboarding` successfully.
+
+C:\Users\KGS-429\Downloads>
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding migrate
+
+dir database\migrations
+php artisan migrate:status
+php artisan migrate:rollback --path=database/migrations/2026_05_08_000001_create_vendor_management_settings_table.php
+
+php artisan migrate:status
+php artisan migrate --path=database\migrations\2026_05_08_000001_create_vendor_management_settings_table.php
+ php artisan migrate:refresh --path=/database\migrations\2026_03_13_160100_create_working_paper_files_table.php  
+
+
+SELECT * FROM migrations 
+WHERE migration = '2026_05_08_000001_create_vendor_management_settings_table';
+
+DELETE FROM migrations 
+WHERE migration = '2026_05_08_000001_create_vendor_management_settings_table';
+
+
+php artisan migrate --path=database/migrations/2026_05_08_000001_create_vendor_management_settings_table.php
 
 composer remove laravel/horizon
 

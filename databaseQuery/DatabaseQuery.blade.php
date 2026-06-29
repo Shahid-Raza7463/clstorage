@@ -5,8 +5,38 @@
 {{-- * regarding  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
-{{-- * regarding  --}}
+{{-- * regarding export error  --}}
+
+
+
+🚀 Ab yeh karo (Step-by-Step)
+"Disable foreign key checks" ko TICK kar de ✅
+
+"Add DROP TABLE..." ko bhi TICK kar de (optional lekin recommended)
+
+Neche "Export" button dabao
+
+File download ho jayegi
+
+Ab yeh file import karo - error nahi aayega! 😊
+
+
+proformance and teammember chhod kar baki sabhi table ka export lele and teammember ka
+SHOW CREATE TABLE teammembers;
+fir create kar lo
+
 {{--  Start Hare --}}
+ALTER TABLE articlepayrolls
+MODIFY stipend VARCHAR(200) DEFAULT NULL,
+MODIFY totalstipend VARCHAR(200) DEFAULT NULL,
+MODIFY arrear VARCHAR(200) DEFAULT NULL,
+MODIFY amounttobepaid VARCHAR(200) DEFAULT NULL;
+{{--  Start Hare --}}
+ALTER TABLE articlepayrolls
+MODIFY stipend DECIMAL(15,2) DEFAULT NULL,
+MODIFY totalstipend DECIMAL(15,2) DEFAULT NULL,
+MODIFY arrear DECIMAL(15,2) DEFAULT NULL,
+MODIFY amounttobepaid DECIMAL(15,2) DEFAULT NULL;
 {{--  Start Hare --}}
 {{-- * regarding  --}}
 UPDATE articlepayrolls
@@ -31,6 +61,7 @@ SELECT status, COUNT(*) as total
 FROM audit_cycles
 GROUP BY status;
 {{--  Start Hare --}}
+SHOW CREATE TABLE teammembers;
 SHOW CREATE TABLE users;
 DESCRIBE assignments;
 {{-- * regarding  --}}
@@ -438,7 +469,7 @@ Steps 1 :
 delete rahega to ab databse ko backup lene ki baari hai
 
 #AB DATABASE BACKUP LENA HAI
-6.performance_schema, phpmyadmin, test folders ko copy kare C:\xampp\mysql\backup folder se uske baad
+6.performance_schema, phpmyadmin, test, folders ko copy kare C:\xampp\mysql\backup folder se uske baad
 C:\xampp\mysql\data folder me paste karde
 
 7.expertaff, vsalive, vsademo etc folders ko copy kare C:\xampp\mysql\data_old folder se uske baad
@@ -449,7 +480,7 @@ next step 8
 8.ibdata1, ib_logfile1, ib_logfile0, ib_buffer_pool, aria_log_control, aria_log.00000001 folders ko copy kare
 C:\xampp\mysql\data_old folder se uske baad
 C:\xampp\mysql\data folder me paste karde yaha aapka sabhi table me bhi data aa jayega ok yaha pahle ibdata1 file ko
-copy karke paste kare pahle agar data aa gya to thik hai otherwise ye sabhi folder co copy karke paste kar de data aa
+copy karke paste kare pahle agar data aa gya to thik hai otherwise ye sabhi folder ko copy karke paste kar de data aa
 jayega tables me ibdata1, ib_logfile1, ib_logfile0, ib_buffer_pool, aria_log_control, aria_log.00000001
 
 

@@ -1,0 +1,387 @@
+01-06-2026
+1.VSA task sohan jha timesheet delete 
+2.bugs explain to pooja kumari and mentioned commet on 4 bugs in grc 
+3.in capitall , UI fixed on dashboard 
+
+`````````````````````````````
+
+
+02-06-2026
+1. permission page implemented on all over capitall portal 
+2. active and inactive user on  creating and editing page on all over capitall portal 
+	
+	
+03-06-2026
+2. active and inactive user on  creating and editing page on all over capitall portal and testing complted
+
+
+04-06-2026 
+
+
+05-06-2026
+1.Internal dashboard UI
+
+
+06-06-2026
+Casual leave 
+
+07-06-2026
+Sunday
+
+08-06-2026	
+Casual leave
+
+````````````````````````````````````
+
+09-06-2026
+1.Internal dashboard UI completed and tested 
+2.deployed dashboard UI task on internal and testing completed 
+3.checkinreport datatable upload on kgsdemo and functional testing completed
+
+
+````````````````````````````````````````
+
+
+10-06-2026
+1.ui test for mobile responsive 
+2.vsa issue checked and i have not found issue 
+3.Internal UI changed (New UI)
+
+
+11-06-2026
+1.deployed datatable checkin report on kgsdemo 
+2.S3 related issues: Working on teammemer edit, store and indexing
+
+
+	
+	
+2164.7
+
+
+12-06-2026
+1.VSA download issue solved 
+2.S3 related issues: Working on teammemer edit, store and indexing
+
+	
+
+13-06-2026
+Sturday
+
+
+14-06-2026
+Sunday 
+
+15-06-2026
+1.S3 related issues: Working on teammemer edit, store and indexing completed and deployed on capitall and functional testing completed
+2.onbording module
+ 2.1 understood onboarding flow 
+
+
+maine samjh liya hai aage kiya karna ahi btana 
+
+16-06-2026
+1.Logs not getting captured when payroll data is generated
+2.Days to be Paid' should not be more than 'No of days Present'
+3.Days to be paid' column to be made auto fetched
+4.Getting Error message on excel upload
+5.Payroll user details Upload - Missing validation message for excel having duplicate data
+6.After NEFT generation, page gets navigated but it is not showing current month data
+
+
+17-06-2026
+All listed task deployed on cron and functional testing completed
+1.Logs not getting captured when payroll data is generated
+2.Days to be Paid' should not be more than 'No of days Present'
+3.Days to be paid' column to be made auto fetched
+4.Getting Error message on excel upload
+5.Payroll user details Upload - Missing validation message for excel having duplicate data
+6.After NEFT generation, page gets navigated but it is not showing current month data
+
+
+
+
+18-06-2026
+1.Eroor UI completed for 401,402,403,404,405,408,419, 429, 500
+2.Added erroor message on all Ui 
+
+
+19-06-2026
+all below code deployed on capitall and functional testing completed
+ 1.Eroor UI completed for 401,402,403,404,405,408,419, 429, 500
+ 2.Added erroor message on all Ui 
+Now All error page implemented on cron and kgslive 
+
+
+
+20-06-2026
+all below code deployed on kgslive and functional testing completed
+ 1.Eroor UI completed for 401,402,403,404,405,408,419, 429, 500
+internal capuitall 
+ 1 Date of birth already fixed 
+
+
+ 
+21-06-2026
+Sunday 
+
+
+22-06-2026
+1.MINIO setup for s3 
+2.tested on local 
+3.all s3 related completed work deployed on capitall and functional testing completed
+4.userprofele page connected with s3 and 
+
+
+
+23-06-2026
+internal capuitall 
+ 1.Date of birth already fixed
+ 2.picture fixed in user profile
+ 3.picture fixed in leftsidebaar 
+ 4.dummy image added for user profile
+ 5.teammember create form UI fixed 
+ 6.teammember edit form UI fixed
+
+1.Validation on teammmeber create , edit and user profile 
+2. dashboard listing issue 
+3.dashboard scroll bar fixed 
+
+24-06-2026
+1.Validation on teammmeber create , edit and user profile 
+2.dashboard listing issue 
+3.dashboard scroll bar fixed 
+
+25-06-2026
+1.after leave applied timesheet delete on capitall
+2.upload code on caitall and functional testing completed
+3.after leave applied timesheet delete on kgslive and functional testing completed
+4.
+
+
+
+
+
+26-06-2026
+28-06-2026
+29-06-2026
+30-06-2026
+31-06-2026
+
+
+
+
+return response()->view('backEnd.errors.403', [], 403);
+abort(403, 'You do not have permission to access this page.');
+        // return response()->view('backEnd.errors.403', [], 403);
+        // abort(403);
+
+        abort(403, 'Access Denied', [
+            'code' => '403',
+            'title' => 'Access Denied',
+            'body' => 'Only authorized users can view this report.'
+        ]);
+
+
+          return response()->view('errors.401', [], 401);
+    return response()->view('errors.402', [], 402);
+    return response()->view('errors.403', [], 403);
+    return response()->view('errors.404', [], 404);
+    return response()->view('errors.405', [], 405);
+    return response()->view('errors.408', [], 408);
+    return response()->view('errors.419', [], 419);
+    return response()->view('errors.429', [], 429);
+    return response()->view('errors.500', [], 500);
+    return response()->view('errors.503', [], 503);
+ background: #37A000;
+
+
+      <div class="brand-mark text-white">
+                    <p>Capitall</p>
+                </div>
+                  $dashboardUrl = url('/');
+
+
+
+
+Route::get('/dashboard', function() {
+    return view('dashboard');
+})->middleware('auth');
+
+
+
+
+
+
+https://jam.dev/c/f8a80496-d)916-40f3-b110-1cf84c69ae8e
+
+
+
+composer remove vendor/horizon
+
+
+composer require laravel/horizon
+chuchuk karke user hai jiska staff code nahi aa raha hai 
+
+
+BIH101595  end date 27 replace to 17.
+
+
+
+
+app\Http\Controllers\NeftController.php
+
+
+https://cronapi.capitall.io/employeepayroll
+
+https://cronapi.capitall.io/attendance
+
+
+
+Dasboard Filters - 
+Financial Year (dropdown)
+Task Type (dropdown - IAC, ACB)
+Task Sub-type (Audit Reporting/Non-Audit Reporting) - When ACB is selected
+Assignee
+Reviewer
+
+
+Financial Year
+Task Type
+Task Sub-type
+Assignee
+Reviewer
+
+
+https://bitbucket.org/capitallio/ifchub/pull-requests/245
+
+
+app\Http\Controllers\Admin\Dashboard\iacengagement\IacengagementRepository.php, resources\views\iacdashboard\iacengagement.blade.php  and resources\views\iacdashboard\iacdashboardcount.blade.php  is three file me status me change huwa hai to mujhe code me bhi change karna hoga ab status  is tarah hai open, 
+
+
+open,
+recommended for closure
+Recommended for Closure
+
+resources\views\iacdashboard\iacdashboardcount.blade.php  ab is file me card hoga Total Tasks, Open, Recommended for Closure, Completed and Overdue and baki ka jo 2 status tha Under Review and Awaiting Approval  ye basically open me count hoga yaani Open, Under Review, Awaiting Approval ye teeno open me count hoga and jab is open wale count per click karunga 
+
+
+Total Action Items
+total action items
+
+
+	Plus iac wala doc bhi update kr diya h
+	icon add karna hai 
+	
+	
+
+
+public function payroll_index()
+
+ public function payrollarticleneft()
+ 
+  public function payrollarticleneftss(Request $request)
+    ->where('nefts.type', 'Salary')
+
+ public function emailUpload(Request $request)
+
+
+
+
+            $neftData = DB::table('nefts')
+                ->leftJoin('teammembers', 'teammembers.id', 'nefts.teammember_id')
+                ->where('nefts.month', $month)
+                ->where('nefts.year', $year)
+                ->where('nefts.type', 'Salary')
+                ->select('nefts.*', 'teammembers.team_member')
+                ->get();
+				
+				
+				
+
+windfun
+
+
+
+
+if duplicate then not insert or i nsert 
+2.neft page per bhi data nahi aa raha hai 
+
+
+1.documnet read
+2.vender creaton group level 
+3.kgs bugs 
+4.
+
+ {{-- <td>{{ $row->total_hours ?? 'N/A' }}</td> --}}
+ 
+   {{-- <td>{{ $row->teamesthour ?? 'N/A' }}</td> --}}
+   card .btn {
+    margin-bottom: 6px;
+    height: 34px;
+    border-radius: 8px;
+    font-weight: 600;
+    min-width: 75px;
+    padding: 0px !important;
+}
+
+iska sirf UI same karna hai baki logic ko touch mat karna use unchanged rakhna
+
+
+
+
+
+1.assignmentbudgetings
+2.assignmentmappings
+3.assignments
+4.assignmentteammappings
+5.clients
+6.checkins
+7.Users
+8.teammembers
+9.timesheets
+10.timesheetrequests
+12.timesheetusers
+
+
+
+app\Http\Controllers\FileController.php
+
+if (in_array($ext, ['xls', 'xlsx', 'csv'])) {
+
+1483622651
+
+   'default' => env('FILESYSTEM_DISK', 's3'),
+      'default' => env('FILESYSTEM_DISK', 'local'),
+{{ $subobservation->response_due_date ?? $subobservation->due_date ?? 'N/A' }}
+
+
+1385678794
+
+s1097 kunal tanwar 
+kunalt@vsa.co.in
+
+
+Mr. Kunal Tanwal  64
+
+
+1232315353
+
+
+sohan jha 
+sunday ka timeshheet mAY
+
+
+https://capitallio.sharepoint.com/:w:/s/NPCI-ImportantFiles/IQDdOX0N9EgMR5puuJZzDrSyAVdGc0TACyNNqPSMDIxLFRQ?e=eg5TCb
+
+https://capitallio.sharepoint.com/:w:/s/NPCI-ImportantFiles/IQB7oQfc6nLbTbzHp0Db3cb7Afk9vx9lO2t96CnKF3rJ1_Y?e=zLfVyS
+
+https://capitallio-my.sharepoint.com/:x:/r/personal/prashant_capitall_io/_layouts/15/Doc.aspx?sourcedoc=%7B4CC923BF-E940-4472-88F7-7454E1BEB361%7D&file=UAT%20Bugs.xlsx&fromShare=true&action=default&mobileredirect=true
+
+
+
+https://capitalldemo2.grc.capitall.io/admin/actionable/b189df4e-2498-4759-932d-1f8b17df91f8
+
+
+
+
+1091479609

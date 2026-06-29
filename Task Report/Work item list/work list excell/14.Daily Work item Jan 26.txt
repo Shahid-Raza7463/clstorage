@@ -244,67 +244,13 @@ V.SANKAR AIYAR & CO
 2. Kt with pooja for KGS task 
 
 29-04-2026
+1.IAC engagemnet Dashboard
+
 30-04-2026
-31-04-2026
+1.IAC engagemnet Dashboard
 
-
-composer remove vendor/horizon
-
-
-composer require laravel/horizon
-chuchuk karke user hai jiska staff code nahi aa raha hai 
-
-
-BIH101595  end date 27 replace to 17.
-
-
-
-
-app\Http\Controllers\NeftController.php
-
-
-https://cronapi.capitall.io/employeepayroll
-
-https://cronapi.capitall.io/attendance
-
-
-
-Dasboard Filters - 
-Financial Year (dropdown)
-Task Type (dropdown - IAC, ACB)
-Task Sub-type (Audit Reporting/Non-Audit Reporting) - When ACB is selected
-Assignee
-Reviewer
-
-
-Financial Year
-Task Type
-Task Sub-type
-Assignee
-Reviewer
-
-
-https://bitbucket.org/capitallio/ifchub/pull-requests/245
-
-
-app\Http\Controllers\Admin\Dashboard\iacengagement\IacengagementRepository.php, resources\views\iacdashboard\iacengagement.blade.php  and resources\views\iacdashboard\iacdashboardcount.blade.php  is three file me status me change huwa hai to mujhe code me bhi change karna hoga ab status  is tarah hai open, 
-
-
-open,
-recommended for closure
-Recommended for Closure
-
-resources\views\iacdashboard\iacdashboardcount.blade.php  ab is file me card hoga Total Tasks, Open, Recommended for Closure, Completed and Overdue and baki ka jo 2 status tha Under Review and Awaiting Approval  ye basically open me count hoga yaani Open, Under Review, Awaiting Approval ye teeno open me count hoga and jab is open wale count per click karunga 
-
-
-Total Action Items
-total action items
-
-
-	Plus iac wala doc bhi update kr diya h
-	icon add karna hai 
-	
-	
+Excel: exportAllAsExcel('excel')
+CSV: exportAllAsExcel('csv')
 
 
 

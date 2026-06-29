@@ -6108,15 +6108,6 @@ end hare
 
 
 
-all pending on kgslive ```end hare ```2222
-
-################################################################################################################
-
-
-
-
-all pending on kgsdemo ```start hare ```333
-
 Help Desk - OMS Query _ Sort is not working fine 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 resources\views\backEnd\omsqueryticket\index.blade.php
@@ -8084,7 +8075,3367 @@ Undefined variable $months (  using priyanka id
 
 
 
+
+
+
+
+
+
+find backEnd.neft.payrollneftindex
+4 places milega 
+
+  $months = $this->articlePayrollMonths();
+            $years = $this->articlePayrollYears();
+			
+			
+
+  return view('backEnd.neft.payrollneftindex', compact('neftData', 'months', 'years'));
+
 end hare Payroll & Attendance Edit Control with Scheduler Protection
+
+
+
+18-05-2026
+timesheet url 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+ Route::get('/timesheetreportsection',  [TimesheetController::class, 'TimesheetReportsection']);
+ 
+ 
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+
+  public function TimesheetReportsection(Request $request)
+  {
+
+    $employeename = DB::table('teammembers')
+      ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+      ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+      ->where('role_id', '!=', 11)->where('role_id', '!=', 13)->where('role_id', '!=', 12)->where('status', 1)
+      ->select('teammembers.*', 'roles.rolename', 'titles.title')
+      ->get();
+
+    $result = DB::table('timesheets')->select(DB::raw('YEAR(created_at) as year'))
+      ->distinct()->orderBy('year', 'DESC')->limit(5)->get();
+
+    $years = $result->pluck('year');
+    $client = DB::table('clients')
+      ->where('client_name', '!=', null)->where('client_name', '!=', '-')->latest()->get();
+    //dd($client);
+    return view('backEnd.timesheet.timesheetreport', compact('employeename', 'years', 'client'));
+  }
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\timesheetreport.blade.php
+
+
+<!-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet"> -->
+
+<!--Third party Styles(used by this page)-->
+<link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
+@extends('backEnd.layouts.layout') @section('backEnd_content')
+    <!--Content Header (Page header)-->
+    <div class="content-header row align-items-center m-0">
+        <!-- <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+                                    <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-green mb-0 float-sm-right">
+                                        <li class="breadcrumb-item"><a href="" style="color:white;" onClick="window.location.reload();">Reset Filters</a>
+                                        </li>
+                                      
+                                    </ol>
+                                </nav> -->
+        <div class="col-sm-8 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-puzzle-outline"></i></div>
+                <div class="media-body">
+                    <h1 class="font-weight-bold">Home</h1>
+                    <small>Report Section </small>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.Content Header (Page header)-->
+    <div class="body-content">
+        <div class="card mb-4">
+            <div class="card-header">
+                <form id="filterform" method="GET" action="{{ url('timesheetreportsection') }}">
+                    <div class="row row-sm" style="border: 2px solid gray;">
+                        <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6">
+                            <div class="card card-stats statistic-box mb-4 mt-3">
+                                <div
+                                    class="card-header card-header-warning card-header-icon position-relative border-0 text-right px-3 py-0">
+                                    <p class="card-category text-uppercase fs-18 font-weight-bold" style="float:left;">
+                                        Filters</p>
+                                    <!-- <h3 class="card-title fs-18 font-weight-bold">Total Check-In : <span id="totalcount"></span></h3>                       -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Employee Name</label>
+                                <select class="language form-control" id="employee" name="employeeid">
+                                    <option value="">Please Select One</option>
+                                    @foreach ($employeename as $employeeData)
+                                        <option value="{{ $employeeData->id }}">
+                                            {{ $employeeData->team_member }} ({{ $employeeData->rolename ?? '' }})</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Client</label>
+                                <select class="language form-control" id="client_id" name="client_id">
+                                    <option></option>
+                                    <option value="">Please Select One</option>
+                                    @foreach ($client as $clientData)
+                                        <option value="{{ $clientData->id }}">
+                                            {{ $clientData->client_name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Assignment</label>
+                                <select class="language form-control" id="assignment_id" name="assignment_id">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Select Year</label>
+                                <select class="language form-control" id="yearly" name="yearly">
+
+                                    <option value="">Please Select Year</option>
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year }}">
+                                            {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Month </label>
+                                <select class="form-control key" id="month" name="month">
+                                    <option value=''>Please Select Month</option>
+                                    <option value='1'>Janaury</option>
+                                    <option value='2'>February</option>
+                                    <option value='3'>March</option>
+                                    <option value='4'>April</option>
+                                    <option value='5'>May</option>
+                                    <option value='6'>June</option>
+                                    <option value='7'>July</option>
+                                    <option value='8'>August</option>
+                                    <option value='9'>September</option>
+                                    <option value='10'>October</option>
+                                    <option value='11'>November</option>
+                                    <option value='12'>December</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">From</label>
+                                <input type="date" class="form-control" id="fromdate" name="fromdate">
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">To</label>
+                                <input type="date" class="form-control" id="todate" name="todate">
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label class="font-weight-600">Hour</label>
+                                <select class="form-control key" id="hour" name="hour">
+                                    <option value="">Please Select One</option>
+                                    <option value="4">Less than 4 Hours</option>
+                                    <option value="5">Less than 5 Hours</option>
+                                    <option value="6">Less than 6 Hours</option>
+                                    <option value="7">Less than 7 Hours</option>
+                                    <option value="8">Less than 8 Hours</option>
+                                    <option value="10">Less than 10 Hours</option>
+                                    <option value="12">Less than 12 Hours</option>
+                                    <option value="14">Less than 14 Hours</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 form-group" style="text-align:center;">
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            <a class="btn btn-success" style="color:white; margin-left:10px;"
+                                href="{{ url('timesheetreportsection') }}">Reset Filters</a>
+                        </div>
+                    </div>
+                </form>
+
+
+                <div class="card-body">
+
+                    @component('backEnd.components.alert')
+                    @endcomponent
+
+                    <div class="table-responsive">
+                        <div id="Saarni">
+                            <table
+                                class="table key-buttons text-md-nowrap  table-bordered table-striped display dt-datatable">
+                                <thead>
+                                    <tr>
+                                        <th data-column="team_member">Employee Name</th>
+                                        <th data-column="emailid">Email Id</th>
+                                        <th data-column="rolename">Role</th>
+                                        <th data-column="date">Date</th>
+                                        <th data-column="month">Month</th>
+                                        <th data-column="client_name">Client</th>
+                                        <th data-column="assignment_name">Assignment Name</th>
+                                        <th data-column="assignmentgenerate_id">Assignment Id</th>
+                                        <th data-column="workitem">Work Item</th>
+                                        <th data-column="teampartner">Partner</th>
+                                        <th data-column="hour">Total Hour</th>
+                                        <th data-column="billable_status">Billable Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.body content-->
+    <style>
+        .addCol {
+            position: absolute;
+            left: -17px;
+        }
+
+        .fix-table table {
+            position: relative;
+            table-layout: fixed;
+            overflow: hidden;
+            border-collapse: collapse;
+        }
+
+        .fix-table thead {
+            position: relative;
+            display: block;
+            overflow: visible;
+        }
+
+        .fix-table thead th {
+            min-width: 220px;
+            height: 32px;
+            white-space: normal;
+        }
+
+
+        .fix-table tbody {
+            position: relative;
+            display: block;
+            overflow: scroll;
+            max-height: 500px;
+        }
+
+        .fix-table tbody td {
+            min-width: 220px;
+            white-space: normal;
+        }
+
+
+        .fix-table table.dataTable tbody td {
+            padding: 8px 10px;
+            padding-right: 30px;
+        }
+    </style>
+
+    @php
+        $datatableUrl = url('timesheetfiltersection');
+        $queryString = http_build_query(
+            request()->only([
+                'employeeid',
+                'client_id',
+                'assignment_id',
+                'month',
+                'fromdate',
+                'todate',
+                'hour',
+                'yearly',
+            ]),
+        );
+        if (!empty($queryString)) {
+            $datatableUrl .= '?' . $queryString;
+        }
+        $options = ['selector' => 'Saarni', 'url' => $datatableUrl, 'moduleName' => 'Timesheet Report'];
+    @endphp
+    @include('backEnd.layouts.includes.saarnijs', ['options' => $options])
+@endsection
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+        Route::get('/timesheetfiltersection',  [TimesheetController::class, 'timesheetfiltersection']);
+		
+		
+		
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\TimesheetController.php
+
+  public function timesheetfiltersection(Request $request)
+  {
+    $employeeId = (int) $request->employeeid;
+    $month = (int) $request->month;
+    $fromDate = $request->fromdate;
+    $toDate = $request->todate;
+    $hasAnyFilter = !empty($request->employeeid)
+      || !empty($request->client_id)
+      || !empty($request->assignment_id)
+      || !empty($request->month)
+      || !empty($request->yearly)
+      || !empty($request->hour)
+      || !empty($request->fromdate)
+      || !empty($request->todate)
+      || !empty($request->search)
+      || !empty($request->sortColumn)
+      || !empty($request->page);
+
+    $perPage = $request->perPage ?? 25;
+    if (!$hasAnyFilter) {
+      $records = new LengthAwarePaginator([], 0, $perPage, 1, [
+        'path' => url('timesheetfiltersection'),
+        'query' => $request->query(),
+      ]);
+      $datatable = view('backEnd.timesheet.datatable', compact('records'))->render();
+
+      return response()->json([
+        'status' => 200,
+        'msg' => 'Data loaded',
+        'data' => $datatable,
+        'paginationInfo' => getPaginationInfo($records)
+      ]);
+    }
+
+    $query = DB::table('timesheets')
+      ->leftJoin('timesheetusers', 'timesheetusers.timesheetid', '=', 'timesheets.id')
+      ->leftJoin('teammembers', 'teammembers.id', '=', 'timesheets.created_by')
+      ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+      ->leftJoin('clients', 'clients.id', '=', 'timesheetusers.client_id')
+      ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'timesheetusers.assignmentgenerate_id')
+      ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+      ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'timesheetusers.assignmentgenerate_id')
+      ->leftJoin('teammembers as teampartner', 'teampartner.id', '=', 'assignmentmappings.leadpartner')
+      ->when($employeeId, function ($query) use ($employeeId) {
+        return $query->where('timesheets.created_by', $employeeId);
+      })
+      ->when($request->client_id != 0, function ($query) use ($request) {
+        return $query->where('timesheetusers.client_id', $request->client_id);
+      })
+      ->when($request->assignment_id != 0, function ($query) use ($request) {
+        return $query->where('timesheetusers.assignmentgenerate_id', $request->assignment_id);
+      })
+      ->when($month, function ($query) use ($month) {
+        return $query->whereMonth('timesheets.date', '=', $month);
+      })
+      ->when($request->yearly != 0, function ($query) use ($request) {
+        return $query->whereYear('timesheets.date', $request->yearly);
+      })
+      ->when($request->hour != null, function ($query) use ($request) {
+        $startTime = $request->hour;
+        return $query->whereRaw("TIME(timesheetusers.hour) <= ?", [$startTime]);
+      })
+      ->when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
+        $nextDay = date('Y-m-d', strtotime($toDate . ' +1 day'));
+        return $query->whereBetween('timesheets.date', [$fromDate, $nextDay]);
+      })
+      ->select(
+        'roles.rolename',
+        'timesheetusers.date',
+        'timesheets.month',
+        'teammembers.team_member',
+        'clients.client_name',
+        'timesheetusers.hour',
+        'timesheetusers.assignmentgenerate_id',
+        'teammembers.emailid',
+        'assignmentbudgetings.assignmentname',
+        'assignments.assignment_name',
+        'teampartner.team_member as teampartner',
+        'timesheetusers.workitem',
+        'timesheetusers.billable_status',
+        'timesheetusers.id'
+      );
+
+    if (!empty($request->search)) {
+      $search = $request->search;
+      $query->where(function ($q) use ($search) {
+        $q->where('teammembers.team_member', 'like', "%{$search}%")
+          ->orWhere('teammembers.emailid', 'like', "%{$search}%")
+          ->orWhere('roles.rolename', 'like', "%{$search}%")
+          ->orWhere('timesheetusers.date', 'like', "%{$search}%")
+          ->orWhere('timesheets.month', 'like', "%{$search}%")
+          ->orWhere('clients.client_name', 'like', "%{$search}%")
+          ->orWhere('assignments.assignment_name', 'like', "%{$search}%")
+          ->orWhere('assignmentbudgetings.assignmentname', 'like', "%{$search}%")
+          ->orWhere('timesheetusers.assignmentgenerate_id', 'like', "%{$search}%")
+          ->orWhere('timesheetusers.workitem', 'like', "%{$search}%")
+          ->orWhere('teampartner.team_member', 'like', "%{$search}%")
+          ->orWhere('timesheetusers.hour', 'like', "%{$search}%")
+          ->orWhere('timesheetusers.billable_status', 'like', "%{$search}%");
+      });
+    }
+
+    $allowedSorts = ['team_member', 'emailid', 'rolename', 'date', 'month', 'client_name', 'assignment_name', 'assignmentgenerate_id', 'workitem', 'teampartner', 'hour', 'billable_status'];
+    if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+      $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+    } else {
+      $query->orderBy('timesheetusers.id', 'DESC');
+    }
+
+    $records = $query->paginate($perPage);
+    $datatable = view('backEnd.timesheet.datatable', compact('records'))->render();
+
+    return response()->json([
+      'status' => 200,
+      'msg' => 'Data loaded',
+      'data' => $datatable,
+      'paginationInfo' => getPaginationInfo($records)
+    ]);
+  }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\timesheet\datatable.blade.php
+
+@forelse($records as $row)
+    <tr>
+        <td>{{ $row->team_member ?? '-' }}</td>
+        <td>{{ $row->emailid ?? '-' }}</td>
+        <td>{{ $row->rolename ?? '-' }}</td>
+        <td>{{ $row->date ?? '-' }}</td>
+        <td>{{ $row->month ?? '-' }}</td>
+        <td>{{ $row->client_name ?? '-' }}</td>
+        <td>
+            @if (!empty($row->assignment_name))
+                {{ $row->assignment_name }}
+                @if (!empty($row->assignmentname))
+                    ({{ $row->assignmentname }})
+                @endif
+            @else
+                {{ $row->assignmentname ?? '-' }}
+            @endif
+        </td>
+        <td>{{ $row->assignmentgenerate_id ?? '-' }}</td>
+        <td>{{ $row->workitem ?? '-' }}</td>
+        <td>{{ $row->teampartner ?? '-' }}</td>
+        <td>{{ $row->hour ?? '-' }}</td>
+        <td>{{ $row->billable_status ?? '-' }}</td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="12" class="text-center">No Data Found</td>
+    </tr>
+@endforelse
+
+18-05-2026
+
+
+
+
+
+
+all pending on kgslive ```end hare ```2222
+
+################################################################################################################
+
+
+
+
+all pending on kgsdemo ```start hare ```333
+
+13-05-2026
+regarding datatale task 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+        //report
+        Route::match(['get', 'post'], 'assignmentfulllist', [AssignmentController::class, 'assignmentlist'])
+            ->name('assignmentfull.list');
+	
+
+	
+			
+			
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentController.php
+
+    public function assignmentlist(Request $request)
+    {
+        $staff = Teammember::whereIn('role_id', ['14', '15'])
+            ->where('status', 1)
+            ->with('role')
+            ->get();
+
+        $client = Client::where('status', 1)->get();
+        $partners = Teammember::where('role_id', 14)->where('status', 1)->get();
+
+        if (!$request->ajax()) {
+            return view('backEnd.assignment.assignmentlist.index', compact('client', 'staff', 'partners'));
+        }
+
+        $perPage = $request->perPage ?? 25;
+        $query = DB::table('assignmentmappings')
+            ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+            ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+            ->leftJoin('teammembers as leadpartner', 'leadpartner.id', '=', 'assignmentmappings.leadpartner')
+            ->leftJoin('teammembers as otherpartner', 'otherpartner.id', '=', 'assignmentmappings.otherpartner')
+            ->leftJoin('teammembers as reviewerpartner', 'reviewerpartner.id', '=', 'assignmentmappings.eqcrpartner')
+            ->select(
+                'assignmentmappings.id',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentbudgetings.assignmentname',
+                'assignmentbudgetings.billingfrequency',
+                'assignmentbudgetings.duedate',
+                'assignmentbudgetings.finalreportdate',
+                'assignmentbudgetings.draftreportdate',
+                'assignmentbudgetings.moneyreceiveddate',
+                'assignmentbudgetings.tentativetimeline',
+                'assignmentbudgetings.actualstartdate',
+                'assignmentbudgetings.actualenddate',
+                'assignmentbudgetings.tentativestartdate',
+                'assignmentbudgetings.tentativeenddate',
+                'assignmentbudgetings.periodstartdate',
+                'assignmentbudgetings.periodenddate',
+                'assignmentmappings.engagementfee',
+                'assignmentmappings.location',
+                'assignmentmappings.auditassignment',
+                'assignmentmappings.natureofassignment',
+                'assignmentmappings.audittypecag',
+                'assignmentmappings.eqcrapplicability',
+                'assignmentmappings.eqcresthour',
+                'assignmentmappings.eqcrestcost',
+                'assignmentmappings.revenuefy',
+                'assignmentmappings.revenuefromoperations',
+                'assignmentmappings.otherrevenue',
+                'assignmentmappings.totalturnover',
+                'assignmentmappings.networthfy',
+                'assignmentmappings.networth',
+                'assignmentmappings.borrowingsfy',
+                'assignmentmappings.borrowingsamt',
+                'assignmentmappings.borrowingsotherfy',
+                'assignmentmappings.borrowingsother',
+                'assignmentmappings.paidupfy',
+                'assignmentmappings.paidupcapitall',
+                'assignmentmappings.cmpnystatusname',
+                'assignmentmappings.cmpnystatuschange',
+                'assignmentmappings.sectorcompany',
+                'assignmentmappings.roleassignment',
+                'assignmentmappings.esthours',
+                'assignmentmappings.teamestcost',
+                'assignmentmappings.pocketexpenses',
+                'assignmentmappings.profit',
+                'assignmentmappings.partneresthour',
+                'assignmentmappings.partnerestcost',
+                'assignmentmappings.otherpartneresthour',
+                'assignmentmappings.otherpartnerestcost',
+                'assignmentmappings.totalstaffcount',
+                'assignmentmappings.reasonforstaffcount',
+                'assignmentmappings.esthours',
+                'assignmentmappings.created_at',
+                'clients.client_name',
+                'assignments.assignment_name',
+                'leadpartner.team_member as lead_partner',
+                'otherpartner.team_member as other_partner',
+                'reviewerpartner.team_member as reviewer_partner'
+            )
+            ->selectSub(function ($sub) {
+                $sub->from('timesheetusers')
+                    ->leftJoin('teammembers', 'teammembers.id', '=', 'timesheetusers.createdby')
+                    ->whereColumn('timesheetusers.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+                    ->where('teammembers.role_id', 14)
+                    ->selectRaw('COALESCE(SUM(timesheetusers.hour), 0)');
+            }, 'total_hours')
+
+            ->selectSub(function ($sub) {
+                $sub->from('assignmentteammappings as atm')
+                    ->leftJoin('teammembers as tm', 'tm.id', '=', 'atm.teammember_id')
+                    ->whereColumn('atm.assignmentmapping_id', 'assignmentmappings.id')
+                    ->selectRaw("GROUP_CONCAT(CONCAT(COALESCE(tm.team_member, ''), '|', COALESCE(atm.type, '')) SEPARATOR '~~')");
+            }, 'assignment_team_mappings');
+
+        if ($request->filled('clientId')) {
+            $query->whereIn('assignmentbudgetings.client_id', (array) $request->clientId);
+        }
+        if ($request->filled('assignment')) {
+            $query->whereIn('assignmentbudgetings.assignmentgenerate_id', (array) $request->assignment);
+        }
+        if ($request->filled('partnerId')) {
+            $query->whereIn('assignmentmappings.leadpartner', (array) $request->partnerId);
+        }
+        if ($request->filled('teammemberId')) {
+            $query->whereExists(function ($sub) use ($request) {
+                $sub->select(DB::raw(1))
+                    ->from('assignmentteammappings')
+                    ->whereColumn('assignmentteammappings.assignmentmapping_id', 'assignmentmappings.id')
+                    ->whereIn('assignmentteammappings.teammember_id', (array) $request->teammemberId);
+            });
+        }
+        if ($request->filled('startdate')) {
+            $query->whereDate('assignmentmappings.created_at', '>=', $request->startdate);
+        }
+        if ($request->filled('enddate')) {
+            $query->whereDate('assignmentmappings.created_at', '<=', $request->enddate);
+        }
+
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('assignmentmappings.assignmentgenerate_id', 'like', "%{$search}%")
+                    ->orWhere('clients.client_name', 'like', "%{$search}%")
+                    ->orWhere('assignments.assignment_name', 'like', "%{$search}%")
+                    ->orWhere('assignmentbudgetings.assignmentname', 'like', "%{$search}%")
+                    ->orWhere('leadpartner.team_member', 'like', "%{$search}%");
+            });
+        }
+
+        $allowedSorts = [
+            'assignmentgenerate_id',
+            'client_name',
+            'assignment_name',
+            'assignmentname',
+            'lead_partner',
+            'created_at',
+        ];
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+            $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            // $query->latest('assignmentmappings.id');
+            $query->orderBy('assignmentmappings.id', 'asc');
+        }
+
+        $records = $query->paginate($perPage);
+        // dd($records);
+        $datatable = view('backEnd.assignment.assignmentlist.datatable', compact('records'))->render();
+
+        return response()->json([
+            'status' => 200,
+            'msg' => 'Data loaded',
+            'data' => $datatable,
+            'paginationInfo' => getPaginationInfo($records)
+        ]);
+    }
+	
+
+
+
+
+
+
+resources\views\backEnd\layouts\includes\saarnijs.blade.php
+
+	
+	
+	
+	app\Providers\AppServiceProvider.php
+	
+	
+<?php
+
+namespace App\Providers;
+
+use App\Models\Permission;
+use App\Models\User;
+use View;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        require_once app_path('helpers.php');
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //        view()->composer('*', function ($view) 
+        //        {
+        //            $getrole = Permission::select('page_id')->where('role_id', Auth::user()->role_id ??'')->get();
+        //   // dd($getrole);
+        //            //...with this variable
+        //            $view->with('getrole', $getrole );    
+        //              $getuser=User::where('role_id', Auth::user()->role_id ??'')->with('teammember')->first(); 
+        //            View::share('getuser',$getuser); 
+        //        });
+        Paginator::useBootstrap();
+    }
+}
+
+	
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignment\assignmentlist\index.blade.php
+
+
+
+
+
+
+
+     Route::get('getassignment', [AssignmentController::class, 'getassignment']);
+	 
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentController.php
+
+ public function getassignment(Request $request)
+    {
+        if ($request->ajax() && $request->filled('cid')) {
+
+            $assignments = DB::table('assignmentbudgetings')
+                ->WhereIn('assignmentbudgetings.client_id', $request->cid)
+                ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+                ->orderBy('assignments.assignment_name')
+                ->select(
+                    'assignmentbudgetings.assignmentgenerate_id',
+                    'assignmentbudgetings.assignmentname',
+                    'assignments.assignment_name'
+                )
+                ->get();
+
+            // dd($assignments, $request->cid);
+
+            return response()->json($assignments);
+        }
+
+        return response()->json([]);
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\helpers.php
+
+<?php
+
+if (!function_exists('getPaginationInfo')) {
+    function getPaginationInfo($data)
+    {
+        return [
+            'currentPage' => $data->currentPage(),
+            'lastPage' => $data->lastPage(),
+            'from' => $data->firstItem() ?? 0,
+            'to' => $data->lastItem() ?? 0,
+            'total' => $data->total(),
+            'perPage' => $data->perPage() ?? 25,
+            'previousPageUrl' => $data->previousPageUrl() ?? null,
+            'nextPageUrl' => $data->nextPageUrl() ?? null,
+            'hasPreviousPage' => $data->currentPage() > 1,
+            'hasNextPage' => $data->hasMorePages(),
+        ];
+    }
+}
+
+if (!function_exists('throwException')) {
+    function throwException($th)
+    {
+        return response()->json([
+            'status' => '500',
+            'msg' => 'Server Error',
+            'error' => $th->getMessage()
+        ], 500);
+    }
+}
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+ Route::get('client_list', [ClientController::class, 'clientList'])->name('client.list');
+ 
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ClientController.php
+  public function clientList(Request $request)
+    {
+        if (!$request->ajax()) {
+            return view('backEnd.client.clientlist.index');
+        }
+
+        $perPage = $request->perPage ?? 25;
+
+        $query = DB::table('clients')
+            ->leftJoin('states', 'states.id', '=', 'clients.c_state')
+            ->select('clients.*', 'states.statename')
+            ->when($request->filled('startdate'), function ($q) use ($request) {
+                $q->whereDate('clients.created_at', '>=', $request->startdate);
+            })
+            ->when($request->filled('enddate'), function ($q) use ($request) {
+                $q->whereDate('clients.created_at', '<=', $request->enddate);
+            })
+            ->when($request->filled('status'), function ($q) use ($request) {
+                $q->where('clients.status', $request->status);
+            })
+            ->when($request->filled('review'), function ($q) use ($request) {
+                $q->where('clients.classification', $request->review);
+            });
+
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('clients.name', 'like', "%{$search}%")
+                    ->orWhere('clients.client_name', 'like', "%{$search}%")
+                    ->orWhere('clients.mobileno', 'like', "%{$search}%")
+                    ->orWhere('clients.emailid', 'like', "%{$search}%")
+                    ->orWhere('clients.kind_attention', 'like', "%{$search}%")
+                    ->orWhere('states.statename', 'like', "%{$search}%")
+                    ->orWhere('clients.panno', 'like', "%{$search}%")
+                    ->orWhere('clients.gstno', 'like', "%{$search}%");
+            });
+        }
+
+        $allowedSorts = [
+            'name',
+            'client_name',
+            'mobileno',
+            'emailid',
+            'kind_attention',
+            'statename',
+            'classification',
+            'created_at',
+            'status'
+        ];
+
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+            $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            // $query->latest('clients.id');
+            $query->orderBy('clients.id', 'asc');
+        }
+
+        $records = $query->paginate($perPage);
+        $datatable = view('backEnd.client.clientlist.datatable', compact('records'))->render();
+
+        return response()->json([
+            'status' => 200,
+            'msg' => 'Data loaded',
+            'data' => $datatable,
+            'paginationInfo' => getPaginationInfo($records),
+        ]);
+    }
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\client\clientlist\datatable.blade.php
+
+
+
+
+        Route::get('/vendorreportlist', [VendorController::class, 'vendorreportlist']);
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\VendorController.php
+
+    public function vendorreportlist(Request $request)
+    {
+        $startdate = $request->input('startdate');
+        $enddate = $request->input('enddate');
+        $status = $request->input('vendorstatus'); // status filter from DataTable
+        $clientId = $request->input('clientId');
+        $assignmentId = $request->input('assignment');
+
+        // Clients dropdown data
+        /* $client = DB::table('vendorlist')
+        ->join('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'vendorlist.assignmentgenerate_id')
+        ->join('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+        ->select('clients.id', 'clients.client_name')
+        ->where('assignmentbudgetings.status', 1)
+        ->groupBy('assignmentbudgetings.client_id', 'clients.id', 'clients.client_name')
+        ->orderBy('clients.client_name', 'ASC')
+        ->get(); */
+        $client = Client::where('status', 1)->get();
+
+        // Main query
+        $query = DB::table('vendors')
+            ->leftJoin('vendorlist', 'vendorlist.vendor_id', '=', 'vendors.id')
+            ->leftJoin('teammembers as team', 'team.id', '=', 'vendorlist.created_by')
+            ->leftJoin('teammembers', 'teammembers.id', '=', 'vendorlist.approver')
+            ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'vendorlist.assignmentgenerate_id')
+            ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+            ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+            ->select(
+                'vendorlist.*',
+                'vendors.vendorname',
+                'vendors.email',
+                'vendors.benficiaryname',
+                'vendors.bankname',
+                'vendors.ifsccode',
+                'vendors.accountnumber',
+                'vendors.gstno',
+                'vendors.type',
+                'vendors.phoneno',
+                'vendors.vendoraddress',
+                'team.team_member',
+                'teammembers.team_member as approver',
+                'assignmentbudgetings.client_id',
+                'assignmentbudgetings.assignmentgenerate_id',
+                'assignments.assignment_name',
+                'clients.client_name as clientname'
+            );
+
+        // Role-based filtering
+        if (!(auth()->user()->teammember_id == 99 || auth()->user()->teammember_id == 157
+            || in_array(auth()->user()->role_id, [17, 11, 18]))) {
+            $query->where(function ($q) {
+                $q->where('vendorlist.created_by', auth()->user()->teammember_id)
+                    ->orWhere('vendorlist.approver', auth()->user()->teammember_id);
+            });
+        }
+
+        // Apply filters
+        // Filter by client
+        if ($request->filled('clientId')) {
+            $query->WhereIn('assignmentbudgetings.client_id', $request->clientId);
+        }
+
+        // Filter by assignment
+        if ($request->filled('assignment')) {
+            $query->WhereIn('assignmentbudgetings.assignmentgenerate_id', $request->assignment);
+        }
+
+        if (!empty($status) || $status === "0") {
+            $query->WhereIn('vendorlist.status', $status);
+        }
+
+        if (!empty($startdate)) {
+            $query->whereDate('vendorlist.created_at', '>=', $startdate);
+        }
+
+        if (!empty($enddate)) {
+            $query->whereDate('vendorlist.created_at', '<=', $enddate);
+        }
+
+        if (!$request->ajax()) {
+            return view('backEnd.vendor.vendorreport.index', compact('client'));
+        }
+
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('vendors.vendorname', 'like', "%{$search}%")
+                    ->orWhere('vendors.email', 'like', "%{$search}%")
+                    ->orWhere('vendors.phoneno', 'like', "%{$search}%")
+                    ->orWhere('vendorlist.itemname', 'like', "%{$search}%")
+                    ->orWhere('vendorlist.assignmentgenerate_id', 'like', "%{$search}%")
+                    ->orWhere('clients.client_name', 'like', "%{$search}%")
+                    ->orWhere('assignments.assignment_name', 'like', "%{$search}%");
+            });
+        }
+
+        $allowedSorts = [
+            'status',
+            'created_at',
+            'paymentdate',
+            'paiddate',
+            'payment',
+            'team_member',
+            'approver',
+            'vendorname',
+            'email',
+            'phoneno',
+            'itemname',
+            'amount',
+            'clientname',
+            'assignmentgenerate_id',
+            'assignment_name',
+            'type',
+        ];
+
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+            $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            // $query->latest('vendorlist.id');
+            $query->orderBy('vendorlist.id', 'asc');
+        }
+
+        $records = $query->paginate($request->perPage ?? 25);
+        $datatable = view('backEnd.vendor.vendorreport.datatable', compact('records'))->render();
+
+        return response()->json([
+            'status' => 200,
+            'msg' => 'Data loaded',
+            'data' => $datatable,
+            'paginationInfo' => getPaginationInfo($records),
+        ]);
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\vendor\vendorreport\datatable.blade.php
+
+
+
+
+
+ Route::get('/invoicedatareportlist', [InvoicereportController::class, 'invoicedatareport']);
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\InvoicereportController.php
+
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
+class InvoicereportController extends Controller
+{
+    public function invoicedatareport(Request $request)
+    {
+        // 👉 First Load
+        if (!$request->ajax()) {
+            return view('backEnd.invoicereport.index');
+        }
+
+        try {
+            $user = auth()->user();
+            $perPage = $request->perPage ?? 25;
+
+            // 🔹 Subquery for payment sums (to avoid N+1)
+            $paymentSubquery = DB::table('payments')
+                ->select(
+                    'invoiceid',
+                    DB::raw('SUM(tds) as total_tds'),
+                    DB::raw('SUM(roundoff) as total_roundoff'),
+                    DB::raw('SUM(tdscgst) as total_tdscgst'),
+                    DB::raw('SUM(tdsigst) as total_tdsigst'),
+                    DB::raw('SUM(tdssgst) as total_tdssgst'),
+                    DB::raw('SUM(amountreceived) as total_amountreceived')
+                )
+                ->groupBy('invoiceid');
+
+            $records = DB::table('invoices as i')
+                ->leftJoin('clients as c', 'c.id', '=', 'i.client_id')
+                ->leftJoin('teammembers as t', 't.id', '=', 'i.partner')
+                ->leftJoin('assignments as a', 'a.id', '=', 'i.assignment_id')
+                ->leftJoinSub($paymentSubquery, 'p', function ($join) {
+                    $join->on('p.invoiceid', '=', 'i.invoice_id');
+                })
+                ->select(
+                    'i.*',
+                    'c.client_name',
+                    't.team_member',
+                    'a.assignment_name',
+                    'p.total_tds',
+                    'p.total_roundoff',
+                    'p.total_tdscgst',
+                    'p.total_tdsigst',
+                    'p.total_tdssgst',
+                    'p.total_amountreceived'
+                );
+
+            // 🛡️ PERMISSION CHECK
+            if (!(in_array($user->teammember_id, [28, 156, 23]) || in_array($user->role_id, [11]))) {
+                return response()->json([
+                    'status' => 200,
+                    'msg' => 'Unauthorized',
+                    'data' => '<tr><td colspan="13" class="text-center">No permission to view this report</td></tr>',
+                    'paginationInfo' => ''
+                ]);
+            }
+
+            // 🔍 SEARCH
+            if (!empty($request->search)) {
+                $search = $request->search;
+                $records->where(function ($q) use ($search) {
+                    $q->where('c.client_name', 'LIKE', "%{$search}%")
+                        ->orWhere('t.team_member', 'LIKE', "%{$search}%")
+                        ->orWhere('a.assignment_name', 'LIKE', "%{$search}%")
+                        ->orWhere('i.invoice_id', 'LIKE', "%{$search}%");
+                });
+            }
+
+            // 🔽 SORT
+            $allowedSorts = [
+                'id',
+                'client_name',
+                'team_member',
+                'assignment_name',
+                'invoicedate',
+                'total',
+                'paymentstatus',
+                'status'
+            ];
+            if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts)) {
+                $column = $request->sortColumn;
+                if ($column == 'client_name') $column = 'c.client_name';
+                if ($column == 'team_member') $column = 't.team_member';
+                if ($column == 'assignment_name') $column = 'a.assignment_name';
+                if ($column == 'invoicedate') $column = 'i.invoicedate';
+                if ($column == 'total') $column = 'i.total';
+                if ($column == 'paymentstatus') $column = 'i.paymentstatus';
+                if ($column == 'status') $column = 'i.status';
+
+                $records->orderBy($column, $request->sortDirection ?? 'desc');
+            } else {
+                $records->orderBy('i.id', 'desc');
+            }
+
+            // 🔽 PAGINATION
+            $records = $records->paginate($perPage);
+
+            // 🔥 Render
+            $datatable = view('backEnd.invoicereport.datatable', compact('records'))->render();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records)
+            ]);
+        } catch (Throwable $th) {
+            return response()->json([
+                'status' => 500,
+                'msg' => $th->getMessage()
+            ], 500);
+        }
+    }
+}
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\invoicereport\datatable.blade.php
+
+
+
+        Route::get('/billspending', [DashboardReport::class, 'billspending']);
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+DashboardReport
+
+
+    public function billspending(Request $request)
+    {
+        $filtersdata = $this->filtersRequest($request);
+
+        $yearly = $filtersdata['yearly'];
+        $monthsdigit = $filtersdata['monthsdigit'];
+        $partnerId = $filtersdata['partnerId'];
+        $startDateFormatted = $filtersdata['startDateFormatted'];
+        $endDateFormatted = $filtersdata['endDateFormatted'];
+        $months = $filtersdata['months'];
+
+
+        // filter Bills Pending for Generation
+        // $assignments = Assignmentmapping::with([
+        //     'assignmentBudgeting.client:id,client_name',
+        //     'assignmentBudgeting.assignment:id,assignment_name',
+        //     'leadPartner:id,team_member',
+        //     'otherPartner:id,team_member',
+        //     'reviewerPartner:id,team_member',
+        //     'assignmentTeamMappings.teamMember:id,team_member',
+        //     'timsheetusers.createdBy:id,role_id'
+        // ])
+        //     ->whereHas('assignmentBudgeting', function ($q) {
+        //         $q->where('status', 0);
+        //     })
+        //     ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+        //         $query->whereHas('assignmentBudgeting', function ($q) use ($startDateFormatted, $endDateFormatted) {
+        //             $q->whereBetween(DB::raw('COALESCE(DATE(actualenddate), DATE(tentativeenddate))'), [$startDateFormatted, $endDateFormatted]);
+        //         });
+        //     })
+        //     ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+        //         $query->whereHas('assignmentBudgeting', function ($q) use ($monthsdigit) {
+        //             $q->whereMonth(DB::raw('COALESCE(DATE(actualenddate), DATE(tentativeenddate))'), $monthsdigit);
+        //         });
+        //     })
+        //     ->when(!empty($partnerId), function ($query) use ($partnerId) {
+        //         $query->where('leadpartner', $partnerId);
+        //     })
+        //     ->whereDoesntHave('invoices')
+        //     ->get();
+
+        if (!$request->ajax()) {
+            return view('backEnd.dashboardreport.billspending.index');
+        }
+
+        $perPage = $request->perPage ?? 25;
+        $records = DB::table('assignmentmappings')
+            ->leftjoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+            ->leftJoin('assignments', 'assignments.id', '=', 'assignmentmappings.assignment_id')
+            ->leftJoin('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+            // Invoice not raised
+            ->whereNull('invoices.assignmentgenerate_id')
+            // Assignment closed
+            ->where('assignmentbudgetings.status', 0)
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereBetween(DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate)'), [$startDateFormatted, $endDateFormatted]);
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereMonth(DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate)'), $monthsdigit);
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('assignmentmappings.leadpartner', $partnerId);
+            })
+            ->when(!empty($request->search), function ($query) use ($request) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('assignmentmappings.assignmentgenerate_id', 'like', "%{$search}%")
+                        ->orWhere('clients.client_name', 'like', "%{$search}%")
+                        ->orWhere('assignments.assignment_name', 'like', "%{$search}%")
+                        ->orWhere('assignmentbudgetings.assignmentname', 'like', "%{$search}%")
+                        ->orWhere('teammembers.team_member', 'like', "%{$search}%");
+                });
+            })
+            ->select(
+                'assignmentmappings.id',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignmentmappings.engagementfee',
+                'assignments.assignment_name',
+                'clients.client_name',
+                'assignmentbudgetings.assignmentname',
+                'assignmentbudgetings.tentativestartdate',
+                'assignmentbudgetings.tentativeenddate',
+                'assignmentbudgetings.finaldraftreportdate',
+                'assignmentbudgetings.percentclosedate',
+                'teammembers.team_member as partner_name',
+            );
+
+        $allowedSorts = ['assignmentgenerate_id', 'client_name', 'assignment_name', 'assignmentname', 'partner_name', 'engagementfee'];
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+            $records->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            $records->latest('assignmentmappings.id');
+        }
+
+        $records = $records->paginate($perPage);
+        $records->getCollection()->transform(function ($row) {
+            // first timesheet created date
+            $firstTimesheetDate = DB::table('timesheets')
+                ->join('timesheetusers', 'timesheetusers.timesheetid', '=', 'timesheets.id')
+                ->where('timesheetusers.assignmentgenerate_id', $row->assignmentgenerate_id)
+                ->min('timesheets.date');
+
+
+            $first  = $firstTimesheetDate ? Carbon::parse($firstTimesheetDate) : null;
+            $start  = $row->tentativestartdate ? Carbon::parse($row->tentativestartdate) : null;
+            $end    = $row->tentativeenddate ? Carbon::parse($row->tentativeenddate) : null;
+
+            // Difference between TentativeStartdate and TentativeEnddate
+            $timesheetEndDate = null;
+            if ($start && $end && $first) {
+                $diffDays = $start->diffInDays($end, false);
+                // i have added total diff days on first timesheet created date
+                if ($diffDays > 0) {
+                    $timesheetEndDate = $first->copy()->addDays($diffDays);
+                }
+            }
+
+            //  possible closed dates
+            $dates = collect([
+                // remove nulls
+                $row->finaldraftreportdate ? Carbon::parse($row->finaldraftreportdate) : null,
+                $row->percentclosedate ? Carbon::parse($row->percentclosedate) : null,
+                $timesheetEndDate,
+            ])->filter();
+
+            // dd($dates);
+
+            $row->assignmentcloseddate = $dates->isNotEmpty() ? $dates->sort()->first()->toDateString() : null;
+            $row->delay_days = $row->assignmentcloseddate ? Carbon::parse($row->assignmentcloseddate)->diffInDays(Carbon::today(), false) : null;
+            if (!is_null($row->delay_days) && $row->delay_days < 0) {
+                $row->delay_days = 0;
+            }
+            return $row;
+        });
+
+        $datatable = view('backEnd.dashboardreport.billspending.datatable', compact('records'))->render();
+        return response()->json([
+            'status' => 200,
+            'msg' => 'Data loaded',
+            'data' => $datatable,
+            'paginationInfo' => getPaginationInfo($records)
+        ]);
+    }
+
+
+
+
+
+
+    public function filtersRequest($request)
+    {
+        $yearly = $request->query('yearly');
+        $monthsdigit =  $request->query('monthsdigit');
+        $partnerId = $request->query('partnerId');
+
+        $startDateFormatted = null;
+        $endDateFormatted = null;
+
+        if (!empty($yearly)) {
+            [$startYear, $endYear] = explode('-', $yearly);
+
+            $startDate = Carbon::createFromFormat('Y-m-d', $startYear . '-04-01');
+            $endDate   = Carbon::createFromFormat('Y-m-d', $endYear . '-03-31');
+            $startDateFormatted = $startDate->format('Y-m-d');
+            $endDateFormatted = $endDate->format('Y-m-d');
+        }
+
+        $monthNames = [
+            1  => 'January',
+            2  => 'February',
+            3  => 'March',
+            4  => 'April',
+            5  => 'May',
+            6  => 'June',
+            7  => 'July',
+            8  => 'August',
+            9  => 'September',
+            10 => 'October',
+            11 => 'November',
+            12 => 'December',
+        ];
+
+        $months = !empty($monthsdigit) ? ($monthNames[$monthsdigit] ?? null) : null;
+
+        return [
+            'yearly' => $yearly,
+            'monthsdigit' => $monthsdigit,
+            'partnerId' => $partnerId,
+            'startDateFormatted' => $startDateFormatted,
+            'endDateFormatted' => $endDateFormatted,
+            'months' => $months,
+        ];
+    }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\dashboardreport\billspending\datatable.blade.php
+
+
+
+       Route::get('/billspendingforcollection', [DashboardReport::class, 'billspendingforcollection']);
+	   
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+DashboardReport
+
+
+    public function billspendingforcollection(Request $request)
+    {
+        $filtersdata = $this->filtersRequest($request);
+
+        $yearly = $filtersdata['yearly'];
+        $monthsdigit = $filtersdata['monthsdigit'];
+        $partnerId = $filtersdata['partnerId'];
+        $startDateFormatted = $filtersdata['startDateFormatted'];
+        $endDateFormatted = $filtersdata['endDateFormatted'];
+        $months = $filtersdata['months'];
+
+        $teammember = Teammember::where('role_id', '!=', 11)
+            ->where('role_id', '!=', 12)
+            ->with('title', 'role')
+            ->get();
+
+        $outstandingQuery = DB::table('assignmentmappings')
+            ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('assignments', 'assignments.id', '=', 'assignmentmappings.assignment_id')
+            ->leftJoin('invoices', 'invoices.assignmentgenerate_id', '=', 'assignmentmappings.assignmentgenerate_id')
+            ->leftJoin('outstandings', 'outstandings.BILL_NO', '=', 'invoices.invoice_id')
+            ->leftJoin('teammembers', 'teammembers.id', '=', 'outstandings.Partner')
+            ->whereNotNull('invoices.id')
+            ->whereNotNull('outstandings.BILL_NO')
+            ->where('assignmentbudgetings.status', 0)
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereBetween(DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate)'), [$startDateFormatted, $endDateFormatted]);
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereMonth(DB::raw('COALESCE(assignmentbudgetings.actualenddate, assignmentbudgetings.tentativeenddate)'), $monthsdigit);
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('invoices.partner', $partnerId);
+            })
+            ->where(function ($q) {
+                $q->whereIn('invoices.currency', [1, 3])
+                    ->orWhereNull('invoices.currency');
+            })
+            ->select(
+                'outstandings.*',
+                'assignmentmappings.assignmentgenerate_id',
+                'assignments.assignment_name',
+                'assignmentbudgetings.assignmentname',
+                'invoices.invoice_id',
+                'invoices.amount',
+                'invoices.total',
+                'invoices.paymentstatus',
+                'invoices.currency',
+                'invoices.pocketexpenseamount',
+                DB::raw("DATE_FORMAT(outstandings.created_at, '%Y-%m-%d') as bill_date"),
+                'teammembers.team_member',
+            );
+
+        if (!$request->ajax()) {
+            $outstandingDatas = $outstandingQuery->get();
+            $billspendingforcollection = $this->convertusdtoinr(
+                $outstandingDatas->map(function ($item) {
+                    return (object)[
+                        'currency'      => $item->currency,
+                        'bill_date'     => $item->bill_date,
+                        'total_amount'  => $item->AMT
+                    ];
+                })
+            );
+            $total = $billspendingforcollection;
+            return view('backEnd.dashboardreport.billspendingforcollection.index', compact('total', 'teammember'));
+        }
+
+        $perPage = $request->perPage ?? 25;
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $outstandingQuery->where(function ($q) use ($search) {
+                $q->where('assignmentmappings.assignmentgenerate_id', 'like', "%{$search}%")
+                    ->orWhere('outstandings.CLIENT_NAME', 'like', "%{$search}%")
+                    ->orWhere('assignments.assignment_name', 'like', "%{$search}%")
+                    ->orWhere('assignmentbudgetings.assignmentname', 'like', "%{$search}%")
+                    ->orWhere('invoices.invoice_id', 'like', "%{$search}%");
+            });
+        }
+
+        $allowedSorts = ['assignmentgenerate_id', 'CLIENT_NAME', 'assignment_name', 'invoice_id', 'AMT', 'bill_date'];
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+            $outstandingQuery->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            $outstandingQuery->latest('assignmentmappings.id');
+        }
+
+        $records = $outstandingQuery->paginate($perPage);
+        $datatable = view('backEnd.dashboardreport.billspendingforcollection.datatable', compact('records'))->render();
+
+        return response()->json([
+            'status' => 200,
+            'msg' => 'Data loaded',
+            'data' => $datatable,
+            'paginationInfo' => getPaginationInfo($records)
+        ]);
+    }
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\dashboardreport\billspendingforcollection\datatable.blade.php
+
+
+
+ Route::get('/assignments_completed_list', [AssignmentcompletedlistController::class, 'assignmentscompleted']);
+ 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\AssignmentcompletedlistController.php
+
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
+class AssignmentcompletedlistController extends Controller
+{
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    public function assignmentscompleted(Request $request)
+    {
+        [$startDate, $endDate, $monthDigit] = $this->resolveFinancialYearFilters($request);
+
+        // 👉 First Load
+        if (!$request->ajax()) {
+            return view('backEnd.assignmentscompleted.index');
+        }
+
+        try {
+
+            $perPage = $request->perPage ?? 25;
+
+            // 🔹 Invoice Subquery
+            $invoiceCountSubquery = DB::table('invoices')
+                ->select(
+                    'assignmentgenerate_id',
+                    DB::raw('COUNT(*) as invoice_count'),
+                    DB::raw('SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as approved_invoice_count')
+                )
+                ->groupBy('assignmentgenerate_id');
+
+            // 🔹 MAIN QUERY
+            $records = DB::table('assignmentmappings as am')
+                ->leftJoin('assignmentbudgetings as ab', 'ab.assignmentgenerate_id', '=', 'am.assignmentgenerate_id')
+                ->leftJoin('clients as c', 'c.id', '=', 'ab.client_id')
+                ->leftJoin('teammembers as lp', 'lp.id', '=', 'am.leadpartner')
+
+                ->leftJoinSub($invoiceCountSubquery, 'invoice_counts', function ($join) {
+                    $join->on('invoice_counts.assignmentgenerate_id', '=', 'am.assignmentgenerate_id');
+                })
+
+                ->selectRaw("
+                    am.id,
+                    am.assignmentgenerate_id,
+                    COALESCE(c.client_name, 'N/A') as client_name,
+                    COALESCE(ab.assignmentname, 'N/A') as assignmentname,
+                    COALESCE(lp.team_member, 'N/A') as partner_name,
+                    ab.percentclosedate,
+                    ab.otpverifydate,
+                    DATE(am.created_at) as assignment_created_date,
+                    COALESCE(invoice_counts.approved_invoice_count, 0) as approved_invoice_count
+                ")
+                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                    $query->where(function ($q) use ($startDate, $endDate) {
+                        $q->whereBetween('ab.otpverifydate', [$startDate, $endDate])
+                            ->orWhereBetween('am.created_at', [$startDate, $endDate]);
+                    });
+                })
+                ->when($monthDigit, function ($query) use ($monthDigit) {
+                    $query->where(function ($q) use ($monthDigit) {
+                        $q->whereMonth('ab.otpverifydate', $monthDigit)
+                            ->orWhereMonth('am.created_at', $monthDigit);
+                    });
+                });
+
+            // 🔍 LOSS STYLE SEARCH
+            $this->search($request, $records);
+
+            // 🔽 LOSS STYLE SORT
+            $this->sort($request, $records);
+
+            // 🔽 PAGINATION
+            $records = $records->paginate($perPage);
+
+            // 🔥 FINAL CALCULATION
+            $records->getCollection()->transform(function ($row) {
+
+                // Documentation %
+                $progress = $this->calculateDocumentationProgress($row->assignmentgenerate_id);
+                $row->documentation_percentage = $progress['documentation_percentage'];
+
+                // Status
+                $row->completion_status =
+                    (!empty($row->percentclosedate) && $row->approved_invoice_count > 0)
+                    ? 'Completed'
+                    : 'Not Completed';
+
+                // Closed Date
+                $row->assignment_closed_date = $row->otpverifydate
+                    ? date('Y-m-d', strtotime($row->otpverifydate))
+                    : 'N/A';
+
+                // Total invoices
+                $row->total_invoices = $row->approved_invoice_count ?? 0;
+
+                // Load filtered invoices for click functionality
+                $row->invoices = DB::table('invoices')
+                    ->where('assignmentgenerate_id', $row->assignmentgenerate_id)
+                    ->where('status', 2)
+                    ->get();
+
+                return $row;
+            });
+
+            // 🔥 SAARNI RENDER
+            $datatable = view('backEnd.assignmentscompleted.datatable', compact('records'))->render();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records)
+            ]);
+        } catch (Throwable $th) {
+            return throwException($th);
+        }
+    }
+
+    private function search($request, $query)
+    {
+        if (!empty($request->search)) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('am.assignmentgenerate_id', 'LIKE', "%{$search}%")
+                    ->orWhere('c.client_name', 'LIKE', "%{$search}%")
+                    ->orWhere('ab.assignmentname', 'LIKE', "%{$search}%")
+                    ->orWhere('lp.team_member', 'LIKE', "%{$search}%");
+            });
+        }
+    }
+
+    private function sort($request, $query)
+    {
+        if (!empty($request->sortColumn)) {
+            $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            $query->latest('am.id');
+        }
+    }
+
+    // 🔥 FIXED (NO STATUS ERROR)
+    private function calculateDocumentationProgress($assignmentId)
+    {
+        // Get assignment mapping
+        $assignmentMapping = DB::table('assignmentmappings')
+            ->where('assignmentgenerate_id', $assignmentId)
+            ->select('assignment_id', 'eqcrapplicability')
+            ->first();
+
+        if (!$assignmentMapping) {
+            return [
+                'documentation_percentage' => 0,
+            ];
+        }
+
+        // EQCR Assignment Exclude Logic
+        $eqcrTypeName = '';
+        $eqcrAssignmentId = null;
+
+        if (!empty($assignmentMapping->eqcrapplicability)) {
+
+            switch ($assignmentMapping->eqcrapplicability) {
+                case 1:
+                    $eqcrTypeName = 'NFRA';
+                    break;
+
+                case 2:
+                    $eqcrTypeName = 'Quality Review';
+                    break;
+
+                case 3:
+                    $eqcrTypeName = 'Peer Review';
+                    break;
+
+                case 4:
+                    $eqcrTypeName = 'Others';
+                    break;
+
+                case 5:
+                    $eqcrTypeName = 'PCAOB';
+                    break;
+            }
+
+            $specialAssignment = DB::table('assignments')
+                ->where('assignment_name', $eqcrTypeName)
+                ->first();
+
+            if ($specialAssignment) {
+                $eqcrAssignmentId = $specialAssignment->id;
+            }
+        }
+
+        // Get Classification IDs
+        $classificationIds = DB::table('financialstatementclassifications')
+            ->where('assignment_id', $assignmentMapping->assignment_id)
+            ->where(function ($q) use ($assignmentId) {
+                $q->whereNull('assignmentgenerate_id')
+                    ->orWhere('assignmentgenerate_id', $assignmentId);
+            })
+            ->when($eqcrAssignmentId, function ($query) use ($eqcrAssignmentId) {
+                $query->where('assignment_id', '!=', $eqcrAssignmentId);
+            })
+            ->pluck('id');
+
+        // Get Sub Classification IDs
+        $subClassIds = DB::table('subfinancialclassfications')
+            ->whereIn('financialstatemantclassfication_id', $classificationIds)
+            ->pluck('id');
+
+        // Total Questions
+        $totalQuestions = DB::table('auditquestions')
+            ->whereIn('financialstatemantclassfication_id', $classificationIds)
+            ->whereIn('subclassfied_id', $subClassIds)
+            ->count();
+
+        // Closed Questions
+        $closedQuestions = DB::table('checklistanswers')
+            ->join('statuses', 'checklistanswers.status', '=', 'statuses.id')
+            ->where('checklistanswers.assignment_id', $assignmentId)
+            ->whereIn('checklistanswers.financialstatemantclassfication_id', $classificationIds)
+            ->whereIn('checklistanswers.subclassfied_id', $subClassIds)
+            ->where('statuses.name', 'CLOSE')
+            ->count();
+
+        // Percentage Calculation
+        $documentationPercentage = $totalQuestions > 0
+            ? round(($closedQuestions / $totalQuestions) * 100, 2)
+            : 0;
+
+        return [
+            'documentation_percentage' => $documentationPercentage,
+        ];
+    }
+
+    private function resolveFinancialYearFilters(Request $request): array
+    {
+        $yearly = trim((string) $request->input('yearly', ''));
+        $monthDigit = (int) $request->input('months');
+        $monthDigit = ($monthDigit >= 1 && $monthDigit <= 12) ? $monthDigit : null;
+
+        if (!preg_match('/^\d{4}-\d{4}$/', $yearly)) {
+            return [null, null, $monthDigit];
+        }
+
+        [$startYear, $endYear] = array_map('intval', explode('-', $yearly));
+        if ($endYear !== ($startYear + 1)) {
+            return [null, null, $monthDigit];
+        }
+
+        $startDate = Carbon::create($startYear, 4, 1)->startOfDay();
+        $endDate = Carbon::create($endYear, 3, 31)->endOfDay();
+
+        return [$startDate, $endDate, $monthDigit];
+    }
+}
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentscompleted\datatable.blade.php
+
+   Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+
+
+
+app\Http\Controllers\AssignmentdelayedController.php
+
+
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
+class AssignmentdelayedController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    public function delayedassignments(Request $request)
+    {
+        [$startDate, $endDate, $monthDigit] = $this->resolveFinancialYearFilters($request);
+
+        // 👉 First Load
+        if (!$request->ajax()) {
+            return view('backEnd.assignmentdelayed.index');
+        }
+
+        try {
+            $perPage = $request->perPage ?? 25;
+
+            // 🔹 Timesheet Subquery
+            $timesheetSubquery = DB::table('timesheetusers')
+                ->select(
+                    'assignmentgenerate_id',
+                    DB::raw('SUM(COALESCE(totalhour, 0)) as workedhour'),
+                    DB::raw('MIN(date) as actual_start_date')
+                )
+                ->groupBy('assignmentgenerate_id');
+
+            // 🔹 MAIN QUERY
+            $records = DB::table('assignmentmappings as am')
+                ->leftJoin('assignmentbudgetings as ab', 'ab.assignmentgenerate_id', '=', 'am.assignmentgenerate_id')
+                ->leftJoin('clients as c', 'c.id', '=', 'ab.client_id')
+                ->leftJoin('teammembers as lp', 'lp.id', '=', 'am.leadpartner')
+                ->leftJoinSub($timesheetSubquery, 'timesheet_data', function ($join) {
+                    $join->on('timesheet_data.assignmentgenerate_id', '=', 'am.assignmentgenerate_id');
+                })
+                ->where(function ($q) {
+                    $q->where(function ($sub) {
+                        $sub->where('ab.status', 1)
+                            ->where(function ($inner) {
+                                $inner->whereNull('ab.percentclosedate')
+                                    ->orWhereRaw('ab.finaldraftreportdate > ab.tentativeenddate');
+                            });
+                    })
+                        ->orWhereRaw('COALESCE(timesheet_data.workedhour, 0) > COALESCE(am.esthours, 0)');
+                })
+                ->when(!empty($startDate) && !empty($endDate), function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(
+                        DB::raw('COALESCE(ab.actualenddate, ab.tentativeenddate)'),
+                        [$startDate, $endDate]
+                    );
+                })
+                ->when(!empty($monthDigit), function ($query) use ($monthDigit) {
+                    $query->whereMonth(
+                        DB::raw('COALESCE(ab.actualenddate, ab.tentativeenddate)'),
+                        $monthDigit
+                    );
+                })
+                ->selectRaw("
+                    am.id,
+                    am.assignmentgenerate_id,
+                    COALESCE(c.client_name, 'N/A') as client_name,
+                    COALESCE(ab.assignmentname, 'N/A') as assignmentname,
+                    COALESCE(lp.team_member, 'N/A') as partner_name,
+                    timesheet_data.actual_start_date,
+                    ab.tentativestartdate,
+                    ab.tentativeenddate,
+                    ab.finaldraftreportdate,
+                    ab.percentclosedate,
+                    COALESCE(am.esthours, 0) as esthours,
+                    COALESCE(timesheet_data.workedhour, 0) as workedhour,
+                    CASE
+                        WHEN ab.tentativeenddate IS NOT NULL AND ab.tentativeenddate < CURDATE()
+                        THEN DATEDIFF(CURDATE(), ab.tentativeenddate)
+                        ELSE 0
+                    END as delay_days
+                ");
+
+            // 🔍 SEARCH
+            $this->applySearch($request, $records);
+
+            // 🔽 SORT
+            $this->applySort($request, $records);
+
+            // 🔽 PAGINATION
+            $records = $records->paginate($perPage);
+
+            // 🚀 OPTIMIZED DOCUMENTATION CALCULATION
+            $this->applyDocumentationProgress($records);
+
+            // 🔥 Render
+            $datatable = view('backEnd.assignmentdelayed.datatable', compact('records'))->render();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records)
+            ]);
+        } catch (Throwable $th) {
+            return throwException($th);
+        }
+    }
+
+    // 🔍 SEARCH
+    private function applySearch($request, $query)
+    {
+        if (!empty($request->search)) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('am.assignmentgenerate_id', 'LIKE', "%{$search}%")
+                    ->orWhere('c.client_name', 'LIKE', "%{$search}%")
+                    ->orWhere('ab.assignmentname', 'LIKE', "%{$search}%")
+                    ->orWhere('lp.team_member', 'LIKE', "%{$search}%");
+            });
+        }
+    }
+
+    // 🔽 SORT (SAFE)
+    private function applySort($request, $query)
+    {
+        $allowedSorts = [
+            'assignmentgenerate_id',
+            'client_name',
+            'assignmentname',
+            'partner_name',
+            'delay_days'
+        ];
+
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts)) {
+            $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            $query->latest('am.id');
+        }
+    }
+
+    // 🚀 MAIN OPTIMIZATION (NO N+1)
+    private function applyDocumentationProgress($records)
+    {
+        $assignmentIds = $records->pluck('assignmentgenerate_id')->toArray();
+
+        // 🔹 Mapping
+        $mappings = DB::table('assignmentmappings')
+            ->whereIn('assignmentgenerate_id', $assignmentIds)
+            ->pluck('assignment_id', 'assignmentgenerate_id');
+
+        // 🔹 Classifications
+        $classifications = DB::table('financialstatementclassifications')
+            ->whereIn('assignment_id', $mappings->values())
+            ->get()
+            ->groupBy('assignment_id');
+
+        // 🔹 Subclasses
+        $subclasses = DB::table('subfinancialclassfications')
+            ->get()
+            ->groupBy('financialstatemantclassfication_id');
+
+        // 🔹 Questions
+        $questions = DB::table('auditquestions')
+            ->get()
+            ->groupBy(function ($q) {
+                return $q->financialstatemantclassfication_id . '_' . $q->subclassfied_id;
+            });
+
+        // 🔹 Closed Answers
+        $closedAnswers = DB::table('checklistanswers as ca')
+            ->join('statuses as s', 'ca.status', '=', 's.id')
+            ->whereIn('ca.assignment_id', $assignmentIds)
+            ->where('s.name', 'CLOSE')
+            ->get()
+            ->groupBy(function ($a) {
+                return $a->assignment_id . '_' . $a->financialstatemantclassfication_id . '_' . $a->subclassfied_id;
+            });
+
+        // 🔥 FINAL LOOP
+        $records->getCollection()->transform(function ($row) use (
+            $mappings,
+            $classifications,
+            $subclasses,
+            $questions,
+            $closedAnswers
+        ) {
+
+            $assignmentId = $row->assignmentgenerate_id;
+            $assignmentMainId = $mappings[$assignmentId] ?? null;
+
+            if (!$assignmentMainId || !isset($classifications[$assignmentMainId])) {
+                $row->documentation_percentage = 0;
+                return $row;
+            }
+
+            $total = 0;
+            $closed = 0;
+
+            foreach ($classifications[$assignmentMainId] as $cls) {
+
+                // ✅ IMPORTANT CONDITION (same as original)
+                if (!is_null($cls->assignmentgenerate_id) && $cls->assignmentgenerate_id != $assignmentId) {
+                    continue;
+                }
+
+                $clsId = $cls->id;
+
+                if (!isset($subclasses[$clsId])) continue;
+
+                foreach ($subclasses[$clsId] as $sub) {
+
+                    $key = $clsId . '_' . $sub->id;
+
+                    if (!isset($questions[$key])) continue;
+
+                    $qCount = count($questions[$key]);
+                    $total += $qCount;
+
+                    $closedKey = $assignmentId . '_' . $clsId . '_' . $sub->id;
+
+                    if (isset($closedAnswers[$closedKey])) {
+                        $closed += count($closedAnswers[$closedKey]);
+                    }
+                }
+            }
+
+            $row->documentation_percentage = $total > 0
+                ? (float) round(((float)$closed / (float)$total) * 100, 2)
+                : 0.0;
+
+            return $row;
+        });
+    }
+
+    private function resolveFinancialYearFilters(Request $request): array
+    {
+        $yearly = trim((string) $request->input('yearly', ''));
+        $monthDigit = (int) $request->input('months');
+        $monthDigit = ($monthDigit >= 1 && $monthDigit <= 12) ? $monthDigit : null;
+
+        if (!preg_match('/^\d{4}-\d{4}$/', $yearly)) {
+            return [null, null, $monthDigit];
+        }
+
+        [$startYear, $endYear] = array_map('intval', explode('-', $yearly));
+        if ($endYear !== ($startYear + 1)) {
+            return [null, null, $monthDigit];
+        }
+
+        $startDate = Carbon::create($startYear, 4, 1)->startOfDay();
+        $endDate = Carbon::create($endYear, 3, 31)->endOfDay();
+
+        return [$startDate, $endDate, $monthDigit];
+    }
+}
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\assignmentdelayed\datatable.blade.php
+
+
+        Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']);
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+DashboardReport
+
+
+    public function exceptionalexpenses(Request $request)
+    {
+
+        $filtersdata = $this->filtersRequest($request);
+
+        $yearly = $filtersdata['yearly'];
+        $monthsdigit = $filtersdata['monthsdigit'];
+        $partnerId = $filtersdata['partnerId'];
+        $startDateFormatted = $filtersdata['startDateFormatted'];
+        $endDateFormatted = $filtersdata['endDateFormatted'];
+        $months = $filtersdata['months'];
+
+        $outstationQuery = DB::table('outstationconveyances')
+            ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'outstationconveyances.assignmentgenerate_id')
+            ->leftjoin('assignments', 'assignments.id', 'outstationconveyances.assignment_id')
+            ->leftjoin('clients', 'clients.id', 'outstationconveyances.client_id')
+            ->leftJoin('teammembers', 'teammembers.id', '=', 'assignmentmappings.leadpartner')
+            // ->where('outstationconveyances.createdby', '!=', 336)
+            // ->where('outstationconveyances.conveyance', 'Local Conveyance')
+            ->whereIn('outstationconveyances.conveyance', ['Local Conveyance', 'Outstation Conveyance'])
+            ->where('outstationconveyances.status', 6)
+            // ->when(empty($yearly) && empty($monthsdigit) && empty($partnerId), function ($query) {
+            //     $query->whereMonth('outstationconveyances.paiddate', Carbon::now()->month)
+            //         ->whereYear('outstationconveyances.paiddate', Carbon::now()->year);
+            // })
+            ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                $query->whereBetween('outstationconveyances.paiddate', [$startDateFormatted, $endDateFormatted]);
+            })
+            ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                $query->whereMonth('outstationconveyances.paiddate', $monthsdigit);
+            })
+            ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                $query->where('assignmentmappings.leadpartner', $partnerId);
+            })
+            ->select(
+                'outstationconveyances.id',
+                'outstationconveyances.assignmentgenerate_id',
+                'outstationconveyances.conveyance',
+                'outstationconveyances.finalamount',
+                'clients.client_name',
+                'assignments.assignment_name as assignmentsname',
+                'teammembers.team_member as partner_name',
+                DB::raw("'N/A' as approver_name")
+            );
+
+        $tab = $request->input('tab', 'conveyance');
+
+        if (!empty($request->conveyanceType) && $tab === 'conveyance') {
+            $outstationQuery->where('outstationconveyances.conveyance', $request->conveyanceType);
+        }
+
+        $isDataRequest = $request->ajax()
+            || $request->has('perPage')
+            || $request->has('page')
+            || $request->has('sortColumn')
+            || $request->has('sortDirection')
+            || $request->has('search');
+
+        if (!$isDataRequest) {
+            $outstationData = (clone $outstationQuery)->get();
+            $conveyanceTotal = $outstationData->sum('finalamount') ?? 0;
+
+            $vendorlist = DB::table('vendorlist')
+                ->leftJoin('vendors', 'vendors.id', '=', 'vendorlist.vendor_id')
+                ->leftJoin('teammembers', 'teammembers.id', '=', 'vendorlist.approver')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'vendorlist.assignmentgenerate_id')
+                ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'vendorlist.assignmentgenerate_id')
+                ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+                ->where('vendorlist.status', 1)
+                ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                    $query->whereBetween('vendorlist.created_at', [$startDateFormatted, $endDateFormatted]);
+                })
+                ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                    $query->whereMonth('vendorlist.created_at', $monthsdigit);
+                })
+                ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                    $query->where('assignmentmappings.leadpartner', $partnerId);
+                })
+                ->select(
+                    'vendorlist.*',
+                    'vendors.vendorname',
+                    'teammembers.team_member as approver',
+                    'assignmentbudgetings.assignmentgenerate_id',
+                    'assignmentbudgetings.assignmentname',
+                    'assignmentmappings.leadpartner',
+                    'assignments.assignment_name',
+                    'clients.client_name as clientname'
+                )
+                ->get();
+
+            $vendorTotal = $vendorlist->sum(fn($item) => is_numeric($item->amount) ? (float) $item->amount : 0);
+            $totalAmount = ($conveyanceTotal ?? 0) + ($vendorTotal ?? 0);
+            return view('backEnd.dashboardreport.exceptionalexpenses.index', compact('totalAmount'));
+        }
+
+        if ($tab === 'vendors') {
+            $perPage = $request->perPage ?? 25;
+            $vendorQuery = DB::table('vendorlist')
+                ->leftJoin('vendors', 'vendors.id', '=', 'vendorlist.vendor_id')
+                ->leftJoin('teammembers', 'teammembers.id', '=', 'vendorlist.approver')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'vendorlist.assignmentgenerate_id')
+                ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'vendorlist.assignmentgenerate_id')
+                ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('clients', 'clients.id', '=', 'assignmentbudgetings.client_id')
+                ->leftJoin('teammembers as partners', 'partners.id', '=', 'assignmentmappings.leadpartner')
+                ->where('vendorlist.status', 1)
+                ->when(!empty($yearly), function ($query) use ($startDateFormatted, $endDateFormatted) {
+                    $query->whereBetween('vendorlist.created_at', [$startDateFormatted, $endDateFormatted]);
+                })
+                ->when(!empty($monthsdigit), function ($query) use ($monthsdigit) {
+                    $query->whereMonth('vendorlist.created_at', $monthsdigit);
+                })
+                ->when(!empty($partnerId), function ($query) use ($partnerId) {
+                    $query->where('assignmentmappings.leadpartner', $partnerId);
+                })
+                ->select(
+                    'vendorlist.id',
+                    'assignmentbudgetings.assignmentgenerate_id',
+                    'assignments.assignment_name',
+                    'clients.client_name as clientname',
+                    'partners.team_member as partner_name',
+                    'vendors.vendorname',
+                    'teammembers.team_member as approver',
+                    'vendorlist.status',
+                    'vendorlist.amount'
+                );
+
+            if (!empty($request->search)) {
+                $search = $request->search;
+                $vendorQuery->where(function ($q) use ($search) {
+                    $q->where('assignmentbudgetings.assignmentgenerate_id', 'like', "%{$search}%")
+                        ->orWhere('clients.client_name', 'like', "%{$search}%")
+                        ->orWhere('assignments.assignment_name', 'like', "%{$search}%")
+                        ->orWhere('partners.team_member', 'like', "%{$search}%")
+                        ->orWhere('vendors.vendorname', 'like', "%{$search}%")
+                        ->orWhere('teammembers.team_member', 'like', "%{$search}%");
+                });
+            }
+
+            $allowedSorts = ['assignmentgenerate_id', 'clientname', 'assignment_name', 'partner_name', 'vendorname', 'approver', 'amount'];
+            if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+                $vendorQuery->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+            } else {
+                $vendorQuery->latest('vendorlist.id');
+            }
+
+            $records = $vendorQuery->paginate($perPage);
+            $datatable = view('backEnd.dashboardreport.exceptionalexpenses.vendorsdatatable', compact('records'))->render();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records)
+            ]);
+        }
+
+        $perPage = $request->perPage ?? 25;
+        if (!empty($request->search)) {
+            $search = $request->search;
+            $outstationQuery->where(function ($q) use ($search) {
+                $q->where('outstationconveyances.assignmentgenerate_id', 'like', "%{$search}%")
+                    ->orWhere('clients.client_name', 'like', "%{$search}%")
+                    ->orWhere('assignments.assignment_name', 'like', "%{$search}%")
+                    ->orWhere('teammembers.team_member', 'like', "%{$search}%")
+                    ->orWhere('outstationconveyances.conveyance', 'like', "%{$search}%");
+            });
+        }
+
+        $allowedSorts = ['assignmentgenerate_id', 'client_name', 'assignmentsname', 'partner_name', 'approver_name', 'conveyance', 'finalamount'];
+        if (!empty($request->sortColumn) && in_array($request->sortColumn, $allowedSorts, true)) {
+            $outstationQuery->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            $outstationQuery->latest('outstationconveyances.id');
+        }
+
+        $records = $outstationQuery->paginate($perPage);
+        $datatable = view('backEnd.dashboardreport.exceptionalexpenses.datatable', compact('records'))->render();
+
+        return response()->json([
+            'status' => 200,
+            'msg' => 'Data loaded',
+            'data' => $datatable,
+            'paginationInfo' => getPaginationInfo($records)
+        ]);
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\dashboardreport\exceptionalexpenses\datatable.blade.php
+
+
+
+
+  Route::get('/lossassignment_list', [LossmakingController::class, 'lossassignments'])->name('lossassignments.list');
+  
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\LossmakingController.php
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
+class LossmakingController extends Controller
+{
+    public function lossassignments(Request $request)
+    {
+        [$startDate, $endDate, $monthDigit] = $this->resolveFinancialYearFilters($request);
+
+        // 👉 First Load
+        if (!$request->ajax()) {
+            return view('backEnd.lossmakingassignment.index');
+        }
+
+        try {
+
+            $perPage = $request->perPage ?? 25;
+
+            // 🔹 SUBQUERIES
+            $timesheetCostSubquery = DB::table('timesheetusers')
+                ->leftJoin('teammembers as cost_members', 'cost_members.id', '=', 'timesheetusers.createdby')
+                ->select(
+                    'timesheetusers.assignmentgenerate_id',
+                    DB::raw('SUM(COALESCE(timesheetusers.totalhour, 0) * COALESCE(cost_members.cost_hour, 0)) as totalusercost')
+                )
+                ->groupBy('timesheetusers.assignmentgenerate_id');
+
+            $conveyanceCostSubquery = DB::table('outstationconveyances')
+                ->select(
+                    'assignmentgenerate_id',
+                    DB::raw("SUM(CASE WHEN bill = 'No' AND finalamount IS NOT NULL THEN finalamount ELSE 0 END) as totalconveyancesamt")
+                )
+                ->groupBy('assignmentgenerate_id');
+
+            $managerSubquery = DB::table('assignmentteammappings')
+                ->leftJoin('teammembers as manager_members', 'manager_members.id', '=', 'assignmentteammappings.teammember_id')
+                ->where('assignmentteammappings.type', 0)
+                ->select(
+                    'assignmentteammappings.assignmentmapping_id',
+                    DB::raw("GROUP_CONCAT(DISTINCT manager_members.team_member SEPARATOR ', ') as manager_names")
+                )
+                ->groupBy('assignmentteammappings.assignmentmapping_id');
+
+            // 🔹 MAIN QUERY
+            $records = DB::table('assignmentmappings as am')
+                ->leftJoin('assignmentbudgetings as ab', 'ab.assignmentgenerate_id', '=', 'am.assignmentgenerate_id')
+                ->leftJoin('clients as c', 'c.id', '=', 'ab.client_id')
+                ->leftJoin('teammembers as lp', 'lp.id', '=', 'am.leadpartner')
+
+                ->leftJoinSub($timesheetCostSubquery, 'timesheet_costs', function ($join) {
+                    $join->on('timesheet_costs.assignmentgenerate_id', '=', 'am.assignmentgenerate_id');
+                })
+
+                ->leftJoinSub($conveyanceCostSubquery, 'conveyance_costs', function ($join) {
+                    $join->on('conveyance_costs.assignmentgenerate_id', '=', 'am.assignmentgenerate_id');
+                })
+
+                ->leftJoinSub($managerSubquery, 'manager_data', function ($join) {
+                    $join->on('manager_data.assignmentmapping_id', '=', 'am.id');
+                })
+
+                // 🔥 LOSS CONDITION (IMPORTANT)
+                ->whereRaw('(COALESCE(am.engagementfee, 0)
+                    - COALESCE(timesheet_costs.totalusercost, 0)
+                    - COALESCE(conveyance_costs.totalconveyancesamt, 0)) < 0')
+                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween('am.created_at', [$startDate, $endDate]);
+                })
+                ->when($monthDigit, function ($query) use ($monthDigit) {
+                    $query->whereMonth('am.created_at', $monthDigit);
+                })
+
+                ->selectRaw("
+                    am.id,
+                    am.assignmentgenerate_id,
+                    COALESCE(c.client_name, 'N/A') as client_name,
+                    COALESCE(ab.assignmentname, 'N/A') as assignment_name,
+                    COALESCE(lp.team_member, 'N/A') as partner_name,
+                    COALESCE(manager_data.manager_names, 'N/A') as manager_names,
+                    COALESCE(am.engagementfee, 0) as budgeted_billing_amount,
+                    COALESCE(am.teamestcost, 0) as budgeted_cost,
+                    COALESCE(timesheet_costs.totalusercost, 0) as totalusercost,
+                    COALESCE(conveyance_costs.totalconveyancesamt, 0) as totalconveyancesamt
+                ");
+
+            // 🔍 SEARCH
+            $this->search($request, $records);
+
+            // 🔽 SORT
+            $this->sort($request, $records);
+
+            $records = $records->paginate($perPage);
+
+            // 🔹 GET IDS
+            $assignmentIds = $records->pluck('assignmentgenerate_id')->filter()->values();
+
+            // 🔹 INVOICES
+            $invoiceGroups = DB::table('invoices')
+                ->whereIn('assignmentgenerate_id', $assignmentIds)
+                ->where('status', 2)
+                ->select('assignmentgenerate_id', 'total')
+                ->get()
+                ->groupBy('assignmentgenerate_id');
+
+            // 🔹 TIMESHEET
+            $timesheetGroups = DB::table('timesheetusers')
+                ->leftJoin('teammembers as tm', 'tm.id', '=', 'timesheetusers.createdby')
+                ->whereIn('timesheetusers.assignmentgenerate_id', $assignmentIds)
+                ->select('timesheetusers.assignmentgenerate_id', 'timesheetusers.hour', 'tm.cost_hour')
+                ->get()
+                ->groupBy('assignmentgenerate_id');
+
+            // 🔥 FINAL CALCULATION
+            $records->getCollection()->transform(function ($row) use ($invoiceGroups, $timesheetGroups) {
+
+                // ✅ Actual Billing
+                $invoices = $invoiceGroups->get($row->assignmentgenerate_id, collect());
+                $actualBillingAmount = round($invoices->sum('total'), 2);
+
+                // ✅ Overhead
+                $invoiceOverhead = round(($actualBillingAmount * 30) / 100, 2);
+
+                // ✅ Timesheet Cost
+                $timesheets = $timesheetGroups->get($row->assignmentgenerate_id, collect());
+
+                $actualUserCost = round($timesheets->sum(function ($t) {
+                    $hours = $this->convertHourToDecimal($t->hour);
+                    return $hours * ($t->cost_hour ?? 0);
+                }), 2);
+
+                // ✅ Final Cost
+                $actualCost = round(
+                    $actualUserCost
+                        + ($row->totalconveyancesamt ?? 0)
+                        + $invoiceOverhead,
+                    2
+                );
+
+                // ✅ Profit Loss
+                $row->actual_billing_amount = $actualBillingAmount;
+                $row->actual_cost = $actualCost;
+
+                $row->budgeted_profit_loss = round(
+                    ($row->budgeted_billing_amount ?? 0)
+                        - ($row->budgeted_cost ?? 0),
+                    2
+                );
+
+                $row->actual_profit_loss = round(
+                    $actualBillingAmount - $actualCost,
+                    2
+                );
+
+                return $row;
+            });
+
+            // 🔥 SAARNI RENDER
+            $datatable = view('backEnd.lossmakingassignment.datatable', compact('records'))->render();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records)
+            ]);
+        } catch (Throwable $th) {
+            return throwException($th);
+        }
+    }
+
+    // 🔍 SEARCH
+    private function search($request, $query)
+    {
+        if (!empty($request->search)) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('am.assignmentgenerate_id', 'LIKE', "%{$search}%")
+                    ->orWhere('c.client_name', 'LIKE', "%{$search}%")
+                    ->orWhere('ab.assignmentname', 'LIKE', "%{$search}%")
+                    ->orWhere('lp.team_member', 'LIKE', "%{$search}%")
+                    ->orWhere('manager_data.manager_names', 'LIKE', "%{$search}%");
+            });
+        }
+    }
+
+    // 🔽 SORT
+    private function sort($request, $query)
+    {
+        if (!empty($request->sortColumn)) {
+            $query->orderBy($request->sortColumn, $request->sortDirection ?? 'desc');
+        } else {
+            $query->latest('am.id');
+        }
+    }
+
+    // 🔥 TIME CONVERSION (IMPORTANT)
+    private function convertHourToDecimal($time)
+    {
+        if (!$time) return 0;
+
+        if (strpos($time, ':') !== false) {
+            [$h, $m] = explode(':', $time);
+            return (float) $h + ((float) $m / 60);
+        }
+
+        return (float) $time;
+    }
+
+    private function resolveFinancialYearFilters(Request $request): array
+    {
+        $yearly = trim((string) $request->input('yearly', ''));
+        $monthDigit = (int) $request->input('months');
+        $monthDigit = ($monthDigit >= 1 && $monthDigit <= 12) ? $monthDigit : null;
+
+        if (!preg_match('/^\d{4}-\d{4}$/', $yearly)) {
+            return [null, null, $monthDigit];
+        }
+
+        [$startYear, $endYear] = array_map('intval', explode('-', $yearly));
+        if ($endYear !== ($startYear + 1)) {
+            return [null, null, $monthDigit];
+        }
+
+        $startDate = Carbon::create($startYear, 4, 1)->startOfDay();
+        $endDate = Carbon::create($endYear, 3, 31)->endOfDay();
+
+        return [$startDate, $endDate, $monthDigit];
+    }
+}
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\lossmakingassignment\datatable.blade.php
+
+
+
+
+ <li>
+                                      <a class="has-arrow material-ripple" href="#">
+                                          <i class="typcn typcn-document-text mr-2"></i>
+                                          Report
+                                      </a>
+                                      <ul class="nav-second-level">
+                                          <li><a href="{{ url('assignmentfulllist') }}">Assignment List</a></li>
+                                          <li><a href="{{ url('client_list') }}">Client List</a></li>
+                                          <li><a href="{{ url('vendorreportlist') }}">Vendor List</a></li>
+
+                                          <li><a href="{{ url('invoicedatareportlist') }}">Assignment Final Report</a>
+                                          </li>
+                                          <li><a href="{{ url('billspending') }}">Assignment List (bills pending)</a>
+                                          </li>
+                                          <li><a href="{{ url('billspendingforcollection') }}">Collection v/s
+                                                  Outstanding
+                                                  Report</a></li>
+                                          <li><a href="{{ url('assignments_completed_list') }}">Assignment Completion
+                                                  Report
+                                                  (FY)</a></li>
+                                          <li><a href="{{ url('assignments_delayed_list') }}">Assignment Delay Report
+                                              </a></li>
+                                          <li><a href="{{ url('exceptionalexpenses') }}">Conveyance Report </a></li>
+                                          <li><a href="{{ url('lossassignment_list') }}">Assignment P & L Report </a>
+                                          </li>
+
+                                      </ul>
+                                  </li>
+								 
+								 
+
+
+
+
+end hare 
+13-05-2026 
+
+
+
+18-05-2026
+checkinlist, timesheetreportsection 
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+        Route::get('checkinlist', [CheckInController::class, 'checkinlist']);
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\CheckInController.php
+
+    public function checkinlist(Request $request)
+    {
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 18 || auth()->user()->teammember_id == 170) {
+            $employeename = DB::table('teammembers')
+                ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+                ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+                ->where('role_id', '!=', 11)->where('role_id', '!=', 13)->where('role_id', '!=', 12)->where('status', 1)
+                ->select('teammembers.*', 'roles.rolename', 'titles.title')
+                ->get();
+
+            $currentMonth = date('m');
+            $startDate = now()->startOfMonth()->subMonth()->addDays(25);
+            $endDate = now()->startOfMonth()->addDays(24);
+
+            $daysInMonth = $startDate->diffInDays($endDate) + 1;
+            $currentMonthName = date('F', mktime(0, 0, 0, $currentMonth, 1));
+
+            $datesArray = [];
+            $currentDate = $startDate->copy();
+            while ($currentDate <= $endDate) {
+                $datesArray[] = $currentDate->format('d');
+                $currentDate->addDay();
+            }
+
+            $report = DB::table('teammembers')
+                ->leftJoin('checkins', 'teammembers.id', '=', 'checkins.teammember_id')
+                ->leftJoin('roles', 'teammembers.role_id', '=', 'roles.id')
+                ->leftJoin('clients', 'checkins.client_id', '=', 'clients.id')
+                ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+                ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+                ->leftJoin('teammembers as teampartner', 'teampartner.id', '=', 'assignmentmappings.leadpartner')
+                ->leftJoin('holidays', function ($join) {
+                    $join->on(DB::raw('STR_TO_DATE(checkins.date, "%d-%m-%Y")'), '=', 'holidays.startdate');
+                })
+                ->whereBetween(
+                    DB::raw('STR_TO_DATE(checkins.date, "%d-%m-%Y")'),
+                    [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]
+                )
+                ->select(
+                    'teammembers.id',
+                    'teammembers.joining_date',
+                    'teammembers.team_member',
+                    'roles.rolename',
+
+                    DB::raw('GROUP_CONCAT(DISTINCT clients.client_name) as client_Namess'),
+                    DB::raw('GROUP_CONCAT(DISTINCT checkins.assignment_id) as assignmentid'),
+                    DB::raw('GROUP_CONCAT(DISTINCT assignments.assignment_name) as assignmentname'),
+                    DB::raw('GROUP_CONCAT(DISTINCT teampartner.team_member) as teampartner'),
+                    // DB::raw('COUNT(*) as Total_Checkin'),
+                    DB::raw('COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y")) as Total_Checkin'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Office" THEN 1 ELSE 0 END) as Office'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Work From Home" THEN 1 ELSE 0 END) as WFM'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Client Place" THEN 1 ELSE 0 END) as Client_Place'),
+                    DB::raw('SUM(CASE WHEN checkins.checkin_from = "Business Development" THEN 1 ELSE 0 END) as Business_Development'),
+                    DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
+                    DB::raw('SUM(CASE WHEN checkins.time >= "10:30:00" AND checkins.time < "12:00:00" THEN 1 ELSE 0 END) as chgg'),
+                    DB::raw('SUM(CASE WHEN checkins.time > "12:01:00" THEN 1 ELSE 0 END) as After_12_PM'),
+                    //   DB::raw('SUM(CASE WHEN checkins.typeval IS NULL THEN 1 ELSE 0 END) as Unallocated'),
+                    DB::raw("SUM(CASE WHEN checkins.typeval = 'Unallocated' THEN 1 ELSE 0 END) as Unallocated"),
+
+                    DB::raw('GROUP_CONCAT(DISTINCT CONCAT(STR_TO_DATE(checkins.date, "%d-%m-%Y"), " ", TIME_FORMAT(checkins.time, "%H:%i:%s"))) as checkin_datetime'),
+
+                    //-- Leave Count
+                    DB::raw('(SELECT COUNT(*) FROM applyleaves 
+                      WHERE applyleaves.createdby = teammembers.id 
+                      AND applyleaves.from BETWEEN "' . $startDate->format('Y-m-d') . '" 
+                      AND "' . $endDate->format('Y-m-d') . '") as Leave_Count'),
+
+                    //-- Leave Days
+                    DB::raw('(SELECT SUM(DATEDIFF(
+                CASE WHEN `to` > "' . $endDate->format('Y-m-d') . '" THEN "' . $endDate->format('Y-m-d') . '" ELSE `to` END,
+                CASE WHEN `from` < "' . $startDate->format('Y-m-d') . '" THEN "' . $startDate->format('Y-m-d') . '" ELSE `from` END
+            ) + 1)
+            FROM applyleaves 
+            WHERE applyleaves.createdby = teammembers.id 
+              AND status IN (1,0) 
+              AND (`from` BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '"
+              OR `to` BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '"
+              OR (`from` < "' . $startDate->format('Y-m-d') . '" AND `to` > "' . $endDate->format('Y-m-d') . '")
+            )) as Leave_Days'),
+
+                    DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '" AND holidays.status = 3) as weekends_Count'),
+                    DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '" AND holidays.status = 1) as holidaymonth_Count'),
+                    DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '") as Holiday_Count'),
+
+                    DB::raw('(' . $daysInMonth . ' - (SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '")) as totalcheckin_count'),
+                    DB::raw('COUNT(DISTINCT holidays.startdate) as holiday_working_count'),
+                    DB::raw('COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y")) - COUNT(DISTINCT holidays.startdate) as Total_Checkin_minus_holiday_count'),
+
+
+                    //----------------------------------------------------
+                    // ⭐ ADDED: TOTAL TIMESHEET FILLED COUNTER
+                    //----------------------------------------------------
+                    DB::raw('(SELECT COUNT(DISTINCT STR_TO_DATE(timesheetusers.date, "%d-%m-%Y")) FROM timesheetusers
+          WHERE timesheetusers.createdby = teammembers.id
+          AND STR_TO_DATE(timesheetusers.date, "%d-%m-%Y")
+          BETWEEN "' . $startDate->format('Y-m-d') . '"
+          AND "' . $endDate->format('Y-m-d') . '"
+         ) AS Timesheet_Filled_Count')
+                )
+                ->groupBy('teammembers.id', 'teammembers.joining_date', 'teammembers.team_member', 'roles.rolename')
+                ->get();
+
+            // Keep your remaining code untouched…
+            $holidays = \App\Models\Holiday::whereBetween('startdate', [
+                $startDate->format('Y-m-d'),
+                $endDate->format('Y-m-d')
+            ])
+                ->get()
+                ->keyBy(function ($item) {
+                    return date('Y-m-d', strtotime($item->startdate));
+                });
+            //    dd($holidays);
+            $leaves = \App\Models\Applyleave::where(function ($query) use ($startDate, $endDate) {
+                $query->where('from', '<=', $endDate)
+                    ->where('to', '>=', $startDate);
+            })->leftJoin('leavetypes', 'leavetypes.id', '=', 'applyleaves.leavetype')
+                ->select('applyleaves.*', 'leavetypes.code')
+                ->get();
+
+            foreach ($report as $entry) {
+
+                $entry->daysInMonth = $daysInMonth;
+                $entry->currentMonthName = $currentMonthName;
+                $entry->formatted_joining_date = \Carbon\Carbon::parse($entry->joining_date)->isoFormat('MMMM DD, YYYY');
+
+                $datetime_pairs = explode(',', $entry->checkin_datetime);
+                $temp_array = [];
+
+                $currentDate = $startDate;
+                while ($currentDate <= $endDate) {
+
+                    $date = date('Y-m-d', strtotime($currentDate));
+                    $holiday = $holidays[$date] ?? null;
+
+                    $leavesForDate = $leaves->where('from', '<=', $date)
+                        ->where('to', '>=', $date)
+                        ->where('createdby', $entry->id)
+                        ->whereIn('status', [1, 0])
+                        ->pluck('code')
+                        ->implode(', ');
+
+                    $found = false;
+                    foreach ($datetime_pairs as $datetime_pair) {
+                        $datetime_parts = explode(' ', trim($datetime_pair));
+                        $entry_date = $datetime_parts[0];
+                        if ($date === $entry_date) {
+                            $time = date('H:i', strtotime($datetime_parts[1]));
+                            $temp_array[] = ['date' => $date, 'time' => $time];
+                            $found = true;
+                            break;
+                        }
+                    }
+
+                    if (!$found) {
+                        $temp_array[] = [
+                            'date' => $date,
+                            'time' => ($holiday)
+                                ? ($holiday->status == 3 ? 'W' : 'H')
+                                : ($leavesForDate ? $leavesForDate : 'Not Checkin')
+                        ];
+                    }
+
+                    $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+                }
+
+
+                $entry->checkin_datetime = $temp_array;
+
+                $notCheckinCount = 0;
+
+                foreach ($entry->checkin_datetime as $day) {
+                    if ($day['time'] === 'Not Checkin') {
+                        $notCheckinCount++;
+                    }
+                }
+
+                $entry->not_checkin = $notCheckinCount;
+            }
+
+            if (!$request->ajax()) {
+                return view('backEnd.check-In.checkinlist', compact('employeename', 'datesArray'));
+            }
+
+            try {
+                $reportCollection = collect($report);
+
+                if (!empty($request->search)) {
+                    $search = strtolower($request->search);
+                    $reportCollection = $reportCollection->filter(function ($item) use ($search) {
+                        return str_contains(strtolower($item->team_member ?? ''), $search)
+                            || str_contains(strtolower($item->rolename ?? ''), $search)
+                            || str_contains(strtolower($item->assignmentname ?? ''), $search)
+                            || str_contains(strtolower($item->client_Namess ?? ''), $search)
+                            || str_contains(strtolower($item->teampartner ?? ''), $search);
+                    });
+                }
+
+                if (!empty($request->sortColumn)) {
+                    $sortColumn = $request->sortColumn;
+                    if ($request->sortDirection === 'asc') {
+                        $reportCollection = $reportCollection->sortBy($sortColumn);
+                    } else {
+                        $reportCollection = $reportCollection->sortByDesc($sortColumn);
+                    }
+                }
+
+                $perPage = $request->perPage ?? 25;
+                $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
+                $items = $reportCollection->forPage($currentPage, $perPage);
+
+                $records = new \Illuminate\Pagination\LengthAwarePaginator(
+                    $items,
+                    $reportCollection->count(),
+                    $perPage,
+                    $currentPage,
+                    ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+                );
+
+                $datatable = view('backEnd.check-In.checkinlist_datatable', compact('records', 'datesArray'))->render();
+
+                return response()->json([
+                    'status' => 200,
+                    'msg' => 'Data loaded',
+                    'data' => $datatable,
+                    'paginationInfo' => getPaginationInfo($records)
+                ]);
+            } catch (\Throwable $th) {
+                return response()->json(['status' => 500, 'msg' => $th->getMessage()]);
+            }
+        } else {
+            abort(403, 'You do not have permission.');
+        }
+    }
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\check-In\checkinlist.blade.php
+
+
+<!-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css" rel="stylesheet"> -->
+
+<!--Third party Styles(used by this page)-->
+<link href="{{ url('backEnd/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/select2-bootstrap4/dist/select2-bootstrap4.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/jquery.sumoselect/sumoselect.min.css') }}" rel="stylesheet">
+<link href="{{ url('backEnd/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+
+@extends('backEnd.layouts.layout') @section('backEnd_content')
+    <!--Content Header (Page header)-->
+    <div class="content-header row align-items-center m-0">
+        <!-- <nav aria-label="breadcrumb" class="col-sm-4 order-sm-last mb-3 mb-sm-0 p-0 ">
+            <ol class="breadcrumb d-inline-flex font-weight-600 fs-13 bg-green mb-0 float-sm-right">
+                <li class="breadcrumb-item"><a href="" style="color:white;" onClick="window.location.reload();">Reset Filters</a>
+                </li>
+              
+            </ol>
+        </nav> -->
+        <div class="col-sm-8 header-title p-0">
+            <div class="media">
+                <div class="header-icon text-success mr-3"><i class="typcn typcn-puzzle-outline"></i></div>
+                <div class="media-body">
+                    <h1 class="font-weight-bold">Home</h1>
+                    <small>Check-In Report Section </small>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.Content Header (Page header)-->
+    <div class="body-content">
+        <div class="card mb-4">
+            <div class="card-header">
+
+
+                <div class="row row-sm">
+                    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6">
+                        <div class="card card-stats statistic-box mb-4 mt-3">
+                            <div class="card-header card-header-warning card-header-icon position-relative border-0 text-right px-3 py-0"
+                                style=" border-radius: 5px; background-color: #28a745;">
+                                <p class="card-category text-uppercase fs-18 font-weight-bold"
+                                    style="color:white; text-align:center;">Check-In report</p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-4 mt-3">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Please Select Month
+                            </button>
+                            <div class="dropdown-menu">
+
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'January') }}">January</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'February') }}">February</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'March') }}">March</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'April') }}">April</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'May') }}">May</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'June') }}">June</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'July') }}">July</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'August') }}">August</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'September') }}">September</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'October') }}">October</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'November') }}">November</a>
+                                <a style="color: #37A000" class="dropdown-item"
+                                    href="{{ url('/checkinlistfilter?' . 'month=' . 'December') }}">December</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="Saarni">
+
+                @component('backEnd.components.alert')
+                @endcomponent
+
+                <div class="table-responsive">
+                    <table class="table table-bordered w-100 dt-datatable">
+                        <thead>
+                            <tr>
+                                <th data-column="team_member">Name</th>
+                                <th data-column="rolename">Role</th>
+                                <th data-column="assignmentname">Assignment</th>
+                                <th data-column="client_Namess">Client</th>
+                                <th data-column="teampartner">Partner</th>
+                                <th data-column="joining_date">DOJ</th>
+                                <th>Month</th>
+                                @foreach ($datesArray as $date)
+                                    <th>{{ $date ?? '' }}</th>
+                                @endforeach
+                                <th data-column="daysInMonth">Total Number of Days</th>
+                                <th data-column="totalcheckin_count">Total working in Month</th>
+                                <th data-column="Total_Checkin_minus_holiday_count">Total Checkin</th>
+                                <th data-column="Timesheet_Filled_Count">Total Timesheet Filled</th>
+                                <th data-column="holiday_working_count">Weekends Checkin</th>
+                                <th data-column="weekends_Count">Total Weekends</th>
+                                <th data-column="holidaymonth_Count">Total Holidays</th>
+                                <th data-column="Office">Office</th>
+                                <th data-column="WFM">WFH</th>
+                                <th data-column="Client_Place">Client</th>
+                                <th data-column="Business_Development">BD</th>
+                                <th data-column="On_Time_Before_10_30">On Time(Before 10.30)</th>
+                                <th data-column="chgg">10.30 AM-12 PM</th>
+                                <th data-column="After_12_PM">After 12 PM</th>
+                                <th data-column="Leave_Days">Leave</th>
+                                <th data-column="Holiday_Count">Holiday</th>
+                                <th>Not Checkin</th>
+                                <th data-column="Unallocated">Unallocated</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!--/.body content-->
+    <style>
+        .table thead th {
+            white-space: nowrap;
+            /* Prevent text from wrapping */
+            overflow: hidden;
+            /* Hide any overflowing text */
+            text-overflow: ellipsis;
+            /* Add an ellipsis (...) for text that overflows */
+            max-width: 200px;
+            /* Set a fixed maximum width for each header cell */
+        }
+
+
+        .card-category {
+            border-radius: 5px;
+        }
+    </style>
+
+    @php
+        $datatableUrl = request()->fullUrl();
+        $options = [
+            'selector' => 'Saarni',
+            'url' => $datatableUrl,
+            'moduleName' => 'Check-In List',
+        ];
+    @endphp
+
+    @include('backEnd.layouts.includes.saarnijs', ['options' => $options])
+@endsection
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+resources\views\backEnd\check-In\checkinlist_datatable.blade.php
+
+@forelse($records as $reportData)
+    <tr>
+        <td>{{ $reportData->team_member ?? '' }}</td>
+        <td>{{ $reportData->rolename ?? '' }}</td>
+        <td>{{ $reportData->assignmentname ?? '' }}</td>
+        <td>{{ $reportData->client_Namess ?? '' }}</td>
+        <td>{{ $reportData->teampartner ?? '' }}</td>
+        <td>{{ $reportData->joining_date ? date('F d,Y', strtotime($reportData->joining_date)) : '' }}</td>
+        <td>{{ $reportData->currentMonthName ?? '' }}</td>
+        @foreach ($reportData->checkin_datetime as $datetime)
+            <td>{{ $datetime['time'] ?? 0 }}</td>
+        @endforeach
+        <td>{{ $reportData->daysInMonth ?? 0 }}</td>
+        <td>{{ $reportData->totalcheckin_count ?? 0 }}</td>
+        <td>{{ $reportData->Total_Checkin_minus_holiday_count ?? 0 }}</td>
+        <td>{{ $reportData->Timesheet_Filled_Count ?? 0 }}</td>
+        <td>{{ $reportData->holiday_working_count ?? 0 }}</td>
+        <td>{{ $reportData->weekends_Count ?? 0 }}</td>
+        <td>{{ $reportData->holidaymonth_Count ?? 0 }}</td>
+        <td>{{ $reportData->Office ?? 0 }}</td>
+        <td>{{ $reportData->WFM ?? 0 }}</td>
+        <td>{{ $reportData->Client_Place ?? 0 }}</td>
+        <td>{{ $reportData->Business_Development ?? 0 }}</td>
+        <td>{{ $reportData->On_Time_Before_10_30 ?? 0 }}</td>
+        <td>{{ $reportData->chgg ?? 0 }}</td>
+        <td>{{ $reportData->After_12_PM ?? 0 }}</td>
+        <td>{{ $reportData->Leave_Days ?? 0 }}</td>
+        <td>{{ $reportData->Holiday_Count ?? 0 }}</td>
+        <td>{{ abs($reportData->not_checkin ?? 0) }}</td>
+        <td>{{ $reportData->Unallocated ?? 0 }}</td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="{{ 25 + count($datesArray) }}" class="text-center">No Data Found</td>
+    </tr>
+@endforelse
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+        Route::get('/checkinlistfilter', [CheckInController::class, 'checkinlistfiltersection']);
+		
+		
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\CheckInController.php
+
+
+    public function checkinlistfiltersection(Request $request)
+    {
+        // dd($request);
+
+        $employeename = DB::table('teammembers')
+            ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+            ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+            ->where('role_id', '!=', 11)->where('role_id', '!=', 13)->where('role_id', '!=', 12)->where('status', 1)
+            ->select('teammembers.*', 'roles.rolename', 'titles.title')
+            ->get();
+        $month =  $request->month;
+        $month = date('m', strtotime($month));
+        //dd($month);
+        $currentYear = now()->year;
+        $selectedMonth = Carbon::create(null, $month, 1);
+        // Set start date to the 25th of the month
+        $startDate = $selectedMonth->copy()->subMonth()->day(26);
+        // Set end date to the 25th of the selected month
+        $endDate = now()->startOfMonth()->setMonth($month)->addDays(24);
+        $daysInMonth = $startDate->diffInDays($endDate) + 1;
+        $currentMonthName = date('F', mktime(0, 0, 0, $month, 1));
+        //dd($currentMonthName);
+        $datesArray = [];
+        //dd($endDate);
+        // Generate dates for the current month
+        $currentDate = $startDate->copy();
+        while ($currentDate <= $endDate) {
+            $datesArray[] = $currentDate->format('d');
+            $currentDate->addDay();
+        }
+
+        $report = DB::table('teammembers')
+            ->leftJoin('checkins', 'teammembers.id', '=', 'checkins.teammember_id')
+            ->leftJoin('roles', 'teammembers.role_id', '=', 'roles.id')
+            ->leftJoin('clients', 'checkins.client_id', '=', 'clients.id')
+            ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+            ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+            ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+            ->leftJoin('teammembers as teampartner', 'teampartner.id', '=', 'assignmentmappings.leadpartner')
+            ->leftJoin('holidays', function ($join) {
+                $join->on(DB::raw('STR_TO_DATE(checkins.date, "%d-%m-%Y")'), '=', 'holidays.startdate');
+            })
+            ->whereBetween(DB::raw('STR_TO_DATE(checkins.date, "%d-%m-%Y")'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+            ->select(
+                'teammembers.id',
+                'teammembers.joining_date',
+                'teammembers.team_member',
+                'roles.rolename',
+
+                DB::raw('GROUP_CONCAT(DISTINCT clients.client_name) as client_Namess'),
+                DB::raw('GROUP_CONCAT(DISTINCT checkins.assignment_id) as assignmentid'),
+                DB::raw('GROUP_CONCAT(DISTINCT assignments.assignment_name) as assignmentname'),
+                DB::raw('GROUP_CONCAT(DISTINCT teampartner.team_member) as teampartner'),
+                // DB::raw('COUNT(*) as Total_Checkin'),
+                DB::raw('COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y")) as Total_Checkin'),
+                DB::raw('SUM(CASE WHEN checkins.checkin_from = "Office" THEN 1 ELSE 0 END) as Office'),
+                DB::raw('SUM(CASE WHEN checkins.checkin_from = "Work From Home" THEN 1 ELSE 0 END) as WFM'),
+                DB::raw('SUM(CASE WHEN checkins.checkin_from = "Client Place" THEN 1 ELSE 0 END) as Client_Place'),
+                DB::raw('SUM(CASE WHEN checkins.checkin_from = "Business Development" THEN 1 ELSE 0 END) as Business_Development'),
+                DB::raw('SUM(CASE WHEN checkins.time < "10:30:00" THEN 1 ELSE 0 END) as On_Time_Before_10_30'),
+                DB::raw('SUM(CASE WHEN checkins.time >= "10:30:00" AND checkins.time < "12:00:00" THEN 1 ELSE 0 END) as chgg'),
+                DB::raw('SUM(CASE WHEN checkins.time > "12:01:00" THEN 1 ELSE 0 END) as After_12_PM'),
+                // DB::raw('SUM(CASE WHEN checkins.typeval IS NULL THEN 1 ELSE 0 END) as Unallocated'),
+                DB::raw("SUM(CASE WHEN checkins.typeval = 'Unallocated' THEN 1 ELSE 0 END) as Unallocated"),
+
+                DB::raw('GROUP_CONCAT(DISTINCT CONCAT(STR_TO_DATE(checkins.date, "%d-%m-%Y"), " ", TIME_FORMAT(checkins.time, "%H:%i:%s"))) as checkin_datetime'),
+
+                //-- Leave Count
+                DB::raw('(SELECT COUNT(*) FROM applyleaves 
+                      WHERE applyleaves.createdby = teammembers.id 
+                      AND applyleaves.from BETWEEN "' . $startDate->format('Y-m-d') . '" 
+                      AND "' . $endDate->format('Y-m-d') . '") as Leave_Count'),
+
+                //-- Leave Days
+                DB::raw('(SELECT SUM(DATEDIFF(
+                CASE WHEN `to` > "' . $endDate->format('Y-m-d') . '" THEN "' . $endDate->format('Y-m-d') . '" ELSE `to` END,
+                CASE WHEN `from` < "' . $startDate->format('Y-m-d') . '" THEN "' . $startDate->format('Y-m-d') . '" ELSE `from` END
+            ) + 1)
+            FROM applyleaves 
+            WHERE applyleaves.createdby = teammembers.id
+              AND status IN (1,0) 
+              AND (`from` BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '"
+              OR `to` BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '"
+              OR (`from` < "' . $startDate->format('Y-m-d') . '" AND `to` > "' . $endDate->format('Y-m-d') . '")
+            )) as Leave_Days'),
+
+                DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '" AND holidays.status = 3) as weekends_Count'),
+                DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '" AND holidays.status = 1) as holidaymonth_Count'),
+                DB::raw('(SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '") as Holiday_Count'),
+
+                DB::raw('(' . $daysInMonth . ' - (SELECT COUNT(*) FROM holidays WHERE holidays.startdate BETWEEN "' . $startDate->format('Y-m-d') . '" AND "' . $endDate->format('Y-m-d') . '")) as totalcheckin_count'),
+                DB::raw('COUNT(DISTINCT holidays.startdate) as holiday_working_count'),
+                DB::raw('COUNT(DISTINCT STR_TO_DATE(checkins.date, "%d-%m-%Y")) - COUNT(DISTINCT holidays.startdate) as Total_Checkin_minus_holiday_count'),
+
+                //----------------------------------------------------
+                // ⭐ ADDED: TOTAL TIMESHEET FILLED COUNTER
+                //----------------------------------------------------
+                DB::raw('(SELECT COUNT(DISTINCT STR_TO_DATE(timesheetusers.date, "%d-%m-%Y")) FROM timesheetusers
+          WHERE timesheetusers.createdby = teammembers.id
+          AND STR_TO_DATE(timesheetusers.date, "%d-%m-%Y")
+          BETWEEN "' . $startDate->format('Y-m-d') . '"
+          AND "' . $endDate->format('Y-m-d') . '"
+         ) AS Timesheet_Filled_Count')
+            )
+
+            ->groupBy('teammembers.id', 'teammembers.joining_date', 'teammembers.team_member', 'roles.rolename')
+            ->get();
+
+
+        //dd($report);
+        $holidays = \App\Models\Holiday::whereBetween('startdate', [
+            $startDate->format('Y-m-d'),
+            $endDate->format('Y-m-d')
+        ])
+            ->get()
+            ->keyBy(function ($item) {
+                return date('Y-m-d', strtotime($item->startdate));
+            });
+
+        $leaves = \App\Models\Applyleave::where(function ($query) use ($startDate, $endDate) {
+            $query->where('from', '<=', $endDate)
+                ->where('to', '>=', $startDate);
+        })->leftJoin('leavetypes', 'leavetypes.id', '=', 'applyleaves.leavetype')
+            ->select('applyleaves.*', 'leavetypes.code')
+            ->get();
+        foreach ($report as $entry) {
+            // Explode each entry by the comma to separate date-time pairs
+            $entry->daysInMonth = $daysInMonth;
+            $entry->currentMonthName = $currentMonthName;
+            $entry->formatted_joining_date = \Carbon\Carbon::parse($entry->joining_date)->isoFormat('MMMM DD, YYYY');
+            $datetime_pairs = explode(',', $entry->checkin_datetime);
+
+            // Create a temporary array to hold the separated date-time components
+            $temp_array = [];
+
+            // Loop through each date between $startDate and $endDate
+            $currentDate = $startDate;
+            while ($currentDate <= $endDate) {
+                $date = date('Y-m-d', strtotime($currentDate));
+                $holiday = $holidays[$date] ?? null;
+
+                // Filter leaves for the current date and team member
+                $leavesForDate = $leaves->where('from', '<=', $date)
+                    ->where('to', '>=', $date)
+                    ->where('createdby', $entry->id)
+                    ->whereIn('status', [1, 0])
+                    ->pluck('code')
+                    ->implode(', ');
+
+                // Check if the current date exists in the entry's checkin_datetime
+                $found = false;
+                foreach ($datetime_pairs as $datetime_pair) {
+                    $datetime_parts = explode(' ', trim($datetime_pair));
+                    $entry_date = $datetime_parts[0]; // Extract date from datetime pair
+                    if ($date === $entry_date) {
+                        $time = $datetime_parts[1]; // Extract time from datetime pair
+                        $time = date('H:i', strtotime($time));
+                        $temp_array[] = [
+                            'date' => $date,
+                            'time' => $time
+                        ];
+                        $found = true;
+                        break; // No need to check further once found
+                    }
+                }
+
+                // If the current date was not found, set time to null
+                if (!$found) {
+                    $temp_array[] = [
+                        'date' => $date,
+                        'time' => ($holiday) ? ($holiday->status == 3 ? 'W' : 'H') : (($leavesForDate) ? $leavesForDate : 'Not Checkin')
+                    ];
+                }
+
+                // Move to the next date
+                $currentDate = date('Y-m-d', strtotime($currentDate . ' +1 day'));
+            }
+
+            // Replace the checkin_datetime with the separated date-time components
+            $entry->checkin_datetime = $temp_array;
+
+            $notCheckinCount = 0;
+
+            foreach ($entry->checkin_datetime as $day) {
+                if ($day['time'] === 'Not Checkin') {
+                    $notCheckinCount++;
+                }
+            }
+
+            $entry->not_checkin = $notCheckinCount;
+        }
+
+        if (!$request->ajax()) {
+            return view('backEnd.check-In.checkinlist', compact('employeename', 'datesArray'));
+        }
+
+        try {
+            $reportCollection = collect($report);
+
+            if (!empty($request->search)) {
+                $search = strtolower($request->search);
+                $reportCollection = $reportCollection->filter(function ($item) use ($search) {
+                    return str_contains(strtolower($item->team_member ?? ''), $search)
+                        || str_contains(strtolower($item->rolename ?? ''), $search)
+                        || str_contains(strtolower($item->assignmentname ?? ''), $search)
+                        || str_contains(strtolower($item->client_Namess ?? ''), $search)
+                        || str_contains(strtolower($item->teampartner ?? ''), $search);
+                });
+            }
+
+            if (!empty($request->sortColumn)) {
+                $sortColumn = $request->sortColumn;
+                if ($request->sortDirection === 'asc') {
+                    $reportCollection = $reportCollection->sortBy($sortColumn);
+                } else {
+                    $reportCollection = $reportCollection->sortByDesc($sortColumn);
+                }
+            }
+
+            $perPage = $request->perPage ?? 25;
+            $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1;
+            $items = $reportCollection->forPage($currentPage, $perPage);
+
+            $records = new \Illuminate\Pagination\LengthAwarePaginator(
+                $items,
+                $reportCollection->count(),
+                $perPage,
+                $currentPage,
+                ['path' => \Illuminate\Pagination\Paginator::resolveCurrentPath()]
+            );
+
+            $datatable = view('backEnd.check-In.checkinlist_datatable', compact('records', 'datesArray'))->render();
+
+            return response()->json([
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records)
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 500, 'msg' => $th->getMessage()]);
+        }
+    }
+
+
+
+end hare 
+18-05-2026
+
+16-06-2026
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\EmployeepayrollController.php
+ $currentDateTime = Carbon::now('America/New_York');
+ 
+ 
+  $currentDateTime = Carbon::now('Asia/Kolkata');
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
@@ -8197,6 +11548,120 @@ app\Http\Controllers\ApplyleaveController.php
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 app\Http\Controllers\ApplyleaveController.php
 
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\ApplyleaveController.php
 
 
 
@@ -8235,3 +11700,46 @@ https://cronapi.capitall.io/documentationstatus
 https://kgs.capitall.io/ assignmentfulllist , 
 
 payrollarticle payrollarticleneft do url h
+
+
+Do not explain. Output only final code.
+
+Refactor subpoena module UI:
+
+- Replace all modals with velox module style (inline/page UI)
+- Do not change business logic
+- Keep structure simple
+
+Output:
+- Only modified code
+- No explanation
+
+
+- Minimal changes only
+- No explanation
+- Do not rewrite full file
+
+
+
+Task: <your task>
+
+Rules:
+- Do not change logic
+- Minimal changes only
+- Do not rewrite full file
+- No explanation
+
+Output:
+- Only modified code
+
+https://platform.claude.com/settings/billin
+
+
+
+Completed by bahadur sir 
+http://127.0.0.1:8000/invoicedatareportlist
+http://127.0.0.1:8000/assignments_completed_list
+http://127.0.0.1:8000/assignments_delayed_list
+http://127.0.0.1:8000/lossassignment_list
+
+

@@ -1,0 +1,26 @@
+Analyze this project and explain structure
+
+22222222222222222222222222222222222
+
+Task:
+Change only the UI/layout of this Blade file to match the dashboard UI structure used in the reference dashboard.
+
+Requirements:
+- Do not change any business logic.
+- Do not modify queries, variables, loops, conditions, routes, URLs, or functionality.
+- Keep all @if, @foreach, and PHP code exactly as-is.
+- Only update HTML structure, Bootstrap classes, card heights, scrollable sections, spacing, and footer placement.
+- Match the visual style of the reference dashboard:
+  - Assignment card height 649px with scrollable content area.
+  - Notification card with fixed height and scroll area.
+  - Upcoming Holidays card with same style as reference dashboard.
+  - Mentor and Mentees cards should use the same card/list layout as Assignment card.
+  - Birthday and Work Anniversary cards should have identical styling and scrolling behavior.
+  - Keep existing colors and icons unchanged.
+- Output complete updated Blade code.
+
+
+
+222222222222222222222222222222222222222222
+16-06-2026
+https://chatgpt.com/#pricing

@@ -488,27 +488,52 @@ git pull origin npci-dev
 git merge npci-devlatest
 git push origin npci-dev
 
+22222222222222222222222222222
+daily use before work start
+git fetch origin
+git rebase origin/npci-dev
+
+
+222222222222222222222222222222222222222222222222
+
+new branch create and work  on it 
+git checkout npci-dev
+git pull origin npci-dev
+git checkout -b shahid-iacV4
+git push -u origin shahid-iacV4
+
+now you can work on it 
+
+end hare 
 
 regarding push code
+php artisan optimize:clear 
+php artisan serve
 
 cd C:\xampp\htdocs\ifchub
+cd C:\xampp\htdocs\vsademo
 cd C:\xampp\htdocs\npci-dev
+cd C:\xampp\htdocs\kgsdemo
+cd C:\xampp\htdocs\capitall
 git branch
 git add . 
-git commit -am "All minor Changed completed"
+git commit -m "KYC doc"
 git status
 git pull origin npci-dev 
 git push origin kkc 
 git push origin shahid-npcidashboard 
-git push origin shahid-iac 
+git push origin vsa-demo
+git push origin shahid-iacV3
 
 git add .
-git commit -am "fetch latest code"
+git commit -a -m "add git command"
 git pull origin npci-dev
 git push origin HEAD
 git merge npci-dev
 
 
+
+Working on latest code then use it 
 git checkout npci-dev
 git pull origin npci-dev
 git merge npcidev-shahid
@@ -523,6 +548,7 @@ php artisan migrate:refresh --path=\database\migrations\2026_03_14_164508_create
 cd C:\Shahid Raza\Capitall\VSA project functionality
 cd C:\xampp\htdocs\npci-dev
 git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git .
+git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git npci-dev
 git status
 git config --global --add safe.directory C:/xampp/htdocs/npci-dev
 git config --global --add safe.directory "C:/Shahid Raza/Capitall/VSA project functionality"
@@ -540,7 +566,7 @@ git pull origin npci-dev
 
 git status
 git add .
-git commit -am "fetch latest code"
+git commit -a -m "add git command"
 git pull origin npci-dev
 git push origin HEAD
 
@@ -564,11 +590,7 @@ b79ee89c Merged in fixes-29-mar-26 (pull request #105)
 C:\xampp\htdocs\npci-dev>
 
 
-new branch create and work 
-git checkout npci-dev
-git pull origin npci-dev
-git checkout -b shahid-raza-new
-git push -u origin shahid-raza-new
+
 
 
 conflict time solved 
@@ -581,7 +603,7 @@ git pull origin npci-dev
 git stash
 git status
 git stash apply
-git commit -am "Conflict resolved"
+git commit -a -m "add git command"
 git status
 git pull origin npci-dev
 git pull origin npci-dev
@@ -606,7 +628,7 @@ Option 1: Fresh branch from latest npci-dev (BEST)
 git checkout npci-dev
 git pull origin npci-dev
 git checkout -b shahid-iac
-git push -u origin shahid-iac
+git push -u origin shahid-iacV2
 
 
 git diff resources/views/iacdashboard/iacengagement.blade.php
@@ -628,3 +650,212 @@ git diff routes/web.php
 | `:q!`   | exit without saving ❌ |
 
 https://bitbucket.org/capitallio/ifchub/pull-requests/new?source=shahid-iac&t=1
+
+cltrl + L for agent 
+
+git restore resources/views/iacdashboard/iacengagement.blade.php
+
+regarding revret / regarding restore commit 
+git log --oneline -5
+git reset --hard 364550f5
+
+222222222222222222222222222222222222222222222222222222
+regarding git ignor folder
+# Laravel specific
+/vendor
+/node_modules
+
+# Laravel storage (ignore files but keep structure)
+/storage/*.key
+/storage/app/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Keep folders
+!/storage/app/.gitignore
+!/storage/framework/.gitignore
+!/storage/logs/.gitignore
+
+# Env file
+.env
+
+# Public assets (optional - agar build se generate hote ho)
+/public/storage
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archives
+*.zip
+*.sql
+
+# Misc
+dist/
+
+222222222222222222222222222222222222222222
+existing project me new branch so that your updated code will push in this 
+cd C:\xampp\htdocs\kgsdemo
+git status
+git init
+git remote add origin https://capitall-india-admin@bitbucket.org/capitallio/kgs-capitall.git
+git remote -v
+git checkout -b shahid-kgsdemo
+git add .
+git commit -m "Initial commit with updated composer and latest code"
+git push -u origin shahid-kgsdemo
+git push -u origin shahid-internal
+git push -u origin service-provider
+
+.gitignore check please
+vendor/
+node_modules/
+.env
+
+
+server per conflict aaye tab 
+in this branch shahid-iacV3 then 
+git fetch origin
+git branch it will be  shahid-iacV3
+git merge origin/npci-dev  now you will see conflict and solve it then 
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222
+git stash push -u -m "temp work"
+
+Iska meaning:
+git stash push → current changes stash karega
+-u → untracked files/folders bhi stash karega
+-m "temp work" → stash ko name de dega
+
+git status
+git stash pop
+git stash drop stash@{0}
+
+git stash apply
+    git restore .
+    git clean -fd
+
+git stash list
+git stash apply stash@{0}
+
+git restore resources/views/group/vendormanagement/invoice-recordings/form.blade.php
+
+
+222222222222222222222222222222222222
+regarding push 
+
+git checkout shahid-iacV3
+
+git add .
+git commit -m "your task"
+
+git fetch origin
+git rebase origin/npci-dev
+
+# resolve conflicts if any
+
+git add (conflict file path)
+git rebase --continue
+
+git push origin shahid-iacV3 --force-with-lease
+
+
+
+git commit -m "Conflict solved"
+git rebase origin/npci-dev
+git add app/Http/Controllers/Admin/Dashboard/VendorManagement/VendorManagementController.php
+git add resources/views/group/vendormanagement/invoice-recordings/datatable.blade.php
+git rebase --continue
+git push origin shahid-iacV3 --force-with-lease
+
+2222222222222222222222222222222222
+git checkout shahid-iacV3
+
+git fetch origin
+git rebase origin/npci-dev
+git push origin shahid-iacV3 --force-with-lease
+
+
+
+
+
+222222222222222222222
+git checkout -b backup-filesystem-config
+    Ye current state ka exact snapshot bana dega.
+git checkout shahid-iacV3
+
+git restore config/filesystems.php
+
+
+2222222222222222222
+C:\xampp\htdocs\kgsdemo>git reset --hard
+fatal: Unable to create 'C:/xampp/htdocs/kgsdemo/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, or the lock file may be stale
+
+use it del .git\index.lock
+
+22222222222222222222222222222222222222222222
+switch on ---
+
+
+C:\xampp\htdocs\capitall>git log --oneline -20
+a8a36a5 (HEAD) only add path
+679223a s3 on index and store completed 4
+b74fa9f s3 on index and store completed 3
+cf16b17 s3 on index and store completed 2
+9ab8fb0 s3 on index and store completed 1
+b72087c s3 on index and store completed
+50333c7 (origin/shahid-internal) Initial commit with updated composer and latest code
+
+git checkout 50333c7
+git checkout shahid-kgsdemo
+
+
+
+git checkout shahid-internal
+git reset --hard 1b0bf0e
+git log --oneline -5
+
+
+git cherry-pick 1b0bf0e
+
+
+git restore .
+
+##### sirf code dekhna hai?
+git log --oneline -5
+git checkout a8a36a5
+git checkout 1b0bf0e
+  Code dekhne ke baad wapas apni branch par aane ke liye:
+git checkout shahid-internal
+
+
+
+##### branch ko wapas us commit par le jana hai?
+git checkout shahid-internal
+git log --oneline -5
+git reset --hard a8a36a5
+
+
+##### ya us commit ke changes current code me lana hai?
+git checkout shahid-internal
+git log --oneline -5
+git cherry-pick a8a36a5
+
+222222222222222222222222
+delete multiple file 
+del CleanProject.bat ConnectPhone.bat Doctor.bat GitPush.bat InstallDebug.bat ReleaseAPK.bat StartMetro.bat

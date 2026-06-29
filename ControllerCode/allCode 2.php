@@ -38,18 +38,342 @@ class Allcode extends Controller
         //* regarding 
         // Start Hare
         // Start Hare
+
+        //! End hare 
+        
+        //* regarding  s3 handlar / s3 handling 
+        // Start Hare
+
+            public function store(Request $request)
+    {
+
+     // Set this to false for local storage, true for S3 (same as store function)
+            $useS3 = false;
+
+            $allowedRoleIds = [14, 16, 17, 18];
+            if (in_array($request->role_id, $allowedRoleIds)) {
+                $employeestatus = 'Employee';
+            } elseif ($request->role_id == 19) {
+                $employeestatus = 'Intern';
+            } elseif ($request->role_id == 15) {
+                $employeestatus = 'CA Article';
+            } elseif ($request->role_id == 21) {
+                $employeestatus = 'Support Staff';
+            }
+
+            // Aadhar Upload
+            if ($request->hasFile('aadharupload')) {
+                $file = $request->file('aadharupload');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['aadharupload'] = $name;
+            }
+
+            // PAN Upload
+            if ($request->hasFile('panupload')) {
+                $file = $request->file('panupload');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['panupload'] = $name;
+            }
+
+            // Passport Upload
+            if ($request->hasFile('passport')) {
+                $file = $request->file('passport');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['passport'] = $name;
+            }
+
+            // Voter ID Upload
+            if ($request->hasFile('voterid')) {
+                $file = $request->file('voterid');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['voterid'] = $name;
+            }
+
+            // Driving License Upload
+            if ($request->hasFile('drivinglicense')) {
+                $file = $request->file('drivinglicense');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['drivinglicense'] = $name;
+            }
+
+            // Profile Pic Upload (With Resize)
+            if ($request->hasFile('profilepic')) {
+                $avatar = $request->file('profilepic');
+                $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+
+                if ($useS3) {
+                    $image = Image::make($avatar)->resize(800, 600)->encode($avatar->getClientOriginalExtension());
+                    Storage::disk('s3')->put('candidateonboarding/profilepic/' . $filename, (string) $image);
+                } else {
+                    $destinationPath = 'backEnd/image/teammember/profilepic';
+                    Image::make($avatar)->resize(800, 600)->save($destinationPath . '/' . $filename);
+                }
+                $data['profilepic'] = $filename;
+            }
+
+            // Appointment Letter Upload
+            if ($request->hasFile('appointment_letter')) {
+                $file = $request->file('appointment_letter');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding/appointmentletter', $filename, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember/appointmentletter';
+                    $file->move($destinationPath . '/', $filename);
+                }
+                $data['appointment_letter'] = $filename;
+            }
+
+            // NDA Upload
+            if ($request->hasFile('nda')) {
+                $file = $request->file('nda');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding/nda', $filename, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember/nda';
+                    $file->move($destinationPath . '/', $filename);
+                }
+                $data['nda'] = $filename;
+            }
+
+            // Address Upload (With Resize)
+            if ($request->hasFile('addressupload')) {
+                $avatar = $request->file('addressupload');
+                $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+
+                if ($useS3) {
+                    $image = Image::make($avatar)->resize(800, 600)->encode($avatar->getClientOriginalExtension());
+                    Storage::disk('s3')->put('candidateonboarding/addressupload/' . $filename, (string) $image);
+                } else {
+                    $destinationPath = 'backEnd/image/teammember/addressupload';
+                    Image::make($avatar)->resize(800, 600)->save($destinationPath . '/' . $filename);
+                }
+                $data['addressupload'] = $filename;
+            }
+            
+
+
+
+        $request->validate([
+            'team_member' => "required",
+            'role_id' => "required",
+            'emailid' => 'required|unique:teammembers',
+        ]);
+
+        try {
+            $data = $request->except(['_token']);
+
+            // Set this to false for local storage, true for S3
+            $useS3 = false;
+
+            $allowedRoleIds = [14, 16, 17, 18];
+            if (in_array($request->role_id, $allowedRoleIds)) {
+                $employeestatus = 'Employee';
+            } elseif ($request->role_id == 19) {
+                $employeestatus = 'Intern';
+            } elseif ($request->role_id == 15) {
+                $employeestatus = 'CA Article';
+            } elseif ($request->role_id == 21) {
+                $employeestatus = 'Support Staff';
+            }
+
+            if ($request->hasFile('aadharupload')) {
+                $file = $request->file('aadharupload');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['aadharupload'] = $name;
+            }
+
+            if ($request->hasFile('panupload')) {
+                $file = $request->file('panupload');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['panupload'] = $name;
+            }
+
+            if ($request->hasFile('passport')) {
+                $file = $request->file('passport');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['passport'] = $name;
+            }
+
+            if ($request->hasFile('voterid')) {
+                $file = $request->file('voterid');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['voterid'] = $name;
+            }
+
+            if ($request->hasFile('drivinglicense')) {
+                $file = $request->file('drivinglicense');
+                $name = time() . $file->getClientOriginalName();
+
+                if ($useS3) {
+                    $file->storeAs('candidateonboarding', $name, 's3');
+                } else {
+                    $destinationPath = 'backEnd/image/teammember';
+                    $file->move($destinationPath, $name);
+                }
+                $data['drivinglicense'] = $name;
+            }
+
+            if ($request->hasFile('profilepic')) {
+                $avatar = $request->file('profilepic');
+                $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+
+                if ($useS3) {
+                    $image = Image::make($avatar)->resize(800, 600)->encode($avatar->getClientOriginalExtension());
+                    Storage::disk('s3')->put('candidateonboarding/profilepic/' . $filename, (string) $image);
+                } else {
+                    Image::make($avatar)->resize(800, 600)->save('backEnd/image/teammember/profilepic/' . $filename);
+                }
+                $data['profilepic'] = $filename;
+            }
+
+            if ($request->hasFile('appointment_letter')) {
+                $avatar = $request->file('appointment_letter');
+                $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+
+                if ($useS3) {
+                    $image = Image::make($avatar)->resize(800, 600)->encode($avatar->getClientOriginalExtension());
+                    Storage::disk('s3')->put('candidateonboarding/appointmentletter/' . $filename, (string) $image);
+                } else {
+                    Image::make($avatar)->resize(800, 600)->save('backEnd/image/teammember/appointmentletter/' . $filename);
+                }
+                $data['appointment_letter'] = $filename;
+            }
+
+            if ($request->hasFile('addressupload')) {
+                $avatar = $request->file('addressupload');
+                $filename = time() . rand(1, 100) . '.' . $avatar->getClientOriginalExtension();
+
+                if ($useS3) {
+                    $image = Image::make($avatar)->resize(800, 600)->encode($avatar->getClientOriginalExtension());
+                    Storage::disk('s3')->put('candidateonboarding/addressupload/' . $filename, (string) $image);
+                } else {
+                    Image::make($avatar)->resize(800, 600)->save('backEnd/image/teammember/addressupload/' . $filename);
+                }
+                $data['addressupload'] = $filename;
+            }
+
+            $data['employment_status'] = $employeestatus ?? '';
+            $data['status'] = 0;
+            $data['created_by'] = auth()->user()->id;
+
+            Teammember::Create($data);
+
+            $teamMemberName = $request->input('team_member');
+            $teammember_id = Teammember::where('team_member', $teamMemberName)->value('id');
+
+            $currentDateTime = now()->format('Y-m-d H:i:s');
+            $actionName = class_basename($request->route()->getActionname());
+            $pagename = substr($actionName, 0, strpos($actionName, "Controller"));
+            $id = auth()->user()->teammember_id;
+
+            DB::table('activitylogs')->insert([
+                'user_id' => $id,
+                'teammember_id' => $teammember_id,
+                'ip_address' => $request->ip(),
+                'activitytitle' => $pagename,
+                'month_year' => now()->format('Y-m'),
+                'generate_date_time' => $currentDateTime,
+                'description' => 'New Team Member Added' . ' ' . '( ' . $request->team_member . ' )',
+                'created_at' => date('Y-m-d'),
+                'updated_at' => date('Y-m-d')
+            ]);
+
+            $output = array('msg' => 'Create Successfully');
+            return back()->with('success', $output);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+    }
+        // Start Hare
+        //! End hare 
+        //* regarding 
+        // Start Hare
+//         ALTER TABLE articlepayrolls
+// MODIFY stipend DECIMAL(15,2) DEFAULT NULL,
+// MODIFY totalstipend DECIMAL(15,2) DEFAULT NULL,
+// MODIFY arrear DECIMAL(15,2) DEFAULT NULL,
+// MODIFY amounttobepaid DECIMAL(15,2) DEFAULT NULL;
+        // Start Hare
         //! End hare 
         //* regarding 
         // Start Hare
         // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
-        // Start Hare
-        //! End hare 
-        //* regarding 
-        // Start Hare
-        // Start Hare
+        DB::beginTransaction();
+                    DB::commit();
+
         //! End hare 
         //* regarding 
         // Start Hare
@@ -107,7 +431,7 @@ foreach ($tables as $table) {
             //         $newAttachmentPath = uploadToS3($file, 'uploads/attachment/', $filename);
             //     }
 
-            //     $data['attachment'] = $newAttachmentPath;
+            //     $data['attachment'] = $newAttrachmentPath;
 
             //     // Log the uploaded file
             //     DB::table('project_report_logs')->insert([

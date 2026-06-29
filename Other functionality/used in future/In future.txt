@@ -5,8 +5,111 @@ c:\xampp\htdocs\vsalive\app\Http\Controllers\11ActivitylogsController.php c:\xam
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+public function getFileUrl($fileName, $localPath = 'backEnd/image/teammember')
+    {
+        if (empty($fileName)) {
+            return $localPath == 'backEnd/image/teammember/profilepic'
+                ? asset('backEnd/image/dummy-user.png')
+                : '#';
+        }
+
+        // agar temp path aa raha hai to usko ignore karo
+        if (
+            str_contains($fileName, 'xampp/tmp') ||
+            str_contains($fileName, 'xampp\\tmp') ||
+            str_contains($fileName, '.tmp')
+        ) {
+            return '#';
+        }
+
+        $fileName = str_replace('\\', '/', trim($fileName));
+
+        $localFile = public_path($localPath . '/' . basename($fileName));
+
+        if (file_exists($localFile)) {
+            return asset($localPath . '/' . basename($fileName));
+        }
+
+        try {
+            if (Storage::disk('s3')->exists($fileName)) {
+                return Storage::disk('s3')->temporaryUrl($fileName, now()->addMinutes(30));
+            }
+
+            $s3Path = 'candidateonboarding/' . basename($fileName);
+
+            if (Storage::disk('s3')->exists($s3Path)) {
+                return Storage::disk('s3')->temporaryUrl($s3Path, now()->addMinutes(30));
+            }
+        } catch (\Exception $e) {
+            \Log::error('MinIO file error: ' . $e->getMessage());
+        }
+
+        return $localPath == 'backEnd/image/teammember/profilepic'
+            ? asset('backEnd/image/teammember/profilepic/16092382843.png')
+            : '#';
+    }
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+   public function getFileUrl($fileName, $localPath = 'backEnd/image/teammember')
+    {
+        if (empty($fileName)) {
+            return '#';
+        }
+
+        // agar temp path aa raha hai to usko ignore karo
+        if (
+            str_contains($fileName, 'xampp/tmp') ||
+            str_contains($fileName, 'xampp\\tmp') ||
+            str_contains($fileName, '.tmp')
+        ) {
+            return '#';
+        }
+
+        $fileName = str_replace('\\', '/', trim($fileName));
+
+        $localFile = public_path($localPath . '/' . basename($fileName));
+
+        if (file_exists($localFile)) {
+            return asset($localPath . '/' . basename($fileName));
+        }
+
+        try {
+            if (Storage::disk('s3')->exists($fileName)) {
+                return Storage::disk('s3')->temporaryUrl($fileName, now()->addMinutes(30));
+            }
+
+            $s3Path = 'candidateonboarding/' . basename($fileName);
+
+            if (Storage::disk('s3')->exists($s3Path)) {
+                return Storage::disk('s3')->temporaryUrl($s3Path, now()->addMinutes(30));
+            }
+        } catch (\Exception $e) {
+            \Log::error('MinIO file error: ' . $e->getMessage());
+        }
+
+        return '#';
+    }
+    
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+file downlaod fast way 
+public function assignmentfileDownload($id)
+{
+    $file = DB::table('assignmentfolderfiles')
+        ->where('id', $id)
+        ->first();
+ 
+    $filePath = $file->assignmentgenerateid . '/' . $file->filesname;
+ 
+    $url = Storage::disk('s3')->temporaryUrl(
+        $filePath,
+        now()->addMinutes(10),
+        [
+            'ResponseContentDisposition' => 'attachment; filename="' . $file->realname . '"'
+        ]
+    );
+ 
+    return redirect($url);
+}
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 DRl 
 

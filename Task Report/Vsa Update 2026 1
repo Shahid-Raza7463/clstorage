@@ -7323,7 +7323,23 @@ app\Http\Controllers\ApplyleaveController.php
 
 end hare 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\PromotionandrejoiningController.php
+   private function updateOrInsertAttendance($employeeId, $rejoiningDate, $joiningDate)
+
+ private function getStaffCodePrefix($roleId)
+    {
+        switch ($roleId) {
+            case 13:
+                return 'P';
+            case 14:
+                return 'M';
+            case 15:
+                return 'S';
+            default:
+                return '';
+        }
+    }
+
 
 
 

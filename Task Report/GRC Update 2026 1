@@ -4468,33 +4468,410 @@ resources\views\atrdashboardcount1.blade.php
 
 
 
+
+Capitall strat
+02-06=2026
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+resources\views\backEnd\index.blade.php
+
+
+                                      <div class="card-body">
+                                        <div class="media new">
+                                            <div class="media-body">
+                                                <a href="{{ url('/ticket/' . $assetticketData->id) }}" class="text-dark">
+                                                    <h6 class="fs-15 font-weight-600 mb-1">{{ $assetticketData->subject }}
+                                                    </h6>
+                                                    <span
+                                                        class="text-muted text-sm">#{{ $assetticketData->generateticket_id }}</span>
+                                                    <p class="mb-1"><span
+                                                            style="color:#007bff;font-size: small;">created by</span>
+                                                        {{ $assetticketData->team_member }}
+                                                        <span class="badge badge-info">
+                                                            @if ($assetticketData->status == 0)
+                                                                <span>open</span>
+                                                            @elseif($assetticketData->status == 1)
+                                                                <span>working</span>
+                                                            @elseif($assetticketData->status == 2)
+                                                                <span>close</span>
+                                                            @else
+                                                                <span>reject</span>
+                                                            @endif
+                                                        </span>
+                                                    </p>
+                                                    <small class="text-muted"><i class="far fa-clock mr-1"></i>
+                                                        {{ date('H:i A', strtotime($assetticketData->created_at)) }},
+                                                        {{ date('F jS', strtotime($assetticketData->created_at)) }}</small>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+ 
+ 
+ 
+
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
+
+    public function create()
+    {
+        $title = Title::latest()->get();
+        $teamrole = Role::where('id', '!=', '11')->get();
+
+        $mentor = DB::table('teammembers')
+            ->join('roles', 'roles.id', 'teammembers.role_id')
+            ->whereNotNull('role_id')
+            ->where('teammembers.status', 1)
+            ->select('teammembers.*', 'roles.rolename')
+            ->get();
+        return view('backEnd.teammember.create', compact('title', 'teamrole', 'mentor'));
+    }
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\AppointmentletterController.php
+
+
+    public function create()
+    {
+        $teammember = Teammember::where('role_id', '=', 13)->where('status', 1)->with('title', 'role')->get();
+        return view('backEnd.appointmentletter.create', compact('teammember'));
+    }
+	
 
 
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+app\Http\Controllers\TeammemberController.php
+
+
+
+    public function edit($id)
+    {
+        if (!in_array(auth()->user()->role_id, [11, 18, 16, 17])) {
+            return response()->view('backEnd.errors.403', [], 403);
+        }
+        $title = Title::latest()->get();
+        $teamrole = Role::latest()->get();
+        $teammember = Teammember::where('id', $id)->first();
+
+        $mentor = DB::table('teammembers')
+            ->join('roles', 'roles.id', 'teammembers.role_id')
+            ->whereNotNull('role_id')
+            // ->where('teammembers.status', 1)
+            ->select('teammembers.*', 'roles.rolename')
+            ->get();
+
+        $activitylogDatas = DB::table('activitylogs')
+            ->leftJoin('teammembers', 'teammembers.id', '=', 'activitylogs.user_id')
+            ->leftJoin('roles', 'roles.id', '=', 'teammembers.role_id')
+            ->where('activitylogs.teammember_id', $id)
+            ->where('activitytitle', 'Teammember')
+            ->orderByDesc('generate_date_time')
+            ->get();
+
+        return view('backEnd.teammember.edit', compact('id', 'teammember', 'title', 'teamrole', 'mentor', 'activitylogDatas'));
+    }
+
+
+
+
+
+
+temp`q`q
+
+->where('status', 1)
+
+ ->where('teammembers.status', 1)
+ 
+ 
+     {
+        $teammember = Teammember::whereIn('role_id', [13, 14])
+            ->where('status', 1)
+            ->with('role')
+            ->get();
+			
+$teammember = Teammember::where(function ($query) {
+        $query->whereIn('role_id', [13, 14])
+              ->orWhere('id', auth()->user()->teammember_id);
+    })
+    ->where('status', 1)
+    ->with('title', 'role')
+    ->get();
+ 
+ 
+ 
+ 
+09-06-2026
+checkin report wala section 
+
+22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+app\Http\Controllers\CheckInController.php
+
+    public function Reportsection(Request $request)
+    {
+        //dd($request);
+        if (auth()->user()->role_id == 11 || auth()->user()->role_id == 12 || auth()->user()->role_id == 18 || auth()->user()->teammember_id == 157) {
+            $employeename = DB::table('teammembers')
+                ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+                ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+                ->where('role_id', '!=', 11)->where('role_id', '!=', 13)->where('role_id', '!=', 12)->where('status', 1)
+                ->select('teammembers.*', 'roles.rolename', 'titles.title')
+                ->get();
+            $partnername = DB::table('teammembers')
+                ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+                ->leftjoin('titles', 'titles.id', 'teammembers.title_id')
+                ->where('role_id', 13)->where('status', 1)
+                ->select('teammembers.*', 'roles.rolename', 'titles.title')
+                ->get();
+            //  dd($employeename);
+            $client = DB::table('clients')
+                ->where('client_name', '!=', null)->where('client_name', '!=', '-')->latest()->get();
+
+            $result = DB::table('checkins')->select(DB::raw('YEAR(created_at) as year'))
+                ->distinct()->orderBy('year', 'DESC')->limit(5)->get();
+
+            $years = $result->pluck('year');
+            $currentDate = date('d-m-Y');
+
+            $checkinofficeCount = DB::table('checkins')
+                ->where('date', $currentDate)
+                ->where('checkins.checkin_from', 'Office')
+                ->count();
+            $checkinworkfromCount = DB::table('checkins')
+                ->where('date', $currentDate)
+                ->where('checkins.checkin_from', 'Work From Home')
+                ->count();
+            $checkinclientCount = DB::table('checkins')
+                ->where('date', $currentDate)
+                ->where('checkins.checkin_from', 'Client Place')
+                ->count();
+            $checkinbusinessCount = DB::table('checkins')
+                ->where('date', $currentDate)
+                ->where('checkins.checkin_from', 'Business Development')
+                ->count();
+            $today = date('Y-m-d');
+
+            $teamapplyleaveDatas = DB::table('applyleaves')
+                ->leftjoin('leavetypes', 'leavetypes.id', 'applyleaves.leavetype')
+                ->leftjoin('teammembers', 'teammembers.id', 'applyleaves.createdby')
+                ->leftjoin('roles', 'roles.id', 'teammembers.role_id')
+                ->select('applyleaves.*', 'teammembers.team_member', 'roles.rolename', 'leavetypes.name')
+                ->where('applyleaves.status', '!=', 2)
+                ->where('applyleaves.from', '<=', $today)
+                ->where('applyleaves.to', '>=', $today)
+                ->get();
+            $result = $teamapplyleaveDatas->count();
+            //  dd($result);
+            $teammemberDatas = DB::table('teammembers')
+                ->where('teammembers.status', 1)
+                ->get();
+            //  dd($teammemberDatas);
+            $currentDate = date('d-m-Y');
+            $checkinCount = DB::table('checkins')
+                ->where('date', $currentDate)
+                ->count();
+            $notCheckedInCount = count($teammemberDatas) - $checkinCount - $result;
+            $unallocatedCount = DB::table('checkins')
+                ->where('date', $currentDate)
+                ->where('checkins.typeval', 'Unallocated')
+                ->count();
+            //dd($unallocatedCount);
+            return view('backEnd.check-In.checkinreport', compact(
+                'teammemberDatas',
+                'employeename',
+                'years',
+                'checkinofficeCount',
+                'partnername',
+                'checkinworkfromCount',
+                'checkinclientCount',
+                'checkinbusinessCount',
+                'result',
+                'notCheckedInCount',
+                'client',
+                'unallocatedCount'
+            ));
+        } else {
+            abort(403, ' You do not have permission.');
+        }
+    }
+	
+	
+	
+	
+	
+	
+	
+	 public function checkinfiltersection(Request $request)
+    {
+        $employeeId = (int) $request->employeeid;
+        $month = (int) $request->month;
+        $fromDate = $request->fromdate;
+        $toDate = $request->todate;
+        $partnerid = $request->partnerid;
+
+        if ($request->ajax()) {
+            $query = DB::table('checkins')
+                ->leftJoin('teammembers', 'teammembers.id', '=', 'checkins.teammember_id')
+                ->leftJoin('clients', 'clients.id', '=', 'checkins.client_id')
+                ->leftJoin('assignmentbudgetings', 'assignmentbudgetings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+                ->leftJoin('assignments', 'assignments.id', '=', 'assignmentbudgetings.assignment_id')
+                ->leftJoin('assignmentmappings', 'assignmentmappings.assignmentgenerate_id', '=', 'checkins.assignment_id')
+                ->leftJoin('teammembers as teampartner', 'teampartner.id', '=', 'assignmentmappings.leadpartner')
+                ->when($employeeId, function ($query) use ($employeeId) {
+                    return $query->where('checkins.teammember_id', $employeeId);
+                })
+                ->when($month, function ($query) use ($month) {
+                    return $query->whereMonth('checkins.created_at', $month);
+                })
+                ->when($request->yearly != 0, function ($query) use ($request) {
+                    return $query->whereYear('checkins.created_at', $request->yearly);
+                })
+                ->when($request->checkin != null, function ($query) use ($request) {
+                    return $query->where('checkins.checkin_from', $request->checkin);
+                })
+                ->when($request->type != null, function ($query) use ($request) {
+                    return $query->where('checkins.typeval', $request->type);
+                })
+                ->when($request->time != null, function ($query) use ($request) {
+                    $startTime = $request->time . ':00';
+                    return $query->whereRaw("TIME(checkins.time) >= ?", [$startTime]);
+                })
+                ->when($fromDate && $toDate, function ($query) use ($fromDate, $toDate) {
+                    $nextDay = date('Y-m-d', strtotime($toDate . ' +1 day'));
+                    return $query->whereBetween('checkins.created_at', [$fromDate, $nextDay]);
+                })
+                ->when($request->client_id != 0, function ($query) use ($request) {
+                    return $query->where('checkins.client_id', $request->client_id);
+                })
+                ->when($request->assignment_id != 0, function ($query) use ($request) {
+                    return $query->where('checkins.assignment_id', $request->assignment_id);
+                });
+
+            if ($partnerid) {
+                $query->where(function ($q) use ($partnerid) {
+                    $q->where('assignmentmappings.leadpartner', $partnerid)
+                        ->orWhereNull('assignmentmappings.leadpartner');
+                });
+            }
+
+            $query->select(
+                'checkins.created_at',
+                'checkins.time',
+                'teammembers.team_member',
+                'checkins.checkin_from',
+                'checkins.typeval',
+                'clients.client_name',
+                'assignments.assignment_name',
+                'checkins.assignment_id',
+                'checkins.place',
+                'checkins.latitude',
+                'checkins.longitude',
+                'teampartner.team_member as teampartner'
+            );
+
+            if ($request->filled('init') && (int) $request->init === 1) {
+                $query->whereRaw('1 = 0');
+            }
+
+            if (!empty($request->search)) {
+                $search = $request->search;
+                $query->where(function ($q) use ($search) {
+                    $q->where('teammembers.team_member', 'LIKE', "%{$search}%")
+                        ->orWhere('teampartner.team_member', 'LIKE', "%{$search}%")
+                        ->orWhere('checkins.checkin_from', 'LIKE', "%{$search}%")
+                        ->orWhere('checkins.typeval', 'LIKE', "%{$search}%")
+                        ->orWhere('clients.client_name', 'LIKE', "%{$search}%")
+                        ->orWhere('assignments.assignment_name', 'LIKE', "%{$search}%")
+                        ->orWhere('checkins.assignment_id', 'LIKE', "%{$search}%")
+                        ->orWhere('checkins.place', 'LIKE', "%{$search}%");
+                });
+            }
+
+            $allowedSorts = [
+                'created_at' => 'checkins.created_at',
+                'time' => 'checkins.time',
+                'team_member' => 'teammembers.team_member',
+                'teampartner' => 'teampartner.team_member',
+                'checkin_from' => 'checkins.checkin_from',
+                'typeval' => 'checkins.typeval',
+                'client_name' => 'clients.client_name',
+                'assignment_name' => 'assignments.assignment_name',
+                'place' => 'checkins.place',
+            ];
+
+            if (!empty($request->sortColumn) && isset($allowedSorts[$request->sortColumn])) {
+                $query->orderBy($allowedSorts[$request->sortColumn], $request->sortDirection ?? 'desc');
+            } else {
+                $query->orderBy('checkins.id', 'DESC');
+            }
+
+            $records = $query->paginate($request->perPage ?? 25);
+            $datatable = view('backEnd.check-In.checkinreportdatatable', compact('records'))->render();
+
+            return response()->json([
+                'count' => $records->total(),
+                'status' => 200,
+                'msg' => 'Data loaded',
+                'data' => $datatable,
+                'paginationInfo' => getPaginationInfo($records),
+            ]);
+        }
+    }
+	
+	
+	
+	
+	
+	
+	resources\views\backEnd\check-In\checkinreport.blade.php
+	add file 
+
+
+
+    <script>
+        document.getElementById('fromdate').addEventListener('change', validateDates);
+        document.getElementById('todate').addEventListener('change', validateDates);
+
+        function validateDates() {
+            let from = document.getElementById('fromdate').value;
+            let to = document.getElementById('todate').value;
+
+            if (from && to) {
+                if (new Date(from) > new Date(to)) {
+                    alert("From date cannot be greater than To date");
+
+                    // Reset wrong field
+                    this.value = "";
+                }
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+   
 
 
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
+resources\views\backEnd\check-In\checkinreportdatatable.blade.php
+
+add file 
 
 
-
-22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
-app\Http\Controllers\ApplyleaveController.php
 
 
 
@@ -4998,3 +5375,20 @@ https://bitbucket.org/capitallio/ifchub/pull-requests/new?source=shahid-raza&t=1
 baki hai pull request create karna 
 
 https://capitallio.sharepoint.com/:w:/s/NPCI-ImportantFiles/IQDdOX0N9EgMR5puuJZzDrSyAVdGc0TACyNNqPSMDIxLFRQ?e=eg5TCb
+
+
+confusion points 
+1.IAC and ACb both will be come or only IAC   yes both 
+clickable 
+
+department wise 
+filter 
+
+
+https://bitbucket.org/capitallio/ifchub/pull-requests/255
+
+
+UPDATE teammembers
+SET monthly_gross_salary = '20000';
+
+totalsalarypermonth,annualsalary,annualsalary    staffappointmentletters table

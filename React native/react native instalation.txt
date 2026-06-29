@@ -1,3 +1,4 @@
+222222222222222222222222222222222222222222222222222
 After setup
 C:\ReactNativeApp\FriendsList
 
@@ -21,20 +22,30 @@ module.exports = {
       </View>
     </View>
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+regarding react native / enviroment / run on local 
 1.Open android Studio
 2.open project in vs code 
 5.create virtual device
+   in android studei --> more actrions -->vertual device manager 
 3.open cmd 
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
-cd C:\ReactNativeApp\FriendsList
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
 cd C:\ReactNativeApp\FriendList
 cd C:\Users\KGS-429\Desktop\shahidapp\UsersList
+cd C:\ReactNativeApp\FriendsList
 npx react-native start --reset-cache  if neede then other was skip it 
 5.npx react-native start
 4.open cmd
 6.npx react-native run-android  ye command always run using adminstration cmd
 
+
+npx react-native doctor
+
+22222222222222222222222222222
+jab dusra project kisi aur project me copy paste kare tab ye chalana hoga 
+
+npm install
+npx react-native run-android
 2222222222222222222222222222222222222
 
  assets\images\FB_IMG_1545560289018.jpg
@@ -1148,3 +1159,95 @@ rm -rf node_modules
 rm package-lock.json
 npm cache clean --force
 npm install
+
+2222222222222222222222222222222222222222222222222
+install on mobile / install on phone 
+2.
+cd C:\ReactNativeApp\FriendsList\android
+gradlew.bat installDebug
+
+
+if mobile nikal liya to fir se connect kare app ko 
+     1.adb reverse tcp:8081 tcp:8081
+
+
+     2.cd C:\ReactNativeApp\FriendsList
+       npx react-native start
+
+
+1.
+cd C:\Users\KGS-429\AppData\Local\Android\Sdk\platform-tools
+adb devices
+
+cd C:\ReactNativeApp\FriendsList
+npx react-native run-android --device 43f1f2550505
+
+
+if error then 
+adb uninstall com.friendslist
+npx react-native run-android --device 43f1f2550505
+
+
+cd C:\Users\KGS-429\AppData\Local\Android\Sdk\platform-tools
+adb devices
+adb reverse tcp:8081 tcp:8081
+
+222222222222222222222222222222
+make application using
+
+cd C:\ReactNativeApp\FriendsList\android
+gradlew assembleRelease
+Agar CMD me gradlew na chale to:
+gradlew.bat assembleRelease
+C:\ReactNativeApp\FriendsList\android\app\build\outputs\apk\release\app-release.apk
+
+
+222222222222222222
+
+echo %JAVA_HOME%
+java -version
+
+
+2222222222222222222222222222222222222222222222222222
+Phir sirf ye 2 cheezein change karo:
+
+App Name
+
+android/app/src/main/res/values/strings.xml
+
+<string name="app_name">Convert PDF</string>
+Package Name
+
+android/app/build.gradle
+
+applicationId "com.shahid.convertpdf"
+namespace "com.shahid.convertpdf"
+
+APK banao aur GitHub me push kar do.
+
+2222222222222222222222222222222222222222
+
+@echo off
+cd C:\Users\KGS-429\AppData\Local\Android\Sdk\platform-tools
+adb kill-server
+adb start-server
+adb devices
+adb reverse tcp:8081 tcp:8081
+
+cd C:\ReactNativeApp\FriendsList
+start cmd /k "npx react-native start"
+
+echo.
+echo ===============================
+echo Phone Connected Successfully
+echo Open the app on your phone.
+echo ===============================
+pause
+
+22222222222222222222222222222222
+git add RN-Toolkit.bat
+git commit -m "Added React Native Toolkit"
+git push
+
+
+222222222222222222222222222222222222

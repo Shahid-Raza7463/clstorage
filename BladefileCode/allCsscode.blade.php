@@ -48,10 +48,28 @@
 {{--  Start Hare --}}
 <style>
 </style>
-{{-- * regarding  --}}
+{{-- * regarding responsive  --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 <style>
+    @media (max-width: 767px) {
+        .dashboard-section-card {
+            min-height: auto;
+            max-height: none;
+            height: auto;
+        }
+
+        .dashboard-section-list,
+        .dashboard-section-card>.list-group-flush {
+            max-height: 340px;
+        }
+    }
+
+    @media (max-width: 974px) {
+        .row.gx-4.gy-4>[class*="col-"] {
+            margin-bottom: 1rem;
+        }
+    }
 </style>
 {{-- * regarding  --}}
 {{--  Start Hare --}}
@@ -169,7 +187,7 @@
         pointer-events: none;
     }
 </style>
-{{-- * regarding  scroll --}}
+{{-- * regarding scroll --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 <style>

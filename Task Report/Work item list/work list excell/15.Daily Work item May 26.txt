@@ -1,0 +1,227 @@
+01-05-2026
+1.IAC engagemnet Dashboard
+
+02-05-2026
+1.IAC engagemnet Dashboard
+
+03-05-2026
+Sunday
+
+04-05-2026 
+1.IAC engagemnet Dashboard
+ 1.1 Link icon added on Chart Task Distribution by Status
+ 1.2 Download icon added on Chart Task Distribution by Status
+ 1.3 Link icon added on Chart Task Tasks by Month
+ 1.4 Download icon added on Chart Tasks by Month
+
+
+05-05-2026
+1.KGS demo code connected with bitbuket
+2.Dynamic Article Payroll Management with Excel Import &amp; NEFT Conversion
+ 2.1 Payroll user details Upload - Missing validation message for excel having duplicate data
+ 2.2 Payroll user details Upload - Incorrect validation message for blank excel upload
+ 2.3 Month/Year mismatch validation is not shown when data uploaded is different in 'Import &amp; Add Excel' sections
+ 2.4 After excel uplaod in 'Add Excel', system shows successful excel uplaod message but after upload data is not visible to anywhere
+ 2.5 System showing error message when cliked on 'NEFT' button
+ 2.6 System is not showing correct error validation for invalid emails uploaded
+ 2.7 System not showing validation for duplicate email Ids in Email Import
+ 2.8 Improper error message for blank data upload in email Import
+ 2.9 After successfull excel upload, data is still not visible 
+ 2.10 Getting Error message on excel upload
+
+
+06-05-2026
+1.kgs task related connected with bahadur 
+2.Dynamic Article Payroll Management with Excel Import &amp; NEFT Conversion
+ 2.1 Payroll user details Upload - Missing validation message for excel having duplicate data
+ 2.2 Payroll user details Upload - Incorrect validation message for blank excel upload
+ 2.3 Month/Year mismatch validation is not shown when data uploaded is different in 'Import &amp; Add Excel' sections
+ 2.4 After excel uplaod in 'Add Excel', system shows successful excel uplaod message but after upload data is not visible to anywhere
+ 2.5 System showing error message when cliked on 'NEFT' button
+ 2.6 System is not showing correct error validation for invalid emails uploaded
+ 2.7 System not showing validation for duplicate email Ids in Email Import
+ 2.8 Improper error message for blank data upload in email Import
+ 2.9 After successfull excel upload, data is still not visible 
+ 2.10 Getting Error message on excel upload
+3 testing conmpleted all bugs 
+
+
+
+07-05-2026
+1.kgs task related connected with bahadur 
+2.Dynamic Article Payroll Management with Excel Import &amp; NEFT Conversion
+ 2.1 Payroll user details Upload - Missing validation message for excel having duplicate data
+ 2.2 Payroll user details Upload - Incorrect validation message for blank excel upload
+ 2.3 Month/Year mismatch validation is not shown when data uploaded is different in 'Import &amp; Add Excel' sections
+ 2.4 After excel uplaod in 'Add Excel', system shows successful excel uplaod message but after upload data is not visible to anywhere
+ 2.5 System showing error message when cliked on 'NEFT' button
+ 2.6 System is not showing correct error validation for invalid emails uploaded
+ 2.7 System not showing validation for duplicate email Ids in Email Import
+ 2.8 Improper error message for blank data upload in email Import
+ 2.9 After successfull excel upload, data is still not visible 
+ 2.10 Getting Error message on excel upload
+3 testing conmpleted all bugs 
+
+
+08-05-2026
+1.Data table implementd on bill pending for collection
+2.Data table implementd on bill pending
+3.All bugs deployed on cron
+
+09-05-2026
+Starday
+
+10-05-2026
+Sunday
+
+
+11-05-2026
+
+	
+12-05-2026
+
+13-05-2026
+1.All datatable tested and deployed on cron 
+
+
+
+14-05-2026
+1.Data table implementd on checkin
+2.Data table implementd on check in report 
+3.Data table implementd on timesheet 
+4.Data table implementd on checkinlist
+5.Data table implementd on timesheetreportsection  
+
+
+15-05-2026
+1.Data table implementd on checkin
+2.Data table implementd on check in report 
+3.Data table implementd on timesheet 
+4.Data table implementd on checkinlist
+5.Data table implementd on timesheetreportsection  
+6.VSA rejoining issue fixed and deployed on vsa 
+
+
+
+
+16-05-2026
+1.Data table implementd on checkin
+2.Data table implementd on check in report 
+3.Data table implementd on timesheet 
+4.Data table implementd on checkinlist
+5.Data table implementd on timesheetreportsection
+
+
+17-05-2026
+Sunday 
+
+18-05-2026
+1.Data table implementd on checkin
+2.Data table implementd on check in report 
+3.Data table implementd on timesheet 
+4.Data table implementd on checkinlist
+5.Data table implementd on timesheetreportsection
+All above task deployed on cron 
+6.4.Data table implementd on checkinlist on kgsdemo (new checkinlist)
+
+
+
+19-05-2026
+1.All prevoius datatable related task deployed on crone 
+
+		
+20-05-2026
+1.All prevoius datatable related task deployed on kgs
+
+
+21-05-2026
+1.Expected -Date supposed to be shown as 29th january 2026
+2.Expected - Date should be shown in activity log timestamp as 16th May 2026 Date should be shown in timestamp as DD/MMMMMMM/YYYY ie full month name not first three letters
+3.Expected Behavior - For Vendor management creation, in KYC document section following file format should be available for upload docx, .txt, .pdf, .pptx, .xlsx, .csv, .jpeg, .jpg, .png, .svg
+4.A new field to be added in Vendor Creation form (GSTIN). Refer to the requirement (with validations) in the 
+5.233, 234, 267, 268
+
+22-05-2026
+1.Expected -Date supposed to be shown as 29th january 2026
+2.Expected - Date should be shown in activity log timestamp as 16th May 2026 Date should be shown in timestamp as DD/MMMMMMM/YYYY ie full month name not first three letters
+3.Expected Behavior - For Vendor management creation, in KYC document section following file format should be available for upload docx, .txt, .pdf, .pptx, .xlsx, .csv, .jpeg, .jpg, .png, .svg
+4.A new field to be added in Vendor Creation form (GSTIN). Refer to the requirement (with validations) in the 
+5.233, 234, 267, 268
+
+
+23-05-2026
+Sturday 
+
+24-05-2026
+Sunday 
+
+25-05-2026
+1.'Sub-observation count by status' chart - Column 'OWNER & Target date' not showing as per the document in side panel & tabular form.
+2.'sub-observation count by status' - no data showing when clicking on closed status neither in side panel nor in tabular view.
+3.overdue observation' card not showing as per document. Missing columns are - Observation title, Status, Owner, Target date, Aging
+4.In a chart 'Engagement-wise Risk Count' column is not as per document. columns 'owner & target date' is missing & observation should not be hyperlinked as per the document.
+5.In a chart 'Department-wise Risk Count' column is not as per document. column 'target date' is missing & department name should not be hyperlinked as per the document.
+
+
+
+26-05-2026
+1.VSA issue checked and not issue from our side 
+2.In the chart 'Engagement Stage Tracker' side panel count at the top should be shown for completed but it is showing count for the status on which user clicks. In the document it is mentined as 'Opens right-side panel: count completed'.
+3.testing completed from my side on npci 
+
+
+27-05-2026
+Casual leave
+
+
+
+28-05-2026
+leave for bakrid fastival 
+
+29-05-2026
+1.Heading on Log page should be properly alligned
+2.mandatory icon to be removed from the non-editable fields;
+3.Logs not getting captured when payroll data is generated
+4.One more field to be removed here is ' Payroll ID' as it is not required for user &amp; also it is not related to manual edit..
+5.Word should under 'Activity Log' should be properly shown
+9.Excel not getting uploaded showing error message. (https://jam.dev/c/a75b1d16-c409-4686-8a1e-e43115d0067b).
+
+6.old month data is visible only after upload but once we refresh &amp; re navigate on the page then it does not show old month data;
+7.Getting Error message on excel upload
+8.Still not showing correct message for invalid emails. for few emails it is showing as invalid email but for others it is showing as email not showing in Teams module
+
+
+
+
+original 
+1.Payroll user details Upload - Missing validation message for excel having duplicate data
+2.System is not showing correct error validation for invalid emails uploaded
+3.After successfull excel upload, data is still not visible
+4.Getting Error message on excel upload
+
+5.Month/Year mismatch validation is not shown when data uploaded is different in 'Import &amp; Add Excel' sections  ``
+6.After excel uplaod in 'Add Excel', system shows successful excel uplaod message but after upload data is not visible to anywhere  ``
+7.System not showing validation for duplicate email Ids in Email Import  ``
+
+
+8.Word should under 'Activity Log' should be properly shown
+9.Heading on Log page should be properly alligned
+10.Mandatory column need to be defined on Payroll Edit page
+11.Logs not getting captured when payroll data is generated
+12.Logs not capturing edited field properly
+
+log accending order
+
+ALTER TABLE articlepayrolls
+MODIFY stipend VARCHAR(200) DEFAULT NULL,
+MODIFY totalstipend VARCHAR(200) DEFAULT NULL,
+MODIFY arrear VARCHAR(200) DEFAULT NULL,
+MODIFY amounttobepaid VARCHAR(200) DEFAULT NULL;
+
+
+8.
+
+30-05-2026
+1.Setup code for internal capitall
+2.tender KPI UI fixed
+

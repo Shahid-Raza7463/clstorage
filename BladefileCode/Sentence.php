@@ -624,7 +624,7 @@ class Sentence extends Command
 
     // Pooja Kumari can you please retest the bugs that are resolved?
     // Need confirmation from Saurav to pick this as currently working on another task
-
+// Sumit Sir, I do not have any pending tasks right now. The 4 NPCI bugs assigned to me have been completed. Please let me know what I should work on next.
 
 
     //     2222222222222222222222222222222222

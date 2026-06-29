@@ -57,10 +57,27 @@
 {{--  Start Hare --}}
 {{--  Start Hare --}}
 {{-- ! End hare --}}
-{{-- * regarding  --}}
+{{-- * regarding hide text / hide   --}}
 {{--  Start Hare --}}
 {{--  Start Hare --}}
+<tbody>
+    @foreach ($activitylogDatas as $activitylogData)
+        <tr>
+            <td>{{ $activitylogData->team_member ?? '' }}({{ $activitylogData->rolename ?? '' }})
+            </td>
+            <td>{{ $activitylogData->activitytitle ?? '' }}</td>
+            <td>
+                {{ preg_replace('/,\s*Payroll ID:\s*\d+/', '', $activitylogData->description ?? '') }}
+            </td>
+            <td>{{ $activitylogData->ip_address ?? '' }}</td>
+            <td>{{ date('F, Y', strtotime($activitylogData->month_year)) ?? '' }}</td>
+            <td>{{ date('d F, Y H:i:s', strtotime($activitylogData->generate_date_time)) ?? '' }}
+            </td>
+        </tr>
+    @endforeach
+</tbody>
 {{-- ! End hare --}}
+
 {{-- * regarding  --}}
 
 <div class="card">
@@ -887,7 +904,7 @@ storage\framework\views\2d8ab15d1e529421574a5bed535ae1dd83623bfb.php
                                                     ₹{{ number_format($gstAmount, 2) }}</td>
                                                 <td class="fw-bold text-dark">
                                                     ₹{{ number_format($invoice->total ?? 0, 2) }}</td>
-                                                <td>{!!  !!}</td>
+                                                <td>{!! !!}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
