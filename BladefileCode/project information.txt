@@ -40,7 +40,7 @@ PS C:\xampp\htdocs\kgslive> taskkill /IM php.exe /F
 cd C:\xampp\mysql\bin
 folder me cmd open kare using adminstrate
 {{-- 1.mysql -u root vsalive1 < "C:\xampp\htdocs\database\vsalive2.sql"  --}}
-{{-- 1.mysql -u root kgsdemopayrol1 < "C:\xampp\htdocs\database\kgsdemop1.sql"  --}}
+{{-- 1.mysql -u root vsalive2 < "C:\xampp\htdocs\database\vsalive2.sql"  --}}
 
 
 https://bitbucket.org/capitallio/workspace/overview/
@@ -735,11 +735,11 @@ regarding tables delete on vsademo
         'joining_date' => '2025-08-01',
       ]);
 
-    // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
-
+// 22222222222222222222222222222222222222222222222222222222222222222222222222222222
 user timesheet delete 
-DB::beginTransaction();
+   DB::beginTransaction();
 
+1st way 
     $authteamid = 940;
     $startdate = '2025-06-30';
     $enddate   = '2025-12-29';
@@ -831,42 +831,72 @@ DB::beginTransaction();
     dd('Successfully done');
 
 
+2nd way i am using currently 
 
-    // $authteamid = 844;
-    // $startdate = '2025-03-17';
-    // $enddate = '2025-03-29';
+   DB::transaction(function () {
+      $authteamid = 810;
+      $startdate = '2026-03-02';
+      $enddate = '2026-03-14';
 
-    // $nextweektimesheet1 = DB::table('timesheetusers')
-    //   ->where('createdby', $authteamid)
-    //   ->whereBetween('date', [$startdate,  $enddate])
-    //   ->update(['status' => 0]);
-    // // ->get();
-    // // ->update(['createdby' => 8471]);
-    // // ->delete();
+      $assignmentHours = DB::table('timesheetusers')
+        ->select(
+          'assignmentgenerate_id',
+          DB::raw('SUM(CAST(hour AS DECIMAL(10,2))) as total_hours'),
+          DB::raw('COUNT(*) as total_entries')
+        )
+        ->where('createdby', $authteamid)
+        ->whereBetween('date', [$startdate, $enddate])
+        ->groupBy('assignmentgenerate_id')
+        ->get();
 
-    // $nextweektimesheet2 = DB::table('timesheets')
-    //   ->where('created_by', $authteamid)
-    //   ->whereBetween('date', [$startdate,  $enddate])
-    //   ->update(['status' => 0]);
-    // // ->get();
-    // // ->update(['created_by' => 8471]);
-    // // ->delete();
+      foreach ($assignmentHours as $data) {
+        DB::table('assignmentteammappings')
+          ->join('assignmentmappings', 'assignmentmappings.id', '=', 'assignmentteammappings.assignmentmapping_id')
+          ->where('assignmentmappings.assignmentgenerate_id', $data->assignmentgenerate_id)
+          ->where('assignmentteammappings.teammember_id', $authteamid)
+          ->update([
+            'assignmentteammappings.teamhour' => DB::raw(
+              'COALESCE(assignmentteammappings.teamhour, 0) - ' . (float) $data->total_hours
+            )
+          ]);
+      }
 
-    // $nextweektimesheet3 = DB::table('timesheetreport')
-    //   ->where('teamid', $authteamid)
-    //   ->whereBetween('startdate', [$startdate, $enddate])
-    //   ->delete();
-    // // ->get();
-    // // ->update(['teamid' => 8471]);
+      $nextweektimesheet1 = DB::table('timesheetusers')
+        ->where('createdby', $authteamid)
+        ->whereBetween('date', [$startdate,  $enddate])
+        // ->update(['status' => 0]);
+        // ->get();
+        // ->update(['createdby' => 8471]);
+        ->delete();
 
-    // // $attendanceexist = DB::table('attendances')
-    // //   ->where('employee_name', $authteamid)
-    // //   ->where('month', 'December')
-    // //   ->delete();
-    // // ->update(['employee_name' => 8471]);
+      $nextweektimesheet2 = DB::table('timesheets')
+        ->where('created_by', $authteamid)
+        ->whereBetween('date', [$startdate,  $enddate])
+        // ->update(['status' => 0]);
+        // ->get();
+        // ->update(['created_by' => 8471]);
+        ->delete();
 
-    // dd('successfully done');
+      $nextweektimesheet3 = DB::table('timesheetreport')
+        ->where('teamid', $authteamid)
+        ->whereBetween('startdate', [$startdate, $enddate])
+        ->delete();
+      // ->get();
+      // ->update(['teamid' => 8471]);
 
+      // $attendanceexist = DB::table('attendances')
+      //   ->where('employee_name', $authteamid)
+      //   ->where('month', 'March')
+      //   ->where('year', '2026')
+      //   ->get();
+      // ->delete();
+      // ->update(['teamhour' => 8471]);
+
+      // dd($nextweektimesheet1, $nextweektimesheet2, $nextweektimesheet3, $attendanceexist);
+
+    });
+
+    dd('successfully done');
     // 22222222222222222222222222222222222222222222222222222222222222222222222222222222
 
 222222222222222222222222222222222222222222222222222222222222

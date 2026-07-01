@@ -1,4 +1,9 @@
 GIT AND GITHUB
+
+  npci-dev
+  shahid-iacV2
+  shahid-iacV3
+* shahid-iacV4
 #################################################################################
 bhi ab ye btao ki mere pass ek developer hai usko maine npci-dev ka latest code clone karwa diya hai
 
@@ -489,18 +494,51 @@ git merge npci-devlatest
 git push origin npci-dev
 
 22222222222222222222222222222
-daily use before work start
+regarding push code  
+
+git checkout shahid-ajantaV1
+git status
+git add .
+git commit -m "your task"
+git fetch origin
+git rebase origin/ajanta-dev
+
+# resolve conflicts if any
+git add (conflict file path)
+git rebase --continue
+
+git push origin shahid-ajantaV1 --force-with-lease
+
+
+git commit -m "Conflict solved"
+git rebase origin/npci-dev
+git add app/Http/Controllers/Admin/Dashboard/VendorManagement/VendorManagementController.php
+git add resources/views/group/vendormanagement/invoice-recordings/datatable.blade.php
+git rebase --continue
+git push origin shahid-ajantaV1 --force-with-lease
+
+
+
+git checkout shahid-ajantaV1
 git fetch origin
 git rebase origin/npci-dev
+git push origin shahid-ajantaV1 --force-with-lease
 
 
+
+every 5 min latest code without any work 
+
+git checkout shahid-ajantaV1
+git fetch origin
+ error then n and enter 
+git merge origin/ajanta-dev
 222222222222222222222222222222222222222222222222
 
 new branch create and work  on it 
-git checkout npci-dev
-git pull origin npci-dev
-git checkout -b shahid-iacV4
-git push -u origin shahid-iacV4
+git checkout ajanta-dev
+git pull origin ajanta-dev
+git checkout -b shahid-ajantaV1
+git push -u origin shahid-ajantaV1
 
 now you can work on it 
 
@@ -515,6 +553,8 @@ cd C:\xampp\htdocs\vsademo
 cd C:\xampp\htdocs\npci-dev
 cd C:\xampp\htdocs\kgsdemo
 cd C:\xampp\htdocs\capitall
+cd C:\xampp\htdocs\ajanta-dev
+
 git branch
 git add . 
 git commit -m "KYC doc"
@@ -545,10 +585,23 @@ php artisan migrate:refresh --path=\database\migrations\2026_03_14_164508_create
 
 
 
+
+
 cd C:\Shahid Raza\Capitall\VSA project functionality
 cd C:\xampp\htdocs\npci-dev
+
+1st way 
+cd C:\xampp\htdocs\ajanta-dev
+git clone -b ajanta-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git .
 git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git .
 git clone -b npci-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git npci-dev
+
+
+2nd way 
+cd C:\xampp\htdocs
+git clone -b ajanta-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git ajanta-dev
+cd ajanta-dev
+
 git status
 git config --global --add safe.directory C:/xampp/htdocs/npci-dev
 git config --global --add safe.directory "C:/Shahid Raza/Capitall/VSA project functionality"
@@ -563,6 +616,16 @@ git checkout -b npcishahid-new
 git branch
 git pull origin npci-dev
 
+
+
+cd C:\xampp\htdocs
+git clone -b ajanta-dev https://capitall-india-admin@bitbucket.org/capitallio/ifchub.git ajanta-dev
+cd ajanta-dev
+composer install
+copy .env.example .env
+php artisan key:generate
+git checkout -b npcishahid-new
+git pull origin ajanta-dev
 
 git status
 git add .
@@ -755,41 +818,8 @@ git restore resources/views/group/vendormanagement/invoice-recordings/form.blade
 
 
 222222222222222222222222222222222222
-regarding push 
-
-git checkout shahid-iacV3
-
-git add .
-git commit -m "your task"
-
-git fetch origin
-git rebase origin/npci-dev
-
-# resolve conflicts if any
-
-git add (conflict file path)
-git rebase --continue
-
-git push origin shahid-iacV3 --force-with-lease
-
-
-
-git commit -m "Conflict solved"
-git rebase origin/npci-dev
-git add app/Http/Controllers/Admin/Dashboard/VendorManagement/VendorManagementController.php
-git add resources/views/group/vendormanagement/invoice-recordings/datatable.blade.php
-git rebase --continue
-git push origin shahid-iacV3 --force-with-lease
 
 2222222222222222222222222222222222
-git checkout shahid-iacV3
-
-git fetch origin
-git rebase origin/npci-dev
-git push origin shahid-iacV3 --force-with-lease
-
-
-
 
 
 222222222222222222222
@@ -859,3 +889,16 @@ git cherry-pick a8a36a5
 222222222222222222222222
 delete multiple file 
 del CleanProject.bat ConnectPhone.bat Doctor.bat GitPush.bat InstallDebug.bat ReleaseAPK.bat StartMetro.bat
+
+
+2222222222222222222222222222222222222222222
+regarding laragon / database export is command ke throug laravel se database export karwaye and ye jis file me run karta hai usi file me backup.sql bnata hai  
+mysqldump -u root --default-character-set=utf8mb4 --single-transaction --routines --triggers database_name > backup.sql
+
+222222222222222222222222222222222222
+
+
+
+
+22222222222222222222222222222222
+

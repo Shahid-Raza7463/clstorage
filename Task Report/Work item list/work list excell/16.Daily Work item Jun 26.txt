@@ -1,3 +1,5 @@
+vsa all task created on grc in this file 
+
 01-06-2026
 1.VSA task sohan jha timesheet delete 
 2.bugs explain to pooja kumari and mentioned commet on 4 bugs in grc 
@@ -155,17 +157,45 @@ internal capuitall
 1.after leave applied timesheet delete on capitall
 2.upload code on caitall and functional testing completed
 3.after leave applied timesheet delete on kgslive and functional testing completed
-4.
 
 
 
 
 
 26-06-2026
+Moharram leave
+
+27-06-2026
+Sturday
+
 28-06-2026
+Sunday 
+
+
+
 29-06-2026
+1.The VSA client has requested that the timesheet data for user Swastik Sharma from 02-March-2026 to 14-March-2026 be deleted. Any related records associated with this timesheet data should also be deleted
+2.after leave applied timesheet delete task deployed on kgslive and functional testing completed
+3.Ajanta project setup 
+ 
+
 30-06-2026
-31-06-2026
+1.all data will be come using ajax after filter 
+2.entyty column removed from  status card 
+3.- Add the same download options (PDF, Word, Excel, SVG, PNG) to:
+  - High Risk Observations
+  - Risk Exposure by Location
+  - Audit Count by Location
+4.Audit Count by Location: right side pannel UI fixed and data display
+
+
+
+
+1-07-2026
+match with doc all ok 
+vsa issue checked 
+3. data checked all dashboard 
+
 
 
 
