@@ -5,6 +5,11 @@
 
 
 # Ignore this directory only at the root
+# /Z TempraryStore file
+# /Z Temprary code
+# /Z Code upload folder
+# /Z template and search
+# Task Report/excell import
 
 # Ignore this directory globally in this project
 # migration/
@@ -19,7 +24,6 @@
 *.app
 *.exe
 *.war
-.env
 
 
 # Large media files
@@ -29,6 +33,5 @@
 *.flv
 *.mov
 *.wmv
-*.sql
-
-.env 
+# *.sql
+ 
