@@ -1,0 +1,279 @@
+# =============================================================================
+# APPLICATION CONFIGURATION
+# =============================================================================
+APP_NAME="LifeNavi"
+APP_ENV=local
+APP_KEY=base64:mCTPvpHnLAcrn5QTg/b7yX7Plwtd1vM1tvH1Wfs2FyQ=
+APP_DEBUG=true
+APP_TIMEZONE=UTC
+APP_URL=https://lifenavi.test
+# APP_URL=http://localhost/lifenavi-v2/public
+ASSET_URL=
+
+# =============================================================================
+# DOMAIN CONFIGURATION
+# =============================================================================
+APP_WEB_DOMAIN=lifenavi.test
+APP_API_DOMAIN=api.lifenavi.test
+APP_FORCE_DOMAIN_CHECK=false
+
+# =============================================================================
+# LOCALIZATION
+# =============================================================================
+APP_LOCALE=ph
+APP_FALLBACK_LOCALE=ph
+APP_FAKER_LOCALE=en_US
+
+# =============================================================================
+# MAINTENANCE MODE
+# =============================================================================
+APP_MAINTENANCE_DRIVER=file
+APP_MAINTENANCE_STORE=database
+
+# =============================================================================
+# PHP CONFIGURATION
+# =============================================================================
+PHP_CLI_SERVER_WORKERS=4
+BCRYPT_ROUNDS=12
+
+# =============================================================================
+# LOGGING
+# =============================================================================
+LOG_CHANNEL=daily
+LOG_LEVEL=info
+LOG_DAILY_DAYS=14
+
+# =============================================================================
+# DATABASE CONFIGURATION
+# =============================================================================
+# Primary Database (PostgreSQL recommended for production)
+# DB_CONNECTION=pgsql
+# DB_HOST=127.0.0.1
+# DB_PORT=5432
+# DB_DATABASE=lifenavi
+# DB_USERNAME=postgres
+# DB_PASSWORD=
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=lifenavi
+DB_USERNAME=root
+DB_PASSWORD=
+
+# SQLite (for local development - uncomment to use)
+# DB_CONNECTION=sqlite
+
+# Source Database (for data syncing/migration)
+SOURCE_DB_HOST=127.0.0.1
+SOURCE_DB_PORT=5432
+SOURCE_DB_DATABASE=lifenavi_old
+SOURCE_DB_USERNAME=postgres
+SOURCE_DB_PASSWORD=
+
+# =============================================================================
+# SESSION CONFIGURATION
+# =============================================================================
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+SESSION_ENCRYPT=false
+SESSION_PATH=/
+SESSION_DOMAIN=null
+
+# =============================================================================
+# CACHE CONFIGURATION
+# =============================================================================
+CACHE_STORE=file
+CACHE_DRIVER=file
+CACHE_PREFIX=
+CACHE_TTL=3600
+CACHE_REFERENCE_DATA_TTL=86400
+
+# Redis Cache (optional - uncomment if using Redis)
+# CACHE_STORE=redis
+# REDIS_HOST=127.0.0.1
+# REDIS_PASSWORD=null
+# REDIS_PORT=6379
+# REDIS_CLIENT=phpredis
+
+# Memcached (optional)
+# MEMCACHED_HOST=127.0.0.1
+# MEMCACHED_PORT=11211
+
+# =============================================================================
+# QUEUE CONFIGURATION
+# =============================================================================
+QUEUE_CONNECTION=sync
+# For production, use: QUEUE_CONNECTION=database or QUEUE_CONNECTION=redis
+
+# =============================================================================
+# BROADCASTING / REAL-TIME
+# =============================================================================
+BROADCAST_CONNECTION=pusher
+# Options: pusher, reverb, log, null
+
+# Pusher Configuration
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_APP_CLUSTER=
+PUSHER_HOST=
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+
+# Vite Pusher Configuration (for frontend)
+VITE_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"
+VITE_PUSHER_HOST="${PUSHER_HOST}"
+VITE_PUSHER_PORT="${PUSHER_PORT}"
+VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
+
+# =============================================================================
+# FILE STORAGE
+# =============================================================================
+FILESYSTEM_DISK=local
+# For production: FILESYSTEM_DISK=do_spaces
+
+# AWS S3 (optional)
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+
+# DigitalOcean Spaces (recommended for production)
+UPLOAD_PRIMARY_DISK=do_spaces
+DO_SPACES_KEY=
+DO_SPACES_SECRET=
+DO_SPACES_REGION=sgp1
+DO_SPACES_BUCKET=
+DO_SPACES_ENDPOINT=https://sgp1.digitaloceanspaces.com
+DO_SPACES_CDN_URL=
+
+# =============================================================================
+# MAIL CONFIGURATION
+# =============================================================================
+MAIL_MAILER=log
+# Options: smtp, log, resend, postmark, ses
+
+# SMTP Configuration (Gmail example)
+# MAIL_MAILER=smtp
+# MAIL_HOST=smtp.gmail.com
+# MAIL_PORT=587
+# MAIL_USERNAME=your-email@gmail.com
+# MAIL_PASSWORD=your-app-password
+# MAIL_ENCRYPTION=tls
+# MAIL_FROM_ADDRESS="noreply@lifenavi.com"
+# MAIL_FROM_NAME="${APP_NAME}"
+
+# Resend (alternative)
+# MAIL_MAILER=resend
+# RESEND_API_KEY=
+# MAIL_FROM_ADDRESS="noreply@notify.lifenavi.com"
+
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+MAIL_SUPPORT_ADDRESS="info@lifenavi.com"
+MAIL_SUPPORT_NAME="Lifenavi Support"
+
+# =============================================================================
+# VALIDATION SERVICES
+# =============================================================================
+# Choose validation service: 'turnstile' or 'recaptcha'
+VALIDATION_SERVICE=turnstile
+
+# Cloudflare Turnstile
+TURNSTILE_SITE_KEY="1x00000000000000000000AA"
+TURNSTILE_SECRET_KEY="1x0000000000000000000000000000000AA"
+TURNSTILE_BYPASS=false
+TURNSTILE_BYPASS_MOBILE=true
+TURNSTILE_REQUIRE_WEB=true
+
+# Google reCAPTCHA (alternative)
+RECAPTCHA_SITE_KEY=6Lc_xfMrAAAAAHyj_OU1-XKTK__lHjNxOQCXhGRu
+RECAPTCHA_SECRET_KEY=6Lc_xfMrAAAAAM49G_JvnwJOyP14AYYubOWB9Pae
+RECAPTCHA_BYPASS=false
+RECAPTCHA_BYPASS_MOBILE=true
+RECAPTCHA_REQUIRE_WEB=true
+
+# =============================================================================
+# EMAIL VALIDATION
+# =============================================================================
+ZEROBOUNCE_ENABLED=false
+ZEROBOUNCE_API_KEY=
+ZEROBOUNCE_ALLOW_CATCH_ALL=true
+ZEROBOUNCE_CACHE_TTL_DAYS=30
+
+# =============================================================================
+# SMS / TWILIO
+# =============================================================================
+TWILIO_ENABLED=true
+TWILIO_ACCOUNT_SID="ACdb63177ce4439e1efa903e3af360087f"
+TWILIO_AUTH_TOKEN="4db0d9bacae04f2baacc030e7ee2d565"
+TWILIO_FROM_NUMBER="+15739943209"
+TWILIO_VERIFY_SID="VA9d6a6342c58196d43ac6e987d0534ef1"
+TWILIO_COOLDOWN_SECONDS=120
+TWILIO_MAX_ATTEMPTS=5
+
+# =============================================================================
+# GOOGLE SERVICES
+# =============================================================================
+# Google OAuth
+GOOGLE_CLIENT_ID="724076836594-p1vd8d0ebqb16aa9acpvv14vt977513m.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="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"
+GOOGLE_REDIRECT="http://localhost:8000/auth/google/callback"
+
+# Google Places API
+GOOGLE_PLACES_API_KEY="AIzaSyDSuT1eYaH7pX6eYNRmjp_1IIc5JfZlOaw"
+
+# =============================================================================
+# SEARCH (TYPESENSE)
+# =============================================================================
+# Optional - for advanced search functionality
+# TYPESENSE_HOST=
+# TYPESENSE_PORT=8108
+# TYPESENSE_PROTOCOL=http
+# TYPESENSE_API_KEY=
+
+# =============================================================================
+# API CONFIGURATION
+# =============================================================================
+FRONTEND_LIFENAVI_API_KE=lfn_8xK9mP2vQwR5tY7zN3bC6dF4gH1jL0sA9uX2eW5rT8yI6oP3qM7nB4vC1xZ9
+API_LOG_QUERIES=true
+API_INCLUDE_PERFORMANCE_META=true
+
+# =============================================================================
+# USER HISTORY TRACKING
+# =============================================================================
+USER_HISTORY_USE_QUEUE=true
+USER_HISTORY_QUEUE_NAME=history
+
+# =============================================================================
+# CHAT SYSTEM
+# =============================================================================
+CHAT_MESSAGE_RATE_LIMIT_PER_MINUTE=30
+CHAT_MESSAGE_RATE_LIMIT_PER_HOUR=500
+CHAT_CONVERSATION_LIMIT_PER_DAY=50
+
+# =============================================================================
+# OCTANE / PERFORMANCE
+# =============================================================================
+OCTANE_SERVER=frankenphp
+# Options: frankenphp, roadrunner, swoole
+
+# =============================================================================
+# DEVELOPMENT TOOLS
+# =============================================================================
+DEBUGBAR_ENABLED=true
+SEO_TOOLS_INERTIA=true
+
+# =============================================================================
+# DATA EXPORT/IMPORT
+# =============================================================================
+EXPORT_ALL_DATA=false
+# IMPORT_ALL_DATA=false
+
+# =============================================================================
+# VITE / FRONTEND
+# =============================================================================
+VITE_APP_NAME="${APP_NAME}"
