@@ -1,0 +1,267 @@
+01-10-2026
+1.The staff code should be displayed in the Timesheet Not Submitted Report (Excel).
+2.Independence confirmation should not be required for the Assignment Viewer.
+3.Activity logs need to be implemented in the Profile section for Documents viewand Documents download actions.
+4.View action downloads the document instead of opening it for preview.
+5.Space missing in Profile Pic.
+6.No minimum age validation while adding a Team Member.
+7.Activity Log Displays Document Type as “NA” When Qualification Document Is Viewed.
+8.Appointment Letter View Button Misaligned.
+9.Mandatory Type Selection Required When Adding Team Member.
+10.Incorrect Spelling of “Members” on Independence List Page.
+11.Pagination Arrow Overlaps the Number of Entries Field.
+12.Independence List Does Not Display All Assignment Team Members.
+13.Internal Server Error 500 While Adding Member to Team.
+14.Misspelled and Improperly Spaced Column Headings in Team List.
+15.Maintain Consistent Naming for Bank Proof Document.
+16.Error pages added on VSA.
+
+02-10-2026
+Gandhi jayanti 
+
+03-10-2026
+Sturday
+
+04-10-2026 
+Sunday 
+
+05-10-2026
+1.Meeting with client 
+2.shahid-migration branch merged with vsa-dev and resolve conflict 
+
+06-10-2026
+1.Currently working on VSA. Testing the merged changes locally. After that, I will take a backup, run the pipeline, and then perform testing on VSADemo
+
+
+07-10-2026
+1.Independence Confirmation completed from backend for Assignment id QUE101538 for user 
+2.Database integrated with foregn key and data type.
+
+
+08-10-2026
+1.from Limited Review (LR_June 2026) to Limited Review (LR_September 2026) on vsalive 
+2.i have checkd KRA issue on kgslive and inform to bahadur 
+3.create seeder database 
+
+
+app\Http\Controllers\ApplyleaveController.php
+
+JES101912
+
+vishal remove and  kartic add 
+
+Vishal Agarwal
+Karthik Srinivasan
+
+
+
+SEM100001
+UNA100002
+OFF100003
+OFF100004
+
+09-10-2026
+1.Create seeder file for table 
+2.deploy on vsademo
+
+
+10-10-2026
+Sturday 
+
+11-10-2026
+Sunday 
+
+12-10-2026
+1.Testing completed on vsademo after seeder 
+
+
+`````````````````````````````````````````````
+
+13-10-2026
+
+
+assignmet created date ascending order
+kiya kiya issue aayega  on vsa 
+and in progress taska and on hold wale task complete 
+
+
+
+
+
+
+14-10-2026
+
+
+Business Development
+
+
+fl    display: flex;
+
+
+15-10-2026
+16-10-2026
+17-10-2026
+18-10-2026
+19-10-2026
+20-10-2026
+21-10-2026
+22-10-2026
+23-10-2026
+24-10-2026
+25-10-2026
+26-10-2026
+27-10-2026
+28-10-2026
+29-10-2026
+30-10-2026
+31-10-2026
+
+
+
+web .php file se taskcontroller wale route delete karna hai
+
+
+
+
+
+https://bitbucket.org/capitallio/vsa-demo/pull-requests/8
+
+codex run then 
+1.prompt cleare 
+2.model check kaun sa model selected hai 
+
+
+
+
+vsalivemigrateartisan3
+
+
+library check karna hai 
+
+
+
+
+
+1.database ka column me lenth sahi hona chahiye  and backennd and front me handle hoga ki agar 200 se jayada lenth hai to kiya hoga ````////
+2.isme kuch duplicate tables h uska use nhi h toa usko remove krna h   ```````
+3.isme foreign key missing h kaee jagah  `````///
+4.analyse ki kaha kaha bugs hai isme 
+5.and kaha kaha try cath laga sakte hai 
+6.ek list bnawana hai ki kaha kaha issue hai and kaha kaha validation lagana hai 
+7.
+
+
+
+
+
+
+
+
+1.DEV NARAYAN YADAV  iska indepenedence pending hai and ise submit karwana hai 
+.independence pending hai 
+
+jis pride ka timesheet submit  hai 
+
+created date assign independence create 
+
+2.nitin RSW100909 nitin single, 1031 0 hour timeshee team  hatana hau 
+3.rsw101719 isme M1076 isko hatana hai is 
+
+``````````````````
+
+independences table se id 3289 delete 
+
+app\Http\Controllers\IndependenceController.php
+           // ->where('assignmentteammappings.teammember_id', 952)
+		  
+             ->where('assignmentteammappings.viewerteam', null)
+
+
+
+SHR101225
+BAN100901
+
+ 
+
+
+
+
+
+
+
+fix on live / regarding push on live 
+assignment create time s3 
+mail and htaccess file 
+
+	
+before commit code on bitbucket 
+config\mail.php
+
+
+VSA_featuers_shahid
+https://capitallio-my.sharepoint.com/:w:/r/personal/shahidraza_capitall_io/_layouts/15/Doc.aspx?sourcedoc=%7B4E5C8506-550E-4D59-B229-639FEFA595FF%7D&file=VSA_Features_shahid.docx&action=default&mobileredirect=true
+
+
+Vsa_pdr_shahid
+https://capitallio-my.sharepoint.com/:w:/r/personal/shahidraza_capitall_io/_layouts/15/Doc.aspx?sourcedoc=%7BB55BA9DD-F1C6-4B92-9AF2-32D5888CF5A7%7D&file=VSA_PDR_shahid.docx&action=default&mobileredirect=true
+
+
+
+
+``````````````````````````````````````````````
+mar 1.5
+apr 1.5
+may 1.5
+june 1.5
+july 1.5 
+aug  1.5 
+sept 1.5
+
+total casual 9 
+
+
+```````````````````````````````````````````
+PF
+
+pf start month February 2026
+
+Feb   
+Mar   1800
+April 1800
+May   1800
+June  1800
+July  1800
+Aug   1800
+Sep
+oct
+nov  
+
+
+
+```````````````````````````````````````````
+intrnal capitall se sabhi data le chuka hu and drive per hai 
+24, 25 and 2026 ka all payrole downloaded completed and on drive 
+increanet and appointment later also completed
+
+```````````````````````````````````````````
+
+cron ka 
+all completed 
+
+VSA ka 
+all completed 
+
+capitall ka 
+all completed 
+
+
+VDR ka 
+
+
+npci
+
+
+ajanta
+
+
+``````````````````````````````````````````````````

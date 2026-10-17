@@ -1,4 +1,631 @@
 {{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+{{-- * Database working --}}
+UPDATE assignmentteammappings
+SET viewerteam = NULL
+WHERE viewerteam = 0;
+{{-- * Database working --}}
+
+SELECT
+TABLE_NAME,
+COLUMN_NAME,
+CONSTRAINT_NAME,
+REFERENCED_TABLE_NAME,
+REFERENCED_COLUMN_NAME
+FROM information_schema.KEY_COLUMN_USAGE
+WHERE
+TABLE_SCHEMA = 'vsalivemigrateartisan2'
+AND REFERENCED_TABLE_NAME IS NOT NULL
+ORDER BY TABLE_NAME, COLUMN_NAME;
+{{-- * Database working --}}
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- =====================================================
+-- activitylogs
+-- =====================================================
+ALTER TABLE `activitylogs`
+ADD CONSTRAINT `activitylogs_user_id_foreign`
+FOREIGN KEY (`user_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- activitylogs_details
+-- =====================================================
+ALTER TABLE `activitylogs_details`
+ADD CONSTRAINT `activitylogs_details_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `activitylogs_details_performed_by_foreign`
+FOREIGN KEY (`performed_by`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- annual_independence_declarations
+-- =====================================================
+ALTER TABLE `annual_independence_declarations`
+ADD CONSTRAINT `annual_independence_declarations_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `annual_independence_declarations_partner_foreign`
+FOREIGN KEY (`partner`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- applyleaves
+-- =====================================================
+ALTER TABLE `applyleaves`
+ADD CONSTRAINT `applyleaves_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `applyleaves_leavetype_foreign`
+FOREIGN KEY (`leavetype`) REFERENCES `leavetypes` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `applyleaves_approver_foreign`
+FOREIGN KEY (`approver`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `applyleaves_updatedby_foreign`
+FOREIGN KEY (`updatedby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- appointmentletters
+-- =====================================================
+ALTER TABLE `appointmentletters`
+ADD CONSTRAINT `appointmentletters_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- articles
+-- =====================================================
+ALTER TABLE `articles`
+ADD CONSTRAINT `articles_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- assignmentbudgetings
+-- =====================================================
+ALTER TABLE `assignmentbudgetings`
+ADD CONSTRAINT `assignmentbudgetings_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentbudgetings_client_id_foreign`
+FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `assignmentbudgetings_assignment_id_foreign`
+FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `assignmentbudgetings_closedby_foreign`
+FOREIGN KEY (`closedby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- assignmentbudgetingudins
+-- =====================================================
+ALTER TABLE `assignmentbudgetingudins`
+ADD CONSTRAINT `assignmentbudgetingudins_assignment_generate_id_foreign`
+FOREIGN KEY (`assignment_generate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentbudgetingudins_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentbudgetingudins_partner_foreign`
+FOREIGN KEY (`partner`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- assignmentfolderfiles
+-- =====================================================
+ALTER TABLE `assignmentfolderfiles`
+ADD CONSTRAINT `assignmentfolderfiles_assignmentfolder_id_foreign`
+FOREIGN KEY (`assignmentfolder_id`) REFERENCES `assignmentfolders` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentfolderfiles_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- assignmentfolders
+-- =====================================================
+ALTER TABLE `assignmentfolders`
+ADD CONSTRAINT `assignmentfolders_assignmentgenerateid_foreign`
+FOREIGN KEY (`assignmentgenerateid`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentfolders_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- assignmentmappings
+-- =====================================================
+ALTER TABLE `assignmentmappings`
+ADD CONSTRAINT `assignmentmappings_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentbudgetings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentmappings_assignment_id_foreign`
+FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `assignmentmappings_leadpartner_foreign`
+FOREIGN KEY (`leadpartner`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `assignmentmappings_otherpartner_foreign`
+FOREIGN KEY (`otherpartner`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- assignmentteammappings
+-- =====================================================
+ALTER TABLE `assignmentteammappings`
+ADD CONSTRAINT `assignmentteammappings_assignmentmapping_id_foreign`
+FOREIGN KEY (`assignmentmapping_id`)
+REFERENCES `assignmentmappings` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `assignmentteammappings_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- attendances
+-- =====================================================
+ALTER TABLE `attendances`
+ADD CONSTRAINT `attendances_employee_name_foreign`
+FOREIGN KEY (`employee_name`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- auditfiles
+-- =====================================================
+ALTER TABLE `auditfiles`
+ADD CONSTRAINT `auditfiles_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `auditfiles_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- auditquestions
+-- =====================================================
+ALTER TABLE `auditquestions`
+ADD CONSTRAINT `auditquestions_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `auditquestions_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- audittrails
+-- =====================================================
+ALTER TABLE `audittrails`
+ADD CONSTRAINT `audittrails_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- balanceconfirmationreminder
+-- =====================================================
+ALTER TABLE `balanceconfirmationreminder`
+ADD CONSTRAINT `balanceconfirmationreminder_assignmentgenid_foreign`
+FOREIGN KEY (`assignmentgenid`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `balanceconfirmationreminder_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- checklistanswers
+-- =====================================================
+ALTER TABLE `checklistanswers`
+ADD CONSTRAINT `checklistanswers_assignment_id_foreign`
+FOREIGN KEY (`assignment_id`) REFERENCES `assignmentmappings` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `checklistanswers_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `checklistanswers_modify_by_foreign`
+FOREIGN KEY (`modify_by`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- clientcontacts
+-- =====================================================
+ALTER TABLE `clientcontacts`
+ADD CONSTRAINT `clientcontacts_client_id_foreign`
+FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- clientdocuments
+-- =====================================================
+ALTER TABLE `clientdocuments`
+ADD CONSTRAINT `clientdocuments_client_id_foreign`
+FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `clientdocuments_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `clientdocuments_updated_by_foreign`
+FOREIGN KEY (`updated_by`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- clients
+-- =====================================================
+ALTER TABLE `clients`
+ADD CONSTRAINT `clients_createdbyadmin_id_foreign`
+FOREIGN KEY (`createdbyadmin_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `clients_updatedbyadmin_id_foreign`
+FOREIGN KEY (`updatedbyadmin_id`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- criticalnotes
+-- =====================================================
+ALTER TABLE `criticalnotes`
+ADD CONSTRAINT `criticalnotes_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- debtorbatchshare
+-- =====================================================
+ALTER TABLE `debtorbatchshare`
+ADD CONSTRAINT `debtorbatchshare_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `debtorbatchshare_revokeby_foreign`
+FOREIGN KEY (`revokeby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- debtorconfirmations
+-- =====================================================
+ALTER TABLE `debtorconfirmations`
+ADD CONSTRAINT `debtorconfirmations_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `debtorconfirmations_debtor_id_foreign`
+FOREIGN KEY (`debtor_id`) REFERENCES `debtors` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- debtors
+-- =====================================================
+ALTER TABLE `debtors`
+ADD CONSTRAINT `debtors_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `debtors_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- discusesteammebers
+-- =====================================================
+ALTER TABLE `discusesteammebers`
+ADD CONSTRAINT `discusesteammebers_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- financialstatementclassifications
+-- =====================================================
+ALTER TABLE `financialstatementclassifications`
+ADD CONSTRAINT `financialstatementclassifications_assignment_id_foreign`
+FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- independencereminder
+-- =====================================================
+ALTER TABLE `independencereminder`
+ADD CONSTRAINT `independencereminder_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- independences
+-- =====================================================
+ALTER TABLE `independences`
+ADD CONSTRAINT `independences_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `independences_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- leaveapprove
+-- =====================================================
+ALTER TABLE `leaveapprove`
+ADD CONSTRAINT `leaveapprove_teammemberid_foreign`
+FOREIGN KEY (`teammemberid`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `leaveapprove_leavetype_foreign`
+FOREIGN KEY (`leavetype`) REFERENCES `leavetypes` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- leaverequest
+-- =====================================================
+ALTER TABLE `leaverequest`
+ADD CONSTRAINT `leaverequest_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `leaverequest_applyleaveid_foreign`
+FOREIGN KEY (`applyleaveid`) REFERENCES `applyleaves` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `leaverequest_approver_foreign`
+FOREIGN KEY (`approver`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- leaveroles
+-- =====================================================
+ALTER TABLE `leaveroles`
+ADD CONSTRAINT `leaveroles_leavetype_id_foreign`
+FOREIGN KEY (`leavetype_id`) REFERENCES `leavetypes` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `leaveroles_role_foreign`
+FOREIGN KEY (`role`) REFERENCES `roles` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- leaveteams
+-- =====================================================
+ALTER TABLE `leaveteams`
+ADD CONSTRAINT `leaveteams_leave_id_foreign`
+FOREIGN KEY (`leave_id`) REFERENCES `applyleaves` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `leaveteams_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- leavetypes
+-- =====================================================
+ALTER TABLE `leavetypes`
+ADD CONSTRAINT `leavetypes_role_foreign`
+FOREIGN KEY (`role`) REFERENCES `roles` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `leavetypes_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `leavetypes_updatedby_foreign`
+FOREIGN KEY (`updatedby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- notificationreadorunread
+-- =====================================================
+ALTER TABLE `notificationreadorunread`
+ADD CONSTRAINT `notificationreadorunread_notifications_id_foreign`
+FOREIGN KEY (`notifications_id`) REFERENCES `notifications` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `notificationreadorunread_readedby_foreign`
+FOREIGN KEY (`readedby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- notifications
+-- =====================================================
+ALTER TABLE `notifications`
+ADD CONSTRAINT `notifications_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- notificationtargets
+-- =====================================================
+ALTER TABLE `notificationtargets`
+ADD CONSTRAINT `notificationtargets_notification_id_foreign`
+FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `notificationtargets_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- permissions
+-- =====================================================
+ALTER TABLE `permissions`
+ADD CONSTRAINT `permissions_role_id_foreign`
+FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `permissions_page_id_foreign`
+FOREIGN KEY (`page_id`) REFERENCES `pages` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- rejoiningsamepost
+-- =====================================================
+ALTER TABLE `rejoiningsamepost`
+ADD CONSTRAINT `rejoiningsamepost_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- teammembers
+-- NOTE: created_by references USERS.ID as per your file
+-- =====================================================
+ALTER TABLE `teammembers`
+ADD CONSTRAINT `teammembers_mentor_id_foreign`
+FOREIGN KEY (`mentor_id`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `teammembers_title_id_foreign`
+FOREIGN KEY (`title_id`) REFERENCES `titles` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `teammembers_role_id_foreign`
+FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `teammembers_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `users` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- teammember_document_files
+-- =====================================================
+ALTER TABLE `teammember_document_files`
+ADD CONSTRAINT `teammember_document_files_teamember_id_foreign`
+FOREIGN KEY (`teamember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- teamrolehistory
+-- =====================================================
+ALTER TABLE `teamrolehistory`
+ADD CONSTRAINT `teamrolehistory_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `teamrolehistory_roleid_old_foreign`
+FOREIGN KEY (`roleid_old`) REFERENCES `roles` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `teamrolehistory_roleid_new_foreign`
+FOREIGN KEY (`roleid_new`) REFERENCES `roles` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- templates
+-- =====================================================
+ALTER TABLE `templates`
+ADD CONSTRAINT `templates_client_id_foreign`
+FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `templates_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `templates_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- timesheetday
+-- =====================================================
+ALTER TABLE `timesheetday`
+ADD CONSTRAINT `timesheetday_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- timesheetreport
+-- =====================================================
+ALTER TABLE `timesheetreport`
+ADD CONSTRAINT `timesheetreport_teamid_foreign`
+FOREIGN KEY (`teamid`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `timesheetreport_partnerid_foreign`
+FOREIGN KEY (`partnerid`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- timesheetrequests
+-- =====================================================
+ALTER TABLE `timesheetrequests`
+ADD CONSTRAINT `timesheetrequests_client_id_foreign`
+FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetrequests_assignment_id_foreign`
+FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetrequests_partner_foreign`
+FOREIGN KEY (`partner`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetrequests_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- timesheets
+-- =====================================================
+ALTER TABLE `timesheets`
+ADD CONSTRAINT `timesheets_created_by_foreign`
+FOREIGN KEY (`created_by`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- timesheetupdatelogs
+-- =====================================================
+ALTER TABLE `timesheetupdatelogs`
+ADD CONSTRAINT `timesheetupdatelogs_timesheetusers_id_foreign`
+FOREIGN KEY (`timesheetusers_id`) REFERENCES `timesheetusers` (`id`)
+ON DELETE CASCADE;
+
+-- =====================================================
+-- timesheetusers
+-- =====================================================
+ALTER TABLE `timesheetusers`
+ADD CONSTRAINT `timesheetusers_timesheetid_foreign`
+FOREIGN KEY (`timesheetid`) REFERENCES `timesheets` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `timesheetusers_client_id_foreign`
+FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetusers_assignmentgenerate_id_foreign`
+FOREIGN KEY (`assignmentgenerate_id`)
+REFERENCES `assignmentmappings` (`assignmentgenerate_id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `timesheetusers_partner_foreign`
+FOREIGN KEY (`partner`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetusers_assignment_id_foreign`
+FOREIGN KEY (`assignment_id`) REFERENCES `assignments` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetusers_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `timesheetusers_rejectedby_foreign`
+FOREIGN KEY (`rejectedby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL,
+ADD CONSTRAINT `timesheetusers_updatedby_foreign`
+FOREIGN KEY (`updatedby`) REFERENCES `teammembers` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- trail
+-- =====================================================
+ALTER TABLE `trail`
+ADD CONSTRAINT `trail_createdby_foreign`
+FOREIGN KEY (`createdby`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE,
+ADD CONSTRAINT `trail_pageid_foreign`
+FOREIGN KEY (`pageid`) REFERENCES `pages` (`id`)
+ON DELETE SET NULL;
+
+-- =====================================================
+-- userloginactiviteies
+-- =====================================================
+ALTER TABLE `userloginactiviteies`
+ADD CONSTRAINT `userloginactiviteies_teammember_id_foreign`
+FOREIGN KEY (`teammember_id`) REFERENCES `teammembers` (`id`)
+ON DELETE CASCADE;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+{{-- * Database working --}}
 1 current working database is vsa = 27-03-24
 2 before it vsaold
 
@@ -526,7 +1153,7 @@ max_allowed_packet=512M
 2.Database ka backup le using command
 {{-- 2.mysqldump -u root myapp > "D:\xampp_backups\myapp_backup.sql" --}}
 
-{{-- * regarding xampp error / regarding xampp / phpmyadmin  --}}
+{{-- regarding xampp error / regarding xampp / phpmyadmin  --}}
 {{--  Start Hare --}}
 {{--  when you get error during start mysql in xampp on that case follow these steps --}}
 Note: jab aap C:\xampp\mysql folder me backup folder se data ko data folder me paste karte ho to aapka mysql run ho

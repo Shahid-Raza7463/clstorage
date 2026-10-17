@@ -89,7 +89,7 @@ Sunday
 1.Working on error pages 
 2.Error pages completed and deployed on vsademo and functional testing completed
 3.Error pages completed and deployed on vsalive and functional testing completed
-4.Bugs fixed related to logs task 
+4.Bugs fixed related to logs task ( Kindly remove extra Unique named entries from the log these are not required for User + Name should match the tab name with the entry)
 
 
 13-08-2026
@@ -99,18 +99,9 @@ Sunday
 optimize ho gya hai test karna hai ok and iske baad work karna hai 
 
 
-
-1.resources\views\errors\internal.blade.php  3 jagah per hai 
-error page me kahi kahi KGS TO VSA aa raha hai use remove karna hai 
-
 14-08-2026
-1.
-
-
-Test Case:
-1.Save but don't submit – Employees who have saved their timesheets but never submitted them.
-2.Never filled – Employees who have never created/filled any timesheet at all.
-3.Rejoining employees – Employees who have rejoined the company (either on the same or different post) but have not submitted their timesheets after rejoining.
+1.Fix Database Migration Issues
+  1.1 i have worked on teammemnber module and added validation also 
 
 
  
@@ -124,87 +115,128 @@ Sunday
 
 
 17-08-2026
-1.VSA task testing on vsademo and inform to mohit 
+1.VSA task testing completed on vsademo and inform to mohit 
 2.column lenth fixed on database 
-3.
+3.form validation added on all filed to teammember create / edit and user profile page 
 
 
+``````````````````````
 
-
-1.database ka column me lenth sahi hona chahiye  and backennd and front me handle hoga ki agar 200 se jayada lenth hai to kiya hoga 
-2.isme kuch duplicate tables h uska use nhi h toa usko remove krna h  
-3.isme foreign key missing h kaphi jaga 
-4.analyse ki kaha kaha bugs hai isme 
-5.and kaha kaha try cath laga sakte hai 
-6.ek list bnawana hai ki kaha kaha issue hai and kaha kaha validation lagana hai 
-7.
 
 
 18-08-2026
+1.VSA bugs completed and depoloyed on vsademo  (View action downloads the document instead of opening it for preview)
+2.meeting with ajit and checked file upload size related and confirm to ajit
+3.lenth fixed on all table 
+
+
+
+
+http://127.0.0.1:8000/client/create
+
+
+
 19-08-2026
+##.Working on all form on portal 
+1. client/{id}/edit
+2. client/create
+3. client/contactedit/{id}
+4. client/add-document/{id}
+5. /teamlogin/create
+6. applyleave/create
+7. /knowledgebase 
+8. /assignment
+9. /article/create/{id}
+
+````````````
+
+
+
 20-08-2026
+1.Data clean on vsademo for client meeting and added data 
+## Working on all form on portal
+1.client/add-document/{id}
+2.teamlogin/create
+3.applyleave/create
+4.openleave/{id}
+5.notification/create
+6.applyleave (teamapplication.blade.php)
+7.activitylogs
+8.totaltimeshow
+9.timesheet/fulllist
+10.permotionandrejoin
+11.attendance
+12.independencereport
+13.filtering-applyleve
+
+
+
+
+
+
+
+
 21-08-2026
+Sick leave 
+
 22-08-2026
+Sturday
+
+
 23-08-2026
+Sunday
+
+
+
 24-08-2026
+## Working on all form on portal
+14.assignmentfolders/{id}
+15.assignmentfolderfiles/{id}
+16.assignmentmapping/create
+17.assignmentlist/{id}
+18.assignmentmapping/edit/{id}
+19.viewassignment/{id}
+##Comment added on all controller, helper , command file. 
+
+
+
+
 25-08-2026
+Casual leave 
+
 26-08-2026
+Casual leave 
+
 27-08-2026
+##Temp claer and storage clean
+and testing baki hai url ka
+The table that is no longer in use has been removed, along with all associated code
+
+
+
+
 28-08-2026
+Holidays Rksha bandhan
+
 29-08-2026
+1.The table that is no longer in use has been removed from migration and foregn key added on table 
+
+
 30-08-2026
+Sunday
+
+
 31-08-2026
-
-
-1.resources\views\errors\internal.blade.php  3 jagah per hai 
-error page me kahi kahi KGS TO VSA aa raha hai use remove karna hai 
-
-
+1.Meeting with sumit sir
+2.All foregn column will be same datatype 
+3.All foreign keys have been compared across all tables (65 tables), and all foreign key columns must have the same datatype and length
 
 
 
 
 
-DB_DATABASE=vsademotimeheet3
-
-
-
-
-1.DEV NARAYAN YADAV  iska indepenedence pending hai and ise submit karwana hai 
-.independence pending hai 
-
-jis pride ka timesheet submit  hai 
-
-created date assign independence create 
-
-2.nitin RSW100909 nitin single, 1031 0 hour timeshee team  hatana hau 
-3.rsw101719 isme M1076 isko hatana hai is 
-
-``````````````````
-
-Independence confirmation should not be required for the Assignment Viewer.
-  1.report-indepnedence and filter
-  2.viewassignment - independence 
-  3 send remimneder 
-  
-  
-  
-independences table se id 3289 delete 
-
-app\Http\Controllers\IndependenceController.php
-           // ->where('assignmentteammappings.teammember_id', 952)
-		   
-             ->where('assignmentteammappings.viewerteam', null)
-
-
-
-SHR101225
-BAN100901
-
-
-
-```````````````````````````
-
-
-http://127.0.0.1:8000/timesheetnotfillreminder
-
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   app/Http/Controllers/AssignmentconfirmationController.php
+        modified:   app/Http/Controllers/TaskController.php
+        modified:   app/Http/Controllers/TimesheetController.php

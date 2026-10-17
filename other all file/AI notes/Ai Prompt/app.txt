@@ -1,0 +1,1219 @@
+222222222222222222222222222222222222222222222222222222222222222
+
+1. Notes App
+Create a modern React Native Notes App.
+
+Features:
+- Add, edit, delete notes
+- Search notes
+- Save notes using AsyncStorage
+- Note title, description, created date
+
+Requirements:
+- Home/List screen
+- Add/Edit note screen
+- Note detail screen
+- Empty state
+- Validation
+- Modern clean UI
+- No API/backend
+2. Todo App
+Create a modern React Native Todo App.
+
+Features:
+- Add, edit, delete tasks
+- Mark task completed/pending
+- Completed/Pending filter
+- Save tasks locally using AsyncStorage
+
+Requirements:
+- Task list screen
+- Add/Edit task screen
+- Status filter tabs
+- Empty state
+- Validation
+- Modern clean UI
+- No API/backend
+3. Expense Tracker
+Create a modern React Native Expense Tracker App.
+
+Features:
+- Add income/expense
+- Edit/delete transaction
+- Category filter
+- Monthly total summary
+- Save data using AsyncStorage
+
+Requirements:
+- Dashboard
+- Transaction list
+- Add/Edit transaction form
+- Income/Expense summary cards
+- Search/filter
+- Modern clean UI
+- No API/backend
+4. Contact Book
+Create a modern React Native Contact Book App.
+
+Features:
+- Add, edit, delete contacts
+- Name, phone, email
+- Search contacts
+- Call button
+- Save contacts using AsyncStorage
+
+Requirements:
+- Contact list
+- Add/Edit contact form
+- Contact detail screen
+- Phone validation
+- Modern clean UI
+- No API/backend
+5. PDF Tools App
+Create a modern React Native PDF Tools App.
+
+Features:
+- PDF merge
+- PDF split
+- PDF rename
+- PDF list
+- Select PDFs from device
+- Save/manage PDFs locally
+
+Requirements:
+- PDF tools dashboard
+- PDF list screen
+- Merge screen
+- Split screen
+- Rename screen
+- File picker support
+- Modern clean UI
+- No API/backend
+6. Attendance App
+Create a modern React Native Attendance App.
+
+Features:
+- Student/employee list
+- Mark present/absent
+- Date-wise attendance report
+- Save data locally using AsyncStorage
+
+Requirements:
+- People list
+- Add/Edit person
+- Mark attendance screen
+- Date-wise report screen
+- Present/Absent filter
+- Modern clean UI
+- No API/backend
+7. Service Provider App
+Create a modern React Native Service Provider App.
+
+Features:
+- Category listing
+- Provider CRUD
+- Search/filter providers
+- Call button
+- Profile/detail screen
+- Save data locally using AsyncStorage
+
+Requirements:
+- Home category screen
+- Provider list screen
+- Add/Edit provider form
+- Provider detail screen
+- Modern clean UI
+- No API/backend
+8. Leave Management App
+Create a modern React Native Leave Management App.
+
+Features:
+- Apply leave
+- Leave status
+- Local approval/rejection flow
+- Save data using AsyncStorage
+
+Requirements:
+- Leave list screen
+- Apply leave form
+- Leave detail screen
+- Approval screen
+- Status filters: Pending, Approved, Rejected
+- Modern clean UI
+- No API/backend
+9. Invoice/Bill App
+Create a modern React Native Invoice/Bill App.
+
+Features:
+- Add client
+- Add invoice items
+- Calculate subtotal, tax, total
+- Generate bill preview
+- Save invoices locally using AsyncStorage
+
+Requirements:
+- Client list
+- Invoice list
+- Create/Edit invoice
+- Bill preview screen
+- Modern clean UI
+- No API/backend
+10. Image to PDF App
+Create a modern React Native Image to PDF App.
+
+Features:
+- Pick multiple images
+- Arrange image order
+- Convert images to PDF
+- Save generated PDF locally
+
+Requirements:
+- Image picker
+- Preview selected images
+- Drag/reorder images
+- Convert button
+- Result screen
+- Modern clean UI
+- No API/backend
+
+22222222222222222222222222222222
+Create a modern mobile app UI for PDF Merge.
+
+App:
+PDF Page Merger
+
+Features:
+- Select multiple PDF files.
+- After selection, show each PDF with its page list.
+- Example:
+  shahid.pdf → Page 1, Page 2, Page 3
+  arif.pdf → Page 1, Page 2, Page 3, Page 4, Page 5
+- User can select specific pages from each PDF.
+- Selected pages should be merged into one PDF.
+- Add Merge PDF button.
+- Show success message after merge.
+
+Screens:
+- Home / PDF Picker
+- Selected PDFs with page checklist
+- Merge preview/summary
+- Result screen with merged PDF
+
+Design:
+- Modern clean UI
+- Light theme
+- Card-based layout
+- Checkbox page selection
+- Rounded buttons
+- Progress/loading state
+- Empty state
+- Error messages
+
+Output:
+- Complete UI flow
+- PDF selection flow
+- Page selection flow
+- Merge action flow
+
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222222222222222222
+Create a modern mobile app UI + local CRUD.
+
+App:
+Service Provider Directory
+
+Categories:
+- Doctor
+- 4 Wheeler Driver
+- Auto Driver
+- Helper
+- Medicine Shop
+
+Screens:
+1. Home
+- Category cards grid
+- Tap category → listing screen
+
+2. Listing
+- Search
+- Filter
+- Provider cards:
+  photo, name, profession, location, experience, rating, call, view profile
+- Add, Edit, Delete provider
+- Data stored locally in app only
+- No API/backend
+
+3. Add/Edit Form
+- Name
+- Profession/category
+- Phone
+- Location
+- Experience
+- Rating
+- Photo
+- Description
+
+Design:
+- Modern mobile UI
+- Light theme
+- Material style
+- Rounded cards
+- Soft shadows
+- Clean icons
+- Responsive
+
+Output:
+- Home UI
+- Listing UI
+- Add/Edit UI
+- Local CRUD flow
+
+
+
+
+You created only the Home screen.
+
+Now add missing screens/features:
+
+Task:
+- On category card click, open Listing screen.
+- Listing screen should show providers for selected category.
+- Add local CRUD:
+  - Add provider
+  - Edit provider
+  - Delete provider
+  - View provider
+- No API/backend.
+- Store data locally in app state or AsyncStorage.
+
+Screens needed:
+- Home
+- Category Listing
+- Add/Edit Provider
+- Provider Detail
+
+Keep current Home UI.
+Add navigation and CRUD flow.
+
+22222222222222222222222222222222222222222222222222
+
+
+Remove the complete "Service Provider Directory" module.
+
+Delete:
+- All screens (Home, Listing, Detail, Add/Edit)
+- Navigation/routes
+- Components
+- Context/store
+- AsyncStorage logic
+- CRUD logic
+- Models/types
+- Utilities
+- Assets used only by this module
+
+Clean up:
+- Remove unused imports, dependencies, and references.
+- Ensure the project builds without errors or warnings.
+
+Do not modify any unrelated code or project configuration.
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+I'm getting this runtime error after implementing the PDF Merge feature.
+
+Error:
+
+ERROR TypeError: Cannot read property 'RNFSFileTypeRegular' of null, js engine: hermes
+
+LOG Running "FriendsList" with {"rootTag":21}
+
+The app bundles successfully, but crashes immediately after launch.
+
+Task:
+- Find the root cause.
+- Fix this error completely.
+- Keep the existing PDF Merge UI and functionality unchanged.
+- Do not modify unrelated code.
+
+The app should launch without this error and the PDF Merge feature should work correctly.
+
+22222222222222222222222222222222222222222222222222
+Create a modern React Native Expense Tracker App.
+
+Features:
+- Add income/expense
+- Edit/delete transaction
+- Category filter
+- Monthly total summary
+- Save data using AsyncStorage
+
+Requirements:
+- Dashboard
+- Transaction list
+- Add/Edit transaction form
+- Income/Expense summary cards
+- Search/filter
+- Modern clean UI
+- No API/backend
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+
+
+22222222222222222222222222222222222222222222222222
+
+Create a modern React Native Contact Book App.
+
+Features:
+- Add, edit, delete contacts
+- Name, phone, email
+- Search contacts
+- Call button
+- Save contacts using AsyncStorage
+
+Requirements:
+- Contact list
+- Add/Edit contact form
+- Contact detail screen
+- Phone validation
+- Modern clean UI
+- No API/backend
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+
+22222222222222222222222222222222222222222222222222
+
+Create a modern React Native Contact Book App.
+
+Features:
+- Add, edit, delete contacts
+- Name, phone, email
+- Search contacts
+- Call button
+- Save contacts using AsyncStorage
+
+Requirements:
+- Contact list
+- Add/Edit contact form
+- Contact detail screen
+- Phone validation
+- Modern clean UI
+- No API/backend
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+
+
+22222222222222222222222222222222222222222222222222
+
+Create a modern React Native mobile app.
+
+App Name:
+MCQ Scanner
+
+Purpose:
+Study Assistant for analyzing MCQs from books, notes, PDFs, or practice material.
+
+Features:
+
+1. Home Screen
+- Clean modern dashboard
+- "Scan Questions" button
+- "History" button
+- "Settings" button
+
+2. Scan Screen
+- Open device camera.
+- Detect and extract text using OCR.
+- Automatically identify one or multiple MCQs from the captured image.
+- Show a loading animation while processing.
+
+3. AI Analysis
+- Analyze each detected question.
+- Determine the most likely correct option.
+- Display results inside the app (do not open an external browser).
+
+Example Output:
+
+Q1 → A
+Q2 → C
+Q3 → D
+Q4 → B
+
+- Also display a short explanation (2–3 lines) for each answer.
+
+4. Results Screen
+- Original scanned question
+- Detected options (A/B/C/D)
+- Predicted answer
+- Short explanation
+- Confidence percentage
+- Copy result
+- Share result
+
+5. History
+- Save previous scans locally using AsyncStorage.
+- Search history.
+- Delete individual or all history.
+
+6. Settings
+- Light/Dark theme
+- OCR language selection
+- Clear history
+
+Design
+- Modern
+- Material Design inspired
+- Unique UI (do not reuse previous app layouts)
+- Rounded cards
+- Smooth animations
+- Responsive
+- Professional color palette
+
+Technical
+- React Native
+- React Navigation
+- AsyncStorage
+- Camera integration
+- OCR support
+- Local history only
+- No backend/API required for storage
+
+Output
+- Complete React Native project
+- Home Screen
+- Camera Scan Screen
+- Results Screen
+- History Screen
+- Settings Screen
+- Working navigation
+- Working local storage
+
+22222222222222222222222222222222222
+
+Mode: CONTINUE_IMPLEMENTATION
+
+Analyze current project first.
+
+Continue from the existing implementation.
+
+Rules:
+- Never recreate completed code.
+- Never redesign completed UI.
+- Never rename existing files.
+- Never change working functionality.
+- Complete only unfinished tasks.
+- Reuse existing code.
+- Fix only related issues.
+
+Follow AGENTS.md
+
+
+
+22222222222222222222222222222222222
+
+I want you to create a complete React Native mobile application called "MCQ Scanner" with the following features and specifications:
+
+---
+
+## 🎯 **CORE FUNCTIONALITY**
+
+### 1. Camera Scanner (Main Screen)
+- When the app opens, the camera should activate immediately
+- User points camera at a printed/ handwritten MCQ question paper
+- App detects and extracts text from the image using OCR (Optical Character Recognition)
+- **No Google Vision API** — use local OCR library like `react-native-text-detector` or `@react-native-ml-kit/text-recognition`
+- After scanning, extract questions and their options (A, B, C, D)
+
+### 2. Answer Detection Logic
+- After OCR extracts text, parse the content intelligently:
+  - Identify question numbers (Q1, Q2, ... or 1., 2., ...)
+  - Identify options (A., B., C., D. or A) B) C) D))
+  - Identify correct answers if marked (circled, underlined, or written)
+- If answers are NOT marked, the app should still detect questions and options
+
+### 3. Answer Display (In-App)
+- Show results in a clean list format:
+
+22222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222
+
+
+Create a modern React Native Personal Finance Manager App.
+
+Project Goal:
+Build a complete offline Personal Finance Manager that replaces manual monthly Notepad accounting. The app should automatically manage balances, income, expenses, monthly reports, and transaction history.
+
+Platform:
+- React Native
+- No API / No Backend
+- Store all data using AsyncStorage
+- Clean Architecture
+- Reusable Components
+- Proper Folder Structure
+- Production-ready Code
+
+====================================================
+CORE FEATURES
+====================================================
+
+1. Dashboard
+- Current Balance
+- Opening Balance (Current Month)
+- Closing Balance (Current Month)
+- Total Income (Current Month)
+- Total Expense (Current Month)
+- Monthly Savings
+- Recent Transactions
+- Quick Statistics
+- Monthly Income vs Expense Chart
+- Smooth Animated Cards
+
+2. Income Management
+- Add Income
+- Edit Income
+- Delete Income
+- View Income Details
+
+Income Fields:
+- Person Name
+- Amount
+- Date
+- Account (Cash / Bank)
+- Notes
+
+Examples:
+Shahid
+Hamid Bhai
+Arif Bhai
+
+3. Expense Management
+- Add Expense
+- Edit Expense
+- Delete Expense
+- View Expense Details
+
+Expense Fields:
+- Category
+- Amount
+- Date
+- Account (Cash / Bank)
+- Notes
+
+Default Categories:
+- Hospital
+- Home
+- Food
+- Education
+- Travel
+- Family
+- Bills
+- Others
+
+4. Transaction History
+- Show all Income & Expense together
+- Color coded
+- Income = Green
+- Expense = Red
+- Search Transactions
+- Filter by
+  - Month
+  - Year
+  - Income
+  - Expense
+  - Cash
+  - Bank
+  - Person
+  - Category
+
+Sort:
+- Newest First
+- Oldest First
+- Highest Amount
+- Lowest Amount
+
+====================================================
+BALANCE LOGIC
+====================================================
+
+Automatically calculate:
+
+Opening Balance
++ Total Income
+= Balance Before Expense
+
+Balance Before Expense
+- Total Expense
+= Closing Balance
+
+The Closing Balance of the previous month must automatically become the Opening Balance of the next month.
+
+Every transaction must immediately update:
+- Current Balance
+- Monthly Summary
+- Dashboard Cards
+
+====================================================
+MONTHLY LEDGER REPORT
+====================================================
+
+Generate a report exactly like a handwritten monthly accounting notebook.
+
+Example Layout:
+
+###################################
+
+May 2025
+
+Received (रुपैया जमा हुआ)
+
+Shahid ............ ₹5,000
+Hamid Bhai ........ ₹30,000
+Arif Bhai ......... ₹50,000
+
+Total Received
+₹85,000
+
+Previous Month Balance
+₹147,000
+
+Balance Before Expense
+₹232,000
+
+Spend (रुपैया खर्चा हुआ)
+
+Hospital .......... ₹1,500
+Ammi .............. ₹20,000
+Mojahid ........... ₹1,500
+
+Total Expense
+₹23,000
+
+Closing Balance
+₹209,000
+
+###################################
+
+Requirements:
+- Automatically generate this report
+- Printable layout
+- PDF-ready structure
+- Future Excel-ready structure
+- Share-ready layout
+
+====================================================
+MONTHLY ARCHIVE
+====================================================
+
+Archive Screen
+
+2025
+
+January
+February
+March
+April
+May
+June
+...
+
+Clicking a month opens:
+- Full Monthly Report
+- Income List
+- Expense List
+- Opening Balance
+- Closing Balance
+- Statistics
+
+====================================================
+QUICK ENTRY MODE
+====================================================
+
+Provide a Quick Entry screen where users can type:
+
++5000 Shahid
+
++30000 Hamid Bhai
+
++50000 Arif Bhai
+
+-1500 Hospital
+
+-20000 Ammi
+
+-1500 Mojahid
+
+The app should automatically detect:
+- Income or Expense
+- Amount
+- Person or Category
+
+Then create the transaction instantly.
+
+====================================================
+SEARCH
+====================================================
+
+Global Search
+
+Search by:
+- Person
+- Category
+- Amount
+- Notes
+- Month
+- Year
+
+====================================================
+STATISTICS
+====================================================
+
+Charts:
+- Monthly Income
+- Monthly Expense
+- Monthly Savings
+- Income vs Expense
+- Yearly Trend
+
+====================================================
+CRUD
+====================================================
+
+Support complete CRUD:
+- Income
+- Expense
+
+====================================================
+DATA
+====================================================
+
+Use AsyncStorage only.
+
+No Firebase.
+
+No Backend.
+
+No API.
+
+====================================================
+EXPORT (Future Ready)
+====================================================
+
+Prepare architecture for:
+
+- PDF Export
+- Excel Export
+- JSON Backup
+- JSON Restore
+
+Implementation can remain placeholder buttons with modular structure.
+
+====================================================
+SETTINGS
+====================================================
+
+- Dark Mode
+- Light Mode
+- Currency Selection
+- Reset Data
+- About App
+
+====================================================
+UI REQUIREMENTS
+====================================================
+
+The UI must be premium and completely unique.
+
+Do NOT copy common expense tracker layouts.
+
+Use:
+- Glassmorphism
+- Soft Shadows
+- Rounded Cards
+- Smooth Animations
+- Floating Action Button
+- Beautiful Empty States
+- Modern Typography
+- Gradient Backgrounds
+- Responsive Design
+- Clean Navigation
+- Minimal yet premium appearance
+
+Each screen should have a different layout while maintaining a consistent design system.
+
+====================================================
+SCREENS
+====================================================
+
+Splash Screen
+
+Dashboard
+
+Add Income
+
+Edit Income
+
+Add Expense
+
+Edit Expense
+
+Transaction History
+
+Transaction Details
+
+Monthly Report
+
+Monthly Archive
+
+Statistics
+
+Search
+
+Settings
+
+====================================================
+CODE QUALITY
+====================================================
+
+Use:
+- Functional Components
+- React Hooks
+- Context API (or clean state management)
+- Reusable Components
+- Reusable Cards
+- Custom Hooks where appropriate
+- Well-organized folder structure
+- Proper TypeScript-ready architecture (even if using JavaScript)
+
+====================================================
+IMPORTANT
+====================================================
+
+This application is intended to replace manual monthly Notepad bookkeeping.
+
+Focus on:
+- Automatic balance calculations
+- Fast data entry
+- Clean monthly accounting
+- Excellent user experience
+- Premium UI
+- Offline-first architecture
+- Easily extensible for future features like PDF export, Excel export, cloud sync, and authentication.
+
+
+
+
+222222222
+
+Create a modern React Native Personal Finance Manager App.
+
+Features:
+- Dashboard
+- Add Income
+- Add Expense
+- Transaction History
+- Monthly Report
+- Current Balance
+- Income & Expense Summary
+- Search & Filter Transactions
+- PDF Report (future ready)
+- Excel Export (future ready)
+
+Transaction Fields:
+- Type (Income/Expense)
+- Person/Category
+- Amount
+- Date
+- Account (Cash/Bank)
+- Notes
+
+Monthly Report:
+- Opening Balance
+- Total Income
+- Total Expense
+- Closing Balance
+- Income List
+- Expense List
+
+Requirements:
+- Store data using AsyncStorage.
+- Auto-calculate balances.
+- Previous month's closing balance becomes next month's opening balance.
+- CRUD for Income & Expense.
+- Clean architecture.
+- Modern, premium, and responsive UI.
+- Smooth animations.
+- Dark & Light mode.
+- No API/backend.
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+Design it like a premium finance app, not a basic CRUD application.
+
+2222222222222222
+
+Create a modern React Native Personal Finance Manager App.
+
+Goal:
+Replace manual monthly Notepad bookkeeping with a complete offline finance manager.
+
+Platform:
+- React Native
+- AsyncStorage
+- No API/Backend
+- Clean Architecture
+- Reusable Components
+
+Features:
+- Dashboard
+- Income Management (CRUD)
+- Expense Management (CRUD)
+- Transaction History
+- Monthly Ledger Report
+- Monthly Archive
+- Statistics
+- Global Search
+- Settings
+- Quick Entry
+
+Dashboard:
+- Current, Opening & Closing Balance
+- Monthly Income, Expense & Savings
+- Recent Transactions
+- Income vs Expense Chart
+
+Transaction Fields:
+- Type (Income/Expense)
+- Person/Category
+- Amount
+- Date
+- Account (Cash/Bank)
+- Notes
+
+Balance Logic:
+- Auto-calculate balances.
+- Previous month's closing balance becomes next month's opening balance.
+- Update dashboard instantly after every transaction.
+
+Monthly Report:
+- Opening Balance
+- Income List
+- Expense List
+- Total Income
+- Total Expense
+- Closing Balance
+- Match handwritten monthly ledger.
+
+Quick Entry:
+Examples:
++5000 Shahid
+-1500 Hospital
+
+Auto-detect income/expense, amount and person/category.
+
+Search & Filters:
+- Person
+- Category
+- Month
+- Year
+- Amount
+- Account
+
+Statistics:
+- Income
+- Expense
+- Savings
+- Monthly/Yearly Charts
+
+Future Ready:
+- PDF Export
+- Excel Export
+- JSON Backup/Restore
+
+UI:
+- Premium finance app
+- Glassmorphism
+- Gradient cards
+- Soft shadows
+- Rounded UI
+- Smooth animations
+- FAB
+- Beautiful empty states
+- Responsive
+- Dark/Light Mode
+- Unique design (do not reuse previous layouts)
+
+Code:
+- Functional Components
+- React Hooks
+- Context API
+- Custom Hooks
+- Modular Folder Structure
+- TypeScript-ready architecture
+
+Build a complete production-ready offline application with clean, reusable, and extensible code.
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Create a modern React Native Contact Book App.
+
+Features:
+- Add, edit, delete contacts
+- Name, phone, email
+- Search contacts
+- Call button
+- Save contacts using AsyncStorage
+
+Requirements:
+- Contact list
+- Add/Edit contact form
+- Contact detail screen
+- Phone validation
+- Modern clean UI
+- No API/backend
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+
+
+222222222222222222222222222222222222222222
+
+
+Create a modern React Native Remote Phone Finder App.
+
+Goal:
+Use one phone as Master to remotely ring other linked Android phones, even when they are on silent mode.
+
+Platform:
+
+* React Native
+* Android
+* Firebase Authentication
+* Firebase Cloud Messaging (FCM)
+* Firebase database for device linking
+* Native Android/Kotlin where required
+
+Features:
+
+* Email Login
+* Master/Linked Device setup
+* Multiple linked phones
+* Device name/model
+* Online/Offline status
+* Ring Device
+* Stop Ring
+* Ring History
+* Remove Device
+* Lost Mode
+
+Ring Logic:
+
+* Master sends a ring command to a selected device.
+* Target device should ring at maximum allowed alarm volume.
+* Handle silent mode using proper Android permissions/APIs.
+* Ring should work in background/locked screen where Android permits.
+* Allow Stop Ring from Master and target device.
+* Do not bypass Android security or permissions.
+
+Requirements:
+
+* Secure device ownership/linking.
+* FCM background handling.
+* Handle notification/DND permissions where required.
+* Handle battery optimization/autostart guidance for POCO, Redmi, Vivo.
+* Clean architecture and reusable components.
+* Modern unique UI.
+* Production-ready code.
+* Do not reuse previous app designs.
+
+2222222222222222222222222222222
+
+1
+Create a modern React Native FriendData App.
+
+Features:
+
+Fetch friends data from API
+Display friends in a clean list/card UI
+Pull to refresh
+Loading indicator
+Empty state
+API error handling
+
+API:
+https://shahid1.infinityfreeapp.com/api/friends
+
+Requirements:
+
+API data only
+No dummy/local data
+No add/edit/delete
+Use fetch or axios
+Modern clean UI
+Responsive layout
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+
+
+
+
+
+
+2
+ye baad me run karna hai jab sahi me api se data list ho raha hoga tab 
+
+# FriendData CRUD App Prompt
+
+Create a modern React Native FriendData App with full CRUD.
+
+API:
+https://shahid1.infinityfreeapp.com/api/friends
+
+Fields:
+
+* id
+* name
+* color
+* image
+* created_at
+* updated_at
+
+Features:
+
+* List friends from API
+* Add friend
+* Edit/update friend
+* Delete friend with confirmation
+* View friend details
+* Search friends
+* Pull to refresh
+* Image upload/select
+* Default avatar if image is null
+* Loading, success, empty, and error states
+
+Requirements:
+
+* Perform CRUD through API only.
+* No dummy data or AsyncStorage.
+* Use GET, POST, PUT/PATCH, DELETE endpoints as supported by the API.
+* Refresh list automatically after add/edit/delete.
+* Add proper form validation.
+* Handle API/network errors properly.
+* Keep code simple and beginner-friendly.
+* Modern responsive UI.
+
+Make the UI unique for this app. Do not reuse the same layout/design from previous apps.
+
+
+
+222222222222222222222222222
+

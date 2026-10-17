@@ -45,8 +45,8 @@ regarding react native / enviroment / run on local
    in android studei --> more actrions -->vertual device manager 
 3.open cmd 
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
-cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
-cd C:\ReactNativeApp\FriendList
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
+cd C:\ReactNativeApp\FriendsList
 cd C:\Users\KGS-429\Desktop\shahidapp\UsersList
 cd C:\ReactNativeApp\FriendsList
 npx react-native start --reset-cache  if neede then other was skip it 
@@ -96,7 +96,7 @@ gradlew assembleRelease
 setup enviroment
 1024   *  768
 cd C:\Users\KGS-429\Desktop\secondapp\Projects
-cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
 cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
 
 npx react-native start
@@ -346,7 +346,7 @@ rmdir /s /q AwesomeProject
 rmdir /s /q "C:\Users\KGS-429\Desktop\firstapp"
 C:\Windows\system32>rmdir /s /q "C:\Users\KGS-429\Desktop\firstapp"
 
-rmdir /s /q C:\Users\KGS-429\Desktop\shahidapp\FriendList\android\.gradle
+rmdir /s /q C:\Users\KGS-429\Desktop\shahidapp\FriendsList\android\.gradle
 rmdir /s /q C:\Users\KGS-429\.gradle
 rmdir /s /q C:\Users\KGS-429\.gradle\caches
 
@@ -612,7 +612,7 @@ npx react-native doctor
 after erorr
 1st way to fix it 
 
-cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
 rmdir /s /q .gradle
 
 
@@ -626,7 +626,7 @@ rmdir /s /q C:\Users\KGS-429\Desktop\secondapp\Projects\android\app\build
 rmdir /s /q C:\Users\KGS-429\Desktop\secondapp\Projects\android\build
 
 
-cd C:\Users\KGS-429\Desktop\shahidapp\FriendList
+cd C:\Users\KGS-429\Desktop\shahidapp\FriendsList
 rmdir /s /q node_modules
 
 
@@ -1004,7 +1004,7 @@ npx react-native run-android
 
 
 
-C:\Users\KGS-429\Desktop\shahidapp\FriendList\android> ./gradlew clean
+C:\Users\KGS-429\Desktop\shahidapp\FriendsList\android> ./gradlew clean
 '.' is not recognized as an internal or external command,
 operable program or batch file.
 
@@ -1021,9 +1021,9 @@ Clean rnscreens-x86_64
 
 BUILD SUCCESSFUL in 59s
 19 actionable tasks: 15 executed, 4 up-to-date
-C:\Users\KGS-429\Desktop\shahidapp\FriendList\android>cd ..
+C:\Users\KGS-429\Desktop\shahidapp\FriendsList\android>cd ..
 
-C:\Users\KGS-429\Desktop\shahidapp\FriendList>npx react-native run-android
+C:\Users\KGS-429\Desktop\shahidapp\FriendsList>npx react-native run-android
 
 
 22222222222223333333333333333333333333333333333333333333333

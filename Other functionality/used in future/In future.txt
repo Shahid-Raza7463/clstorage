@@ -8,15 +8,2454 @@ c:\xampp\htdocs\vsalive\app\Http\Controllers\11ActivitylogsController.php c:\xam
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+      $allTables = DB::select('SHOW TABLES');
+
+      $tablesWithData = [];
+
+      foreach ($allTables as $table) {
+        $tableName = reset($table);
+
+        if (DB::table($tableName)->exists()) {
+          $tablesWithData[] = [
+            'table' => $tableName,
+            'rows' => DB::table($tableName)->count(),
+          ];
+        }
+      }
+
+      echo "<h2>Total Tables: " . count($allTables) . "</h2>";
+
+      echo "<h3>Tables Having Data (" . count($tablesWithData) . "):</h3>";
+
+      echo "<table border='1' cellpadding='8' cellspacing='0'>";
+      echo "<tr>";
+      echo "<th>#</th>";
+      echo "<th>Table Name</th>";
+      echo "<th>Row Count</th>";
+      echo "</tr>";
+
+      foreach ($tablesWithData as $index => $table) {
+        echo "<tr>";
+        echo "<td>" . ($index + 1) . "</td>";
+        echo "<td style='color:green;'><strong>" . $table['table'] . "</strong></td>";
+        echo "<td>" . $table['rows'] . "</td>";
+        echo "</tr>";
+      }
+
+      echo "</table>";
+
+      dd('Process Complete!');
+      
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+-- activitylogs
+ALTER TABLE `activitylogs`
+  ADD FOREIGN KEY (`user_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- activitylogs_details
+ALTER TABLE `activitylogs_details`
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`performed_by`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- annual_independence_declarations
+ALTER TABLE `annual_independence_declarations`
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`partner`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- applyleaves
+ALTER TABLE `applyleaves`
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`leavetype`) REFERENCES `leavetypes`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`approver`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`updatedby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- appointmentletters
+ALTER TABLE `appointmentletters`
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- articles
+ALTER TABLE `articles`
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- assignmentbudgetings
+ALTER TABLE `assignmentbudgetings`
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`assignment_id`) REFERENCES `assignments`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`closedby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- assignmentbudgetingudins
+ALTER TABLE `assignmentbudgetingudins`
+  ADD FOREIGN KEY (`assignment_generate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`partner`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- assignmentfolderfiles
+ALTER TABLE `assignmentfolderfiles`
+  ADD FOREIGN KEY (`assignmentfolder_id`) REFERENCES `assignmentfolders`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- assignmentfolders
+ALTER TABLE `assignmentfolders`
+  ADD FOREIGN KEY (`assignmentgenerateid`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- assignmentmappings
+ALTER TABLE `assignmentmappings`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentbudgetings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`assignment_id`) REFERENCES `assignments`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`leadpartner`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`otherpartner`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- assignmentteammappings
+ALTER TABLE `assignmentteammappings`
+  ADD FOREIGN KEY (`assignmentmapping_id`) REFERENCES `assignmentmappings`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- attendances
+ALTER TABLE `attendances`
+  ADD FOREIGN KEY (`employee_name`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- auditfiles
+ALTER TABLE `auditfiles`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- auditquestions
+ALTER TABLE `auditquestions`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- audittrails
+ALTER TABLE `audittrails`
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- balanceconfirmationreminder
+ALTER TABLE `balanceconfirmationreminder`
+  ADD FOREIGN KEY (`assignmentgenid`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- checklistanswers
+ALTER TABLE `checklistanswers`
+  ADD FOREIGN KEY (`assignment_id`) REFERENCES `assignmentmappings`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`modify_by`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- clientcontacts
+ALTER TABLE `clientcontacts`
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE;
+
+-- clientdocuments
+ALTER TABLE `clientdocuments`
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`updated_by`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- clientfolders
+ALTER TABLE `clientfolders`
+  ADD FOREIGN KEY (`clientlogin_id`) REFERENCES `clientlogins`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- clientlogins
+ALTER TABLE `clientlogins`
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE;
+
+-- clientlogs
+ALTER TABLE `clientlogs`
+  ADD FOREIGN KEY (`clientlogin_id`) REFERENCES `clientlogins`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE CASCADE;
+
+-- clients
+ALTER TABLE `clients`
+  ADD FOREIGN KEY (`createdbyadmin_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`updatedbyadmin_id`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- confirmationrem
+ALTER TABLE `confirmationrem`
+  ADD FOREIGN KEY (`assignmentgenid`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE;
+
+-- criticalnotes
+ALTER TABLE `criticalnotes`
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- debtorbatchshare
+ALTER TABLE `debtorbatchshare`
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`revokeby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- debtorconfirmations
+ALTER TABLE `debtorconfirmations`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`debtor_id`) REFERENCES `debtors`(`id`) ON DELETE CASCADE;
+
+-- debtors
+ALTER TABLE `debtors`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- discusesteammebers
+ALTER TABLE `discusesteammebers`
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- financialstatementclassifications
+ALTER TABLE `financialstatementclassifications`
+  ADD FOREIGN KEY (`assignment_id`) REFERENCES `assignments`(`id`) ON DELETE SET NULL;
+
+-- independencereminder
+ALTER TABLE `independencereminder`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE;
+
+-- independences
+ALTER TABLE `independences`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- leaveapprove
+ALTER TABLE `leaveapprove`
+  ADD FOREIGN KEY (`teammemberid`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`leavetype`) REFERENCES `leavetypes`(`id`) ON DELETE SET NULL;
+
+-- leaverequest
+ALTER TABLE `leaverequest`
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`applyleaveid`) REFERENCES `applyleaves`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`approver`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- leaveroles
+ALTER TABLE `leaveroles`
+  ADD FOREIGN KEY (`leavetype_id`) REFERENCES `leavetypes`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`role`) REFERENCES `roles`(`id`) ON DELETE SET NULL;
+
+-- leaveteams
+ALTER TABLE `leaveteams`
+  ADD FOREIGN KEY (`leave_id`) REFERENCES `applyleaves`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- leavetypes
+ALTER TABLE `leavetypes`
+  ADD FOREIGN KEY (`role`) REFERENCES `roles`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`updatedby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- notificationreadorunread
+ALTER TABLE `notificationreadorunread`
+  ADD FOREIGN KEY (`notifications_id`) REFERENCES `notifications`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`readedby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- notifications
+ALTER TABLE `notifications`
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- notificationtargets
+ALTER TABLE `notificationtargets`
+  ADD FOREIGN KEY (`notification_id`) REFERENCES `notifications`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- permissions
+ALTER TABLE `permissions`
+  ADD FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`page_id`) REFERENCES `pages`(`id`) ON DELETE CASCADE;
+
+-- rejoiningsamepost
+ALTER TABLE `rejoiningsamepost`
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- steplists
+ALTER TABLE `steplists`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE;
+
+-- subfinancialclassfications
+ALTER TABLE `subfinancialclassfications`
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE;
+
+-- teammembers
+ALTER TABLE `teammembers`
+  ADD FOREIGN KEY (`mentor_id`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`title_id`) REFERENCES `titles`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL;
+
+-- teammember_document_files
+ALTER TABLE `teammember_document_files`
+  ADD FOREIGN KEY (`teamember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- teamrolehistory
+ALTER TABLE `teamrolehistory`
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`roleid_old`) REFERENCES `roles`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`roleid_new`) REFERENCES `roles`(`id`) ON DELETE SET NULL;
+
+-- templates
+ALTER TABLE `templates`
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- timesheetday
+ALTER TABLE `timesheetday`
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- timesheetreport
+ALTER TABLE `timesheetreport`
+  ADD FOREIGN KEY (`teamid`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`partnerid`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- timesheetrequests
+ALTER TABLE `timesheetrequests`
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`assignment_id`) REFERENCES `assignments`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`partner`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- timesheets
+ALTER TABLE `timesheets`
+  ADD FOREIGN KEY (`created_by`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
+-- timesheetupdatelogs
+ALTER TABLE `timesheetupdatelogs`
+  ADD FOREIGN KEY (`timesheetusers_id`) REFERENCES `timesheetusers`(`id`) ON DELETE CASCADE;
+
+-- timesheetusers
+ALTER TABLE `timesheetusers`
+  ADD FOREIGN KEY (`timesheetid`) REFERENCES `timesheets`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`client_id`) REFERENCES `clients`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`assignmentgenerate_id`) REFERENCES `assignmentmappings`(`assignmentgenerate_id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`partner`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`assignment_id`) REFERENCES `assignments`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`rejectedby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL,
+  ADD FOREIGN KEY (`updatedby`) REFERENCES `teammembers`(`id`) ON DELETE SET NULL;
+
+-- trail
+ALTER TABLE `trail`
+  ADD FOREIGN KEY (`createdby`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE,
+  ADD FOREIGN KEY (`pageid`) REFERENCES `pages`(`id`) ON DELETE SET NULL;
+
+-- userloginactiviteies
+ALTER TABLE `userloginactiviteies`
+  ADD FOREIGN KEY (`teammember_id`) REFERENCES `teammembers`(`id`) ON DELETE CASCADE;
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+
+        var count = 1;
+        var allowedFileExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
+        var profilePicExtensions = ['jpg', 'jpeg', 'png'];
+
+        function validateFileUpload(input) {
+            if (!input.files || !input.files.length) {
+                return true;
+            }
+
+            var extensions = input.name === 'profilepic' ? profilePicExtensions : allowedFileExtensions;
+
+            for (var i = 0; i < input.files.length; i++) {
+                var fileName = input.files[i].name;
+                var extension = fileName.split('.').pop().toLowerCase();
+
+                if ($.inArray(extension, extensions) === -1) {
+                    alert(input.name === 'profilepic' ?
+                        'Profile picture must be in JPG, JPEG, or PNG format' :
+                        'Only JPG, JPEG, PNG, and PDF files are allowed');
+                    $(input).val('').focus();
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        var $form = $('input[name="team_member"]').closest('form');
+        var feedbackCounter = 0;
+        var numericFields = [
+            'mobile_no',
+            'emergencycontactnumber',
+            'adharcardnumber',
+            'mothernumber',
+            'fathernumber',
+            'bankaccountnumber'
+        ];
+        var validationMessages = {
+            title_id: {
+                valueMissing: 'Please select a title.'
+            },
+            team_member: {
+                valueMissing: 'Please enter team member name.',
+                tooLong: 'Name can be maximum 100 characters.'
+            },
+            entity: {
+                valueMissing: 'Please select an entity.'
+            },
+            emailid: {
+                valueMissing: 'Please enter email id.',
+                typeMismatch: 'Please enter a valid email id.',
+                tooLong: 'Email id can be maximum 100 characters.'
+            },
+            personalemail: {
+                valueMissing: 'Please enter personal email id.',
+                typeMismatch: 'Please enter a valid personal email id.',
+                tooLong: 'Personal email id can be maximum 100 characters.'
+            },
+            mobile_no: {
+                valueMissing: 'Please enter mobile number.',
+                patternMismatch: 'Mobile number must be exactly 10 digits.'
+            },
+            emergencycontactnumber: {
+                valueMissing: 'Please enter emergency mobile number.',
+                patternMismatch: 'Emergency mobile number must be exactly 10 digits.'
+            },
+            dateofbirth: {
+                valueMissing: 'Please select date of birth.'
+            },
+            role_id: {
+                valueMissing: 'Please select a role.'
+            },
+            adharcardnumber: {
+                valueMissing: 'Please enter Aadhaar number.',
+                patternMismatch: 'Aadhaar number must be exactly 12 digits.'
+            },
+            pancardno: {
+                valueMissing: 'Please enter PAN card number.',
+                patternMismatch: 'PAN must be in valid format, e.g. ABCDE1234F.'
+            },
+            mothernumber: {
+                patternMismatch: 'Mother number must be exactly 10 digits.'
+            },
+            fathernumber: {
+                patternMismatch: 'Father number must be exactly 10 digits.'
+            },
+            bankaccountnumber: {
+                patternMismatch: 'Bank account number must be numeric and up to 20 digits.'
+            },
+            ifsccode: {
+                patternMismatch: 'IFSC code must be in valid format, e.g. ABCD0123456.'
+            },
+            joining_date: {
+                valueMissing: 'Please select joining date.'
+            }
+        };
+
+        function fieldName(field) {
+            return (field.name || '').replace('[]', '');
+        }
+
+        function validationMessage(field) {
+            var messages = validationMessages[fieldName(field)] || {};
+
+            if (field.validity.valueMissing && messages.valueMissing) {
+                return messages.valueMissing;
+            }
+
+            if (field.validity.typeMismatch && messages.typeMismatch) {
+                return messages.typeMismatch;
+            }
+
+            if (field.validity.patternMismatch && messages.patternMismatch) {
+                return messages.patternMismatch;
+            }
+
+            if (field.validity.tooLong && messages.tooLong) {
+                return messages.tooLong;
+            }
+
+            return field.title || field.validationMessage || 'Please enter a valid value.';
+        }
+
+        function feedbackId(field) {
+            var $field = $(field);
+
+            if (!$field.data('validationFeedbackId')) {
+                feedbackCounter++;
+                $field.data('validationFeedbackId', 'feedback-' + fieldName(field).replace(/[^a-zA-Z0-9_-]/g,
+                    '-') + '-' + feedbackCounter);
+            }
+
+            return $field.data('validationFeedbackId');
+        }
+
+        function ensureFeedback(field) {
+            var $field = $(field);
+            var id = feedbackId(field);
+
+            if (!$field.next('.invalid-feedback').length) {
+                $field.after('<div class="invalid-feedback" id="' + id + '"></div>');
+            }
+
+            $field.attr('aria-describedby', id);
+        }
+
+        function updateFieldState(field) {
+            if (!field.willValidate) {
+                return;
+            }
+
+            var $field = $(field);
+            var $feedback = $field.next('.invalid-feedback');
+
+            if (field.checkValidity()) {
+                $field.removeClass('is-invalid');
+                $feedback.text('');
+            } else {
+                $field.addClass('is-invalid');
+                $feedback.text(validationMessage(field));
+            }
+        }
+
+        $form.attr('novalidate', 'novalidate');
+
+        $form.find('input:not([type="hidden"]), select, textarea').each(function() {
+            ensureFeedback(this);
+        });
+
+        $form.on('submit', function(event) {
+            var form = this;
+
+            $(form).find('input:not([type="hidden"]), select, textarea').each(function() {
+                updateFieldState(this);
+            });
+
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                $(form).addClass('was-validated');
+                $(form).find(':invalid').first().focus();
+            }
+        });
+
+        $form.on('input change', 'input, select, textarea', function() {
+            if (numericFields.indexOf(this.name) !== -1) {
+                this.value = this.value.replace(/\D/g, '').slice(0, this.maxLength > 0 ? this
+                    .maxLength : undefined);
+            }
+
+            if (this.name === 'pancardno' || this.name === 'ifsccode') {
+                this.value = this.value.toUpperCase();
+            }
+
+            if ($form.hasClass('was-validated') || $(this).hasClass('is-invalid')) {
+                updateFieldState(this);
+            }
+        });
+
+        $(document).on('click', '#add_button', function() {
+            count++;
+            //$('#total_item').val(count);
+            var html_code = '';
+            html_code += '<div id="row_id_' + count + '">';
+            html_code +=
+                '<div class="row"><div class="col-md-6"> <div class="form-group"><label class="font-weight-600">Qualification</label><input type="text" class="form-control key" name="qualification[]" id="qualification" value="" maxlength="100" placeholder="Enter Qulification"></div></div>';
+            html_code +=
+                '<div class="col-md-5"> <div class="form-group"><label class="font-weight-600">Document</label> <input type="file" class="form-control key" name="document_file[]" id="document_file" value=""></div></div><a style="margin-top: 9px;margin-left: 13px;" href="javascript:void(0);" class="remove_row" name="remove_row" id="' +
+                count + '"><img src="{{ url('backEnd/image/remove-icon.png') }}"/></a></div>';
+            html_code += '</div>';
+            var $newRow = $(html_code);
+
+            $('#qulification_add').append($newRow);
+            $newRow.find('input:not([type="hidden"]), select, textarea').each(function() {
+                ensureFeedback(this);
+            });
+        });
+
+        $(document).on('click', '.remove_row', function() {
+            var row_id = $(this).attr("id");
+            $('#row_id_' + row_id).remove();
+            count--;
+        });
+
+        $(document).on('click', '.teammember-document-view', function() {
+            var viewUrl = new URL(this.href, window.location.origin);
+            viewUrl.searchParams.set('_view', Date.now());
+            this.href = viewUrl.toString();
+        });
+
+        $(document).on('change',
+            "input[type='file'][name='profilepic'], input[type='file'][name='cancelcheque'], input[type='file'][name='appointment_letter'], input[type='file'][name='nda'], input[type='file'][name='panupload'], input[type='file'][name='addressupload'], input[type='file'][name='aadharupload'], input[type='file'][name='document_file[]']",
+            function() {
+                validateFileUpload(this);
+            });
+
+        $('form').on('submit', function(event) {
+            var isValid = true;
+
+            $(this).find(
+                "input[type='file'][name='profilepic'], input[type='file'][name='cancelcheque'], input[type='file'][name='appointment_letter'], input[type='file'][name='nda'], input[type='file'][name='panupload'], input[type='file'][name='addressupload'], input[type='file'][name='aadharupload'], input[type='file'][name='document_file[]']"
+            ).each(function() {
+                if (!validateFileUpload(this)) {
+                    isValid = false;
+                    return false;
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+    });
+</script>
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+# Disable directory listing
+Options -Indexes
+
+# Deny access to files starting with a dot
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect .env file
+<Files .env>
+    # Restrict access to the .env file
+    Order allow,deny
+    Deny from all
+</Files>
+
+    RewriteEngine On
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+
+
+
+
+mail file 
+
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Mailer
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default mailer that is used to send any email
+    | messages sent by your application. Alternative mailers may be setup
+    | and used as needed; however, this mailer will be used by default.
+    |
+    */
+
+    'default' => env('MAIL_MAILER', 'smtp'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mailer Configurations
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure all of the mailers used by your application plus
+    | their respective settings. Several examples have been configured for
+    | you and you are free to add your own as your application requires.
+    |
+    | Laravel supports a variety of mail "transport" drivers to be used while
+    | sending an e-mail. You will specify which one you are using for your
+    | mailers below. You are free to add additional mailers as required.
+    |
+    | Supported: "smtp", "sendmail", "mailgun", "ses",
+    |            "postmark", "log", "array"
+    |
+    */
+
+    'mailers' => [
+        'smtp' => [
+            'transport' => 'smtp',
+            'host' => 'smtp-mail.outlook.com',
+            'port' => 587,
+            'encryption' => 'tls',
+            'username' => 'noreply@capitall.io',
+            'password' => 'Secure@651243',
+            'timeout' => null,
+            'local_domain' => null,
+        ],
+
+        'ses' => [
+            'transport' => 'ses',
+        ],
+
+        'mailgun' => [
+            'transport' => 'mailgun',
+        ],
+
+        'postmark' => [
+            'transport' => 'postmark',
+        ],
+
+        'sendmail' => [
+            'transport' => 'sendmail',
+            'path' => '/usr/sbin/sendmail -bs',
+        ],
+
+        'log' => [
+            'transport' => 'log',
+            'channel' => env('MAIL_LOG_CHANNEL'),
+        ],
+
+        'array' => [
+            'transport' => 'array',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Global "From" Address
+    |--------------------------------------------------------------------------
+    |
+    | You may wish for all e-mails sent by your application to be sent from
+    | the same address. Here, you may specify a name and address that is
+    | used globally for all e-mails that are sent by your application.
+    |
+    */
+
+    'from' => [
+        'address' => 'noreply@capitall.io',
+        'name' => 'vsa demo',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Markdown Mail Settings
+    |--------------------------------------------------------------------------
+    |
+    | If you are using Markdown based email rendering, you may configure your
+    | theme and component paths here, allowing you to customize the design
+    | of the emails. Or, you may simply stick with the Laravel defaults!
+    |
+    */
+
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
+
+];
+
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+# These are some examples of commonly ignored file patterns.
+# You should customize this list as applicable to your project.
+# Learn more about .gitignore:
+#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# Node artifact files
+# Ignore this directory only at the root
+/node_modules
+/public
+/vendor
+
+# Ignore this directory globally in this project
+# dist/
+.vscode/
+
+# Compiled Java class files
+*.class
+
+# Compiled Python bytecode
+*.py[cod]
+
+# Log files
+*.log
+
+# Package files
+*.jar
+
+# Maven
+target/
+
+# JetBrains IDE
+.idea/
+
+# Unit test reports
+TEST*.xml
+
+# Generated by MacOS
+.DS_Store
+
+# Generated by Windows
+Thumbs.db
+
+# Applications
+*.app
+*.exe
+*.war
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+*.sql
+*.zip
+
+/AGENTS.md
+.env
+
+# Laravel generated cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framewgit/*
+/storage/debugbar/*
+.trycatch-audit-output.tsv
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+# These are some examples of commonly ignored file patterns.
+# You should customize this list as applicable to your project.
+# Learn more about .gitignore:
+#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# Node artifact files
+# Ignore this directory only at the root
+/node_modules
+/public
+/vendor
+
+# Ignore this directory globally in this project
+# dist/
+.vscode/
+
+# Compiled Java class files
+*.class
+
+# Compiled Python bytecode
+*.py[cod]
+
+# Log files
+*.log
+
+# Package files
+*.jar
+
+# Maven
+target/
+
+# JetBrains IDE
+.idea/
+
+# Unit test reports
+TEST*.xml
+
+# Generated by MacOS
+.DS_Store
+
+# Generated by Windows
+Thumbs.db
+
+# Applications
+*.app
+*.exe
+*.war
+
+# Large media files
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+*.sql
+*.zip
+
+AGENTS.md
+.env
+
+# Laravel generated cache
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framewgit/*
+/storage/debugbar/*
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+      // Step 1: Saari tables fetch karo
+      $allTables = DB::select('SHOW TABLES');
+
+      // Step 2: Un tables ki list jo RAKHNI HAIN (tere list ke hisaab se)
+      $tablesToKeep = [
+        'activitylogs',
+        'activitylogs_details',
+        'annual_independence_declarations',
+        'applyleaves',
+        'appointmentletters',
+        'articles',
+        'assignmentbudgetings',
+        'assignmentbudgetingudins',
+        'assignmentfolderfiles',
+        'assignmentfolders',
+        'assignmentmappings',
+        'assignments',
+        'assignmentteammappings',
+        'attendances',
+        'auditfiles',
+        'auditquestions',
+        'audittrails',
+        'balanceconfirmationreminder',
+        'checklistanswers',
+        'clientcontacts',
+        'clientdocuments',
+        'clients',
+        'criticalnotes',
+        'currency_codes',
+        'debtorbatchshare',
+        'debtorconfirmations',
+        'debtors',
+        'discusesteammebers',
+        'financialstatementclassifications',
+        'holidays',
+        'independencereminder',
+        'independences',
+        'jobs',
+        'knowledgebases',
+        'leaveapprove',
+        'leaverequest',
+        'leaveroles',
+        'leaveteams',
+        'leavetypedays',
+        'leavetypemonth',
+        'leavetypemonthly',
+        'leavetypes',
+        'migrations',
+        'notificationreadorunread',
+        'notifications',
+        'notificationtargets',
+        'pages',
+        'permissions',
+        'rejoiningsamepost',
+        'roles',
+        'teammember_document_files',
+        'teammembers',
+        'teamrolehistory',
+        'templates',
+        'timesheetday',
+        'timesheetreport',
+        'timesheetrequests',
+        'timesheets',
+        'timesheetupdatelogs',
+        'timesheetusers',
+        'titles',
+        'trail',
+        'userloginactiviteies',
+        'users',
+        'subfinancialclassfications',
+        'steplists',
+        'statuses',
+        'confirmationrem',
+        'states',
+        'clientfolders',
+        'clientlogs',
+        'clientlogins',
+        'vsaclient'
+      ];
+
+      // Step 3: Tables ko display karo aur delete karo
+      echo "<h2>Total Tables Found: " . count($allTables) . "</h2>";
+
+      // Step 4: Foreign key checks disable karo (taaki delete mein error na aaye)
+      DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+      $deletedTables = [];
+      $keptTables = [];
+
+      foreach ($allTables as $table) {
+        $tableName = reset($table);
+
+        if (in_array($tableName, $tablesToKeep)) {
+          // Yeh table rakhni hai
+          $keptTables[] = $tableName;
+        } else {
+          // Yeh table delete karni hai
+          $deletedTables[] = $tableName;
+          DB::statement("DROP TABLE IF EXISTS {$tableName}");
+        }
+      }
+
+      // Step 5: Foreign key checks wapas enable karo
+      DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+      // Step 6: Result display karo
+      echo "<h3>✅ Tables Kept (" . count($keptTables) . "):</h3>";
+      echo "<ul>";
+      foreach ($keptTables as $name) {
+        echo "<li style='color:green;'>" . $name . "</li>";
+      }
+      echo "</ul>";
+
+      echo "<h3>🗑️ Tables Deleted (" . count($deletedTables) . "):</h3>";
+      echo "<ul>";
+      foreach ($deletedTables as $name) {
+        echo "<li style='color:red;'>" . $name . "</li>";
+      }
+      echo "</ul>";
+
+      // Step 7: Confirmation message
+      dd('✅ Process Complete! ' . count($deletedTables) . ' tables deleted, ' . count($keptTables) . ' tables kept.');
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+2
+
+
+        deleted:    app/Http/Controllers/Api/TaskController.php
+        deleted:    app/Http/Controllers/TaskController.php
+        deleted:    app/Models/Admin.php
+        deleted:    app/Models/Answer.php
+        deleted:    app/Models/Articleonboarding.php
+        deleted:    app/Models/Asset.php
+        deleted:    app/Models/Assetprocurement.php
+        deleted:    app/Models/Assetticket.php
+        deleted:    app/Models/Atr.php
+        deleted:    app/Models/Atrfile.php
+        deleted:    app/Models/Audittrail.php
+        deleted:    app/Models/Balance.php
+        deleted:    app/Models/Candidateonboarding.php
+        deleted:    app/Models/Candidateonboardingpayslip.php
+        deleted:    app/Models/Candidateonboardingresidence.php
+        deleted:    app/Models/Checkin.php
+        deleted:    app/Models/Companydetail.php
+        deleted:    app/Models/Connection.php
+        deleted:    app/Models/Connectioncompany.php
+        deleted:    app/Models/ContractandSubscription.php
+        deleted:    app/Models/Conversion.php
+        deleted:    app/Models/Creditnote.php
+        deleted:    app/Models/Criticalnote.php
+        deleted:    app/Models/Cyclingevent.php
+        deleted:    app/Models/Employeereferral.php
+        deleted:    app/Models/ExamAnswer.php
+        deleted:    app/Models/Fullandfinal.php
+        deleted:    app/Models/Group.php
+        deleted:    app/Models/Icard.php
+        deleted:    app/Models/Ifc.php
+        deleted:    app/Models/Ifcfolder.php
+        deleted:    app/Models/Ilraddinformation.php
+        deleted:    app/Models/Ilrfolder.php
+        deleted:    app/Models/Ilrfolderassign.php
+        deleted:    app/Models/Informationresource.php
+        deleted:    app/Models/Internalaudit.php
+        deleted:    app/Models/Invoice.php
+        deleted:    app/Models/Lead.php
+        deleted:    app/Models/Material.php
+        deleted:    app/Models/Meetingfolder.php
+        deleted:    app/Models/Mis.php
+        deleted:    app/Models/Misphoto.php
+        deleted:    app/Models/Neft.php
+        deleted:    app/Models/Outstanding.php
+        deleted:    app/Models/Outstationconveyance.php
+        deleted:    app/Models/Payment.php
+        deleted:    app/Models/Payroll.php
+        deleted:    app/Models/Pbd.php
+        deleted:    app/Models/Policy.php
+        deleted:    app/Models/Project.php
+        deleted:    app/Models/Recruitmentform.php
+        deleted:    app/Models/Replyticket.php
+        deleted:    app/Models/Service.php
+        deleted:    app/Models/Staffdetail.php
+        deleted:    app/Models/Staffrequest.php
+        deleted:    app/Models/Tab.php
+        deleted:    app/Models/Talent.php
+        deleted:    app/Models/Task.php
+        deleted:    app/Models/Tax.php
+        deleted:    app/Models/Teamprofile.php
+        deleted:    app/Models/Tender.php
+        deleted:    app/Models/Training.php
+        deleted:    app/Models/Trainingassessment.php
+        deleted:    app/Models/Travel.php
+        deleted:    app/Models/Travelattachment.php
+        deleted:    app/Models/Travelfeedback.php
+        deleted:    app/Models/Travelform.php
+        deleted:    app/Models/Vendor.php
+        deleted:    resources/views/backEnd/asset/form.blade.php
+        deleted:    resources/views/backEnd/assetassign/form.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/edit.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/form.blade.php
+        deleted:    resources/views/backEnd/assetticket/create.blade.php
+        deleted:    resources/views/backEnd/auditticket/form.blade.php
+        deleted:    resources/views/backEnd/candidateonboarding/view.blade.php
+        deleted:    resources/views/backEnd/check-In/form.blade.php
+        deleted:    resources/views/backEnd/companydetail/form.blade.php
+        deleted:    resources/views/backEnd/connection/form.blade.php
+        deleted:    resources/views/backEnd/courierinout/edit.blade.php
+        deleted:    resources/views/backEnd/courierinout/form.blade.php
+        deleted:    resources/views/backEnd/creditnote/form.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/edit.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/form.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/view.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/form.blade.php
+        deleted:    resources/views/backEnd/development/form.blade.php
+        deleted:    resources/views/backEnd/directapplication/form.blade.php
+        deleted:    resources/views/backEnd/discuses/edit.blade.php
+        deleted:    resources/views/backEnd/discuses/form.blade.php
+        deleted:    resources/views/backEnd/discuses/index1.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/mailform.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/datatable.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/form1.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/payrollform.blade.php
+        deleted:    resources/views/backEnd/employeereferral/form.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/form.blade.php
+        deleted:    resources/views/backEnd/gnatt/create.blade.php
+        deleted:    resources/views/backEnd/gnatt/edit.blade.php
+        deleted:    resources/views/backEnd/gnatt/form.blade.php
+        deleted:    resources/views/backEnd/group/create.blade.php
+        deleted:    resources/views/backEnd/group/edit.blade.php
+        deleted:    resources/views/backEnd/group/form.blade.php
+        deleted:    resources/views/backEnd/hbrtool/form.blade.php
+        deleted:    resources/views/backEnd/hrticket/form.blade.php
+        deleted:    resources/views/backEnd/icards/create.blade.php
+        deleted:    resources/views/backEnd/icards/edit.blade.php
+        deleted:    resources/views/backEnd/icards/form.blade.php
+        deleted:    resources/views/backEnd/informationresources/edit.blade.php
+        deleted:    resources/views/backEnd/informationresources/form.blade.php
+        deleted:    resources/views/backEnd/invoice/form.blade.php
+        deleted:    resources/views/backEnd/jobapplication/edit.blade.php
+        deleted:    resources/views/backEnd/jobapplication/form.blade.php
+        deleted:    resources/views/backEnd/lead/form.blade.php
+        deleted:    resources/views/backEnd/letterhead/form.blade.php
+        deleted:    resources/views/backEnd/localconveyance/form.blade.php
+        deleted:    resources/views/backEnd/material/edit.blade.php
+        deleted:    resources/views/backEnd/material/form.blade.php
+        deleted:    resources/views/backEnd/mis/edit.blade.php
+        deleted:    resources/views/backEnd/mis/form.blade.php
+        deleted:    resources/views/backEnd/mis/view.blade.php
+        deleted:    resources/views/backEnd/neft/form.blade.php
+        deleted:    resources/views/backEnd/neft/form1.blade.php
+        deleted:    resources/views/backEnd/neft/index.blade.php
+        deleted:    resources/views/backEnd/neft/view.blade.php
+        deleted:    resources/views/backEnd/outstanding/create.blade.php
+        deleted:    resources/views/backEnd/outstanding/edit.blade.php
+        deleted:    resources/views/backEnd/outstanding/form.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/form.blade.php
+        deleted:    resources/views/backEnd/payment/edit.blade.php
+        deleted:    resources/views/backEnd/payment/form.blade.php
+        deleted:    resources/views/backEnd/payroll/create.blade.php
+        deleted:    resources/views/backEnd/payroll/edit.blade.php
+        deleted:    resources/views/backEnd/payroll/form.blade.php
+        deleted:    resources/views/backEnd/payroll/view.blade.php
+        deleted:    resources/views/backEnd/pbd/form.blade.php
+        deleted:    resources/views/backEnd/pbd/view.blade.php
+        deleted:    resources/views/backEnd/penality/form.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/form.blade.php
+        deleted:    resources/views/backEnd/policy/edit.blade.php
+        deleted:    resources/views/backEnd/policy/form.blade.php
+        deleted:    resources/views/backEnd/policy/view.blade.php
+        deleted:    resources/views/backEnd/project/form.blade.php
+        deleted:    resources/views/backEnd/proposal/edit.blade.php
+        deleted:    resources/views/backEnd/proposal/form.blade.php
+        deleted:    resources/views/backEnd/proposal/teamapplication.blade.php
+        deleted:    resources/views/backEnd/questionnaireform/view.blade.php
+        deleted:    resources/views/backEnd/questionpaper/edit.blade.php
+        deleted:    resources/views/backEnd/questionpaper/form.blade.php
+        deleted:    resources/views/backEnd/questionpaper/form1.blade.php
+        deleted:    resources/views/backEnd/questionpaper/index.blade.php
+        deleted:    resources/views/backEnd/questionpaper/neftindex.blade.php
+        deleted:    resources/views/backEnd/questionpaper/payrollneftindex.blade.php
+        deleted:    resources/views/backEnd/questionpaper/view.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/edit.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/form.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/form.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/form.blade.php
+        deleted:    resources/views/backEnd/service/form.blade.php
+        deleted:    resources/views/backEnd/staffdetail/edit.blade.php
+        deleted:    resources/views/backEnd/staffdetail/form.blade.php
+        deleted:    resources/views/backEnd/staffdetail/indexlist.blade.php
+        deleted:    resources/views/backEnd/staffrequest/edit.blade.php
+        deleted:    resources/views/backEnd/staffrequest/form.blade.php
+        deleted:    resources/views/backEnd/step/checklistindex.blade.php
+        deleted:    resources/views/backEnd/tab/form.blade.php
+        deleted:    resources/views/backEnd/task/create.blade.php
+        deleted:    resources/views/backEnd/task/edit.blade.php
+        deleted:    resources/views/backEnd/task/form.blade.php
+        deleted:    resources/views/backEnd/task/index.blade.php
+        deleted:    resources/views/backEnd/task/statusindex.blade.php
+        deleted:    resources/views/backEnd/task/taskassemble.blade.php
+        deleted:    resources/views/backEnd/task/taskreport.blade.php
+        deleted:    resources/views/backEnd/task/view.blade.php
+        deleted:    resources/views/backEnd/tax/edit.blade.php
+        deleted:    resources/views/backEnd/tax/form.blade.php
+        deleted:    resources/views/backEnd/teamprofile/form.blade.php
+        deleted:    resources/views/backEnd/teamprofile/view.blade.php
+        deleted:    resources/views/backEnd/tender/form.blade.php
+        deleted:    resources/views/backEnd/training/create.blade.php
+        deleted:    resources/views/backEnd/training/edit.blade.php
+        deleted:    resources/views/backEnd/training/form.blade.php
+        deleted:    resources/views/backEnd/training/index.blade.php
+        deleted:    resources/views/backEnd/trainingassetsments/edit.blade.php
+        deleted:    resources/views/backEnd/trainingassetsments/form.blade.php
+        deleted:    resources/views/backEnd/travel/form.blade.php
+        deleted:    resources/views/backEnd/travelform/form.blade.php
+        deleted:    resources/views/backEnd/vendor/edit.blade.php
+        deleted:    resources/views/backEnd/vendor/form.blade.php
+        deleted:    resources/views/candidateonboarding-capitall.blade.php
+        deleted:    resources/views/candidateonboarding-kgs.blade.php
+        deleted:    resources/views/candidateonboarding-kgsadvisors.blade.php
+        deleted:    resources/views/candidateonboarding-womennovator.blade.php
+        deleted:    resources/views/candidateonboarding.blade.php
+        deleted:    resources/views/emails/contractandsubscription.blade.php
+        deleted:    resources/views/emails/dataanalytics.blade.php
+        deleted:    resources/views/emails/fullandfinalmail.blade.php
+        deleted:    resources/views/emails/hrtaskdone.blade.php
+        deleted:    resources/views/emails/icardform.blade.php
+        deleted:    resources/views/emails/invoiceapprovedmail.blade.php
+        deleted:    resources/views/emails/invoiceapprovelmail.blade.php
+        deleted:    resources/views/emails/invoicemail.blade.php
+        deleted:    resources/views/emails/invoicerejectmail.blade.php
+        deleted:    resources/views/emails/invoicereminder.blade.php
+        deleted:    resources/views/emails/leadform.blade.php
+        deleted:    resources/views/emails/localconveyanceaccountform.blade.php
+        deleted:    resources/views/emails/localconveyanceapprovelform.blade.php
+        deleted:    resources/views/emails/localconveyancecorrectionform.blade.php
+        deleted:    resources/views/emails/localconveyanceform.blade.php
+        deleted:    resources/views/emails/materialform.blade.php
+        deleted:    resources/views/emails/materialformin.blade.php
+        deleted:    resources/views/emails/outstandingmail.blade.php
+        deleted:    resources/views/emails/outstandingreminder.blade.php
+        deleted:    resources/views/emails/outstationconveyanceaccountform.blade.php
+        deleted:    resources/views/emails/outstationconveyanceapprovelform.blade.php
+        deleted:    resources/views/emails/outstationconveyancecorrectionform.blade.php
+        deleted:    resources/views/emails/outstationconveyanceform.blade.php
+        deleted:    resources/views/emails/payroll/approved.blade.php
+        deleted:    resources/views/emails/payroll/clarification_required.blade.php
+        deleted:    resources/views/emails/penalityassign.blade.php
+        deleted:    resources/views/emails/penalityassigns.blade.php
+        deleted:    resources/views/emails/policyform.blade.php
+        deleted:    resources/views/emails/policyyform.blade.php
+        deleted:    resources/views/emails/proposalform.blade.php
+        deleted:    resources/views/emails/recruitmentform.blade.php
+        deleted:    resources/views/emails/reimbursementclaimaccountform.blade.php
+        deleted:    resources/views/emails/reimbursementclaimapprovelform.blade.php
+        deleted:    resources/views/emails/reimbursementclaimform.blade.php
+        deleted:    resources/views/emails/secretastarialkassign.blade.php
+        deleted:    resources/views/emails/secretastarialktaskdone.blade.php
+        deleted:    resources/views/emails/staffrequest.blade.php
+        deleted:    resources/views/emails/taskassign.blade.php
+        deleted:    resources/views/emails/taskassigns.blade.php
+        deleted:    resources/views/emails/taskreminder.blade.php
+        deleted:    resources/views/emails/taskremindermail.blade.php
+        deleted:    resources/views/emails/tenderassign.blade.php
+        deleted:    resources/views/emails/tenderreject.blade.php
+        deleted:    resources/views/emails/tenderreminder.blade.php
+        deleted:    resources/views/emails/tendersubmit.blade.php
+        deleted:    resources/views/emails/tenderverify.blade.php
+        deleted:    resources/views/emails/travelapprovedform.blade.php
+        deleted:    resources/views/emails/travelform.blade.php
+        deleted:    resources/views/emails/travelformapproved.blade.php
+        deleted:    resources/views/emails/travelformreject.blade.php
+        deleted:    resources/views/emails/travelrejectform.blade.php
+        deleted:    resources/views/emails/travelrequestform.blade.php
+        deleted:    resources/views/emails/vendoraccountform.blade.php
+        deleted:    resources/views/emails/vendorapprovelform.blade.php
+        deleted:    resources/views/emails/vendorformapproval.blade.php
+        deleted:    resources/views/emails/vendorlogin.blade.php
+        deleted:    resources/views/privacypolicy.blade.php
+        deleted:    resources/views/student/studentexam/view.blade.php
+        modified:   routes/web.php
+
+1
+        new file:   .willbedelete.tsv
+        deleted:    app/Console/Commands/EveryDay.php
+        deleted:    app/Console/Commands/InvoiceReminder.php
+        deleted:    app/Console/Commands/OutstandingReminder.php
+        deleted:    app/Console/Commands/TaskReminder.php
+        deleted:    app/Console/Commands/TimesheetCron.php
+        modified:   app/Console/Kernel.php
+        deleted:    app/Exports/DataTableExport.php
+        deleted:    app/Exports/OutstandingExport.php
+        deleted:    app/Http/Controllers/Admin/AdminController.php
+        deleted:    app/Http/Controllers/Admin/TabController.php
+        deleted:    app/Http/Controllers/AdminitrController.php
+        deleted:    app/Http/Controllers/AdminmisController.php
+        deleted:    app/Http/Controllers/Api/AdvanceclaimController.php
+        deleted:    app/Http/Controllers/Api/AssetController.php
+        deleted:    app/Http/Controllers/Api/AssetprocurementController.php
+        deleted:    app/Http/Controllers/Api/AssetticketController.php
+        deleted:    app/Http/Controllers/Api/CalendarController.php
+        deleted:    app/Http/Controllers/Api/CheckInController.php
+        deleted:    app/Http/Controllers/Api/ClientloginController.php
+        deleted:    app/Http/Controllers/Api/ConnectionController.php
+        deleted:    app/Http/Controllers/Api/DiscussController.php
+        deleted:    app/Http/Controllers/Api/FinanceController.php
+        deleted:    app/Http/Controllers/Api/InvoiceController.php
+        deleted:    app/Http/Controllers/Api/PhotoController.php
+        deleted:    app/Http/Controllers/Api/StaffrequestController.php
+        deleted:    app/Http/Controllers/Api/TenderController.php
+        deleted:    app/Http/Controllers/Api/TicketController.php
+        deleted:    app/Http/Controllers/ArticlefileController.php
+        deleted:    app/Http/Controllers/ArticleonboardingController.php
+        deleted:    app/Http/Controllers/AssetController.php
+        deleted:    app/Http/Controllers/AssetasignController.php
+        deleted:    app/Http/Controllers/AssetprocurementController.php
+        deleted:    app/Http/Controllers/AssetticketController.php
+        modified:   app/Http/Controllers/AssignmentconfirmationController.php
+        modified:   app/Http/Controllers/AssignmentmappingController.php
+        deleted:    app/Http/Controllers/AtrController.php
+        deleted:    app/Http/Controllers/AuditticketController.php
+        deleted:    app/Http/Controllers/Auth/ClientLoginController.php
+        deleted:    app/Http/Controllers/Auth/StudentLoginController.php
+        modified:   app/Http/Controllers/BackEndController.php
+        deleted:    app/Http/Controllers/BalanceController.php
+        deleted:    app/Http/Controllers/CandidateboardingController.php
+        deleted:    app/Http/Controllers/CheckInController.php
+        deleted:    app/Http/Controllers/Client/ClienthomeController.php
+        deleted:    app/Http/Controllers/Client/InformationController.php
+        deleted:    app/Http/Controllers/Client/InternalauditController.php
+        deleted:    app/Http/Controllers/Client/ItrController.php
+        deleted:    app/Http/Controllers/Client/MisController.php
+        deleted:    app/Http/Controllers/ClientAtrController.php
+        deleted:    app/Http/Controllers/ClientSpecificIndependenceController.php
+        deleted:    app/Http/Controllers/ClientuserloginController.php
+        deleted:    app/Http/Controllers/CompanydetailController.php
+        deleted:    app/Http/Controllers/ConnectionController.php
+        deleted:    app/Http/Controllers/ContractandSubscriptionController.php
+        deleted:    app/Http/Controllers/ConversionController.php
+        deleted:    app/Http/Controllers/CourierinoutController.php
+        deleted:    app/Http/Controllers/CreditnoteController.php
+        deleted:    app/Http/Controllers/CyclingeventController.php
+        deleted:    app/Http/Controllers/DataanalyticsController.php
+        deleted:    app/Http/Controllers/DeclarationformController.php
+        deleted:    app/Http/Controllers/DevelopmentController.php
+        deleted:    app/Http/Controllers/DirectapplicationController.php
+        deleted:    app/Http/Controllers/DiscusesController.php
+        deleted:    app/Http/Controllers/DraftemailController.php
+        deleted:    app/Http/Controllers/EmployeeonboardingController.php
+        deleted:    app/Http/Controllers/EmployeepayrollController.php
+        deleted:    app/Http/Controllers/EmployeereferralController.php
+        deleted:    app/Http/Controllers/ExamAnswerController.php
+        deleted:    app/Http/Controllers/ExportController.php
+        deleted:    app/Http/Controllers/FeedController.php
+        deleted:    app/Http/Controllers/FullandfinalController.php
+        deleted:    app/Http/Controllers/GnattchartController.php
+        deleted:    app/Http/Controllers/GroupController.php
+        deleted:    app/Http/Controllers/HbrController.php
+        deleted:    app/Http/Controllers/HrtaskController.php
+        deleted:    app/Http/Controllers/IcardController.php
+        deleted:    app/Http/Controllers/IfcController.php
+        deleted:    app/Http/Controllers/IfcfolderController.php
+        deleted:    app/Http/Controllers/InformationresourceController.php
+        deleted:    app/Http/Controllers/InvoiceController.php
+        deleted:    app/Http/Controllers/JobapplicationController.php
+        deleted:    app/Http/Controllers/LeadController.php
+        deleted:    app/Http/Controllers/LetterheadController.php
+        deleted:    app/Http/Controllers/LocalconveyancesController.php
+        deleted:    app/Http/Controllers/MaterialController.php
+        deleted:    app/Http/Controllers/MeetingfolderController.php
+        deleted:    app/Http/Controllers/NeftController.php
+        deleted:    app/Http/Controllers/OutstandingController.php
+        deleted:    app/Http/Controllers/OutstationconveyanceController.php
+        deleted:    app/Http/Controllers/PaymentController.php
+        deleted:    app/Http/Controllers/PayrollController.php
+        deleted:    app/Http/Controllers/PbdController.php
+        deleted:    app/Http/Controllers/PenalityController.php
+        deleted:    app/Http/Controllers/PerformanceappraisalController.php
+        deleted:    app/Http/Controllers/PerformanceevaluationformController.php
+        deleted:    app/Http/Controllers/PolicyController.php
+        deleted:    app/Http/Controllers/ProfileController.php
+        deleted:    app/Http/Controllers/ProjectController.php
+        deleted:    app/Http/Controllers/ProposalController.php
+        deleted:    app/Http/Controllers/QuestionnaireroundoneController.php
+        deleted:    app/Http/Controllers/QuestionpaperController.php
+        deleted:    app/Http/Controllers/RecruitmentformController.php
+        deleted:    app/Http/Controllers/ReimbursementclaimController.php
+        deleted:    app/Http/Controllers/SecretarialTaskController.php
+        deleted:    app/Http/Controllers/ServiceController.php
+        deleted:    app/Http/Controllers/StaffassignController.php
+        deleted:    app/Http/Controllers/StaffdetailController.php
+        deleted:    app/Http/Controllers/StaffrequestController.php
+        deleted:    app/Http/Controllers/SteptaskController.php
+        deleted:    app/Http/Controllers/Student/StudentExamController.php
+        deleted:    app/Http/Controllers/Student/StudenthomeController.php
+        deleted:    app/Http/Controllers/SubstepController.php
+        deleted:    app/Http/Controllers/SubsteptaskController.php
+        deleted:    app/Http/Controllers/TabController.php
+        modified:   app/Http/Controllers/TaskController.php
+        deleted:    app/Http/Controllers/TaxController.php
+        deleted:    app/Http/Controllers/TeamlevelController.php
+        deleted:    app/Http/Controllers/TeamprofileController.php
+        deleted:    app/Http/Controllers/TenderController.php
+        modified:   app/Http/Controllers/TimesheetController.php
+        deleted:    app/Http/Controllers/TimesheetoldController.php
+        deleted:    app/Http/Controllers/TrainingassessmentController.php
+        deleted:    app/Http/Controllers/TravelController.php
+        deleted:    app/Http/Controllers/TravelfeedbackController.php
+        deleted:    app/Http/Controllers/TravelformController.php
+        deleted:    app/Http/Controllers/VendorController.php
+        deleted:    app/Mail/ClarificationRequiredMail.php
+        deleted:    app/Mail/PayrollApprovedMail.php
+        deleted:    app/Models/Businessentity.php
+        deleted:    app/Models/Clientspecificindependencedeclaration.php
+        deleted:    app/Models/Courierinout.php
+        deleted:    app/Models/Declarationform.php
+        deleted:    app/Models/Draftemail.php
+        deleted:    app/Models/Financerequest.php
+        deleted:    app/Models/Ganttchart.php
+        deleted:    app/Models/Ganttstaff.php
+        deleted:    app/Models/Ilraddinformationfirst.php
+        deleted:    app/Models/Ilraddinformationsecond.php
+        deleted:    app/Models/Ilraddinformationthird.php
+        deleted:    app/Models/Ilranswer.php
+        deleted:    app/Models/Ilrbank.php
+        deleted:    app/Models/Ilrdeduction.php
+        deleted:    app/Models/Ilrfrombusiness.php
+        deleted:    app/Models/Ilrfromcapitalgain.php
+        deleted:    app/Models/Ilrfromsource.php
+        deleted:    app/Models/Ilrhouse.php
+        deleted:    app/Models/Ilrpersonal.php
+        deleted:    app/Models/Ilrsalary.php
+        deleted:    app/Models/Letterhead.php
+        deleted:    app/Models/Localconveyance.php
+        deleted:    app/Models/Missubmit.php
+        deleted:    app/Models/Performanceevaluationform.php
+        deleted:    app/Models/Questionnaireroundone.php
+        deleted:    app/Models/Questionpaper.php
+        deleted:    app/Models/Reimbursementclaim.php
+        deleted:    app/Models/SecretarialTask.php
+        deleted:    app/Models/Statecode.php
+        deleted:    app/Models/Steptask.php
+        deleted:    app/Models/StudentExam.php
+        deleted:    app/Models/Studentlogin.php
+        deleted:    app/Models/Substep.php
+        deleted:    app/Models/Substeptask.php
+        deleted:    app/imports/Atrimport.php
+        deleted:    app/imports/Discussimport.php
+        deleted:    app/imports/Financeimport.php
+        deleted:    app/imports/Ganttimport.php
+        deleted:    app/imports/Ifcimport.php
+        deleted:    app/imports/Ifcimportanswer.php
+        deleted:    app/imports/Informationresourceimport.php
+        deleted:    app/imports/Payrollarticleimport.php
+        deleted:    app/imports/Payrollimport.php
+        deleted:    app/imports/Tdsimport.php
+        deleted:    app/imports/TeammembersSalaryImport.php
+        deleted:    resources/views/admin/index.blade.php
+        deleted:    resources/views/admin/tab/create.blade.php
+        deleted:    resources/views/admin/tab/edit.blade.php
+        deleted:    resources/views/admin/tab/index.blade.php
+        deleted:    resources/views/auth/clientlogin.blade.php
+        deleted:    resources/views/auth/loginotp.blade.php
+        deleted:    resources/views/auth/studentlogin.blade.php
+        deleted:    resources/views/auth/studentregister.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/create.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/edit.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/index.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/view.blade.php
+        deleted:    resources/views/backEnd/articlefiles/create.blade.php
+        deleted:    resources/views/backEnd/articlefiles/edit.blade.php
+        deleted:    resources/views/backEnd/articlefiles/index.blade.php
+        deleted:    resources/views/backEnd/articleonboarding/index.blade.php
+        deleted:    resources/views/backEnd/asset/create.blade.php
+        deleted:    resources/views/backEnd/asset/edit.blade.php
+        deleted:    resources/views/backEnd/asset/index.blade.php
+        deleted:    resources/views/backEnd/assetassign/assetassignedreport.blade.php
+        deleted:    resources/views/backEnd/assetassign/create.blade.php
+        deleted:    resources/views/backEnd/assetassign/edit.blade.php
+        deleted:    resources/views/backEnd/assetassign/index.blade.php
+        deleted:    resources/views/backEnd/assetassign/view.blade.php
+        deleted:    resources/views/backEnd/assetassign/viewit.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/assetprocurementindex.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/create.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/index.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/view.blade.php
+        deleted:    resources/views/backEnd/assetticket/edit.blade.php
+        deleted:    resources/views/backEnd/assetticket/index.blade.php
+        deleted:    resources/views/backEnd/atr/index.blade.php
+        deleted:    resources/views/backEnd/atr/view.blade.php
+        deleted:    resources/views/backEnd/auditticket/create.blade.php
+        deleted:    resources/views/backEnd/auditticket/edit.blade.php
+        deleted:    resources/views/backEnd/auditticket/index.blade.php
+        deleted:    resources/views/backEnd/auditticket/view.blade.php
+        deleted:    resources/views/backEnd/balance/index.blade.php
+        deleted:    resources/views/backEnd/candidateonboarding/index.blade.php
+        deleted:    resources/views/backEnd/candidateonboarding/preview.blade.php
+        deleted:    resources/views/backEnd/check-In/create.blade.php
+        deleted:    resources/views/backEnd/check-In/index.blade.php
+        deleted:    resources/views/backEnd/clientlogin/create.blade.php
+        deleted:    resources/views/backEnd/clientlogin/index.blade.php
+        deleted:    resources/views/backEnd/clientlogin/resetpassword.blade.php
+        deleted:    resources/views/backEnd/clientspecificindependencedeclaration/create.blade.php
+        deleted:    resources/views/backEnd/clientspecificindependencedeclaration/index.blade.php
+        deleted:    resources/views/backEnd/clientspecificindependencedeclaration/view.blade.php
+        deleted:    resources/views/backEnd/clientstaffassign/staffassignlist.blade.php
+        deleted:    resources/views/backEnd/companydetail/create.blade.php
+        deleted:    resources/views/backEnd/companydetail/edit.blade.php
+        deleted:    resources/views/backEnd/companydetail/index.blade.php
+        deleted:    resources/views/backEnd/companydetail/view.blade.php
+        deleted:    resources/views/backEnd/connection/create.blade.php
+        deleted:    resources/views/backEnd/connection/edit.blade.php
+        deleted:    resources/views/backEnd/connection/index.blade.php
+        deleted:    resources/views/backEnd/connection/view.blade.php
+        deleted:    resources/views/backEnd/conversion/index.blade.php
+        deleted:    resources/views/backEnd/courierinout/create.blade.php
+        deleted:    resources/views/backEnd/courierinout/index.blade.php
+        deleted:    resources/views/backEnd/courierinout/view.blade.php
+        deleted:    resources/views/backEnd/createticket.blade.php
+        deleted:    resources/views/backEnd/creditnote/create.blade.php
+        deleted:    resources/views/backEnd/creditnote/edit.blade.php
+        deleted:    resources/views/backEnd/creditnote/index.blade.php
+        deleted:    resources/views/backEnd/creditnote/view.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/create.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/index.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/create.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/edit.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/index.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/view.blade.php
+        deleted:    resources/views/backEnd/declarationform/create.blade.php
+        deleted:    resources/views/backEnd/declarationform/index.blade.php
+        deleted:    resources/views/backEnd/declarationform/view.blade.php
+        deleted:    resources/views/backEnd/development/create.blade.php
+        deleted:    resources/views/backEnd/development/index.blade.php
+        deleted:    resources/views/backEnd/development/view.blade.php
+        deleted:    resources/views/backEnd/directapplication/articleship.blade.php
+        deleted:    resources/views/backEnd/directapplication/articleshipview.blade.php
+        deleted:    resources/views/backEnd/directapplication/caview.blade.php
+        deleted:    resources/views/backEnd/directapplication/chartered.blade.php
+        deleted:    resources/views/backEnd/directapplication/create.blade.php
+        deleted:    resources/views/backEnd/directapplication/internship.blade.php
+        deleted:    resources/views/backEnd/directapplication/internshipview.blade.php
+        deleted:    resources/views/backEnd/directapplication/other.blade.php
+        deleted:    resources/views/backEnd/directapplication/otherview.blade.php
+        deleted:    resources/views/backEnd/discuses/create.blade.php
+        deleted:    resources/views/backEnd/discuses/index.blade.php
+        deleted:    resources/views/backEnd/discuses/indexchart.blade.php
+        deleted:    resources/views/backEnd/discuses/view.blade.php
+        deleted:    resources/views/backEnd/draftemail/index.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/index.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/mail.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/mailpreview.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/otherindex.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/payroll.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/upload-excel-form.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/view.blade.php
+        deleted:    resources/views/backEnd/employeereferral/create.blade.php
+        deleted:    resources/views/backEnd/employeereferral/edit.blade.php
+        deleted:    resources/views/backEnd/employeereferral/index.blade.php
+        deleted:    resources/views/backEnd/employeereferral/view.blade.php
+        deleted:    resources/views/backEnd/examanswer/index.blade.php
+        deleted:    resources/views/backEnd/examanswer/view.blade.php
+        deleted:    resources/views/backEnd/feed/feed.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/create.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/edit.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/index.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/view.blade.php
+        deleted:    resources/views/backEnd/gnatt/assignlist.blade.php
+        deleted:    resources/views/backEnd/gnatt/editassign.blade.php
+        deleted:    resources/views/backEnd/gnatt/index.blade.php
+        deleted:    resources/views/backEnd/group/index.blade.php
+        deleted:    resources/views/backEnd/hbrtool/create.blade.php
+        deleted:    resources/views/backEnd/hrticket/create.blade.php
+        deleted:    resources/views/backEnd/hrticket/edit.blade.php
+        deleted:    resources/views/backEnd/hrticket/index.blade.php
+        deleted:    resources/views/backEnd/hrticket/view.blade.php
+        deleted:    resources/views/backEnd/icards/index.blade.php
+        deleted:    resources/views/backEnd/ifc/chart.blade.php
+        deleted:    resources/views/backEnd/ifc/index.blade.php
+        deleted:    resources/views/backEnd/ifc/view.blade.php
+        deleted:    resources/views/backEnd/ifcfolder/clientifcfolderindex.blade.php
+        deleted:    resources/views/backEnd/ifcfolder/index.blade.php
+        modified:   resources/views/backEnd/index.blade.php
+        deleted:    resources/views/backEnd/informationresources/create.blade.php
+        deleted:    resources/views/backEnd/informationresources/folderlist.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilraddinformation.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrbank.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrbp.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrdeduction.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrhouse.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrpersonalinformation.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrsalary.blade.php
+        deleted:    resources/views/backEnd/informationresources/incomefromcapitalgains.blade.php
+        deleted:    resources/views/backEnd/informationresources/incomefromsources.blade.php
+        deleted:    resources/views/backEnd/informationresources/index.blade.php
+        deleted:    resources/views/backEnd/informationresources/subfolderlist.blade.php
+        deleted:    resources/views/backEnd/invoice/barchart.blade.php
+        deleted:    resources/views/backEnd/invoice/create.blade.php
+        deleted:    resources/views/backEnd/invoice/edit.blade.php
+        deleted:    resources/views/backEnd/invoice/index.blade.php
+        deleted:    resources/views/backEnd/invoice/invoicefinalreport.blade.php
+        deleted:    resources/views/backEnd/invoice/invoicepdf.blade.php
+        deleted:    resources/views/backEnd/invoice/invoicereport.blade.php
+        deleted:    resources/views/backEnd/invoice/view.blade.php
+        deleted:    resources/views/backEnd/jobapplication/articleship.blade.php
+        deleted:    resources/views/backEnd/jobapplication/articleshipview.blade.php
+        deleted:    resources/views/backEnd/jobapplication/caapplication.blade.php
+        deleted:    resources/views/backEnd/jobapplication/caview.blade.php
+        deleted:    resources/views/backEnd/jobapplication/internship.blade.php
+        deleted:    resources/views/backEnd/jobapplication/other.blade.php
+        deleted:    resources/views/backEnd/lead/create.blade.php
+        deleted:    resources/views/backEnd/lead/edit.blade.php
+        deleted:    resources/views/backEnd/lead/index.blade.php
+        deleted:    resources/views/backEnd/lead/view.blade.php
+        deleted:    resources/views/backEnd/letterhead/create.blade.php
+        deleted:    resources/views/backEnd/letterhead/edit.blade.php
+        deleted:    resources/views/backEnd/letterhead/index.blade.php
+        deleted:    resources/views/backEnd/letterhead/view.blade.php
+        deleted:    resources/views/backEnd/localconveyance/create.blade.php
+        deleted:    resources/views/backEnd/localconveyance/edit.blade.php
+        deleted:    resources/views/backEnd/localconveyance/index.blade.php
+        deleted:    resources/views/backEnd/localconveyance/view.blade.php
+        deleted:    resources/views/backEnd/material/create.blade.php
+        deleted:    resources/views/backEnd/material/index.blade.php
+        deleted:    resources/views/backEnd/material/view.blade.php
+        deleted:    resources/views/backEnd/meetingfolder/index.blade.php
+        deleted:    resources/views/backEnd/meetingfolder/subfolderindex.blade.php
+        deleted:    resources/views/backEnd/meetingfolder/subindex.blade.php
+        deleted:    resources/views/backEnd/mis/create.blade.php
+        deleted:    resources/views/backEnd/mis/index.blade.php
+        deleted:    resources/views/backEnd/neft/create.blade.php
+        deleted:    resources/views/backEnd/neft/edit.blade.php
+        deleted:    resources/views/backEnd/neft/neftindex.blade.php
+        deleted:    resources/views/backEnd/neft/payrollneftindex.blade.php
+        deleted:    resources/views/backEnd/outstanding/index.blade.php
+        deleted:    resources/views/backEnd/outstanding/outstandingechart.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/create.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/edit.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/index.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/view.blade.php
+        deleted:    resources/views/backEnd/payment/create.blade.php
+        deleted:    resources/views/backEnd/payment/index.blade.php
+        deleted:    resources/views/backEnd/payroll/index.blade.php
+        deleted:    resources/views/backEnd/payroll/payrollarticleindex.blade.php
+        deleted:    resources/views/backEnd/pbd/create.blade.php
+        deleted:    resources/views/backEnd/pbd/edit.blade.php
+        deleted:    resources/views/backEnd/pbd/index.blade.php
+        deleted:    resources/views/backEnd/penality/create.blade.php
+        deleted:    resources/views/backEnd/penality/edit.blade.php
+        deleted:    resources/views/backEnd/penality/index.blade.php
+        deleted:    resources/views/backEnd/penality/statusindex.blade.php
+        deleted:    resources/views/backEnd/penality/taskassemble.blade.php
+        deleted:    resources/views/backEnd/penality/view.blade.php
+        deleted:    resources/views/backEnd/performanceappraisal/index.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/create.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/edit.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/index.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/view.blade.php
+        deleted:    resources/views/backEnd/policy/create.blade.php
+        deleted:    resources/views/backEnd/policy/index.blade.php
+        deleted:    resources/views/backEnd/policy/policyacknowledgelist.blade.php
+        deleted:    resources/views/backEnd/policy/policyindex.blade.php
+        deleted:    resources/views/backEnd/policy/policyindexx.blade.php
+        deleted:    resources/views/backEnd/profile/create.blade.php
+        deleted:    resources/views/backEnd/profile/edit.blade.php
+        deleted:    resources/views/backEnd/profile/index.blade.php
+        deleted:    resources/views/backEnd/project/create.blade.php
+        deleted:    resources/views/backEnd/project/edit.blade.php
+        deleted:    resources/views/backEnd/project/index.blade.php
+        deleted:    resources/views/backEnd/project/view.blade.php
+        deleted:    resources/views/backEnd/proposal/create.blade.php
+        deleted:    resources/views/backEnd/proposal/index.blade.php
+        deleted:    resources/views/backEnd/proposal/view.blade.php
+        deleted:    resources/views/backEnd/questionnaireform/index.blade.php
+        deleted:    resources/views/backEnd/questionpaper/create.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/create.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/index.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/view.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/create.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/edit.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/index.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/view.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/create.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/edit.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/index.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/view.blade.php
+        deleted:    resources/views/backEnd/service/create.blade.php
+        deleted:    resources/views/backEnd/service/edit.blade.php
+        deleted:    resources/views/backEnd/service/index.blade.php
+        deleted:    resources/views/backEnd/staffdetail/create.blade.php
+        deleted:    resources/views/backEnd/staffdetail/index.blade.php
+        deleted:    resources/views/backEnd/staffrequest/create.blade.php
+        deleted:    resources/views/backEnd/staffrequest/index.blade.php
+        deleted:    resources/views/backEnd/staffrequest/list.blade.php
+        deleted:    resources/views/backEnd/staffrequest/view.blade.php
+        deleted:    resources/views/backEnd/tab/create.blade.php
+        deleted:    resources/views/backEnd/tab/edit.blade.php
+        deleted:    resources/views/backEnd/tab/index.blade.php
+        deleted:    resources/views/backEnd/tax/create.blade.php
+        deleted:    resources/views/backEnd/tax/index.blade.php
+        deleted:    resources/views/backEnd/tax/view.blade.php
+        deleted:    resources/views/backEnd/teamlevel/create.blade.php
+        deleted:    resources/views/backEnd/teamlevel/edit.blade.php
+        deleted:    resources/views/backEnd/teamlevel/form.blade.php
+        deleted:    resources/views/backEnd/teamlevel/index.blade.php
+        deleted:    resources/views/backEnd/teamprofile/create.blade.php
+        deleted:    resources/views/backEnd/teamprofile/edit.blade.php
+        deleted:    resources/views/backEnd/teamprofile/index.blade.php
+        deleted:    resources/views/backEnd/tender/create.blade.php
+        deleted:    resources/views/backEnd/tender/edit.blade.php
+        deleted:    resources/views/backEnd/tender/index.blade.php
+        deleted:    resources/views/backEnd/tender/tenderexpirelist.blade.php
+        deleted:    resources/views/backEnd/tender/tenderfolder.blade.php
+        deleted:    resources/views/backEnd/tender/view.blade.php
+        deleted:    resources/views/backEnd/trainingassetsments/create.blade.php
+        deleted:    resources/views/backEnd/trainingassetsments/index.blade.php
+        deleted:    resources/views/backEnd/travel/create.blade.php
+        deleted:    resources/views/backEnd/travel/edit.blade.php
+        deleted:    resources/views/backEnd/travel/index.blade.php
+        deleted:    resources/views/backEnd/travel/travelindex.blade.php
+        deleted:    resources/views/backEnd/travel/view.blade.php
+        deleted:    resources/views/backEnd/travelfeedback/index.blade.php
+        deleted:    resources/views/backEnd/travelform/create.blade.php
+        deleted:    resources/views/backEnd/travelform/index.blade.php
+        deleted:    resources/views/backEnd/travelform/view.blade.php
+        modified:   resources/views/backEnd/userprofile.blade.php
+        deleted:    resources/views/backEnd/vendor/create.blade.php
+        deleted:    resources/views/backEnd/vendor/index.blade.php
+        deleted:    resources/views/backEnd/vendor/view.blade.php
+        deleted:    resources/views/client/atr/index.blade.php
+        deleted:    resources/views/client/atr/view.blade.php
+        deleted:    resources/views/client/clientfile/clientfolderlist.blade.php
+        deleted:    resources/views/client/clientfile/clientindex.blade.php
+        deleted:    resources/views/client/clientfile/filelist.blade.php
+        deleted:    resources/views/client/clientfile/resetpassword.blade.php
+        deleted:    resources/views/client/information/assignfolderlist.blade.php
+        deleted:    resources/views/client/information/create.blade.php
+        deleted:    resources/views/client/information/folderlist.blade.php
+        deleted:    resources/views/client/information/ilraddinformation.blade.php
+        deleted:    resources/views/client/information/ilrallindex.blade.php
+        deleted:    resources/views/client/information/ilrbank.blade.php
+        deleted:    resources/views/client/information/ilrbp.blade.php
+        deleted:    resources/views/client/information/ilrdeduction.blade.php
+        deleted:    resources/views/client/information/ilrhouse.blade.php
+        deleted:    resources/views/client/information/ilrpersonalinformation.blade.php
+        deleted:    resources/views/client/information/ilrsalary.blade.php
+        deleted:    resources/views/client/information/incomefromcapitalgains.blade.php
+        deleted:    resources/views/client/information/incomefromsources.blade.php
+        deleted:    resources/views/client/information/index.blade.php
+        deleted:    resources/views/client/information/talentlist.blade.php
+        deleted:    resources/views/client/internalaudit/actionitem.blade.php
+        deleted:    resources/views/client/internalaudit/actiontracker.blade.php
+        deleted:    resources/views/client/internalaudit/index.blade.php
+        deleted:    resources/views/client/mis/create.blade.php
+        deleted:    resources/views/client/mis/edit.blade.php
+        deleted:    resources/views/client/mis/index.blade.php
+        deleted:    resources/views/client/mis/view.blade.php
+        deleted:    resources/views/questionnaireform.blade.php
+        deleted:    resources/views/student/index.blade.php
+        deleted:    resources/views/student/studentexam/index.blade.php
+        deleted:    resources/views/student/studentexam/result.blade.php
+        deleted:    resources/views/student/studentexam/thanks.blade.php
+        modified:   routes/web.php
+
+        
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+         } catch (\Exception $e) {
+            if (\DB::transactionLevel() > 0) {
+                \DB::rollBack();
+            }
+            report($e);
+            $output = array('msg' => $e->getMessage());
+            return back()->withErrors($output)->withInput();
+        }
+		
+		
+		
+		    } catch (Exception $e) {
+      DB::rollBack();
+      Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+      report($e);
+      $output = array('msg' => $e->getMessage());
+      return back()->withErrors($output)->withInput();
+    }
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Rules\ExcelColumnHeading;
+use App\Models\Debtor;
+use App\Models\Teammember;
+
+class KrasController extends Controller {
+
+        new file:   .willbedelete.tsv
+        deleted:    app/Console/Commands/EveryDay.php
+        deleted:    app/Console/Commands/InvoiceReminder.php
+        deleted:    app/Console/Commands/OutstandingReminder.php
+        deleted:    app/Console/Commands/TaskReminder.php
+        deleted:    app/Console/Commands/TimesheetCron.php
+        modified:   app/Console/Kernel.php
+        deleted:    app/Exports/DataTableExport.php
+        deleted:    app/Exports/OutstandingExport.php
+        deleted:    app/Http/Controllers/Admin/AdminController.php
+        deleted:    app/Http/Controllers/Admin/TabController.php
+        deleted:    app/Http/Controllers/AdminitrController.php
+        deleted:    app/Http/Controllers/AdminmisController.php
+        deleted:    app/Http/Controllers/Api/AdvanceclaimController.php
+        deleted:    app/Http/Controllers/Api/AssetController.php
+        deleted:    app/Http/Controllers/Api/AssetprocurementController.php
+        deleted:    app/Http/Controllers/Api/AssetticketController.php
+        deleted:    app/Http/Controllers/Api/CalendarController.php
+        deleted:    app/Http/Controllers/Api/CheckInController.php
+        deleted:    app/Http/Controllers/Api/ClientloginController.php
+        deleted:    app/Http/Controllers/Api/ConnectionController.php
+        deleted:    app/Http/Controllers/Api/DiscussController.php
+        deleted:    app/Http/Controllers/Api/FinanceController.php
+        deleted:    app/Http/Controllers/Api/InvoiceController.php
+        deleted:    app/Http/Controllers/Api/PhotoController.php
+        deleted:    app/Http/Controllers/Api/StaffrequestController.php
+        deleted:    app/Http/Controllers/Api/TenderController.php
+        deleted:    app/Http/Controllers/Api/TicketController.php
+        deleted:    app/Http/Controllers/ArticlefileController.php
+        deleted:    app/Http/Controllers/ArticleonboardingController.php
+        deleted:    app/Http/Controllers/AssetController.php
+        deleted:    app/Http/Controllers/AssetasignController.php
+        deleted:    app/Http/Controllers/AssetprocurementController.php
+        deleted:    app/Http/Controllers/AssetticketController.php
+        modified:   app/Http/Controllers/AssignmentconfirmationController.php
+        modified:   app/Http/Controllers/AssignmentmappingController.php
+        deleted:    app/Http/Controllers/AtrController.php
+        deleted:    app/Http/Controllers/AuditticketController.php
+        deleted:    app/Http/Controllers/Auth/ClientLoginController.php
+        deleted:    app/Http/Controllers/Auth/StudentLoginController.php
+        modified:   app/Http/Controllers/BackEndController.php
+        deleted:    app/Http/Controllers/BalanceController.php
+        deleted:    app/Http/Controllers/CandidateboardingController.php
+        deleted:    app/Http/Controllers/CheckInController.php
+        deleted:    app/Http/Controllers/Client/ClienthomeController.php
+        deleted:    app/Http/Controllers/Client/InformationController.php
+        deleted:    app/Http/Controllers/Client/InternalauditController.php
+        deleted:    app/Http/Controllers/Client/ItrController.php
+        deleted:    app/Http/Controllers/Client/MisController.php
+        deleted:    app/Http/Controllers/ClientAtrController.php
+        deleted:    app/Http/Controllers/ClientSpecificIndependenceController.php
+        deleted:    app/Http/Controllers/ClientuserloginController.php
+        deleted:    app/Http/Controllers/CompanydetailController.php
+        deleted:    app/Http/Controllers/ConnectionController.php
+        deleted:    app/Http/Controllers/ContractandSubscriptionController.php
+        deleted:    app/Http/Controllers/ConversionController.php
+        deleted:    app/Http/Controllers/CourierinoutController.php
+        deleted:    app/Http/Controllers/CreditnoteController.php
+        deleted:    app/Http/Controllers/CyclingeventController.php
+        deleted:    app/Http/Controllers/DataanalyticsController.php
+        deleted:    app/Http/Controllers/DeclarationformController.php
+        deleted:    app/Http/Controllers/DevelopmentController.php
+        deleted:    app/Http/Controllers/DirectapplicationController.php
+        deleted:    app/Http/Controllers/DiscusesController.php
+        deleted:    app/Http/Controllers/DraftemailController.php
+        deleted:    app/Http/Controllers/EmployeeonboardingController.php
+        deleted:    app/Http/Controllers/EmployeepayrollController.php
+        deleted:    app/Http/Controllers/EmployeereferralController.php
+        deleted:    app/Http/Controllers/ExamAnswerController.php
+        deleted:    app/Http/Controllers/ExportController.php
+        deleted:    app/Http/Controllers/FeedController.php
+        deleted:    app/Http/Controllers/FullandfinalController.php
+        deleted:    app/Http/Controllers/GnattchartController.php
+        deleted:    app/Http/Controllers/GroupController.php
+        deleted:    app/Http/Controllers/HbrController.php
+        deleted:    app/Http/Controllers/HrtaskController.php
+        deleted:    app/Http/Controllers/IcardController.php
+        deleted:    app/Http/Controllers/IfcController.php
+        deleted:    app/Http/Controllers/IfcfolderController.php
+        deleted:    app/Http/Controllers/InformationresourceController.php
+        deleted:    app/Http/Controllers/InvoiceController.php
+        deleted:    app/Http/Controllers/JobapplicationController.php
+        deleted:    app/Http/Controllers/LeadController.php
+        deleted:    app/Http/Controllers/LetterheadController.php
+        deleted:    app/Http/Controllers/LocalconveyancesController.php
+        deleted:    app/Http/Controllers/MaterialController.php
+        deleted:    app/Http/Controllers/MeetingfolderController.php
+        deleted:    app/Http/Controllers/NeftController.php
+        deleted:    app/Http/Controllers/OutstandingController.php
+        deleted:    app/Http/Controllers/OutstationconveyanceController.php
+        deleted:    app/Http/Controllers/PaymentController.php
+        deleted:    app/Http/Controllers/PayrollController.php
+        deleted:    app/Http/Controllers/PbdController.php
+        deleted:    app/Http/Controllers/PenalityController.php
+        deleted:    app/Http/Controllers/PerformanceappraisalController.php
+        deleted:    app/Http/Controllers/PerformanceevaluationformController.php
+        deleted:    app/Http/Controllers/PolicyController.php
+        deleted:    app/Http/Controllers/ProfileController.php
+        deleted:    app/Http/Controllers/ProjectController.php
+        deleted:    app/Http/Controllers/ProposalController.php
+        deleted:    app/Http/Controllers/QuestionnaireroundoneController.php
+        deleted:    app/Http/Controllers/QuestionpaperController.php
+        deleted:    app/Http/Controllers/RecruitmentformController.php
+        deleted:    app/Http/Controllers/ReimbursementclaimController.php
+        deleted:    app/Http/Controllers/SecretarialTaskController.php
+        deleted:    app/Http/Controllers/ServiceController.php
+        deleted:    app/Http/Controllers/StaffassignController.php
+        deleted:    app/Http/Controllers/StaffdetailController.php
+        deleted:    app/Http/Controllers/StaffrequestController.php
+        deleted:    app/Http/Controllers/SteptaskController.php
+        deleted:    app/Http/Controllers/Student/StudentExamController.php
+        deleted:    app/Http/Controllers/Student/StudenthomeController.php
+        deleted:    app/Http/Controllers/SubstepController.php
+        deleted:    app/Http/Controllers/SubsteptaskController.php
+        deleted:    app/Http/Controllers/TabController.php
+        modified:   app/Http/Controllers/TaskController.php
+        deleted:    app/Http/Controllers/TaxController.php
+        deleted:    app/Http/Controllers/TeamlevelController.php
+        deleted:    app/Http/Controllers/TeamprofileController.php
+        deleted:    app/Http/Controllers/TenderController.php
+        modified:   app/Http/Controllers/TimesheetController.php
+        deleted:    app/Http/Controllers/TimesheetoldController.php
+        deleted:    app/Http/Controllers/TrainingassessmentController.php
+        deleted:    app/Http/Controllers/TravelController.php
+        deleted:    app/Http/Controllers/TravelfeedbackController.php
+        deleted:    app/Http/Controllers/TravelformController.php
+        deleted:    app/Http/Controllers/VendorController.php
+        deleted:    app/Mail/ClarificationRequiredMail.php
+        deleted:    app/Mail/PayrollApprovedMail.php
+        deleted:    app/Models/Businessentity.php
+        deleted:    app/Models/Clientspecificindependencedeclaration.php
+        deleted:    app/Models/Courierinout.php
+        deleted:    app/Models/Declarationform.php
+        deleted:    app/Models/Draftemail.php
+        deleted:    app/Models/Financerequest.php
+        deleted:    app/Models/Ganttchart.php
+        deleted:    app/Models/Ganttstaff.php
+        deleted:    app/Models/Ilraddinformationfirst.php
+        deleted:    app/Models/Ilraddinformationsecond.php
+        deleted:    app/Models/Ilraddinformationthird.php
+        deleted:    app/Models/Ilranswer.php
+        deleted:    app/Models/Ilrbank.php
+        deleted:    app/Models/Ilrdeduction.php
+        deleted:    app/Models/Ilrfrombusiness.php
+        deleted:    app/Models/Ilrfromcapitalgain.php
+        deleted:    app/Models/Ilrfromsource.php
+        deleted:    app/Models/Ilrhouse.php
+        deleted:    app/Models/Ilrpersonal.php
+        deleted:    app/Models/Ilrsalary.php
+        deleted:    app/Models/Letterhead.php
+        deleted:    app/Models/Localconveyance.php
+        deleted:    app/Models/Missubmit.php
+        deleted:    app/Models/Performanceevaluationform.php
+        deleted:    app/Models/Questionnaireroundone.php
+        deleted:    app/Models/Questionpaper.php
+        deleted:    app/Models/Reimbursementclaim.php
+        deleted:    app/Models/SecretarialTask.php
+        deleted:    app/Models/Statecode.php
+        deleted:    app/Models/Steptask.php
+        deleted:    app/Models/StudentExam.php
+        deleted:    app/Models/Studentlogin.php
+        deleted:    app/Models/Substep.php
+        deleted:    app/Models/Substeptask.php
+        deleted:    app/imports/Atrimport.php
+        deleted:    app/imports/Discussimport.php
+        deleted:    app/imports/Financeimport.php
+        deleted:    app/imports/Ganttimport.php
+        deleted:    app/imports/Ifcimport.php
+        deleted:    app/imports/Ifcimportanswer.php
+        deleted:    app/imports/Informationresourceimport.php
+        deleted:    app/imports/Payrollarticleimport.php
+        deleted:    app/imports/Payrollimport.php
+        deleted:    app/imports/Tdsimport.php
+        deleted:    app/imports/TeammembersSalaryImport.php
+        deleted:    resources/views/admin/index.blade.php
+        deleted:    resources/views/admin/tab/create.blade.php
+        deleted:    resources/views/admin/tab/edit.blade.php
+        deleted:    resources/views/admin/tab/index.blade.php
+        deleted:    resources/views/auth/clientlogin.blade.php
+        deleted:    resources/views/auth/loginotp.blade.php
+        deleted:    resources/views/auth/studentlogin.blade.php
+        deleted:    resources/views/auth/studentregister.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/create.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/edit.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/index.blade.php
+        deleted:    resources/views/backEnd/ContractandSubscription/view.blade.php
+        deleted:    resources/views/backEnd/articlefiles/create.blade.php
+        deleted:    resources/views/backEnd/articlefiles/edit.blade.php
+        deleted:    resources/views/backEnd/articlefiles/index.blade.php
+        deleted:    resources/views/backEnd/articleonboarding/index.blade.php
+        deleted:    resources/views/backEnd/asset/create.blade.php
+        deleted:    resources/views/backEnd/asset/edit.blade.php
+        deleted:    resources/views/backEnd/asset/index.blade.php
+        deleted:    resources/views/backEnd/assetassign/assetassignedreport.blade.php
+        deleted:    resources/views/backEnd/assetassign/create.blade.php
+        deleted:    resources/views/backEnd/assetassign/edit.blade.php
+        deleted:    resources/views/backEnd/assetassign/index.blade.php
+        deleted:    resources/views/backEnd/assetassign/view.blade.php
+        deleted:    resources/views/backEnd/assetassign/viewit.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/assetprocurementindex.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/create.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/index.blade.php
+        deleted:    resources/views/backEnd/assetprocurement/view.blade.php
+        deleted:    resources/views/backEnd/assetticket/edit.blade.php
+        deleted:    resources/views/backEnd/assetticket/index.blade.php
+        deleted:    resources/views/backEnd/atr/index.blade.php
+        deleted:    resources/views/backEnd/atr/view.blade.php
+        deleted:    resources/views/backEnd/auditticket/create.blade.php
+        deleted:    resources/views/backEnd/auditticket/edit.blade.php
+        deleted:    resources/views/backEnd/auditticket/index.blade.php
+        deleted:    resources/views/backEnd/auditticket/view.blade.php
+        deleted:    resources/views/backEnd/balance/index.blade.php
+        deleted:    resources/views/backEnd/candidateonboarding/index.blade.php
+        deleted:    resources/views/backEnd/candidateonboarding/preview.blade.php
+        deleted:    resources/views/backEnd/check-In/create.blade.php
+        deleted:    resources/views/backEnd/check-In/index.blade.php
+        deleted:    resources/views/backEnd/clientlogin/create.blade.php
+        deleted:    resources/views/backEnd/clientlogin/index.blade.php
+        deleted:    resources/views/backEnd/clientlogin/resetpassword.blade.php
+        deleted:    resources/views/backEnd/clientspecificindependencedeclaration/create.blade.php
+        deleted:    resources/views/backEnd/clientspecificindependencedeclaration/index.blade.php
+        deleted:    resources/views/backEnd/clientspecificindependencedeclaration/view.blade.php
+        deleted:    resources/views/backEnd/clientstaffassign/staffassignlist.blade.php
+        deleted:    resources/views/backEnd/companydetail/create.blade.php
+        deleted:    resources/views/backEnd/companydetail/edit.blade.php
+        deleted:    resources/views/backEnd/companydetail/index.blade.php
+        deleted:    resources/views/backEnd/companydetail/view.blade.php
+        deleted:    resources/views/backEnd/connection/create.blade.php
+        deleted:    resources/views/backEnd/connection/edit.blade.php
+        deleted:    resources/views/backEnd/connection/index.blade.php
+        deleted:    resources/views/backEnd/connection/view.blade.php
+        deleted:    resources/views/backEnd/conversion/index.blade.php
+        deleted:    resources/views/backEnd/courierinout/create.blade.php
+        deleted:    resources/views/backEnd/courierinout/index.blade.php
+        deleted:    resources/views/backEnd/courierinout/view.blade.php
+        deleted:    resources/views/backEnd/createticket.blade.php
+        deleted:    resources/views/backEnd/creditnote/create.blade.php
+        deleted:    resources/views/backEnd/creditnote/edit.blade.php
+        deleted:    resources/views/backEnd/creditnote/index.blade.php
+        deleted:    resources/views/backEnd/creditnote/view.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/create.blade.php
+        deleted:    resources/views/backEnd/cyclingevent/index.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/create.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/edit.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/index.blade.php
+        deleted:    resources/views/backEnd/dataanalytics/view.blade.php
+        deleted:    resources/views/backEnd/declarationform/create.blade.php
+        deleted:    resources/views/backEnd/declarationform/index.blade.php
+        deleted:    resources/views/backEnd/declarationform/view.blade.php
+        deleted:    resources/views/backEnd/development/create.blade.php
+        deleted:    resources/views/backEnd/development/index.blade.php
+        deleted:    resources/views/backEnd/development/view.blade.php
+        deleted:    resources/views/backEnd/directapplication/articleship.blade.php
+        deleted:    resources/views/backEnd/directapplication/articleshipview.blade.php
+        deleted:    resources/views/backEnd/directapplication/caview.blade.php
+        deleted:    resources/views/backEnd/directapplication/chartered.blade.php
+        deleted:    resources/views/backEnd/directapplication/create.blade.php
+        deleted:    resources/views/backEnd/directapplication/internship.blade.php
+        deleted:    resources/views/backEnd/directapplication/internshipview.blade.php
+        deleted:    resources/views/backEnd/directapplication/other.blade.php
+        deleted:    resources/views/backEnd/directapplication/otherview.blade.php
+        deleted:    resources/views/backEnd/discuses/create.blade.php
+        deleted:    resources/views/backEnd/discuses/index.blade.php
+        deleted:    resources/views/backEnd/discuses/indexchart.blade.php
+        deleted:    resources/views/backEnd/discuses/view.blade.php
+        deleted:    resources/views/backEnd/draftemail/index.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/index.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/mail.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/mailpreview.blade.php
+        deleted:    resources/views/backEnd/employeeonboarding/otherindex.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/payroll.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/upload-excel-form.blade.php
+        deleted:    resources/views/backEnd/employeepayroll/view.blade.php
+        deleted:    resources/views/backEnd/employeereferral/create.blade.php
+        deleted:    resources/views/backEnd/employeereferral/edit.blade.php
+        deleted:    resources/views/backEnd/employeereferral/index.blade.php
+        deleted:    resources/views/backEnd/employeereferral/view.blade.php
+        deleted:    resources/views/backEnd/examanswer/index.blade.php
+        deleted:    resources/views/backEnd/examanswer/view.blade.php
+        deleted:    resources/views/backEnd/feed/feed.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/create.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/edit.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/index.blade.php
+        deleted:    resources/views/backEnd/fullandfinal/view.blade.php
+        deleted:    resources/views/backEnd/gnatt/assignlist.blade.php
+        deleted:    resources/views/backEnd/gnatt/editassign.blade.php
+        deleted:    resources/views/backEnd/gnatt/index.blade.php
+        deleted:    resources/views/backEnd/group/index.blade.php
+        deleted:    resources/views/backEnd/hbrtool/create.blade.php
+        deleted:    resources/views/backEnd/hrticket/create.blade.php
+        deleted:    resources/views/backEnd/hrticket/edit.blade.php
+        deleted:    resources/views/backEnd/hrticket/index.blade.php
+        deleted:    resources/views/backEnd/hrticket/view.blade.php
+        deleted:    resources/views/backEnd/icards/index.blade.php
+        deleted:    resources/views/backEnd/ifc/chart.blade.php
+        deleted:    resources/views/backEnd/ifc/index.blade.php
+        deleted:    resources/views/backEnd/ifc/view.blade.php
+        deleted:    resources/views/backEnd/ifcfolder/clientifcfolderindex.blade.php
+        deleted:    resources/views/backEnd/ifcfolder/index.blade.php
+        modified:   resources/views/backEnd/index.blade.php
+        deleted:    resources/views/backEnd/informationresources/create.blade.php
+        deleted:    resources/views/backEnd/informationresources/folderlist.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilraddinformation.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrbank.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrbp.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrdeduction.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrhouse.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrpersonalinformation.blade.php
+        deleted:    resources/views/backEnd/informationresources/ilrsalary.blade.php
+        deleted:    resources/views/backEnd/informationresources/incomefromcapitalgains.blade.php
+        deleted:    resources/views/backEnd/informationresources/incomefromsources.blade.php
+        deleted:    resources/views/backEnd/informationresources/index.blade.php
+        deleted:    resources/views/backEnd/informationresources/subfolderlist.blade.php
+        deleted:    resources/views/backEnd/invoice/barchart.blade.php
+        deleted:    resources/views/backEnd/invoice/create.blade.php
+        deleted:    resources/views/backEnd/invoice/edit.blade.php
+        deleted:    resources/views/backEnd/invoice/index.blade.php
+        deleted:    resources/views/backEnd/invoice/invoicefinalreport.blade.php
+        deleted:    resources/views/backEnd/invoice/invoicepdf.blade.php
+        deleted:    resources/views/backEnd/invoice/invoicereport.blade.php
+        deleted:    resources/views/backEnd/invoice/view.blade.php
+        deleted:    resources/views/backEnd/jobapplication/articleship.blade.php
+        deleted:    resources/views/backEnd/jobapplication/articleshipview.blade.php
+        deleted:    resources/views/backEnd/jobapplication/caapplication.blade.php
+        deleted:    resources/views/backEnd/jobapplication/caview.blade.php
+        deleted:    resources/views/backEnd/jobapplication/internship.blade.php
+        deleted:    resources/views/backEnd/jobapplication/other.blade.php
+        deleted:    resources/views/backEnd/lead/create.blade.php
+        deleted:    resources/views/backEnd/lead/edit.blade.php
+        deleted:    resources/views/backEnd/lead/index.blade.php
+        deleted:    resources/views/backEnd/lead/view.blade.php
+        deleted:    resources/views/backEnd/letterhead/create.blade.php
+        deleted:    resources/views/backEnd/letterhead/edit.blade.php
+        deleted:    resources/views/backEnd/letterhead/index.blade.php
+        deleted:    resources/views/backEnd/letterhead/view.blade.php
+        deleted:    resources/views/backEnd/localconveyance/create.blade.php
+        deleted:    resources/views/backEnd/localconveyance/edit.blade.php
+        deleted:    resources/views/backEnd/localconveyance/index.blade.php
+        deleted:    resources/views/backEnd/localconveyance/view.blade.php
+        deleted:    resources/views/backEnd/material/create.blade.php
+        deleted:    resources/views/backEnd/material/index.blade.php
+        deleted:    resources/views/backEnd/material/view.blade.php
+        deleted:    resources/views/backEnd/meetingfolder/index.blade.php
+        deleted:    resources/views/backEnd/meetingfolder/subfolderindex.blade.php
+        deleted:    resources/views/backEnd/meetingfolder/subindex.blade.php
+        deleted:    resources/views/backEnd/mis/create.blade.php
+        deleted:    resources/views/backEnd/mis/index.blade.php
+        deleted:    resources/views/backEnd/neft/create.blade.php
+        deleted:    resources/views/backEnd/neft/edit.blade.php
+        deleted:    resources/views/backEnd/neft/neftindex.blade.php
+        deleted:    resources/views/backEnd/neft/payrollneftindex.blade.php
+        deleted:    resources/views/backEnd/outstanding/index.blade.php
+        deleted:    resources/views/backEnd/outstanding/outstandingechart.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/create.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/edit.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/index.blade.php
+        deleted:    resources/views/backEnd/outstationconveyance/view.blade.php
+        deleted:    resources/views/backEnd/payment/create.blade.php
+        deleted:    resources/views/backEnd/payment/index.blade.php
+        deleted:    resources/views/backEnd/payroll/index.blade.php
+        deleted:    resources/views/backEnd/payroll/payrollarticleindex.blade.php
+        deleted:    resources/views/backEnd/pbd/create.blade.php
+        deleted:    resources/views/backEnd/pbd/edit.blade.php
+        deleted:    resources/views/backEnd/pbd/index.blade.php
+        deleted:    resources/views/backEnd/penality/create.blade.php
+        deleted:    resources/views/backEnd/penality/edit.blade.php
+        deleted:    resources/views/backEnd/penality/index.blade.php
+        deleted:    resources/views/backEnd/penality/statusindex.blade.php
+        deleted:    resources/views/backEnd/penality/taskassemble.blade.php
+        deleted:    resources/views/backEnd/penality/view.blade.php
+        deleted:    resources/views/backEnd/performanceappraisal/index.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/create.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/edit.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/index.blade.php
+        deleted:    resources/views/backEnd/performanceevaluationform/view.blade.php
+        deleted:    resources/views/backEnd/policy/create.blade.php
+        deleted:    resources/views/backEnd/policy/index.blade.php
+        deleted:    resources/views/backEnd/policy/policyacknowledgelist.blade.php
+        deleted:    resources/views/backEnd/policy/policyindex.blade.php
+        deleted:    resources/views/backEnd/policy/policyindexx.blade.php
+        deleted:    resources/views/backEnd/profile/create.blade.php
+        deleted:    resources/views/backEnd/profile/edit.blade.php
+        deleted:    resources/views/backEnd/profile/index.blade.php
+        deleted:    resources/views/backEnd/project/create.blade.php
+        deleted:    resources/views/backEnd/project/edit.blade.php
+        deleted:    resources/views/backEnd/project/index.blade.php
+        deleted:    resources/views/backEnd/project/view.blade.php
+        deleted:    resources/views/backEnd/proposal/create.blade.php
+        deleted:    resources/views/backEnd/proposal/index.blade.php
+        deleted:    resources/views/backEnd/proposal/view.blade.php
+        deleted:    resources/views/backEnd/questionnaireform/index.blade.php
+        deleted:    resources/views/backEnd/questionpaper/create.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/create.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/index.blade.php
+        deleted:    resources/views/backEnd/recruitmentform/view.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/create.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/edit.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/index.blade.php
+        deleted:    resources/views/backEnd/reimbursementclaim/view.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/create.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/edit.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/index.blade.php
+        deleted:    resources/views/backEnd/secretarialoftask/view.blade.php
+        deleted:    resources/views/backEnd/service/create.blade.php
+        deleted:    resources/views/backEnd/service/edit.blade.php
+        deleted:    resources/views/backEnd/service/index.blade.php
+        deleted:    resources/views/backEnd/staffdetail/create.blade.php
+        deleted:    resources/views/backEnd/staffdetail/index.blade.php
+        deleted:    resources/views/backEnd/staffrequest/create.blade.php
+        deleted:    resources/views/backEnd/staffrequest/index.blade.php
+        deleted:    resources/views/backEnd/staffrequest/list.blade.php
+        deleted:    resources/views/backEnd/staffrequest/view.blade.php
+        deleted:    resources/views/backEnd/tab/create.blade.php
+        deleted:    resources/views/backEnd/tab/edit.blade.php
+        deleted:    resources/views/backEnd/tab/index.blade.php
+        deleted:    resources/views/backEnd/tax/create.blade.php
+        deleted:    resources/views/backEnd/tax/index.blade.php
+        deleted:    resources/views/backEnd/tax/view.blade.php
+        deleted:    resources/views/backEnd/teamlevel/create.blade.php
+        deleted:    resources/views/backEnd/teamlevel/edit.blade.php
+        deleted:    resources/views/backEnd/teamlevel/form.blade.php
+        deleted:    resources/views/backEnd/teamlevel/index.blade.php
+        deleted:    resources/views/backEnd/teamprofile/create.blade.php
+        deleted:    resources/views/backEnd/teamprofile/edit.blade.php
+        deleted:    resources/views/backEnd/teamprofile/index.blade.php
+        deleted:    resources/views/backEnd/tender/create.blade.php
+        deleted:    resources/views/backEnd/tender/edit.blade.php
+        deleted:    resources/views/backEnd/tender/index.blade.php
+        deleted:    resources/views/backEnd/tender/tenderexpirelist.blade.php
+        deleted:    resources/views/backEnd/tender/tenderfolder.blade.php
+        deleted:    resources/views/backEnd/tender/view.blade.php
+        deleted:    resources/views/backEnd/trainingassetsments/create.blade.php
+        deleted:    resources/views/backEnd/trainingassetsments/index.blade.php
+        deleted:    resources/views/backEnd/travel/create.blade.php
+        deleted:    resources/views/backEnd/travel/edit.blade.php
+        deleted:    resources/views/backEnd/travel/index.blade.php
+        deleted:    resources/views/backEnd/travel/travelindex.blade.php
+        deleted:    resources/views/backEnd/travel/view.blade.php
+        deleted:    resources/views/backEnd/travelfeedback/index.blade.php
+        deleted:    resources/views/backEnd/travelform/create.blade.php
+        deleted:    resources/views/backEnd/travelform/index.blade.php
+        deleted:    resources/views/backEnd/travelform/view.blade.php
+        modified:   resources/views/backEnd/userprofile.blade.php
+        deleted:    resources/views/backEnd/vendor/create.blade.php
+        deleted:    resources/views/backEnd/vendor/index.blade.php
+        deleted:    resources/views/backEnd/vendor/view.blade.php
+        deleted:    resources/views/client/atr/index.blade.php
+        deleted:    resources/views/client/atr/view.blade.php
+        deleted:    resources/views/client/clientfile/clientfolderlist.blade.php
+        deleted:    resources/views/client/clientfile/clientindex.blade.php
+        deleted:    resources/views/client/clientfile/filelist.blade.php
+        deleted:    resources/views/client/clientfile/resetpassword.blade.php
+        deleted:    resources/views/client/information/assignfolderlist.blade.php
+        deleted:    resources/views/client/information/create.blade.php
+        deleted:    resources/views/client/information/folderlist.blade.php
+        deleted:    resources/views/client/information/ilraddinformation.blade.php
+        deleted:    resources/views/client/information/ilrallindex.blade.php
+        deleted:    resources/views/client/information/ilrbank.blade.php
+        deleted:    resources/views/client/information/ilrbp.blade.php
+        deleted:    resources/views/client/information/ilrdeduction.blade.php
+        deleted:    resources/views/client/information/ilrhouse.blade.php
+        deleted:    resources/views/client/information/ilrpersonalinformation.blade.php
+        deleted:    resources/views/client/information/ilrsalary.blade.php
+        deleted:    resources/views/client/information/incomefromcapitalgains.blade.php
+        deleted:    resources/views/client/information/incomefromsources.blade.php
+        deleted:    resources/views/client/information/index.blade.php
+        deleted:    resources/views/client/information/talentlist.blade.php
+        deleted:    resources/views/client/internalaudit/actionitem.blade.php
+        deleted:    resources/views/client/internalaudit/actiontracker.blade.php
+        deleted:    resources/views/client/internalaudit/index.blade.php
+        deleted:    resources/views/client/mis/create.blade.php
+        deleted:    resources/views/client/mis/edit.blade.php
+        deleted:    resources/views/client/mis/index.blade.php
+        deleted:    resources/views/client/mis/view.blade.php
+        deleted:    resources/views/questionnaireform.blade.php
+        deleted:    resources/views/student/index.blade.php
+        deleted:    resources/views/student/studentexam/index.blade.php
+        deleted:    resources/views/student/studentexam/result.blade.php
+        deleted:    resources/views/student/studentexam/thanks.blade.php
+        modified:   routes/web.php
+
+        
+}
+
+
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+
+
+
+
+
+INSERT INTO `teammembers` (`id`, `staffcode`, `staffcodenumber`, `mentor_id`, `title_id`, `team_member`, `entity`, `employment_status`, `mobile_no`, `emailid`, `department`, `personalemail`, `profilepic`, `fathername`, `dateofbirth`, `pancardno`, `emergencycontactnumber`, `adharcardnumber`, `aadharupload`, `nameasperbank`, `nameofbank`, `bankaccountnumber`, `ifsccode`, `cancelcheque`, `mothername`, `mothernumber`, `fathernumber`, `panupload`, `address_proof`, `designation`, `addressupload`, `originalcancelcheque`, `originalappointment_letter`, `originalnda`, `originalpanupload`, `originaladdressupload`, `originalaadharupload`, `role_id`, `teamlead`, `qualification`, `appointment_letter`, `nda`, `permanentaddress`, `communicationaddress`, `joining_date`, `rejoining_date`, `leavingdate`, `reasonofleaving`, `dateofresign`, `created_by`, `location`, `gender`, `linkedin`, `about`, `status`, `timesheet_access`, `verify`, `relievingstatus`, `category`, `cost_hour`, `salary_range`, `monthly_gross_salary`, `pf_applicable`, `timesheet_applicable`, `taxtds`, `taxgrosssalary`, `taxpf`, `change_type`, `created_at`, `updated_at`) VALUES
+(878, 'SA1001', '1', 0, 2, 'Administrator', 'V.SANKAR AIYAR & CO', NULL, '9717108180', 'itsupport_delhi@vsa.co.in', NULL, NULL, 'Tulips.jpg', NULL, '1985-02-10', 'AVDPK0137A', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcGRmbG93ZXJzZXQxNmJhdGNoMi1hZGotMjJhLWxlYXZlc18yLmpwZw.webp', NULL, NULL, NULL, '1695276629Screenshot (1).png', NULL, NULL, NULL, 'czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcGRmbG93ZXJzZXQxNmJhdGNoMi1hZGotMjJhLWxlYXZlc18yLmpwZw.webp', NULL, NULL, '1695276629Screenshot (1).png', NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, NULL, '2023-07-31', NULL, NULL, NULL, NULL, 485, NULL, 'Male', NULL, NULL, 1, 0, 1, NULL, NULL, NULL, '0', 0, NULL, NULL, NULL, NULL, NULL, NULL, '2023-07-31 06:11:33', '2023-09-21 06:10:29');
+
+
+
+
+INSERT INTO `users` (`id`, `teammember_id`, `role_id`, `fcm`, `email`, `passwordResetToken`, `passwordResetExpiresAt`, `email_verified_at`, `password`, `status`, `remember_token`, `two_factor_code`, `otp`, `two_factor_expires_at`, `created_at`, `updated_at`) VALUES
+(724, 878, 11, NULL, 'itsupport_delhi@vsa.co.in', 'C1wbABRFLxvelFBXieiqvae2v3C7NXrITyVgY4s3K97hJp0W9obFhHY2702f', '2026-05-27 15:25:05', NULL, '$2y$10$LNORWUhdMffo064HHek5K.mbuw3w5ZFQ4SfDmZxLpGPp0xD9I0gKe', 1, 'ufbKZZW1LILRxgGoix9U9bIesxQnpM6iyzoLLCjI6f8vwRmWxlUA7E7l3Cph', 707464, 328402, '2026-08-14 11:47:40', '2023-07-31 06:13:07', '2026-05-27 08:55:05');
+
+
+
+
+
+
+
+
+
+
+mujhe teamleder ke side se call aya tha and mujhe btaya gya hai ki teamleader ko hr ne bola hai ki mujhese baat karne ke liye to teamleader ne call kiya tha and mujhe btaya gya hai ki tumhe company se nikala ja raha hai and maine resion puchha hu to ye btaya gya hai ki compny ko restucterd kiya ja raha hai isi liye mujhe nikala ja raha hai.
+
+to mera sawal hai ki kiya ye valid reson hai nikalne ka compny se 
+and mere according ye reason valid nahi hai to ab mujhe kiya karna chahiye ye btao 
+and ye bola gya hai ki compny ko restuctured karne me mujhe shahid in future me kahi nazar nahi aa raha hai to mujhe ye bhi janna hai ki mai kaise nazar nahi aa raha hu 
+mera kaha issue tha preformence me , apne team leader ko report karne me , ya mera koi kaam related issue , ya mai time per task deleverd nahi kar raha tha ya mai koi new technolygy adubt karne me mai to new technology adapt bhi kar sakta hu agar new technology neede hai to fir kiyo nikala ja raha hai 
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+mujhe teamleder ke side se call aya tha and mujhe btaya gya hai ki teamleader ko hr ne bola hai ki mujhese baat karne ke liye to teamleader ne call kiya tha and mujhe btaya gya hai ki tumhe company se nikala ja raha hai and maine resion puchha hu to ye btaya gya hai ki compny ko restucterd kiya ja raha hai isi liye mujhe nikala ja raha hai.
+
+
+
+to mera sawal hai ki kiya ye valid reson hai nikalne ka compny se 
+and mere according ye reason valid nahi hai to ab mujhe kiya karna chahiye ye btao 
+and ye bola gya hai ki compny ko restuctured karne me mujhe shahid in future me kahi nazar nahi aa raha hai to mujhe ye bhi janna hai ki mai kaise nazar nahi aa raha hu 
+
+
+
+
+  iske according mera kiya kiya question ban sakta hai jo valid ho vo question do point wise 
+
+
+
+
+
+3333333333
+
+
+Also, when it is said that my role is not seen in the future structure, I would like to understand what specifically is changing. If the future structure requires a different technology or skill set, I am open to learning and adapting to the required technology and taking up different responsibilities.
+
+
+“Ma'am, I would also like to understand whether the Associate Software Engineer position itself is being reduced or removed as part of the restructuring, or whether this decision is specific to my employment.
+
+If employees in the same role are continuing in the organization while I am being separated, I would request you to please help me understand the criteria on the basis of which I was selected for separation.
+
+
+
+“If this is restructuring and not performance-related, what is changing in my role, and if others in the same role are being retained, what objective criteria were used to select me for separation?
+
+
+
+444444444444444444444444444444444444444
+
+Hi HR,
+
+I was informed today that the company has gone through some restructuring and, as a result, my role is no longer considered relevant and does not fit into the future structure of the company.
+
+Honestly, I would like to understand the actual reason behind this decision, because the explanation of “restructuring” and “role fit” is not very clear to me.
+
+I was specifically asked to start using new AI tools in my work. I took that feedback seriously, learned the tools, and started implementing them in my daily work. I am now using them to complete my work more efficiently and with better speed.
+
+
+I have always given my best to the company. Whenever a task or responsibility was assigned to me, I made sure to complete it sincerely and within the expected timelines.
+
+
+
+If there were any concerns regarding my performance, quality of work, productivity, skills, or any other aspect, I would genuinely appreciate knowing about them. I believe I should have been given specific feedback so that I could understand the issue and work on improving it.
+
+
+
+
+Therefore, I would request you to please provide me with a clear and specific explanation of the actual reason behind this decision. If restructuring is the reason, I would also like to understand specifically why my role is being eliminated and what has changed regarding my role.
+
+
+
+I would really appreciate transparency and clarity on this, as I believe I deserve to understand the actual reason behind this decision and whether there was anything I could have done differently.
+
+
+
+5555555555555555555555555555555555555555555555555555
+
+Hi HR,
+
+I was informed today that the company has gone through some restructuring and, as a result, my role is no longer considered relevant and does not fit into the future structure of the company.
+
+Honestly, I would like to understand the actual reason behind this decision, because the explanation of “restructuring” and “role fit” is not very clear to me.
+
+I was specifically asked to start using new AI tools in my work. I took that feedback seriously, learned the tools, and started implementing them in my daily work. I am now using them to complete my work more efficiently and with better speed.
+
+I have always given my best to the company. Whenever a task or responsibility was assigned to me, I made sure to complete it sincerely and within the expected timelines.
+
+If there were any concerns regarding my performance, quality of work, productivity, skills, or any other aspect, I would genuinely appreciate knowing about them. I believe I should have been given specific feedback so that I could understand the issue and work on improving it.
+
+Therefore, I would request you to please provide me with a clear and specific explanation of the actual reason behind this decision. If restructuring is the reason, I would also like to understand specifically what is changing in my role and why my role is being considered unsuitable for the future structure.
+
+I would also like to understand whether the Associate Software Engineer position itself is being reduced or removed as part of the restructuring, or whether this decision is specific to my employment.
+
+If other employees in the same or similar role are continuing in the organization while I am being separated, I would respectfully request clarification on the criteria used to select my role/employment for separation.
+
+I would appreciate understanding what specifically has changed in the organizational structure that makes my current role no longer relevant and why my role has been identified for separation as part of this restructuring
+
+I would really appreciate transparency and clarity on this, as I would like to understand the actual basis of the decision and whether there was anything I could have done differently.
+
+Thank you for your time and clarification.
+
+Regards,
+Md Shahid Raza
+
+
+
+
+
+
+
+333222222222222222222222
+
+Hi HR,
+
+I was informed today that the company has gone through some restructuring and, as a result, my role is no longer considered relevant and does not fit into the future structure of the company.
+
+Honestly, I would like to understand the actual reason behind this decision, because the explanation of “restructuring” and “role fit” is not very clear to me.
+
+I was specifically asked to start using new AI tools in my work. I took that feedback seriously, learned the tools, and started implementing them in my daily work. I am now using them to complete my work more efficiently and with better speed.
+
+I have always given my best to the company. Whenever a task or responsibility was assigned to me, I made sure to complete it sincerely and within the expected timelines.
+
+If there were any concerns regarding my performance, quality of work, productivity, skills, or any other aspect, I would genuinely appreciate knowing about them. I believe I should have been given specific feedback so that I could understand the issue and work on improving it.
+
+Therefore, I would request you to please provide me with a clear and specific explanation of the actual reason behind this decision. If restructuring is the reason, I would like to understand what specifically has changed in the organizational structure that makes my current role no longer relevant and why my role has been identified for separation as part of this restructuring.
+
+I would also like to understand whether the Associate Software Engineer position itself is being reduced or removed as part of the restructuring, and whether this restructuring decision applies to all employees in this position or specifically to my employment.
+
+I would really appreciate transparency and clarity on this, as I would like to clearly understand the basis of this decision.
+
+Thank you for your time and clarification.
+
+Regards,
+Md Shahid Raza
+
 22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
 Haan, sahi pakda. git ls-files "storage/app/*.xlsx" Git pathspec behavior ki wajah se nested paths bhi match kar raha hai.
 

@@ -1728,11 +1728,116 @@ S3-related issues: Currently working on Team Member store, edit, and indexing fu
 
 
 
+2222222222222222222222222222222222222
+
+
+host 
+apiapp-3836ffb1-todolistapp7463-be4a.b.aivencloud.com
+
+Database name
+defaultdb
+
+port
+19847
+
+User
+avnadmin
+
+pass
+AVNS_KDpuoe04VJqcmEhIseN
+
+
+
+
+1.The staff code should be displayed in the Timesheet Not Submitted Report (Excel).
+2.Independence confirmation should not be required for the Assignment Viewer.
+3.Activity logs need to be implemented in the Profile section for Documents viewand Documents download actions.
+
+
+
+View action downloads the document instead of opening it for preview.
+Space missing in Profile Pic.
+No minimum age validation while adding a Team Member.
+Activity Log Displays Document Type as “NA” When Qualification Document Is Viewed.
+Appointment Letter View Button Misaligned.
+Mandatory Type Selection Required When Adding Team Member.
+Incorrect Spelling of “Members” on Independence List Page.
+Pagination Arrow Overlaps the Number of Entries Field.
+Independence List Does Not Display All Assignment Team Members.
+Internal Server Error 500 While Adding Member to Team.
+Misspelled and Improperly Spaced Column Headings in Team List.
+Maintain Consistent Naming for Bank Proof Document.
+Error pages added on VSA.
 
 
 
 
 
+Tables Having Data (15):
+#	Table Name	Row Count
+1	assignmentbudgetings	4
+2	assignmentmappings	4
+3	assignments	4
+4	assignmentteammappings	8
+5	clients	4
+6	leaveroles	25
+7	leavetypes	12
+8	migrations	72
+9	pages	26
+10	permissions	34
+11	roles	10
+12	states	39
+13	teammembers	5
+14	titles	3
+15	users	3
 
 
+
+
+      $allTables = DB::select('SHOW TABLES');
+
+      $tablesWithData = [];
+
+      foreach ($allTables as $table) {
+        $tableName = reset($table);
+
+        if (DB::table($tableName)->exists()) {
+          $tablesWithData[] = [
+            'table' => $tableName,
+            'rows' => DB::table($tableName)->count(),
+          ];
+        }
+      }
+
+      echo "<h2>Total Tables: " . count($allTables) . "</h2>";
+
+      echo "<h3>Tables Having Data (" . count($tablesWithData) . "):</h3>";
+
+      echo "<table border='1' cellpadding='8' cellspacing='0'>";
+      echo "<tr>";
+      echo "<th>#</th>";
+      echo "<th>Table Name</th>";
+      echo "<th>Row Count</th>";
+      echo "</tr>";
+
+      foreach ($tablesWithData as $index => $table) {
+        echo "<tr>";
+        echo "<td>" . ($index + 1) . "</td>";
+        echo "<td style='color:green;'><strong>" . $table['table'] . "</strong></td>";
+        echo "<td>" . $table['rows'] . "</td>";
+        echo "</tr>";
+      }
+
+      echo "</table>";
+
+      dd('Process Complete!');
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  AGENTS.md
+.env
 

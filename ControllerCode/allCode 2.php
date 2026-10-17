@@ -35,9 +35,142 @@ class Allcode extends Controller
         // Start Hare
         // Start Hare
         //! End hare 
-        //* regarding 
+        //* regarding table name display
         // Start Hare
         // Start Hare
+        
+    $tables = DB::select('SHOW TABLES');
+
+    echo "<h2>Total Tables: " . count($tables) . "</h2>";
+    echo "<ul>";
+    foreach ($tables as $table) {
+      $tableName = reset($table);
+      echo "<li>" . $tableName . "</li>";
+    }
+    echo "</ul>";
+
+    dd('hi');
+
+    
+    // Start Hare
+
+
+
+    // Step 1: Saari tables fetch karo
+    $allTables = DB::select('SHOW TABLES');
+
+    // Step 2: Un tables ki list jo RAKHNI HAIN (tere list ke hisaab se)
+    $tablesToKeep = [
+      'activitylogs',
+      'activitylogs_details',
+      'annual_independence_declarations',
+      'applyleaves',
+      'appointmentletters',
+      'articles',
+      'assignmentbudgetings',
+      'assignmentbudgetingudins',
+      'assignmentfolderfiles',
+      'assignmentfolders',
+      'assignmentmappings',
+      'assignments',
+      'assignmentteammappings',
+      'attendances',
+      'auditfiles',
+      'auditquestions',
+      'audittrails',
+      'balanceconfirmationreminder',
+      'checklistanswers',
+      'clientcontacts',
+      'clientdocuments',
+      'clients',
+      'criticalnotes',
+      'currency_codes',
+      'debtorbatchshare',
+      'debtorconfirmations',
+      'debtors',
+      'discusesteammebers',
+      'financialstatementclassifications',
+      'holidays',
+      'independencereminder',
+      'independences',
+      'jobs',
+      'knowledgebases',
+      'leaveapprove',
+      'leaverequest',
+      'leaveroles',
+      'leaveteams',
+      'leavetypedays',
+      'leavetypemonth',
+      'leavetypemonthly',
+      'leavetypes',
+      'migrations',
+      'notificationreadorunread',
+      'notifications',
+      'notificationtargets',
+      'pages',
+      'permissions',
+      'rejoiningsamepost',
+      'roles',
+      'teammember_document_files',
+      'teammembers',
+      'teamrolehistory',
+      'templates',
+      'timesheetday',
+      'timesheetreport',
+      'timesheetrequests',
+      'timesheets',
+      'timesheetupdatelogs',
+      'timesheetusers',
+      'titles',
+      'trail',
+      'userloginactiviteies',
+      'users',
+      'vsaclient'
+    ];
+
+    // Step 3: Tables ko display karo aur delete karo
+    echo "<h2>Total Tables Found: " . count($allTables) . "</h2>";
+
+    // Step 4: Foreign key checks disable karo (taaki delete mein error na aaye)
+    DB::statement('SET FOREIGN_KEY_CHECKS = 0;');
+
+    $deletedTables = [];
+    $keptTables = [];
+
+    foreach ($allTables as $table) {
+      $tableName = reset($table);
+
+      if (in_array($tableName, $tablesToKeep)) {
+        // Yeh table rakhni hai
+        $keptTables[] = $tableName;
+      } else {
+        // Yeh table delete karni hai
+        $deletedTables[] = $tableName;
+        DB::statement("DROP TABLE IF EXISTS {$tableName}");
+      }
+    }
+
+    // Step 5: Foreign key checks wapas enable karo
+    DB::statement('SET FOREIGN_KEY_CHECKS = 1;');
+
+    // Step 6: Result display karo
+    echo "<h3>✅ Tables Kept (" . count($keptTables) . "):</h3>";
+    echo "<ul>";
+    foreach ($keptTables as $name) {
+      echo "<li style='color:green;'>" . $name . "</li>";
+    }
+    echo "</ul>";
+
+    echo "<h3>🗑️ Tables Deleted (" . count($deletedTables) . "):</h3>";
+    echo "<ul>";
+    foreach ($deletedTables as $name) {
+      echo "<li style='color:red;'>" . $name . "</li>";
+    }
+    echo "</ul>";
+
+    // Step 7: Confirmation message
+    dd('✅ Process Complete! ' . count($deletedTables) . ' tables deleted, ' . count($keptTables) . ' tables kept.');
+
 
         //! End hare 
         

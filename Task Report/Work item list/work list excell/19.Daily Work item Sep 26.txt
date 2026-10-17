@@ -1,0 +1,255 @@
+01-09-2026
+1.All QA tasks KT given to tester
+2.Added birthdate age limit on vsademo  (Bugs)
+3.foregn key testing task on vsademo using local database  
+
+
+02-09-2026
+1.Report created for try and catch block that is missing in code 
+
+
+
+03-09-2026
+1.Delete all unused files mentioned in below:
+  - Controllers
+  - Models (if any)
+  - Views (if any)
+  - Email/Mail files (if any)
+  - Imports
+  - Exports
+  - Commands
+  - Jobs
+
+
+isme check karna hai ki kise rakhna hai and kisi nahi ye allready sab hu chuka hai ise commit karna hai test karke 
+
+
+04-09-2026 
+holidays 
+
+05-09-2026
+holidays 
+
+
+06-09-2026
+Sunday
+
+
+07-09-2026
+1.Delete all unused files mentioned in below:
+  - Controllers
+  - Models (if any)
+  - Views (if any)
+  - Email/Mail files (if any)
+  - Imports
+  - Exports
+  - Commands
+  - Jobs
+  
+  - Api 
+  - Controllers
+  - testing on admin 
+
+
+08-09-2026
+1.After deleted unused code i have tested on admin and partner
+
+
+is below table ko rakhna hai 
+subfinancialclassfications
+steplists
+statuses
+confirmationrem
+states
+clientfolders
+clientlogs
+clientlogins
+
+
+
+09-09-2026
+1.After deleted unused code i have tested on manager and staff role
+2.after testing i have got some bugs that is fixed 
+
+
+		
+10-09-2026
+casual leave 
+
+11-09-2026
+casual leave 
+
+12-09-2026
+Sturdays
+
+13-09-2026
+Sunday
+
+
+14-09-2026
+1.After testing i have got some bugs that is fixed and try and catch block added
+  1.1 Deletet table added 
+  1.2 and create migration on that table 
+  1.3 foregn key added on that table 
+  1.4 fixed column lenth and type of that table 
+  1.5 add try catch block on all over portal
+  1.6 testing on try and catch block   
+  
+
+15-09-2026
+1.add maxlenth on column all over project 
+2.Kt with deveshwar 
+3.testing completed on try catch block all over project  
+
+
+
+02 
+
+
+
+
+
+
+16-09-2026
+1.KT with Deveshwar kaushik 
+2.i have checked QA issue but not faund and explain to deveshwar kaushik 
+3.i have done data ready for VSA client meeting 
+4.
+
+TaskController
+
+
+17-09-2026
+1.After final testing i have got file that should be remove 
+2.After final testing i have got file that should be remove completed and functional testing completed 
+
+
+
+
+18-09-2026
+1.Appointment lateer issue fixed on vsademo 
+2.Space missing in Profile Pic (fixed)
+3.Browser Back Navigation Displays Login Page with 419 Error (on hold)
+4.nternal Server Error 500 While Adding Member to Team (fixed)
+5.Pagination Arrow Overlaps the Number of Entries Field
+
+
+
+https://bitbucket.org/capitallio/vsa-demo/pull-requests/9
+
+
+
+coonect for understand 
+Misspelled and Improperly Spaced Column Headings in Team List
+
+
+19-09-2026
+6.Incorrect Spelling of “Members” on Independence List Page
+7.Independence List Does Not Display All Assignment Team Members
+8.Mandatory Type Selection Required When Adding Team Member
+9. Independence module KT given to Deveshwar 
+
+
+20-09-2026
+Sunday
+
+
+21-09-2026
+1.Maintain Consistent Naming for Bank Proof Document
+2.Misspelled and Improperly Spaced Column Headings in Team List
+3.Employee Status Remains Active After Leave Date
+4.Activity Log Displays Document Type as “NA” When Qualification Document Is Viewed
+5.Appointment Letter View Button Misaligned
+
+22-09-2026
+1.VSA_features documnet has to update 
+
+
+23-09-2026
+1.VSA_features documnet has to update 
+
+24-09-2026
+1.VSA_features documnet has to update 
+
+25-09-2026
+1.I have recieved bugs from client side and checjed but not faund any issue and explained to client 
+2.After deployed all Code review task, i have tested on vsademo.
+
+26-09-2026
+sturday 
+
+27-09-2026
+Sunday
+
+
+28-09-2026
+i have not recieved anny task from teamleader 
+
+
+
+29-09-2026
+sick leave
+
+
+30-09-2026
+1.The staff code should be displayed in the Timesheet Not Submitted Report (Excel).
+2.Independence confirmation should not be required for the Assignment Viewer.
+3.Activity logs need to be implemented in the Profile section for Documents viewand Documents download actions.
+4.View action downloads the document instead of opening it for preview.
+5.Space missing in Profile Pic.
+6.No minimum age validation while adding a Team Member.
+7.Activity Log Displays Document Type as “NA” When Qualification Document Is Viewed.
+8.Appointment Letter View Button Misaligned.
+9.Mandatory Type Selection Required When Adding Team Member.
+10.Incorrect Spelling of “Members” on Independence List Page.
+11.Pagination Arrow Overlaps the Number of Entries Field.
+12.Independence List Does Not Display All Assignment Team Members.
+13.Internal Server Error 500 While Adding Member to Team.
+14.Misspelled and Improperly Spaced Column Headings in Team List.
+15.Maintain Consistent Naming for Bank Proof Document.
+16.Error pages added on VSA.
+
+
+01-09-2026
+
+1.The staff code should be displayed in the Timesheet Not Submitted Report (Excel).
+2.Independence confirmation should not be required for the Assignment Viewer.
+3.Activity logs need to be implemented in the Profile section for Documents viewand Documents download actions.
+4.View action downloads the document instead of opening it for preview.
+5.Space missing in Profile Pic.
+6.No minimum age validation while adding a Team Member.
+7.Activity Log Displays Document Type as “NA” When Qualification Document Is Viewed.
+8.Appointment Letter View Button Misaligned.
+9.Mandatory Type Selection Required When Adding Team Member.
+10.Incorrect Spelling of “Members” on Independence List Page.
+11.Pagination Arrow Overlaps the Number of Entries Field.
+12.Independence List Does Not Display All Assignment Team Members.
+13.Internal Server Error 500 While Adding Member to Team.
+14.Misspelled and Improperly Spaced Column Headings in Team List.
+15.Maintain Consistent Naming for Bank Proof Document.
+16.Error pages added on VSA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

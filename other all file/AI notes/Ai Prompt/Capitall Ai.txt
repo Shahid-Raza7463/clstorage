@@ -1,0 +1,779 @@
+222222222222222222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+resources\views\backEnd\errors
+
+Task:
+- Error page files are already created.
+- Review them and implement/use them in Capitall.
+- Make Laravel use these custom error pages for matching error codes.
+- Keep Capitall layout/design.
+- Do not modify error page UI unless required.
+
+Keep:
+- Existing routes
+- Controllers
+- Middleware
+- Config
+- Functionality
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIteammember
+
+Target:
+resources\views\backEnd\layouts\includes\leftsidebar.blade.php
+resources\views\backEnd\userprofile.blade.php
+resources\views\backEnd\teammember\form.blade.php
+
+Task:
+- Fix profilepic agar profile pick hai to thik hai otherwise dymmy dikhana hai 
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222222222
+
+http://127.0.0.1:8000/teammember/create
+
+
+
+
+
+
+
+22222222222222222222222222222222222222222222222222
+
+Mode: UI_REFACTOR
+
+Target:
+resources\views\backEnd\teammember\form.blade.php
+
+Task:
+- is form ko design sahi karna hai mai jo image diya hu vais same karna hai ok and sirf ui ko hi sahi karna hai baki koi bhi cheejo ko toucch nahi karna 
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+  Route::resource('/outstationconveyance', OutstationconveyanceController::class);
+ fu nction create ()
+
+Task:
+- form.blade.php form is used for both Create and Edit pages,
+- is form me and userprofile.blade.php wale form me sirf validation lagana hai isme validatiot apne aaccording lagao ki kis field ko mandatry rakhna hai ya nahi and is form me manadatry filed per * sign lagana red colr me and mobile no nubric hona chahiye and 10 digit hi hona chahiye usi tarah pan card and adhaar card is sabhi per proper validation lagao and sirf validation add karna hai proper way me iske alawa koi bhi chije touch nahi karna hai  
+- Do not remove or alter any field.
+- Do not touch logic, validation, routes, conditions, store/update flow, or functionality.
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222222222
+
+Mode: UI_REFACTOR
+
+Target:
+resources\views\backEnd\teammember\form.blade.php
+
+Task:
+- Match this form UI with the provided reference image.
+- This same form is used for both Create and Edit pages, so preserve both flows.
+- Fix only UI/layout/styling.
+- Do not remove or alter any field.
+- Do not touch logic, validation, routes, conditions, store/update flow, or functionality.
+
+Follow AGENTS.md
+
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\backEnd\teammember\form.blade.php
+
+Issue:
+- UI refactor is done, but Edit page layout is broken/not displaying properly.
+- This form is used for both Create and Edit.
+- Create page should remain unchanged if working.
+
+Task:
+- Fix Edit page UI only.
+- Preserve all fields, existing values, View links, file inputs, validation, routes, and update flow.
+- Do not remove any field.
+- Keep Create page working.
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Targets:
+- resources\views\backEnd\userprofile.blade.php
+- resources\views\backEnd\teammember\form.blade.php
+
+Task:
+- Add frontend validation only.
+- Mark mandatory fields with red *.
+- Mobile: numeric, exactly 10 digits.
+- Aadhaar: numeric, exactly 12 digits.
+- PAN: valid PAN format.
+- Email: valid email format.
+- Apply proper required validation where needed.
+- form.blade.php is used for Create + Edit, keep both working.
+
+Keep:
+- All fields
+- Logic
+- Routes
+- Store/update flow
+- Existing functionality
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Targets:
+- app\Http\Controllers\ApplyleaveController.php
+
+Task:
+- jab koi bhi leave apply kare and us days ka timesheet fill ho to timesheet delete hona chahiye means timesheet create karne per jo bhi functionality hota hai use revrt karna hai agar us days ko apply leave kare to 
+
+Follow AGENTS.md
+
+
+april 
+
+
+22222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+resources\views\backEnd\errors
+
+Task:
+- Error page files are already created.
+- Review them and implement/use them in Capitall.
+- Make Laravel use these custom error pages for matching error codes.
+- Keep Capitall layout/design.
+- Do not modify error page UI unless required.
+
+Keep:
+- Existing routes
+- Controllers
+- Middleware
+- Config
+- Functionality
+
+Follow AGENTS.md
+
+
+
+Mode: BUG_FIX
+
+Reference:
+Route::match(['get', 'post'], 'auditengagement', [AuditengagementController::class, 'auditengagement'])->name('auditengagement');
+
+Target:
+Route::match(['get', 'post'], 'overviewdashboard', [OverviewDashboardController::class, 'OverviewDashboard'])->name('overviewdashboard');
+
+
+Task:
+- auditengagement url wale page per filter laga hai and overviewdashboard wale perr bhi filter laga hai but is per jab select karta hu and mouse bahar click karta hu tab filter hota hai jabki auditengagement per selct karta hu ki usi time filter ho jata hai to ye same functionality mujhe overviewdashboard wale filter per chahiye 
+-isme abhi jo output aa raha hai vo sahi hai and design and everything sahi hai sirf filter ko sahi karna hai baki kuchh mat chedna 
+
+Follow AGENTS.md
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+error:
+- Unclosed '[' on line 2889 does not match ')'
+
+tasks:
+- fix this error 
+
+Follow AGENTS.md
+
+
+
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+Task:
+- Use "Risk Exposure by Location" card as reference.
+- Add the same download options to right side paanel:
+  - Audit Count by Location
+
+Do NOT:
+- Analyze the entire file.
+- Modify unrelated charts/cards.
+- Change UI, logic, or functionality outside these 2 cards.
+
+Follow AGENTS.md
+
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+tasks:
+- Audit Health wale card ke top me download icon laga hai uske click per PDF, Word, Excel, SVG, PNG formate me download ho raha hai but High Risk Observations, and  Risk Exposure by Location per nahi hai to ye sabhi formate me hona chahiye 
+
+Follow AGENTS.md
+
+
+2
+22222222222222222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+  Route::match(['get', 'post'], 'overviewdashboard', [OverviewDashboardController::class, 'OverviewDashboard'])->name('overviewdashboard');
+
+Task:
+- Audit Count by Location is card per jo icon laga hai class="ri-external-link-line" is ke click per location, completed, in progress ,planned , total column dikh raha ahi jab ki ye nahi dikhega ab is model me jab is card me chart aa raha hai uske color per click karta hu to jo data aa raha hai location wise to jab is cion se click karega to total is card me jitne bhi location ka data aata hai location wise to vo sabhi data aana chahiye jaise delhi me 4 hai mumbai wale color per click karta hu to 2 aata hai to jab card ke is icon ko click karunga toye dono mila kar 6 data aana chahiye 
+
+Do NOT:
+- Analyze the entire file.
+- Modify unrelated charts/cards.
+- Change UI, logic, or functionality outside these three cards.
+
+Follow AGENTS.md
+
+
+2222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+  Route::match(['get', 'post'], 'overviewdashboard', [OverviewDashboardController::class, 'OverviewDashboard'])->name('overviewdashboard');
+
+Task:
+- mujhe ye puchhna hai kai is dashboard per jo data aa raha hai use verify karna hai ki data sahi aa raha hai ki nahi to kaise ise jaldi check kar sakte hai like database open karke direct table me check karunga to easy hoga ya kaise 
+
+Do NOT:
+-chane anythisng
+
+Follow AGENTS.md
+
+222222222222222222222222222222222222222
+
+Mode: ANALYSIS
+
+Target:
+OverviewDashboardController@OverviewDashboard
+
+Task:
+List each dashboard card with:
+- Source table(s)
+- Query/method used
+- How to verify its data directly from DB
+
+No code changes.
+
+Follow AGENTS.md
+
+22222222
+
+Mode: ANALYSIS
+
+Target:
+OverviewDashboardController@OverviewDashboard
+
+Task:
+For each dashboard output below, explain:
+- Source method
+- Source table/model
+- Filter applied
+- Simple SQL/query to verify from DB
+
+Outputs:
+- counts
+- charts
+- overdueEngagements
+- highRiskObservations
+- auditCountByLocation
+- riskExposureByLocation
+- auditHealth
+
+No code changes.
+
+Follow AGENTS.md
+
+
+
+
+
+
+
+
+222222222222222222222
+
+
+
+Mode: BUG_FIX
+
+Reference:
+resources\views\auditengagement.blade.php
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+Task:
+- reference page per Project by Status card per jo ri-external-link-line icon ke click per right side panel opne hota hai to vo same design ka right side pannel mere newoverviewdashboard.blade.php page per degin usi trah rahega and data nahi hoga to us case me bhi handle karna hai same way me and koi bhi data and heading name and column name change nahi karna hai kewal design same karna hai and jitne right side pannel ka width hai utnahi mere is page per bhi rahega 
+- koi bhi output nahi change hona chahiye data sahi aa raha hai kewal design copy karna hai and data nahi ho us case me handle karna hai 
+Follow AGENTS.md
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+Task:
+- Audit Count by Location card me sequence chnage karna 1. planned, 2nd me in progress and 3rd me completed hoga 
+
+Do NOT:
+- Analyze the entire file.
+- Modify unrelated charts/cards.
+- Change UI, logic, or functionality outside these 2 cards.
+
+Follow AGENTS.md
+
+
+Mode: BUG_FIX
+
+Reference:
+resources\views\auditengagement.blade.php
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+Fix right-side panel UI only:
+- Empty state me table headings dikhne chahiye.
+- "0 projects found" text remove karo.
+- Panel header height/width/font-size reference jaisa karo.
+- Table columns/data single line me rahe, e.g. "Planned" wrap na ho.
+- No data Available text hona chahiye jab data na ho tab 
+
+Keep data, headings, columns, output unchanged.
+Do not touch unrelated UI/logic.
+
+Follow AGENTS.md
+
+2222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\newoverviewdashboard\newoverviewdashboard.blade.php
+
+Task:
+- Fix only the High-Risk Observations KPI side panel.
+- Update table columns to exactly:
+  ID | Observation Title | Location(s) | Status | Risk Rating | Owner | Target Date | Aging
+
+Do NOT:
+- Analyze the entire file.
+- Modify unrelated charts/cards.
+- Change data, queries, filters, logic, or functionality outside this side panel.
+
+Follow AGENTS.md
+
+
+
+
+PS C:\Windows\system32> irm https://claude.ai/install.ps1 | iex
+Setting up Claude Code...
+
+√ Claude Code successfully installed!
+
+  Version: 2.1.198
+
+  Location: C:\Users\HP\.local\bin\claude.exe
+
+
+  Next: Run claude --help to get started
+
+‼ Setup notes:
+  ● Native installation exists but C:\Users\HP\.local\bin is not in your PATH. Add it by opening: System Properties →
+    Environment Variables → Edit User PATH → New → Add the path above. Then restart your terminal.
+
+
+✅ Installation complete!
+
+
+
+
+
+2222222222222222222222222222222222222222222
+
+
+
+
+
+ode: BUG_FIX
+
+Reference:
+Route::match(['get', 'post'], 'overviewdashboard', [OverviewDashboardController::class, 'OverviewDashboard'])->name('overviewdashboard');
+
+function:
+OverviewDashboard()
+
+Target:
+Route::match(['get', 'post'], 'auditee/dashboard', [AuditeeDashboardController::class, 'index'])->name('auditee.dashboard');
+
+function:
+dashboard()
+
+
+Tasks:
+- 1.KPI: Open Observations / High Risk Observations : remove Department column from right side pannel after click on this KPI and right side pannel ko same ui copy karo overviewdashboard kpi se.
+- 2.Card 1 — Observation by Status 
+   1.Side Panel Columns :Department column remove hare from side pannel 
+   2.Side Panel View Icon  : Yes
+   3.Side Panel Export  : Yes
+   4.Secondary View (it means ri-layout-grid-line icon): Yes — Tabular. Same columns as side panel. 
+   5.Card Export : PDF, Word, Excel, SVG, PNG.
+
+- 3.Card 2 — Actionable by Status 
+   1.Side Panel View Icon  : Yes
+   2.Side Panel Export  : Yes
+   3.Secondary View it means ri-layout-grid-line icon) : Yes — Tabular. Same columns as side panel. 
+   4.Card Export : PDF, Word, Excel, SVG, PNG.
+
+
+
+- 3.Card 3 — IRL by Status 
+   1.Side Panel View Icon  : Yes
+   2.Side Panel Export  : Yes
+   3.Secondary View it means ri-layout-grid-line icon) : Yes — Tabular. Same columns as side panel. 
+   4.Card Export : PDF, Word, Excel, SVG, PNG.
+
+
+- 4.Card 4 — High Risk Observations 
+  1.Card Export : PDF, Word, Excel, SVG, PNG.
+
+
+Note: abhi jo bhi data aa raha hai auditee/dashboard per vo sahi hai data ko galat mat kar dena 
+and Open Actionables and Open IRLs me data sahi aa raha ahia and is dono kpi ka rightside pannel me bhi data sahi aa raha hai iska  same ui copy karo overviewdashboard kpi se
+
+Follow AGENTS.md
+
+22222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+overviewdashboard
+Function: OverviewDashboard()
+
+Target:
+auditee/dashboard
+Function: dashboard()
+
+Task:
+
+1. KPI
+- Open Observations & High Risk Observations:
+  - Remove Department column from side panel.
+  - Copy same side panel UI/design from overviewdashboard KPI.
+
+2. Observation by Status
+- Remove Department column from side panel.
+- Add View icon.
+- Add Side Panel Export.
+- Add Secondary View (ri-layout-grid-line) with same columns as side panel.
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+3. Actionable by Status
+- Add View icon.
+- Add Side Panel Export.
+- Add Secondary View (ri-layout-grid-line) with same columns as side panel.
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+4. IRL by Status
+- Add View icon.
+- Add Side Panel Export.
+- Add Secondary View (ri-layout-grid-line) with same columns as side panel.
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+5. High Risk Observations
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+Keep:
+- Existing data unchanged.
+- Existing queries/logic unchanged.
+- Open Actionables & Open IRLs data and side-panel functionality unchanged.
+- Only copy the UI/UX from overviewdashboard where required.
+
+Do NOT:
+- Analyze unrelated files/modules.
+- Change business logic, filters, queries, or output.
+
+Follow AGENTS.md
+
+
+
+
+Mode: BUG_FIX
+
+Target:
+auditee/dashboard
+
+Fix only these issues:
+
+1. View icon
+- Add ri-external-link-line on card header and after click on it open side pannel and column as same side pannel.
+- Do not add View icon inside side panel.
+
+2. Side Panel Export
+- Side panel export should download Excel only.
+- Remove PDF/Word export from side panel.
+
+3. Secondary View
+- Observation by Status, Actionable by Status, IRL by Status already have ri-layout-grid-line.
+- On click, show tabular view with same columns as side panel.
+
+Keep data, queries, UI, and existing output unchanged.
+
+Follow AGENTS.md
+
+
+
+
+22222222222222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Reference:
+overviewdashboard
+Function: OverviewDashboard()
+
+Target:
+auditee/dashboard
+Function: dashboard()
+
+Task:
+
+1. KPI
+- Open Observations & High Risk Observations:
+  - Remove Department column from side panel.
+  - Copy same side panel UI/design from overviewdashboard KPI.
+
+2. Observation by Status
+- Remove Department column from side panel.
+- Add ri-external-link-line on card header and after click on it open side pannel and column as same side pannel.
+- Side panel export should download Excel only..
+- Secondary View (ri-layout-grid-line) with same columns as side panel.
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+3. Actionable by Status
+- Add ri-external-link-line on card header and after click on it open side pannel and column as same side pannel.
+- Side panel export should download Excel only.
+- Secondary View (ri-layout-grid-line) with same columns as side panel.
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+4. IRL by Status
+- Add ri-external-link-line on card header and after click on it open side pannel and column as same side pannel.
+- Side panel export should download Excel only.
+- Secondary View (ri-layout-grid-line) with same columns as side panel.
+- Add Card Export: PDF, Word, Excel, SVG, PNG.
+
+5. High Risk Observations
+- Add Card Export only on card: PDF, Word, Excel, SVG, PNG.
+
+Keep:
+- Existing data unchanged.
+- Existing queries/logic unchanged.
+- Open Actionables & Open IRLs data and side-panel functionality unchanged.
+- Only copy the UI/UX from overviewdashboard where required.
+
+Do NOT:
+- Analyze unrelated files/modules.
+- Change business logic, filters, queries, or output.
+
+Follow AGENTS.md
+
+
+
+
+Mode: BUG_FIX
+
+Target:
+auditee/dashboard
+
+Fix only these issues:
+
+1. View icon
+- Add ri-external-link-line on card header and after click on it open side pannel and column as same side pannel.
+- Do not add View icon inside side panel.
+
+2. Side Panel Export
+- Side panel export should download Excel only.
+- Remove PDF/Word export from side panel.
+
+3. Secondary View
+- Observation by Status, Actionable by Status, IRL by Status already have ri-layout-grid-line.
+- On click, show tabular view with same columns as side panel.
+
+Keep data, queries, UI, and existing output unchanged.
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Reference:
+overviewdashboard
+Function: OverviewDashboard()
+
+Target:
+auditee/dashboard
+Function: dashboard()
+
+Task:
+1.sabhi side pannel class="ri-file-excel-line"  ise replace kare same overviewdashboard ke tarah hoga ye and iske alawa kuchh chnage na kare 
+2.Observation by Status, Actionable by Status, IRL by Status, and High Risk Observations () is sabhi card ke header me jo icon hai same icon hona chahiye and sequence bhi and size with sab same ho 
+3.class="ri-layout-grid-line"  ye icon jaha jaha laga hai iske click per jo table aata hai usme column name card se bahar ja raha hai ise same overviewdashboard ke tarah bnao
+
+Keep:
+- Existing data unchanged.
+- Existing queries/logic unchanged.
+- Open Actionables & Open IRLs data and side-panel functionality unchanged.
+- Only copy the UI/UX from overviewdashboard where required.
+
+Do NOT:
+- Analyze unrelated files/modules.
+- Change business logic, filters, queries, or output.
+
+Follow AGENTS.md
+
+
+
+222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+overviewdashboard
+Function: OverviewDashboard()
+
+Target:
+auditee/dashboard
+Function: dashboard()
+
+Task:
+
+1. Side Panel Export
+- Replace all side panel Excel export icons (ri-file-excel-line) with the same implementation, design, icon, size, spacing, and behavior used in overviewdashboard.
+- Do not change any other side panel functionality.
+
+2. Card Header Icons
+- Observation by Status
+- Actionable by Status
+- IRL by Status
+- High Risk Observations
+
+For all above cards:
+- Match the header icons exactly with overviewdashboard.
+- Keep the same icon sequence, size, spacing, alignment, and styling.
+
+3. Secondary View (ri-layout-grid-line)
+- On clicking the Secondary View icon, the tabular view should match overviewdashboard.
+- Fix table layout so all column headers and values remain inside the table/container.
+- No column header or data should overflow or wrap incorrectly.
+
+Keep:
+- Existing data unchanged.
+- Existing queries/logic unchanged.
+- Existing output unchanged.
+- Open Actionables & Open IRLs functionality unchanged.
+- Copy only the required UI/UX from overviewdashboard.
+
+Do NOT:
+- Analyze unrelated files/modules.
+- Change business logic, filters, queries, or output.
+
+Follow AGENTS.md
+
+
+
+
+Mode: BUG_FIX
+
+Reference:
+overviewdashboard
+
+Target:
+auditee/dashboard
+
+Fix:
+1. Side panel and card status, Risk Rating, colors should match overviewdashboard. and side panel me chart ke acording status ka color hona chahiye
+2. PDF download logo should match overviewdashboard everywhere.
+3. Date format should be: 28th June 2026.
+
+Keep data, queries, output, and functionality unchanged.
+
+Follow AGENTS.md
+
+
+
+Mode: BUG_FIX
+
+Reference:
+overviewdashboard
+
+Target:
+auditee/dashboard
+
+Fix:
+1. Date format should be: 28th June 2026.
+
+Keep data, queries, output, and functionality unchanged.
+
+Follow AGENTS.md
+
+
+
+
+
+
+
+
+
+
+
+

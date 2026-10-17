@@ -1,0 +1,101 @@
+
+1.Bills Pending for Generation
+ 1.1.No of due dates as of date, i have completed but just for confirmation 
+
+2.Assignments Completed
+ 2.1. In this KPI we need to show the total number of Assignments as well. Take the total Number of assignments Created during the Year
+ 2.2.Status (Completed/not Completed) column 
+
+3.Delayed Assignments
+ 3.1. And if actual hours exceed estimated hours , has to be reported .  Secondly if extend from previous year time ( how will they map it) 
+ 3.2.% Documents (As of Date)
+
+4.Other Expenses
+ 4.1. Expenses which are other than Salary such as Reimbursements (born by KGS) and Raised on the Vendor Portal 
+ 4.2. These are the expenses which are raised by people on the Vendor portal and this will include the Reimbursements which are raised (and are not reimbursed by clients), Conveyance Claimed, Reimbursement.
+ 4.3 Amount,Conveyance Amount,Claims Amount, 
+
+5.Break even of loss Making Assignments
+ 5.1.Actual Cost = Employee Cost (Total hour*Hourly Rate)+ Reimbursements which are not reimbursed from the client+ 30 % of revenue
+ 5.2 the headings of Table Actual Billing Amount (Exc GST),Budgeted billing Amount (Exc GST), budgeted Cost, Actual Cost, Budgeted Profit/loss, Actual profit/loss.
+
+
+6.Tenders Under Process
+ 6.1 Total number of Tenders on which response is yet to be received
+ 6.2 Tenders which are created and No final response of Successful/uncussessful has been given.
+ 6.3 Actual Billing Amount (Exc GST),Budgeted billing Amount (Exc GST), budgeted Cost, Actual Cost, Budgeted Profit/loss, Actual profit/loss. Due Date of Tender
+
+
+7.Upcoming Assignments
+ 8.1. Assignments Whose Tentative Start Dates are About to come in this month or Next month
+ 8.2  assignment tentative start date is within 30 days from today then those assignment count should be mentioned
+ 8.3 Additional Feature pending from shivam side 
+
+
+
+
+
+
+
+
+
+2.Assignments Completed
+ 2.1. In this KPI we need to show the total number of Assignments as well. Take the total Number of assignments Created during the Year
+ 2.2.Status (Completed/not Completed) column 
+
+
+
+3.Delayed Assignments
+ 3.1. And if actual hours exceed estimated hours , has to be reported .  Secondly if extend from previous year time ( how will they map it) 
+ 3.2.% Documents (As of Date)
+
+4.Other Expenses
+ 4.1. Expenses which are other than Salary such as Reimbursements (born by KGS) and Raised on the Vendor Portal 
+ 4.2. These are the expenses which are raised by people on the Vendor portal and this will include the Reimbursements which are raised (and are not reimbursed by clients), Conveyance Claimed, Reimbursement.
+ 4.3 Amount,Conveyance Amount,Claims Amount, 
+
+5.Break even of loss Making Assignments
+ 5.1.Actual Cost = Employee Cost (Total hour*Hourly Rate)+ Reimbursements which are not reimbursed from the client+ 30 % of revenue
+ 5.2 the headings of Table Actual Billing Amount (Exc GST),Budgeted billing Amount (Exc GST), budgeted Cost, Actual Cost, Budgeted Profit/loss, Actual profit/loss.
+
+
+6.Tenders Under Process
+ 6.1 Total number of Tenders on which response is yet to be received
+ 6.2 Tenders which are created and No final response of Successful/uncussessful has been given.
+ 6.3 Actual Billing Amount (Exc GST),Budgeted billing Amount (Exc GST), budgeted Cost, Actual Cost, Budgeted Profit/loss, Actual profit/loss. Due Date of Tender
+
+
+
+
+Bills Pending for Generation
+Collection's Outstanding
+Delayed Assignments
+NFRA Audits Ongoing
+Upcoming Assignments
+Assignments Completed
+Independence Acceptance Pending
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

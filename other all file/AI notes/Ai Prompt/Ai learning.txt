@@ -1,0 +1,332 @@
+222222222222222222222222222222222222222222222222222222222222222
+
+I am working on a [Laravel / React Native] project.
+
+Current project status:
+- [what is already built]
+- [what screen/page/module already exists]
+- [what is missing]
+
+Task:
+- [exact feature 1]
+- [exact feature 2]
+- [exact feature 3]
+
+Important constraints:
+- Do not change the existing UI of [screen name]
+- Keep current project structure unchanged
+- Reuse existing components/files if possible
+- Do not add unnecessary new files
+- Keep variable names and flow consistent with existing code
+- If a package is required, mention it first
+- Code should actually work, not just UI mockup
+
+Output format:
+1. First tell me which files need to be created/updated
+2. Then give complete code file by file
+3. After code, explain each file in beginner-friendly Hinglish
+4. Mention where I need to paste each file
+
+
+
+I am building a React Native app.
+
+Current status:
+- Home screen is already built.
+- Category cards are visible on home screen.
+- Navigation setup already exists.
+- I want full local app flow using AsyncStorage only.
+- No backend/API is needed.
+
+Task:
+- On category card click, open category-wise provider listing screen
+- Show only selected category providers
+- Add full CRUD flow:
+  - Add provider
+  - Edit provider
+  - Delete provider
+  - View provider details
+- Listing screen must include search, filter, provider cards, call action, edit/delete actions
+- Add/Edit form must save data in AsyncStorage
+
+Important constraints:
+- Keep existing Home UI unchanged
+- Do not break current navigation
+- CRUD should actually work, not just UI
+- Keep code beginner-friendly and clean
+- Reuse current structure if possible
+
+Output format:
+1. Tell me which files will be created/updated
+2. Give complete code file by file
+3. After that explain every file in Hinglish:
+   - why this file is needed
+   - what each function does
+   - how data flows between screens
+
+22222222222222222222222222222222222222222222222222
+Jab existing code me bug fix karwana ho'
+
+I am getting an error in my Laravel/React Native project.
+
+Expected behavior:
+- [what should happen]
+
+Actual issue:
+- [what is happening]
+
+Error:
+[paste exact error]
+
+Relevant file code:
+[paste code]
+
+Please:
+1. Identify the root cause
+2. Explain the issue in simple Hinglish
+3. Give the corrected code only for the required part
+4. Do not rewrite unrelated code
+5. Keep existing functionality unchanged
+
+
+22222222222222222222222222222222222222222222222222
+Jab code samajhna ho (very important)
+
+I am a beginner and I want to understand this code properly.
+
+Please explain this code in Hinglish with the following structure:
+
+1. Purpose of this file
+   - Why this file exists
+   - Where it is used in the project
+
+2. High-level flow
+   - When this code runs
+   - What input it takes
+   - What output/result it gives
+
+3. Line-by-line / block-by-block explanation
+   - Explain every important block in simple language
+   - Tell me what each function does
+   - Explain variables and conditions
+   - Explain API call / DB query / state update if any
+
+4. Beginner notes
+   - Which part is important to remember
+   - Which part can break if changed
+   - Which part is reusable
+
+5. End summary
+   - Explain the full flow again in 5–7 simple points
+
+Here is the code:
+[paste code]
+
+
+22222222222222222222222222222222222222222222222222
+
+File: ProviderStore.tsx
+
+Purpose:
+This file handles provider data storage using AsyncStorage and shares it across screens.
+
+Please explain it in Hinglish.
+[paste code]
+
+
+
+
+I am sharing 3 files from the same React Native flow:
+
+1. HomeScreen.tsx → category cards screen
+2. ProviderListScreen.tsx → category-wise provider listing
+3. ProviderStore.tsx → AsyncStorage data handling
+
+Please explain:
+- how these files are connected
+- which screen calls which screen
+- where data is coming from
+- how add/edit/delete flow works
+
+22222222222222222222222222222222222222222222222222
+
+This is Part 1 of the file. Don’t explain yet. Just read and understand.
+
+Then all parts bhejkar bolo:
+
+Now explain the full file using all 4 parts together.
+
+22222222222222222222222222222222222222222222222222
+
+Improve this dashboard UI.
+
+My expectation:
+- It should look modern and clean
+- Keep same data/KPI cards
+- Improve spacing, hierarchy and colors
+- Make cards more premium
+- Use subtle shadows, rounded corners and better typography
+- Keep it practical for Laravel Blade + Bootstrap
+- Avoid over-design
+- Do not use random bright colors
+- Do not change business logic
+- Only update HTML/CSS classes if possible
+22222222222222222222222222222222222222222222222222
+Regarding UI
+
+
+I want to design a clean modern dashboard UI for a Laravel admin panel.
+
+Module:
+- [dashboard / employee list / provider listing / detail page]
+
+Goal:
+- professional corporate UI
+- clean spacing
+- good card hierarchy
+- modern colors
+- responsive layout
+
+Data/sections that must stay:
+- KPI cards
+- table section
+- filters
+- quick actions
+
+Please first give me:
+1. Layout structure
+2. Section hierarchy
+3. Color palette
+4. Typography suggestions
+5. Card design suggestions
+6. Spacing system
+7. Hover/interaction ideas
+
+Do not write code yet. First give the UI plan.
+
+
+Use this UI image as inspiration, not exact copy.
+
+I want:
+- similar cleanliness and spacing
+- similar card hierarchy
+- similar premium look
+
+But adapt it for my module:
+- [describe your actual module]
+
+Do not copy blindly.
+Keep it practical for [Laravel Blade / React Native].
+First tell me:
+- what elements you will keep
+- what you will change
+- how the final layout will look
+
+
+
+Now convert the approved UI plan into Laravel Blade + Bootstrap code.
+
+Requirements:
+- Use Bootstrap classes where possible
+- Keep HTML clean and readable
+- Add minimal custom CSS only where needed
+- Keep it responsive
+- Do not change backend data variables
+- Use my existing Blade variable names
+- Do not touch controller logic
+
+Output:
+1. Updated Blade code
+2. CSS section
+3. Short explanation of changes
+
+
+
+
+
+
+
+
+
+Convert this UI screenshot into production-friendly code for React Native.
+
+Requirements:
+- Match layout structure closely
+- Keep it practical, not pixel-perfect overengineering
+- Use reusable components where possible
+- Make spacing, font sizes and card sizes balanced
+- If something in screenshot is unclear, make a reasonable developer-friendly version
+- Keep code clean and maintainable
+
+Output:
+1. Component breakdown first
+2. Then full code
+3. Then style explanation
+
+
+
+
+I am sharing a rough UI wireframe idea.
+
+Please convert it into a clean production-ready UI for Laravel Blade + Bootstrap.
+
+Do not copy the roughness literally.
+Understand the layout intent and improve it professionally.
+
+Also:
+- keep the same sections
+- improve spacing and alignment
+- choose a professional color system
+- make cards and table visually balanced
+22222222222222222222222222222222222222222222222222
+
+
+I am a beginner. I do not just want code — I want to understand the full implementation.
+
+I will share all files of a feature one by one.
+
+Your job:
+- first understand all files
+- then explain the full feature in Hinglish
+- explain file-by-file
+- explain screen flow / request flow / data flow
+- explain where CRUD starts and where it ends
+- explain which file stores data and which file shows UI
+- explain how navigation and state work together
+
+For each file, explain in this format:
+1. File purpose
+2. Why this file is needed
+3. Main functions inside it
+4. How it connects with other files
+5. What I should not break if I edit it
+6. Simple summary
+
+
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+
+22222222222222222222222222222222222222222222222222
+
+

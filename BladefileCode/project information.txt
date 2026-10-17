@@ -1,6 +1,7 @@
-22 march 
-28 march
-29 march  3 leave 
+22 march 26
+28 march 26
+29 march 26  
+3 leave 
 
 
 30-07-2026 chatgpt subscreption
@@ -79,8 +80,8 @@ https://bitbucket.org/capitallio/workspace/projects/
 
 https://13.200.130.146/phpMyAdmin/index.php?route=/&reload=1
 DB_DATABASE=vsademo
-DB_USERNAME=vsademo
-DB_PASSWORD=Vsaaa_@2023
+DB_USERNAME=Vsa_@2026_
+DB_PASSWORD=Vsa_@2026_
 
 
 DB_DATABASE=admin_cronapi
@@ -570,7 +571,7 @@ crone
 UPDATE users
 SET
     password = '$2y$10$0qJ0fYiNHT8cLnr9J3dipOimWzumTVYSsFU8IgdocNZXHYL31.Rye',
-    password_changed_at = '2026-07-01 21:27:58';
+    password_changed_at = '2026-09-01 21:27:58';
 
 
         DB::table('users')
@@ -1448,6 +1449,7 @@ Tushar Garg
 
 end hare ```
 
+2222222222222222222222222222222222222222222222222222222222
 with time increase 
 
     $usersAssignments = [
@@ -1606,7 +1608,7 @@ DB::table('independences')->insert($data);
 
 dd('completed');
 
-
+222222222222222222222222222222222222222222222222222222222222222222
 
 independences ke liye 
 http://127.0.0.1:8000/independencereport

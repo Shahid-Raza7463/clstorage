@@ -493,6 +493,23 @@ git pull origin npci-dev
 git merge npci-devlatest
 git push origin npci-dev
 
+2222222222222222222222222222
+
+temp branch ya duplicate branch create 
+git switch vsa-dev
+git branch
+git switch -c temp-shahid-migration
+git branch
+git status
+
+
+
+Branch delete from local 
+git branch -d temp-shahid-migration
+
+
+
+git log --oneline shahid-migration --not shahid-migration-copy
 22222222222222222222222222222
 regarding push code  
 
@@ -509,6 +526,7 @@ git rebase --continue
 
 git push origin shahid-ajantaV4 --force-with-lease
 
+git push -u origin shahid-migration-final
 
 git commit -m "Conflict solved"
 git rebase origin/npci-dev
@@ -538,7 +556,7 @@ Create new branch and work on it
 git checkout vsa-dev
 git pull origin vsa-dev
 git checkout -b shahid-ajantaV4
-git push -u origin shahid-timesheetreminder
+git push -u origin shahid-databaseseeder
 
 now you can work on it 
 
@@ -724,9 +742,9 @@ git diff routes/web.php
  
  | Action            | Key   |
 | ----------------- | ----- |
+| Save + exit       | `:wq` |  rebase ke case me 
 | Mode se bahar     | `Esc` |
 | Edit start        | `i`   |
-| Save + exit       | `:wq` |
 | Exit without save | `:q!` |
 
 | Command | Meaning               |
@@ -820,6 +838,8 @@ git merge origin/npci-dev  now you will see conflict and solve it then
 
 22222222222222222222222222222222222222222222222222222
 git stash push -u -m "temp work"
+git stash list
+git stash apply stash@{0}
 
 git stash -u
 git checkout portfolio-demo
@@ -839,8 +859,6 @@ git stash apply
     git restore .
     git clean -fd
 
-git stash list
-git stash apply stash@{0}
 
 git restore resources/views/group/vendormanagement/invoice-recordings/form.blade.php
 
@@ -925,6 +943,7 @@ mysqldump -u root --default-character-set=utf8mb4 --single-transaction --routine
 
 222222222222222222222222222222222222
 git restore --staged .
+
 
 
 
@@ -1116,3 +1135,135 @@ git checkout vsa-qa
 git pull origin vsa-qa
 git cherry-pick 6b8355f
 git push origin vsa-qa
+
+
+222222222222222222222222222222222222222222222222
+regarding diff 
+
+
+if you have added in add .
+git diff --cached
+
+without add . 
+
+git diff
+git diff -- database/migrations/
+
+222222222222222222222222222222222222222222222222
+regarding count / git count
+
+1
+git add .
+git diff --cached --stat
+git diff --cached --numstat
+
+2
+Without add . it 
+git diff --stat
+git diff --numstat
+git diff --shortstat
+
+Haan, Git se files count aur actual line changes (insertions/deletions) dono check kar sakte ho.
+
+Tumhare changes already staged hain, isliye ye commands use karo:
+
+git diff --cached --stat
+
+Isse output kuch aisa milega:
+
+11 files changed, 150 insertions(+), 40 deletions(-)
+
+Sirf total summary chahiye:
+
+git diff --cached --shortstat
+
+Example:
+
+11 files changed, 150 insertions(+), 40 deletions(-)
+
+Aur agar dekhna hai har file me kitni lines add/delete hui hain:
+
+git diff --cached --numstat
+
+Example:
+
+10    2    resources/views/backEnd/applyleave/form.blade.php
+25    5    resources/views/backEnd/article/form.blade.php
+50    0    resources/views/backEnd/components/frontend-validation.blade.php
+
+Yahan:
+
+10  2
+↑   ↑
+Add Delete
+
+Tumhare current case me sabse useful command:
+
+git diff --cached --shortstat
+
+Isse ek line me pata chal jayega kitni files change hui, kitni lines add hui aur kitni delete hui.
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+regarding commit only add . file and left from commit without add file 
+
+C:\xampp\htdocs\vsademo>git status
+On branch shahid-migration
+Your branch is up to date with 'origin/shahid-migration'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   resources/views/backEnd/applyleave/form.blade.php
+        modified:   resources/views/backEnd/article/form.blade.php
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   resources/views/backEnd/teammember/form.blade.php
+
+only commit Changes to be committed: section 
+
+git commit -m "Add frontend validation"
+git status
+git push origin shahid-migration
+
+2222222222222222222222222222222222222222222222222222222222222222
+git diff --cached resources/views/backEnd/applyleave/adminopen.blade.php
+
+
+22222222222222222222222222222222222222
+regarding branch created date 
+git reflog --all --date=local | findstr /C:"branch: Created"
+git branch --sort=-committerdate
+
+
+
+22222222222222222
+C:\xampp\htdocs\vsademo>git branch
+  backup-logs
+  main
+  shahid-agelimit
+  shahid-bugsof3tasks
+  shahid-bugsonactivity
+  shahid-errorpage
+  shahid-logsbugs
+  shahid-migration
+* shahid-migration-copy
+  shahid-timesheetreminder
+  shahid-vsadev
+  shahid-vsadev1
+  vsa-demo
+  vsa-dev
+  vsa-qa
+
+C:\xampp\htdocs\vsademo>git status
+On branch shahid-migration-copy
+nothing to commit, working tree clean
+
+
+
+ab is branch me sirf commit karna hai like 
+git commit -m "Conflict solved hare"
+
+
+ise commit karne ke baad again vsa-dev se push kare rebase wala ke sath 
+C:\xampp\htdocs\vsademo>

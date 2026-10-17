@@ -5,11 +5,6 @@
 
 
 # Ignore this directory only at the root
-/Z TempraryStore file
-/Z Temprary code
-/Z Code upload folder
-/Z template and search
-Task Report/excell import
 
 # Ignore this directory globally in this project
 # migration/

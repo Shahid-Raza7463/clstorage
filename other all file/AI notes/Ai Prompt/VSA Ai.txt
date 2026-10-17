@@ -1,0 +1,3652 @@
+
+2222222222222222222222222222222222222222222222
+
+regarding revert
+
+Mode: BUG_FIX
+
+Task:
+Revert only the changes introduced by the previous implementation of the ATR Dashboard filter task. Restore the code to the last working state before that implementation. Do not revert any unrelated changes.
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+convertoassignment()
+
+Target:
+assignmentList()
+Form: #detailsForm (teammapping/update)
+
+Task:
+After adding team members, send the existing `clientindependenceform` email.
+
+Rules:
+- Reuse the mail logic from `convertoassignment()`.
+- Send only `clientindependenceform`.
+- Send only to newly added team members.
+
+Keep everything else unchanged.
+
+Follow AGENTS.md.  
+
+2222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+Scope: employee payroll edit modal
+
+File:
+resources/views/backEnd/employeepayroll/payroll.blade.php
+
+Analyze edit payroll modal:
+<div class="modal fade" id="employeepayrollmodel">
+
+Fix these issues:
+
+1. 'Days to be Paid' should not be greater than 'No of Days Present'
+2. All numeric fields should not accept negative values
+3. All fields should be mandatory and required fields should show red star mark (*)
+4. Round total amount paid before submit if decimal value is generated
+   Example:
+   140003.34 → 140004
+
+Follow AGENTS.md
+
+
+222222222222222222222222222222222222222222222222222222
+Mode: BUG_FIX
+Scope: payroll email excel upload
+
+File:
+app/Http/Controllers/PayrollController.php
+
+Analyze these functions carefully:
+- payroll_index()
+- emailUpload(Request $request)
+
+Fix the following issues in emailUpload(Request $request) only:
+
+1. While uploading email excel template, system incorrectly shows:
+   "Invalid email on row 4"
+
+2. After successful email excel upload, uploaded data is not visible
+
+3. If user uploads blank excel file, system should show proper blank file validation message instead of:
+   "Invalid email on row 2"
+
+4. Add validation for duplicate email IDs in imported excel
+
+5. Improve invalid email validations and show proper error messages for all invalid email scenarios
+
+6. If uploaded excel is blank, show only blank-file related validation message
+
+7. Show proper validation error if duplicate entries exist in uploaded excel
+
+Requirements:
+- Make changes only inside emailUpload(Request $request)
+- Preserve existing flow and functionality
+- Keep changes minimal
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+Scope: payroll email upload
+
+File:
+app/Http/Controllers/PayrollController.php
+
+Check:
+- payroll_index()
+- emailUpload(Request $request)
+
+Fix email upload issues in emailUpload() only:
+
+- Wrong invalid email validation
+- Uploaded data not visible after success
+- Proper blank excel validation
+- Duplicate email validation
+- Proper invalid email error messages
+- Duplicate entry validation in excel
+
+Follow AGENTS.md
+
+
+2222222222222222222222222222222222222222222
+Mode: BUG_FIX
+Scope: payroll email upload
+
+File:
+app/Http/Controllers/PayrollController.php
+
+Analyze payroll_index() and fix all email excel upload validation/data visibility issues inside emailUpload() only.
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222
+assignments_delayed_list ke tarah mujhe same way me datatable ka design ke tarah karna hai dusre module ko na dpattern bhi same rahega like alag folder create karke to  assignments_delayed_list ke realted code ko samjhlo ye raha file 
+ Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+app\Http\Controllers\AssignmentdelayedController.php
+
+and mujhe is module per karna hai 
+1
+  Route::get('/billspendingforcollection', [DashboardReport::class, 'billspendingforcollection']);
+2
+        Route::get('/billspending', [DashboardReport::class, 'billspending']);
+3
+ Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']);
+ ye 3 module hai and ise same assignments_delayed_list  ke tarah datatable bnana hai and same pattern follow karna and jo bhi file bnana hoga bna sakte ho paatern follow karne ke liye 
+
+regarding datatable
+22222222222222222222222222222222
+
+Mode: UI_REFACTOR
+Scope: dashboard report datatable modules
+
+Reference Module:
+Route:
+Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+Reference Files:
+- app/Http/Controllers/AssignmentdelayedController.php
+- assignments_delayed_list related blade/js/datatables structure
+
+Target Modules:
+1.
+Route::get('/billspendingforcollection', [DashboardReport::class, 'billspendingforcollection']);
+
+2.
+Route::get('/billspending', [DashboardReport::class, 'billspending']);
+
+3.
+Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']);
+
+Task:
+- Analyze assignments_delayed_list module structure completely
+- Implement same datatable pattern, UI, folder structure, and flow in all 3 target modules
+- Follow same reusable pattern for blade, controller flow, ajax/datatable structure, filters, and folder organization
+- Create new files/folders if required to maintain same pattern
+
+Follow AGENTS.md
+
+2222222222222222222222222222222222222222222222222222222222222
+
+
+Route::get('/billspending', [DashboardReport::class, 'billspending']);  ye bilkul sahi aa raha hai but 
+1.Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']);  isme tumne datatable to sahi aa raha hai but is page per Conveyance Expenses and Vendors Expenses
+ ka tab tha Conveyance Expenses ke click per Conveyance Expenses wala data aata tha table me and Vendors Expenses ke click per Vendors Expenses ka data aata tha and Conveyance Expenses tab per ek filter bhi tha Convence type ka jis me local convence and outstatiion convence ye same chahiye tha  and total amount RS me Conveyance Expenses ka total and Vendors Expenses ka total aata tha navbar me 
+
+2.
+Route::get('/billspendingforcollection', [DashboardReport::class, 'billspendingforcollection']);  isme 1. Assignment Code
+2. Client Name
+3. Assignment Name
+4. Partner Name
+5. Invoice Number
+6. Amount of Invoice
+7. Pocket Expense Amount
+8. GST
+9. Total Invoice Amount
+10. Collection Amount
+11. Outstanding Amount
+12. Bill Date
+13. Outstanding Number of Days  ye sabhi heading aata tha but abhi sirf  ye aa raha ahi     <tr>
+                            <th data-column="assignmentgenerate_id">Assignment Code</th>
+                            <th data-column="CLIENT_NAME">Client Name</th>
+                            <th data-column="assignment_name">Assignment Name</th>
+                            <th data-column="invoice_id">Invoice Number</th>
+                            <th>Amount of Invoice</th>
+                            <th>Pocket Expense Amount</th>
+                            <th>Total Invoice Amount</th>
+                            <th data-column="AMT">Outstanding Amount</th>
+                            <th data-column="bill_date">Bill Date</th>
+                        </tr>
+
+
+
+
+22222222222222222222222222222222222222222222
+
+1.
+Route::get('/billspendingforcollection', [DashboardReport::class, 'billspendingforcollection']);
+
+2.
+Route::get('/billspending', [DashboardReport::class, 'billspending']);  ab ye dono sahi aa raha hai but exceptionalexpenses'
+Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']); is per abhi bhi issue hai issue no 1.nav baar me convence expence total and vender expence total ye alalg alag nahi aayega ye total amount = RS me aayga 2no ka sum ho kar and 
+issue no 2. conevence expence tab active rahega tabhi 
+local convence and outstation convence wala dropdown dikhega other waise select year and select month hi rahega filter ke liye and 
+3 issu is convence expence tab per click karta hu to data table aa raha hai sahi but vender ex[ence tab per click karta hu tab datatable nahi aa raha hai sahi 
+
+
+
+regarding bugs fix
+
+Mode: BUG_FIX
+Scope: exceptional expenses datatable module
+
+Route:
+Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']);
+
+Fix remaining issues in exceptionalexpenses datatable implementation:
+
+1. Navbar Total
+- Do not show separate totals for:
+  - Conveyance Expenses
+  - Vendors Expenses
+- Show only:
+  - Total Amount = Rs (combined sum of both tabs)
+
+2. Conveyance Type Filter
+- year and month and "Local Conveyance / Outstation Conveyance" dropdown should appear when:
+  - Conveyance Expenses tab is active
+- When Vendors Expenses tab is active:
+  - Hide conveyance type dropdown
+  - Show only Year and Month filters
+
+3. Vendors Expenses Tab
+- Conveyance Expenses tab datatable is working correctly
+- Vendors Expenses tab datatable is not loading/rendering properly
+- Fix vendors expenses datatable rendering and data loading
+
+Task:
+- Fix only remaining issues
+- Preserve existing datatable pattern already implemented
+- Follow assignments_delayed_list structure/pattern
+
+Follow AGENTS.md
+
+
+
+222222222222222222222222222222
+
+Route::get('/exceptionalexpenses', [DashboardReport::class, 'exceptionalexpenses']); is per abhi bhi issue hai 
+issue no 1. conevence expence tab active rahega tabhi select year , select month and 
+local convence and outstation convence wala dropdown dikhega and jab vender expence tab active hoga tab select year and select month hi rahega and local convence and outstation convence wala dropdown hide ho jayega  and 
+3 issu is convence expence tab per click karta hu to data table aa raha hai sahi but vender expence tab per click karta hu tab datatable me data nahi aa raha hai
+
+conevence expence tab ne ye sabhi heading aana chahiye abhi currently 6 hi heading aa raha ahi 
+1. Assignment Code
+2. Client Name
+3. Assignment Name
+4. Partner Name
+5. Approver Name
+6. Conveyance Type
+7. Conveyance Amount
+8. Amount
+
+baki kisi ko mat chedna 
+
+
+22222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: dashboard report datatable modules
+
+Reference Module:
+Route:
+Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+Reference Files:
+- app/Http/Controllers/AssignmentdelayedController.php
+- assignments_delayed_list related blade/js/datatables structure
+
+Target Modules:
+1.
+Route::get('client_list', [ClientController::class, 'clientList'])->name('client.list');
+
+
+
+Task:
+- Analyze assignments_delayed_list module structure completely
+- Implement same datatable pattern, UI, folder structure, and flow in target modules
+- Keep existing filters unchanged:
+  - Start Date
+  - End Date
+  - Status
+  - Review
+- Follow same reusable pattern for blade, controller flow, ajax/datatable structure and folder organization
+- Create new files/folders if required to maintain same pattern
+
+Follow AGENTS.md
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: dashboard report datatable modules
+
+Reference Module:
+Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+Reference Files:
+- app/Http/Controllers/AssignmentdelayedController.php
+- assignments_delayed_list related blade/js/datatables structure
+
+Target Modules:
+1.
+Route::get('/vendorreportlist', [VendorController::class, 'vendorreportlist']);
+
+
+
+Task:
+- Analyze assignments_delayed_list module structure completely
+- Implement same datatable pattern, UI, folder structure, and flow in target modules
+- Keep existing filters unchanged:
+  - Client
+  - Assignment
+  - Start Date
+  - End Date
+  - Status
+- Follow same reusable pattern for blade, controller flow, ajax/datatable structure and folder organization
+- Create new files/folders if required to maintain same pattern
+
+Follow AGENTS.md
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+Scope: vendorreportlist datatable module
+
+Route:
+Route::get('/vendorreportlist', [VendorController::class, 'vendorreportlist']);
+
+Fix remaining issues in vendorreportlist datatable implementation:
+
+1. Restore existing anchor tag in Bill column.
+2.Fix filter dependency:
+- When Client is selected,
+  Assignment dropdown should load only related assignments.
+
+
+Task:
+- Fix only remaining issues
+- Preserve existing datatable pattern already implemented
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: dashboard report datatable modules
+
+Reference Module:
+Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+Reference Files:
+- app/Http/Controllers/AssignmentdelayedController.php
+- assignments_delayed_list related blade/js/datatables structure
+
+Target Modules:
+1.
+Route::match(['get', 'post'], 'assignmentfulllist', [AssignmentController::class, 'assignmentlist'])
+            ->name('assignment.list');
+
+
+
+Task:
+- Analyze assignments_delayed_list module structure completely
+- Implement same datatable pattern, UI, folder structure, and flow in target modules
+- Keep existing filters unchanged:
+  - Client
+  - Assignment
+  - Partner Name
+  - Teammember
+  - Start Date
+  - End Date
+- Follow same reusable pattern for blade, controller flow, ajax/datatable structure and folder organization
+- Create new files/folders if required to maintain same pattern
+
+Follow AGENTS.md
+
+ 2222222222222222222222222222222222222222222
+Mode: BUG_FIX
+
+Route:
+Route::match(['get', 'post'], 'assignmentfulllist', [AssignmentController::class, 'assignmentlist'])->name('assignment.list');
+
+Issue:
+During datatable refactor, many original table columns/headings were removed.
+
+Restore all original table headings/columns exactly as previous table structure.
+Do not reduce or replace existing columns.
+
+Keep current datatable implementation and functionality unchanged.
+Only restore missing columns and related data mapping.
+
+Preserve:
+- Existing filters
+- Existing datatable flow
+- Existing ajax structure
+
+Follow AGENTS.md
+
+
+222222222222222222222222222
+
+Mode: BUG_FIX
+
+Route:
+Route::match(['get', 'post'], 'assignmentfulllist', [AssignmentController::class, 'assignmentlist'])->name('assignment.list');
+
+Fix Total hours column:
+
+- "Total hours" column currently not matching previous implementation/data.
+- Restore "Total hours" exactly same as old table logic/output.
+
+Keep current datatable implementation and functionality unchanged.
+
+Follow AGENTS.md
+
+
+222222222222222222222222222222222222222222222222222222
+
+Jab ye task mujhe assign hua tha, us time detailed PRD ya exact expected behavior available nahi tha, isliye maine available understanding aur existing system pattern ke basis par logs implement kiye the.”
+
+
+
+“Implementation complete hone ke baad maine KT/session bhi conduct kiya tha aur us time mujhe indication mila tha ki flow expected direction me hai. Agar kuch scenarios miss hue hain ya expectations different hain, to we can definitely refine them.”
+
+
+
+kuch decisions implementation level par lene pade.”
+
+
+“Maine logs ko generic, scalable aur reusable approach se design kiya tha taki future modules me bhi same structure use ho sake.”
+
+
+“Focus tha ki important activity trace ho, audit maintain rahe aur unnecessary noise avoid ho.”
+
+
+“Agar aap expected scenarios ya preferred logging structure share kar den, to main quickly align karke update kar dunga.”
+
+
+2222222222222222222222222222222222222222222222222
+
+Mode: UI_REFACTOR
+Scope: Check-In datatable migration
+
+Reference Module:
+Route:
+Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+Reference Files:
+- app/Http/Controllers/AssignmentdelayedController.php
+- assignments_delayed_list related blade/js/datatables structure
+
+Target Module:
+Route::resource('/check-In', CheckInController::class);
+
+Target Function:
+- index()
+
+Task:
+- Analyze assignments_delayed_list module completely
+- Implement same Saarni datatable pattern, ajax flow, blade structure, pagination, sorting, search, and reusable structure
+- Do not change any existing business logic
+- Do not change any functionality
+- Do not change existing queries/output
+- Keep existing filters unchanged:
+  - Select Month
+- Existing data flow and results should remain exactly same
+- Create separate datatable blade/files/folders if required following same pattern
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222
+
+
+
+
+Mode: UI_REFACTOR
+Scope: checkinreport datatable migration
+
+Reference Module:
+Route:
+Route::get('/assignments_delayed_list', [AssignmentdelayedController::class, 'delayedassignments']);
+
+Reference Files:
+- app/Http/Controllers/AssignmentdelayedController.php
+- assignments_delayed_list related blade/js/datatables structure
+
+Target Module:
+        Route::get('checkinreport', [CheckInController::class, 'Reportsection']);
+        Route::get('/checkinfiltersection',  [CheckInController::class, 'checkinfiltersection']);
+
+
+Task:
+- Analyze assignments_delayed_list module completely
+- Implement same Saarni datatable pattern, ajax flow, blade structure, pagination, sorting, search, and reusable structure
+- Do not change any existing business logic
+- Do not change any functionality
+- Do not change existing queries/output
+- Keep existing filter UI/design unchanged
+- Keep existing filter logic unchanged
+- Existing data flow and results should remain exactly same
+- Create separate datatable blade/files/folders if required following same pattern
+- Keep Today Attendance section UI/design/logic completely unchanged
+- Only migrate listing/table section into Saarni datatable pattern
+
+Follow AGENTS.md
+
+
+
+22222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: timesheetreportsection datatable migration
+
+Reference Module:
+Route::get('/billspending', [DashboardReport::class, 'billspending']);
+
+Target Module:
+1.
+ Route::get('/timesheetreportsection',  [TimesheetController::class, 'TimesheetReportsection']);
+ Route::get('/timesheetfiltersection',  [TimesheetController::class, 'timesheetfiltersection']);
+
+Task:
+- Analyze billspending module structure completely
+- Implement same Saarni datatable pattern, ajax flow, blade structure, pagination, sorting, search, and reusable structure
+- Do not change any existing business logic
+- Do not change any functionality
+- Do not change existing queries/output
+- Keep existing filters unchanged:
+  - Please Select Month
+- Existing data flow and results should remain exactly same
+- Create separate datatable blade/files/folders if required following same pattern
+
+Follow AGENTS.md
+
+
+222222222222222222222222222222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: datatable modules
+
+Reference Module:
+Route::get('/billspending', [DashboardReport::class, 'billspending']);
+
+
+Target Module:
+1.
+ Route::get('/timesheetreportsection',  [TimesheetController::class, 'TimesheetReportsection']);
+ Route::get('/timesheetfiltersection',  [TimesheetController::class, 'timesheetfiltersection']);
+
+
+Task:
+- Analyze billspending module structure completely
+- Implement same datatable pattern, UI, folder structure, and flow in target modules
+- Keep existing filters unchanged:
+- Keep existing filter UI/design unchanged
+- Follow same reusable pattern for blade, controller flow, ajax/datatable structure and folder organization
+- Create new files/folders if required to maintain same pattern
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222
+regarding datatable using billpending 
+
+Mode: UI_REFACTOR
+Scope: timesheetreportsection datatable migration
+
+Reference Module:
+Route::get('/billspending', [DashboardReport::class, 'billspending']);
+
+
+Target Module:
+1.
+ Route::get('/timesheetreportsection',  [TimesheetController::class, 'TimesheetReportsection']);
+ Route::get('/timesheetfiltersection',  [TimesheetController::class, 'timesheetfiltersection']);
+
+
+Task:
+- Analyze billspending module completely
+- Implement same Saarni datatable pattern, ajax flow, blade structure, pagination, sorting, search, and reusable structure
+- Do not change any existing business logic
+- Do not change any functionality
+- Do not change existing queries/output
+- Keep existing filter UI/design unchanged
+- Keep existing filter logic unchanged
+- Existing data flow and results should remain exactly same
+- Create separate datatable blade/files/folders if required following same pattern
+- Only migrate listing/table section into Saarni datatable pattern
+
+Follow AGENTS.md
+
+
+2222222222222222222222222222222222222222222222222222222222222222
+
+
+
+
+Mode: BUG_FIX
+
+ Route::get('/timesheetreportsection',  [TimesheetController::class, 'TimesheetReportsection']);
+ Route::get('/timesheetfiltersection',  [TimesheetController::class, 'timesheetfiltersection']);
+
+Fix default loading :
+
+- abhi kiya ho raha hai ki jab mai timesheetreportsection url per aa raha hu to datatable implement to ho gya hai but loading kafi der tak ho raha hai jab tak is page ko closed na kar du tab tak means almost 2 hour se loading hi aa raha ahi 
+
+
+Keep current datatable implementation and functionality unchanged.
+
+Follow AGENTS.md
+
+222222222222222222222222222222222222222222222222222222222222
+
+Mode: UI_REFACTOR
+Scope: checkinlis datatable migration
+
+Reference Module:
+  Route::get('/billspendingreport', [DashboardReport::class, 'billspendingreport']);
+
+
+Target Module:
+1.
+  Route::get('checkinlist', [CheckInController::class, 'checkinlist']);
+  Route::post('/checkinlistfilter', [CheckInController::class, 'checkinlistfiltersection']);
+
+
+Task:
+- Analyze billspendingreport module completely
+- Implement same Saarni datatable pattern, ajax flow, blade structure, pagination, sorting, search, and reusable structure
+- Do not change any existing business logic
+- Do not change any functionality
+- Do not change existing queries/output
+- Keep existing filter UI/design unchanged
+- Keep existing filter logic unchanged
+- Existing data flow and results should remain exactly same
+- Create separate datatable blade/files/folders if required following same pattern
+- Only migrate listing/table section into Saarni datatable pattern
+
+Follow AGENTS.md
+
+
+
+
+regarding NPCI 
+
+
+22222222222222222222222222222222222222222222222222222222
+
+
+222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Route:
+1
+Route::get('/vendor-creation', [VendorManagementController::class, 'vendorCreationIndex'])->name('vendor-creation.index');
+
+Add GSTIN filed in form :
+
+- GSTIN Format validation: The system validates the 15-character format with Regex 
+- Must be unique, Show error if GSTIN already exists. Must be exactly 15 characters 
+
+Regex - ^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$
+
+without breaking existing flow.  
+
+
+Follow AGENTS.md
+
+
+
+2222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Scope: Vendor Management module date display format
+
+Routes:
+Route::group(['prefix' => 'vendormanagement', 'as' => 'vendormanagement.'], function () {
+    // All routes inside this module
+});
+
+Issue:
+- Currently dates are displaying like:
+  29 Jan 2026
+
+Expected Format:
+- Date only:
+  29th January 2026
+
+- If datetime exists:
+  29th January 2026 05:30 PM
+
+Task:
+- Fix only date/datetime display format in all Vendor Management module pages/views
+- Apply format everywhere date is visible in UI for this module
+- If time is already being shown currently, keep time also in formatted output
+- Change only view/display format
+- Do not change database values
+- Do not change business logic
+- Do not change queries/controllers unnecessarily
+- Do not modify functionality
+
+Expected Examples:
+- 1st January 2026
+- 2nd February 2026
+- 3rd March 2026
+- 29th January 2026
+- 29th January 2026 05:30 PM
+
+Follow AGENTS.md
+
+222222222222222222222222222222222222222222
+
+MMode: BUG_FIX
+
+Route:
+Route::get('/vendor-creation', [VendorManagementController::class, 'vendorCreationIndex'])->name('vendor-creation.index');
+
+Module:
+Vendor Creation → KYC Documents field
+
+Issues:
+1.
+- KYC Documents field supports multiple file upload
+- In view page, documents should display properly line by line
+
+2.
+- Currently CSV files are not opening on View button click
+- Other file types are working correctly
+
+Task:
+- Fix only KYC Documents display and CSV view issue
+- Preserve existing upload logic and existing flow
+- Do not modify unrelated functionality
+- Do not change business logic
+- Keep current UI structure intact
+
+Follow AGENTS.md
+
+333333333333333333333333333333333
+
+Mode: BUG_FIX
+
+Route:
+Route::get('/vendor-creation', [VendorManagementController::class, 'vendorCreationIndex'])->name('vendor-creation.index');
+
+Issue:
+- In:
+  resources\views\vendormanagement\vendor-creation\index.blade.php
+
+- Data is not loading inside:
+  <div class="modal fade modern-modal" id="vendorDetailModal">
+
+- Previously modal data was working correctly
+
+Task:
+- Fix modal data loading only
+- Keep existing UI, flow, and functionality unchanged
+- Do not modify unrelated code
+
+Follow AGENTS.md
+
+
+22222222222222222
+
+Mode: BUG_FIX
+
+file:
+resources\views\auditengagement.blade.php
+
+Issue:
+- In:
+  resources\views\vendormanagement\vendor-creation\index.blade.php
+
+- Data is not loading inside:
+  <div class="modal fade modern-modal" id="vendorDetailModal">
+
+- Previously modal data was working correctly
+
+Task:
+- Fix modal data loading only
+- Keep existing UI, flow, and functionality unchanged
+- Do not modify unrelated code
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: UI chnaged
+
+Reference Files:
+- resources\views\backEnd\tempindex.blade.php
+
+Target file:
+   resources\views\backEnd\index.blade.php
+
+
+Task:
+- Do not change any business logic.
+- Do not modify queries, variables, loops, conditions, routes, URLs, or functionality.
+- Keep all @if, @foreach, and PHP code exactly as-is.
+- Only update HTML structure, Bootstrap classes, card heights, scrollable sections, spacing, and footer placement.
+- Match the visual style of the reference dashboard:
+  - Assignment card height 649px with scrollable content area.
+  - Notification card with fixed height and scroll area.
+  - Upcoming Holidays card with same style as reference dashboard.
+  - Mentor and Mentees cards should use the same card/list layout as Assignment card.
+  - Birthday and Work Anniversary cards should have identical styling and scrolling behavior.
+  - Keep existing colors and icons unchanged.
+- Output complete updated in <div class="body-content"> section only yaani<div class="body-content">  section me hi change karna hai sirf aur kahi nahi  .
+
+Follow AGENTS.md
+
+
+
+Mode: UI_REFACTOR
+
+Reference:
+resources\views\backEnd\tempindex.blade.php
+
+Target:
+resources\views\backEnd\index.blade.php
+
+Requirements:
+- Only update UI inside <div class="body-content">.
+- Copy layout/styling structure from tempindex.blade.php.
+- Do NOT change:
+  - Business logic
+  - PHP code
+  - Queries
+  - Variables
+  - Conditions
+  - Loops
+  - Routes/URLs
+  - Functionality
+
+Apply reference UI pattern to:
+- Support Ticket
+- Notification card
+- Assignment (fixed height + scroll)
+- Birthday card (fixed height + scroll)
+- Work Anniversary card
+- Upcoming Holidays card
+
+
+Keep:
+- Existing colors
+- Existing icons
+- Existing data rendering
+
+Allowed changes:
+- HTML structure
+- Bootstrap classes
+- Heights
+- Scroll areas
+- Spacing/alignment
+- Footer placement
+
+Output:
+- Summary only (changed sections list)
+- No full file
+- No code unless required
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222222222222222222
+
+
+Mode: UI_REFACTOR
+Scope: Access page
+
+Target Module:
+app\Http\Controllers\AssignmentController.php
+
+Target Function:
+- assignment_profitloss()
+
+Task:
+- abort(403, ' you have no permission to access this page ');  mujhe iske liye ek page bnana hai and yaha is function me isi page per jayega agar aceess nahi hai to 
+
+Follow AGENTS.md
+
+
+222222222222222222222222222222
+
+  <div class="col-md-12 col-lg-4">
+                <div class="card mb-4" style="height: 310px;">
+                    <div class="card-header" style="background-color:#ff000029;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="fs-17 font-weight-600 mb-0"> <i style="font-size: 20px;padding:10px;"
+                                        class="typcn typcn-bell"></i>Notification</h6>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="notification-list" style="height: 190px; overflow-y: auto;">
+                        @if (count($notificationDatas) > 0)
+                            @foreach ($notificationDatas as $notificationData)
+                                <div class="card-body" style="height: 86px;">
+                                    <div class="media new">
+                                        <div class="media-body">
+                                            <h6> {{ $notificationData->title }} <a
+                                                    class="d-block fs-15 font-weight-600 text-sm mb-0"><span
+                                                        style="color:#007bff;font-size: small;">created by <b
+                                                            style="color: black;">{{ $notificationData->team_member }}</b></span>
+                                                </a></h6>
+                                            <span> <small class="text-muted"><i class="far fa-clock mr-1"></i>
+                                                    {{ date('H:i A', strtotime($notificationData->created_at)) }},
+                                                    {{ date('F jS', strtotime($notificationData->created_at)) }}</small></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="card-body" style="height: 190px;">
+                                <div class="media new">
+                                    <div class="media-body text-center">
+                                        <h5><span>No Data</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="dropdown-footer text-center mt-2"><a href="{{ url('notification') }}">View All
+                            Notifications</a></div>
+                    <br>
+                </div>
+
+            </div>
+
+
+image me jis tarah Notification section ka ui hai usi tarah same ui karna hai and isme jo data hai hamare code me vahi same data dikhana hai  and Do not modify business logic.Update only UI
+222222222222222222222222222222222222
+
+
+
+
+Mode: UI_REFACTOR
+Scope: dashboard kpi design
+
+Target:
+resources\views\backEnd\index.blade.php
+
+
+
+Task:
+- KPI design
+
+
+
+Requirements:
+- abhi KPI design jis tarah hai @if (Auth::user()->role_id == 11) per usi tarh KPI ka design karna hai sabhi role per like  @if (Auth::user()->role_id == 13 || Auth::user()->role_id == 14) and @if (Auth::user()->role_id == 15) and  @if (Auth::user()->role_id == 12)
+- Do NOT change:
+  - Business logic
+  - PHP code
+  - Queries
+  - Variables
+  - Conditions
+  - Loops
+  - Routes/URLs
+  - Functionality
+
+Follow AGENTS.md
+
+
+Mode: UI_REFACTOR
+
+File:
+resources\views\backEnd\index.blade.php
+
+Task:
+- mmujhe is page per view all jaha jaha hai vaha ye icon lagana hai   <i class="ri-external-link-line"></i> 
+
+Rules:
+- UI/design only 
+- Keep existing logic, variables, conditions, queries, routes, and functionality unchanged
+
+Follow AGENTS.md
+
+
+
+2222222222222222222222222222
+
+Mode: UI_REFACTOR
+
+File:
+resources\views\backEnd\index.blade.php
+
+Task:
+- is page ko responsive bnana hai ye basically abhi bhi responsive hai but only kpi me issue hai ki jab 943*378 yaha 943 se kam kar raha hu to kpi vertically kpi ke beech me gap nahi aa raha hai vo sata huwa hai and horizently gap aa raha hai 
+
+Rules:
+- UI/design only 
+- Keep existing logic, variables, conditions, queries, routes, and functionality unchanged
+
+Follow AGENTS.md
+
+
+
+
+Mode: UI_REFACTOR
+
+File:
+resources\views\backEnd\index.blade.php
+
+Task:
+- Fix KPI card spacing on responsive screens.
+- Below ~943px width, KPI cards are touching vertically.
+- Maintain proper vertical and horizontal gaps between KPI cards on all screen sizes.
+
+Rules:
+- UI only
+- Keep existing logic and functionality unchanged
+
+Follow AGENTS.md
+
+
+2222222222222222222222222222222222222222
+
+
+
+
+Mode: UI_REFACTOR
+
+Reference:
+resources\views\backEnd\dashboard (2).html
+
+Target:
+resources\views\backEnd\index.blade.php
+
+Task:
+- Match index.blade.php UI with dashboard (2).html
+- UI/layout only
+
+Keep Unchanged:
+- Business logic
+- PHP/Blade code
+- Variables
+- Queries
+- Conditions
+- Loops
+- Routes/URLs
+- Permissions
+- Functionality
+
+Apply:
+- Same layout structure
+- Same card styling
+- Same spacing/alignment
+- Same responsive behavior
+- Same KPI/card visual design
+
+Follow AGENTS.md
+
+
+
+222222222222222222
+
+Mode: UI_REFACTOR
+Scope: UI chnaged
+
+Reference Files:
+- resources\views\backEnd\dashboard (2).html
+
+Target file:
+   resources\views\backEnd\index.blade.php
+
+
+Task:
+- mujhe same
+
+Follow AGENTS.md
+
+
+
+2222222222222222222222222222222
+
+Mode: UI_REFACTOR
+Scope: UI chnaged
+
+Reference Files:
+- resources\views\backEnd\indexnew.blade.php
+
+Target file:
+   resources\views\backEnd\index.blade.php
+
+
+Task:
+- resources\views\backEnd\index.blade.php  mujhe is file me same design karna hai using resources\views\backEnd\indexnew.blade.php file 
+
+Follow AGENTS.md
+
+
+22222222222222222222
+
+
+Mode: UI_REFACTOR
+
+Reference:
+resources\views\backEnd\indexnew.blade.php
+
+Target:
+resources\views\backEnd\index.blade.php
+
+Task:
+- Make index.blade.php UI match indexnew.blade.php
+- Replicate layout, cards, KPI design, spacing, alignment, sections, responsiveness, and overall look & feel
+
+Allowed:
+- HTML/Blade structure changes
+- Bootstrap/CSS changes
+- Section rearrangement if required
+
+Keep:
+- Existing data/output
+- Routes
+- Permissions
+- Functionality
+
+Follow AGENTS.md
+
+
+
+
+
+
+
+sort ```
+
+Mode: UI_REFACTOR
+
+File:
+resources\views\backEnd\index.blade.php
+
+Task:
+- yaha card wale section me ek line me 2 dikh raha hai jo ki sahi hai mujhe ek line me 2 chahiye but jab kisi user ko Support tickets section nahi dikhta hai to ek line me sirf notification aa raha hai and isi line me dusre card ke jagh per khai spcae  aa raha hai mai chahta hu ki khali space na aaye 
+- Keep everything else unchanged.
+
+Follow AGENTS.md
+
+2222222222222222222222222222222222222222222222222222222
+
+Mode: REFACTOR
+
+File:
+app\Http\Controllers\TeammemberController.php
+
+Function:
+store()
+
+Task:
+- Migrate all file uploads in store() to S3.
+- Follow same upload pattern already used for:
+  - aadharupload
+  - panupload
+
+- Replace local storage usages:
+  - move()
+  - Image::make(...)->save(...)
+
+- Store all uploaded files on S3.
+- Keep existing DB values/filenames structure unchanged.
+- Keep existing functionality unchanged.
+- Do not modify business logic.
+- Preserve existing image resize behavior before uploading to S3.
+
+Follow AGENTS.md
+
+
+
+22222222222222222222222222222222222222222222222222222
+
+
+Mode: REFACTOR
+
+File:
+app\Http\Controllers\TeammemberController.php
+
+Function:
+store()
+
+Task:
+- Convert all file uploads from local storage to S3.
+- Use same S3 pattern as aadharupload/panupload.
+- Preserve image resize behavior.
+- Keep filenames, DB values, and functionality unchanged.
+
+Follow AGENTS.md
+
+
+
+Mode: UI_REFACTOR
+
+Reference:
+resources\views\backEnd\teammember\oldform.blade.php
+
+Target:
+resources\views\backEnd\teammember\form.blade.php
+
+Task:
+- For all file upload fields, add a "View" link/button beside the file input.
+- Show the View link only in Edit mode when a file already exists.
+- Do not show the View link in Create mode.
+- Reuse the same View URL/display pattern already used in oldform.blade.php.
+- Apply to all file-related fields consistently.
+
+Keep:
+- Existing upload logic
+- Validation
+- Routes/URLs
+- Variables
+- Conditions
+- Permissions
+- Functionality
+- UI structure except View link addition
+
+Follow AGENTS.md
+
+22222222222222222222222222
+
+Mode: REFACTOR
+
+
+Target:
+app\Http\Controllers\TeammemberController.php
+resources\views\backEnd\teammember\form.blade.php
+
+
+Function:
+store()
+update()
+
+
+Task:
+- is form me jitne bhi file se related input hai uske next me View ancor tag laga huwa hai iske click per file ko view kar sakte hai to isme jo bhi file hai pahle local me check karega agar 
+
+Allowed:
+-only View button for file  
+
+
+Keep:
+- Existing upload logic
+- Validation
+- Routes/URLs
+- Variables
+- Conditions
+- Permissions
+- Functionality
+- UI structure except View link addition
+
+Follow AGENTS.md
+
+
+http://127.0.0.1:8000/backEnd/image/teammember/1781168709Screenshot_1.png
+
+https://s3.amazonaws.com/dummy_bucket/candidateonboarding/1781168709Screenshot_1.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=dummy_key%2F20260612%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260612T073446Z&X-Amz-SignedHeaders=host&X-Amz-Expires=1800&X-Amz-Signature=509e9879bff4cf3d4ff45393487eb97e7192c8974c1c3310c91d3afa8d22d47b
+
+
+
+
+
+22222222222222222222222222222
+
+
+
+Mode: UI_REFACTOR
+
+Reference:
+resources\views\backEnd\teammember\index.blade.php
+
+Target:
+ Route::match(['get', 'post'], 'overviewdashboard', [OverviewDashboardController::class, 'OverviewDashboard'])->name('overviewdashboard');
+
+Function:
+index()
+
+
+Task:
+- index function me role id 11 ke liye jo UI use ho raha hau usme file se related sabhi field pper work kiya hai same usi tarah index function me jitne bhi role hai uske ui me agar jaha file use ho raha hai usme same index blade file ke tarah karna hai only file se related column ko cheedna otherwise kuchh change nahi karna hai 
+
+
+Follow AGENTS.md
+
+
+22222222222222222222
+
+Mode: UI_REFACTOR
+
+Target:
+TeammemberController@index
+
+Views:
+index, hrindex, allindex
+
+Task:
+- Role 11 me jo file/document View handling hai, same sabhi role/views me apply karo.
+- Sirf file/document columns ko touch karo.
+
+Keep:
+- Logic
+- Queries
+- Conditions
+- Routes
+- Permissions
+- Functionality
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222
+
+Mode: UI_REFACTOR
+
+Target:
+http://127.0.0.1:8000/draftemail
+http://127.0.0.1:8000/candidateboarding
+http://127.0.0.1:8000/employeeonboarding
+
+Task:
+- target rout ko samjho and mujhe btao ye onboarding module kaise work kar raha hai so that mujhe ye module samjh me aa jaye kab kiya create karna hai and kiya karna hai 
+
+Allowed:
+-do not change anythuing only explain 
+
+Follow AGENTS.md
+
+
+2222222222222222222222222222222222222222222
+explain any module  / regarding module 
+
+Mode: ANALYSIS
+
+Routes:
+- /draftemail
+- /candidateboarding
+- /employeeonboarding
+
+Task:
+- Analyze complete onboarding flow.
+- Explain step-by-step:
+  1. Entry point (where process starts)
+  2. Role of draftemail
+  3. Role of candidateboarding
+  4. Role of employeeonboarding
+  5. Data flow between modules
+  6. Tables/models used
+  7. Email flow
+  8. Status flow
+  9. When candidate becomes employee
+  10. Which actions trigger next step
+
+Output:
+- Simple functional explanation
+- Flow diagram (text format)
+- File/Controller list involved
+- No code changes
+
+Follow AGENTS.md
+
+
+22222222222222222222222222222222222222222222
+
+
+
+
+Mode:bugs fixed
+
+Target:
+app\Http\Controllers\EmployeepayrollController.php
+
+Function:
+index()
+
+
+Task:
+-   <div class="modal fade" id="employeepayrollmodel" tabindex="-1" role="dialog"  is model me data upload ho raha hai isme karna ye hai ke 
+   1.CO field hatana hai 
+   2.LWP * and Absent *  me koi data dalta hai to Day to be Paid me se minus hoga LWP * and Absent
+
+
+Follow AGENTS.md
+
+
+
+
+
+
+
+222222222222222222222
+sort
+
+Mode: BUG_FIX
+
+Target:
+EmployeepayrollController@index
+
+#employeepayrollmodel
+
+Fix:
+- Remove CO field.
+- Day to be Paid = Day to be Paid - LWP - Absent.
+- Auto update on LWP/Absent change.
+
+Keep everything else unchanged.
+
+Follow AGENTS.md
+
+
+
+222222222
+Mode: BUG_FIX
+
+File:
+app\Http\Controllers\PayrollController.php
+
+Function:
+payrollarticle_upload()
+
+Issue:
+- If articlepayrolls record does not exist for uploaded email/month/year, show only mismatch error.
+- Do not show duplicate/invalid/payroll field errors in this scenario.
+
+Fix:
+- Give mismatch validation highest priority.
+- If any row has "No email import record found..." error, return only those mismatch errors.
+- Skip all other errors when mismatch exists.
+
+Keep upload/update flow unchanged.
+
+Follow AGENTS.md
+
+2222222222222
+
+Mode:bugs fixed
+
+Target:
+app\Http\Controllers\PayrollController.php
+
+Function:
+payrollarticle_upload()
+
+
+Task:
+-yaha basically ye karna hai ki agar  ye error ho tab baki ka erro na dikhaye $errors[] = "Row " . $rowNumber . ": No email import record found for '" . $email . "' in " . $request->month . " " . $request->yearvalue . ". Both Excel files must have same month and year.";
+ 
+
+
+Error message is not proper. If excel data not exist should only show error message for mismatch. No other issue related to duplicate email or invalid email should show
+
+Follow AGENTS.md
+
+
+
+
+22222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+EmployeepayrollController@index
+
+#employeepayrollmodel
+
+Fix:
+- isme No of Day Present ,LWP, absent, SL, CL, Birthday, Holidays and Total Days, ye sabhi field ka calculation sahi aan achahiye 
+- Auto update on LWP/Absent/SL/CL/Birthday/Holidays change.
+
+Keep everything else unchanged.
+
+Follow AGENTS.md
+
+
+2222222222222222222222
+
+Mode: BUG_FIX
+
+EmployeepayrollController@index
+#employeepayrollmodel
+
+Fix day calc:
+- Total Days fixed rahega.
+- Present auto = Total Days - SL - CL - LWP - Absent - Birthday - Holidays.
+- Day to be Paid = Total Days - LWP - Absent.
+- Auto recalc on day fields change.
+
+Keep rest unchanged.
+
+Follow AGENTS.md
+
+
+2222222222222222222
+Mode: BUG_FIX
+
+EmployeepayrollController@index
+#employeepayrollmodel
+
+Fix day calc:
+- Total Days fixed rahega.
+- Present auto = Total Days - SL - CL - LWP - Absent - Birthday - Holidays.
+- Day to be Paid = Total Days - LWP - Absent.
+- Auto recalc on day fields change.
+
+Keep rest unchanged.
+
+Follow AGENTS.md
+
+
+
+
+Mode: BUG_FIX
+
+EmployeepayrollController@index
+#employeepayrollmodel
+
+Issue:
+- Holidays field already included in No of Day Present.
+- When Holidays changes from 8 to 9, Present should decrease by 1 only.
+- Currently Present decreases by full 9.
+
+Fix:
+- Use old Holidays value to calculate only difference.
+
+Keep rest unchanged.
+
+Follow AGENTS.md
+
+
+
+222222222222222222
+
+
+
+Mode: ANALYSIS
+
+Folder:
+resources\views\backEnd\errors
+
+Task:
+- ab mujhe btana hai ki resources\views\backEnd\errors is folder me sabhi error page bna do jo tumne annylise kiya hai uske refrence le karke and use as a refrence lena hai and jo mere project me layout hai uske according ye sabhi error page bna do 
+
+No code changes.
+
+Follow AGENTS.md
+
+
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\backEnd\errors
+
+Task:
+- Error page files are already created.
+- Review them and implement/use them in Capitall.
+- Make Laravel use these custom error pages for matching error codes.
+- Keep Capitall layout/design.
+- Do not modify error page UI unless required.
+
+Keep:
+- Existing routes
+- Controllers
+- Middleware
+- Config
+- Functionality
+
+Follow AGENTS.md
+
+
+
+
+
+
+
+
+
+
+
+
+
+Table	Purpose	Key Columns
+draftemails	Initial candidate invitation	email, name, role_id, entity, description
+candidateonboardings	Candidate onboarding data	your_full_name, personal_email, role, department, dateofjoining, status
+articleonboardings	CA Article candidate data	name, emailid, role, doj, status
+employeeonboardings	Final employee onboarding	your_full_name, personal_email, role, dateofjoining, mail_status
+employeeonboardingmail	Email drafts/history	employeeonboarding_id, content, status
+candidateonboardingpayslip	Previous payslips	candidateonboarding_id
+candidateonboardingresidence	Residence proofs	candidateonboarding_id
+teammembers	Employee master	team_member, personalemail, role_id, employment_status
+attendance	Employee attendance	employee_name, month, dateofjoining
+users
+
+
+
+
+   2. currently holidays included hai No of Day Present me ab manlo ki holidays me 8 hai and No of Day Present me 22 hai and maine holidays 8 ko chnage karke 10 kar diya to no of days 24 ho jana chahiye 
+
+
+2222222222222222222222222222
+
+mujhe ek prompt do jisme ye btao ki abhi jo application bna hai use remove karke ek application bnao jisme home page per card hoga an card me title ye hoga 1. Doctor , 
+
+
+
+Design a modern mobile app UI.
+App Concept:
+Service Provider Directory App
+Home Screen:
+- Show category cards in a clean grid layout.
+- Categories:
+  1. Doctor 👨‍⚕️
+  2. 4 Wheeler Driver 🚗
+  3. Auto Driver 🛺
+  4. Helper 👷
+5. Medicine shoap
+
+Behavior:
+- On tapping a category card, navigate to a listing screen.
+Listing Screen:
+- Search bar at top.
+- Filter button.
+- Provider cards with:
+  - Profile photo
+  - Name
+  - Profession
+  - Location
+  - Experience
+  - Rating
+  - Call button
+  - View Profile button
+Design Style:
+- Modern
+- Professional
+- Clean
+- Mobile-first
+- Material Design inspired
+- Attractive icons and illustrations
+- Rounded cards
+- Soft shadows
+- Responsive layout
+Output:
+- Home Screen UI
+- Listing Screen UI
+- Light theme
+- High-quality mobile app mockup
+
+
+222222222222222222222222222
+
+I am a beginner and I want to understand this app code.
+
+Task:
+- Explain all files you created for this app.
+- For each file, tell:
+  1. why this file was created
+  2. what its role is
+  3. how it connects with other files
+  4. which screen/feature it handles
+  5. important functions inside it
+- Explain navigation flow:
+  Home → Listing → Detail → Add/Edit
+- Explain local CRUD flow with AsyncStorage:
+  add, edit, delete, read
+- Explain in simple beginner-friendly language.
+
+Output format:
+- File-wise explanation
+- Then complete app flow explanation step by step
+- No code changes
+
+2222222222222222222222222222222222
+
+Mode:bugs fixed
+
+Target:
+app\Http\Controllers\Auth\TwoFactorController.php
+app\Http\Middleware\TwoFactor.php
+
+error:
+- Call to a member function lt() on null
+
+fixed issue:
+
+
+Follow AGENTS.md
+
+
+
+Mode: BUG_FIX
+
+Target:
+- app\Http\Controllers\Auth\TwoFactorController.php
+- app\Http\Middleware\TwoFactor.php
+
+Error:
+- Call to a member function lt() on null
+
+Task:
+- Fix the null check before calling lt().
+- Handle cases where two_factor_expires_at is null.
+- Prevent application crash and redirect user gracefully.
+- Keep existing 2FA flow, validation, login, middleware, and functionality unchanged.
+
+Do NOT:
+- Change authentication logic.
+- Remove 2FA.
+- Modify routes or business logic.
+
+Follow AGENTS.md
+
+
+
+222222222222222222222222222222222
+
+Mode: UI_REFACTOR
+
+Scope:
+Dashboard Report UI improvement
+
+Reference:
+Attched image
+1.dashboardbyshahid
+2.dashboardbyprashant
+
+Target:
+Route::get('/dashbordreport', [BackEndController::class, 'dashbordreport']);
+Route::post('/filterdashboardreport', [BackEndController::class, 'filterdashboardreport']);
+
+Task:
+Match UI from refrence.
+
+Requirements:
+- dashboardbyshahid image se match karna hai 
+  1.KPI 
+  2.Staff Allocation vs Actual Timesheet Analysis
+  3.Unresolved Tickets — HR, IT & Admin
+  4.Monthly Expense Analysis
+
+- dashboardbyprashantimage se match karna hai 
+  1.Today check-in
+
+-iske alawa jo chart hai like ise tum apne according se kar do 
+  Assignment Status Overview
+  Document Completion Progress
+  NFRA Audits, Quality Reviews & Peer Review
+  Partner-wise P&L Statement
+  Assignment-wise P&L Analysis
+  Cash Flow Analysis
+  Lap Days Analysis (Assignment to Invoice)
+  Invoice Due vs Assignment Billing vs Cash Recovery
+
+- Make page responsive for desktop, tablet, and mobile.
+- Keep existing data, filters, routes, controller logic, form actions, IDs, names, and functionality unchanged.
+- Do not change backend queries or business logic.
+
+Keep everything else unchanged.
+
+Follow AGENTS.md
+
+
+2222222222222222222222222222222222222222222222222222
+Mode: UI_REFACTOR
+
+Scope: Dashboard Report
+
+Reference:
+- dashboardbyshahid
+- dashboardbyprashant
+
+Target:
+- GET /dashbordreport
+- POST /filterdashboardreport
+
+Task:
+Match Dashboard Report UI with reference images.
+
+Rules:
+- Match these sections from dashboardbyshahid:
+  - KPI cards
+  - Staff Allocation vs Actual Timesheet Analysis
+  - Unresolved Tickets — HR, IT & Admin
+  - Monthly Expense Analysis
+
+- Match Today Check-In section from dashboardbyprashant.
+
+Requirements:
+- Responsive for desktop, tablet, and mobile.
+- Keep existing data, filters, routes, controller logic, form actions, IDs, names, and functionality unchanged.
+- Do not change backend queries or business logic.
+- Keep everything else unchanged.
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Scope: Dashboard Report
+
+Target:
+-resources/views/backEnd/kgsdashboardreport.blade.php
+
+Task:
+- today checkin wale section me card me hi haeding kar do jaise sabhi card me hai and ' 0 of 24 team members checked in' is text ko replace kar do yaha jitne checkin hai uska total dikhega total teammmber nahi dikhega .
+- today check in me jitne bhi kpi hai uske ander white background hai use same karna image ke tarah   
+
+Requirements:
+- Keep existing data, filters, routes, controller logic, form actions, IDs, names, and functionality unchanged.
+- Do not change backend queries or business logic.
+- Keep everything else unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+Mode: BUG_FIX
+
+Scope: Dashboard Report
+
+Target:
+resources/views/backEnd/kgsdashboardreport.blade.php
+
+Task:
+Fix only Today Check-In section.
+
+Changes:
+- Move Today Check-In heading inside the main card, same as other dashboard cards.
+- Replace text like `0 of 24 team members checked in`.
+- Show only total check-ins count, not total team members.
+- Update Today Check-In KPI inner boxes white background to match reference image.
+
+Requirements:
+- Modify only Today Check-In section.
+- Keep everything else unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+2222222222222222
+
+
+Mode: UI_REFACTOR
+
+Scope: Dashboard Report
+
+Reference:
+- resources\views\backEnd\kgsdashboardreport.blade.php
+
+Target:
+- resources\views\backEnd\index.blade.php
+
+Task:
+-<div class="filter-maincontainer"> is ko same bnana hai \kgsdashboardreport.blade.php file me jaisa hai usi tarah is section ko karo and jitne bhi condition hai is section per rahene dena kewal UI chnage karna hai iske alawa kuchh change mat karna 
+
+Follow AGENTS.md.
+
+
+
+2222222222222222222222222222
+
+Mode: BUG_FIX
+
+Scope: Dashboard Report
+
+Target:
+resources/views/backEnd/kgsdashboardreport.blade.php
+
+Task:
+- Assignment Status Overview, Document Completion Progress, NFRA Audits, Quality Reviews & Peer Review is 3no card me card ka color white hai jo sahi hai but jitne bhi tdata aa raha ahi us ka color today checkin ke under jo kpi hai vaisa color kar do so that card me data seprately pta chale 
+Requirements:  
+- Fix only the requested items above.
+- Do not make any other UI changes.
+- Keep everything else unchanged.
+
+Follow AGENTS.md.
+
+
+
+Mode: BUG_FIX
+
+Scope: Dashboard Report
+
+Target:
+resources/views/backEnd/kgsdashboardreport.blade.php
+
+Task:
+Update only these sections:
+- Monthly Expense Analysis
+- Cash Flow Analysis
+- Lap Days Analysis (Assignment to Invoice)
+- Invoice Due vs Assignment Billing vs Cash Recovery
+- Staff Allocation vs Actual Timesheet Analysis
+
+Changes:
+-sabhi abve listed section ka chart sahi nahi lag raha hai ise aur sahi karna
+
+Requirements:
+- Modify only the five sections listed above.
+- Keep everything else unchanged.
+- output same rahna chahiye sirf ui fix karna hai 
+
+Follow AGENTS.md.
+
+
+
+2222222222222222222
+Mode: BUG_FIX
+
+Scope: Dashboard Report
+
+Reference:
+Attached image
+
+Target:
+resources/views/backEnd/kgsdashboardreport.blade.php
+
+Task:
+-Partner-wise P&L Statement
+-Assignment-wise P&L Analysis
+-Unresolved Tickets - HR, IT & Admin
+
+is above section per table wala jo refrence hai usi tarah karna hia ki agar data hai to thik hai and agar data nahi hai to icon add hoga with No Data Avilable and 
+
+
+-Assignment Status Overview
+-Document Completion Progress
+-NFRA Audits, Quality Reviews & Peer Review
+-Monthly Expense Analysis
+-Cash Flow Analysis
+-Budget vs Actual Cash Flow
+-Lap Days Analysis (Assignment to Invoice)
+-Invoice Due vs Assignment Billing vs Cash Recovery
+-Staff Allocation vs Actual Timesheet Analysis
+
+
+is above per pure card per icon add hoga refrence dekh lo like observation by status per laga hai vaise 
+
+
+Requirements:
+- Modify only the jab data nahi ho tab sirf listed above per hi karna hai .
+- Do not change chart data, labels, calculations, or chart logic.
+- Keep everything else unchanged.
+- sirf jab data na ho tabhi handle karna hai listed section ko iske alawa kuchh nahi karna hai 
+
+Follow AGENTS.md.
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222
+
+
+
+Mode: BUG_FIX
+
+Reference:
+ Route::get('/convertoassignment/{id}', [AssignmentplanningController::class, 'convertoassignment']);
+
+Target:
+  Route::get('/assignmentlist/{id}', [ChecklistanswerController::class, 'assignmentList']);
+  iske blade file me  <form id="detailsForm" method="post" action="{{ url('teammapping/update') }}" enctype="multipart/form-data">  ye section hai jaha se team add kiya jata hai to is section ko target karna hai 
+
+
+Task:
+-jab team add karte hai to clientindependenceform mail jayega user ko jo ki abhi nahi ja raha hai ise add karna hai team add karne per ye alraedy refrence route me jata hai sabhi teammember ko mail vaha se dekh lo and yaha add teammember wale form se jab team add karega to sirf ye mail jayega clientindependenceform 
+
+Requirements:
+- Keep everything else unchanged.
+-iske alawa kuchh chnage mat karna 
+
+
+Follow AGENTS.md
+
+
+
+2222222222222222222222222222222222222222222222222222
+
+
+
+Mode: BUG_FIX
+
+Reference:
+1.teammappingUpdate()
+2.Route::get('/clientspecificindependencelist/{id}', [ClientSpecificIndependenceController::class, 'index']);
+
+Target:
+-app\Http\Controllers\TimesheetController.php is file me store function me add karna hai condition 
+
+Task:
+-basically karna hai ki jab assignmentteammapping me team create hota hai us date se chck karna hai ki 48 ghnate ke ander independence form filled kar diya hai us assignment ka ya nahi agar kar diya hai to timesheet create kar sakta hai us assignment per otherise use message dekhega ki your independence is pending on this assignment id 
+
+Keep everything else unchanged.
+
+Follow AGENTS.md. 
+
+
+
+222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Scope: Dashboard Report
+
+Target:
+resources/views/backEnd/kgsdashboardreport.blade.php
+
+Task:
+Update only pdf print:
+- pdf me ye section <div class="filter-maincontainer22"> and   <div class="filter-maincontainer"> ye section nahi aana chahiye jab mai downalod as pdf per click karu to 
+
+
+Requirements:
+- Keep everything else unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+
+1.The staff code should be display in timesheet submitted report in excel (deployed on VSA)
+2.If timesheet rejected then first fill timeshett,  (deployed on VSA)
+3.Remove created date column from attendence tab (deployed on VSA)
+4.vsa issue checked and fixed it (login issue)  (deployed on VSA)
+5.Starting testing on partner dashboard all section 
+6.UI created for partner dashboard (deployed on cron)
+7.After NEFT generation, page gets navigated but it is not showing current month data bugs completed (deployed on cron and live)
+8.New Ui created on partner dashboard completed (deployed on cron)
+9.VSA user name swastik: apply leave data removed from backend (deployed on VSA)
+10.The Independence form should be sent after adding a team member to an assignment. (deployed on cron)
+11.Timesheet submission should be blocked after 48 hours if the user has not submitted the Independence form (deployed on cron)
+12.Payroll & Attendance Edit Control with Scheduler Protection (deployed on kgslive)
+13.Dynamic Article Payroll Management with Excel Import & NEFT Conversion (deployed on kgslive)
+
+
+22222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+resources\views\backEnd\userprofile.blade.php
+resources\views\backEnd\teammember\form.blade.php
+
+Task:
+- form.blade.php form is used for both Create and Edit pages,
+- is form me and userprofile.blade.php wale form me sirf validation lagana hai isme validatiot apne aaccording lagao ki kis field ko mandatry rakhna hai ya nahi and is form me manadatry filed per * sign lagana red colr me and mobile no nubric hona chahiye and 10 digit hi hona chahiye usi tarah pan card and adhaar card is sabhi per proper validation lagao and sirf validation add karna hai proper way me iske alawa koi bhi chije touch nahi karna hai  
+- Do not remove or alter any field.
+- Do not touch logic, validation, routes, conditions, store/update flow, or functionality.
+
+Follow AGENTS.md
+
+
+
+
+Mode: UI_REFACTOR
+
+Target:
+Route::resource('/outstationconveyance', OutstationconveyanceController::class)
+Method: create()
+View: form.blade.php
+
+Task:
+Improve only the form UI.
+
+Rules:
+- `form.blade.php` is shared by Create and Edit; changes must work for both.
+- Fix field widths, alignment, spacing, and label wrapping.
+- Keep all fields responsive.
+- Show red `*` only for required fields.
+- Remove `required` validation where no `*` exists.
+- Keep `required` only for fields already marked with `*`.
+- Number fields must accept only numeric values. and Do not allow negative values.
+- Hide number input increment/decrement (spinner) controls.
+- Do not add/remove any field.
+
+Keep logic, routes, conditions, store/update flow, and functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+22222222222222222222222222222222
+kgsreport 
+
+Mode: BUG_FIX
+
+Target:
+app/Http/Controllers/Admin/Observation/ObservationRepository.php
+
+Function:
+create()
+
+Task:
+- Increase the `Recommendation` field character limit from 500 to 2000.
+- Apply the same limit on the Edit form if it uses the same field.
+
+Rules:
+- Follow the existing code structure.
+- Do not change any other validation or functionality.
+
+Follow AGENTS.md.
+
+
+
+23-07-2026
+222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+Dashboard module (Find the controller/repository/service responsible for loading the Dashboard default data)
+
+Function:
+Dashboard default load (index/dashboard or equivalent method)
+
+Task:
+- By default, display only the Current Financial Year (FY) data on the Dashboard.
+- The Financial Year should be considered from 1st April to 31st March.
+- Remove the default behavior of showing data from all Financial Years.
+- Apply the Current FY filter consistently across all Dashboard data (cards, charts, counts, tables, and summaries loaded by the default Dashboard view).
+
+Rules:
+- Follow the existing code structure.
+- Do not change any business logic other than the default Financial Year filtering.
+- Do not modify existing filters or user-selected Financial Year behavior (if available).
+- Ensure the default Dashboard view automatically loads the Current Financial Year data only.
+- Do not introduce any unrelated changes.
+
+Follow AGENTS.md.
+
+444444444444444444444444444444444444444444444444444444444444444
+
+Mode: BUG_FIX
+
+Target:
+- overviewdashboard
+- atrdashboard
+- auditengagement
+
+Task:
+isme ek issue hai ki fY waise ko Quater hoga vahi aayega abhi 2026-27 me sirf Q! hai but Q2 bhi aa raha hai and location bhi pahle 2 hi aata is FY me and Quater me abhi 3 aa raha ahi  ye jo maine btaya hai vo overiew dashboard ka btaya hu but sabhi dashboard per isi trah tha 
+
+Rules:
+- Keep existing filter functionality and user-selected behavior unchanged.
+- Do not change any other logic or UI.
+
+Follow AGENTS.md.
+
+Mode: BUG_FIX
+
+Target:
+- Route::match(['get', 'post'], 'overviewdashboard', [OverviewDashboardController::class, 'OverviewDashboard'])->name('overviewdashboard');
+- Route::match(['get', 'post'], 'atrdashboard', [AtrdashboardController::class, 'atrDashboard'])->name('atrdashboard');
+- Route::match(['get', 'post'], 'auditengagement', [AuditengagementController::class, 'auditengagement'])->name('auditengagement')
+
+Task:
+Load only the Current Financial Year by default.
+
+Rules:
+- Default FY = Current Financial Year (1 Apr – 31 Mar).
+- Default Quarter = All Quarters (full FY view).
+- Apply the default FY filter to all dashboard data (cards, charts, tables, counts, summaries).
+- Keep user-selected FY/Quarter filters unchanged.
+- Follow the existing code structure.
+- Do not change any other business logic.
+
+Follow AGENTS.md.
+
+Mode: BUG_FIX
+
+Target:
+ATR Dashboard Filters
+
+Task:
+Fix the default filter selection behavior only.
+
+Issue:
+- Default state is correct:
+  - Current Financial Year selected.
+  - All Quarters selected.
+- But after clicking **All** in any multi-select filter, the **All** checkbox is not getting checked.
+- This issue exists in all ATR multi-select filters (Quarter, Location, Status, Assignee, Risk Rating, etc.).
+
+Rules:
+- When "All" is selected, the "All" checkbox must also remain checked.
+- Keep the displayed value and selected items in sync.
+- Do not change any filtering logic or business logic.
+- Follow the existing code structure.
+
+Follow AGENTS.md.
+
+
+Mode: BUG_FIX
+
+Target:
+ATR Dashboard Filters
+
+Task:
+Fix the multi-select "All" selection behavior.
+
+Expected Behavior:
+- On page load:
+  - Current Financial Year must be selected.
+  - Quarter must have **All + Q1 + Q2 + Q3 + Q4** selected.
+- If the user unchecks **All**, all quarters (Q1, Q2, Q3, Q4) must also be unchecked and the filter should apply.
+- If the user checks **All**, all quarters (Q1, Q2, Q3, Q4) must be checked automatically.
+- If all individual quarters are checked manually, **All** should automatically become checked.
+- If any individual quarter is unchecked, **All** should automatically become unchecked.
+
+Apply the same behavior to every ATR multi-select filter (Quarter, Location, Status, Assignee, Risk Rating, etc.):
+- Checking **All** selects every option.
+- Unchecking **All** deselects every option.
+- Selecting all individual options checks **All** automatically.
+- Deselecting any individual option unchecks **All** automatically.
+
+Rules:
+- Keep existing filtering logic and business logic unchanged.
+- Do not modify any other functionality.
+- Follow the existing code structure.
+
+Follow AGENTS.md.
+
+
+22222222222
+
+Mode: BUG_FIX
+
+Target:
+Dashboard > ATR Tab > Observation By Status (Find the controller/view responsible for the side panel)
+
+Function:
+Observation By Status side panel
+
+Task:
+- Replace the `Due Date` column with the `Target Date` column.
+- Display the corresponding `Target Date` value instead of `Due Date`.
+- Ensure the side panel shows `Target Date` wherever `Due Date` is currently displayed.
+
+Rules:
+- Follow the existing code structure.
+- Do not modify any other columns, filters, sorting, or business logic.
+- Do not change the side panel layout or functionality.
+- Make only the required replacement from `Due Date` to `Target Date`.
+
+Follow AGENTS.md.
+
+
+22222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+Dashboard > ATR Tab > Aging Analysis Card
+Dashboard > Due This Month KPI > Side Panel View
+
+Function:
+Observation Overdue / Ageing calculation
+
+Task:
+- Correct the Observation Overdue (Ageing) calculation logic.
+- Calculate Ageing using the Observation `Target Date`.
+- Ageing should be calculated as: Current Date − Target Date (only when the Target Date is in the past).
+- Apply the corrected logic consistently in:
+  - Aging Analysis Card (ATR Tab)
+  - Due This Month KPI - Side Panel View
+
+Rules:
+- Follow the existing code structure.
+- Do not modify the dashboard UI or layout.
+- Do not change any filters, KPI counts, or unrelated business logic.
+- Ensure the same Ageing calculation logic is used in all affected locations.
+
+Follow AGENTS.md.  sie sort karo 
+
+
+22222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+- atrdashboard
+
+
+in this section, side pannel and tebular me due date ko replace karna hai target date se 
+Observation by Status
+Risk-wise Observation Status
+Department-wise Observation Status
+Aging Analysis
+
+and kpi me bhi due date aata hai use target date se replca karna hai 
+
+in this section, side pannel and tebular me due date hi rahega 
+Actionable by Status
+
+
+Task:
+- Replace the `Due Date` column with the `Target Date` column.
+- Display the corresponding `Target Date` value instead of `Due Date`.
+- Ensure the side panel shows `Target Date` wherever `Due Date` is currently displayed.
+
+Rules:
+- Follow the existing code structure.
+- Do not modify any other columns, filters, sorting, or business logic.
+- Do not change the side panel layout or functionality.
+- Make only the required replacement from `Due Date` to `Target Date`.
+
+Follow AGENTS.md.
+
+
+
+
+Mode: BUG_FIX
+
+Target:
+atrdashboard
+
+Task:
+- Replace `Due Date` with `Target Date` in:
+  - Observation by Status
+  - Risk-wise Observation Status
+  - Department-wise Observation Status
+  - Aging Analysis
+- Apply to Side Panel, Tabular View, and related KPI panels.
+- Keep `Due Date` unchanged in Actionable by Status.
+
+Rules:
+- Follow existing code structure.
+- No unrelated changes.
+
+Follow AGENTS.md.
+
+
+22222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+atrdashboard > Aging Analysis Card
+atrdashboard > Due This Month KPI > Side Panel View
+
+
+Task:
+- Correct the Observation Overdue (Ageing) calculation logic.
+- Calculate Ageing using the Observation `Target Date`.
+- Ageing should be calculated as: Current Date − Target Date (only when the Target Date is in the past).
+- Apply the corrected logic consistently in:
+  - Aging Analysis Card (ATR Tab)
+  - Due This Month KPI - Side Panel View
+
+Rules:
+- Follow the existing code structure.
+- Do not modify the dashboard UI or layout.
+- Do not change any filters, KPI counts, or unrelated business logic.
+- Ensure the same Ageing calculation logic is used in all affected locations.
+
+Follow AGENTS.md
+
+
+Mode: BUG_FIX
+
+Target:
+- atrdashboard > Aging Analysis
+- atrdashboard > Due This Month KPI (Side Panel)
+
+Task:
+Fix Observation Ageing calculation.
+
+Rules:
+- Calculate Ageing using `Target Date`.
+- Ageing = Current Date − Target Date (only if Target Date < Current Date).
+- Apply the same logic to Aging Analysis and Due This Month Side Panel.
+- Follow the existing code structure.
+- Do not change UI, filters, KPI counts, or any other business logic.
+
+Follow AGENTS.md.
+
+222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+- overviewdashboard
+- auditengagement
+
+Task:
+FY wise logic sahi chal raha hai isme filter ke UI me sirf Financial year selected aana chahiye jo ki overviewdashboard per aa raha hai user ko dikh raha hai ki finacial year me selcetd bhi hai and auditengagement me selected to hai but user ko us filed me nahi dikh raha hai  
+
+Rules:
+- Keep existing filter functionality and user-selected behavior unchanged.
+- Do not change any other logic or UI.
+
+Follow AGENTS.md.
+
+32222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+refrence:
+Risk Exposure by Location iske side paneenl me laga ahi 
+
+Target:
+- overviewdashboard
+
+Task:
+Audit Count by Location ke side panel me status column me color  and Camel Case missing hai
+
+Rules:
+- Follow the existing code structure.
+
+Follow AGENTS.md.
+
+222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+refrence:
+- Route::match(['get', 'post'], 'atrdashboard', [AtrdashboardController::class, 'atrDashboard'])->name('atrdashboard'); is me Actionable by Status me already laga hai Actionable Title and Observation Title clickable hyperlinks
+
+Target:
+-  Route::match(['get', 'post'], 'auditee/dashboard', [AuditeeDashboardController::class, 'index'])->name('auditee.dashboard');
+
+Task:
+-Actionable by Status charte se below listed work ko fix karna hai 
+  1.Make Actionable Title and Observation Title clickable hyperlinks
+  2.Remove the "View" button from the last column
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222222222222222222
+
+
+
+Mode: BUG_FIX
+
+refrence:
+- auditengagement dashboard ->Project by Status me project name per laga hai hyperlink vaha se dekh lo  and isi me id ka bhi formate hai vo dekh le 
+
+
+Target:
+- auditee/dashboard
+
+Task:
+- Make "Project" column clickable hyperlink (opens in new tab)
+- Make "Audit Requirements" column clickable hyperlink (opens in sidebar) ye kahi dusre module me check karo agar laga hai yaha bhi add kar do usui tarah agar nahi hai kisi module me to ise chhor de 
+- Replace plain ID with formatted ID (e.g., AJAN- -101 type format) across all modules YE DUSRE MODULE ME DEKH LO KIS TARAH SE AATA AHI 
+- Remove the "View" button from the last column
+
+Rules:
+- Match the ID format used in other modules
+- Keep all other functionality and UI unchanged
+
+
+
+Mode: BUG_FIX
+
+Reference:
+- auditengagement/dashboard > Project by Status chart
+  - Project name hyperlink behavior
+
+Target:
+- auditee/dashboard
+
+Task:
+- Make "Project" column clickable hyperlink (opens in new tab) - follow reference behavior
+- Make "Audit Requirements" column clickable hyperlink (opens in sidebar) - check if exists in other modules; if yes, apply same pattern; if not, skip
+- Remove the "View" button from the last column
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222222222222222222222222222
+Mode: BUG_FIX
+
+Reference:
+- auditee/dashboard > Observation by Status chart
+  - Status column has color coding and Proper spacing/alignment
+  - Risk Rating has color coding and Proper spacing/alignment
+
+Target:
+- admin/atrdashboard > Observation by Status chart
+
+Task:
+- Fix Status column display to match reference:
+  - Add status color coding and Fix spacing/alignment issues
+  - Add Risk Rating color coding and Fix spacing/alignment issues
+
+Rules:
+- Follow reference implementation for status styling and  Risk Rating  
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- admin/atrdashboard per super admin id per total observation 2 aa raha hai and admin/atr per bi total obesrvation 2 aa raha hai jo ki sahi hai 
+- but admin/atrdashboard per auditor user ko total observation 0 aa raha hai and admin/atr pe total obesrvation 2 aa raha hai jo ki sahi hai to yaha auditor ke liye admin/atrdashboard per bhi 2 aana chahiye ise fix karna 
+
+Task:
+
+
+Rules:
+- Follow reference implementation for status styling and  Risk Rating  
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+2222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- admin/atrdashboard: Super Admin sees total observations = 2 (correct)
+- admin/atr: Super Admin sees total observations = 2 (correct)
+- admin/atr: Auditor user sees total observations = 2 (correct)
+
+Target:
+- admin/atrdashboard: Auditor user currently sees total observations = 0 (incorrect)
+
+Task:
+- Fix the observation count for Auditor user on admin/atrdashboard
+- It should display 2 (matching admin/atr and Super Admin view)
+
+Rules:
+- Follow reference implementation for observation count logic
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- admin/auditengagement: Super Admin sees Total Audits = 1, Audits Planned = 0, Audits In Progress = 1, etc (correct) and Project by Status, Audit Procedure Completion Status, IRL by Status me bhi data aa raha hai 
+- admin/auditengagement: Admin sees Total Audits = 0, Audits Planned = 0, Audits In Progress = 0, etc (incorrect) and Project by Status, Audit Procedure Completion Status, IRL by Status me bhi data nahi aa raha hai basically superadmin per sai chal raha hai but admi n per data nahi aa raha hai 
+
+Target:
+
+
+Task:
+
+
+Rules:
+- Follow reference implementation for observation count logic
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- admin/auditengagement: Super Admin
+  - Total Audits = 1 (correct)
+  - Audits Planned = 0 (correct)
+  - Audits In Progress = 1 (correct)
+  - Project by Status, Audit Procedure Completion Status, IRL by Status - data displayed correctly
+
+Target:
+- admin/auditengagement: Admin user
+
+Task:
+- Fix data visibility for Admin user on auditengagement dashboard:
+  1. Total Audits should show correct count (currently showing 0)
+  2. Audits Planned should show correct count (currently showing 0)
+  3. Audits In Progress should show correct count (currently showing 0)
+  4. Project by Status chart should display data
+  5. Audit Procedure Completion Status chart should display data
+  6. IRL by Status chart should display data
+
+Rules:
+- Match Super Admin behavior but with Admin user permissions
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+22222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- auditengagement/dashboard > Project by Status chart
+  - Project name hyperlink behavior
+
+Target:
+- auditee/dashboard
+
+Task:
+- Make "Audit Requirements" column unclickable  and remove hyperlink on auditee/dashboard only 
+- Make "Project" column clickable hyperlink (opens in new tab) - follow reference behavior on admin/auditengagement only
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+2222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- auditengagement/dashboard > Project by Status chart (Project name hyperlink behavior)
+
+Target 1: auditee/dashboard
+- Remove hyperlink from "Audit Requirements" column (make unclickable)
+
+Target 2: admin/auditengagement
+- Add hyperlink to "Project" column (opens in new tab) - follow reference
+
+Rules:
+- Apply only to specified targets
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+22222222222222222222222222222222222222222222222222222222222
+Mode: BUG_FIX
+
+Reference:
+- auditengagement/dashboard > Project by Status chart
+  - Project name hyperlink behavior
+
+Target:
+- auditee/dashboard
+
+Task:
+- Make "Audit Requirements" column unclickable  and remove hyperlink on auditee/dashboard only 
+- Make "Project" column clickable hyperlink (opens in new tab) - follow reference behavior on admin/auditengagement only
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Reference:
+- overviewdashboard
+
+Target:
+- auditee/dashboard  (auditee/dashboard per jaisa filter logic chal raha hai vaisahi rahega sirf by default finacial year and us year me jitne bhi Quater hai vo selected aayega (overviewdashboard per ye implement hai use sirf dekhle kis tarah se chal raha hai )
+
+Task:
+Load only the Current Financial Year by default.
+
+Rules:
+- Default FY = Current Financial Year (1 Apr – 31 Mar).
+- Default Quarter = All Quarters (full FY view).
+- Apply the default FY filter to all dashboard data (cards, charts, tables, counts, summaries).
+- Follow the existing code structure.
+- Do not change any other business logic.
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+- auditee/dashboard
+
+Task:
+- Current Financial Year is already selected by default
+- Ensure "All" option is also selected in the dropdown when only one FY is available
+- Ensure "All" option is selected in Quarter dropdown by default
+- Both FY and Quarter should show selected state in UI
+
+Rules:
+- Keep existing filter logic unchanged
+
+Follow AGENTS.md.
+
+222222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- resources\views\atrdashboard.blade.php is file me <div class="dropdown d-flex align-items-center"> yaha button hai 
+like 
+       <div class="dropdown d-flex align-items-center">
+            <button
+                class="btn btn-white btn-sm d-print-none d-inline-flex align-items-center fw-medium dropdown-toggle gap-1 border px-3 py-1 shadow-sm"
+                type="button" data-bs-toggle="dropdown" data-bs-strategy="fixed" aria-expanded="false"
+                style="background: white !important; color: #334155; border-color: #e2e8f0 !important;">
+                <i class="ri-download-2-line" style="font-size: 16px;"></i>
+                <span class="d-none d-md-inline">Export Report</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end border-0 shadow"
+                style="border-radius: 12px; padding: 0.5rem; min-width: 160px;">
+                <li><a class="dropdown-item px-3 py-2" href="javascript:void(0);" onclick="exportAtrDashboardAsPdf()"><i
+                            class="ri-file-pdf-line me-2"></i> PDF</a></li>
+                <li><a class="dropdown-item px-3 py-2" href="javascript:void(0);" id="atrExportDocxBtn"><i
+                            class="ri-file-word-2-line me-2 text-primary"></i> Word (.docx)</a></li>
+            </ul>
+        </div>
+
+yaha Export Report button ke click per abhi pdf and Word (.docx) download kar sakta hu  but isme add karna hai Excel 
+
+Target:
+- add excell so that excel mai export kar sakhu and is excell me jo data jayega vo attchment ke tarah jayega and attchment ko as a refrence use karna ok and excell me Ajanta pharma ka logo rahega jaise pdf me hai and pdf me jo data aa raha hai usi tarah aayega excell me 
+
+Task:
+
+
+
+
+
+
+
+222222222222222222222222222222222
+
+
+Mode: FEATURE_ADD
+
+Reference:
+- resources/views/atrdashboard.blade.php (<span class="d-none d-md-inline">Export Report</span>)
+
+Target:
+- admin/atrdashboard
+
+Task:
+- Add Excel export option in the Export Report dropdown
+- Excel should contain same data as PDF export
+- Excel should include Ajanta Pharma logo (same as PDF)
+- No watermark in Excel (unlike PDF)
+
+Rules:
+- Keep existing PDF and Word export functionality unchanged
+- Only add Excel option
+- Follow same data structure as PDF export
+
+Follow AGENTS.md.
+
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+2222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+refrence:
+- admin/atrdashboard
+
+Target:
+- admin/overviewdashboard
+- admin/atrdashboard
+- admin/auditengagement
+- auditee/dashboard
+ above listed 4 dashboard per jaha bhi AGING aa raha ho uska color red karna hai jaise admin/atrdashboard me Actionable by Status card ke side paneel me aa raha hai 
+
+Task:
+
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+- Match the ID format used in other modules
+
+
+
+- Make "Project" column clickable hyperlink (opens in new tab)
+- Replace plain ID with formatted ID (e.g., AJN-101 type format) across all modules
+
+
+22222222222222222222222222222222222222
+All dashbaord 
+
+Mode: BUG_FIX
+
+Reference:
+- admin/atrdashboard > Actionable by Status side panel (Aging color styling)
+
+Target:
+- admin/overviewdashboard
+- admin/atrdashboard
+- admin/auditengagement
+- auditee/dashboard
+
+Task:
+- Apply red color to all "Aging" display across all 4 dashboards
+- Match the reference implementation from atrdashboard side panel
+- Apply wherever Aging appears (tables, cards, side panels, charts)
+
+Rules:
+- Keep all other functionality and UI unchanged
+- Follow reference color styling exactly
+
+Follow AGENTS.md.
+
+222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Reference 1:
+- admin/atrdashboard > Actionable by Status side panel (Aging color styling)
+
+Reference 2:
+- auditee/dashboard > IRL by Status card (ID format: AJAN-001 type)
+
+Target:
+- admin/overviewdashboard
+- admin/atrdashboard
+- admin/auditengagement
+- auditee/dashboard
+
+Task:
+1. Apply red color to all "Aging" display across all 4 dashboards (match reference 1)
+2. Format all IDs to AJAN- -001 type format across all 4 dashboards (match reference 2)
+   - Apply wherever ID appears (tables, cards, side panels, charts)
+   - Keep existing hyperlinks intact (do not add/remove links, only change text format)
+
+Rules:
+- Keep all other functionality and UI unchanged
+- Follow reference implementations exactly
+- Do not change hyperlink behavior
+
+Follow AGENTS.md.
+
+2222222222222222222222222222222222222222222222
+
+
+Mode: FEATURE_ADD
+
+Reference:
+- admin/atrdashboard (Export Report dropdown with Excel option - recently implemented)
+
+Target:
+- admin/overviewdashboard
+- admin/auditengagement
+
+Task:
+- Add Excel export option in the Export Report dropdown on both dashboards
+- Excel should contain same data structure as admin/atrdashboard Excel export
+- Excel should include Ajanta Pharma logo
+- File should download as attachment
+
+Rules:
+- Keep existing PDF and Word export functionality unchanged
+- Only add Excel option
+- Follow the same implementation pattern as admin/atrdashboard
+
+Follow AGENTS.md.
+
+
+22222222222222222222222222222222222222222222222222
+
+
+Mode: ANALYSIS
+
+Target:
+OverviewDashboardController@OverviewDashboard
+
+Task:
+For dashboard output below, explain:
+
+- Source method
+- Source table/model
+- Filter applied
+- Simple SQL/query to verify from DB
+
+Outputs:
+
+- riskExposureByLocation
+
+
+No code changes.
+
+Follow AGENTS.md
+
+22222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Reference:
+- admin/atrdashboard (Export Report dropdown with Excel option allready implemented)
+
+Target:
+- admin/overviewdashboard
+- admin/auditengagement
+
+Task:
+- Excel should contain same data structure as admin/atrdashboard Excel export
+- Excel should include Ajanta Pharma logo
+- File should download as attachment
+
+Rules:
+- Keep existing PDF and Word export functionality unchanged
+- Only add data in Excel option
+- Follow the same implementation pattern as admin/atrdashboard
+
+Follow AGENTS.md.
+
+
+Mode: BUG_FIX
+
+Reference:
+- admin/atrdashboard (Excel export - working correctly)
+- admin/auditengagement (Excel export - working correctly)
+
+Target:
+- admin/overviewdashboard
+
+Issue:
+- Overview Dashboard Excel export data is not correct
+- Other dashboards (ATR, Audit Engagement) are working fine
+
+Task:
+- Fix Overview Dashboard Excel export to match the data structure of reference dashboards
+- Ensure all KPI data, charts data, and proper formatting is included
+- Ajanta Pharma logo should appear
+- File should download as attachment
+
+Rules:
+- Keep existing PDF and Word export functionality unchanged
+- Only fix Overview Dashboard Excel export
+- Follow same implementation pattern as admin/atrdashboard and admin/auditengagement
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+- admin/overviewdashboard
+- admin/atrdashboard
+- admin/auditengagement
+- auditee/dashboard
+
+Task:
+- is 4 dashboard per jaha bhi id aa raha hai vo ek hi line me aaye us column ka wrap na ho abhi aa raha hai id column me AJAN- and next line me PRJ-001 ye aa raha hai jabki ye ek hi line me ho wraping na ho like AJAN-PRJ-001
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+
+
+
+
+
+
+222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Reference: atrdashboard, auditengagement, auditee/dashboard 
+
+Target: overviewdashboard
+
+Task: Fix ID column wrapping to match reference dashboards - IDs should display in single line, not wrap to next line
+
+Rules: Only fix wrapping, keep everything else unchanged
+
+Follow AGENTS.md.
+
+
+activitylogs
+
+22222222222222222222222222222222222222222222222222
+
+Mode: BUG_FIX
+
+Target:
+- activitylogs
+- teammember/*/edit
+
+Task:
+- basically ise ye kharna hai ki activity log implemented hai isme ek baar ise dekh lo and isme add karna hai 
+  1.jab admin (role id 11) kisi bhi teamemmber ka profile edit karta hai to uska log bnata hai isme add karna hai ki agar Qualifications section me file upload karta hai to uska bhi log banega 
+  2. agar koi Qualifications section me file /documnet delete karega to uska bhi log banega and 
+
+Rules:
+- Keep all other functionality and UI unchanged
+
+Follow AGENTS.md.
+
+
+Mode: BUG_FIX
+
+Target:
+- activitylogs
+- teammember/*/edit
+
+Task:
+- Activity log is already implemented
+- Add logging for Qualifications section:
+  1. When admin (role id 11) uploads a file/document in Qualifications section while editing team member profile
+  2. When any file/document is deleted from Qualifications section
+
+Rules:
+- Keep all other functionality and UI unchanged
+- Follow existing activity log implementation pattern
+
+Follow AGENTS.md.
+
+
+2222222222222222222222222222222222
+
+
+Mode: ENHANCEMENT
+
+Target:
+- teammember/*/edit
+
+Task:
+- Add activity logging for all document/file actions on team member edit page:
+  1. When admin views/clicks any file (Pan card, Aadhaar card, Qualifications, etc.)
+  2. When admin downloads any file
+
+Rules:
+- Follow existing activity log pattern
+- Apply to all document types (Pan card, Aadhaar, Qualifications, etc.)
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+2222222222
+
+
+Mode: ENHANCEMENT
+
+Target:
+- teammember/*/edit
+
+Task:
+- Add activity logging for all document/file actions on team member edit page:
+  1. When admin views/clicks any file (Pan card, Aadhaar card, Qualifications, etc.)
+  2. When admin downloads any file
+
+Rules:
+- Follow existing activity log pattern
+- Apply to all document types (Pan card, Aadhaar, Qualifications, etc.)
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+
+222222222222222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+- teammember/*/edit (document/file actions)
+
+Issue:
+- Activity logging for document views works inconsistently
+- Sometimes logs are created, sometimes they are not
+
+Task:
+- Fix activity logging to work consistently for view actions only
+- Every time admin views/clicks any file, a log should be created
+- Apply to all document types (Pan card, Aadhaar, Qualifications, etc.)
+
+Rules:
+- Follow existing activity log pattern
+- Keep all other functionality unchanged
+- Log should be created on every single view/click
+
+Follow AGENTS.md.
+
+
+
+refrence 1:
+app\Http\Controllers\ClientController.php function store()
+
+refrence 2:
+app\Http\Controllers\ActivitylogsController.php function (activitylogs)
+
+
+
+## jab file view karega tab
+
+Details column me 
+Module 'Teammember' and Action 'Viewed' hoga 	
+Viewed details has been created refrence 1
+
+and data before update and data after update ko same rahne do jaisa abhi hai
+
+
+refrence 2
+## During Qualifications Upload
+Module 'Teammember' and Action 'Update' hoga 
+
+Details column me 
+Qualification: N/A  → 10the certificate (qualification name)
+Document File: N/A  → 1785566909Screenshot (103).png 
+Original file: N/A  → Screenshot (103).png 
+
+Data before update me 
+same rahega jasie abhi hai
+
+
+Data after Update me 
+Teamember id	936
+Qualification	10the certificate (qualification name)
+Document file	1785566909Screenshot (103).png
+Original file	Screenshot (103).png
+
+
+refrence 2
+## During Qualification delete 
+Module 'Teammember' and Action 'Update' hoga 
+
+Details column me 
+Qualification: 10the certificate (qualification name) → N/A
+Document File: 1785566909Screenshot (103).png   → N/A
+Original file: Screenshot (103).png   → N/A
+
+Data before update me 
+
+Field Name	Field Value
+Teamember id	936
+Qualification	10the certificate (qualification name)
+Document file	1785566909Screenshot (103).png
+Original file	Screenshot (103).png
+
+
+
+Data after Update me 
+
+Field Name	Field Value
+Teamember id	936
+Qualification	N/A
+Document file	N/A
+Original file	N/A
+
+
+222222222222222222222222222222222222222222222
+
+Mode: ENHANCEMENT
+
+Reference 1:
+- app/Http/Controllers/ClientController.php > store() - Activity log creation pattern
+- app\Http\Controllers\TeammemberController.php > changeteamStatus()  - Activity log creation pattern
+- app/Http/Controllers/ActivitylogsController.php - Activity log structure
+
+Target:
+- teammember/*/edit (document/file actions)
+
+Task:
+- Add/Update activity logging for following actions:
+
+1. File View:
+   - Module: 'Teammember'
+   - Action: 'Viewed'
+   - Details: "Viewed details has been created"
+   - Keep before/after data same as existing
+
+2. Qualification Upload:
+   - Module: 'Teammember'
+   - Action: 'Update'
+   - Details: 
+     - Qualification: N/A → [qualification_name]
+     - Document File: N/A → [file_name]
+     - Original File: N/A → [original_file_name]
+   - Data Before: Teamember id, Qualification: N/A, Document File: N/A, Original File: N/A
+   - Data After: Teamember id, Qualification: [value], Document File: [value], Original File: [value]
+
+3. Qualification Delete:
+   - Module: 'Teammember'
+   - Action: 'Update'
+   - Details:
+     - Qualification: [qualification_name] → N/A
+     - Document File: [file_name] → N/A
+     - Original File: [original_file_name] → N/A
+   - Data Before: Teamember id, Qualification: [value], Document File: [value], Original File: [value]
+   - Data After: Teamember id, Qualification: N/A, Document File: N/A, Original File: N/A
+
+Rules:
+- Follow reference implementation from ClientController and ActivitylogsController
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+
+
+
+12222222222222222222222222
+
+
+Mode: ENHANCEMENT
+
+
+Target:
+- teammember/*/edit (qualification delete action)
+
+Task:
+- Update activity logging for Qualification Delete:
+
+3. Qualification Delete:
+   - Module: 'Teammember'
+   - Action: 'Update'
+   - Details:
+     - Qualification: [qualification_name] → N/A
+     - Document File: [file_name] → N/A
+     - Original File: [original_file_name] → N/A
+   - Data Before: Teamember Name, Qualification: [value], Document File: [value], Original File: [value]
+   - Data After: Teamember Name, Qualification: N/A, Document File: N/A, Original File: N/A
+
+Note:
+- Replace "Teamember id" with "Teamember Name" in both Data Before and Data After
+- Keep all other columns unchanged
+
+Rules:
+- Follow reference implementation from ClientController and ActivitylogsController
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+22222222222222222222222222222222222222
+
+
+
+Mode: BUG_FIX
+
+Reference: 
+- teammember/*/edit
+
+Target:
+- /teammember for role id 11 ke liye only
+
+Task:
+- Fix activity logging to work consistently for view actions only
+- Every time admin views/clicks any file, a log should be created
+- Apply to all document types (Pan card, Aadhaar, etc.)
+
+Rules:
+- Follow existing activity log pattern
+- Keep all other functionality unchanged
+- Log should be created on every single view/click
+
+Follow AGENTS.md.
+
+
+regarding VSA
+222222222222222222222222222222222222222222222222222222
+
+Mode: OPTIMIZATION
+
+Target:
+- TimesheetController@timesheetnotfilledlastweek
+- TimesheetnotfilllastweekReminder@handle
+
+Task:
+Optimize both functions without changing their output or behavior.
+
+Rules:
+- Reduce unnecessary queries, loops, and duplicate logic.
+- Preserve all conditions, returned data, emails, and results exactly.
+- Follow the existing code structure.
+- Do not change any unrelated code.
+
+Follow AGENTS.md.
+
+
+22222222222222222222222222222222222222222222222222
+
+
+
+
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- resources/views/backEnd/timesheet/myteamindex.blade.php
+- `Timesheet All` button
+- TimesheetnotfilllastweekReminder@handle
+
+Task:
+
+Rules:
+
+
+Follow AGENTS.md.
+
+
+
+Test cases 
+
+1.Login as role admin; open timesheet-> Submitted timesheet; click Timesheet All
+2.The User whose last submission is not greater than latest rejoining date (User is skipped)
+3.The User whose last submission is greater than latest rejoining date (User remains included)
+4.Excel include data only Active User jo timesheet submitt kiya ho 
+
+
+
+DB_DATABASE=vsalive2
+# DB_DATABASE=vsademotimeheet3
+
+
+222222222222222222222222222222222222
+
+
+
+Mode: ENHANCEMENT
+
+Reference 1:
+- app/Http/Controllers/ClientController.php > store() - Activity log creation pattern
+- app\Http\Controllers\TeammemberController.php > changeteamStatus()  - Activity log creation pattern
+- app/Http/Controllers/ActivitylogsController.php - Activity log structure
+
+Target:
+- teammember/*/edit (document/file actions)
+-
+
+Task:
+- Add/Update activity logging for following actions:
+
+1. File View:
+   - Module: 'Teammember'
+   - Action: 'Viewed'
+   - Details: "Viewed details has been created"
+   - Keep before/after data same as existing
+
+2. Qualification Upload:
+   - Module: 'Teammember'
+   - Action: 'Update'
+   - Details: 
+     - Qualification: N/A → [qualification_name]
+     - Document File: N/A → [file_name]
+     - Original File: N/A → [original_file_name]
+   - Data Before: Teamember id, Qualification: N/A, Document File: N/A, Original File: N/A
+   - Data After: Teamember id, Qualification: [value], Document File: [value], Original File: [value]
+
+3. Qualification Delete:
+   - Module: 'Teammember'
+   - Action: 'Update'
+   - Details:
+     - Qualification: [qualification_name] → N/A
+     - Document File: [file_name] → N/A
+     - Original File: [original_file_name] → N/A
+   - Data Before: Teamember id, Qualification: [value], Document File: [value], Original File: [value]
+   - Data After: Teamember id, Qualification: N/A, Document File: N/A, Original File: N/A
+
+Rules:
+- Follow reference implementation from ClientController and ActivitylogsController
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+
+
+
+Mode: BUG_FIX
+
+Target:
+- teammember/*/edit (document/file actions)
+- /teammember for role id 11 ke liye only
+
+Task:
+1. File View:
+   - Module: 'Teammember'
+   - Action: 'Viewed'
+   - Details: "Viewed details has been created"
+   - Keep Data before update same as existing
+   - Data After update: Teamember Name, Document name: [value], Document File: [value], Original File: [value]  yaha documnet name jayega jab Qualification ko viewed karega us case me qualification jayega 
+
+Rules:
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+
+Mode: BUG_FIX
+
+Target:
+- teammember/*/edit (document/file view actions)
+- /teammember (only for role_id = 11)
+
+Task:
+- Fix File View activity logging:
+  - Module: 'Teammember'
+  - Action: 'Viewed'
+  - Details: "Viewed details has been created"
+  - Data Before: Keep same as existing (unchanged)
+  - Data After: Teamember Name, Document name: [value], Document File: [value], Original File: [value]
+  - Note: Field Name me  "Document name" should be dynamic based on what is being viewed (e.g., if Qualification is viewed, show Field Name me "Qualification" and Field Value me [value]; if Pan card is viewed, show  Field Name column me Document name: and Field Value column me   [value], etc.)
+
+Rules:
+- Keep all other functionality unchanged
+- Follow existing activity log pattern
+
+Follow AGENTS.md.
+
+
+22222222222222222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+- teammember/*/edit (document/file view actions)
+- /teammember (only for role_id = 11)
+
+Task:
+user jab image per click karta hai to https://vsademo.capitall.io/backEnd/image/teammember/profilepic/178601692035.png  and jab admin click karta hai to https://vsademo.capitall.io/teammember/document/936/profilepic/view?_view=1786017757951
+basically user jab file per click karta hai to image open hota hai but admin per nahi ho raha ahi
+
+Rules:
+- Keep all other functionality unchanged
+- Follow existing activity log pattern
+
+Follow AGENTS.md.
+
+
+
+
+Activity logs need to be implemented in the Profile section for Documents viewand Documents download actions.
+
+
+
+22222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Target:
+- teammember/*/edit (document/file view)
+- /teammember (role_id = 11 only)
+
+Issue:
+- User URL: opens image directly (works)
+- Admin URL: gives 404 Not Found (broken)
+- https://vsademo.capitall.io/backEnd/image/teammember/profilepic/178601692035.png  user   
+- https://vsademo.capitall.io/teammember/document/936/profilepic/view?_view=1786018298480 admin - 
+
+Task:
+- Fix admin file view route so it opens files properly
+- Admin should be able to view all files (Pan card, Aadhaar, Qualifications, Profile Pic, etc.)
+- Match the user view behavior
+
+Rules:
+- Keep all other functionality unchanged
+- Fix only the 404 issue for admin
+
+Follow AGENTS.md.
+
+
+
+
+11111111111111111111111111111111111111111111111111
+
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- Entire Project (Frontend + Admin Panel)
+
+Task:
+- Convert static portfolio project to dynamic
+- Create migrations for all frontend data sections
+- Create database tables
+- Seed existing frontend data into tables
+- Build CRUD operations (Create, Read, Update, Delete, View) in admin panel for all sections
+- Display dynamic data on frontend from database
+
+Scope:
+- All frontend sections (Home, About, Resume, Portfolio, Contacts, etc.)
+- Admin panel to manage all data
+
+Rules:
+- Follow Laravel best practices
+- Keep existing frontend UI unchanged
+- Use proper database relationships
+
+Follow AGENTS.md.
+
+
+
+
+Prashant sir vo increamet latter wala current appraisal cycle me kuchh nahi Karega same rahega 
+
+ye to ho nahi paaya to please work from home kar wa do 1 month office and 1 month
+
+
+
+
+
+1.abbout section me jo image hai pahle jitna hieght and width tha utna karna hai 
+2.Skills section me jo text tha and jo Ui design hai same rahega 
+3.Resume section me bhi jo text tha vahi rahega and UI bhi same rahega 
+4.Portfolio section me bhi jo text and image ka height width tha vo same rahega  basically ui same rahega and data bhi same rahega 
+5.Android applications section me bhi ui same rahega and image ka with height and design same rahega 
+
+
+Mode: ANALYSIS
+
+Target:
+- Static version of portfolio project
+
+Task:
+- Analyze the static version completely:
+  1. About section: Image dimensions, layout, spacing, text styling
+  2. Skills section: Text content, UI design, colors, layout, icons
+  3. Resume section: Text content, layout, sections, styling
+  4. Portfolio section: Image dimensions, grid layout, spacing, text styling
+  5. Android Applications section: UI design, image dimensions, grid layout, styling
+  6. Overall design: Colors, fonts, spacing, responsiveness
+
+Output:
+- Document all UI specifications and design patterns
+- Note image dimensions used in each section
+- Note text styling (font size, color, spacing)
+- Note layout structure (grid, flex, columns)
+- Note any specific CSS classes or styles used
+
+Next Step:
+- After analysis, mai dynamic version dunga and dynamic version me jo bhi deffrence aayega use solved karna hoga 
+
+Note: abhi sirf analyze karo koi change nahi karna hai 
+
+Follow AGENTS.md.
+
+22222222222222222222222222222
+
+
+Mode: BUG_FIX
+
+Reference:
+- Static version (UI and design)
+
+Target:
+- Dynamic version (current implementation)
+
+Issues:
+1. About section - Image height/width not matching static version
+2. Skills section - Text and UI design not matching static version
+3. Resume section - Text and UI design not matching static version
+4. Portfolio section - Text, image height/width, and UI design not matching static version
+5. Android Applications section - UI design, image height/width, and layout not matching static version
+
+Task:
+- Fix all sections to match static version exactly:
+  1. About: Restore original image dimensions
+  2. Skills: Restore original text and UI design
+  3. Resume: Restore original text and UI design
+  4. Portfolio: Restore original text, image dimensions, and UI design
+  5. Android Applications: Restore original UI design, image dimensions, and layout
+
+Rules:
+- Keep all functionality unchanged (dynamic data should still work)
+- Only fix UI/design to match static version
+- Data should remain dynamic but display should match static
+
+Note: This is The dynamic version 
+
+Follow AGENTS.md.
+
+
+Mode: BUG_FIX
+
+Refrence:
+- admin/blog
+
+Target:
+- admin/portfolio/settings  table me Profile Image
+- admin/portfolio/portfolio-items  table me Image
+- admin/portfolio/portfolio-detail-images  table me  Image
+
+
+Task:
+-  $item->details_url  iske click per jo page open hota hai portfolio ka vo page abhi bhi static hai ise dynamic karo and iska table create kro using migration and isme jo data hai abhi vo same data rahega and ui same rahega sirf tumhe data dikhana hai same ui me 
+
+
+Rules:
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+
+
+
+
+

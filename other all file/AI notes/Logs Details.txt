@@ -1,0 +1,38 @@
+1.Assignment Edit
+2.Assignment Create
+3.Add Assignment Name
+
+4.Add Teammember to Assignment
+5.Teammember List – Added from Assignment View Page
+6.Partner List – Added from Assignment View Page
+7.Teammember List – Active and Inactive Team from Assignment
+8.Assignment Viewer – Added
+9.Client Contact – Added
+10.UDIN List – Added
+
+11.Confirmation List
+12.Confirmation – Open and Closed
+13.Upload Confirmation File
+
+14.Folder Added to Assignment
+15.Add File in Folder
+
+16.Edit Client Details
+17.Add Client
+
+18.Teammember – Active and Inactive
+19.Add New Teammember
+20.Edit Teammember Details
+
+21.Leave – Approve and Reject
+22.Timesheet Request – Approve and Reject
+
+23.Notification – Added
+24.Edit Holiday
+25.Add Checklist
+26.Create Login Member
+27.Leave Revert – Approve/Reject
+28.User Timesheet Delete
+29.Reject Submitted Timesheet
+30.Promotion and Rejoining
+31.Knowledgebase – Add and Delete
