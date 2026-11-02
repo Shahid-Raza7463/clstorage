@@ -37,7 +37,6 @@ git commit -m "17-10-2026 latest"
 git remote -v
 git push -u origin main
 
-
 baki hai 
 C:\xampp\htdocs
 Sabh ka database le le and yaha drive per daale xampp_backup folder me 
@@ -150,9 +149,4 @@ Untracked files:
         vsalive/
 		database/
 		
-		
-
-
 	
-	
-prashant and capitall hr wala mail baki 
