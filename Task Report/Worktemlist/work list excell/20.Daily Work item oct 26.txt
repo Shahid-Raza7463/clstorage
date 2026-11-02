@@ -78,11 +78,8 @@ Sunday
 `````````````````````````````````````````````
 
 13-10-2026
+1.Worked on VSA demo 
 
-
-assignmet created date ascending order
-kiya kiya issue aayega  on vsa 
-and in progress taska and on hold wale task complete 
 
 
 
@@ -90,31 +87,89 @@ and in progress taska and on hold wale task complete
 
 
 14-10-2026
-
-
-Business Development
-
-
-fl    display: flex;
+1.Working on Vendor module 
 
 
 15-10-2026
+1.Working on Vendor module 
+
 16-10-2026
+1.Working on Vendor module 
+
 17-10-2026
+Sturday 
+
 18-10-2026
+Sunday
+
+
 19-10-2026
+1.Working on Vendor module 
+
 20-10-2026
+Dashahara leave 
+
+
 21-10-2026
+1.Working on Vendor module 
+
+Expense Details : on show page 
+
+
+
 22-10-2026
+1. warning message not coming 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 23-10-2026
+770.Exclude Existing Team Members from Staff Selection Dropdown
+636.Browser Back Navigation Displays Login Page with 419 Error
+779.No Option to Return to Login Page from OTP Verification Screen
+775.Allow Existing Designation During Employee Rejoining
+
 24-10-2026
+Staurday 
+
 25-10-2026
+Sunday
+
 26-10-2026
+770.Exclude Existing Team Members from Staff Selection Dropdown
+636.Browser Back Navigation Displays Login Page with 419 Error
+779.No Option to Return to Login Page from OTP Verification Screen
+775.Allow Existing Designation During Employee Rejoining
+Working on Data for vsa KT
+
 27-10-2026
+
+
 28-10-2026
+
+
 29-10-2026
+
+
 30-10-2026
+
+
 31-10-2026
+
+assignmet created date ascending order
+kiya kiya issue aayega  on vsa 
+and in progress taska and on hold wale task complete 
 
 
 
@@ -265,3 +320,30 @@ ajanta
 
 
 ``````````````````````````````````````````````````
+
+20234258745
+
+206106862256
+
+749899832459
+
+
+        if (auth()->check() && $user->two_factor_code && !in_array($user->email, ['Poojakumari@capitall.io', 'manojsangwan@capitall.io', 'sukhbahadur1993@gmail.com', 'sangwanm242@gmail.com', 'Guneet@capitall.io', 'Harish@capitall.io', 'Simmi@capitall.io', 'shahidraza@capitall.io', 'itsupport_delhi@vsa.co.in', 'keshavc@vsa.co.in'])) {
+
+
+
+
+itsupport_delhi@vsa.co.in
+
+bhaskark@vsa.co.in
+
+sunnygupta@vsa.co.in
+
+shreya@vsa.co.in
+
+
+                // shahid take
+                ->take(50)
+				
+				
+ye function hai to mujhe prompt do ki mai is function me kiya features ahi becouse mujhe KT dena hai to mai Ai ko bolunga ki mujhe ek notes bna ke de jisme kpi ka kiya use hai mai 1 kpi ka explain karta hu usi tarah mujhe sabhi kpi and chart ka notes bna kar dega tumhe sirf prompt dena hai jaise ki ek kpi hai Bills Pending for Generation iska explananiton is tarah se hona chahiye jaise ki "ye kpi me jo data aa raha ahi  aise assignmnet jiska invoice abhi tak generate nahi huwa hai un sabhi assignment ka amount aata hai is kpi me " is tarah se proper explanantion ho to prompt do 

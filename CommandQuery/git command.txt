@@ -599,8 +599,8 @@ git merge npcidev-shahid
 git push origin npci-dev
 git reset --hard
 
-php artisan migrate:refresh --path=\database\migrations\2026_03_14_164508_create_sub_observations_table.php
-
+php artisan migrate:refresh --path=\database\migrations\2026_10_21_000001_create_vendor_expenses_table.php
+php artisan migrate --path=database/migrations/2026_10_21_000001_create_vendor_expenses_table.php
 
 
 
@@ -831,8 +831,6 @@ in this branch shahid-iacV3 then
 git fetch origin
 git branch it will be  shahid-iacV3
 git merge origin/npci-dev  now you will see conflict and solve it then 
-
-
 
 
 
@@ -1267,3 +1265,16 @@ git commit -m "Conflict solved hare"
 
 ise commit karne ke baad again vsa-dev se push kare rebase wala ke sath 
 C:\xampp\htdocs\vsademo>
+
+
+2222222222222222222222222222222
+add folder one by one on git 
+git add .gitignore
+git add "All working/"
+git add "backend using model/"
+git add "e-commerce/"
+
+2222222222222222222222222
+
+git branch -D capitallexittime
+git fetch origin --prune

@@ -1,21 +1,158 @@
+C:\ReactNativeApp
+C:\ReactNativeApp\FriendList> completed https://github.com/Shahid-Raza7463/ReactNativeApp.git
+C:\ReactNativeApp\FriendsList> Completed   https://github.com/Shahid-Raza7463/all-app-directry.git hare inside capitallleavingtime
+
+
+	
+
+
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        ajanta-dev/
+        applications.html
+        bitnami.css
+        capitall/
+        dashboard/
+        database/
+        expertaff final.zip
+        expertaff old/
+        expertaff/
+        favicon.ico
+        img/
+        index.php
+        kgsdemo/
+        kgslive/
+        linktester/
+        npci-dev/
+        portfolio1/
+        prarang-assignmnet/
+        shahidportfolio/
+        vsademo/
+        vsalive/
+        xampp/
+
+
 git commit -m "17-10-2026 latest"
 git remote -v
 git push -u origin main
 
 
 baki hai 
-Desktop
-C:\ReactNativeApp
-C:\Shahid Raza
 C:\xampp\htdocs
+Sabh ka database le le and yaha drive per daale xampp_backup folder me 
 
 
 
+``````````````````````````````````
+C:\Shahid Raza
+C:\Shahid Raza\Capitall All Project  baki hai 
+C:\Shahid Raza\Capitall\Project   no need to store please delete it on last date 
+```````````````````````````````````````
 
 
 
 
 Completed
-C:\Shahid Raza\Capitall\VSA project functionality  completed
+C:\Shahid Raza\Capitall\VSA project functionality  completed on git 
+C:\Shahid Raza\Capitall\All Setup  completed on drive  ise abhi delet nahi kare otherwise vs code ka setup sab kharab ho jayega 
+C:\Users\KGS-429\Desktop\shahidapp completed on git 
 
 
+
+
+
+
+
+
+22222222222222222222222222222222222222
+All react project folder only
+
+git config --global --add safe.directory "C:/Users/KGS-429/Desktop/React/All react project folder only/Downloaded project/CRUD_with_React_Node.js_MySQL"
+
+
+git config --global --add safe.directory 'C:/Users/KGS-429/Desktop/React/All react project folder only/Downloaded project/CRUD_with_React_Node.js_MySQL'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+…or create a new repository on the command line
+echo "# FriendList-V1" >> README.md
+git init
+git add README.md
+git commit -m "FriendList app project added"
+git branch -M FriendList
+
+git remote add origin https://github.com/Shahid-Raza7463/all-app-directry.git
+
+git push -u origin FriendList
+
+git push origin portfolio-demo
+admin@123 ReactNativeApp 
+
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/Shahid-Raza7463/React-js-project.git
+git branch -M working
+git push -u origin working
+
+
+
+
+expertaffnode
+IN react folder, completed on git 
+C:\Users\KGS-429\Desktop\React\ExpertAff
+C:\Users\KGS-429\Desktop\React\expertaffnode
+C:\Users\KGS-429\Desktop\React\expertaffreact
+C:\Users\KGS-429\Desktop\React\practicereact
+C:\Users\KGS-429\Desktop\React\All react project folder only>
+C:\Users\KGS-429\Desktop\React\Downloaded project>
+
+
+
+htdocs
+C:\xampp\htdocs\shahidportfolio>  
+origin  https://github.com/Shahid-Raza7463/portfolio.git (push)
+
+C:\xampp\htdocs\expertaff>
+C:\xampp\htdocs\expertaff old>
+expertaff final.zip
+linktester/ 
+portfolio1/
+prarang-assignmnet/
+		
+		
+
+
+
+capitall-htdocss
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        ajanta-dev/
+        capitall/
+        kgsdemo/
+        kgslive/
+        npci-dev/
+        vsademo/
+        vsalive/
+		database/
+		
+		
+
+
+	
+	
+prashant and capitall hr wala mail baki 

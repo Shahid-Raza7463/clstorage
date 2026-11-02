@@ -5979,7 +5979,182 @@ Follow AGENTS.md.
 
 
  
-assignmentmappings table me engagementfee column me amount hai us amount ko Amount * filed se compare kare and agar engagementfee ke amount se jayada maount enter karega to ek warning aayega 
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Function: create()
+
+Task:
+- Implement dynamic Hotel Limit calculation based on City Tier, Designation Category, Number of People, and Stay Nights.
+
+Rules for Hotel Limits (Per Person, Per Night):
+| Category | Tier 1 | Tier 2 | Tier 3 |
+| :--- | :--- | :--- | :--- |
+| Partner | 10,000 | 7,000 | 5,000 |
+| CA/Semi | 5,000 | 3,500 | 2,500 |
+| Article | 4,000 | 3,000 | 2,000 |
+
+City Tier Classification:
+- Tier 1: Mumbai, New Delhi, Delhi, Noida, Greater Noida, Ghaziabad, Gurugram, Faridabad, Bengaluru, Chennai, Hyderabad, Pune, Kolkata
+- Tier 2: Jaipur, Ahmedabad, Surat, Vadodara, Indore, Nagpur, Kochi, Coimbatore, Lucknow
+- Tier 3: Any other city entered manually (Others).
+
+Calculation Logic:
+1. Determine the category based on designation (Partner, CA/Semi, Article).
+2. Determine the base limit per night based on Category and City Tier.
+3. Multiply by Number of People (e.g., 2 Managers = 2 * base limit).
+4. Multiply by Number of Stay Nights (e.g., 1/12 to 7/12 = 6 nights).
+   Formula: Total Limit = (Base Limit) * (Number of People) * (Stay Nights).
+5. Excess Allowance: 10% above the calculated total limit requires approval (show warning, do not block submission).
+
+Acceptance Criteria:
+1. Automatically calculate and display the Hotel Limit when City, Date, and Team Members are selected.
+2. Show a warning if the entered Hotel Amount exceeds the calculated limit + 10% excess.
+3. Keep existing functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+
+Mode: BUG_FIX
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Function: create()
+
+Task:
+
+1.Add Extra Member (Optional) ancor tag maine add kiya hai plus icon ke bgal me basically is ke click per Add Extra Member (Optional) ka jo select box hai isme jo data aa raha hai vahi same data aayega and iske bagal me Expense Type * ka bhi selct box aayega and 
+iske baad minus wale icon aayega uske click per ye row hat jayega and ye row create hoga same way jaise plus icon per click karne per hota hai and expence type * ka functionality same rahega  basically is row ko add karne ka matlab ye hai ki abhi assignment team select box me jo data aata hai vahi data aata hai jo assignment me hai but agar assignment ke alawa koi team add karna chahe to kar sakta hai to iske according mujhe prompt do 
+Rules:
+- Keep all other functionality unchanged
+
+Follow AGENTS.md.
+
+
+
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Function: create()
+
+Task:
+- Add an "Add Extra Member (Optional)" anchor tag next to the existing Plus (+) icon.
+- On clicking this anchor tag:
+  1. Add a new row.
+  2. The first field in the row should be "Add Extra Member (Optional)" select box.
+     - This select box should populate with the same data that is currently appearing in the "Add Extra Member (Optional)" field (i.e., allow selecting team members beyond the selected assignment).
+  3. Add an "Expense Type *" select box next to it.
+     - The functionality of Expense Type remains the same (dynamic dependent fields per row).
+  4. Add a Minus (-) icon at the end of the row.
+     - Clicking this Minus icon removes this specific row (similar behavior to the existing Minus icon).
+  5."Add Extra Member (Optional)" field remove it that is coming right now after Amount * field
+
+Rules:
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Function: create()
+
+- Route::resource('/vendor', VendorController::class);
+- Function: show()
+
+Task:
+1.-vendor create ka form ready ho gya hai ab ise store karwana hai jo bhi new field add kiye hai like Expense Type * and iske related filed ko to jo abhi table hai usi me ho jayega ya koi extra table bnana hoga ?
+2.-Function: show()
+ per jo blade file chal raha hai us per data dikhana hai extra field jo bhi add huwa hai uska bhi 
+3.jab store karte hai to jo data jata hai uska dd karke output is file me hai (vendorstoreddoutput.tsv) use review kar lo 
+
+Rules:
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+Mode: BUG_FIX
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Function: create()
+
+Task:
+1.An invalid form control with name='hotel_city_other[]' is not focusable. ye issue aa raha hai jab expence type me hotel choose karta hu and submit karta hu and jab expence type me travel choose karta hu tab form submit hota hai 
+
+Rules:
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Functions: store(), show()
+
+Task:
+
+1. Store Logic & Database Schema:
+   - Analyze the newly added dynamic fields (Expense Type, Assignment Team, Hotel/Travel details, etc.) based on the provided `vendorstoreddoutput.tsv`.
+   - Determine if the existing database table structure (e.g., `vendors`) is sufficient or if new related tables (1-to-many or JSON columns) are needed to store multiple team members and expense details.
+   - Implement the `store()` logic to save all the new dynamic form data correctly.
+
+2. Show Logic & UI:
+   - Update the `show()` function's Blade view to display all the newly added fields.
+   - Ensure multiple rows (Team members + Expense Types) are displayed properly.
+   - Display the related dynamic data (like Hotel city, travel class, etc.).
+
+Rules:
+- Review `vendorstoreddoutput.tsv` before writing the store logic to understand the data structure.
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+Mode: FEATURE_IMPLEMENTATION
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Functions: store(), show()
+
+Context:
+- The dynamic form fields (Expense Type, Travel, Hotel, Optional Members) are currently being received in the request, but they are NOT being saved in the database.
+- The `show()` function needs to retrieve and display this new dynamic data.
+- The existing `store()` and `show()` functions are provided for reference.
+
+Task:
+
+1. Database Schema (Migrations):
+   - Create a new 1-to-many relationship table (e.g., `vendor_expenses` or `vendor_expense_details`) to save the dynamic expense rows.
+   - Suggested columns: `id`, `vendorlist_id` (foreign key), `teammember_id`, `expense_type`, `travel_place`, `travel_duration`, `travel_mode`, `travel_class`, `hotel_city`, `hotel_city_tier`, `hotel_from_date`, `hotel_to_date`, `hotel_nights`, `created_at`, `updated_at`.
+
+2. Store Logic (`store()`):
+   - Update the `store()` function to save the dynamic arrays (`expense_type`, `travel_place`, `hotel_city`, etc.) into the new table.
+   - Since the number of team members and expense rows can vary, carefully loop through the `$request->expense_type` array and map the corresponding index to team members (handling `assignmentgenerateteam` and `optional_member`).
+   - Keep the existing Vendor and VendorList save logic intact.
+
+3. Show Logic (`show()` & View):
+   - Update the `show()` function to fetch the related dynamic rows from the new table (using `vendorlist_id`).
+   - Update the `backEnd.vendor.view` blade file to display these details in a clear table format (e.g., showing Team Member Name, Expense Type, and specific details like Hotel City/Nights or Travel Place/Class).
+
+Rules:
+- Analyze the provided `store()` and `show()` functions to understand the current DB structure.
+- Keep all other existing functionality (mail sending, file uploads, existing vendor updates) unchanged.
+
+Follow AGENTS.md.
 
 
 
@@ -5990,6 +6165,76 @@ assignmentmappings table me engagementfee column me amount hai us amount ko Amou
 
 
 
+Mode: BUG_FIX
+
+Target:
+- Route::resource('/vendor', VendorController::class);
+- Functions: store(), show()
+
+Issues:
+1. When "Invoice Type *" = "Generic" is selected and submitted, the "Expense Details" section shows up on the view page. This section should ONLY be visible when "Invoice Type *" = "Linked with Client".
+2. When "Invoice Type *" = "Business Development" is selected and submitted, the same issue occurs — "Expense Details" section shows up. It should ONLY be visible for "Linked with Client".
+3. When "Invoice Type *" = "Business Development" is selected, it shows "Team Member" and "Client Name *" fields (where Client Name is entered manually). Previously, this data was saving successfully, but now it's not storing in the database. The "Linked with Client" flow is working fine and should remain untouched.
+
+Task:
+1. In `show()` function/view: Only display the "Expense Details" section if the invoice type (or related `types` flag) corresponds to "Linked with Client". Hide it for "Generic" and "Business Development".
+2. In `store()` function: Fix the saving logic for "Business Development" so that the manually entered "Client Name" and selected "Team Member" data are saved correctly in the database (as they were before).
+
+Rules:
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+770.Exclude Existing Team Members from Staff Selection Dropdown
+636.Browser Back Navigation Displays Login Page with 419 Error
+779.No Option to Return to Login Page from OTP Verification Screen
+775.Allow Existing Designation During Employee Rejoining
+
+
+
+Mode: BUG_FIX
+
+Target:
+- Route::get('/viewassignment/{id}', [StepController::class, 'viewAssignment']);
+- resources\views\backEnd\viewassignment.blade.php is page per Teammember List: yaha plus icon ke click per jo Name * filed teammember ka name aata hai to yaha jo allready add hai unka name nahi aana chahiye Name * list me 
+
+- resources\views\backEnd\viewassignment.blade.php is page per Partner List: yaha plus icon ke click per jo Partner Name : * filed teammember ka name aata hai to yaha jo allready add hai unka name nahi aana chahiye Partner Name : * list me 
+
+
+- URL http://127.0.0.1:8000/verify
+On the VSA Login flow, after the user submits valid login credentials and reaches the OTP Verification page, there is no option to return to the Login page and enter different credentials.
+Expected Behavior:
+The OTP Verification page should provide an option such as “Back to Login”, “Change Credentials”, or equivalent functionality.
+
+
+
+
+Task:
+
+Rules:
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+http://127.0.0.1:8000/home
+
+
+
+http://127.0.0.1:8000/
+
+
+http://127.0.0.1:8000/login
+
+
+
+Error 419: Page Expired
+Form Session Expired
+Your session has expired. Please refresh the page and try submitting the form again.
 
 
 
@@ -5997,10 +6242,63 @@ assignmentmappings table me engagementfee column me amount hai us amount ko Amou
 
 
 
+Mode: BUG_FIX
+
+Target:
+- Route::get('/viewassignment/{id}', [StepController::class, 'viewAssignment']);
+- resources\views\backEnd\viewassignment.blade.php is page per Teammember List: yaha plus icon ke click per jo Name * filed teammember ka name aata hai to yaha jo allready add hai unka name nahi aana chahiye Name * list me 
+
+- resources\views\backEnd\viewassignment.blade.php is page per Partner List: yaha plus icon ke click per jo Partner Name : * filed teammember ka name aata hai to yaha jo allready add hai unka name nahi aana chahiye Partner Name : * list me 
+
+
+- URL http://127.0.0.1:8000/verify
+On the VSA Login flow, after the user submits valid login credentials and reaches the OTP Verification page, there is no option to return to the Login page and enter different credentials.
+Expected Behavior:
+The OTP Verification page should provide an option such as “Back to Login”, “Change Credentials”, or equivalent functionality.
 
 
 
 
+Task:
+
+Rules:
+- Keep all other functionality unchanged.
+
+Follow AGENTS.md.
+
+
+
+
+2222222222222222222222
+
+
+Mode: ANALYSIS
+
+Target:
+- Route::get('/dashbordreport', [BackEndController::class, 'dashbordreport']);
+- Function: `dashbordreport()`
+
+Task:
+- Analyze the entire `dashbordreport()` function deeply.
+- Create a comprehensive KT (Knowledge Transfer) document/notes for all the KPIs, charts, and tables calculated in this function.
+- Explain EACH KPI and chart in simple, plain English (or Hinglish) so that it is easy to understand.
+- The explanation should focus on the **business logic** and **what the data represents**, not just the code.
+
+Format Requirement for each KPI/Chart:
+Provide the output exactly in this format:
+**KPI/Chart Name**: [Name]
+**Explanation**: [Explain what this data represents in simple words. For example, if it's "Bills Pending for Generation", explain: "This KPI shows the total amount of all those assignments where the work is closed but the invoice has not been generated yet."]
+
+Scope to cover:
+1. All KPIs in `role_id == 11` (Admin/Super Admin view) and `role_id == 13` (Partner view).
+2. All charts (like Budget vs Actual Cash Flow, Cash Flow Analysis, Partner-wise P&L, etc.).
+3. All tables (like Assignment Status Overview, Document Completion Progress, etc.).
+
+Rules:
+- Do not change any code.
+- Only provide the detailed notes/documentation based on the existing logic in the function.
+
+Follow AGENTS.md.
 
 
 
@@ -6038,6 +6336,86 @@ The following chalanges may be occure on VSA live
 
 
 
+
+
+
+
+
+222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+
+1.Bills Pending for Generation
+This amount is the engagement-fee value of assignments marked closed (`status = 0`) that do not yet have an invoice.
+
+
+
+2.Collection's Outstanding 
+This is the total outstanding amount recorded against invoices for closed assignments where an invoice exists. It is intended to show money billed but not yet collected. It includes invoices in the configured INR/USD currency codes (and invoices with no currency recorded), converts USD amounts to INR using the bill date, and has no financial-year date restriction.
+
+
+
+3.Assignments Completed 
+The dashboard shows this as `completed assignments / assignments created`. The completed count includes distinct assignments closed in the current financial year, with documentation completion recorded (`percentclosedate` is present) and an invoice generated. The denominator is the number of assignment mappings created in the current financial year.
+
+
+
+4.Delayed Assignments 
+This counts assignments that meet at least one of these conditions: the assignment is still active and its documentation is incomplete; the active assignment's final draft report date is later than its tentative end date; or its recorded timesheet hours exceed the estimated hours. The hours-over-estimate condition can count an assignment even if it is closed. There is no financial-year restriction.
+
+
+
+
+5.Other Expenses 
+This is a combined amount for conveyance claims with status `6` and vendor entries with status `1`. It is presented as expenses other than salary. There is no financial-year date restriction.
+
+
+
+
+6.Loss Making Assignments 
+This is the count of current-financial-year assignments whose engagement fee is lower than the calculated assignment costs. Costs combine staff timesheet hours multiplied by each staff member's hourly cost, plus conveyance entries marked `bill = No`. The assignment list is filtered by lead partner in the Partner view. The assignment selection is financial-year scoped, but the cost lookups themselves are not date-filtered, so recorded costs from outside that year can affect the result.
+
+
+7.Independence Acceptance
+This counts missing independence acceptances for assigned team members, the other partner, and the EQCR partner. A person is treated as having completed this requirement when either an annual independence declaration or an independence record exists for that person and assignment.
+
+
+
+8. NFRA Audits Ongoing 
+This counts assignments that are still active (`status = 1`) and marked as NFRA applicable (`eqcrapplicability = 1`). It is not limited to the current financial year.
+
+
+
+9.Upcoming Assignments
+This adds two counts: unclosed planning records whose planned start date is on or before 30 days from today, and budgeted assignments whose actual start date (or tentative start date when no actual date exists) falls from today through the next 30 days. Partner planning records are scoped by engagement partner; budgeted records are scoped by assignment lead partner. The planning-date check has no lower bound, so an old, still-unclosed planning record can also be counted.
+
+
+10.Payments Not Recieved 
+This is the outstanding balance for invoices created from 15 days ago through today, linked to closed assignments. The amount is converted to INR in the same way as the overall outstanding KPI 
+
+
+
+2222222222222222222222222222222222222222222222222222222222222
+
+Assignment Status Overview 
+Each card represents an assignment mapping created in the current financial year, with its client, assignment name, status, due date, estimated hours, and recorded timesheet hours. Progress is worked hours divided by estimated hours. The displayed progress text is capped at 100% when worked hours exceed the estimate, although the progress-bar width uses the calculated ratio. The label is “COMPLETED” when the budgeting status is `0`; otherwise, a future due date is “ON TRACK” and a due date that is today or earlier is “DELAYED.”
+
+
+
+Document Completion Progress
+Each card shows the percentage of audit checklist questions marked “CLOSE” for an assignment created in the current financial year. The denominator is the number of questions in the assignment's relevant classifications and subclasses; the numerator is the number of matching closed checklist answers. The regular assignment checklist excludes the special EQCR assignment classification.
+
+
+
+NFRA Audits, Quality Reviews & Peer Review 
+Each card shows the client, assignment, assigned EQCR partner, due date, assignment status, and reviewer documentation progress. The list includes current-financial-year assignments marked as NFRA, Quality Review, or Peer Review (`eqcrapplicability` 1, 2, or 3); it is not restricted by assignment status. Reviewer progress counts checklist answers marked “CLOSE” or “NOT-APPLICABLE” against the questions in that review's special checklist. The status label is “COMPLETED” for status `0`, otherwise “IN PROGRESS” when the selected end date is in the future, and “DELAYED” when it is not.
+
+
+
+Partner-wise P&L Statement
+This table groups assignment invoice revenue, calculated staff cost, and non-billable conveyance cost by partner. It includes assignments whose period start and period end are both within the current financial year. Revenue is based on invoice totals and is converted to INR for USD invoices; costs are staff hours multiplied by hourly cost plus conveyance where `bill = No`. Profit is revenue minus expenses, and margin is profit divided by revenue.
+
+
+Assignment-wise P&L Analysis
+Each row compares an assignment's engagement fee with its calculated costs and shows profit/loss, margin, and a “PROFITABLE,” “LOSS,” or “BREAKEVEN” label. Costs are recorded timesheet hours multiplied by staff hourly cost plus non-billable conveyance. A negative profit is a loss, a positive profit is profitable, and zero is break-even. The assignment list is based on assignments created in the current financial year and is limited by lead partner
 
 
 
