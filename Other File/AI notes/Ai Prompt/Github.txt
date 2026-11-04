@@ -58,7 +58,7 @@ C:\Shahid Raza\Capitall\Project   no need to store please delete it on last date
 
 Completed
 C:\Shahid Raza\Capitall\VSA project functionality  completed on git 
-C:\Shahid Raza\Capitall\All Setup  completed on drive  ise abhi delet nahi kare otherwise vs code ka setup sab kharab ho jayega 
+C:\Shahid Raza\Capitall\All Setup  completed on drive   important big file folder name ise abhi delet nahi kare otherwise vs code ka setup sab kharab ho jayega 
 C:\Users\KGS-429\Desktop\shahidapp completed on git 
 
 
