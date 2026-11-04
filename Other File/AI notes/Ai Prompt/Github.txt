@@ -1,6 +1,9 @@
 C:\ReactNativeApp
-C:\ReactNativeApp\FriendList> completed https://github.com/Shahid-Raza7463/ReactNativeApp.git
-C:\ReactNativeApp\FriendsList> Completed   https://github.com/Shahid-Raza7463/all-app-directry.git hare inside capitallleavingtime
+C:\ReactNativeApp\FriendList> completed 
+https://github.com/Shahid-Raza7463/ReactNativeApp.git
+
+C:\ReactNativeApp\FriendsList> Completed  
+https://github.com/Shahid-Raza7463/all-app-directry.git hare inside capitallleavingtime
 
 
 	
@@ -47,6 +50,7 @@ Sabh ka database le le and yaha drive per daale xampp_backup folder me
 C:\Shahid Raza
 C:\Shahid Raza\Capitall All Project  baki hai 
 C:\Shahid Raza\Capitall\Project   no need to store please delete it on last date 
+
 ```````````````````````````````````````
 
 
@@ -149,4 +153,11 @@ Untracked files:
         vsalive/
 		database/
 		
-	
+
+
+C:\xampp\htdocs\kgsdemo
+
+
+
+C:\xampp\htdocs\database
+C:\xampp\htdocs\vsalive
