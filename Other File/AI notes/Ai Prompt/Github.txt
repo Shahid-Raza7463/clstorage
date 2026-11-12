@@ -63,11 +63,6 @@ C:\Users\KGS-429\Desktop\shahidapp completed on git
 
 
 
-
-
-
-
-
 22222222222222222222222222222222222222
 All react project folder only
 
@@ -161,3 +156,16 @@ C:\xampp\htdocs\kgsdemo
 
 C:\xampp\htdocs\database
 C:\xampp\htdocs\vsalive
+
+
+
+
+2222222222222222222222222222222222
+
+approc b
+
+kitna time 
+
+white listted 
+
+logic inka and testing bhi inka rahega 
